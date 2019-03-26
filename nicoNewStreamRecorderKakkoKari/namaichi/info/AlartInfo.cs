@@ -44,6 +44,7 @@ namespace namaichi.info
 		public string keyword = "";
 		
 		public DateTime lastHosoDt = DateTime.MinValue;
+		public bool isRecentColor = false;
 		
 		public AlartInfo(string communityId, string hostId, 
 				string communityName, string hostName, 
@@ -55,7 +56,8 @@ namespace namaichi.info
 				bool appliG, bool appliH, bool appliI,
 				bool appliJ,
 				string memo, string communityFollow, 
-				string hostFollow, string lastLvid, string keyword) {
+				string hostFollow, string lastLvid, 
+				string keyword) {
 			this.communityId = communityId;
 			this.hostId = hostId;
 			this.communityName = communityName;

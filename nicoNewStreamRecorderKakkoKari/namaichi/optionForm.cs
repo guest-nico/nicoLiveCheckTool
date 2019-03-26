@@ -113,7 +113,9 @@ namespace namaichi
 				{"appliJName",nameJText.Text},
 				
 				{"IsStartTimeAllCheck",isStartTimeAllCheckChkBox.Checked.ToString().ToLower()},
-				{"Ischeck30min",isCheck30minChkBox.Checked.ToString().ToLower()},
+				{"IscheckRecent",isRecentCheckRadioBtn.Checked.ToString().ToLower()},
+				{"Ischeck30min",isCheck30minRadioBtn.Checked.ToString().ToLower()},
+				{"IscheckOnAir",isCheckOnAirRadioBtn.Checked.ToString().ToLower()},
 				{"IschangeIcon",isChangeIconChkBox.Checked.ToString().ToLower()},
 				{"IstasktrayStart",isTasktrayStartChkBox.Checked.ToString().ToLower()},
 				{"IsdragCom",isdragComChkBox.Checked.ToString().ToLower()},
@@ -143,6 +145,10 @@ namespace namaichi
 				{"IsRss",isRssChkBox.Checked.ToString().ToLower()},
 				{"IsPush",isPushChkBox.Checked.ToString().ToLower()},
 				{"IsAppPush",isAppPushChkBox.Checked.ToString().ToLower()},
+				
+				{"thresholdpage",thresholdpageList.Value.ToString()},
+				{"brodouble",brodoubleList.SelectedIndex.ToString()},
+				{"liveListUpdateMinutes",liveListUpdateMinutesList.Value.ToString()},
 				
 				{"cookieFile",cookieFileText.Text},
 				{"iscookie",isCookieFileSiteiChkBox.Checked.ToString().ToLower()},
@@ -257,9 +263,13 @@ namespace namaichi
 			nameIText.Text = cfg.get("appliIName");
 			nameJText.Text = cfg.get("appliJName");
 			isStartTimeAllCheckChkBox.Checked = bool.Parse(cfg.get("IsStartTimeAllCheck"));
-			isCheck30minChkBox.Checked = bool.Parse(cfg.get("Ischeck30min"));
+			
+			isRecentCheckRadioBtn.Checked = bool.Parse(cfg.get("IscheckRecent"));
+			isCheck30minRadioBtn.Checked = bool.Parse(cfg.get("Ischeck30min"));
+			isCheckOnAirRadioBtn.Checked = bool.Parse(cfg.get("IscheckOnAir"));
 			isChangeIconChkBox.Checked = bool.Parse(cfg.get("IschangeIcon"));
-			isCheck30minChkBox_Update();
+			isCheckRecentChkBox_Update();
+			
 			isTasktrayStartChkBox.Checked = bool.Parse(cfg.get("IstasktrayStart"));
 			isdragComChkBox.Checked = bool.Parse(cfg.get("IsdragCom"));
 			doublecmodeList.Text = cfg.get("doublecmode");
@@ -289,6 +299,11 @@ namespace namaichi
 			isRssChkBox.Checked = bool.Parse(cfg.get("IsRss"));
 			isPushChkBox.Checked = bool.Parse(cfg.get("IsPush"));
 			isAppPushChkBox.Checked = bool.Parse(cfg.get("IsAppPush"));
+			
+			thresholdpageList.Value = int.Parse(cfg.get("thresholdpage"));
+			brodoubleList.SelectedIndex = int.Parse(cfg.get("brodouble"));
+			liveListUpdateMinutesList.Value = decimal.Parse(cfg.get("liveListUpdateMinutes"));
+			
 			
         	isCookieFileSiteiChkBox.Checked = bool.Parse(cfg.get("iscookie"));
         	isCookieFileSiteiChkBox_UpdateAction();
@@ -373,12 +388,14 @@ namespace namaichi
 			
 			tb.Text = dialog.FileName;
 		}
-		private void isCheck30minChkBox_Update() {
-			isChangeIconChkBox.Enabled = isCheck30minChkBox.Checked;
+		private void isCheckRecentChkBox_Update() {
+			isCheck30minRadioBtn.Enabled = isRecentCheckRadioBtn.Checked;
+			isCheckOnAirRadioBtn.Enabled = isRecentCheckRadioBtn.Checked;
+			isChangeIconChkBox.Enabled = isRecentCheckRadioBtn.Checked;
 		}
-		void IsCheck30minChkBoxCheckedChanged(object sender, EventArgs e)
+		void IsRecentChkBoxCheckedChanged(object sender, EventArgs e)
 		{
-			isCheck30minChkBox_Update();
+			isCheckRecentChkBox_Update();
 		}
 		void IsDefaultSoundChkBtnCheckedChanged(object sender, EventArgs e)
 		{

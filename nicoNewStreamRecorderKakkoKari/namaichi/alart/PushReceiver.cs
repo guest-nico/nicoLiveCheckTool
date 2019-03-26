@@ -317,7 +317,7 @@ namespace namaichi.alart
 	
 				var res = req.GetResponse();
 				
-				var resStream = new System.IO.StreamReader(res.GetResponseStream());
+				var resStream = new StreamReader(res.GetResponseStream());
 				foreach (var h in res.Headers) util.debugWriteLine("header " + h + " " + res.Headers[h.ToString()]);
 				var resStr = resStream.ReadToEnd();
 				util.debugWriteLine("nico send post res " + resStr);

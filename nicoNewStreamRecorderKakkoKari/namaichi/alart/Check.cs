@@ -89,7 +89,7 @@ namespace namaichi.alart
 		}
 		
 		private bool gotStreamProcess(List<RssItem> items) {
-			
+			util.debugWriteLine("gotStreamProcess itemCount");
 			var isChanged = false;
 			items.Reverse();
 			foreach (var item in items) {
@@ -316,7 +316,7 @@ namespace namaichi.alart
 			}
 		}
 		public bool isUserIdFromLvidOk(RssItem rssItem, string alartUserId) {
-			if (alartUserId == null || alartUserId == "") return true;
+			if (string.IsNullOrEmpty(alartUserId)) return true;
 			
 			var uid = (rssItem.userId != null) ? rssItem.userId : getUserIdFromLvid(rssItem.lvId);
 			if (rssItem.userId == null && uid != null) rssItem.userId = uid;
@@ -329,7 +329,7 @@ namespace namaichi.alart
 			return uid == alartUserId;
 		}
 		public string getUserIdFromLvid(string lvid) {
-			var url = "http://live2.nicovideo.jp/watch/" + lvid;
+			var url = "https://live2.nicovideo.jp/watch/" + lvid;
 			var res = util.getPageSource(url, container);
 			if (res == null) return null;
 			var uid = util.getRegGroup(res, "user/(\\d+)");
@@ -387,7 +387,7 @@ namespace namaichi.alart
 			var br = "";
 			sw.WriteLine("[放送開始時間] " + DateTime.Parse(ri.pubDate).ToString("yyyy/MM/dd HH:mm:ss") + br);
 			sw.WriteLine("[タイトル] " + ri.title + br);
-			sw.WriteLine("[限定] " + ((ri.isMenberOnly) ? "限定" : "オープン") + br);
+			sw.WriteLine("[限定] " + ((ri.isMemberOnly) ? "限定" : "オープン") + br);
 			sw.WriteLine("[放送タイプ] " + ((isJikken) ? "nicocas" : "nicolive"));
 			sw.WriteLine("[放送者] " + ri.hostName + br);
 			sw.WriteLine("[コミュニティ名] " + ri.comName + br);
@@ -404,7 +404,7 @@ namespace namaichi.alart
 		public void deleteOldCheckedLvIdList() {
 			try {
 				checkedLvIdList.Sort();
-				checkedLvIdList.RemoveRange(0, checkedLvIdList.Count - 800);
+				checkedLvIdList.RemoveRange(0, checkedLvIdList.Count - 18000);
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
@@ -479,7 +479,7 @@ namespace namaichi.alart
 			userNameUpdateInterval = int.Parse(form.config.get("userNameUpdateInterval"));
 		}
 		public void regularlyProcess() {
-			var lastCheckLast30minLiveTime = DateTime.Now;
+			var lastCheckLastRecentLiveTime = DateTime.Now;
 			while (true) {
 				var ut = userNameUpdateInterval;
 				if (ut < 15) ut = 15;
@@ -495,13 +495,13 @@ namespace namaichi.alart
 					
 				}
 				
-				
-				if (bool.Parse(form.config.get("Ischeck30min")) && 
-				 	   DateTime.Now - lastCheckLast30minLiveTime > TimeSpan.FromSeconds(60)) {
+				var intervalSec = bool.Parse(form.config.get("IscheckOnAir")) ? 180 : 60;
+				if (bool.Parse(form.config.get("IscheckRecent")) && 
+				 	   DateTime.Now - lastCheckLastRecentLiveTime > TimeSpan.FromSeconds(intervalSec)) {
 					Task.Run(() => {
-					    lastCheckLast30minLiveTime = DateTime.MaxValue;
+					    lastCheckLastRecentLiveTime = DateTime.MaxValue;
 					    form.recentLiveCheck();
-			         	lastCheckLast30minLiveTime = DateTime.Now;
+			         	lastCheckLastRecentLiveTime = DateTime.Now;
 					});
 				}
 				Thread.Sleep(10000);

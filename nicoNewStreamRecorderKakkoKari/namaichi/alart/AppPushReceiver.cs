@@ -88,7 +88,8 @@ namespace namaichi.alart
 				
 				var cr = new CheckinRequest();
 				
-				cr.Imei = "109269993813709";// # "".join(random.choice("0123456789") for _ in range(15))
+				//cr.Imei = "109269993813709";// # "".join(random.choice("0123456789") for _ in range(15))
+				cr.Imei = "000000000000000";// # "".join(random.choice("0123456789") for _ in range(15))
 				cr.AndroidId= 0;
 				
 				var build = new CheckinRequest.Types.Checkin.Types.Build();
@@ -110,7 +111,8 @@ namespace namaichi.alart
 				cr.LoggingId = 1;
 				//cr.marketCheckin
 				//cr.macAddress.append("".join(random.choice("ABCDEF0123456789") for _ in range(12)))
-				cr.MacAddress.Add("47D435B5CCCA");
+				//cr.MacAddress.Add("47D435B5CCCA");
+				cr.MacAddress.Add("111111111111");
 				//cr.meid = "".join(random.choice("0123456789") for _ in range(14))
 				cr.Meid = "01234567890123";
 				cr.AccountCookie.Add("");
@@ -173,13 +175,14 @@ namespace namaichi.alart
 				var param = "app=jp.nicovideo.android";
 				param += "&sender=812879448480";
 				param += "&device=" + androidId;
-				param += "&cert=8b25f54d3ab466dba54bef9302f27acdfdd70cb1";
+				//param += "&cert=8b25f54d3ab466dba54bef9302f27acdfdd70cb1";
+				//param += "&cert=0005f54d3ab466dba54bef9302f27acdfdd70cb1";
 				param += "&app_ver=107";
 				param += "&gcm_ver=15090013";
 				//param += "&X-appid=$randomString";
 				param += "&X-scope=GCM";
 				param += "&X-app_ver_name=4.48.0";
-				param += "&info=sxu5CRtfHmsco0hB01boBVwFAxLXkBY";
+				//param += "&info=sxu5CRtfHmsco0hB01boBVwFAxLXkBY";
 				byte[] postDataBytes = Encoding.ASCII.GetBytes(param);
 				util.debugWriteLine(param);
 				
@@ -198,6 +201,7 @@ namespace namaichi.alart
 		private bool sendTokenNico(string pushToken) {
 			util.debugWriteLine("app push sendTokenNico " + pushToken);
 			try {
+				if (check.container == null) return false;
 				var urlCookie = check.container.GetCookieHeader(new Uri("http://live2.nicovideo.jp")) + ";";
 				var userSession = util.getRegGroup(urlCookie, "user_session=(.+?);");
 				                          

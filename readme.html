@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>readme</title>
+<style type="text/css">
+.version > dt {
+	float: left ;
+	clear: both ;
+	width: 120px ;
+	margin:0px 0px;
+	padding:10px 0px 10px 0px;
+	border-top-width: 1px;
+	border-top-color: rgb(200, 200, 200);
+	border-top-style: dotted;
+}
+.version > dd {
+	width: 450px ;
+	overflow:hidden;
+	padding:10px 0px 10px 0px;
+	border-top-width: 1px;
+	border-top-color: rgb(200, 200, 200);
+	border-top-style: dotted;
+}
+
+</style>
+</head>
+<body>
+
+<div style="display:inline-block; vertical-align: top; width:300px; background-color:white; padding:5px; position: fixed;">
+<a href="#nicoNewRec">ニコ生放送チェックツール</a><br>
+<ul>
+	<li><a href="#howTo">使い方</a></li>
+	<!--<li><a href="#attention">注意</a></li> -->
+	<li><a href="#future">機能説明</a></li>
+	<ul>
+		<li><a href="#source">アラート情報の取得元</a></li>
+	</ul>
+	<li><a href="#environment">動作環境</a></li>
+	<li><a href="#licence">ライセンス・素材</a></li>
+	<li><a href="#history">更新履歴</a></li>
+	<li><a href="#develop">開発</a></li>
+	<!--
+	<li><a href="#trouble">うまく動作しないとき</a></li>
+	<ul>
+		<li><a href="#t-dropSeg">セグメント抜けが多い、他の作業をしていると途切れやすい</a></li>
+		<li><a href="#t-notOpenSetting">設定画面が開かない</a></li>
+		<li><a href="#t-commentFew">タイムシフトのコメント取得数がページ上の数より少ない</a></li>
+	</ul>
+	-->
+</ul>
+
+</div>
+
+
+<div style="display:inline-block; vertical-align: top; background-color:white; margin-left:323px; width:600px; padding:5px 5px 5px 0px">
+<h1 id="nicoNewRec" style="padding-left:331px; margin-left:-331px">ニコ生放送チェックツール</h1>
+ニコ生の公式放送以外の放送の開始をチェックするツールです。
+
+
+<h2 id="howTo" style="padding-left:331px; margin-left:-331px">使い方</h2>
+最初にツール→オプションメニューからログイン設定をします。<br>
+左上の「新規登録」ボタンからコミュニティ/チャンネルID、ユーザーID、キーワードの一つ以上を設定して登録します。<br>
+<br>
+
+
+<h2 id="future" style="padding-left:331px; margin-left:-331px">機能説明</h2>
+機能についての説明です。<br>
+
+
+<h3 id="source" style="padding-left:331px; margin-left:-331px">アラート情報の取得元</h3>
+チャンネルから放送されていない公式放送は取得できません。
+<ul>
+	<li>RSS</li>
+	フォローしていないコミュニティ・チャンネル・ユーザーの放送の開始も取得することができますが、放送開始から1～3分ほど遅れることが多いです。お気に入りリストにユーザーIDが指定されていた場合には正確にはユーザー名と照合しています。設定で指定した時間ごとにユーザー名を更新していますが、放送者のユーザー名が変わっていた場合は取得漏れが発生する可能性があります。
+	<li>ブラウザプッシュ通知</li>
+	フォローしているコミュニティ・チャンネル・ユーザーの放送を取得することができます。リストに登録されていてもフォローしていない場合は放送開始の通知を取得できません。取得タイミングはずれることがあるようですが、2019年3月10日現在は放送開始後30秒ほどで取得できることが多いです。
+	<li>スマホアプリプッシュ通知</li>
+	フォローしているコミュニティ・チャンネルの放送を取得することができます。リストに登録されていてもフォローしていない場合は放送開始の通知を取得できません。取得タイミングはずれることがあるようですが、2019年3月10日現在は放送開始後数秒で取得できることが多いです。
+</ul>
+
+
+<h2 id="environment" style="padding-left:331px; margin-left:-331px">動作環境</h2>
+.NET4.5.2以上推奨
+
+<h2 id="licence" style="padding-left:331px; margin-left:-331px">ライセンス・素材</h2>
+SnkLib.App.CookieGetter<br>
+<a href="https://github.com/namoshika/SnkLib.App.CookieGetter">https://github.com/namoshika/SnkLib.App.CookieGetter</a><br>
+namoshika様<br>
+<br>
+CookieGetterSharp<br>
+<a href="https://github.com/namoshika/CookieGetterSharp">https://github.com/namoshika/CookieGetterSharp</a><br>
+halxxxx様、うつろ様、にょんにょん様、炬燵犬様<br>
+<br>
+SuperSocket Apache License 2.0<br>
+<a href="https://github.com/kerryjiang/SuperSocket/blob/master/LICENSE">https://github.com/kerryjiang/SuperSocket/blob/master/LICENSE</a><br>
+WebSocket4Net<br>
+<a href="https://github.com/kerryjiang/WebSocket4Net">https://github.com/kerryjiang/WebSocket4Net</a><br>
+kerryjiang様<br>
+一部編集しております<br>
+<a href="https://github.com/guest-nico/WebSocket4Net_deflate">https://github.com/guest-nico/WebSocket4Net_deflate</a><br>
+<br>
+NAudio Microsoft Public License<br>
+<a href="https://github.com/naudio/NAudio/blob/master/license.txt">https://github.com/naudio/NAudio/blob/master/license.txt</a><br>
+<br>
+Bouncy Castle MIT license<br>
+<a href="https://www.bouncycastle.org/license.html">https://www.bouncycastle.org/license.html</a><br>
+<br>
+VarintBitConverter<br>
+<a href="https://github.com/topas/VarintBitConverter/blob/master/LICENSE">https://github.com/topas/VarintBitConverter/blob/master/LICENSE</a><br>
+<br>
+protobuf<br>
+<a href="https://github.com/protocolbuffers/protobuf/blob/master/LICENSE">https://github.com/protocolbuffers/protobuf/blob/master/LICENSE</a><br>
+<br>
+chromium<br>
+<a href="https://github.com/chromium/chromium/blob/master/LICENSE">https://github.com/chromium/chromium/blob/master/LICENSE</a><br>
+<br>
+gcmreverse<br>
+<a href="https://github.com/nborrmann/gcmreverse">https://github.com/nborrmann/gcmreverse</a><br>
+<br>
+mozilla/gecko<br>
+<a href="https://www.mozilla.org/en-US/MPL/">https://www.mozilla.org/en-US/MPL/</a><br>
+<br>
+フリー素材「取り放題.com」様<br>
+<a href="http://toriho-dai.com/">http://toriho-dai.com/</a><br>
+otosozai.com様<br>
+<a href="http://www.otosozai.com">http://www.otosozai.com</a><br>
+
+
+<h2 id="history" style="padding-left:331px; margin-left:-331px">更新履歴</h2>
+<h3>ニコ生放送チェックツール</h3>
+<dl class="version">
+<dt>0.0.5</dt><dd>(2019/01/12)</dd>
+<dt>0.0.6</dt><dd>動作が止まることがある不具合の修正。ポップアップとバルーン表示の追加。システムトレイに表示。(2019/01/14)</dd>
+<dt>0.0.7</dt><dd>メニューから終了できるように修正。複数起動時に終了するように。放送IDからの登録機能、放送ログの出力機能、音機能を追加。(2019/01/16)</dd>
+<dt>0.0.8</dt><dd>ver0.0.7で起こっていた同じ放送を検出する不具合の修正、ブラウザで開く機能の追加、起動時に全番組をチェックする設定の追加、ポップアップの設定と右クリックメニュー追加、RSSとユーザー名の更新間隔の設定の追加、新規登録時の重複チェック(2019/01/17)</dd>
+<dt>0.0.9</dt><dd>多重起動されてしまう不具合の修正、アプリの数の追加、引数の追加、予約起動機能の追加、アプリの最大数を10に(2019/01/21)</dd>
+<dt>0.0.10</dt><dd>予約起動の追加時に放送IDからフォームに自動入力する機能の追加、予約起動時に秒単位まで指定できるように修正(2019/01/24)</dd>
+<dt>0.1.0</dt><dd>リストへのドラッグアンドドロップによる登録機能を追加。プッシュ通知からの取得機能を追加、リストの右クリックメニューにアプリの実行を追加、アプリの列名の設定の追加。(2019/02/09)</dd>
+<dt>0.1.1</dt><dd>リスト内の二つ以上の行に合致したときに正しく通知できない不具合を修正、リストが保存されない不具合を修正、チャンネルのフォローができない不具合を修正、メール通知機能を追加、プッシュ通知が受信できない不具合の修正(2019/02/16)</dd>
+<dt>0.1.2</dt><dd>リストが保存されない不具合の修正、チャンネルがフォローできない不具合の修正、ユーザーがフォローできないことがある不具合の修正、一括フォロー機能の追加(2019/02/22)</dd>
+<dt>0.1.3</dt><dd>スマホアプリ版プッシュ通知の受信機能の追加(2019/03/10)</dd>
+<dt>0.1.4</dt><dd>番組一覧機能の追加(2019/03/23)</dd>
+<dt>0.1.5</dt><dd>ユーザーIDを設定した場合に通知できない不具合の修正、放送中の放送に色をつける設定の追加(2019/03/26)</dd>
+</dl>
+
+<h2 id="develop" style="padding-left:331px; margin-left:-331px">開発</h2>
+<a href="http://com.nicovideo.jp/community/co2414037">http://com.nicovideo.jp/community/co2414037</a><br>
+<a href="https://github.com/guest-nico/nicoLiveCheckTool">https://github.com/guest-nico/nicoLiveCheckTool</a>
+
+</div>
+</body>
+</html>

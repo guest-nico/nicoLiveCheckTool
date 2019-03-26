@@ -59,10 +59,14 @@ namespace namaichi
 		
 		public SortableBindingList<AlartInfo> alartListDataSource = new SortableBindingList<AlartInfo>();
 		public SortableBindingList<TaskInfo> taskListDataSource = new SortableBindingList<TaskInfo>();
+		public SortableBindingList<LiveInfo> liveListDataSource = new SortableBindingList<LiveInfo>();
+		public List<LiveInfo> liveListDataReserve = new List<LiveInfo>();
 		//public BindingSource alartListDataSource = new BindingSource();
 		//public BindingSource taskListDataSource = new BindingSource();
 		public Check check = null;
 		public TaskCheck taskCheck = null;
+		public LiveCheck liveCheck = null;
+		
 		public Mutex mutex;
 		//private Thread madeThread;
 		
@@ -71,8 +75,13 @@ namespace namaichi
 		public bool[] notifyOffList = new bool[17];
 		private bool isAddFormDisplaying = false;
 		
+		private Thread madeThread;
+		public object liveListLock = new object();
+		private bool isLiveListTimeProcessing = false;
+		
 		public MainForm(string[] args, Mutex mutex)
 		{
+			madeThread = Thread.CurrentThread;
 			this.mutex = mutex;
 			//this.madeThread = Thread.CurrentThread;
 			//args = "-nowindo -stdIO -IsmessageBox=false -IscloseExit=true lv316762771 -ts-start=1785s -ts-end=0s -ts-list=false -ts-list-m3u8=false -ts-list-update=5 -ts-list-open=false -ts-list-command=\"notepad{i}\" -ts-vpos-starttime=true -afterConvertMode=4 -qualityRank=0,1,2,3,4,5 -IsLogFile=true".Split(' ');
@@ -145,6 +154,7 @@ namespace namaichi
 			check = new Check(alartListDataSource, this);
 			taskList.DataSource = taskListDataSource;
 			taskCheck = new TaskCheck(taskListDataSource, this);
+			liveList.DataSource = liveListDataSource;
 			
 			notifyIcon.Icon = Icon;
 			
@@ -152,14 +162,30 @@ namespace namaichi
 //			new PopupForm(null).Show();
 //			new SmallPopupForm(null).Show();
 			//[2019/01/01 00:00:00] 放送ID：lv10000 コミュニティID：co100001　ユーザーID：100000
-			setListDoubleBuffered(alartList);
-			setListDoubleBuffered(taskList);
+			setDoubleBuffered(alartList);
+			setDoubleBuffered(taskList);
+			setDoubleBuffered(liveList);
 			
 			applyMenuSetting();
 			
 			setAppliNameAndContextMenu();
+			
+			setCategoryBorderPaint();
+			//categoryRightBtn.Text += Convert.ToChar(9654);//右
+			//categoryLeftBtn.Text += Convert.ToChar(9664);//左
+			categoryLeftBtn.Paint += new PaintEventHandler(categoryMoveBorderPaint);
+			categoryRightBtn.Paint += new PaintEventHandler(categoryMoveBorderPaint);
+			
+			
+			foreach (var c in categoryBtnPanel.Controls) {
+				var cc = c.GetType();
+				if (c.GetType() == typeof(System.Windows.Forms.RadioButton))
+					((System.Windows.Forms.RadioButton)c).CheckedChanged += 
+						new EventHandler(CategoryBtnCheckedChanged);
+			}
+			
 		}
-		
+		 
 		
 		/*
 		async void Selector_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -390,6 +416,10 @@ namespace namaichi
 				c.SortMode = DataGridViewColumnSortMode.Automatic;
 			foreach (DataGridViewColumn c in taskList.Columns)
 				c.SortMode = DataGridViewColumnSortMode.Automatic;
+			foreach (DataGridViewColumn c in liveList.Columns)
+				c.SortMode = DataGridViewColumnSortMode.Automatic;
+			
+			liveList.RowTemplate.Height = liveList.Columns[1].Width;
 			
 			Task.Run(() => {
 				new AlartListFileManager().load(this);
@@ -399,6 +429,14 @@ namespace namaichi
 				new TaskListFileManager().load(this);
 				taskCheck.start();
 			});
+			Task.Run(() => {
+			    liveCheck = new LiveCheck(this);
+			    if (bool.Parse(config.get("AutoStart")))
+			    	formAction(() => updateAutoUpdateStartMenu.PerformClick());
+			    
+			});
+			categoryBtnDisplayUpdate();
+			
 			
 			return;
 			
@@ -548,6 +586,7 @@ namespace namaichi
 	       		        var ai = (info.AlartInfo)alartListDataSource[i]; 
 						ai.LastHostDate = hosoDate;//now.Substring(0, now.Length - 0);
 						ai.lastLvid = lvid;
+						ai.isRecentColor = true;
 						
 						alartListDataSource.ResetItem(i);
        		       	} catch (Exception e) {
@@ -885,6 +924,12 @@ namespace namaichi
 		{
 			var curCell = alartList.CurrentCell;
 			if (curCell == null || curCell.RowIndex == -1) return;
+			var ai = alartListDataSource[curCell.RowIndex];
+			var id = (!string.IsNullOrEmpty(ai.communityId)) ? 
+				ai.communityId : 
+				((!string.IsNullOrEmpty(ai.hostId)) ? ai.hostId : ai.keyword);
+			id = string.IsNullOrEmpty(id) ? "こ" : (id);
+			if (MessageBox.Show(id + "の行を削除していいですか？", "確認", MessageBoxButtons.OKCancel) == DialogResult.Cancel) return;
 			alartListDataSource.RemoveAt(curCell.RowIndex);
 		}
 		
@@ -895,6 +940,10 @@ namespace namaichi
 		void taskListCellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
 		{
 			setMouseDownSelect(taskList, e);
+		}
+		void LiveListCellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			setMouseDownSelect(liveList, e);
 		}
 		void setMouseDownSelect(DataGridView dgv, DataGridViewCellMouseEventArgs e) {
 			if (e.Button == MouseButtons.Right) {
@@ -934,6 +983,28 @@ namespace namaichi
 	        	this.Invoke((MethodInvoker)delegate() {
        		       	try {
 						alartList.Sort(alartList.SortedColumn, direction);
+       		       	} catch (Exception e) {
+       		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
+       		       	}
+				});
+	       		return;
+	       	} catch (Exception e) {
+	       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
+	       	}
+		}
+		public void sortLiveList() {
+			var order = (liveList.SortOrder == SortOrder.None) ? "none" : ((liveList.SortOrder == SortOrder.Ascending) ? "asc" : "des");
+			util.debugWriteLine("sortLiveList " + order);
+			
+			if (liveList.SortOrder == SortOrder.None) return;
+			var direction = (liveList.SortOrder == SortOrder.Ascending) ? ListSortDirection.Ascending : ListSortDirection.Descending;
+			try {
+	       		if (this.IsDisposed) return;
+	       		if (!this.IsHandleCreated) return;
+	       		var ret = 0;
+	        	this.Invoke((MethodInvoker)delegate() {
+       		       	try {
+						liveList.Sort(liveList.SortedColumn, direction);
        		       	} catch (Exception e) {
        		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
        		       	}
@@ -1028,20 +1099,21 @@ namespace namaichi
 		{
 			activateForm();
 		}
-		private void setListDoubleBuffered(DataGridView dgv) {
-			typeof(DataGridView).
+		private void setDoubleBuffered(Control dgv) {
+			typeof(Control).
 			    GetProperty("DoubleBuffered",
 			        System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).
 						SetValue(dgv, true, null);
 		}
-		
 		void AlartListCellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
 		{
 			//util.debugWriteLine("value " + alartList[7, e.RowIndex].Value);
 			//util.debugWriteLine("alartlist cellformatting " + e.ColumnIndex + " " + e.RowIndex);
 			//if (keikaTime < TimeSpan.FromSeconds(30)) {
-			if (e.ColumnIndex == 7 && alartListDataSource[e.RowIndex].lastHosoDt != DateTime.MinValue &&
-				   	DateTime.Now - alartListDataSource[e.RowIndex].lastHosoDt < TimeSpan.FromMinutes(30)) {
+			
+			//if (e.ColumnIndex == 7 && alartListDataSource[e.RowIndex].lastHosoDt != DateTime.MinValue &&
+			//	   	DateTime.Now - alartListDataSource[e.RowIndex].lastHosoDt < TimeSpan.FromMinutes(30)) {
+			if (e.ColumnIndex == 7 && alartListDataSource[e.RowIndex].isRecentColor) {
 				alartList[7, e.RowIndex].Style.BackColor =　Color.FromArgb(255, 224, 255);
 				
 			} else {
@@ -1068,6 +1140,7 @@ namespace namaichi
 	       		if (!this.IsHandleCreated) return;
 	        	this.Invoke((MethodInvoker)delegate() {
        		       	try {
+	       		        
 						alartListDataSource.Remove(ai);
        		       	} catch (Exception e) {
        		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
@@ -1230,6 +1303,8 @@ namespace namaichi
 		{
 			var curCell = taskList.CurrentCell;
 			if (curCell == null || curCell.RowIndex == -1) return;
+			var ti = taskListDataSource[curCell.RowIndex];
+			if (MessageBox.Show(ti.lvId + "の行を削除していいですか？", "確認", MessageBoxButtons.OKCancel) == DialogResult.Cancel) return;
 			taskListDataSource.RemoveAt(curCell.RowIndex);
 		}
 		public void taskListRemoveLine(TaskInfo ti) {
@@ -1404,6 +1479,12 @@ namespace namaichi
 				var menu = (ToolStripMenuItem)displayTaskTabMenu.DropDownItems[i];
 				menu.Checked = isDisplay;
 			}
+			var showLiveListColumns = config.get("ShowLiveColumns");
+			for(var i = 0; i < liveList.Columns.Count - 1; i++) {
+				liveList.Columns[i + 1].Visible = showLiveListColumns[i] == '1';
+				var menu = (ToolStripMenuItem)displayOnAirTabMenu.DropDownItems[i];
+				menu.Checked = liveList.Columns[i + 1].Visible;
+			}
 			
 			var notifyOffs = new string[] {
 					"OffPop","OffBalloon",
@@ -1418,6 +1499,30 @@ namespace namaichi
 				if (!isOff) isAllOff = false;
 			}
 			notifyOffList[0] = isAllOff;
+			
+			//更新メニュー
+			var min = new int[]{0, 5, 10, 15, 20, 30, 60, 360};
+			var delMin = int.Parse(config.get("liveListDelMinutes"));
+			for (var i = 0; i < updateAutoDeleteMenu.DropDownItems.Count; i++) {
+				((ToolStripMenuItem)updateAutoDeleteMenu.DropDownItems[i]).Checked =
+					min[i] == delMin;
+			}
+			
+			var cateType = int.Parse(config.get("cateCategoryType"));
+			for (var i = 0; i < updateCateCategoryMenu.DropDownItems.Count; i++) {
+				((ToolStripMenuItem)updateCateCategoryMenu.DropDownItems[i]).Checked =
+					i == cateType;
+			}
+			
+			updateAutoUpdateFirstMenu.Checked = bool.Parse(config.get("AutoStart"));
+			
+			updateTopFavoriteMenu.Checked = bool.Parse(config.get("FavoriteUp"));
+			updateAutoSortMenu.Checked = bool.Parse(config.get("AutoSort"));
+			updateHideMemberOnlyWithoutFavoriteMenu.Checked = bool.Parse(config.get("BlindOnlyA"));
+			updateHideMemberOnlyWithFavoriteMenu.Checked = bool.Parse(config.get("BlindOnlyB"));
+			updateHideQuestionCategoryMenu.Checked = bool.Parse(config.get("BlindQuestion"));
+			
+			
 		}
 		void saveMenuSetting() {
 			var setting = new Dictionary<string, string>();
@@ -1450,6 +1555,12 @@ namespace namaichi
 				setting.Add(taskColumns[i], taskList.Columns[i].Visible.ToString().ToLower());
 			}
 			
+			var buf = "";
+			for(var i = 0; i < liveList.Columns.Count - 1; i++) {
+				buf += liveList.Columns[i + 1].Visible ? "1" : "0";
+			}
+			setting.Add("ShowLiveColumns", buf);
+			
 			var notifyOffs = new string[] {
 					"OffPop","OffBalloon",
 					"OffWeb","OffMail","OffSound","OffAppA",
@@ -1460,6 +1571,9 @@ namespace namaichi
 				setting.Add(notifyOffs[i], notifyOffList[i + 2].ToString().ToLower());
 			}
 			config.saveFromForm(setting);
+			
+			//update
+			config.set("AutoStart", updateAutoUpdateFirstMenu.Checked.ToString().ToLower());
 		}
 		void IsAlartListDisplayTabMenuClick(object sender, EventArgs e)
 		{
@@ -1703,27 +1817,39 @@ namespace namaichi
 			}
 		}
 		public void recentLiveCheck() {
-			var isCheck30min = bool.Parse(config.get("Ischeck30min"));
+			//var isCheck30min = bool.Parse(config.get("Ischeck30min"));
+			//-1-no check 0-onair 1-30min
+			var checkMode = bool.Parse(config.get("IscheckOnAir")) ? 0 : 1;
+			if (!bool.Parse(config.get("IscheckRecent"))) checkMode = -1;
 			
+			var testDt = DateTime.Now;
 			while (true) {
 				try {
 					var recentNum = 0;
 					var c = getAlartListCount();
-					for (var i = 0; i < c; i++) {
+					for (var i = c - 1; i > -1; i--) {
 						//util.debugWriteLine(i + " " + alartListDataSource[i].lastHosoDt + " " + alartList[7, i].Style.BackColor);
-						var is30min = isCheck30min && DateTime.Now - alartListDataSource[i].lastHosoDt < TimeSpan.FromMinutes(30);
-						var is30minColor = alartList[7, i].Style.BackColor == Color.FromArgb(255, 224, 255);
-						if (is30min != is30minColor) {
+						var isRecentProcess = false;
+						if (checkMode == 0) {
+							isRecentProcess = isOnAir(alartListDataSource[i]);
+							
+						} else if (checkMode == 1) {
+							isRecentProcess = DateTime.Now - alartListDataSource[i].lastHosoDt < TimeSpan.FromMinutes(30);
+						}
+						//var is30min = isCheck30min && DateTime.Now - alartListDataSource[i].lastHosoDt < TimeSpan.FromMinutes(30);
+						alartListDataSource[i].isRecentColor = isRecentProcess;
+						var isRecentColor = alartList[7, i].Style.BackColor == Color.FromArgb(255, 224, 255);
+						if (isRecentProcess != isRecentColor) {
 							//alartList[7, i].Style.BackColor = (i % 2 != 0) ? 
 							//	Color.FromArgb(245, 245, 245)
 							//	: Color.FromName("window");
 							alartList.UpdateCellValue(7, i);
 						}
-						if (is30min) recentNum++;
+						if (isRecentProcess) recentNum++;
 					}
 					//var ii = notifyIcon.Icon == Icon;
 					if (bool.Parse(config.get("IschangeIcon")) &&
-					    	isCheck30min)
+					    	checkMode != -1)
 						changeIcon(recentNum);
 					else if (notifyIcon.Icon != Icon) 
 						notifyIcon.Icon = Icon;
@@ -1734,6 +1860,21 @@ namespace namaichi
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			}
+		}
+		private bool isOnAir(AlartInfo ai) {
+			if (string.IsNullOrEmpty(ai.lastLvid)) return false;
+			
+			var elapsed = DateTime.Now - ai.lastHosoDt;
+			var isCheck = false;
+			if (ai.communityId == null ||
+			    	ai.communityId.StartsWith("ch")) {
+				isCheck = elapsed < TimeSpan.FromHours(100);
+			} else isCheck = elapsed < TimeSpan.FromHours(6);
+			if (!isCheck) return false;
+			
+			var url = "https://live.nicovideo.jp/embed/" + ai.lastLvid;
+			var res = util.getPageSource(url, null);
+			return res.IndexOf("status-onair\">") > -1;
 		}
 		private void changeIcon(int recentNum) {
 			var n = recentNum;
@@ -1833,6 +1974,793 @@ namespace namaichi
 			Task.Run(() =>
 				new ListFollow(this, check).channelFollow()
 			);
+		}
+		void categoryBorderPaint(object sender, PaintEventArgs e)
+		{
+			System.Drawing.Rectangle borderRectangle = ((System.Windows.Forms.RadioButton)sender).ClientRectangle;
+			borderRectangle.Inflate(-0, -0);
+			System.Windows.Forms.ControlPaint.DrawBorder3D(e.Graphics, borderRectangle, 
+				System.Windows.Forms.Border3DStyle.Raised);
+		}
+		void setCategoryBorderPaint() {
+			foreach (System.Windows.Forms.RadioButton c in categoryBtnPanel.Controls) {
+				c.Paint += new System.Windows.Forms.PaintEventHandler(categoryBorderPaint);
+			}
+		}
+		void categoryMoveBorderPaint(object sender, PaintEventArgs e)
+		{
+			//System.Drawing.Rectangle borderRectangle = ((System.Windows.Forms.Button)sender).ClientRectangle;
+			System.Drawing.Rectangle borderRectangle = ((System.Windows.Forms.Button)sender).ClientRectangle;
+			borderRectangle.Inflate(-0, -0);
+			//System.Windows.Forms.ControlPaint.DrawBorder3D(e.Graphics, borderRectangle, 
+			//	System.Windows.Forms.Border3DStyle.Raised);
+			ControlPaint.DrawBorder(e.Graphics, borderRectangle, Color.FromArgb(173, 171, 179), ButtonBorderStyle.Solid);
+			
+			System.Drawing.Rectangle borderRectangle2 = ((System.Windows.Forms.Button)sender).ClientRectangle;
+			borderRectangle2.Inflate(-1, -1);
+			ControlPaint.DrawBorder(e.Graphics, borderRectangle2, Color.White, ButtonBorderStyle.Solid);
+		}
+		
+		
+		void Button1Click(object sender, EventArgs e)
+		{
+			
+		}
+		
+		void CategoryLeftBtnClick(object sender, EventArgs e)
+		{
+			var btnsWidth = 0;
+			foreach (Control b in categoryBtnPanel.Controls) btnsWidth += b.Width;
+			if (btnsWidth <= categoryBtnPanel.Size.Width) return;
+			for (var i = 1; i < 16; i++) {
+				if (categoryBtnPanel.Controls[i].Visible) {
+					categoryBtnPanel.Controls[i - 1].Visible = true;
+					break;
+				}
+			}
+		}
+		void CategoryRightBtnClick(object sender, EventArgs e)
+		{
+			if (categoryBtnPanel.PreferredSize.Width < categoryBtnPanel.Width) return;
+			
+			var btnsWidth = 0;
+			foreach (Control b in categoryBtnPanel.Controls) btnsWidth += b.Width;
+			if (btnsWidth <= categoryBtnPanel.Size.Width) return;
+			foreach (System.Windows.Forms.RadioButton b in categoryBtnPanel.Controls) {
+				if (!b.Visible) continue;
+				b.Visible = false;
+				break;
+			}
+			categoryBtnDisplayUpdate();
+		}
+		void CategoryBtnPanelSizeChanged(object sender, EventArgs e)
+		{
+			util.debugWriteLine("category panel size " + categoryBtnPanel.Size.Width);
+			categoryBtnDisplayUpdate();
+		}
+		void categoryBtnDisplayUpdate() {
+			//var freeWidth = liveListSearchText.Location.X - categoryBtnPanel.Location.X - 3;
+			var btnsWidth = 16 * 3;
+			foreach (Control b in categoryBtnPanel.Controls) btnsWidth += b.Width;
+			
+			var freeWidth = Size.Width - categoryBtnPanel.Location.X - 175;
+			//var isDisplayBtn = categoryBtnPanel.PreferredSize.Width > freeWidth;
+			var isDisplayBtn = btnsWidth > freeWidth;
+			if (isDisplayBtn != categoryLeftBtn.Visible) {
+				categoryLeftBtn.Visible = categoryRightBtn.Visible = isDisplayBtn;
+				categoryBtnPanel.Width = (isDisplayBtn) ? (freeWidth - 35) : freeWidth;
+			}
+			
+			var headCateIndex = 0;
+			for (var i = 0; i < 16; i++) {
+				if (categoryBtnPanel.Controls[i].Visible) {
+					headCateIndex = i;
+					break;
+				}
+			}
+			if (headCateIndex > 0 && 
+			    	categoryBtnPanel.Width - categoryBtnPanel.PreferredSize.Width > 
+			    	categoryBtnPanel.Controls[headCateIndex - 1].Width + 5) {
+				categoryBtnPanel.Controls[headCateIndex - 1].Visible = true;
+			}
+		}
+		public void formAction(Action a) {
+			if (IsDisposed || !util.isShowWindow) return;
+			
+			if (Thread.CurrentThread == madeThread) {
+				try {
+					a.Invoke();
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				}
+			} else {
+				try {
+					Invoke((MethodInvoker)delegate() {
+						try {    
+				       		a.Invoke();
+				       	} catch (Exception e) {
+							util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+						}
+					});
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				} 
+			}
+		}
+		public void removeLiveListItem(LiveInfo li) {
+			lock(liveListLock) {
+				for (var i = liveList.Rows.Count - 1; i > -1; i--) {
+					if (liveList.Rows[i].DataBoundItem == li) {
+						
+//						util.debugWriteLine("remove mae [0] " + liveList.Rows[0].Visible + " " + liveList.Rows[0].Cells[3].Value + " " + liveListDataSource[0].hostName);
+						formAction(() => {liveList.Rows.RemoveAt(i);});
+//						util.debugWriteLine("remove ato [0] " + liveList.Rows[0].Visible + " " + liveList.Rows[0].Cells[3].Value + " " + liveListDataSource[0].hostName);
+						util.debugWriteLine("remove " + i + " " + li.hostName);
+						
+					}
+				}
+					//liveListDataSource.Remove(li);
+				
+				liveListDataReserve.Remove(li);
+			}
+		}
+		public void addLiveListItem(LiveInfo li, char cateChar, bool blindOnlyA, bool blindOnlyB, bool blindQuestion) {
+			var isDisp = (cateChar == '全' || li.MainCategory[0] == cateChar);
+			var isMemberOnly = !string.IsNullOrEmpty(li.memberOnly); 
+	        if (bool.Parse(config.get("BlindOnlyA")) && isMemberOnly &&
+			   		!string.IsNullOrEmpty(li.favorite))
+	        	isDisp = false;
+	        if (bool.Parse(config.get("BlindOnlyB")) && isMemberOnly)
+	        	isDisp = false;
+	        if (bool.Parse(config.get("BlindQuestion")) && cateChar != '全' &&
+	            	string.IsNullOrEmpty(li.lvId))
+	        	isDisp = false;
+					        
+			if (isDisp)	formAction(() => liveListDataSource.Add(li));
+			else liveListDataReserve.Add(li);
+			
+			if (!isLiveListTimeProcessing) {
+			//lock(liveListLock) {
+				isLiveListTimeProcessing = true;
+				Task.Run(() => liveListTimeProcess());
+			}
+		}
+		public bool insertLiveListItem(LiveInfo li, int index, char cateChar) {
+			if (cateChar == '全' || li.MainCategory[0] == cateChar) {
+				formAction(() => liveListDataSource.Insert(index, li));
+				return true;
+			} else {
+				liveListDataReserve.Add(li);
+				return false;
+			}
+			/*
+			if (!isLiveListTimeProcessing) {
+			//lock(liveListLock) {
+				isLiveListTimeProcessing = true;
+				Task.Run(() => liveListTimeProcess());
+			}
+			*/
+		}
+		private void liveListTimeProcess() {
+			
+			
+			while (liveList.Rows.Count > 0) {
+				Thread.Sleep(10000);
+				try {
+					deleteLiveListTime();
+					
+					setLiveListNum();
+				} catch (Exception e) {
+					util.debugWriteLine("livelist time process exception " + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				}
+				
+			}
+			
+			isLiveListTimeProcessing = false;
+		}
+		private void deleteLiveListTime() {
+			var delMin = double.Parse(config.get("liveListDelMinutes"));
+			var now = DateTime.Now;
+			lock(liveListLock) {
+				util.debugWriteLine("deletelivelistTime 0");
+				formAction(() => {
+					for (var i = liveListDataSource.Count - 1; i > -1; i--) {
+						if (delMin != 0 && ((TimeSpan)(now - liveListDataSource[i].pubDateDt)).TotalMinutes > delMin)
+							 liveListDataSource.RemoveAt(i);
+						else liveList.UpdateCellValue(8, i);
+					}
+				});
+				util.debugWriteLine("deletelivelistTime 1");
+				for (var i = liveListDataReserve.Count - 1; i > -1; i--) {
+					if (delMin != 0 && ((TimeSpan)(now - liveListDataReserve[i].pubDateDt)).TotalMinutes > delMin)
+						 liveListDataReserve.RemoveAt(i);
+				}
+			}
+			util.debugWriteLine("deletelivelistTime end");
+		}
+		void LiveListColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+		{
+			//util.debugWriteLine("column index " + e.Column.Index);
+			if (e.Column.Index != 1) return;
+			if (e.Column.HeaderText != "ｻﾑﾈ") return;
+			liveList.RowTemplate.Height = liveList.Columns[1].Width;
+			liveListRowHeightUpdate();
+			
+		}
+		public void liveListRowHeightUpdate() {
+			try {
+				foreach (DataGridViewRow r in liveList.Rows)
+					r.Height = liveList.Columns[1].Width;
+			} catch (Exception ee) {
+				util.debugWriteLine("livelist row heightupdate exception " + ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
+				
+		}
+		void LiveListCellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			if (e.ColumnIndex == -1 || e.RowIndex == -1) return;
+			var act = config.get("brodouble");
+			var li = liveListDataSource[e.RowIndex];
+			var url = "https://live.nicovideo.jp/watch/" + li.lvId;
+			
+			var comUrl = "";
+			if (li.comId != null && li.comId != "") {
+				var isChannel = liveListDataSource[e.RowIndex].comId.IndexOf("ch") > -1;
+				comUrl = (isChannel) ? 
+					("http://ch.nicovideo.jp/" + li.comId) :
+					("https://com.nicovideo.jp/community/" + li.comId);
+			}
+			
+			if (act == "1") {
+				util.openUrlBrowser(url, config);
+			} else if (act == "2") {
+				util.openUrlBrowser(comUrl, config);
+			} else if (act == "3") {
+				Clipboard.SetText(url);
+			} else if (act == "4") {
+				Clipboard.SetText(comUrl);
+			} else if (act == "5") {
+				openAddForm(li.comId);
+			}
+		}
+		void LiveListOpenUrlMenuClick(object sender, EventArgs e)
+		{
+			try {
+				var curCell = liveList.CurrentCell;
+				if (curCell == null || curCell.RowIndex == -1) return;
+				var li = (LiveInfo)liveListDataSource[curCell.RowIndex];
+				if (li.lvId == null || li.lvId == "") return;
+				var url = "http://live.nicovideo.jp/watch/" + li.lvId;
+				util.openUrlBrowser(url, config);
+				
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
+		}
+		void LiveListOpenCommunityUrlMenuClick(object sender, EventArgs e)
+		{
+			try {
+				var curCell = liveList.CurrentCell;
+				if (curCell == null || curCell.RowIndex == -1) return;
+				var li = (LiveInfo)liveListDataSource[curCell.RowIndex];
+				if (li.comId == null || li.comId == "") return;
+				var isChannel = li.comId.IndexOf("ch") > -1;
+				var comUrl = (isChannel) ? 
+					("http://ch.nicovideo.jp/" + li.comId) :
+					("https://com.nicovideo.jp/community/" + li.comId);
+				util.openUrlBrowser(comUrl, config);
+				
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
+		}
+		void LiveListAddFavoriteCommunityMenuClick(object sender, EventArgs e)
+		{
+			try {
+				var curCell = liveList.CurrentCell;
+				if (curCell == null || curCell.RowIndex == -1) return;
+				var li = (LiveInfo)liveListDataSource[curCell.RowIndex];
+				if (li.comId == null || li.comId == "") return;
+				openAddForm(li.comId);
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
+		}
+		void LiveListRemoveFavoriteCommunityMenuClick(object sender, EventArgs e)
+		{
+			var cur = liveList.CurrentCell;
+			if (cur.RowIndex == -1) return;
+			var li = liveListDataSource[cur.RowIndex];
+			if (li.comId == null || li.comId == "") return;
+			if (MessageBox.Show("お気に入りリストから" + li.comId + "の行を削除していいですか？", "確認", MessageBoxButtons.OKCancel) == DialogResult.Cancel) return;
+			while (true) {
+				try {
+					var isRemove = false;
+					foreach (var ai in alartListDataSource) {
+						if (ai.communityId == li.comId) {
+							alartListDataSource.Remove(ai);
+							isRemove = true;
+							break;
+						}
+					}
+					if (!isRemove) break;
+				} catch (Exception ee) {
+					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+				}
+			}
+		}
+		
+		void LiveListDeleteRowMenuClick(object sender, EventArgs e)
+		{
+			var cur = liveList.CurrentCell;
+			if (cur.RowIndex == -1) return;
+			var li = liveListDataSource[cur.RowIndex];
+			if (MessageBox.Show(li.lvId + "の行を削除していいですか？", "確認", MessageBoxButtons.OKCancel) == DialogResult.Cancel) return;
+			lock(liveListLock) {
+				liveListDataSource.Remove(li);
+			}
+			setLiveListNum();
+		}
+		
+		void LiveListCopyMenuDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+		{
+			var cur = liveList.CurrentCell;
+			if (cur.RowIndex == -1) return;
+			var li = liveListDataSource[cur.RowIndex];
+			var t = e.ClickedItem.Text;
+			if (t == "放送URL") {
+				var url = "http://live.nicovideo.jp/watch/" + li.lvId;
+				Clipboard.SetText(url);
+			} else if (t == "コミュニティURL") {
+				var isChannel = li.comId.IndexOf("ch") > -1;
+				var comUrl = (isChannel) ? 
+						("http://ch.nicovideo.jp/" + li.comId) :
+						("https://com.nicovideo.jp/community/" + li.comId);
+				Clipboard.SetText(comUrl);
+			} else if (t == "放送タイトル") {
+				Clipboard.SetText(li.title);
+			} else if (t == "放送者") {
+				Clipboard.SetText(li.hostName);
+			} else if (t == "コミュニティ名") {
+				Clipboard.SetText(li.comName);
+			} else if (t == "説明") {
+				Clipboard.SetText(li.description);
+			}
+		}
+		
+		public void setLiveListNum() {
+			var l = new List<LiveInfo>(liveListDataSource);
+			var allC = liveListDataSource.Count + liveListDataReserve.Count;
+			
+			
+			var mainCategories = new string[]{"一般(その他)", "政治",
+					"動物", "料理", "演奏してみた", "歌ってみた", "踊ってみた",
+					"描いてみた", "講座", "ゲーム", "動画紹介", "R18",
+					"顔出し", "凸待ち", "クルーズ待ち"};
+			var btns = new System.Windows.Forms.RadioButton[]{commonCategoryBtn, politicsCategoryBtn,
+					animalCategoryBtn, cookCategoryBtn, playCategoryBtn, 
+					singCategoryBtn, danceCategoryBtn, drawCategoryBtn, 
+					lectureCategoryBtn, gameCategoryBtn, introCategoryBtn, 
+					r18CategoryBtn, faceCategoryBtn, rushCategoryBtn, cruiseCategoryBtn};
+			
+			var btnsText = new List<string>();
+			for (var i = 0; i < mainCategories.Length; i++) {
+				var n = l.Count(x => x.MainCategory == mainCategories[i]);
+				var reserveN = liveListDataReserve.Count(x => x.MainCategory == mainCategories[i]);
+				var t = (mainCategories[i].StartsWith("一般")) ? "一般" : mainCategories[i];
+				btnsText.Add(string.Format(t + "({0}/{1})", n + reserveN, allC));
+				
+				//test
+				foreach (var r in liveListDataReserve) {
+					if (r.MainCategory == mainCategories[i]) {
+//						util.debugWriteLine(r.hostName + " " + r.MainCategory + " " + r.memberOnly);
+						
+					}
+				}
+			}
+			formAction(() => {
+				allCategoryBtn.Text = string.Format("全て({0}/{1})", allC, allC);
+				for (var i = 0; i < mainCategories.Length; i++) {
+					btns[i].Text = btnsText[i];
+				}
+			});
+			
+		}
+		
+		void CategoryBtnCheckedChanged(object sender, EventArgs e)
+		{
+			//util.debugWriteLine((System.Windows.Forms.RadioButton)sender);
+			if (!((System.Windows.Forms.RadioButton)sender).Checked) return;
+			
+			lock(liveListLock) {
+				var mainCategories = new string[]{"一般(その他)", "政治",
+						"動物", "料理", "演奏してみた", "歌ってみた", "踊ってみた",
+						"描いてみた", "講座", "ゲーム", "動画紹介", "R18",
+						"顔出し", "凸待ち", "クルーズ待ち"};
+				var btns = new System.Windows.Forms.RadioButton[]{commonCategoryBtn, politicsCategoryBtn,
+						animalCategoryBtn, cookCategoryBtn, playCategoryBtn, 
+						singCategoryBtn, danceCategoryBtn, drawCategoryBtn, 
+						lectureCategoryBtn, gameCategoryBtn, introCategoryBtn, 
+						r18CategoryBtn, faceCategoryBtn, rushCategoryBtn, cruiseCategoryBtn};
+				//var n = ((Control)sender).Name;
+				var isAll = sender == allCategoryBtn;
+				var cateName = (isAll) ? null : mainCategories[Array.IndexOf(btns, sender)];
+				try {
+					liveList.CurrentCell = null;
+					for (var i = liveList.Rows.Count - 1; i > -1; i--) {
+						var isDisplay = (isAll || liveListDataSource[i].MainCategory == cateName);
+						var isMemberOnly = !string.IsNullOrEmpty(liveListDataSource[i].memberOnly);
+						
+				        if (bool.Parse(config.get("BlindOnlyA")) && isMemberOnly &&
+						   		string.IsNullOrEmpty(liveListDataSource[i].favorite))
+				        	isDisplay = false;
+				        if (bool.Parse(config.get("BlindOnlyB")) && isMemberOnly)
+				        	isDisplay = false;
+						if (bool.Parse(config.get("BlindQuestion")) && cateName != "全て" &&
+				            	string.IsNullOrEmpty(liveListDataSource[i].lvId))
+				        	isDisplay = false;
+				        
+						if (!isDisplay) {
+							liveListDataReserve.Add(liveListDataSource[i]);
+							liveListDataSource.Remove(liveListDataSource[i]);
+						}
+					}
+					//for (var i = 0; i < liveListDataSource.Count; i++)
+					//	liveList.Rows[i].Visible =
+					//		(isAll || liveListDataSource[i].MainCategory == cateName);
+				} catch (Exception ee) {
+					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+				}
+				
+				getVisiRow();
+				
+				try {
+					for (var i = liveListDataReserve.Count - 1; i > -1; i--) {
+						var isDisplay = (isAll || liveListDataReserve[i].MainCategory == cateName);
+						var isMemberOnly = !string.IsNullOrEmpty(liveListDataReserve[i].memberOnly);
+						
+				        if (bool.Parse(config.get("BlindOnlyA")) && isMemberOnly &&
+						   		string.IsNullOrEmpty(liveListDataReserve[i].favorite))
+				        	isDisplay = false;
+				        if (bool.Parse(config.get("BlindOnlyB")) && isMemberOnly)
+				        	isDisplay = false;
+				        if (bool.Parse(config.get("BlindQuestion")) && cateName != "全て" &&
+				            	string.IsNullOrEmpty(liveListDataReserve[i].lvId))
+				        	isDisplay = false;
+				        if (isDisplay) {
+							liveListDataSource.Add(liveListDataReserve[i]);
+							liveListDataReserve.RemoveAt(i);
+						}
+					}
+				} catch (Exception ee) {
+					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+				}
+				
+				util.debugWriteLine("b");
+				getVisiRow();
+				
+				sortLiveList();
+				
+				util.debugWriteLine("d");
+				getVisiRow();
+				
+				if (bool.Parse(config.get("FavoriteUp")))
+					upLiveListFavorite();
+				
+				util.debugWriteLine("a");
+				getVisiRow();
+				
+				util.debugWriteLine("c ");
+				getVisiRow();
+				
+				for (var i = liveListDataSource.Count - 1; i > -1; i--) {
+					var isDisp = (liveListDataSource[i].MainCategory == cateName ||
+					            cateName == null);
+					if (!isDisp) {
+						liveListDataReserve.Add(liveListDataSource[i]);
+						liveListDataSource.RemoveAt(i);
+					}
+				}
+				
+			}
+		}
+		public void getVisiRow(bool isAll = false) {
+			var visiItems = new List<LiveInfo>();
+			for (var i = 0; i < liveList.Rows.Count; i++) {
+				var ii = liveList.Rows[i];
+				if (ii.Visible) {
+					visiItems.Add(((LiveInfo)ii.DataBoundItem));
+//					util.debugWriteLine(((LiveInfo)ii.DataBoundItem).hostName + " " + i);
+				}
+//				if (isAll) util.debugWriteLine(((LiveInfo)ii.DataBoundItem).hostName + " " + i);
+				
+			}
+			util.debugWriteLine(visiItems.Count);
+		}
+		void UpdateLiveListMenuClick(object sender, EventArgs e)
+		{
+			Task.Run(() => liveCheck.load());
+		}
+		void UpdateAutoDeleteMenuDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+		{
+			((ToolStripMenuItem)updateMenuItem).HideDropDown();
+			for (var i = 0; i < updateAutoDeleteMenu.DropDownItems.Count; i++) {
+				((ToolStripMenuItem)updateAutoDeleteMenu.DropDownItems[i]).Checked =
+					(e.ClickedItem == updateAutoDeleteMenu.DropDownItems[i]);
+			}
+			var min = new int[]{0, 5, 10, 15, 20, 30, 60, 360};
+			var delMin = 0;
+			for (var i = 0; i < updateAutoDeleteMenu.DropDownItems.Count; i++) {
+				if (((ToolStripMenuItem)updateAutoDeleteMenu.DropDownItems[i]).Checked)
+					delMin = i;
+			}
+			config.set("liveListDelMinutes", min[delMin].ToString());
+			deleteLiveListTime();
+		}
+		public char getCategoryChar() {
+			for (var i = 0; i < categoryBtnPanel.Controls.Count; i++) {
+				var b = (System.Windows.Forms.RadioButton)
+					categoryBtnPanel.Controls[i];
+				if (b.Checked) return b.Text[0];
+			}
+			return '全';
+		}
+		void UpdateAutoUpdateStartMenuClick(object sender, EventArgs e)
+		{
+			liveCheck.startAutoUpdate();
+			updateAutoUpdateStartMenu.Enabled = false;
+			updateAutoUpdateStopMenu.Enabled = true;
+		}
+		void UpdateAutoUpdateStopMenuClick(object sender, EventArgs e)
+		{
+			liveCheck.stopAutoUpdate();
+			updateAutoUpdateStartMenu.Enabled = true;
+			updateAutoUpdateStopMenu.Enabled = false;
+		}
+		void UpdateCateCategoryMenuDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+		{
+			((ToolStripMenuItem)updateMenuItem).HideDropDown();
+			for (var i = 0; i < updateCateCategoryMenu.DropDownItems.Count; i++) {
+				((ToolStripMenuItem)updateCateCategoryMenu.DropDownItems[i]).Checked =
+					(e.ClickedItem == updateCateCategoryMenu.DropDownItems[i]);
+			}
+			//var min = new int[]{0, 5, 10, 15, 20, 30, 60, 360};
+			var index = 0;
+			for (var i = 0; i < updateCateCategoryMenu.DropDownItems.Count; i++) {
+				if (((ToolStripMenuItem)updateCateCategoryMenu.DropDownItems[i]).Checked)
+					index = i;
+			}
+			config.set("cateCategoryType", index.ToString());
+		}
+		void UpdateTopFavoriteMenuCheckedChanged(object sender, EventArgs e)
+		{
+			config.set("FavoriteUp", ((ToolStripMenuItem)sender).Checked.ToString().ToLower());
+		}
+		void UpdateAutoSortMenuCheckedChanged(object sender, EventArgs e)
+		{
+			config.set("AutoSort", ((ToolStripMenuItem)sender).Checked.ToString().ToLower());
+		}
+		void UpdateHideMemberOnlyWithoutFavoriteMenuClick(object sender, EventArgs e)
+		{
+			updateHideMemberOnlyWithFavoriteMenu.Checked = false;
+			updateHideMemberOnlyWithoutFavoriteMenu.Checked = 
+					!updateHideMemberOnlyWithoutFavoriteMenu.Checked;
+			
+			config.set("BlindOnlyA", ((ToolStripMenuItem)sender).Checked.ToString().ToLower());
+		}
+		void UpdateHideMemberOnlyWithFavoriteMenuClick(object sender, EventArgs e)
+		{
+			updateHideMemberOnlyWithoutFavoriteMenu.Checked = false;
+			updateHideMemberOnlyWithFavoriteMenu.Checked = 
+					!updateHideMemberOnlyWithFavoriteMenu.Checked;
+			config.set("BlindOnlyB", ((ToolStripMenuItem)sender).Checked.ToString().ToLower());
+		}
+		
+		void UpdateHideQuestionCategoryMenuCheckedChanged(object sender, EventArgs e)
+		{
+			config.set("BlindQuestion", ((ToolStripMenuItem)sender).Checked.ToString().ToLower());
+		}
+		public void upLiveListFavorite() {
+			try  {
+				//var favorites = liveListDataSource.Select(li => !string.IsNullOrEmpty(li.Favorite));
+				//liveListDataSource.
+				formAction(() => {
+					var cateChar = getCategoryChar();
+					
+					util.debugWriteLine("e");
+					getVisiRow();
+					
+					var favoriteList = new List<LiveInfo>();
+					foreach (var f in liveListDataSource) 
+						if (!string.IsNullOrEmpty(f.favorite) &&
+						    	(cateChar == '全' || f.MainCategory[0] == cateChar))
+							favoriteList.Add(f);
+					
+					util.debugWriteLine("g");
+					getVisiRow();
+					
+					foreach (var f in favoriteList) liveListDataSource.Remove(f);
+					
+					util.debugWriteLine("h");
+					getVisiRow();
+					
+					favoriteList.Reverse();
+					
+					util.debugWriteLine("f");
+					getVisiRow();
+					
+					foreach (var f in favoriteList) {
+						liveListDataSource.Insert(0, f);
+					}
+					
+					util.debugWriteLine("g");
+					getVisiRow();
+					
+				});
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+		}
+		
+		void LiveListSorted(object sender, EventArgs e)
+		{
+			upLiveListFavorite();
+			
+		}
+		
+		void LiveListSearchBtnClick(object sender, EventArgs e)
+		{
+			if (liveListSearchText.Text == "") return;
+			var searchStr = liveListSearchText.Text;
+			var cur = liveList.CurrentCell;
+			if (cur == null || cur.RowIndex == -1) return;
+			var targetColumns = new int[] {2, 3, 4, 5, 6, 7, liveList.Columns.Count - 1};
+			for (var i = cur.RowIndex; i < liveList.RowCount; i++) {
+				foreach (var c in targetColumns) {
+					if (i == cur.RowIndex && c <= cur.ColumnIndex) continue;
+					var t = liveList[c, i].Value.ToString();
+					if (util.getRegGroup(t, "(" + searchStr + ")") != null) {
+						if (!liveList.Columns[c].Visible) continue;
+						liveList.CurrentCell = liveList[c, i];
+						return;
+					}
+					
+				}
+			}
+			for (var i = 0; i < cur.RowIndex + 1; i++) {
+				foreach (var c in targetColumns) {
+					if (i == cur.RowIndex && c >= cur.ColumnIndex) continue;
+					var t = liveList[c, i].Value;
+					if (t == null) continue;
+					if (util.getRegGroup(t.ToString(), "(" + searchStr + ")") != null) {
+						if (!liveList.Columns[c].Visible) continue;
+						liveList.CurrentCell = liveList[c, i];
+						return;
+					}
+					
+				}
+			}
+			if (util.getRegGroup(cur.Value.ToString(), "(" + searchStr + ")") != null) return;
+			MessageBox.Show("見つかりませんでした");
+		}
+		
+		void LiveListUpdateSamuneMenuClick(object sender, EventArgs e)
+		{
+			var cur = liveList.CurrentCell;
+			if (cur == null || cur.RowIndex == -1) return;
+			var li = liveListDataSource[cur.RowIndex];
+			if (li.thumbnailUrl == null) {
+				util.debugWriteLine("liveListUpdateSamuneMenuClick li.thumbnailUrl null");
+				return;
+			}
+			var img = ThumbnailManager.getImage(li.thumbnailUrl);
+			//liveListDataSource[cur.RowIndex].thumbnail = img;
+			if (img == null) return;
+			li.thumbnail = img;
+			ThumbnailManager.saveImage(img, li.comId);
+			
+			try {
+				var rowI = liveListDataSource.IndexOf(li);
+				if (rowI == -1) return;
+				liveList.UpdateCellValue(1, rowI);
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
+			/*
+			if (img == null) return;
+			
+			ThumbnailManager.saveImage(img, liveListDataSource[cur.RowIndex].comId);
+			liveListDataSource[cur.RowIndex].thumbnail = img;
+			liveList.UpdateCellValue(1, cur.RowIndex);
+			*/
+		}
+		void LiveListWriteSamuneMemoMenuClick(object sender, EventArgs e)
+		{
+			var cur = liveList.CurrentCell;
+			if (cur == null || cur.RowIndex == -1) return;
+			var li = liveListDataSource[cur.RowIndex];
+			if (li.thumbnail == null) {
+				li.thumbnail = ThumbnailManager.getThumbnailRssUrl(li.thumbnailUrl);
+				if (li.thumbnail == null) return;
+			}
+			var img = ThumbnailManager.writeMemo(li.thumbnail);
+			if (img == null) return;
+			li.thumbnail = img;
+			ThumbnailManager.saveImage(img, li.comId);
+			
+			try {
+				var rowI = liveListDataSource.IndexOf(li);
+				if (rowI == -1) return;
+				liveList.UpdateCellValue(1, rowI);
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
+		}
+		
+		void LiveListNGthumbnailMenuClick(object sender, EventArgs e)
+		{
+			var cur = liveList.CurrentCell;
+			if (cur == null || cur.RowIndex == -1) return;
+			var li = liveListDataSource[cur.RowIndex];
+			if (li.thumbnail == null) {
+				li.thumbnail = ThumbnailManager.getThumbnailRssUrl(li.thumbnailUrl);
+				if (li.thumbnail == null) return;
+			}
+			var img = ThumbnailManager.writeNG(li.thumbnail);
+			if (img == null) return;
+			li.thumbnail = img;
+			ThumbnailManager.saveImage(img, li.comId);
+			
+			try {
+				var rowI = liveListDataSource.IndexOf(li);
+				if (rowI == -1) return;
+				liveList.UpdateCellValue(1, rowI);
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
+		}
+		
+		void AlartListRowEnter(object sender, DataGridViewCellEventArgs e)
+		{
+			
+			if (e.RowIndex == -1)
+				return;
+			var ai = alartListDataSource[e.RowIndex];
+			
+			var isExistComThumb = false;
+			System.Drawing.Image img = null;
+			if (!string.IsNullOrEmpty(ai.communityId)) {
+				isExistComThumb = ThumbnailManager.isExist(ai.communityId, out img);
+			}
+			try {
+				comThumbBox.Image = 
+					isExistComThumb ?
+						new Bitmap(img, comThumbBox.Size) :
+						new Bitmap(System.Drawing.Image.FromFile("ImageCommunity/no thumb com.jpg"), comThumbBox.Size);
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
+			
+			var isExistUserThumb = false;
+			if (!string.IsNullOrEmpty(ai.hostId)) {
+				isExistUserThumb = ThumbnailManager.isExist(ai.hostId, out img);
+			}
+			try {
+				userThumbBox.Image = 
+					isExistUserThumb ?
+						new Bitmap(img, userThumbBox.Size) :
+						new Bitmap(System.Drawing.Image.FromFile("ImageUser/blank.jpg"), userThumbBox.Size);
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
+			
+		}
+		
+		void DisplayOnAirTabMenuDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+		{
+			var i = displayOnAirTabMenu.DropDownItems.IndexOf(e.ClickedItem);
+			liveList.Columns[i + 1].Visible = !liveList.Columns[i + 1].Visible;
+			((ToolStripMenuItem)displayOnAirTabMenu.DropDownItems[i]).Checked = liveList.Columns[i + 1].Visible; 
 		}
 	}
 }

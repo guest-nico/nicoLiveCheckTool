@@ -72,7 +72,7 @@ namespace namaichi.alart
 				
 				check.foundLive(items);
 				
-				if (check.checkedLvIdList.Count > 1000)
+				if (check.checkedLvIdList.Count > 20000)
 					check.deleteOldCheckedLvIdList();
 				
 				var t = int.Parse(config.get("rssUpdateInterval"));

@@ -26,8 +26,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.2";
-	public static string versionDayStr = "2019/02/16";
+	public static string versionStr = "ver0.1.5";
+	public static string versionDayStr = "2019/03/26";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	
@@ -1025,8 +1025,12 @@ class util {
 		var res = util.getPageSource(url, container);
 
 		if (res == null) return null;
-		var name = util.getRegGroup(res, "<meta property=\"og:title\" content=\"(.+?)さんのユーザーページ\">");
+		var name = util.getRegGroup(res, "<meta property=\"og:title\" content=\"(.+?)\">"); 
+		if (name == null)
+			name = util.getRegGroup(res, "<meta property=\"og:title\" content=\"(.+?)さんのユーザーページ\">");
 		if (name == null) return null;
+		if (name.EndsWith(" - niconico(ニコニコ)")) 
+			name = name.Replace(" - niconico(ニコニコ)", "");
 		//watching nowatching class
 		if (res.IndexOf("class=\"watching\"") > -1) isFollow = true;
 		return name;

@@ -9,8 +9,10 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using namaichi.info;
 using namaichi.rec;
+using namaichi.alart;
 
 namespace namaichi
 {
@@ -22,6 +24,8 @@ namespace namaichi
 //		public int addType = -1; //-1-no 0-user 1-community or channel 2-official
 		public AlartInfo ret = null;
 		private MainForm form;
+		private string lastGetThumbUser = null;
+		private string lastGetThumbCom = null;
 		public addForm(MainForm form, string id)
 		{
 			this.form = form;
@@ -55,8 +59,8 @@ namespace namaichi
 			var userId = util.getRegGroup(userIdText.Text, "(\\d+)");
 			communityNameText.Text = "";
 			userNameText.Text = "";
-			if (comId != null) GetCommunityInfoBtnClick(null, null);
-			if (userId != null) GetUserInfoBtnClick(null, null);
+			if (comId != null) GetCommunityInfoBtnClickProcess(true);
+			if (userId != null) GetUserInfoBtnClickProcess(true);
 			if (communityNameText.Text == "" && userNameText.Text == "" && keywordText.Text == "") {
 				MessageBox.Show("有効なコミュニティIDかユーザーIDかキーワードが入力されていないです");
 				return;
@@ -81,10 +85,15 @@ namespace namaichi
 					userFollow, "", keywordText.Text);
 			if (!duplicationCheckOk(_ret)) return;
 			ret = _ret;
+			util.debugWriteLine("addform okbtn " + _ret.hostId + " " + _ret.communityId + " " + _ret.keyword);
 			Close();
 		}
 		void GetCommunityInfoBtnClick(object sender, EventArgs e)
 		{
+			GetCommunityInfoBtnClickProcess();
+		}
+		void GetCommunityInfoBtnClickProcess(bool isOkBtn = false) {
+			util.debugWriteLine("GetCommunityInfoBtnClickProcess " + communityId.Text);
 			var num = util.getRegGroup(communityId.Text, "((ch|co)*\\d+)");
 			if (num == null) return;
 			var isChannel = num.StartsWith("ch");
@@ -100,11 +109,16 @@ namespace namaichi
 			if (comName == null) return;
 			communityFollowChkBox.Checked = isFollow;
 			communityNameText.Text = comName;
+			
+			setThunb(num, isOkBtn);
 		}
-		
 		
 		void GetUserInfoBtnClick(object sender, EventArgs e)
 		{
+			GetUserInfoBtnClickProcess();
+		}
+		void GetUserInfoBtnClickProcess(bool isOkBtn = false) {
+			util.debugWriteLine("GetUserInfoBtnClickProcess " + userIdText.Text);
 			var num = util.getRegGroup(userIdText.Text, "(\\d+)");
 			if (num == null) return;
 			userIdText.Text = num;
@@ -113,8 +127,9 @@ namespace namaichi
 			if (userName == null) return;
 			userFollowChkBox.Checked = isFollow;
 			userNameText.Text = userName;
+			
+			setThunb(num, isOkBtn);
 		}
-		
 		void GetInfoFromHosoIdBtnClick(object sender, EventArgs e)
 		{
 			if (hosoIdText.Text == "") return;
@@ -224,7 +239,7 @@ namespace namaichi
 					}
 				}
 			} catch (Exception e) {
-				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				util.debugWriteLine("duplicationcheckok " + e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return false;
 			}
 			return true;
@@ -279,6 +294,39 @@ namespace namaichi
 				
 			}
 		}
-
+		private void setThunb(string num, bool isOkBtn) {
+			var isUser = !num.StartsWith("c");
+			Image img;
+			if (ThumbnailManager.isExist(num, out img)) {
+				var type = isUser ? "ユーザー" : "コミュニティ";
+				if (isUser) userThumbBox.Image = new Bitmap(img, userThumbBox.Size);
+				else comThumbBox.Image = new Bitmap(img, comThumbBox.Size);
+			
+				var res = DialogResult.No;
+				if (!isOkBtn) {
+					res = MessageBox.Show(type + "画像を取得し直しますか？", 
+							type + "画像が既に存在します", MessageBoxButtons.YesNo,
+							MessageBoxIcon.Warning);
+				}
+				if (res == DialogResult.No) {
+					if (isUser) {
+						userThumbBox.Image = new Bitmap(img, userThumbBox.Size);
+					} else {
+						comThumbBox.Image = new Bitmap(img, comThumbBox.Size);
+					}
+					return;
+				}
+			}
+			var newImg = ThumbnailManager.getImageId(num);
+			if (newImg == null) {
+				return;
+			}
+			ThumbnailManager.saveImage(newImg, num);
+			if (isUser) {
+				userThumbBox.Image = new Bitmap(newImg, userThumbBox.Size);
+			} else {
+				comThumbBox.Image = new Bitmap(newImg, comThumbBox.Size);
+			}
+		}
 	}
 }

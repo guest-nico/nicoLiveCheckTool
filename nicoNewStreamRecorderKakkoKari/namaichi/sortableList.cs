@@ -21,6 +21,8 @@ namespace namaichi
         private bool _isSorted;
         private ListSortDirection _sortDirection = ListSortDirection.Ascending;
         private PropertyDescriptor _sortProperty;
+        
+        private string columnName = null;
  
         /// <summary>
         /// Initializes a new instance of the <see cref="SortableBindingList{T}"/> class.
@@ -89,10 +91,14 @@ namespace namaichi
         {
             _sortProperty = prop;
             _sortDirection = direction;
+            
+            columnName = prop.Name;
  
             List<T> list = Items as List<T>;
             if (list == null) return;
  
+            //list.Sort(
+            
             list.Sort(Compare);
  
             _isSorted = true;
@@ -122,6 +128,26 @@ namespace namaichi
             {
                 return 1; //first has value, second doesn't
             }
+            
+            if (columnName == "HostId") {
+            	int intL, intR;
+            	var _l = int.TryParse(lhsValue.ToString(), out intL);
+            	var _r = int.TryParse(rhsValue.ToString(), out intR);
+            	if (_l && _r) return intL.CompareTo(intR);
+            	else if (_l && !_r) return 1;
+            	else if (!_l && _r) return -1;
+            	return 0;
+            }
+            if (columnName == "elapsedTime") {
+            	DateTime intL, intR;
+            	var _l = DateTime.TryParse(lhsValue.ToString().Replace("間", ""), out intL);
+            	var _r = DateTime.TryParse(rhsValue.ToString().Replace("間", ""), out intR);
+            	if (_l && _r) return intL.CompareTo(intR);
+            	else if (_l && !_r) return 1;
+            	else if (!_l && _r) return -1;
+            	return 0;
+            }
+            
             if (lhsValue is IComparable)
             {
                 return ((IComparable)lhsValue).CompareTo(rhsValue);

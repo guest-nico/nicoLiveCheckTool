@@ -157,7 +157,10 @@ public class config
 			{"appliJName",""},
 			{"log","false"},
 			{"IsStartTimeAllCheck","false"},
-			{"Ischeck30min","true"},
+			//{"Ischeck30min","true"},
+			{"IscheckRecent","true"},
+			{"Ischeck30min","false"},
+			{"IscheckOnAir","true"},
 			{"IschangeIcon","false"},
 			{"IstasktrayStart","false"},
 			{"IsdragCom","false"},
@@ -239,6 +242,8 @@ public class config
 			{"ShowTaskDelete","true"},
 			{"ShowTaskMemo","true"},
 			
+			{"ShowLiveColumns","11111111111111111"},
+			
 			{"OffPop", "false"},
 	        {"OffBalloon", "false"},
 	        {"OffWeb", "false"},
@@ -257,7 +262,7 @@ public class config
 	        
 	        {"IsRss", "true"},
 	        {"IsPush", "true"},
-	        {"IsAppPush", "false"},
+	        {"IsAppPush", "true"},
 	        {"pushPri", ""},
 	        {"pushPub", ""},
 	        {"pushAuth", ""},
@@ -266,6 +271,18 @@ public class config
 	        {"appPushId", ""},
 	        {"appPushToken", ""},
 			
+	        {"thresholdpage", "10"},
+	        {"brodouble", "0"},
+	        {"cateCategoryType", "0"},
+	        {"liveListDelMinutes", "30"},
+	        {"FavoriteUp", "true"},
+	        {"AutoSort", "true"},
+	        {"BlindOnlyA", "false"},
+	        {"BlindOnlyB", "false"},
+	        {"BlindQuestion", "false"},
+	        {"AutoStart", "false"},
+	        {"liveListUpdateMinutes", "1"},
+	        
 			{"Height","400"},
 			{"Width","715"},
 			

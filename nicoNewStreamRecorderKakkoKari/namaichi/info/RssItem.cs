@@ -23,7 +23,7 @@ namespace namaichi.info
 		public string pubDate;
 		public string title;
 		public string thumbnailUrl;
-		public bool isMenberOnly;
+		public bool isMemberOnly;
 		public string[] tags = null;
 		public string itemRes;
 		public string userId = null;
@@ -41,7 +41,7 @@ namespace namaichi.info
 			this.pubDate = pubDate;
 			this.title = title;
 			this.thumbnailUrl = thumbnailUrl;
-			this.isMenberOnly = menberOnly == "true";
+			this.isMemberOnly = menberOnly == "true";
 			this.itemRes = itemRes;
 		}
 		public bool isContainKeyword(string keyword) {

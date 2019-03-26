@@ -36,6 +36,7 @@ namespace namaichi
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(addForm));
 			this.button4 = new System.Windows.Forms.Button();
 			this.button3 = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
@@ -49,6 +50,7 @@ namespace namaichi
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.isMailChkBox = new System.Windows.Forms.CheckBox();
 			this.appliJChkBox = new System.Windows.Forms.CheckBox();
 			this.appliIChkBox = new System.Windows.Forms.CheckBox();
 			this.appliHChkBox = new System.Windows.Forms.CheckBox();
@@ -74,13 +76,16 @@ namespace namaichi
 			this.label7 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
-			this.isMailChkBox = new System.Windows.Forms.CheckBox();
+			this.comThumbBox = new System.Windows.Forms.PictureBox();
+			this.userThumbBox = new System.Windows.Forms.PictureBox();
 			this.groupBox1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.comThumbBox)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.userThumbBox)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// button4
 			// 
-			this.button4.Location = new System.Drawing.Point(265, 468);
+			this.button4.Location = new System.Drawing.Point(265, 598);
 			this.button4.Name = "button4";
 			this.button4.Size = new System.Drawing.Size(74, 23);
 			this.button4.TabIndex = 3;
@@ -90,7 +95,7 @@ namespace namaichi
 			// 
 			// button3
 			// 
-			this.button3.Location = new System.Drawing.Point(185, 468);
+			this.button3.Location = new System.Drawing.Point(185, 598);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size(74, 23);
 			this.button3.TabIndex = 2;
@@ -100,7 +105,7 @@ namespace namaichi
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(28, 36);
+			this.label1.Location = new System.Drawing.Point(28, 166);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(68, 15);
 			this.label1.TabIndex = 4;
@@ -108,7 +113,7 @@ namespace namaichi
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(28, 60);
+			this.label2.Location = new System.Drawing.Point(28, 190);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(68, 15);
 			this.label2.TabIndex = 5;
@@ -116,7 +121,7 @@ namespace namaichi
 			// 
 			// communityId
 			// 
-			this.communityId.Location = new System.Drawing.Point(102, 33);
+			this.communityId.Location = new System.Drawing.Point(102, 163);
 			this.communityId.Name = "communityId";
 			this.communityId.Size = new System.Drawing.Size(146, 19);
 			this.communityId.TabIndex = 6;
@@ -124,14 +129,14 @@ namespace namaichi
 			// communityNameText
 			// 
 			this.communityNameText.Enabled = false;
-			this.communityNameText.Location = new System.Drawing.Point(102, 57);
+			this.communityNameText.Location = new System.Drawing.Point(102, 187);
 			this.communityNameText.Name = "communityNameText";
 			this.communityNameText.Size = new System.Drawing.Size(237, 19);
 			this.communityNameText.TabIndex = 6;
 			// 
 			// getCommunityInfoBtn
 			// 
-			this.getCommunityInfoBtn.Location = new System.Drawing.Point(264, 31);
+			this.getCommunityInfoBtn.Location = new System.Drawing.Point(264, 161);
 			this.getCommunityInfoBtn.Name = "getCommunityInfoBtn";
 			this.getCommunityInfoBtn.Size = new System.Drawing.Size(75, 23);
 			this.getCommunityInfoBtn.TabIndex = 7;
@@ -141,7 +146,7 @@ namespace namaichi
 			// 
 			// getUserInfoBtn
 			// 
-			this.getUserInfoBtn.Location = new System.Drawing.Point(264, 114);
+			this.getUserInfoBtn.Location = new System.Drawing.Point(264, 244);
 			this.getUserInfoBtn.Name = "getUserInfoBtn";
 			this.getUserInfoBtn.Size = new System.Drawing.Size(75, 23);
 			this.getUserInfoBtn.TabIndex = 12;
@@ -152,21 +157,21 @@ namespace namaichi
 			// userNameText
 			// 
 			this.userNameText.Enabled = false;
-			this.userNameText.Location = new System.Drawing.Point(102, 140);
+			this.userNameText.Location = new System.Drawing.Point(102, 270);
 			this.userNameText.Name = "userNameText";
 			this.userNameText.Size = new System.Drawing.Size(237, 19);
 			this.userNameText.TabIndex = 11;
 			// 
 			// userIdText
 			// 
-			this.userIdText.Location = new System.Drawing.Point(102, 116);
+			this.userIdText.Location = new System.Drawing.Point(102, 246);
 			this.userIdText.Name = "userIdText";
 			this.userIdText.Size = new System.Drawing.Size(146, 19);
 			this.userIdText.TabIndex = 10;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(28, 143);
+			this.label3.Location = new System.Drawing.Point(28, 273);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(68, 15);
 			this.label3.TabIndex = 9;
@@ -174,7 +179,7 @@ namespace namaichi
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(28, 119);
+			this.label4.Location = new System.Drawing.Point(28, 249);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(68, 15);
 			this.label4.TabIndex = 8;
@@ -197,12 +202,21 @@ namespace namaichi
 			this.groupBox1.Controls.Add(this.appliCChkBox);
 			this.groupBox1.Controls.Add(this.appliBChkBox);
 			this.groupBox1.Controls.Add(this.appliAChkBox);
-			this.groupBox1.Location = new System.Drawing.Point(28, 256);
+			this.groupBox1.Location = new System.Drawing.Point(28, 386);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(329, 118);
 			this.groupBox1.TabIndex = 13;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "動作";
+			// 
+			// isMailChkBox
+			// 
+			this.isMailChkBox.Location = new System.Drawing.Point(255, 18);
+			this.isMailChkBox.Name = "isMailChkBox";
+			this.isMailChkBox.Size = new System.Drawing.Size(68, 24);
+			this.isMailChkBox.TabIndex = 13;
+			this.isMailChkBox.Text = "メール";
+			this.isMailChkBox.UseVisualStyleBackColor = true;
 			// 
 			// appliJChkBox
 			// 
@@ -332,14 +346,14 @@ namespace namaichi
 			// 
 			// memoText
 			// 
-			this.memoText.Location = new System.Drawing.Point(53, 388);
+			this.memoText.Location = new System.Drawing.Point(53, 518);
 			this.memoText.Name = "memoText";
 			this.memoText.Size = new System.Drawing.Size(286, 19);
 			this.memoText.TabIndex = 14;
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(28, 391);
+			this.label5.Location = new System.Drawing.Point(28, 521);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(25, 21);
 			this.label5.TabIndex = 15;
@@ -348,7 +362,7 @@ namespace namaichi
 			// userFollowChkBox
 			// 
 			this.userFollowChkBox.Enabled = false;
-			this.userFollowChkBox.Location = new System.Drawing.Point(102, 165);
+			this.userFollowChkBox.Location = new System.Drawing.Point(102, 295);
 			this.userFollowChkBox.Name = "userFollowChkBox";
 			this.userFollowChkBox.Size = new System.Drawing.Size(81, 15);
 			this.userFollowChkBox.TabIndex = 16;
@@ -358,7 +372,7 @@ namespace namaichi
 			// communityFollowChkBox
 			// 
 			this.communityFollowChkBox.Enabled = false;
-			this.communityFollowChkBox.Location = new System.Drawing.Point(102, 82);
+			this.communityFollowChkBox.Location = new System.Drawing.Point(102, 212);
 			this.communityFollowChkBox.Name = "communityFollowChkBox";
 			this.communityFollowChkBox.Size = new System.Drawing.Size(81, 15);
 			this.communityFollowChkBox.TabIndex = 16;
@@ -367,14 +381,14 @@ namespace namaichi
 			// 
 			// keywordText
 			// 
-			this.keywordText.Location = new System.Drawing.Point(102, 199);
+			this.keywordText.Location = new System.Drawing.Point(102, 329);
 			this.keywordText.Name = "keywordText";
 			this.keywordText.Size = new System.Drawing.Size(237, 19);
 			this.keywordText.TabIndex = 18;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(28, 202);
+			this.label6.Location = new System.Drawing.Point(28, 332);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(68, 30);
 			this.label6.TabIndex = 17;
@@ -382,7 +396,7 @@ namespace namaichi
 			// 
 			// getInfoFromHosoIdBtn
 			// 
-			this.getInfoFromHosoIdBtn.Location = new System.Drawing.Point(298, 436);
+			this.getInfoFromHosoIdBtn.Location = new System.Drawing.Point(298, 566);
 			this.getInfoFromHosoIdBtn.Name = "getInfoFromHosoIdBtn";
 			this.getInfoFromHosoIdBtn.Size = new System.Drawing.Size(75, 23);
 			this.getInfoFromHosoIdBtn.TabIndex = 21;
@@ -392,14 +406,14 @@ namespace namaichi
 			// 
 			// hosoIdText
 			// 
-			this.hosoIdText.Location = new System.Drawing.Point(216, 438);
+			this.hosoIdText.Location = new System.Drawing.Point(216, 568);
 			this.hosoIdText.Name = "hosoIdText";
 			this.hosoIdText.Size = new System.Drawing.Size(76, 19);
 			this.hosoIdText.TabIndex = 20;
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(12, 441);
+			this.label7.Location = new System.Drawing.Point(12, 571);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(167, 15);
 			this.label7.TabIndex = 19;
@@ -408,7 +422,7 @@ namespace namaichi
 			// label8
 			// 
 			this.label8.Enabled = false;
-			this.label8.Location = new System.Drawing.Point(163, 441);
+			this.label8.Location = new System.Drawing.Point(163, 571);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(47, 15);
 			this.label8.TabIndex = 22;
@@ -416,26 +430,41 @@ namespace namaichi
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(102, 219);
+			this.label9.Location = new System.Drawing.Point(102, 349);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(263, 34);
 			this.label9.TabIndex = 23;
 			this.label9.Text = "（コミュニティ名、コミュニティID、放送者名、タイトル、\r\n説明、放送ID）";
 			// 
-			// isMailChkBox
+			// comThumbBox
 			// 
-			this.isMailChkBox.Location = new System.Drawing.Point(255, 18);
-			this.isMailChkBox.Name = "isMailChkBox";
-			this.isMailChkBox.Size = new System.Drawing.Size(68, 24);
-			this.isMailChkBox.TabIndex = 13;
-			this.isMailChkBox.Text = "メール";
-			this.isMailChkBox.UseVisualStyleBackColor = true;
+			this.comThumbBox.Image = ((System.Drawing.Image)(resources.GetObject("comThumbBox.Image")));
+			this.comThumbBox.InitialImage = ((System.Drawing.Image)(resources.GetObject("comThumbBox.InitialImage")));
+			this.comThumbBox.Location = new System.Drawing.Point(46, 12);
+			this.comThumbBox.Name = "comThumbBox";
+			this.comThumbBox.Size = new System.Drawing.Size(128, 128);
+			this.comThumbBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+			this.comThumbBox.TabIndex = 24;
+			this.comThumbBox.TabStop = false;
+			// 
+			// userThumbBox
+			// 
+			this.userThumbBox.Image = ((System.Drawing.Image)(resources.GetObject("userThumbBox.Image")));
+			this.userThumbBox.InitialImage = ((System.Drawing.Image)(resources.GetObject("userThumbBox.InitialImage")));
+			this.userThumbBox.Location = new System.Drawing.Point(211, 12);
+			this.userThumbBox.Name = "userThumbBox";
+			this.userThumbBox.Size = new System.Drawing.Size(128, 128);
+			this.userThumbBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+			this.userThumbBox.TabIndex = 25;
+			this.userThumbBox.TabStop = false;
 			// 
 			// addForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(385, 506);
+			this.ClientSize = new System.Drawing.Size(385, 636);
+			this.Controls.Add(this.userThumbBox);
+			this.Controls.Add(this.comThumbBox);
 			this.Controls.Add(this.label9);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.getInfoFromHosoIdBtn);
@@ -468,9 +497,13 @@ namespace namaichi
 			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.AddFormDragDrop);
 			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.AddFormDragEnter);
 			this.groupBox1.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.comThumbBox)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.userThumbBox)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.PictureBox userThumbBox;
+		private System.Windows.Forms.PictureBox comThumbBox;
 		private System.Windows.Forms.CheckBox isMailChkBox;
 		private System.Windows.Forms.CheckBox appliGChkBox;
 		private System.Windows.Forms.CheckBox appliHChkBox;

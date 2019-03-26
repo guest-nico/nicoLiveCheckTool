@@ -151,6 +151,7 @@
     <Compile Include="alart\AppPushReceiver.cs" />
     <Compile Include="alart\Check.cs" />
     <Compile Include="alart\FollowChecker.cs" />
+    <Compile Include="alart\LiveCheck.cs" />
     <Compile Include="alart\PopupDisplay.cs" />
     <Compile Include="alart\PopupDisplay.Designer.cs">
       <DependentUpon>PopupDisplay.cs</DependentUpon>
@@ -159,6 +160,8 @@
     <Compile Include="alart\PushReceiver.cs" />
     <Compile Include="alart\RssCheck.cs" />
     <Compile Include="alart\TaskCheck.cs" />
+    <Compile Include="alart\ThumbnailManager.cs" />
+    <Compile Include="info\LiveInfo.cs" />
     <Compile Include="info\TaskInfo.cs" />
     <Compile Include="PopupForm.cs" />
     <Compile Include="PopupForm.Designer.cs">
@@ -226,6 +229,10 @@
     <Compile Include="VersionForm.Designer.cs">
       <DependentUpon>VersionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="WriteThumbnailMemoForm.cs" />
+    <Compile Include="WriteThumbnailMemoForm.Designer.cs">
+      <DependentUpon>WriteThumbnailMemoForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="addForm.resx">
@@ -257,6 +264,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="VersionForm.resx">
       <DependentUpon>VersionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WriteThumbnailMemoForm.resx">
+      <DependentUpon>WriteThumbnailMemoForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

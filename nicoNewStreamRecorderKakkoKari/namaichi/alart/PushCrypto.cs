@@ -171,7 +171,7 @@ namespace namaichi.alart
 				util.debugWriteLine("bad payload length");
 				return null;
 			}
-			var _rs0 = (payload[16] << 24); 
+			//var _rs0 = (payload[16] << 24); 
 			var rs = (payload[16] << 24) | (payload[17] << 16) | (payload[18] << 8) | payload[19];
 			var keyIdLen = payload[20];
 			if (keyIdLen != 65) {
@@ -366,7 +366,7 @@ namespace namaichi.alart
 		    _aliceKeyAgree.Init (priKeyPara);
 		    
 		    AsymmetricKeyParameter pubKeyPara = new ECPublicKeyParameters(pubQ, ecDomPars);
-		    SubjectPublicKeyInfo _key = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(pubKeyPara);
+		    //SubjectPublicKeyInfo _key = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(pubKeyPara);
 		    //var pubPara = new ECPublicKeyParameters(priQ, ecDomPars);
 		    BigInteger aliceAgree = _aliceKeyAgree.CalculateAgreement (pubKeyPara);
 		    

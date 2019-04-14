@@ -39,6 +39,8 @@ namespace namaichi.alart
 		private config.config config;
 		private bool isRetry = true;
 		
+		private DateTime startTime = DateTime.Now;
+		
 		public PushReceiver(Check check, config.config config) {
 			this.check = check;
 			this.config = config;
@@ -347,6 +349,8 @@ namespace namaichi.alart
 				lvid = util.getRegGroup(dec, "\"content_ids\":\"(lv\\d+)\"");
 				thumbnail = util.getRegGroup(dec, "\"icon\":\"(.+?)\"");
 				dt = util.getRegGroup(dec, "\"created_at\":\"(.+?)\"");
+				if (dt != null && DateTime.Parse(dt) < startTime) 
+					return null;
 				if (isCom || isJikken) {
 					title = util.getRegGroup(dec, "\"body\":\".+? で、*「(.+?)」を放送\"");
 					comName = util.getRegGroup(dec, "\"body\":\"(.+?) で、*「");

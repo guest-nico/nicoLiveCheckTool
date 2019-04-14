@@ -10,6 +10,7 @@ using System;
 using System.Configuration;
 using System.Collections.Generic;
 using System.Threading;
+using System.IO;
 
 namespace namaichi.config {
 /// <summary>
@@ -20,6 +21,8 @@ public class config
 	private Configuration cfg;
 	public Dictionary<string, string> defaultConfig;
 	public Dictionary<string, string> argConfig = new Dictionary<string, string>();
+	public string brokenCopyFile = null;
+	
 	public config()
 	{
 		cfg = getConfig();
@@ -27,21 +30,25 @@ public class config
         
  	}
 	public Configuration getConfig() {
-		while (true) {
+		for (var i = 0; i < 5; i++) {
 			try {
 				var jarPath = util.getJarPath();
 				var configFile = jarPath[0] + "\\" + jarPath[1] + ".config";
+				if (i > 3) System.IO.File.Delete(configFile);
 				//util.debugWriteLine(configFile);
 		        var exeFileMap = new System.Configuration. ExeConfigurationFileMap { ExeConfigFilename = configFile };
 		        var cfg     = ConfigurationManager.OpenMappedExeConfiguration(exeFileMap, ConfigurationUserLevel.None);
 		        return cfg;
 			} catch (Exception e) {
 				util.debugWriteLine("getconfig " + e.Message + " " + e.StackTrace + " " + e.TargetSite);
+				if (e.Message.IndexOf("レベルのデータ") > -1) break;
 				Thread.Sleep(3000);
 				continue;
+				//ルート レベルのデータが無効です。
 			}
-			
 		}
+		resetConfig();
+		return this.cfg;
 	}
 	public void set(string key, string value) {
 		if (key.IndexOf("user_session") == -1 && 
@@ -165,10 +172,15 @@ public class config
 			{"IstasktrayStart","false"},
 			{"IsdragCom","false"},
 			{"doublecmode","なにもしない"},
-			
+			{"IsNotAllMatchNotifyNoRecent","false"},
+			{"IsAlartListRecentColor","false"},
+			{"recentColor","#FFE0FF"},
 			
 			{"IsbroadLog","false"},
 			{"IsLogFile","false"},
+			{"maxHistoryDisplay","100"},
+			{"maxNotAlartDisplay","100"},
+			{"maxLogDisplay","100"},
 			
 			{"poploc","右下"},
 			{"poptime","10"},
@@ -176,8 +188,11 @@ public class config
 			{"Isfixpopup","false"},
 			{"Issmallpopup","false"},
 			{"IsTopMostPopup","true"},
+			{"IsColorPopup","true"},
+			{"popupOpacity","90"},
 			{"rssUpdateInterval","15"},
 			{"userNameUpdateInterval","15"},
+			
 			
 			{"mailFrom",""},
 			{"mailTo",""},
@@ -186,9 +201,20 @@ public class config
 			{"mailUser",""},
 			{"mailPass",""},
 			{"IsmailSsl","false"},
-			{"IsSoundDefault","true"},
-			{"soundPath",""},
+			//{"IsSoundDefault","true"},
+			{"soundPathA",""},
+			{"soundPathB",""},
+			{"soundPathC",""},
 			{"soundVolume","50"},
+			{"soundAVolume","50"},
+			{"soundBVolume","50"},
+			{"soundCVolume","50"},
+			
+			{"defaultBehavior","0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"},
+			{"defaultTextColor","#000000"},
+			{"defaultBackColor","#ffe0ff"},
+			{"defaultSound","0"},
+			{"IsDefaultSoundId","true"},
 			
 			{"cookieFile",""},
 			{"iscookie","false"},
@@ -198,6 +224,7 @@ public class config
 			{"ShowComName","true"},
 			{"ShowUserName","true"},
 			{"ShowKeyword","true"},
+			{"ShowIsAnd","true"},
 			{"ShowComFollow","true"},
 			{"ShowUserFollow","true"},
 			{"ShowLatestTime","true"},
@@ -217,6 +244,7 @@ public class config
 			{"ShowAppH","false"},
 			{"ShowAppI","false"},
 			{"ShowAppJ","false"},
+			{"ShowSoundType","true"},
 			{"ShowMemo","false"},
 				
 			{"ShowTaskStartDt","true"},
@@ -243,6 +271,12 @@ public class config
 			{"ShowTaskMemo","true"},
 			
 			{"ShowLiveColumns","11111111111111111"},
+			{"ShowHistoryColumns","1111111011"},
+			{"ShowNotAlartColumns","1111111111"},
+			{"ColorAlartListColumns","000000000100000000000000000"},
+			{"ColorHistoryListRecentColumns","1000000000"},
+			
+			{"disableFollowColumns", "false"},
 			
 			{"OffPop", "false"},
 	        {"OffBalloon", "false"},
@@ -283,25 +317,36 @@ public class config
 	        {"AutoStart", "false"},
 	        {"liveListUpdateMinutes", "1"},
 	        
-			{"Height","400"},
-			{"Width","715"},
-			
+			{"Height","480"},
+			{"Width","830"},
+			{"LiveListColumnWidth",""},
+			{"AlartListColumnWidth",""},
+			{"TaskListColumnWidth",""},
+			{"LogListColumnWidth",""},
+			{"HistoryListColumnWidth",""},
+			{"NotAlartListColumnWidth",""},
+			{"activeTab","0"},
 		};
 
-		var buf = new Dictionary<string,string>();
-		foreach (var k in cfg.AppSettings.Settings.AllKeys) {
-			buf.Add(k, cfg.AppSettings.Settings[k].Value);
-		}
-		
-		cfg.AppSettings.Settings.Clear();
-		foreach (var k in defaultConfig.Keys) {
-			var v = (buf.ContainsKey(k)) ? buf[k] : defaultConfig[k];
-			cfg.AppSettings.Settings.Add(k, v);
-		}
 		try {
-			cfg.Save();
+			var buf = new Dictionary<string,string>();
+			foreach (var k in cfg.AppSettings.Settings.AllKeys) {
+				buf.Add(k, cfg.AppSettings.Settings[k].Value);
+			}
+			
+			cfg.AppSettings.Settings.Clear();
+			foreach (var k in defaultConfig.Keys) {
+				var v = (buf.ContainsKey(k)) ? buf[k] : defaultConfig[k];
+				cfg.AppSettings.Settings.Add(k, v);
+			}
+			try {
+				cfg.Save();
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + " " + e.StackTrace);
+			}
 		} catch (Exception e) {
-			util.debugWriteLine(e.Message + " " + e.StackTrace);
+			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			resetConfig();
 		}
 		
 		// Dictionary<string, string>
@@ -320,6 +365,39 @@ public class config
 		}
 	}
 //	private string[] defaultConfig = {};
+	private bool resetConfig() {
+		var jarPath = util.getJarPath();
+		var configFile = jarPath[0] + "\\" + jarPath[1] + ".config";
+		if (File.Exists(configFile)) {
+			var n = DateTime.Now;
+			var fn = jarPath[0] + "\\" + n.ToString("yyyyMMddhhmmss") + "ニコ生放送チェックツール（仮.config";
+			try {
+				File.Copy(configFile, fn);
+				File.Delete(configFile);
+				brokenCopyFile = fn;
+				cfg = getConfig();
+				defaultMergeFile();
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				try {
+					for (var i = 0; i < 10000; i++) {
+						fn = configFile + i.ToString();
+						if (File.Exists(fn)) continue;
+						File.Copy(configFile, fn);
+						File.Delete(configFile);
+						brokenCopyFile = fn;
+						cfg = getConfig();
+						defaultMergeFile();
+						break;
+					}
+				} catch (Exception ee) {
+					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 }
 
 }

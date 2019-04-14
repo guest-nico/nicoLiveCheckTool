@@ -40,7 +40,6 @@ namespace namaichi.info
 		public string memo = "";
 		public bool isDelete;
 		
-		
 		public TaskInfo(string taskTimeStr, string lvId, 
 				string args, string addDate, string status,
 				bool popup, bool baloon, bool browser,

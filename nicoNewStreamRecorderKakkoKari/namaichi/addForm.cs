@@ -10,6 +10,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.IO;
 using namaichi.info;
 using namaichi.rec;
 using namaichi.alart;
@@ -26,16 +27,26 @@ namespace namaichi
 		private MainForm form;
 		private string lastGetThumbUser = null;
 		private string lastGetThumbCom = null;
-		public addForm(MainForm form, string id)
+		private AlartInfo editAi = null;
+		private List<CustomKeywordInfo> customKw = null;
+		public addForm(MainForm form, string id, AlartInfo editAi = null)
 		{
 			this.form = form;
+			this.editAi = editAi;
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
+			if (editAi != null) {
+				setEditModeDisplay(editAi);
+				return;
+			}
+			
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
+			setDefaultBehavior();
+			
 			if (id == null) return;
 			
 			if (id.StartsWith("lv")) hosoIdText.Text = id;
@@ -45,7 +56,9 @@ namespace namaichi
 				}
 				communityId.Text = id;
 			}
-			else userIdText.Text = id; 
+			else userIdText.Text = id;
+			
+			
 		}
 		
 		void Button4Click(object sender, EventArgs e)
@@ -55,20 +68,46 @@ namespace namaichi
 		
 		void Button3Click(object sender, EventArgs e)
 		{
+			if (editAi != null) editOkBtnProcess();
+			else addOkBtnProcess();
+			
+		}
+		void addOkBtnProcess() {
 			var comId = util.getRegGroup(communityId.Text, "((ch|co)*\\d+)");
 			var userId = util.getRegGroup(userIdText.Text, "(\\d+)");
 			communityNameText.Text = "";
 			userNameText.Text = "";
 			if (comId != null) GetCommunityInfoBtnClickProcess(true);
 			if (userId != null) GetUserInfoBtnClickProcess(true);
-			if (communityNameText.Text == "" && userNameText.Text == "" && keywordText.Text == "") {
+			var isNoKeyword = (isSimpleKeywordRadioBtn.Checked && keywordText.Text == "") ||
+					(isCustomKeywordRadioBtn.Checked && customKw == null);
+			if (communityNameText.Text == "" && userNameText.Text == "" && isNoKeyword) {
 				MessageBox.Show("有効なコミュニティIDかユーザーIDかキーワードが入力されていないです");
 				return;
 			}
+			
+			if (isCustomKeywordRadioBtn.Checked) {
+				if (customKw == null) {
+					MessageBox.Show("カスタムキーワードが未設定です");
+					return;
+				}
+				var isAllNot = true;
+				foreach (var c in customKw) {
+					if (c.matchType != "含まない") isAllNot = false;
+				}
+				if (communityNameText.Text == "" && userNameText.Text == "" && isAllNot) {
+					MessageBox.Show("「含まない」以外の行が必要です");
+					return;
+				}
+			}
+			
+			
 			var now = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
 			var addDate = now;//now.Substring(0, now.Length - 3);
-			var comFollow = (communityFollowChkBox.Checked) ? "フォロー解除する" : "フォローする";
-			var userFollow = (userFollowChkBox.Checked) ? "フォロー解除する" : "フォローする";
+			var comFollow = string.IsNullOrEmpty(comId) ? "" : 
+					((communityFollowChkBox.Checked) ? "フォロー解除する" : "フォローする");
+			var userFollow = string.IsNullOrEmpty(userId) ? "" :
+					(userFollowChkBox.Checked) ? "フォロー解除する" : "フォローする";
 			if (communityNameText.Text == "") comFollow = "";
 			if (userNameText.Text == "") userFollow = "";
 			var _ret = new AlartInfo(comId, userId, 
@@ -82,10 +121,96 @@ namespace namaichi
 					appliGChkBox.Checked, appliHChkBox.Checked,					
 					appliIChkBox.Checked, appliJChkBox.Checked,
 					memoText.Text, comFollow,
-					userFollow, "", keywordText.Text);
+					userFollow, "", keywordText.Text, 
+					textColorBtn.BackColor, backColorBtn.BackColor,
+					defaultSoundList.SelectedIndex, 
+					isDefaultSoundIdChkBox.Checked, isMustComChkBox.Checked,
+					isMustUserChkBox.Checked, isMustKeywordChkBox.Checked,
+					customKw, isCustomKeywordRadioBtn.Checked);
 			if (!duplicationCheckOk(_ret)) return;
 			ret = _ret;
-			util.debugWriteLine("addform okbtn " + _ret.hostId + " " + _ret.communityId + " " + _ret.keyword);
+			util.debugWriteLine("addform add okbtn " + _ret.hostId + " " + _ret.communityId + " " + _ret.keyword);
+			Close();
+		}
+		void editOkBtnProcess() {
+			var comId = util.getRegGroup(communityId.Text, "((ch|co)*\\d+)");
+			var userId = util.getRegGroup(userIdText.Text, "(\\d+)");
+			communityNameText.Text = "";
+			userNameText.Text = "";
+			if (comId != null) GetCommunityInfoBtnClickProcess(true);
+			if (userId != null) GetUserInfoBtnClickProcess(true);
+			var comFollow = string.IsNullOrEmpty(comId) ? "" :
+					(communityFollowChkBox.Checked) ? "フォロー解除する" : "フォローする";
+			var userFollow = string.IsNullOrEmpty(userId) ? "":
+					(userFollowChkBox.Checked) ? "フォロー解除する" : "フォローする";
+			
+			var isNoKeyword = (isSimpleKeywordRadioBtn.Checked && keywordText.Text == "") ||
+					(isCustomKeywordRadioBtn.Checked && customKw == null);
+			if (communityNameText.Text == "" && userNameText.Text == "" && isNoKeyword) {
+				MessageBox.Show("有効なコミュニティIDかユーザーIDかキーワードが入力されていないです");
+				return;
+			}
+			
+			if (customKw != null) {
+				var isAllNot = true;
+				foreach (var c in customKw) {
+					if (c.matchType != "含まない") isAllNot = false;
+				}
+				if (communityNameText.Text == "" && userNameText.Text == "" && isAllNot) {
+					MessageBox.Show("「含まない」以外の行が必要です");
+					return;
+				}
+			}
+			
+			editAi.communityId = comId;
+			editAi.hostId = userId;
+			editAi.communityName = communityNameText.Text;
+			editAi.hostName = userNameText.Text;
+			editAi.communityFollow = comFollow;
+			editAi.hostFollow = userFollow;
+			editAi.memo = memoText.Text;
+			editAi.keyword = keywordText.Text;
+			editAi.popup = isPopupChkBox.Checked;
+			editAi.baloon = isBaloonChkBox.Checked;
+			editAi.browser = isWebChkBox.Checked;
+			editAi.mail = isMailChkBox.Checked;
+			editAi.sound = isSoundChkBox.Checked;
+			editAi.appliA = appliAChkBox.Checked;
+			editAi.appliB = appliBChkBox.Checked;
+			editAi.appliC = appliCChkBox.Checked;
+			editAi.appliD = appliDChkBox.Checked;
+			editAi.appliE = appliEChkBox.Checked;
+			editAi.appliF = appliFChkBox.Checked;
+			editAi.appliG = appliGChkBox.Checked;
+			editAi.appliH = appliHChkBox.Checked;
+			editAi.appliI = appliIChkBox.Checked;
+			editAi.appliJ = appliJChkBox.Checked;
+			editAi.textColor = textColorBtn.BackColor;
+			editAi.backColor = backColorBtn.BackColor;
+			editAi.soundType = defaultSoundList.SelectedIndex;
+			editAi.isSoundId = isDefaultSoundIdChkBox.Checked;
+			editAi.isMustCom = isMustComChkBox.Checked;
+			editAi.isMustUser = isMustUserChkBox.Checked;
+			editAi.isMustKeyword = isMustKeywordChkBox.Checked;
+			editAi.cki = customKw;
+			editAi.isCustomKeyword = isCustomKeywordRadioBtn.Checked;
+			/*
+			var _ret = new AlartInfo(comId, userId, 
+					communityNameText.Text, userNameText.Text, 
+					"", editAi.addDate, isPopupChkBox.Checked, 
+					isBaloonChkBox.Checked, isWebChkBox.Checked, 
+					isMailChkBox.Checked, isSoundChkBox.Checked,
+					appliAChkBox.Checked, appliBChkBox.Checked, 
+					appliCChkBox.Checked, appliDChkBox.Checked, 
+					appliEChkBox.Checked, appliFChkBox.Checked,
+					appliGChkBox.Checked, appliHChkBox.Checked,					
+					appliIChkBox.Checked, appliJChkBox.Checked,
+					memoText.Text, comFollow,
+					userFollow, "", keywordText.Text);
+			ret = _ret;
+			*/
+			ret = editAi;
+			util.debugWriteLine("addform edit okbtn " + editAi.hostId + " " + editAi.communityId + " " + editAi.keyword);
 			Close();
 		}
 		void GetCommunityInfoBtnClick(object sender, EventArgs e)
@@ -154,7 +279,7 @@ namespace namaichi
 					userIdText.Text = userNameText.Text = "";
 			communityFollowChkBox.Checked = userFollowChkBox.Checked = false;
 			
-			var url =  "http://live2.nicovideo.jp/watch/" + id;
+			var url =  "https://live2.nicovideo.jp/watch/" + id;
 			var hig = new HosoInfoGetter();
 			hig.get(url);
 			
@@ -247,6 +372,7 @@ namespace namaichi
 		
 		void AddFormLoad(object sender, EventArgs e)
 		{
+			if (editAi != null) return;
 			if (hosoIdText.Text != "") getInfoFromHosoIdBtn.PerformClick();
 			if (communityId.Text != "") getCommunityInfoBtn.PerformClick();
 			if (userIdText.Text != "") getUserInfoBtn.PerformClick();
@@ -327,6 +453,126 @@ namespace namaichi
 			} else {
 				comThumbBox.Image = new Bitmap(newImg, comThumbBox.Size);
 			}
+		}
+		void setEditModeDisplay(AlartInfo editAi) {
+			Text = "お気に入り編集";
+			communityId.Text = string.IsNullOrEmpty(editAi.communityId) ? "" : editAi.communityId;
+			communityNameText.Text = string.IsNullOrEmpty(editAi.communityName) ? "" : editAi.communityName;
+			userIdText.Text = string.IsNullOrEmpty(editAi.hostId) ? "" : editAi.hostId;
+			userNameText.Text = string.IsNullOrEmpty(editAi.hostName) ? "" : editAi.hostName;
+			keywordText.Text = string.IsNullOrEmpty(editAi.keyword) ? "" : editAi.keyword;
+			memoText.Text = string.IsNullOrEmpty(editAi.memo) ? "" : editAi.memo;
+			communityFollowChkBox.Checked = editAi.communityFollow == "フォロー解除する";
+			userFollowChkBox.Checked = editAi.hostFollow == "フォロー解除する";
+			
+			isPopupChkBox.Checked = editAi.popup;
+			isBaloonChkBox.Checked = editAi.baloon;
+			isWebChkBox.Checked = editAi.browser;
+			isMailChkBox.Checked = editAi.mail;
+			isSoundChkBox.Checked = editAi.sound;
+			appliAChkBox.Checked = editAi.appliA;
+			appliBChkBox.Checked = editAi.appliB;
+			appliCChkBox.Checked = editAi.appliC;
+			appliDChkBox.Checked = editAi.appliD;
+			appliEChkBox.Checked = editAi.appliE;
+			appliFChkBox.Checked = editAi.appliF;
+			appliGChkBox.Checked = editAi.appliG;
+			appliHChkBox.Checked = editAi.appliH;
+			appliIChkBox.Checked = editAi.appliI;
+			appliJChkBox.Checked = editAi.appliJ;
+			textColorBtn.BackColor = sampleColorText.ForeColor = 
+				editAi.textColor;
+			backColorBtn.BackColor = sampleColorText.BackColor = 
+				editAi.backColor;
+			defaultSoundList.SelectedIndex = editAi.soundType;
+			isDefaultSoundIdChkBox.Checked = editAi.isSoundId;
+			
+			Image comThumb = null, userThumb = null;
+			if (!string.IsNullOrEmpty(editAi.communityId))
+				if (ThumbnailManager.isExist(editAi.communityId, out comThumb))
+					comThumbBox.Image = comThumb;
+			if (!string.IsNullOrEmpty(editAi.hostId))
+				if (ThumbnailManager.isExist(editAi.hostId, out userThumb))
+					userThumbBox.Image = userThumb;
+			isMustComChkBox.Checked = editAi.isMustCom;
+			isMustUserChkBox.Checked = editAi.isMustUser;
+			isMustKeywordChkBox.Checked = editAi.isMustKeyword;
+			customKw = editAi.cki;
+			if (customKw != null) customKeywordBtn.Text = "カスタム設定(" + customKw[0].name + ")";
+			if (editAi.isCustomKeyword) isCustomKeywordRadioBtn.Checked = true;
+		}
+		private void setDefaultBehavior() {
+			var conf = form.config.get("defaultBehavior");
+			var l = conf.Split(',');
+			for (var i = 0; i < l.Length; i++) {
+				if (typeof(CheckBox) != behaviorGroupBox.Controls[i].GetType()) 
+					continue;
+				CheckBox chkbox = (CheckBox)behaviorGroupBox.Controls[i];
+				chkbox.Checked = l[i] == "1";
+			}
+			
+			textColorBtn.BackColor = sampleColorText.ForeColor = ColorTranslator.FromHtml(form.config.get("defaultTextColor"));
+			backColorBtn.BackColor = sampleColorText.BackColor = ColorTranslator.FromHtml(form.config.get("defaultBackColor"));
+			defaultSoundList.SelectedIndex = int.Parse(form.config.get("defaultSound"));
+			isDefaultSoundIdChkBox.Checked = bool.Parse(form.config.get("IsDefaultSoundId"));
+		}
+		
+		void TextColorBtnClick(object sender, EventArgs e)
+		{
+			var c = new ColorDialog();
+			c.FullOpen = true;
+			c.Color = textColorBtn.BackColor;
+			if (c.ShowDialog() != DialogResult.OK) return;
+			textColorBtn.BackColor = c.Color;
+			sampleColorText.ForeColor = c.Color;
+		}
+		void BackColorBtnClick(object sender, EventArgs e)
+		{
+			var c = new ColorDialog();
+			c.FullOpen = true;
+			c.Color = backColorBtn.BackColor;
+			if (c.ShowDialog() != DialogResult.OK) return;
+			backColorBtn.BackColor = c.Color;
+			sampleColorText.BackColor = c.Color;
+		}
+		void DefaultColorBtnClick(object sender, EventArgs e)
+		{
+			backColorBtn.BackColor = Color.FromArgb(255,224,255);
+			sampleColorText.BackColor = Color.FromArgb(255,224,255);
+			textColorBtn.BackColor = Color.Black;
+			sampleColorText.ForeColor = Color.Black;
+		}
+		void CustomKeywordBtnClick(object sender, EventArgs e)
+		{
+			var f = new CustomKeywordForm(true, customKw);
+			f.ShowDialog();
+			if (f.ret == null) {
+				if (f.DialogResult == DialogResult.OK) {
+					customKeywordBtn.Text = "カスタム設定(未設定)";
+					customKw = null;
+				}
+				return;
+			}
+			customKw = f.ret;
+			customKeywordBtn.Text = "カスタム設定(" + customKw[0].name + ")";
+		}
+		
+		void LinkLabel1LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			var url = "\"" + util.getJarPath()[0] + "/readme.html\"";
+			util.openUrlBrowser(url, form.config);
+		}
+		
+		void IsDefaultSoundIdChkBoxCheckedChanged(object sender, EventArgs e)
+		{
+			 
+			var comId = util.getRegGroup(communityId.Text, "(c[oh]\\d+)");
+			var userId = util.getRegGroup(userIdText.Text, "(\\d+)");
+			existSoundFileLabel.Visible =
+					isDefaultSoundIdChkBox.Checked &&
+				 		(!(comId == null || !File.Exists(util.getJarPath()[0] + "/Sound/" + comId + ".wav")) ||
+				 		!(userId == null || !File.Exists(util.getJarPath()[0] + "/Sound/" + userId + ".wav")));
+			
 		}
 	}
 }

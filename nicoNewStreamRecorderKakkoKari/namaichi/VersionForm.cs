@@ -30,7 +30,7 @@ namespace namaichi
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
 			versionLabel.Text = util.versionStr + " (" + util.versionDayStr + ")";
-			//communityLinkLabel.Links.Add(0, communityLinkLabel.Text.Length, "http://com.nicovideo.jp/community/co2414037");
+			//communityLinkLabel.Links.Add(0, communityLinkLabel.Text.Length, "https://com.nicovideo.jp/community/co2414037");
 		}
 		
 		void okBtnClick(object sender, EventArgs e)
@@ -40,7 +40,7 @@ namespace namaichi
 		
 		void communityLinkLabel_Click(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			var url = "http://com.nicovideo.jp/community/co2414037";
+			var url = "https://com.nicovideo.jp/community/co2414037";
 			util.openUrlBrowser(url, config);
 		}
 	}

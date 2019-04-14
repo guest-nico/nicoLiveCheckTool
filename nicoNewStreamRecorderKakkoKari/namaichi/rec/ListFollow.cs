@@ -50,7 +50,7 @@ namespace namaichi.rec
 			else if (followMode == "community") modeStr = "コミュニティの";
 			else if (followMode == "channel") modeStr = "チャンネルの";
 			form.addLogText(modeStr + "一括フォローを開始します");
-			new FollowChecker(form, check).check();
+			new FollowChecker(form, check.container).check();
 			
 			//var fu = new FollowChannel(false);
 			while (true) {

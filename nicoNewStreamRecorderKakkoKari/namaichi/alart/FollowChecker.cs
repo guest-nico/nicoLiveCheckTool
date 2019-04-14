@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Text.RegularExpressions;
+using System.Net;
 using namaichi;
 
 namespace namaichi.alart
@@ -20,13 +21,13 @@ namespace namaichi.alart
 	public class FollowChecker
 	{
 		private MainForm form;
-		private Check _check;
+		private CookieContainer container;
 		
 		private Regex myPageFollowRegex = new Regex("<h5><a href=\".*?(\\d+)\">(.*?)</a></h5>");
-		public FollowChecker(MainForm form, Check check)
+		public FollowChecker(MainForm form, CookieContainer container)
 		{
 			this.form = form;
-			this._check = check;
+			this.container = container;
 		}
 		public void check() {
 			checkFromMypage();
@@ -35,15 +36,17 @@ namespace namaichi.alart
 			var followList = getFollowList();
 			updateAlartList(followList);
 		}
-		private List<string[]> getFollowList() {
+		public List<string[]> getFollowList(bool[] types = null) {
 			var ret = new List<string[]>();
 			var urls = new string[] {
 				"https://www.nicovideo.jp/my/fav/user",
 				"https://www.nicovideo.jp/my/channel",
 				"https://www.nicovideo.jp/my/community"
 			};
-			foreach (var url in urls) {
-				var l = checkFollowPage(url);
+			for (var i = 0; i < urls.Length; i++) {
+				if (types != null && !types[i]) continue;
+				
+				var l = checkFollowPage(urls[i]);
 				//if (l == null) continue;
 				ret.AddRange(l);
 			}
@@ -55,7 +58,7 @@ namespace namaichi.alart
 			for (var i = 1; i < 50; i++) {
 				var res = "";
 				for (var j = 0; j < 10; j++) {
-					res = util.getPageSource(url + ((i == 1) ? "" : ("?page=" + i)), _check.container);
+					res = util.getPageSource(url + ((i == 1) ? "" : ("?page=" + i)), container);
 					if (res != null) break;
 					Thread.Sleep(3000);
 				}

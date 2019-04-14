@@ -38,7 +38,7 @@ namespace namaichi
 		{
 			this.button3 = new System.Windows.Forms.Button();
 			this.button4 = new System.Windows.Forms.Button();
-			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.appliTab = new System.Windows.Forms.TabPage();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.label30 = new System.Windows.Forms.Label();
 			this.label26 = new System.Windows.Forms.Label();
@@ -117,8 +117,38 @@ namespace namaichi
 			this.browserPathSanshouBtn = new System.Windows.Forms.Button();
 			this.browserPathText = new System.Windows.Forms.TextBox();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
-			this.tabPage3 = new System.Windows.Forms.TabPage();
+			this.commonTab = new System.Windows.Forms.TabPage();
+			this.defaultBehaviorGroupBox = new System.Windows.Forms.GroupBox();
+			this.isPopupChkBox = new System.Windows.Forms.CheckBox();
+			this.isBaloonChkBox = new System.Windows.Forms.CheckBox();
+			this.isWebChkBox = new System.Windows.Forms.CheckBox();
+			this.isMailChkBox = new System.Windows.Forms.CheckBox();
+			this.isSoundChkBox = new System.Windows.Forms.CheckBox();
+			this.appliAChkBox = new System.Windows.Forms.CheckBox();
+			this.appliBChkBox = new System.Windows.Forms.CheckBox();
+			this.appliCChkBox = new System.Windows.Forms.CheckBox();
+			this.appliDChkBox = new System.Windows.Forms.CheckBox();
+			this.appliEChkBox = new System.Windows.Forms.CheckBox();
+			this.appliFChkBox = new System.Windows.Forms.CheckBox();
+			this.appliGChkBox = new System.Windows.Forms.CheckBox();
+			this.appliHChkBox = new System.Windows.Forms.CheckBox();
+			this.appliIChkBox = new System.Windows.Forms.CheckBox();
+			this.appliJChkBox = new System.Windows.Forms.CheckBox();
+			this.sampleColorText = new System.Windows.Forms.TextBox();
+			this.backColorBtn = new System.Windows.Forms.Button();
+			this.textColorBtn = new System.Windows.Forms.Button();
+			this.label52 = new System.Windows.Forms.Label();
+			this.label53 = new System.Windows.Forms.Label();
+			this.defaultColorBtn = new System.Windows.Forms.Button();
+			this.isDefaultSoundIdChkBox = new System.Windows.Forms.CheckBox();
+			this.defaultSoundList = new System.Windows.Forms.ComboBox();
+			this.label57 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.isAlartListColorRecent = new System.Windows.Forms.CheckBox();
+			this.recentSampleColorText = new System.Windows.Forms.TextBox();
+			this.recentColorBtn = new System.Windows.Forms.Button();
+			this.defaultRecentColorBtn = new System.Windows.Forms.Button();
+			this.isNotAllMatchNotifyNoRecentChkBox = new System.Windows.Forms.CheckBox();
 			this.isCheckOnAirRadioBtn = new System.Windows.Forms.RadioButton();
 			this.isCheck30minRadioBtn = new System.Windows.Forms.RadioButton();
 			this.doublecmodeList = new System.Windows.Forms.ComboBox();
@@ -136,10 +166,55 @@ namespace namaichi
 			this.thresholdpageList = new System.Windows.Forms.NumericUpDown();
 			this.label49 = new System.Windows.Forms.Label();
 			this.label48 = new System.Windows.Forms.Label();
+			this.common2Tab = new System.Windows.Forms.TabPage();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.maxLogDisplayList = new System.Windows.Forms.NumericUpDown();
+			this.maxNotAlartDisplayList = new System.Windows.Forms.NumericUpDown();
+			this.label62 = new System.Windows.Forms.Label();
+			this.label61 = new System.Windows.Forms.Label();
+			this.maxHistoryDisplayList = new System.Windows.Forms.NumericUpDown();
+			this.label60 = new System.Windows.Forms.Label();
 			this.isBroadLogChkBox = new System.Windows.Forms.CheckBox();
 			this.isLogChkBtn = new System.Windows.Forms.CheckBox();
-			this.tabPage4 = new System.Windows.Forms.TabPage();
+			this.notifyTab = new System.Windows.Forms.TabPage();
+			this.groupBox9 = new System.Windows.Forms.GroupBox();
+			this.label56 = new System.Windows.Forms.Label();
+			this.label55 = new System.Windows.Forms.Label();
+			this.label54 = new System.Windows.Forms.Label();
+			this.volumeCText = new System.Windows.Forms.Label();
+			this.volumeBText = new System.Windows.Forms.Label();
+			this.volumeAText = new System.Windows.Forms.Label();
+			this.volumeCBar = new System.Windows.Forms.TrackBar();
+			this.volumeBBar = new System.Windows.Forms.TrackBar();
+			this.volumeABar = new System.Windows.Forms.TrackBar();
+			this.volumeText = new System.Windows.Forms.Label();
+			this.volumeBar = new System.Windows.Forms.TrackBar();
+			this.soundCSanshouBtn = new System.Windows.Forms.Button();
+			this.soundBSanshouBtn = new System.Windows.Forms.Button();
+			this.soundCTestBtn = new System.Windows.Forms.Button();
+			this.soundBTestBtn = new System.Windows.Forms.Button();
+			this.soundTestBtn = new System.Windows.Forms.Button();
+			this.soundATestBtn = new System.Windows.Forms.Button();
+			this.soundASanshouBtn = new System.Windows.Forms.Button();
+			this.soundPathCText = new System.Windows.Forms.TextBox();
+			this.soundPathBText = new System.Windows.Forms.TextBox();
+			this.soundPathAText = new System.Windows.Forms.TextBox();
+			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.isColorPopupChkBox = new System.Windows.Forms.CheckBox();
+			this.testPopupBtn = new System.Windows.Forms.Button();
+			this.label59 = new System.Windows.Forms.Label();
+			this.popupOpacityList = new System.Windows.Forms.NumericUpDown();
+			this.label6 = new System.Windows.Forms.Label();
+			this.label58 = new System.Windows.Forms.Label();
+			this.poptimeList = new System.Windows.Forms.NumericUpDown();
+			this.label5 = new System.Windows.Forms.Label();
+			this.poplocList = new System.Windows.Forms.ComboBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.isTopMostPopupChkBox = new System.Windows.Forms.CheckBox();
+			this.IssmallpopupChkBox = new System.Windows.Forms.CheckBox();
+			this.IsfixpopupChkBox = new System.Windows.Forms.CheckBox();
+			this.IsclosepopupChkBox = new System.Windows.Forms.CheckBox();
+			this.notify2Tab = new System.Windows.Forms.TabPage();
 			this.groupBox10 = new System.Windows.Forms.GroupBox();
 			this.sendTestMailBtn = new System.Windows.Forms.Button();
 			this.isMailSslChkBox = new System.Windows.Forms.CheckBox();
@@ -155,23 +230,7 @@ namespace namaichi
 			this.label43 = new System.Windows.Forms.Label();
 			this.mailFromText = new System.Windows.Forms.TextBox();
 			this.label42 = new System.Windows.Forms.Label();
-			this.groupBox9 = new System.Windows.Forms.GroupBox();
-			this.volumeText = new System.Windows.Forms.Label();
-			this.volumeBar = new System.Windows.Forms.TrackBar();
-			this.isDefaultSoundChkBtn = new System.Windows.Forms.CheckBox();
-			this.soundSanshouBtn = new System.Windows.Forms.Button();
-			this.soundPathText = new System.Windows.Forms.TextBox();
-			this.groupBox4 = new System.Windows.Forms.GroupBox();
-			this.label6 = new System.Windows.Forms.Label();
-			this.poptimeList = new System.Windows.Forms.NumericUpDown();
-			this.label5 = new System.Windows.Forms.Label();
-			this.poplocList = new System.Windows.Forms.ComboBox();
-			this.label4 = new System.Windows.Forms.Label();
-			this.isTopMostPopupChkBox = new System.Windows.Forms.CheckBox();
-			this.IssmallpopupChkBox = new System.Windows.Forms.CheckBox();
-			this.IsfixpopupChkBox = new System.Windows.Forms.CheckBox();
-			this.IsclosepopupChkBox = new System.Windows.Forms.CheckBox();
-			this.tabPage5 = new System.Windows.Forms.TabPage();
+			this.alartTab = new System.Windows.Forms.TabPage();
 			this.groupBox8 = new System.Windows.Forms.GroupBox();
 			this.isAppPushChkBox = new System.Windows.Forms.CheckBox();
 			this.isPushChkBox = new System.Windows.Forms.CheckBox();
@@ -183,7 +242,7 @@ namespace namaichi
 			this.label7 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.rssUpdateIntervalList = new System.Windows.Forms.NumericUpDown();
-			this.tabPage2 = new System.Windows.Forms.TabPage();
+			this.accountTab = new System.Windows.Forms.TabPage();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
@@ -199,28 +258,38 @@ namespace namaichi
 			this.cookieFileSanshouBtn = new System.Windows.Forms.Button();
 			this.btnReload = new System.Windows.Forms.Button();
 			this.useSecondLoginChkBox = new System.Windows.Forms.CheckBox();
-			this.tabPage1.SuspendLayout();
+			this.appliTab.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.tabControl1.SuspendLayout();
-			this.tabPage3.SuspendLayout();
+			this.commonTab.SuspendLayout();
+			this.defaultBehaviorGroupBox.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox11.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.liveListUpdateMinutesList)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.thresholdpageList)).BeginInit();
+			this.common2Tab.SuspendLayout();
 			this.groupBox1.SuspendLayout();
-			this.tabPage4.SuspendLayout();
-			this.groupBox10.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.maxLogDisplayList)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.maxNotAlartDisplayList)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.maxHistoryDisplayList)).BeginInit();
+			this.notifyTab.SuspendLayout();
 			this.groupBox9.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.volumeCBar)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.volumeBBar)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.volumeABar)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.volumeBar)).BeginInit();
 			this.groupBox4.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.popupOpacityList)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.poptimeList)).BeginInit();
-			this.tabPage5.SuspendLayout();
+			this.notify2Tab.SuspendLayout();
+			this.groupBox10.SuspendLayout();
+			this.alartTab.SuspendLayout();
 			this.groupBox8.SuspendLayout();
 			this.groupBox7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.userNameUpdateIntervalList)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.rssUpdateIntervalList)).BeginInit();
-			this.tabPage2.SuspendLayout();
+			this.accountTab.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -244,18 +313,18 @@ namespace namaichi
 			this.button4.UseVisualStyleBackColor = true;
 			this.button4.Click += new System.EventHandler(this.optionCancel_Click);
 			// 
-			// tabPage1
+			// appliTab
 			// 
-			this.tabPage1.Controls.Add(this.groupBox6);
-			this.tabPage1.Controls.Add(this.groupBox5);
-			this.tabPage1.Location = new System.Drawing.Point(4, 22);
-			this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
-			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
-			this.tabPage1.Size = new System.Drawing.Size(433, 536);
-			this.tabPage1.TabIndex = 0;
-			this.tabPage1.Text = "アプリ設定";
-			this.tabPage1.UseVisualStyleBackColor = true;
+			this.appliTab.Controls.Add(this.groupBox6);
+			this.appliTab.Controls.Add(this.groupBox5);
+			this.appliTab.Location = new System.Drawing.Point(4, 22);
+			this.appliTab.Margin = new System.Windows.Forms.Padding(2);
+			this.appliTab.Name = "appliTab";
+			this.appliTab.Padding = new System.Windows.Forms.Padding(2);
+			this.appliTab.Size = new System.Drawing.Size(433, 536);
+			this.appliTab.TabIndex = 0;
+			this.appliTab.Text = "アプリ設定";
+			this.appliTab.UseVisualStyleBackColor = true;
 			// 
 			// groupBox6
 			// 
@@ -945,11 +1014,13 @@ namespace namaichi
 			// 
 			// tabControl1
 			// 
-			this.tabControl1.Controls.Add(this.tabPage3);
-			this.tabControl1.Controls.Add(this.tabPage4);
-			this.tabControl1.Controls.Add(this.tabPage5);
-			this.tabControl1.Controls.Add(this.tabPage2);
-			this.tabControl1.Controls.Add(this.tabPage1);
+			this.tabControl1.Controls.Add(this.commonTab);
+			this.tabControl1.Controls.Add(this.common2Tab);
+			this.tabControl1.Controls.Add(this.notifyTab);
+			this.tabControl1.Controls.Add(this.notify2Tab);
+			this.tabControl1.Controls.Add(this.alartTab);
+			this.tabControl1.Controls.Add(this.accountTab);
+			this.tabControl1.Controls.Add(this.appliTab);
 			this.tabControl1.Location = new System.Drawing.Point(9, 10);
 			this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
 			this.tabControl1.Name = "tabControl1";
@@ -958,21 +1029,281 @@ namespace namaichi
 			this.tabControl1.TabIndex = 1;
 			this.tabControl1.Click += new System.EventHandler(this.btnReload_Click);
 			// 
-			// tabPage3
+			// commonTab
 			// 
-			this.tabPage3.Controls.Add(this.groupBox2);
-			this.tabPage3.Controls.Add(this.groupBox11);
-			this.tabPage3.Controls.Add(this.groupBox1);
-			this.tabPage3.Location = new System.Drawing.Point(4, 22);
-			this.tabPage3.Name = "tabPage3";
-			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(433, 536);
-			this.tabPage3.TabIndex = 2;
-			this.tabPage3.Text = "一般";
-			this.tabPage3.UseVisualStyleBackColor = true;
+			this.commonTab.Controls.Add(this.defaultBehaviorGroupBox);
+			this.commonTab.Controls.Add(this.groupBox2);
+			this.commonTab.Controls.Add(this.groupBox11);
+			this.commonTab.Location = new System.Drawing.Point(4, 22);
+			this.commonTab.Name = "commonTab";
+			this.commonTab.Padding = new System.Windows.Forms.Padding(3);
+			this.commonTab.Size = new System.Drawing.Size(433, 536);
+			this.commonTab.TabIndex = 2;
+			this.commonTab.Text = "一般";
+			this.commonTab.UseVisualStyleBackColor = true;
+			// 
+			// defaultBehaviorGroupBox
+			// 
+			this.defaultBehaviorGroupBox.Controls.Add(this.isPopupChkBox);
+			this.defaultBehaviorGroupBox.Controls.Add(this.isBaloonChkBox);
+			this.defaultBehaviorGroupBox.Controls.Add(this.isWebChkBox);
+			this.defaultBehaviorGroupBox.Controls.Add(this.isMailChkBox);
+			this.defaultBehaviorGroupBox.Controls.Add(this.isSoundChkBox);
+			this.defaultBehaviorGroupBox.Controls.Add(this.appliAChkBox);
+			this.defaultBehaviorGroupBox.Controls.Add(this.appliBChkBox);
+			this.defaultBehaviorGroupBox.Controls.Add(this.appliCChkBox);
+			this.defaultBehaviorGroupBox.Controls.Add(this.appliDChkBox);
+			this.defaultBehaviorGroupBox.Controls.Add(this.appliEChkBox);
+			this.defaultBehaviorGroupBox.Controls.Add(this.appliFChkBox);
+			this.defaultBehaviorGroupBox.Controls.Add(this.appliGChkBox);
+			this.defaultBehaviorGroupBox.Controls.Add(this.appliHChkBox);
+			this.defaultBehaviorGroupBox.Controls.Add(this.appliIChkBox);
+			this.defaultBehaviorGroupBox.Controls.Add(this.appliJChkBox);
+			this.defaultBehaviorGroupBox.Controls.Add(this.sampleColorText);
+			this.defaultBehaviorGroupBox.Controls.Add(this.backColorBtn);
+			this.defaultBehaviorGroupBox.Controls.Add(this.textColorBtn);
+			this.defaultBehaviorGroupBox.Controls.Add(this.label52);
+			this.defaultBehaviorGroupBox.Controls.Add(this.label53);
+			this.defaultBehaviorGroupBox.Controls.Add(this.defaultColorBtn);
+			this.defaultBehaviorGroupBox.Controls.Add(this.isDefaultSoundIdChkBox);
+			this.defaultBehaviorGroupBox.Controls.Add(this.defaultSoundList);
+			this.defaultBehaviorGroupBox.Controls.Add(this.label57);
+			this.defaultBehaviorGroupBox.Location = new System.Drawing.Point(5, 369);
+			this.defaultBehaviorGroupBox.Name = "defaultBehaviorGroupBox";
+			this.defaultBehaviorGroupBox.Size = new System.Drawing.Size(420, 168);
+			this.defaultBehaviorGroupBox.TabIndex = 2;
+			this.defaultBehaviorGroupBox.TabStop = false;
+			this.defaultBehaviorGroupBox.Text = "登録時のデフォルト動作";
+			// 
+			// isPopupChkBox
+			// 
+			this.isPopupChkBox.Location = new System.Drawing.Point(6, 18);
+			this.isPopupChkBox.Name = "isPopupChkBox";
+			this.isPopupChkBox.Size = new System.Drawing.Size(82, 24);
+			this.isPopupChkBox.TabIndex = 18;
+			this.isPopupChkBox.Text = "ポップアップ";
+			this.isPopupChkBox.UseVisualStyleBackColor = true;
+			// 
+			// isBaloonChkBox
+			// 
+			this.isBaloonChkBox.Location = new System.Drawing.Point(89, 18);
+			this.isBaloonChkBox.Name = "isBaloonChkBox";
+			this.isBaloonChkBox.Size = new System.Drawing.Size(82, 24);
+			this.isBaloonChkBox.TabIndex = 19;
+			this.isBaloonChkBox.Text = "バルーン";
+			this.isBaloonChkBox.UseVisualStyleBackColor = true;
+			// 
+			// isWebChkBox
+			// 
+			this.isWebChkBox.Location = new System.Drawing.Point(172, 18);
+			this.isWebChkBox.Name = "isWebChkBox";
+			this.isWebChkBox.Size = new System.Drawing.Size(68, 24);
+			this.isWebChkBox.TabIndex = 21;
+			this.isWebChkBox.Text = "Web";
+			this.isWebChkBox.UseVisualStyleBackColor = true;
+			// 
+			// isMailChkBox
+			// 
+			this.isMailChkBox.Location = new System.Drawing.Point(255, 18);
+			this.isMailChkBox.Name = "isMailChkBox";
+			this.isMailChkBox.Size = new System.Drawing.Size(68, 24);
+			this.isMailChkBox.TabIndex = 28;
+			this.isMailChkBox.Text = "メール";
+			this.isMailChkBox.UseVisualStyleBackColor = true;
+			// 
+			// isSoundChkBox
+			// 
+			this.isSoundChkBox.Location = new System.Drawing.Point(338, 18);
+			this.isSoundChkBox.Name = "isSoundChkBox";
+			this.isSoundChkBox.Size = new System.Drawing.Size(82, 24);
+			this.isSoundChkBox.TabIndex = 20;
+			this.isSoundChkBox.Text = "音";
+			this.isSoundChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliAChkBox
+			// 
+			this.appliAChkBox.Location = new System.Drawing.Point(6, 40);
+			this.appliAChkBox.Name = "appliAChkBox";
+			this.appliAChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliAChkBox.TabIndex = 14;
+			this.appliAChkBox.Text = "アプリA";
+			this.appliAChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliBChkBox
+			// 
+			this.appliBChkBox.Location = new System.Drawing.Point(89, 40);
+			this.appliBChkBox.Name = "appliBChkBox";
+			this.appliBChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliBChkBox.TabIndex = 15;
+			this.appliBChkBox.Text = "アプリB";
+			this.appliBChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliCChkBox
+			// 
+			this.appliCChkBox.Location = new System.Drawing.Point(172, 40);
+			this.appliCChkBox.Name = "appliCChkBox";
+			this.appliCChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliCChkBox.TabIndex = 17;
+			this.appliCChkBox.Text = "アプリC";
+			this.appliCChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliDChkBox
+			// 
+			this.appliDChkBox.Location = new System.Drawing.Point(255, 40);
+			this.appliDChkBox.Name = "appliDChkBox";
+			this.appliDChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliDChkBox.TabIndex = 16;
+			this.appliDChkBox.Text = "アプリD";
+			this.appliDChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliEChkBox
+			// 
+			this.appliEChkBox.Location = new System.Drawing.Point(338, 40);
+			this.appliEChkBox.Name = "appliEChkBox";
+			this.appliEChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliEChkBox.TabIndex = 22;
+			this.appliEChkBox.Text = "アプリE";
+			this.appliEChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliFChkBox
+			// 
+			this.appliFChkBox.Location = new System.Drawing.Point(6, 62);
+			this.appliFChkBox.Name = "appliFChkBox";
+			this.appliFChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliFChkBox.TabIndex = 23;
+			this.appliFChkBox.Text = "アプリF";
+			this.appliFChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliGChkBox
+			// 
+			this.appliGChkBox.Location = new System.Drawing.Point(89, 62);
+			this.appliGChkBox.Name = "appliGChkBox";
+			this.appliGChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliGChkBox.TabIndex = 24;
+			this.appliGChkBox.Text = "アプリG";
+			this.appliGChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliHChkBox
+			// 
+			this.appliHChkBox.Location = new System.Drawing.Point(172, 62);
+			this.appliHChkBox.Name = "appliHChkBox";
+			this.appliHChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliHChkBox.TabIndex = 25;
+			this.appliHChkBox.Text = "アプリH";
+			this.appliHChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliIChkBox
+			// 
+			this.appliIChkBox.Location = new System.Drawing.Point(255, 62);
+			this.appliIChkBox.Name = "appliIChkBox";
+			this.appliIChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliIChkBox.TabIndex = 26;
+			this.appliIChkBox.Text = "アプリI";
+			this.appliIChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliJChkBox
+			// 
+			this.appliJChkBox.Location = new System.Drawing.Point(338, 62);
+			this.appliJChkBox.Name = "appliJChkBox";
+			this.appliJChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliJChkBox.TabIndex = 27;
+			this.appliJChkBox.Text = "アプリJ";
+			this.appliJChkBox.UseVisualStyleBackColor = true;
+			// 
+			// sampleColorText
+			// 
+			this.sampleColorText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+			this.sampleColorText.Location = new System.Drawing.Point(225, 88);
+			this.sampleColorText.Name = "sampleColorText";
+			this.sampleColorText.Size = new System.Drawing.Size(95, 19);
+			this.sampleColorText.TabIndex = 33;
+			this.sampleColorText.Text = "例";
+			this.sampleColorText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			// 
+			// backColorBtn
+			// 
+			this.backColorBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+			this.backColorBtn.Location = new System.Drawing.Point(159, 87);
+			this.backColorBtn.Name = "backColorBtn";
+			this.backColorBtn.Size = new System.Drawing.Size(60, 23);
+			this.backColorBtn.TabIndex = 32;
+			this.backColorBtn.UseVisualStyleBackColor = false;
+			this.backColorBtn.Click += new System.EventHandler(this.BackColorBtnClick);
+			// 
+			// textColorBtn
+			// 
+			this.textColorBtn.BackColor = System.Drawing.Color.Black;
+			this.textColorBtn.Location = new System.Drawing.Point(45, 87);
+			this.textColorBtn.Name = "textColorBtn";
+			this.textColorBtn.Size = new System.Drawing.Size(60, 23);
+			this.textColorBtn.TabIndex = 31;
+			this.textColorBtn.UseVisualStyleBackColor = false;
+			this.textColorBtn.Click += new System.EventHandler(this.TextColorBtnClick);
+			// 
+			// label52
+			// 
+			this.label52.Location = new System.Drawing.Point(118, 94);
+			this.label52.Name = "label52";
+			this.label52.Size = new System.Drawing.Size(51, 12);
+			this.label52.TabIndex = 29;
+			this.label52.Text = "背景色";
+			// 
+			// label53
+			// 
+			this.label53.Location = new System.Drawing.Point(6, 94);
+			this.label53.Name = "label53";
+			this.label53.Size = new System.Drawing.Size(51, 12);
+			this.label53.TabIndex = 30;
+			this.label53.Text = "文字色";
+			// 
+			// defaultColorBtn
+			// 
+			this.defaultColorBtn.Location = new System.Drawing.Point(326, 87);
+			this.defaultColorBtn.Name = "defaultColorBtn";
+			this.defaultColorBtn.Size = new System.Drawing.Size(35, 23);
+			this.defaultColorBtn.TabIndex = 34;
+			this.defaultColorBtn.Text = "戻す";
+			this.defaultColorBtn.UseVisualStyleBackColor = true;
+			this.defaultColorBtn.Click += new System.EventHandler(this.DefaultColorBtnClick);
+			// 
+			// isDefaultSoundIdChkBox
+			// 
+			this.isDefaultSoundIdChkBox.Location = new System.Drawing.Point(6, 139);
+			this.isDefaultSoundIdChkBox.Name = "isDefaultSoundIdChkBox";
+			this.isDefaultSoundIdChkBox.Size = new System.Drawing.Size(331, 24);
+			this.isDefaultSoundIdChkBox.TabIndex = 37;
+			this.isDefaultSoundIdChkBox.Text = "Soundフォルダに「{ID}.wav」がある場合、そちらを優先して再生する";
+			this.isDefaultSoundIdChkBox.UseVisualStyleBackColor = true;
+			// 
+			// defaultSoundList
+			// 
+			this.defaultSoundList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.defaultSoundList.FormattingEnabled = true;
+			this.defaultSoundList.Items.AddRange(new object[] {
+									"デフォルトのまま使う",
+									"音ファイルA",
+									"音ファイルB",
+									"音ファイルC"});
+			this.defaultSoundList.Location = new System.Drawing.Point(89, 116);
+			this.defaultSoundList.Name = "defaultSoundList";
+			this.defaultSoundList.Size = new System.Drawing.Size(115, 20);
+			this.defaultSoundList.TabIndex = 36;
+			// 
+			// label57
+			// 
+			this.label57.Location = new System.Drawing.Point(6, 119);
+			this.label57.Name = "label57";
+			this.label57.Size = new System.Drawing.Size(77, 13);
+			this.label57.TabIndex = 35;
+			this.label57.Text = "音設定ファイル";
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.isAlartListColorRecent);
+			this.groupBox2.Controls.Add(this.recentSampleColorText);
+			this.groupBox2.Controls.Add(this.recentColorBtn);
+			this.groupBox2.Controls.Add(this.defaultRecentColorBtn);
+			this.groupBox2.Controls.Add(this.isNotAllMatchNotifyNoRecentChkBox);
 			this.groupBox2.Controls.Add(this.isCheckOnAirRadioBtn);
 			this.groupBox2.Controls.Add(this.isCheck30minRadioBtn);
 			this.groupBox2.Controls.Add(this.doublecmodeList);
@@ -984,10 +1315,59 @@ namespace namaichi
 			this.groupBox2.Controls.Add(this.isStartTimeAllCheckChkBox);
 			this.groupBox2.Location = new System.Drawing.Point(5, 10);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(420, 205);
+			this.groupBox2.Size = new System.Drawing.Size(420, 247);
 			this.groupBox2.TabIndex = 1;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "お気に入りのコミュニティタブの設定";
+			// 
+			// isAlartListColorRecent
+			// 
+			this.isAlartListColorRecent.Location = new System.Drawing.Point(255, 128);
+			this.isAlartListColorRecent.Name = "isAlartListColorRecent";
+			this.isAlartListColorRecent.Size = new System.Drawing.Size(165, 19);
+			this.isAlartListColorRecent.TabIndex = 39;
+			this.isAlartListColorRecent.Text = "お気に入り登録時の色を使う";
+			this.isAlartListColorRecent.UseVisualStyleBackColor = true;
+			this.isAlartListColorRecent.CheckedChanged += new System.EventHandler(this.IsAlartListColorRecentCheckedChanged);
+			// 
+			// recentSampleColorText
+			// 
+			this.recentSampleColorText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+			this.recentSampleColorText.Location = new System.Drawing.Point(101, 124);
+			this.recentSampleColorText.Name = "recentSampleColorText";
+			this.recentSampleColorText.Size = new System.Drawing.Size(95, 19);
+			this.recentSampleColorText.TabIndex = 37;
+			this.recentSampleColorText.Text = "例";
+			this.recentSampleColorText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			// 
+			// recentColorBtn
+			// 
+			this.recentColorBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+			this.recentColorBtn.Location = new System.Drawing.Point(35, 123);
+			this.recentColorBtn.Name = "recentColorBtn";
+			this.recentColorBtn.Size = new System.Drawing.Size(60, 23);
+			this.recentColorBtn.TabIndex = 36;
+			this.recentColorBtn.UseVisualStyleBackColor = false;
+			this.recentColorBtn.Click += new System.EventHandler(this.RecentColorBtnClick);
+			// 
+			// defaultRecentColorBtn
+			// 
+			this.defaultRecentColorBtn.Location = new System.Drawing.Point(202, 123);
+			this.defaultRecentColorBtn.Name = "defaultRecentColorBtn";
+			this.defaultRecentColorBtn.Size = new System.Drawing.Size(35, 23);
+			this.defaultRecentColorBtn.TabIndex = 38;
+			this.defaultRecentColorBtn.Text = "戻す";
+			this.defaultRecentColorBtn.UseVisualStyleBackColor = true;
+			this.defaultRecentColorBtn.Click += new System.EventHandler(this.DefaultRecentColorBtnClick);
+			// 
+			// isNotAllMatchNotifyNoRecentChkBox
+			// 
+			this.isNotAllMatchNotifyNoRecentChkBox.Location = new System.Drawing.Point(19, 220);
+			this.isNotAllMatchNotifyNoRecentChkBox.Name = "isNotAllMatchNotifyNoRecentChkBox";
+			this.isNotAllMatchNotifyNoRecentChkBox.Size = new System.Drawing.Size(405, 19);
+			this.isNotAllMatchNotifyNoRecentChkBox.TabIndex = 10;
+			this.isNotAllMatchNotifyNoRecentChkBox.Text = "登録した設定の一部に該当して通知された場合、最近の放送日時に反映しない";
+			this.isNotAllMatchNotifyNoRecentChkBox.UseVisualStyleBackColor = true;
 			// 
 			// isCheckOnAirRadioBtn
 			// 
@@ -1021,14 +1401,14 @@ namespace namaichi
 									"最近行われた放送のURLをコピー",
 									"コミュニティURLをコピー",
 									"ユーザーURLをコピー"});
-			this.doublecmodeList.Location = new System.Drawing.Point(146, 173);
+			this.doublecmodeList.Location = new System.Drawing.Point(146, 195);
 			this.doublecmodeList.Name = "doublecmodeList";
 			this.doublecmodeList.Size = new System.Drawing.Size(241, 20);
 			this.doublecmodeList.TabIndex = 8;
 			// 
 			// label41
 			// 
-			this.label41.Location = new System.Drawing.Point(19, 176);
+			this.label41.Location = new System.Drawing.Point(19, 198);
 			this.label41.Name = "label41";
 			this.label41.Size = new System.Drawing.Size(121, 18);
 			this.label41.TabIndex = 7;
@@ -1036,7 +1416,7 @@ namespace namaichi
 			// 
 			// isdragComChkBox
 			// 
-			this.isdragComChkBox.Location = new System.Drawing.Point(19, 150);
+			this.isdragComChkBox.Location = new System.Drawing.Point(19, 172);
 			this.isdragComChkBox.Name = "isdragComChkBox";
 			this.isdragComChkBox.Size = new System.Drawing.Size(390, 19);
 			this.isdragComChkBox.TabIndex = 6;
@@ -1045,7 +1425,7 @@ namespace namaichi
 			// 
 			// isTasktrayStartChkBox
 			// 
-			this.isTasktrayStartChkBox.Location = new System.Drawing.Point(19, 128);
+			this.isTasktrayStartChkBox.Location = new System.Drawing.Point(19, 150);
 			this.isTasktrayStartChkBox.Name = "isTasktrayStartChkBox";
 			this.isTasktrayStartChkBox.Size = new System.Drawing.Size(350, 19);
 			this.isTasktrayStartChkBox.TabIndex = 5;
@@ -1089,9 +1469,9 @@ namespace namaichi
 			this.groupBox11.Controls.Add(this.thresholdpageList);
 			this.groupBox11.Controls.Add(this.label49);
 			this.groupBox11.Controls.Add(this.label48);
-			this.groupBox11.Location = new System.Drawing.Point(5, 314);
+			this.groupBox11.Location = new System.Drawing.Point(5, 263);
 			this.groupBox11.Name = "groupBox11";
-			this.groupBox11.Size = new System.Drawing.Size(420, 106);
+			this.groupBox11.Size = new System.Drawing.Size(420, 100);
 			this.groupBox11.TabIndex = 1;
 			this.groupBox11.TabStop = false;
 			this.groupBox11.Text = "番組一覧タブの設定";
@@ -1191,16 +1571,126 @@ namespace namaichi
 			this.label48.Text = "一度に取得する最大ページ数：";
 			this.label48.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// common2Tab
+			// 
+			this.common2Tab.Controls.Add(this.groupBox1);
+			this.common2Tab.Location = new System.Drawing.Point(4, 22);
+			this.common2Tab.Name = "common2Tab";
+			this.common2Tab.Size = new System.Drawing.Size(433, 536);
+			this.common2Tab.TabIndex = 6;
+			this.common2Tab.Text = "一般2";
+			this.common2Tab.UseVisualStyleBackColor = true;
+			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.maxLogDisplayList);
+			this.groupBox1.Controls.Add(this.maxNotAlartDisplayList);
+			this.groupBox1.Controls.Add(this.label62);
+			this.groupBox1.Controls.Add(this.label61);
+			this.groupBox1.Controls.Add(this.maxHistoryDisplayList);
+			this.groupBox1.Controls.Add(this.label60);
 			this.groupBox1.Controls.Add(this.isBroadLogChkBox);
 			this.groupBox1.Controls.Add(this.isLogChkBtn);
-			this.groupBox1.Location = new System.Drawing.Point(5, 221);
+			this.groupBox1.Location = new System.Drawing.Point(5, 10);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(420, 87);
-			this.groupBox1.TabIndex = 1;
+			this.groupBox1.Size = new System.Drawing.Size(420, 157);
+			this.groupBox1.TabIndex = 2;
 			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "ログ";
+			this.groupBox1.Text = "ログ・履歴";
+			// 
+			// maxLogDisplayList
+			// 
+			this.maxLogDisplayList.Location = new System.Drawing.Point(227, 119);
+			this.maxLogDisplayList.Maximum = new decimal(new int[] {
+									10000,
+									0,
+									0,
+									0});
+			this.maxLogDisplayList.Minimum = new decimal(new int[] {
+									1,
+									0,
+									0,
+									0});
+			this.maxLogDisplayList.Name = "maxLogDisplayList";
+			this.maxLogDisplayList.Size = new System.Drawing.Size(51, 19);
+			this.maxLogDisplayList.TabIndex = 12;
+			this.maxLogDisplayList.Value = new decimal(new int[] {
+									100,
+									0,
+									0,
+									0});
+			
+			// 
+			// maxNotAlartDisplayList
+			// 
+			this.maxNotAlartDisplayList.Location = new System.Drawing.Point(227, 97);
+			this.maxNotAlartDisplayList.Maximum = new decimal(new int[] {
+									10000,
+									0,
+									0,
+									0});
+			this.maxNotAlartDisplayList.Minimum = new decimal(new int[] {
+									1,
+									0,
+									0,
+									0});
+			this.maxNotAlartDisplayList.Name = "maxNotAlartDisplayList";
+			this.maxNotAlartDisplayList.Size = new System.Drawing.Size(51, 19);
+			this.maxNotAlartDisplayList.TabIndex = 12;
+			this.maxNotAlartDisplayList.Value = new decimal(new int[] {
+									100,
+									0,
+									0,
+									0});
+			// 
+			// label62
+			// 
+			this.label62.Location = new System.Drawing.Point(19, 120);
+			this.label62.Name = "label62";
+			this.label62.Size = new System.Drawing.Size(205, 18);
+			this.label62.TabIndex = 11;
+			this.label62.Text = "ログの最大表示件数：";
+			this.label62.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// label61
+			// 
+			this.label61.Location = new System.Drawing.Point(19, 98);
+			this.label61.Name = "label61";
+			this.label61.Size = new System.Drawing.Size(205, 18);
+			this.label61.TabIndex = 11;
+			this.label61.Text = "通知しなかった履歴の最大表示件数：";
+			this.label61.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// maxHistoryDisplayList
+			// 
+			this.maxHistoryDisplayList.Location = new System.Drawing.Point(227, 75);
+			this.maxHistoryDisplayList.Maximum = new decimal(new int[] {
+									10000,
+									0,
+									0,
+									0});
+			this.maxHistoryDisplayList.Minimum = new decimal(new int[] {
+									1,
+									0,
+									0,
+									0});
+			this.maxHistoryDisplayList.Name = "maxHistoryDisplayList";
+			this.maxHistoryDisplayList.Size = new System.Drawing.Size(51, 19);
+			this.maxHistoryDisplayList.TabIndex = 12;
+			this.maxHistoryDisplayList.Value = new decimal(new int[] {
+									100,
+									0,
+									0,
+									0});
+			// 
+			// label60
+			// 
+			this.label60.Location = new System.Drawing.Point(19, 76);
+			this.label60.Name = "label60";
+			this.label60.Size = new System.Drawing.Size(205, 18);
+			this.label60.TabIndex = 11;
+			this.label60.Text = "通知履歴の最大表示件数：";
+			this.label60.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// isBroadLogChkBox
 			// 
@@ -1220,18 +1710,411 @@ namespace namaichi
 			this.isLogChkBtn.Text = "お気に入りの放送開始情報をテキストに保存する(favoriteLog.txt)";
 			this.isLogChkBtn.UseVisualStyleBackColor = true;
 			// 
-			// tabPage4
+			// notifyTab
 			// 
-			this.tabPage4.Controls.Add(this.groupBox10);
-			this.tabPage4.Controls.Add(this.groupBox9);
-			this.tabPage4.Controls.Add(this.groupBox4);
-			this.tabPage4.Location = new System.Drawing.Point(4, 22);
-			this.tabPage4.Name = "tabPage4";
-			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage4.Size = new System.Drawing.Size(433, 536);
-			this.tabPage4.TabIndex = 3;
-			this.tabPage4.Text = "通知";
-			this.tabPage4.UseVisualStyleBackColor = true;
+			this.notifyTab.Controls.Add(this.groupBox9);
+			this.notifyTab.Controls.Add(this.groupBox4);
+			this.notifyTab.Location = new System.Drawing.Point(4, 22);
+			this.notifyTab.Name = "notifyTab";
+			this.notifyTab.Padding = new System.Windows.Forms.Padding(3);
+			this.notifyTab.Size = new System.Drawing.Size(433, 536);
+			this.notifyTab.TabIndex = 3;
+			this.notifyTab.Text = "通知";
+			this.notifyTab.UseVisualStyleBackColor = true;
+			// 
+			// groupBox9
+			// 
+			this.groupBox9.Controls.Add(this.label56);
+			this.groupBox9.Controls.Add(this.label55);
+			this.groupBox9.Controls.Add(this.label54);
+			this.groupBox9.Controls.Add(this.volumeCText);
+			this.groupBox9.Controls.Add(this.volumeBText);
+			this.groupBox9.Controls.Add(this.volumeAText);
+			this.groupBox9.Controls.Add(this.volumeCBar);
+			this.groupBox9.Controls.Add(this.volumeBBar);
+			this.groupBox9.Controls.Add(this.volumeABar);
+			this.groupBox9.Controls.Add(this.volumeText);
+			this.groupBox9.Controls.Add(this.volumeBar);
+			this.groupBox9.Controls.Add(this.soundCSanshouBtn);
+			this.groupBox9.Controls.Add(this.soundBSanshouBtn);
+			this.groupBox9.Controls.Add(this.soundCTestBtn);
+			this.groupBox9.Controls.Add(this.soundBTestBtn);
+			this.groupBox9.Controls.Add(this.soundTestBtn);
+			this.groupBox9.Controls.Add(this.soundATestBtn);
+			this.groupBox9.Controls.Add(this.soundASanshouBtn);
+			this.groupBox9.Controls.Add(this.soundPathCText);
+			this.groupBox9.Controls.Add(this.soundPathBText);
+			this.groupBox9.Controls.Add(this.soundPathAText);
+			this.groupBox9.Location = new System.Drawing.Point(5, 10);
+			this.groupBox9.Name = "groupBox9";
+			this.groupBox9.Size = new System.Drawing.Size(420, 267);
+			this.groupBox9.TabIndex = 3;
+			this.groupBox9.TabStop = false;
+			this.groupBox9.Text = "音設定";
+			// 
+			// label56
+			// 
+			this.label56.Location = new System.Drawing.Point(14, 193);
+			this.label56.Name = "label56";
+			this.label56.Size = new System.Drawing.Size(65, 15);
+			this.label56.TabIndex = 13;
+			this.label56.Text = "音ファイルC";
+			// 
+			// label55
+			// 
+			this.label55.Location = new System.Drawing.Point(14, 121);
+			this.label55.Name = "label55";
+			this.label55.Size = new System.Drawing.Size(65, 15);
+			this.label55.TabIndex = 13;
+			this.label55.Text = "音ファイルB";
+			// 
+			// label54
+			// 
+			this.label54.Location = new System.Drawing.Point(14, 49);
+			this.label54.Name = "label54";
+			this.label54.Size = new System.Drawing.Size(65, 15);
+			this.label54.TabIndex = 13;
+			this.label54.Text = "音ファイルA";
+			// 
+			// volumeCText
+			// 
+			this.volumeCText.Location = new System.Drawing.Point(14, 238);
+			this.volumeCText.Name = "volumeCText";
+			this.volumeCText.Size = new System.Drawing.Size(57, 18);
+			this.volumeCText.TabIndex = 12;
+			this.volumeCText.Text = "音量：100";
+			// 
+			// volumeBText
+			// 
+			this.volumeBText.Location = new System.Drawing.Point(14, 166);
+			this.volumeBText.Name = "volumeBText";
+			this.volumeBText.Size = new System.Drawing.Size(57, 18);
+			this.volumeBText.TabIndex = 12;
+			this.volumeBText.Text = "音量：100";
+			// 
+			// volumeAText
+			// 
+			this.volumeAText.Location = new System.Drawing.Point(14, 94);
+			this.volumeAText.Name = "volumeAText";
+			this.volumeAText.Size = new System.Drawing.Size(57, 18);
+			this.volumeAText.TabIndex = 12;
+			this.volumeAText.Text = "音量：100";
+			// 
+			// volumeCBar
+			// 
+			this.volumeCBar.AutoSize = false;
+			this.volumeCBar.BackColor = System.Drawing.SystemColors.Window;
+			this.volumeCBar.Location = new System.Drawing.Point(68, 233);
+			this.volumeCBar.Maximum = 100;
+			this.volumeCBar.Name = "volumeCBar";
+			this.volumeCBar.Size = new System.Drawing.Size(167, 23);
+			this.volumeCBar.TabIndex = 11;
+			this.volumeCBar.TickStyle = System.Windows.Forms.TickStyle.None;
+			this.volumeCBar.ValueChanged += new System.EventHandler(this.VolumeCBarValueChanged);
+			// 
+			// volumeBBar
+			// 
+			this.volumeBBar.AutoSize = false;
+			this.volumeBBar.BackColor = System.Drawing.SystemColors.Window;
+			this.volumeBBar.Location = new System.Drawing.Point(68, 161);
+			this.volumeBBar.Maximum = 100;
+			this.volumeBBar.Name = "volumeBBar";
+			this.volumeBBar.Size = new System.Drawing.Size(167, 23);
+			this.volumeBBar.TabIndex = 11;
+			this.volumeBBar.TickStyle = System.Windows.Forms.TickStyle.None;
+			this.volumeBBar.ValueChanged += new System.EventHandler(this.VolumeBBarValueChanged);
+			// 
+			// volumeABar
+			// 
+			this.volumeABar.AutoSize = false;
+			this.volumeABar.BackColor = System.Drawing.SystemColors.Window;
+			this.volumeABar.Location = new System.Drawing.Point(68, 89);
+			this.volumeABar.Maximum = 100;
+			this.volumeABar.Name = "volumeABar";
+			this.volumeABar.Size = new System.Drawing.Size(167, 23);
+			this.volumeABar.TabIndex = 11;
+			this.volumeABar.TickStyle = System.Windows.Forms.TickStyle.None;
+			this.volumeABar.ValueChanged += new System.EventHandler(this.VolumeABarValueChanged);
+			// 
+			// volumeText
+			// 
+			this.volumeText.Location = new System.Drawing.Point(19, 22);
+			this.volumeText.Name = "volumeText";
+			this.volumeText.Size = new System.Drawing.Size(101, 18);
+			this.volumeText.TabIndex = 12;
+			this.volumeText.Text = "デフォルト音量：100";
+			// 
+			// volumeBar
+			// 
+			this.volumeBar.AutoSize = false;
+			this.volumeBar.BackColor = System.Drawing.SystemColors.Window;
+			this.volumeBar.Location = new System.Drawing.Point(117, 17);
+			this.volumeBar.Maximum = 100;
+			this.volumeBar.Name = "volumeBar";
+			this.volumeBar.Size = new System.Drawing.Size(167, 23);
+			this.volumeBar.TabIndex = 11;
+			this.volumeBar.TickStyle = System.Windows.Forms.TickStyle.None;
+			this.volumeBar.ValueChanged += new System.EventHandler(this.VolumeBarValueChanged);
+			// 
+			// soundCSanshouBtn
+			// 
+			this.soundCSanshouBtn.Location = new System.Drawing.Point(296, 207);
+			this.soundCSanshouBtn.Name = "soundCSanshouBtn";
+			this.soundCSanshouBtn.Size = new System.Drawing.Size(51, 23);
+			this.soundCSanshouBtn.TabIndex = 1;
+			this.soundCSanshouBtn.Text = "参照";
+			this.soundCSanshouBtn.UseVisualStyleBackColor = true;
+			this.soundCSanshouBtn.Click += new System.EventHandler(this.SoundSanshouBtnClick);
+			// 
+			// soundBSanshouBtn
+			// 
+			this.soundBSanshouBtn.Location = new System.Drawing.Point(296, 135);
+			this.soundBSanshouBtn.Name = "soundBSanshouBtn";
+			this.soundBSanshouBtn.Size = new System.Drawing.Size(51, 23);
+			this.soundBSanshouBtn.TabIndex = 1;
+			this.soundBSanshouBtn.Text = "参照";
+			this.soundBSanshouBtn.UseVisualStyleBackColor = true;
+			this.soundBSanshouBtn.Click += new System.EventHandler(this.SoundSanshouBtnClick);
+			// 
+			// soundCTestBtn
+			// 
+			this.soundCTestBtn.Location = new System.Drawing.Point(353, 207);
+			this.soundCTestBtn.Name = "soundCTestBtn";
+			this.soundCTestBtn.Size = new System.Drawing.Size(51, 23);
+			this.soundCTestBtn.TabIndex = 1;
+			this.soundCTestBtn.Text = "テスト";
+			this.soundCTestBtn.UseVisualStyleBackColor = true;
+			this.soundCTestBtn.Click += new System.EventHandler(this.SoundTestBtnClick);
+			// 
+			// soundBTestBtn
+			// 
+			this.soundBTestBtn.Location = new System.Drawing.Point(353, 135);
+			this.soundBTestBtn.Name = "soundBTestBtn";
+			this.soundBTestBtn.Size = new System.Drawing.Size(51, 23);
+			this.soundBTestBtn.TabIndex = 1;
+			this.soundBTestBtn.Text = "テスト";
+			this.soundBTestBtn.UseVisualStyleBackColor = true;
+			this.soundBTestBtn.Click += new System.EventHandler(this.SoundTestBtnClick);
+			// 
+			// soundTestBtn
+			// 
+			this.soundTestBtn.Location = new System.Drawing.Point(352, 17);
+			this.soundTestBtn.Name = "soundTestBtn";
+			this.soundTestBtn.Size = new System.Drawing.Size(51, 23);
+			this.soundTestBtn.TabIndex = 1;
+			this.soundTestBtn.Text = "テスト";
+			this.soundTestBtn.UseVisualStyleBackColor = true;
+			this.soundTestBtn.Click += new System.EventHandler(this.SoundTestBtnClick);
+			// 
+			// soundATestBtn
+			// 
+			this.soundATestBtn.Location = new System.Drawing.Point(352, 63);
+			this.soundATestBtn.Name = "soundATestBtn";
+			this.soundATestBtn.Size = new System.Drawing.Size(51, 23);
+			this.soundATestBtn.TabIndex = 1;
+			this.soundATestBtn.Text = "テスト";
+			this.soundATestBtn.UseVisualStyleBackColor = true;
+			this.soundATestBtn.Click += new System.EventHandler(this.SoundTestBtnClick);
+			// 
+			// soundASanshouBtn
+			// 
+			this.soundASanshouBtn.Location = new System.Drawing.Point(296, 63);
+			this.soundASanshouBtn.Name = "soundASanshouBtn";
+			this.soundASanshouBtn.Size = new System.Drawing.Size(51, 23);
+			this.soundASanshouBtn.TabIndex = 1;
+			this.soundASanshouBtn.Text = "参照";
+			this.soundASanshouBtn.UseVisualStyleBackColor = true;
+			this.soundASanshouBtn.Click += new System.EventHandler(this.SoundSanshouBtnClick);
+			// 
+			// soundPathCText
+			// 
+			this.soundPathCText.Location = new System.Drawing.Point(14, 209);
+			this.soundPathCText.Name = "soundPathCText";
+			this.soundPathCText.Size = new System.Drawing.Size(276, 19);
+			this.soundPathCText.TabIndex = 0;
+			// 
+			// soundPathBText
+			// 
+			this.soundPathBText.Location = new System.Drawing.Point(14, 137);
+			this.soundPathBText.Name = "soundPathBText";
+			this.soundPathBText.Size = new System.Drawing.Size(276, 19);
+			this.soundPathBText.TabIndex = 0;
+			// 
+			// soundPathAText
+			// 
+			this.soundPathAText.Location = new System.Drawing.Point(14, 65);
+			this.soundPathAText.Name = "soundPathAText";
+			this.soundPathAText.Size = new System.Drawing.Size(276, 19);
+			this.soundPathAText.TabIndex = 0;
+			// 
+			// groupBox4
+			// 
+			this.groupBox4.Controls.Add(this.isColorPopupChkBox);
+			this.groupBox4.Controls.Add(this.testPopupBtn);
+			this.groupBox4.Controls.Add(this.label59);
+			this.groupBox4.Controls.Add(this.popupOpacityList);
+			this.groupBox4.Controls.Add(this.label6);
+			this.groupBox4.Controls.Add(this.label58);
+			this.groupBox4.Controls.Add(this.poptimeList);
+			this.groupBox4.Controls.Add(this.label5);
+			this.groupBox4.Controls.Add(this.poplocList);
+			this.groupBox4.Controls.Add(this.label4);
+			this.groupBox4.Controls.Add(this.isTopMostPopupChkBox);
+			this.groupBox4.Controls.Add(this.IssmallpopupChkBox);
+			this.groupBox4.Controls.Add(this.IsfixpopupChkBox);
+			this.groupBox4.Controls.Add(this.IsclosepopupChkBox);
+			this.groupBox4.Location = new System.Drawing.Point(5, 283);
+			this.groupBox4.Name = "groupBox4";
+			this.groupBox4.Size = new System.Drawing.Size(420, 228);
+			this.groupBox4.TabIndex = 2;
+			this.groupBox4.TabStop = false;
+			this.groupBox4.Text = "ポップアップ設定";
+			// 
+			// isColorPopupChkBox
+			// 
+			this.isColorPopupChkBox.Location = new System.Drawing.Point(36, 197);
+			this.isColorPopupChkBox.Name = "isColorPopupChkBox";
+			this.isColorPopupChkBox.Size = new System.Drawing.Size(287, 19);
+			this.isColorPopupChkBox.TabIndex = 10;
+			this.isColorPopupChkBox.Text = "設定した背景色と文字色で表示する";
+			this.isColorPopupChkBox.UseVisualStyleBackColor = true;
+			// 
+			// testPopupBtn
+			// 
+			this.testPopupBtn.Location = new System.Drawing.Point(329, 194);
+			this.testPopupBtn.Name = "testPopupBtn";
+			this.testPopupBtn.Size = new System.Drawing.Size(74, 23);
+			this.testPopupBtn.TabIndex = 1;
+			this.testPopupBtn.Text = "テスト";
+			this.testPopupBtn.UseVisualStyleBackColor = true;
+			this.testPopupBtn.Click += new System.EventHandler(this.TestPopupBtnClick);
+			// 
+			// label59
+			// 
+			this.label59.Location = new System.Drawing.Point(253, 75);
+			this.label59.Name = "label59";
+			this.label59.Size = new System.Drawing.Size(30, 14);
+			this.label59.TabIndex = 9;
+			this.label59.Text = "%";
+			// 
+			// popupOpacityList
+			// 
+			this.popupOpacityList.Location = new System.Drawing.Point(170, 73);
+			this.popupOpacityList.Name = "popupOpacityList";
+			this.popupOpacityList.Size = new System.Drawing.Size(77, 19);
+			this.popupOpacityList.TabIndex = 8;
+			this.popupOpacityList.Value = new decimal(new int[] {
+									90,
+									0,
+									0,
+									0});
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(253, 53);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(30, 14);
+			this.label6.TabIndex = 9;
+			this.label6.Text = "秒";
+			// 
+			// label58
+			// 
+			this.label58.Location = new System.Drawing.Point(31, 75);
+			this.label58.Name = "label58";
+			this.label58.Size = new System.Drawing.Size(122, 14);
+			this.label58.TabIndex = 7;
+			this.label58.Text = "ポップアップの透明度：";
+			this.label58.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// poptimeList
+			// 
+			this.poptimeList.Location = new System.Drawing.Point(170, 51);
+			this.poptimeList.Maximum = new decimal(new int[] {
+									99999,
+									0,
+									0,
+									0});
+			this.poptimeList.Name = "poptimeList";
+			this.poptimeList.Size = new System.Drawing.Size(77, 19);
+			this.poptimeList.TabIndex = 8;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(31, 53);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(122, 14);
+			this.label5.TabIndex = 7;
+			this.label5.Text = "ポップアップの表示時間：";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// poplocList
+			// 
+			this.poplocList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.poplocList.FormattingEnabled = true;
+			this.poplocList.Items.AddRange(new object[] {
+									"左上",
+									"左下",
+									"右上",
+									"右下"});
+			this.poplocList.Location = new System.Drawing.Point(170, 23);
+			this.poplocList.Name = "poplocList";
+			this.poplocList.Size = new System.Drawing.Size(77, 20);
+			this.poplocList.TabIndex = 6;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(51, 26);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(102, 14);
+			this.label4.TabIndex = 5;
+			this.label4.Text = "ポップアップの位置：";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// isTopMostPopupChkBox
+			// 
+			this.isTopMostPopupChkBox.Location = new System.Drawing.Point(36, 175);
+			this.isTopMostPopupChkBox.Name = "isTopMostPopupChkBox";
+			this.isTopMostPopupChkBox.Size = new System.Drawing.Size(340, 19);
+			this.isTopMostPopupChkBox.TabIndex = 4;
+			this.isTopMostPopupChkBox.Text = "ポップアップを最前面に表示する";
+			this.isTopMostPopupChkBox.UseVisualStyleBackColor = true;
+			// 
+			// IssmallpopupChkBox
+			// 
+			this.IssmallpopupChkBox.Location = new System.Drawing.Point(36, 153);
+			this.IssmallpopupChkBox.Name = "IssmallpopupChkBox";
+			this.IssmallpopupChkBox.Size = new System.Drawing.Size(340, 19);
+			this.IssmallpopupChkBox.TabIndex = 4;
+			this.IssmallpopupChkBox.Text = "ポップアップのサイズを小さくする";
+			this.IssmallpopupChkBox.UseVisualStyleBackColor = true;
+			// 
+			// IsfixpopupChkBox
+			// 
+			this.IsfixpopupChkBox.Location = new System.Drawing.Point(36, 131);
+			this.IsfixpopupChkBox.Name = "IsfixpopupChkBox";
+			this.IsfixpopupChkBox.Size = new System.Drawing.Size(340, 19);
+			this.IsfixpopupChkBox.TabIndex = 3;
+			this.IsfixpopupChkBox.Text = "ポップアップの位置を固定する";
+			this.IsfixpopupChkBox.UseVisualStyleBackColor = true;
+			// 
+			// IsclosepopupChkBox
+			// 
+			this.IsclosepopupChkBox.Location = new System.Drawing.Point(36, 109);
+			this.IsclosepopupChkBox.Name = "IsclosepopupChkBox";
+			this.IsclosepopupChkBox.Size = new System.Drawing.Size(340, 19);
+			this.IsclosepopupChkBox.TabIndex = 2;
+			this.IsclosepopupChkBox.Text = "放送タイトルクリック時にポップアップを閉じる";
+			this.IsclosepopupChkBox.UseVisualStyleBackColor = true;
+			// 
+			// notify2Tab
+			// 
+			this.notify2Tab.Controls.Add(this.groupBox10);
+			this.notify2Tab.Location = new System.Drawing.Point(4, 22);
+			this.notify2Tab.Name = "notify2Tab";
+			this.notify2Tab.Size = new System.Drawing.Size(433, 536);
+			this.notify2Tab.TabIndex = 5;
+			this.notify2Tab.Text = "通知2";
+			this.notify2Tab.UseVisualStyleBackColor = true;
 			// 
 			// groupBox10
 			// 
@@ -1252,7 +2135,7 @@ namespace namaichi
 			this.groupBox10.Location = new System.Drawing.Point(5, 10);
 			this.groupBox10.Name = "groupBox10";
 			this.groupBox10.Size = new System.Drawing.Size(420, 195);
-			this.groupBox10.TabIndex = 4;
+			this.groupBox10.TabIndex = 5;
 			this.groupBox10.TabStop = false;
 			this.groupBox10.Text = "メール設定";
 			// 
@@ -1264,7 +2147,6 @@ namespace namaichi
 			this.sendTestMailBtn.TabIndex = 13;
 			this.sendTestMailBtn.Text = "テストメール送信";
 			this.sendTestMailBtn.UseVisualStyleBackColor = true;
-			this.sendTestMailBtn.Click += new System.EventHandler(this.SendTestMailBtnClick);
 			// 
 			// isMailSslChkBox
 			// 
@@ -1370,184 +2252,17 @@ namespace namaichi
 			this.label42.Text = "送信元メールアドレス：";
 			this.label42.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// groupBox9
+			// alartTab
 			// 
-			this.groupBox9.Controls.Add(this.volumeText);
-			this.groupBox9.Controls.Add(this.volumeBar);
-			this.groupBox9.Controls.Add(this.isDefaultSoundChkBtn);
-			this.groupBox9.Controls.Add(this.soundSanshouBtn);
-			this.groupBox9.Controls.Add(this.soundPathText);
-			this.groupBox9.Location = new System.Drawing.Point(5, 211);
-			this.groupBox9.Name = "groupBox9";
-			this.groupBox9.Size = new System.Drawing.Size(420, 102);
-			this.groupBox9.TabIndex = 3;
-			this.groupBox9.TabStop = false;
-			this.groupBox9.Text = "音設定";
-			// 
-			// volumeText
-			// 
-			this.volumeText.Location = new System.Drawing.Point(9, 75);
-			this.volumeText.Name = "volumeText";
-			this.volumeText.Size = new System.Drawing.Size(57, 18);
-			this.volumeText.TabIndex = 12;
-			this.volumeText.Text = "音量：100";
-			// 
-			// volumeBar
-			// 
-			this.volumeBar.AutoSize = false;
-			this.volumeBar.BackColor = System.Drawing.SystemColors.Window;
-			this.volumeBar.Location = new System.Drawing.Point(62, 70);
-			this.volumeBar.Maximum = 100;
-			this.volumeBar.Name = "volumeBar";
-			this.volumeBar.Size = new System.Drawing.Size(167, 28);
-			this.volumeBar.TabIndex = 11;
-			this.volumeBar.TickStyle = System.Windows.Forms.TickStyle.None;
-			this.volumeBar.ValueChanged += new System.EventHandler(this.VolumeBarValueChanged);
-			// 
-			// isDefaultSoundChkBtn
-			// 
-			this.isDefaultSoundChkBtn.Location = new System.Drawing.Point(9, 43);
-			this.isDefaultSoundChkBtn.Name = "isDefaultSoundChkBtn";
-			this.isDefaultSoundChkBtn.Size = new System.Drawing.Size(201, 19);
-			this.isDefaultSoundChkBtn.TabIndex = 10;
-			this.isDefaultSoundChkBtn.Text = "デフォルトのまま使う(se_soc01.wav)";
-			this.isDefaultSoundChkBtn.UseVisualStyleBackColor = true;
-			this.isDefaultSoundChkBtn.CheckedChanged += new System.EventHandler(this.IsDefaultSoundChkBtnCheckedChanged);
-			// 
-			// soundSanshouBtn
-			// 
-			this.soundSanshouBtn.Location = new System.Drawing.Point(352, 16);
-			this.soundSanshouBtn.Name = "soundSanshouBtn";
-			this.soundSanshouBtn.Size = new System.Drawing.Size(51, 23);
-			this.soundSanshouBtn.TabIndex = 1;
-			this.soundSanshouBtn.Text = "参照";
-			this.soundSanshouBtn.UseVisualStyleBackColor = true;
-			this.soundSanshouBtn.Click += new System.EventHandler(this.SoundSanshouBtnClick);
-			// 
-			// soundPathText
-			// 
-			this.soundPathText.Location = new System.Drawing.Point(9, 18);
-			this.soundPathText.Name = "soundPathText";
-			this.soundPathText.Size = new System.Drawing.Size(336, 19);
-			this.soundPathText.TabIndex = 0;
-			// 
-			// groupBox4
-			// 
-			this.groupBox4.Controls.Add(this.label6);
-			this.groupBox4.Controls.Add(this.poptimeList);
-			this.groupBox4.Controls.Add(this.label5);
-			this.groupBox4.Controls.Add(this.poplocList);
-			this.groupBox4.Controls.Add(this.label4);
-			this.groupBox4.Controls.Add(this.isTopMostPopupChkBox);
-			this.groupBox4.Controls.Add(this.IssmallpopupChkBox);
-			this.groupBox4.Controls.Add(this.IsfixpopupChkBox);
-			this.groupBox4.Controls.Add(this.IsclosepopupChkBox);
-			this.groupBox4.Location = new System.Drawing.Point(5, 319);
-			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(420, 184);
-			this.groupBox4.TabIndex = 2;
-			this.groupBox4.TabStop = false;
-			this.groupBox4.Text = "ポップアップ設定";
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(253, 53);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(30, 14);
-			this.label6.TabIndex = 9;
-			this.label6.Text = "秒";
-			// 
-			// poptimeList
-			// 
-			this.poptimeList.Location = new System.Drawing.Point(170, 51);
-			this.poptimeList.Maximum = new decimal(new int[] {
-									99999,
-									0,
-									0,
-									0});
-			this.poptimeList.Name = "poptimeList";
-			this.poptimeList.Size = new System.Drawing.Size(77, 19);
-			this.poptimeList.TabIndex = 8;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(31, 53);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(122, 14);
-			this.label5.TabIndex = 7;
-			this.label5.Text = "ポップアップの表示時間：";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// poplocList
-			// 
-			this.poplocList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.poplocList.FormattingEnabled = true;
-			this.poplocList.Items.AddRange(new object[] {
-									"左上",
-									"左下",
-									"右上",
-									"右下"});
-			this.poplocList.Location = new System.Drawing.Point(170, 23);
-			this.poplocList.Name = "poplocList";
-			this.poplocList.Size = new System.Drawing.Size(77, 20);
-			this.poplocList.TabIndex = 6;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(51, 26);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(102, 14);
-			this.label4.TabIndex = 5;
-			this.label4.Text = "ポップアップの位置：";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// isTopMostPopupChkBox
-			// 
-			this.isTopMostPopupChkBox.Location = new System.Drawing.Point(36, 153);
-			this.isTopMostPopupChkBox.Name = "isTopMostPopupChkBox";
-			this.isTopMostPopupChkBox.Size = new System.Drawing.Size(340, 19);
-			this.isTopMostPopupChkBox.TabIndex = 4;
-			this.isTopMostPopupChkBox.Text = "ポップアップを最前面に表示する";
-			this.isTopMostPopupChkBox.UseVisualStyleBackColor = true;
-			// 
-			// IssmallpopupChkBox
-			// 
-			this.IssmallpopupChkBox.Location = new System.Drawing.Point(36, 131);
-			this.IssmallpopupChkBox.Name = "IssmallpopupChkBox";
-			this.IssmallpopupChkBox.Size = new System.Drawing.Size(340, 19);
-			this.IssmallpopupChkBox.TabIndex = 4;
-			this.IssmallpopupChkBox.Text = "ポップアップのサイズを小さくする";
-			this.IssmallpopupChkBox.UseVisualStyleBackColor = true;
-			// 
-			// IsfixpopupChkBox
-			// 
-			this.IsfixpopupChkBox.Location = new System.Drawing.Point(36, 109);
-			this.IsfixpopupChkBox.Name = "IsfixpopupChkBox";
-			this.IsfixpopupChkBox.Size = new System.Drawing.Size(340, 19);
-			this.IsfixpopupChkBox.TabIndex = 3;
-			this.IsfixpopupChkBox.Text = "ポップアップの位置を固定する";
-			this.IsfixpopupChkBox.UseVisualStyleBackColor = true;
-			// 
-			// IsclosepopupChkBox
-			// 
-			this.IsclosepopupChkBox.Location = new System.Drawing.Point(36, 87);
-			this.IsclosepopupChkBox.Name = "IsclosepopupChkBox";
-			this.IsclosepopupChkBox.Size = new System.Drawing.Size(340, 19);
-			this.IsclosepopupChkBox.TabIndex = 2;
-			this.IsclosepopupChkBox.Text = "放送タイトルクリック時にポップアップを閉じる";
-			this.IsclosepopupChkBox.UseVisualStyleBackColor = true;
-			// 
-			// tabPage5
-			// 
-			this.tabPage5.Controls.Add(this.groupBox8);
-			this.tabPage5.Controls.Add(this.groupBox7);
-			this.tabPage5.Location = new System.Drawing.Point(4, 22);
-			this.tabPage5.Name = "tabPage5";
-			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage5.Size = new System.Drawing.Size(433, 536);
-			this.tabPage5.TabIndex = 4;
-			this.tabPage5.Text = "アラート";
-			this.tabPage5.UseVisualStyleBackColor = true;
+			this.alartTab.Controls.Add(this.groupBox8);
+			this.alartTab.Controls.Add(this.groupBox7);
+			this.alartTab.Location = new System.Drawing.Point(4, 22);
+			this.alartTab.Name = "alartTab";
+			this.alartTab.Padding = new System.Windows.Forms.Padding(3);
+			this.alartTab.Size = new System.Drawing.Size(433, 536);
+			this.alartTab.TabIndex = 4;
+			this.alartTab.Text = "アラート";
+			this.alartTab.UseVisualStyleBackColor = true;
 			// 
 			// groupBox8
 			// 
@@ -1681,16 +2396,16 @@ namespace namaichi
 									0,
 									0});
 			// 
-			// tabPage2
+			// accountTab
 			// 
-			this.tabPage2.Controls.Add(this.groupBox3);
-			this.tabPage2.Location = new System.Drawing.Point(4, 22);
-			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(433, 536);
-			this.tabPage2.TabIndex = 1;
-			this.tabPage2.Text = "アカウント設定";
-			this.tabPage2.UseVisualStyleBackColor = true;
+			this.accountTab.Controls.Add(this.groupBox3);
+			this.accountTab.Location = new System.Drawing.Point(4, 22);
+			this.accountTab.Name = "accountTab";
+			this.accountTab.Padding = new System.Windows.Forms.Padding(3);
+			this.accountTab.Size = new System.Drawing.Size(433, 536);
+			this.accountTab.TabIndex = 1;
+			this.accountTab.Text = "アカウント設定";
+			this.accountTab.UseVisualStyleBackColor = true;
 			// 
 			// groupBox3
 			// 
@@ -1818,6 +2533,7 @@ namespace namaichi
 			this.loginBtn.TabIndex = 17;
 			this.loginBtn.Text = "ログインする";
 			this.loginBtn.UseVisualStyleBackColor = true;
+			this.loginBtn.Click += new System.EventHandler(this.loginBtn_Click);
 			// 
 			// cookieFileSanshouBtn
 			// 
@@ -1862,49 +2578,77 @@ namespace namaichi
 			this.MaximizeBox = false;
 			this.Name = "optionForm";
 			this.Text = "オプション";
-			this.tabPage1.ResumeLayout(false);
+			this.appliTab.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
 			this.groupBox6.PerformLayout();
 			this.groupBox5.ResumeLayout(false);
 			this.groupBox5.PerformLayout();
 			this.tabControl1.ResumeLayout(false);
-			this.tabPage3.ResumeLayout(false);
+			this.commonTab.ResumeLayout(false);
+			this.defaultBehaviorGroupBox.ResumeLayout(false);
+			this.defaultBehaviorGroupBox.PerformLayout();
 			this.groupBox2.ResumeLayout(false);
+			this.groupBox2.PerformLayout();
 			this.groupBox11.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.liveListUpdateMinutesList)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.thresholdpageList)).EndInit();
+			this.common2Tab.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
-			this.tabPage4.ResumeLayout(false);
-			this.groupBox10.ResumeLayout(false);
-			this.groupBox10.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.maxLogDisplayList)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.maxNotAlartDisplayList)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.maxHistoryDisplayList)).EndInit();
+			this.notifyTab.ResumeLayout(false);
 			this.groupBox9.ResumeLayout(false);
 			this.groupBox9.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.volumeCBar)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.volumeBBar)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.volumeABar)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.volumeBar)).EndInit();
 			this.groupBox4.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.popupOpacityList)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.poptimeList)).EndInit();
-			this.tabPage5.ResumeLayout(false);
+			this.notify2Tab.ResumeLayout(false);
+			this.groupBox10.ResumeLayout(false);
+			this.groupBox10.PerformLayout();
+			this.alartTab.ResumeLayout(false);
 			this.groupBox8.ResumeLayout(false);
 			this.groupBox7.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.userNameUpdateIntervalList)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.rssUpdateIntervalList)).EndInit();
-			this.tabPage2.ResumeLayout(false);
+			this.accountTab.ResumeLayout(false);
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);
 		}
-		private System.Windows.Forms.RadioButton isCheck30minRadioBtn;
-		private System.Windows.Forms.RadioButton isCheckOnAirRadioBtn;
-		private System.Windows.Forms.Label label51;
-		private System.Windows.Forms.Label label50;
-		private System.Windows.Forms.NumericUpDown liveListUpdateMinutesList;
-		private System.Windows.Forms.ComboBox brodoubleList;
-		private System.Windows.Forms.Label label49;
-		private System.Windows.Forms.NumericUpDown thresholdpageList;
-		private System.Windows.Forms.Label label48;
-		private System.Windows.Forms.GroupBox groupBox11;
-		private System.Windows.Forms.CheckBox isAppPushChkBox;
-		private System.Windows.Forms.Button sendTestMailBtn;
-		private System.Windows.Forms.CheckBox isMailSslChkBox;
+		private System.Windows.Forms.Label label61;
+		private System.Windows.Forms.Label label62;
+		private System.Windows.Forms.NumericUpDown maxNotAlartDisplayList;
+		private System.Windows.Forms.NumericUpDown maxLogDisplayList;
+		private System.Windows.Forms.Label label60;
+		private System.Windows.Forms.NumericUpDown maxHistoryDisplayList;
+		private System.Windows.Forms.CheckBox isAlartListColorRecent;
+		private System.Windows.Forms.Button defaultRecentColorBtn;
+		private System.Windows.Forms.Button recentColorBtn;
+		private System.Windows.Forms.TextBox recentSampleColorText;
+		private System.Windows.Forms.CheckBox isNotAllMatchNotifyNoRecentChkBox;
+		private System.Windows.Forms.Label label58;
+		private System.Windows.Forms.NumericUpDown popupOpacityList;
+		private System.Windows.Forms.Label label59;
+		private System.Windows.Forms.Button soundTestBtn;
+		private System.Windows.Forms.Button soundBTestBtn;
+		private System.Windows.Forms.Button soundCTestBtn;
+		private System.Windows.Forms.Button soundATestBtn;
+		private System.Windows.Forms.Button testPopupBtn;
+		private System.Windows.Forms.TrackBar volumeCBar;
+		private System.Windows.Forms.Label volumeCText;
+		private System.Windows.Forms.TrackBar volumeBBar;
+		private System.Windows.Forms.Label volumeBText;
+		private System.Windows.Forms.TrackBar volumeABar;
+		private System.Windows.Forms.Label volumeAText;
+		private System.Windows.Forms.Label label57;
+		private System.Windows.Forms.ComboBox defaultSoundList;
+		private System.Windows.Forms.CheckBox isDefaultSoundIdChkBox;
+		private System.Windows.Forms.TabPage common2Tab;
 		private System.Windows.Forms.Label label42;
 		private System.Windows.Forms.TextBox mailFromText;
 		private System.Windows.Forms.Label label43;
@@ -1917,18 +2661,61 @@ namespace namaichi
 		private System.Windows.Forms.TextBox mailUserText;
 		private System.Windows.Forms.Label label45;
 		private System.Windows.Forms.TextBox mailPassText;
+		private System.Windows.Forms.CheckBox isMailSslChkBox;
+		private System.Windows.Forms.Button sendTestMailBtn;
 		private System.Windows.Forms.GroupBox groupBox10;
+		private System.Windows.Forms.TextBox soundPathBText;
+		private System.Windows.Forms.TextBox soundPathCText;
+		private System.Windows.Forms.Button soundBSanshouBtn;
+		private System.Windows.Forms.Button soundCSanshouBtn;
+		private System.Windows.Forms.Label label55;
+		private System.Windows.Forms.Label label56;
+		private System.Windows.Forms.Label label54;
+		private System.Windows.Forms.TabPage notify2Tab;
+		private System.Windows.Forms.Button defaultColorBtn;
+		private System.Windows.Forms.CheckBox isColorPopupChkBox;
+		private System.Windows.Forms.Label label53;
+		private System.Windows.Forms.Label label52;
+		private System.Windows.Forms.Button textColorBtn;
+		private System.Windows.Forms.Button backColorBtn;
+		private System.Windows.Forms.TextBox sampleColorText;
+		private System.Windows.Forms.CheckBox appliAChkBox;
+		private System.Windows.Forms.CheckBox appliBChkBox;
+		private System.Windows.Forms.CheckBox appliCChkBox;
+		private System.Windows.Forms.CheckBox appliDChkBox;
+		private System.Windows.Forms.CheckBox isPopupChkBox;
+		private System.Windows.Forms.CheckBox isBaloonChkBox;
+		private System.Windows.Forms.CheckBox isSoundChkBox;
+		private System.Windows.Forms.CheckBox isWebChkBox;
+		private System.Windows.Forms.CheckBox appliEChkBox;
+		private System.Windows.Forms.CheckBox appliFChkBox;
+		private System.Windows.Forms.CheckBox appliGChkBox;
+		private System.Windows.Forms.CheckBox appliHChkBox;
+		private System.Windows.Forms.CheckBox appliIChkBox;
+		private System.Windows.Forms.CheckBox appliJChkBox;
+		private System.Windows.Forms.CheckBox isMailChkBox;
+		private System.Windows.Forms.GroupBox defaultBehaviorGroupBox;
+		private System.Windows.Forms.RadioButton isCheck30minRadioBtn;
+		private System.Windows.Forms.RadioButton isCheckOnAirRadioBtn;
+		private System.Windows.Forms.Label label51;
+		private System.Windows.Forms.Label label50;
+		private System.Windows.Forms.NumericUpDown liveListUpdateMinutesList;
+		private System.Windows.Forms.ComboBox brodoubleList;
+		private System.Windows.Forms.Label label49;
+		private System.Windows.Forms.NumericUpDown thresholdpageList;
+		private System.Windows.Forms.Label label48;
+		private System.Windows.Forms.GroupBox groupBox11;
+		private System.Windows.Forms.CheckBox isAppPushChkBox;
 		private System.Windows.Forms.ComboBox doublecmodeList;
 		private System.Windows.Forms.Label label41;
 		private System.Windows.Forms.CheckBox isdragComChkBox;
 		private System.Windows.Forms.CheckBox isTasktrayStartChkBox;
 		private System.Windows.Forms.CheckBox isRecentCheckRadioBtn;
 		private System.Windows.Forms.CheckBox isChangeIconChkBox;
-		private System.Windows.Forms.CheckBox isDefaultSoundChkBtn;
 		private System.Windows.Forms.TrackBar volumeBar;
 		private System.Windows.Forms.Label volumeText;
-		private System.Windows.Forms.TextBox soundPathText;
-		private System.Windows.Forms.Button soundSanshouBtn;
+		private System.Windows.Forms.TextBox soundPathAText;
+		private System.Windows.Forms.Button soundASanshouBtn;
 		private System.Windows.Forms.GroupBox groupBox9;
 		private System.Windows.Forms.TextBox nameAText;
 		private System.Windows.Forms.TextBox nameBText;
@@ -1953,7 +2740,7 @@ namespace namaichi
 		private System.Windows.Forms.CheckBox isRssChkBox;
 		private System.Windows.Forms.CheckBox isPushChkBox;
 		private System.Windows.Forms.GroupBox groupBox8;
-		private System.Windows.Forms.TabPage tabPage5;
+		private System.Windows.Forms.TabPage alartTab;
 		private System.Windows.Forms.Label label30;
 		private System.Windows.Forms.Button appliGPathSanshouBtn;
 		private System.Windows.Forms.TextBox argGText;
@@ -2013,13 +2800,13 @@ namespace namaichi
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.ComboBox poplocList;
 		private System.Windows.Forms.GroupBox groupBox4;
-		private System.Windows.Forms.TabPage tabPage4;
+		private System.Windows.Forms.TabPage notifyTab;
 		private System.Windows.Forms.CheckBox isStartTimeAllCheckChkBox;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.CheckBox isBroadLogChkBox;
 		private System.Windows.Forms.CheckBox isLogChkBtn;
 		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.TabPage tabPage3;
+		private System.Windows.Forms.TabPage commonTab;
 		private System.Windows.Forms.CheckBox useSecondLoginChkBox;
 		private System.Windows.Forms.Button btnReload;
 		private System.Windows.Forms.Button cookieFileSanshouBtn;
@@ -2035,7 +2822,7 @@ namespace namaichi
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.GroupBox groupBox3;
-		private System.Windows.Forms.TabPage tabPage2;
+		private System.Windows.Forms.TabPage accountTab;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox appliAPathText;
 		private System.Windows.Forms.Button appliAPathSanshouBtn;
@@ -2058,7 +2845,7 @@ namespace namaichi
 		private System.Windows.Forms.Button button4;
 		private System.Windows.Forms.Button button3;
 		//private SunokoLibrary.Windows.Forms.NicoSessionComboBox nicoSessionComboBox1;
-		private System.Windows.Forms.TabPage tabPage1;
+		private System.Windows.Forms.TabPage appliTab;
 		private System.Windows.Forms.TabControl tabControl1;
 		
 

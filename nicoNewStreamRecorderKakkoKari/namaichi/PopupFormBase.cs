@@ -25,6 +25,10 @@ namespace namaichi
 		protected PopupDisplay pd;
 		protected int showIndex = 0;
 		
+		protected bool isTest = false;
+		protected bool isTestClosePopup = false;
+		protected int testPopTime = 0;
+		
 		public PopupFormBase()
 		{
 			//
@@ -41,7 +45,7 @@ namespace namaichi
 		protected void CopyUrlMenuClick(object sender, EventArgs e)
 		{
 			if (ri.lvId == null || ri.lvId == "") return;
-			var url = "http://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ri.lvId, "(\\d+)");
+			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ri.lvId, "(\\d+)");
 			util.setClipBordText(url);
 		}
 		
@@ -49,7 +53,7 @@ namespace namaichi
 		{
 			var isChannel = ri.comId.IndexOf("ch") > -1;
 			var url = (isChannel) ? 
-				("http://ch.nicovideo.jp/" + ri.comId) :
+				("https://ch.nicovideo.jp/" + ri.comId) :
 				("https://com.nicovideo.jp/community/" + ri.comId);
 			util.setClipBordText(url);
 		}
@@ -73,14 +77,14 @@ namespace namaichi
 		void OpenWebBrowserMenuClick(object sender, EventArgs e)
 		{
 			if (ri.lvId == null || ri.lvId == "") return;
-			var url = "http://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ri.lvId, "(\\d+)");
+			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ri.lvId, "(\\d+)");
 			util.openUrlBrowser(url, config);
 		}
 		void OpenAppliMenuClick(object sender, EventArgs e)
 		{
 			var i = ((ToolStripMenuItem)sender).Name[9];
 			var path = config.get("appli" + i.ToString() + "Path");
-			var url = "http://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ri.lvId, "(\\d+)");
+			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ri.lvId, "(\\d+)");
 			var args = config.get("appli" + i.ToString() + "Args");
 			appliProcess(path, url + " " + args);
 		}
@@ -109,6 +113,15 @@ namespace namaichi
 				contextMenuStrip1.Items[8 + i].Text = name + "で開く";
 			}
 			//var nnn = nn;
+		}
+		protected void allClick(object sender, EventArgs e)
+		{
+			var url = "https://live2.nicovideo.jp/watch/" + ri.lvId;
+			util.openUrlBrowser(url, config);
+
+			if ((isTest && isTestClosePopup) ||
+			    	(!isTest && config.get("Isclosepopup") == "true"))
+				Close();
 		}
 	}
 }

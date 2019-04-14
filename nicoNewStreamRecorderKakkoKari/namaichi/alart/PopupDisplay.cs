@@ -45,12 +45,14 @@ namespace namaichi.alart
 			
 			var isSmall = bool.Parse(form.config.get("Issmallpopup"));
 			var posI = 0;
-			var pos = getPos(isSmall, out posI);
+			var pos = getPos(isSmall, out posI, form.config.get("poploc"),
+					bool.Parse(form.config.get("Isfixpopup")));
 			//test
 //			if (posList.Count > 10) return;
 			form.DisplayPopup(ri, pos, isSmall, this, posI, ai);
 		}
-		private Point getPos(bool isSmall, out int posI) {
+		private Point getPos(bool isSmall, out int posI, string poploc, 
+				bool isFix) {
 			posI = 0;
 			for (var i = 0; i < posList.Count + 1; i++)
 				if (posList.IndexOf(i) == -1) {
@@ -58,8 +60,8 @@ namespace namaichi.alart
 				break;
 			}
 			
-			var poploc = form.config.get("poploc");
-			var isFix = bool.Parse(form.config.get("Isfixpopup"));
+			//var poploc = form.config.get("poploc");
+			//var isFix = bool.Parse(form.config.get("Isfixpopup"));
 			if (isFix) posI = 0;
 			
 			var size = popupSize[isSmall ? 1 : 0];
@@ -81,6 +83,24 @@ namespace namaichi.alart
 			
 			posList.Add(posI);
 			return new Point(x,y);
+		}
+		public void showTest(string poploc, int poptime,
+					bool isClickClose, bool isSmall,
+					bool isTopMost, bool isColor, double opacity) {
+			var thumbnailUrl = util.getJarPath()[0] + "/ImageCommunity/no thumb com.jpg";
+			var ri = new namaichi.info.RssItem("タイトル", "lv1000000",
+					DateTime.Now.ToString(), "放送説明", "コミュニティ名",
+					"コミュニティID", "放送者名", thumbnailUrl, "true", "");
+			
+			popupSize = new Size[]{new PopupForm(ri, form.config, this, 0, null).Size,
+					new SmallPopupForm(ri, form.config, this, 0, null).Size};
+			
+			var posI = 0;
+			var pos = getPos(isSmall, out posI, poploc,
+					true);
+			form.DisplayPopup(ri, pos, isSmall, this, posI, null, true,
+					poploc, poptime, isClickClose, 
+					isTopMost, isColor, opacity);
 		}
 	}
 }

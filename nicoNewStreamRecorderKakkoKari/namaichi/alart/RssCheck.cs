@@ -36,7 +36,8 @@ namespace namaichi.alart
 			this.config = config;
 		}
 		public void start() {
-			var url = "http://live.nicovideo.jp/recent/rss?tab=&p=";
+			check.form.addLogText("RSSからの取得を開始します");
+			var url = "https://live.nicovideo.jp/recent/rss?tab=&p=";
 			while (isRetry) {
 				util.debugWriteLine("rss check lastlv" + lastLv + " " + DateTime.Now);
 				util.debugWriteLine("checked lv list start count " + check.checkedLvIdList.Count);
@@ -79,6 +80,7 @@ namespace namaichi.alart
 				if (t < 15) t = 15;
 				Thread.Sleep(t * 1000);
 			}
+			check.form.addLogText("RSSからの取得を終了します");
 		}
 		private bool getRssItems(string res, ref List<RssItem> items, ref bool isEndFile) {
 			var m = rssReg.Matches(res);

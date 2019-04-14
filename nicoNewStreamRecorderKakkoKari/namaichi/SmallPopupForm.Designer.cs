@@ -53,9 +53,11 @@ namespace namaichi
 			this.descryptionLabel.Name = "descryptionLabel";
 			this.descryptionLabel.Size = new System.Drawing.Size(42, 43);
 			this.descryptionLabel.TabIndex = 5;
+			this.descryptionLabel.Click += new System.EventHandler(this.allClick);
 			// 
 			// thumbnailPictureBox
 			// 
+			this.thumbnailPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.thumbnailPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("thumbnailPictureBox.Image")));
 			this.thumbnailPictureBox.InitialImage = ((System.Drawing.Image)(resources.GetObject("thumbnailPictureBox.InitialImage")));
 			this.thumbnailPictureBox.Location = new System.Drawing.Point(3, 32);
@@ -64,6 +66,7 @@ namespace namaichi
 			this.thumbnailPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.thumbnailPictureBox.TabIndex = 4;
 			this.thumbnailPictureBox.TabStop = false;
+			this.thumbnailPictureBox.Click += new System.EventHandler(this.allClick);
 			// 
 			// titleLabel
 			// 
@@ -77,6 +80,7 @@ namespace namaichi
 			this.titleLabel.Size = new System.Drawing.Size(115, 30);
 			this.titleLabel.TabIndex = 3;
 			this.titleLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.TitleLabelLinkClicked);
+			this.titleLabel.Click += new System.EventHandler(this.allClick);
 			// 
 			// communityNameLabel
 			// 
@@ -120,6 +124,7 @@ namespace namaichi
 			this.TopMost = true;
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SmallPopupFormFormClosed);
 			this.Load += new System.EventHandler(this.SmallPopupFormLoad);
+			this.Click += new System.EventHandler(this.allClick);
 			((System.ComponentModel.ISupportInitialize)(this.thumbnailPictureBox)).EndInit();
 			this.ResumeLayout(false);
 		}

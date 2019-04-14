@@ -429,7 +429,7 @@ namespace namaichi.rec
 	//				var pagetype = getPageType(url + "?ref=grel");
 	//				if (pagetype != 5) return pagetype;
 	//				if (res.IndexOf("会場のご案内") < 0) break;
-					var _url = "http://live2.nicovideo.jp/watch/" + lvid;                              
+					var _url = "https://live2.nicovideo.jp/watch/" + lvid;                              
 					var req = (HttpWebRequest)WebRequest.Create(_url + "?ref=grel");
 					req.Proxy = null;
 					req.AllowAutoRedirect = true;

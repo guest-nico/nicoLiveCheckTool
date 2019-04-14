@@ -9,6 +9,7 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.Threading;
 using System.Net.Mail;
+using System.Runtime.InteropServices;
 using namaichi.config;
 using namaichi.info;
 using namaichi;
@@ -26,8 +27,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.5";
-	public static string versionDayStr = "2019/03/26";
+	public static string versionStr = "ver0.1.7";
+	public static string versionDayStr = "2019/04/14";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	
@@ -740,7 +741,7 @@ class util {
 		}
 	}
 	public static bool isEndedProgram(string lvid, CookieContainer container, bool isSub) {
-		var url = "http://live2.nicovideo.jp/watch/" + lvid;
+		var url = "https://live2.nicovideo.jp/watch/" + lvid;
 		
 		var a = new System.Net.WebHeaderCollection();
 		var res = util.getPageSource(url, ref a, container);
@@ -902,7 +903,7 @@ class util {
 		#if DEBUG
 			if (isMessageBox && isLogFile) {
 				if (frameCount > 150) {
-					MessageBox.Show("framecount stack", frameCount.ToString() + " " + namaichi.Program.arg + " " + DateTime.Now.ToString());
+					System.Windows.Forms.MessageBox.Show("framecount stack", frameCount.ToString() + " " + namaichi.Program.arg + " " + DateTime.Now.ToString());
 					return;
 				}
 			}
@@ -938,7 +939,7 @@ class util {
 		
 		#if DEBUG
 			if (isMessageBox && isLogFile)
-				MessageBox.Show("error " + eo.Message, "error " + namaichi.Program.arg);
+				System.Windows.Forms.MessageBox.Show("error " + eo.Message, "error " + namaichi.Program.arg);
 		#else
 			
 		#endif
@@ -1041,7 +1042,7 @@ class util {
 		
 		var isChannel = communityNum.IndexOf("ch") > -1;
 		var url = (isChannel) ? 
-			("http://ch.nicovideo.jp/" + communityNum) :
+			("https://ch.nicovideo.jp/" + communityNum) :
 			("https://com.nicovideo.jp/community/" + communityNum);
 		
 //			var wc = new WebHeaderCollection();
@@ -1050,7 +1051,7 @@ class util {
 		
 		if (res == null) {
 			url = (isChannel) ? 
-				("http://ch.nicovideo.jp/" + communityNum) :
+				("https://ch.nicovideo.jp/" + communityNum) :
 				("https://com.nicovideo.jp/motion/" + communityNum);
 			res = util.getPageSource(url, cc);
 			if (res == null) return null;
@@ -1071,7 +1072,7 @@ class util {
 		
 		//not login
 		if (title == null) {
-			url = "http://ext.nicovideo.jp/thumb_" + ((isChannel) ? "channel" : "community") + "/" + communityNum;
+			url = "https://ext.nicovideo.jp/thumb_" + ((isChannel) ? "channel" : "community") + "/" + communityNum;
 			res = getPageSource(url, cc, null, false, 3);
 			title = getRegGroup(res, "<p class=\"chcm_tit\">(.+?)</p>");
 		}
@@ -1113,27 +1114,46 @@ class util {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 		}
 	}
-	public static void playSound(config cfg) {
+	public static void playSound(config cfg, AlartInfo ai) {
 		try {
-			var path = (bool.Parse(cfg.get("IsSoundDefault"))) ? 
-				(util.getJarPath()[0] + "/Sound/se_soc01.wav") : cfg.get("soundPath");
-			if (path == "") path = util.getJarPath()[0] + "/Sound/se_soc01.wav";
-			util.debugWriteLine("sound path " + path);
+			string path = null;
+			float volume = 0;
+			var basePath = util.getJarPath()[0];
+			if (ai != null && ai.isSoundId) {
+				try {
+					if (!string.IsNullOrEmpty(ai.communityId) && 
+					    	File.Exists(basePath + "/Sound/" + ai.communityId + ".wav"))
+						path = basePath + "/Sound/" + ai.communityId + ".wav";
+					else if (!string.IsNullOrEmpty(ai.hostId) && 
+					    	File.Exists(basePath + "/Sound/" + ai.hostId + ".wav"))
+						path = basePath + "/Sound/" + ai.hostId + ".wav";
+					else if (!string.IsNullOrEmpty(ai.keyword) && 
+					    	File.Exists(basePath + "/Sound/" + ai.keyword + ".wav"))
+						path = basePath + "/Sound/" + ai.keyword + ".wav";
+					if (path != null) volume = float.Parse(cfg.get("soundVolume")) / 100;
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				}
+			}
+			if (ai != null && path == null) {
+				if (ai.soundType == 1) {
+					path = cfg.get("soundPathA");
+					volume = float.Parse(cfg.get("soundAVolume")) / 100;
+				} else if (ai.soundType == 2) {
+					path = cfg.get("soundPathB");
+					volume = float.Parse(cfg.get("soundBVolume")) / 100;
+				} else if (ai.soundType == 3) {
+					path = cfg.get("soundPathC");
+					volume = float.Parse(cfg.get("soundCVolume")) / 100;
+				}
+			}
+			if (path == null || !File.Exists(path)) {
+				path = util.getJarPath()[0] + "/Sound/se_soc01.wav";
+				volume = float.Parse(cfg.get("soundVolume")) / 100;
+			}
 			
-			var reader = new NAudio.Wave.AudioFileReader(path);
-				
-			var waveOut = new NAudio.Wave.WaveOut(NAudio.Wave.WaveCallbackInfo.FunctionCallback());
-			waveOut.Init(reader);
-			var volume = float.Parse(cfg.get("soundVolume")) / 100;
-			if (volume < 0) volume = (float)0;
-			if (volume > 1) volume = (float)1;
-			waveOut.Volume = volume;
-			util.debugWriteLine("volume " + waveOut.Volume);
-			waveOut.Play();
-			while (waveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing) Thread.Sleep(100);
-			//waveOut.Dispose();
-			reader.Close();
-				
+			playSoundCore(volume, path);
+			
 			/*
 			var path = (bool.Parse(cfg.get("IsSoundDefault"))) ? 
 				(util.getJarPath()[0] + "/Sound/se_soc02.wav") : cfg.get("soundPath");
@@ -1142,6 +1162,25 @@ class util {
 			
 			m.PlaySync();
 			*/
+		} catch (Exception e) {
+			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+		}
+	}
+	public static void playSoundCore(float volume, string path) {
+		try {
+			util.debugWriteLine("sound path " + path);
+			
+			var reader = new NAudio.Wave.AudioFileReader(path);
+			var waveOut = new NAudio.Wave.WaveOut(NAudio.Wave.WaveCallbackInfo.FunctionCallback());
+			waveOut.Init(reader);
+			if (volume < 0) volume = (float)0;
+			if (volume > 1) volume = (float)1;
+			waveOut.Volume = volume;
+			util.debugWriteLine("volume " + waveOut.Volume);
+			waveOut.Play();
+			while (waveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing) Thread.Sleep(100);
+			//waveOut.Dispose();
+			reader.Close();
 		} catch (Exception e) {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 		}
@@ -1170,6 +1209,19 @@ class util {
 			msg = e.Message;
 			return false;
 		}
-		
+	}
+	[DllImport("user32.dll")]
+	public static extern int MessageBox(IntPtr hwnd, String text, String caption, uint type);
+	public static int showModelessMessageBox(string text, string caption, MainForm form, int style = 0) {
+		//0-ok 1-okcancel 2-MB_ABORTRETRYIGNORE 3-MB_YESNOCANCEL
+		//20-MB_ICONQUESTION 10-MB_ICONSTOP 30-MB_ICONWARNING 40-MB_ICONINFORMATION
+		//0-MB_DEFBUTTON1 100-MB_DEFBUTTON2 200-MB_DEFBUTTON3
+		//10000-MB_SETFOREGROUND 40000-MB_TOPMOST
+		//return 0-error 1-IDOK 2-IDCANCEL 3-IDABORT 6-IDYES 7-IDNO
+		int res = 0;
+		form.formAction(() =>
+		                res = MessageBox(new IntPtr(0), text, caption, (uint)style)
+		);
+		return res;
 	}
 }

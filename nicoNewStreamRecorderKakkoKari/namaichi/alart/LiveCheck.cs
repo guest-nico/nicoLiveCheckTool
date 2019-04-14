@@ -138,7 +138,7 @@ namespace namaichi.alart
 		private List<LiveInfo> getLiveItems() {
 			var loadTime = DateTime.Now;
 			var tab = getTabName();
-			var url = "http://live.nicovideo.jp/recent/rss?tab=" + tab + "&p=";
+			var url = "https://live.nicovideo.jp/recent/rss?tab=" + tab + "&p=";
 			util.debugWriteLine(url);
 			var readNum = int.Parse(form.config.get("thresholdpage")) + 1;
 			var buf = new List<LiveInfo>();

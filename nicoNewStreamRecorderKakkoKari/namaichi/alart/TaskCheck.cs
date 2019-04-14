@@ -110,7 +110,7 @@ namespace namaichi.alart
 				openBrowser(item);
 			}
 			if (ti.sound && !form.notifyOffList[5]) {
-				sound(item);
+				sound(item, ti);
 			}
 			
 			form.taskListUpdateState(ti);
@@ -118,7 +118,7 @@ namespace namaichi.alart
 		}
 		private void appliProcess(string appliPath, string lvid, string args) {
 			if (appliPath == null || appliPath == "") return;
-			var url = "http://live2.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
+			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
 
 			try {
 				appliPath = appliPath.Trim();
@@ -134,20 +134,20 @@ namespace namaichi.alart
 		private void displayBaloon(RssItem item) {
 			form.DisplayBalloon(item, null);
 		}
-		private void sound(RssItem ri) {
+		private void sound(RssItem ri, TaskInfo ti) {
 			try {
 				/*
 				if (form.check.soundPlayer == null) 
 					form.check.soundPlayer = new SoundPlayer("Sound/se_soc01.wav");
 				form.check.soundPlayer.Play();
 				*/
-				util.playSound(form.config);
+				util.playSound(form.config, null);
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
 		private void openBrowser(RssItem item) {
-			var url = "http://live2.nicovideo.jp/watch/lv" + util.getRegGroup(item.lvId, "(\\d+)");
+			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(item.lvId, "(\\d+)");
 			util.openUrlBrowser(url, form.config);
 		}
 		

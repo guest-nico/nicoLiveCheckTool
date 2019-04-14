@@ -89,9 +89,9 @@ namespace namaichi.rec
 				if (lvid != null) {
 					if (isPlayOnlyMode) {
 						form.Invoke((MethodInvoker)delegate() {
-							form.urlText.Text = "http://live2.nicovideo.jp/watch/" + lvid;
+							form.urlText.Text = "https://live2.nicovideo.jp/watch/" + lvid;
 						});
-					} else form.urlText.Text = "http://live2.nicovideo.jp/watch/" + lvid;
+					} else form.urlText.Text = "https://live2.nicovideo.jp/watch/" + lvid;
 				}
 //				if (lvid != null) form.urlText.Text = "https://cas.nicovideo.jp/user/77252622/lv313508832";
 				

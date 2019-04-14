@@ -62,6 +62,7 @@ namespace namaichi
 			// 
 			// thumbnailPictureBox
 			// 
+			this.thumbnailPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.thumbnailPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("thumbnailPictureBox.Image")));
 			this.thumbnailPictureBox.InitialImage = ((System.Drawing.Image)(resources.GetObject("thumbnailPictureBox.InitialImage")));
 			this.thumbnailPictureBox.Location = new System.Drawing.Point(3, 32);
@@ -70,32 +71,40 @@ namespace namaichi
 			this.thumbnailPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.thumbnailPictureBox.TabIndex = 1;
 			this.thumbnailPictureBox.TabStop = false;
+			this.thumbnailPictureBox.Click += new System.EventHandler(this.allClick);
 			// 
 			// descryptionLabel
 			// 
 			this.descryptionLabel.Location = new System.Drawing.Point(73, 32);
 			this.descryptionLabel.Name = "descryptionLabel";
-			this.descryptionLabel.Size = new System.Drawing.Size(252, 43);
+			this.descryptionLabel.Size = new System.Drawing.Size(252, 64);
 			this.descryptionLabel.TabIndex = 2;
 			this.descryptionLabel.Text = "弾幕歓迎！荒らすの現金、あ、厳禁(。-`ω´-)ｂlt;br /gt;lt;br /gt;リアルな知り合い以外はコテハン呼び捨てにしますのでご了承を。lt;br " +
 			"/gt;ltbr /gt;いらっしゃいませ。";
+			this.descryptionLabel.Click += new System.EventHandler(this.allClick);
 			// 
 			// hostNameLabel
 			// 
+			this.hostNameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+									| System.Windows.Forms.AnchorStyles.Right)));
 			this.hostNameLabel.Location = new System.Drawing.Point(1, 99);
 			this.hostNameLabel.Name = "hostNameLabel";
-			this.hostNameLabel.Size = new System.Drawing.Size(150, 18);
+			this.hostNameLabel.Size = new System.Drawing.Size(101, 18);
 			this.hostNameLabel.TabIndex = 3;
 			this.hostNameLabel.Text = "公式生放送";
+			this.hostNameLabel.Click += new System.EventHandler(this.allClick);
 			// 
 			// communityNameLabel
 			// 
-			this.communityNameLabel.Location = new System.Drawing.Point(218, 99);
+			this.communityNameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+									| System.Windows.Forms.AnchorStyles.Right)));
+			this.communityNameLabel.Location = new System.Drawing.Point(108, 99);
 			this.communityNameLabel.Name = "communityNameLabel";
-			this.communityNameLabel.Size = new System.Drawing.Size(106, 18);
+			this.communityNameLabel.Size = new System.Drawing.Size(216, 18);
 			this.communityNameLabel.TabIndex = 3;
 			this.communityNameLabel.Text = "official";
 			this.communityNameLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.communityNameLabel.Click += new System.EventHandler(this.allClick);
 			// 
 			// PopupForm
 			// 
@@ -118,6 +127,7 @@ namespace namaichi
 			this.TopMost = true;
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PopupFormFormClosed);
 			this.Load += new System.EventHandler(this.PopupFormLoad);
+			this.Click += new System.EventHandler(this.allClick);
 			((System.ComponentModel.ISupportInitialize)(this.thumbnailPictureBox)).EndInit();
 			this.ResumeLayout(false);
 		}

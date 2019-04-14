@@ -31,6 +31,7 @@ namespace namaichi.alart
 		
 		private SslStream sslStream = null;
 		private bool isRetry = true;
+		private DateTime startTime = DateTime.Now;
 	
 		public AppPushReceiver(Check check, config.config config) {
 			this.check = check;
@@ -202,7 +203,7 @@ namespace namaichi.alart
 			util.debugWriteLine("app push sendTokenNico " + pushToken);
 			try {
 				if (check.container == null) return false;
-				var urlCookie = check.container.GetCookieHeader(new Uri("http://live2.nicovideo.jp")) + ";";
+				var urlCookie = check.container.GetCookieHeader(new Uri("https://live2.nicovideo.jp")) + ";";
 				var userSession = util.getRegGroup(urlCookie, "user_session=(.+?);");
 				                          
 				var url = "https://api.gadget.nicovideo.jp/notification/clientapp/registration"; 
@@ -421,8 +422,9 @@ namespace namaichi.alart
 		}
 		private List<RssItem> getItem(string lvid, DataMessageStanza msg) {
 			try {
-				string title, thumbnail, dt, comName, hostName, description;
-				dt = util.getUnixToDatetime(msg.Sent / 1000).ToString();
+				string title, thumbnail, comName, hostName, description;
+				DateTime dt = util.getUnixToDatetime(msg.Sent / 1000);
+				if (dt < startTime) return null;
 				hostName = "";
 				
 				var hg = new namaichi.rec.HosoInfoGetter();
@@ -471,7 +473,7 @@ namespace namaichi.alart
 				//thumbnail = "";
 				
 				if (title == null || lvid == null || hg.thumbnail == null ||
-				    	dt == null || comName == null || hg.communityId == null ||
+				    	dt == DateTime.MinValue || comName == null || hg.communityId == null ||
 				    	hg.tags == null || hg.description == null ||
 				    	(isCom && (hostName == null || hg.userId == null))) {
 					check.form.addLogText("app push error " + msg);
@@ -480,7 +482,7 @@ namespace namaichi.alart
 					
 				}
 				
-				var i = new RssItem(title, lvid, dt, hg.description, comName, hg.communityId, hostName, hg.thumbnail, "", "");
+				var i = new RssItem(title, lvid, dt.ToString(), hg.description, comName, hg.communityId, hostName, hg.thumbnail, "", "");
 				i.setUserId(hg.userId);
 				i.setTag(hg.tags);
 				var ret = new List<RssItem>();

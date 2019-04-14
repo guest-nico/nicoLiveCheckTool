@@ -24,6 +24,10 @@ namespace namaichi.utility
 		}
 		public void save(MainForm form)
 		{
+			if (File.Exists("tasklist.ini")) {
+				File.Copy("tasklist.ini", "tasklist_backup.ini", true);
+			}
+			
 			var sw = new StreamWriter("tasklist.ini");
 			sw.WriteLine("200");
 			foreach (var ti in form.taskListDataSource) {
@@ -66,6 +70,7 @@ namespace namaichi.utility
 			string[] lines;
 			
 			try {
+				if (!File.Exists(fileName)) return;
 				var sr = new StreamReader(fileName);
 				lines = sr.ReadToEnd().Replace("\r", "").Split('\n');
 				sr.Close();

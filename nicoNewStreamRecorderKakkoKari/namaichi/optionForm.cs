@@ -15,8 +15,9 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
-
 using namaichi.config;
+using System.IO;
+using NAudio.Midi;
 using SunokoLibrary.Application;
 using SunokoLibrary.Windows.ViewModels;
 
@@ -29,10 +30,10 @@ namespace namaichi
 	{
 		private config.config cfg;
 		
-		static readonly Uri TargetUrl = new Uri("http://live.nicovideo.jp/");
-//		private string 
+		static readonly Uri TargetUrl = new Uri("https://live.nicovideo.jp/");
+		private MainForm form; 
 		
-		public optionForm(config.config cfg)
+		public optionForm(config.config cfg, MainForm form)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
@@ -42,6 +43,7 @@ namespace namaichi
 			InitializeComponent();
 			//this.Location = p;
 			this.cfg = cfg;
+			this.form = form;
 			
 			nicoSessionComboBox1.Selector.PropertyChanged += Selector_PropertyChanged;
 //			nicoSessionComboBox2.Selector.PropertyChanged += Selector2_PropertyChanged;
@@ -120,17 +122,25 @@ namespace namaichi
 				{"IstasktrayStart",isTasktrayStartChkBox.Checked.ToString().ToLower()},
 				{"IsdragCom",isdragComChkBox.Checked.ToString().ToLower()},
 				{"doublecmode",doublecmodeList.Text},
+				{"IsNotAllMatchNotifyNoRecent",isNotAllMatchNotifyNoRecentChkBox.Checked.ToString().ToLower()},
+				{"IsAlartListRecentColor",isAlartListColorRecent.Checked.ToString().ToLower()},
+				{"recentColor",ColorTranslator.ToHtml(recentSampleColorText.BackColor)},
 				
 				{"rssUpdateInterval",rssUpdateIntervalList.Text},
 				{"userNameUpdateInterval",userNameUpdateIntervalList.Text},
 				{"log",isLogChkBtn.Checked.ToString().ToLower()},
 				{"IsbroadLog",isBroadLogChkBox.Checked.ToString().ToLower()},
+				{"maxHistoryDisplay",maxHistoryDisplayList.Text},
+				{"maxNotAlartDisplay",maxNotAlartDisplayList.Text},
+				{"maxLogDisplay",maxLogDisplayList.Text},
 				{"poploc",poplocList.Text},
 				{"poptime",poptimeList.Text},
 				{"Isclosepopup",IsclosepopupChkBox.Checked.ToString().ToLower()},
 				{"Isfixpopup",IsfixpopupChkBox.Checked.ToString().ToLower()},
 				{"Issmallpopup",IssmallpopupChkBox.Checked.ToString().ToLower()},
 				{"IsTopMostPopup",isTopMostPopupChkBox.Checked.ToString().ToLower()},
+				{"IsColorPopup",isColorPopupChkBox.Checked.ToString().ToLower()},
+				{"popupOpacity",popupOpacityList.Text},
 				{"mailFrom",mailFromText.Text},
 				{"mailTo",mailToText.Text},
 				{"mailSmtp",mailSmtpText.Text},
@@ -138,9 +148,19 @@ namespace namaichi
 				{"mailUser",mailUserText.Text},
 				{"mailPass",mailPassText.Text},
 				{"IsmailSsl",isMailSslChkBox.Checked.ToString().ToLower()},
-				{"soundPath",soundPathText.Text},
-				{"IsSoundDefault",isDefaultSoundChkBtn.Checked.ToString().ToLower()},
+				{"soundPathA",soundPathAText.Text},
+				{"soundPathB",soundPathBText.Text},
+				{"soundPathC",soundPathCText.Text},
+				//{"IsSoundDefault",isDefaultSoundChkBtn.Checked.ToString().ToLower()},
 				{"soundVolume",volumeBar.Value.ToString()},
+				{"soundAVolume",volumeABar.Value.ToString()},
+				{"soundBVolume",volumeBBar.Value.ToString()},
+				{"soundCVolume",volumeCBar.Value.ToString()},
+				{"defaultBehavior", getDefaultBehavior()},
+				{"defaultTextColor", ColorTranslator.ToHtml(textColorBtn.BackColor)},
+				{"defaultBackColor", ColorTranslator.ToHtml(backColorBtn.BackColor)},
+				{"defaultSound",defaultSoundList.SelectedIndex.ToString()},
+				{"IsDefaultSoundId",isDefaultSoundIdChkBox.Checked.ToString().ToLower()},
 				
 				{"IsRss",isRssChkBox.Checked.ToString().ToLower()},
 				{"IsPush",isPushChkBox.Checked.ToString().ToLower()},
@@ -273,11 +293,18 @@ namespace namaichi
 			isTasktrayStartChkBox.Checked = bool.Parse(cfg.get("IstasktrayStart"));
 			isdragComChkBox.Checked = bool.Parse(cfg.get("IsdragCom"));
 			doublecmodeList.Text = cfg.get("doublecmode");
+			isNotAllMatchNotifyNoRecentChkBox.Checked = bool.Parse(cfg.get("IsNotAllMatchNotifyNoRecent"));
+			var a = ColorTranslator.FromHtml(cfg.get("recentColor"));
+			recentColorBtn.BackColor = recentSampleColorText.BackColor = ColorTranslator.FromHtml(cfg.get("recentColor"));
+			isAlartListColorRecent.Checked = bool.Parse(cfg.get("IsAlartListRecentColor"));
 			
 			rssUpdateIntervalList.Text = cfg.get("rssUpdateInterval");
 			userNameUpdateIntervalList.Text = cfg.get("userNameUpdateInterval");
 			isLogChkBtn.Checked = bool.Parse(cfg.get("log"));
 			isBroadLogChkBox.Checked = bool.Parse(cfg.get("IsbroadLog"));
+			maxHistoryDisplayList.Text = cfg.get("maxHistoryDisplay");
+			maxNotAlartDisplayList.Text = cfg.get("maxNotAlartDisplay");
+			maxLogDisplayList.Text = cfg.get("maxLogDisplay");
 //			setConvertList(int.Parse(cfg.get("afterConvertMode")));
 			poplocList.Text = cfg.get("poploc");
 			poptimeList.Text = cfg.get("poptime");
@@ -285,6 +312,8 @@ namespace namaichi
 			IsfixpopupChkBox.Checked = bool.Parse(cfg.get("Isfixpopup"));
 			IssmallpopupChkBox.Checked = bool.Parse(cfg.get("Issmallpopup"));
 			isTopMostPopupChkBox.Checked = bool.Parse(cfg.get("IsTopMostPopup"));
+			isColorPopupChkBox.Checked = bool.Parse(cfg.get("IsColorPopup"));
+			popupOpacityList.Text = cfg.get("popupOpacity");
 			mailFromText.Text = cfg.get("mailFrom");
 			mailToText.Text = cfg.get("mailTo");
 			mailSmtpText.Text = cfg.get("mailSmtp");
@@ -292,9 +321,19 @@ namespace namaichi
 			mailUserText.Text = cfg.get("mailUser");
 			mailPassText.Text = cfg.get("mailPass");
 			isMailSslChkBox.Checked = bool.Parse(cfg.get("IsmailSsl"));
-			soundPathText.Text = cfg.get("soundPath");
-			isDefaultSoundChkBtn.Checked = bool.Parse(cfg.get("IsSoundDefault"));
+			soundPathAText.Text = cfg.get("soundPathA");
+			soundPathBText.Text = cfg.get("soundPathB");
+			soundPathCText.Text = cfg.get("soundPathC");
+			//isDefaultSoundChkBtn.Checked = bool.Parse(cfg.get("IsSoundDefault"));
 			volumeBar.Value = int.Parse(cfg.get("soundVolume"));
+			volumeABar.Value = int.Parse(cfg.get("soundAVolume"));
+			volumeBBar.Value = int.Parse(cfg.get("soundBVolume"));
+			volumeCBar.Value = int.Parse(cfg.get("soundCVolume"));
+			setDefaultBehavior(cfg.get("defaultBehavior"));
+			textColorBtn.BackColor = sampleColorText.ForeColor = ColorTranslator.FromHtml(cfg.get("defaultTextColor"));
+			backColorBtn.BackColor = sampleColorText.BackColor = ColorTranslator.FromHtml(cfg.get("defaultBackColor"));
+			defaultSoundList.SelectedIndex = int.Parse(cfg.get("defaultSound"));
+			isDefaultSoundIdChkBox.Checked = bool.Parse(cfg.get("IsDefaultSoundId"));
 			
 			isRssChkBox.Checked = bool.Parse(cfg.get("IsRss"));
 			isPushChkBox.Checked = bool.Parse(cfg.get("IsPush"));
@@ -397,10 +436,12 @@ namespace namaichi
 		{
 			isCheckRecentChkBox_Update();
 		}
+		/*
 		void IsDefaultSoundChkBtnCheckedChanged(object sender, EventArgs e)
 		{
 			updateIsSoundEndChkBox();
 		}
+		*/
 		void SoundSanshouBtnClick(object sender, EventArgs e)
 		{
 			var f = new OpenFileDialog();
@@ -410,19 +451,40 @@ namespace namaichi
 			f.Multiselect = false;
 			var a = f.ShowDialog();
 			if (a == DialogResult.OK) {
-				soundPathText.Text = f.FileName;
+				if (sender == soundASanshouBtn) 
+					soundPathAText.Text = f.FileName;
+				if (sender == soundBSanshouBtn) 
+					soundPathBText.Text = f.FileName;
+				if (sender == soundCSanshouBtn) 
+					soundPathCText.Text = f.FileName;
 			}
 		}
+		/*
 		void updateIsSoundEndChkBox() {
-			soundPathText.Enabled = !isDefaultSoundChkBtn.Checked;
-			soundSanshouBtn.Enabled = !isDefaultSoundChkBtn.Checked;
+			soundPathAText.Enabled = !isDefaultSoundChkBtn.Checked;
+			soundASanshouBtn.Enabled = !isDefaultSoundChkBtn.Checked;
 		}
+		*/
 		void VolumeBarValueChanged(object sender, EventArgs e)
 		{
 			util.debugWriteLine(volumeBar.Value);
-			volumeText.Text = "音量：" + volumeBar.Value;
+			volumeText.Text = "デフォルト音量：" + volumeBar.Value;
 		}
-		
+		void VolumeABarValueChanged(object sender, EventArgs e)
+		{
+			util.debugWriteLine(volumeABar.Value);
+			volumeAText.Text = "音量：" + volumeABar.Value;
+		}
+		void VolumeBBarValueChanged(object sender, EventArgs e)
+		{
+			util.debugWriteLine(volumeBBar.Value);
+			volumeBText.Text = "音量：" + volumeBBar.Value;
+		}
+		void VolumeCBarValueChanged(object sender, EventArgs e)
+		{
+			util.debugWriteLine(volumeCBar.Value);
+			volumeCText.Text = "音量：" + volumeCBar.Value;
+		}
 		void SendTestMailBtnClick(object sender, EventArgs e)
 		{
 			if (mailFromText.Text == "") {
@@ -452,7 +514,7 @@ namespace namaichi
 			
 			
 			var title = "[ニコ生]ユーザー名の放送開始";
-			var msg = DateTime.Now.ToString() + "\nユーザー名 が コミュニティ名 で 放送タイトル を開始しました。\nhttp://live.nicovideo.jp/watch/lv********\nhttp://com.nicovideo.jp/community/co*******";
+			var msg = DateTime.Now.ToString() + "\nユーザー名 が コミュニティ名 で 放送タイトル を開始しました。\nhttps://live.nicovideo.jp/watch/lv********\nhttps://com.nicovideo.jp/community/co*******";
 			
 			Task.Run(() => {
 				string eMsg;
@@ -469,5 +531,102 @@ namespace namaichi
 				});
 			});
 		}
+		private string getDefaultBehavior() {
+			var l = new List<string>();
+			for (var i = 0; i < defaultBehaviorGroupBox.Controls.Count; i++) {
+				if (typeof(CheckBox) != defaultBehaviorGroupBox.Controls[i].GetType()) 
+					continue;
+				CheckBox chkbox = (CheckBox)defaultBehaviorGroupBox.Controls[i];
+				l.Add(chkbox.Checked ? "1" : "0");
+			}
+			return string.Join(",", l);
+		}
+		private void setDefaultBehavior(string conf) {
+			var l = conf.Split(',');
+			for (var i = 0; i < l.Length; i++) {
+				if (typeof(CheckBox) != defaultBehaviorGroupBox.Controls[i].GetType()) 
+					continue;
+				CheckBox chkbox = (CheckBox)defaultBehaviorGroupBox.Controls[i];
+				chkbox.Checked = l[i] == "1";
+			}
+		}
+		void TextColorBtnClick(object sender, EventArgs e)
+		{
+			var c = new ColorDialog();
+			c.FullOpen = true;
+			c.Color = textColorBtn.BackColor;
+			if (c.ShowDialog() != DialogResult.OK) return;
+			textColorBtn.BackColor = c.Color;
+			sampleColorText.ForeColor = c.Color;
+		}
+		void BackColorBtnClick(object sender, EventArgs e)
+		{
+			var c = new ColorDialog();
+			c.FullOpen = true;
+			c.Color = backColorBtn.BackColor;
+			if (c.ShowDialog() != DialogResult.OK) return;
+			backColorBtn.BackColor = c.Color;
+			sampleColorText.BackColor = c.Color;
+		}
+		void DefaultColorBtnClick(object sender, EventArgs e)
+		{
+			backColorBtn.BackColor = Color.FromArgb(255,224,255);
+			sampleColorText.BackColor = Color.FromArgb(255,224,255);
+			textColorBtn.BackColor = Color.Black;
+			sampleColorText.ForeColor = Color.Black;
+		}
+		void TestPopupBtnClick(object sender, EventArgs e)
+		{
+			var pm = new namaichi.alart.PopupDisplay(form);
+			pm.showTest(poplocList.Text, int.Parse(poptimeList.Text),
+					IsclosepopupChkBox.Checked, IssmallpopupChkBox.Checked,
+					isTopMostPopupChkBox.Checked, isColorPopupChkBox.Checked, 
+					double.Parse(popupOpacityList.Text));
+		}
+		void SoundTestBtnClick(object sender, EventArgs e)
+		{
+			var name = ((System.Windows.Forms.Button)sender).Name;
+			string path = null;
+			float volume = -1;
+			if (name == "soundTestBtn") {
+				path = util.getJarPath()[0] + "/Sound/se_soc01.wav";
+				volume = (float)volumeBar.Value;
+			} else if (name == "soundATestBtn") {
+				path = soundPathAText.Text;
+				volume = (float)volumeABar.Value;
+			} else if (name == "soundBTestBtn") {
+				path = soundPathBText.Text;
+				volume = (float)volumeBBar.Value;
+			} else if (name == "soundCTestBtn") {
+				path = soundPathCText.Text;
+				volume = (float)volumeCBar.Value;
+			}
+			if (!File.Exists(path)) {
+				MessageBox.Show("ファイルが見つかりませんでした");
+				return;
+			}
+			util.playSoundCore(volume / 100, path);
+		}
+		void RecentColorBtnClick(object sender, EventArgs e)
+		{
+			var c = new ColorDialog();
+			c.FullOpen = true;
+			c.Color = recentColorBtn.BackColor;
+			if (c.ShowDialog() != DialogResult.OK) return;
+			recentColorBtn.BackColor = c.Color;
+			recentSampleColorText.BackColor = c.Color;
+		}
+		void DefaultRecentColorBtnClick(object sender, EventArgs e)
+		{
+			recentColorBtn.BackColor = Color.FromArgb(255,224,255);
+			recentSampleColorText.BackColor = Color.FromArgb(255,224,255);
+		}
+		
+		void IsAlartListColorRecentCheckedChanged(object sender, EventArgs e)
+		{
+			recentColorBtn.Enabled = recentSampleColorText.Enabled = !isAlartListColorRecent.Checked;
+		}
+		
+		
 	}
 }

@@ -12,6 +12,9 @@ using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
 using System.Threading;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Xml;
+using Newtonsoft.Json.Linq;
 using namaichi.info;
 using namaichi.alart;
 
@@ -28,6 +31,10 @@ namespace namaichi.utility
 		}
 		public void save(MainForm form)
 		{
+			if (File.Exists("favoritecom.ini")) {
+				File.Copy("favoritecom.ini", "favoritecom_backup.ini", true);
+			}
+			
 			var sw = new StreamWriter("favoritecom.ini");
 			sw.WriteLine("130");
 			foreach (AlartInfo ai in form.alartListDataSource) {
@@ -37,7 +44,11 @@ namespace namaichi.utility
 					else if (i == 4) sw.WriteLine(ai.communityName);
 					else if (i == 5) sw.WriteLine(ai.hostName);
 					else if (i == 7) sw.WriteLine(ai.lastHostDate);
+					else if (i == 10) sw.WriteLine(ColorTranslator.ToHtml(ai.textColor));
+					else if (i == 11) sw.WriteLine(ColorTranslator.ToHtml(ai.backColor));
+					else if (i == 12) sw.WriteLine(ai.soundType + "," + ai.isSoundId.ToString().ToLower());
 					else if (i == 15) sw.WriteLine(ai.addDate);
+					//else if (i == 16) sw.WriteLine(ai.isAnd.ToString().ToLower());
 					else if (i == 17) sw.WriteLine(ai.popup.ToString().ToLower());
 					else if (i == 18) sw.WriteLine(ai.baloon.ToString().ToLower());
 					else if (i == 19) sw.WriteLine(ai.browser.ToString().ToLower());
@@ -58,6 +69,19 @@ namespace namaichi.utility
                     else if (i == 9) sw.WriteLine(ai.hostFollow);
                     else if (i == 13) sw.WriteLine(ai.lastLvid);
                     else if (i == 3) sw.WriteLine(ai.keyword);
+                    else if (i == 14) sw.WriteLine(ai.isMustCom.ToString().ToLower() + "," + ai.isMustUser.ToString().ToLower() + "," + ai.isMustKeyword.ToString().ToLower());
+                    else if (i == 6) {
+                    	var ckiStr = "";
+                    	try {
+                    		if (ai.cki != null) {
+                    			ckiStr = Newtonsoft.Json.Linq.JToken.FromObject(ai.cki).ToString(Newtonsoft.Json.Formatting.None);
+                    			ckiStr = (ai.isCustomKeyword ? "1" : "0") + ckiStr;
+                    		}
+                    	} catch (Exception e) {
+                    		util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+                    	}
+                    	sw.WriteLine(ckiStr);
+                    }
 					else sw.WriteLine("");
 				}
 			}
@@ -66,14 +90,18 @@ namespace namaichi.utility
 		}
 		public void load(MainForm form)
 		{
-			ReadNamarokuList(form, form.alartListDataSource, "favoritecom.ini", false, false);
-			
+			try {
+				ReadNamarokuList(form, form.alartListDataSource, "favoritecom.ini", false, false);
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
 		}
 		public void ReadNamarokuList(MainForm form, SortableBindingList<AlartInfo> alartListDataSource, string fileName, bool isUpdateComHost, bool isDuplicateCheck)
 		{
 			string[] lines;
 			
 			try {
+				if (!File.Exists(fileName)) return;
 				var sr = new StreamReader(fileName);
 				lines = sr.ReadToEnd().Replace("\r", "").Split('\n');
 				sr.Close();
@@ -94,6 +122,59 @@ namespace namaichi.utility
 				var isFollow = false;
 				var comFollow = "";
 				var userFollow = "";
+				Color textColor = Color.Black, backColor = Color.FromArgb(255,224,255);
+				if (lines[i + 10] != "" && lines[i + 11] != "") {
+					try {
+						textColor = ColorTranslator.FromHtml(lines[i + 10]);
+						backColor = ColorTranslator.FromHtml(lines[i + 11]);
+					} catch (Exception e) {
+//						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					}
+				}
+				int defaultSound = 0;
+				bool isDefaultSoundId = true;
+				if (itemLineNum != 29 && lines[i + 12] != "") {
+					try {
+						var b = lines[i + 12].Split(',');
+						defaultSound = int.Parse(b[0]);
+						isDefaultSoundId = bool.Parse(b[1]);
+					} catch (Exception e) {
+						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					}
+				}
+				/*
+				bool isAnd = true;
+				if (lines[i + 16] != "") {
+					try {
+						isAnd = lines[i + 16] == "true";
+					} catch (Exception e) {
+						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					}
+				}
+				*/
+				bool isMustCom = true, isMustUser = true, isMustKeyword = true;
+				if (itemLineNum != 29 && lines[i + 14] != "") {
+					try {
+						var isMustArr = lines[i + 14].Split(',');
+						isMustCom = bool.Parse(isMustArr[0]);
+						isMustUser = bool.Parse(isMustArr[1]);
+						isMustKeyword = bool.Parse(isMustArr[2]);
+					} catch (Exception e) {
+						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					}
+				}
+				List<CustomKeywordInfo> cki = null;
+				bool isCustomKeyword = false;
+				if (itemLineNum != 29 && lines[i + 6] != "") {
+					try {
+						cki = Newtonsoft.Json.JsonConvert.DeserializeObject< List<CustomKeywordInfo>>(lines[i + 6].Substring(1));
+						isCustomKeyword = lines[i + 6][0] == '1';
+					} catch (Exception e) {
+						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+						cki = null;
+						isCustomKeyword = false;
+					}
+				}
 				if (isUpdateComHost) {
 					/*
 					if (lines[i + 1] != null && lines[i + 1] != "") {
@@ -135,7 +216,9 @@ namespace namaichi.utility
 							false,
 							lines[i + 28],
 							comFollow, userFollow, lines[i + 13], 
-							lines[i + 3]);
+							lines[i + 3], textColor, 
+							backColor, defaultSound, isDefaultSoundId, 
+							true, true, true, null, false);
 				} else {
 					ai = new AlartInfo(lines[i + 1], 
 							lines[i + 2], lines[i + 4], lines[i + 5], 
@@ -157,7 +240,10 @@ namespace namaichi.utility
 							lines[i + 33] == "true",
 							lines[i + 34],
 							comFollow, userFollow, lines[i + 13], 
-							lines[i + 3]);
+							lines[i + 3], textColor,
+							backColor, defaultSound, isDefaultSoundId,
+							isMustCom, isMustUser, isMustKeyword, cki,
+							isCustomKeyword);
 				}
 				//if ((ai.communityId == null || ai.communityId == "") &&
 				//    (ai.hostId == null || ai.hostId == "")) continue;
@@ -195,7 +281,7 @@ namespace namaichi.utility
 				form.alartListAdd(ai);
 			
 			if (form.check.container != null) 
-				new FollowChecker(form, form.check).check();
+				new FollowChecker(form, form.check.container).check();
 			
 			form.recentLiveCheck();
 		}

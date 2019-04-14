@@ -8,17 +8,19 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Media;
+using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Diagnostics;
-using System.Net;
-using System.IO;
-using System.Media;
+
 using namaichi.info;
 using namaichi.rec;
+using namaichi.utility;
 
 namespace namaichi.alart
 {
@@ -32,7 +34,7 @@ namespace namaichi.alart
 		private string lastLv = null;
 		
 		private SortableBindingList<AlartInfo> alartListDataSource;
-		private DateTime lastUserNameCheckTime = DateTime.Now;
+		
 		public CookieContainer container;
 		public List<string> checkedLvIdList = new List<string>();
 		public List<string> processedLvidList = new List<string>();
@@ -95,9 +97,10 @@ namespace namaichi.alart
 			foreach (var item in items) {
 				bool isAppliA, isAppliB, isAppliC, isAppliD, isAppliE, isAppliF, isAppliG, isAppliH, isAppliI, isAppliJ, isPopup, isBaloon, isBrowser, isMail, isSound, isLog;
 				isAppliA = isAppliB = isAppliC = isAppliD = isAppliE = isAppliF = isAppliG = isAppliH = isAppliI = isAppliJ = isPopup = isBaloon = isBrowser = isMail = isSound = isLog = false;
-				var alartListCount = form.getAlartListCount();
+				//var alartListCount = form.getAlartListCount();
 				
-				AlartInfo targetAi = null;
+				var targetAi = new List<AlartInfo>();
+				AlartInfo nearAlartAi = null;
 				for (var i = 0; i < alartListDataSource.Count; i++) {
 					var alartItem = (info.AlartInfo)alartListDataSource[i];
 
@@ -105,20 +108,49 @@ namespace namaichi.alart
 							alartItem.communityId == null;
 					var isNosetHostName = alartItem.hostName == "" ||
 							alartItem.hostName == null;
-					var isNosetKeyword = alartItem.keyword == "" ||
-							alartItem.keyword == null;
-					if (!(isNosetComId ||      
-					     	alartItem.communityId == item.comId) ||
-					     	!(isNosetHostName ||
-					     	 alartItem.hostName == item.hostName) ||
-					        !(isNosetKeyword ||
-					     	 item.isContainKeyword(alartItem.keyword)))
-							continue;
+					var isNosetKeyword = (alartItem.isCustomKeyword && alartItem.cki == null) ||
+						(!alartItem.isCustomKeyword && alartItem.keyword == "" || alartItem.keyword == null);
 					if (isNosetComId && isNosetHostName && isNosetKeyword) continue;
-					if (!isUserIdFromLvidOk(item, alartItem.hostId)) continue;
 					
+					var isComOk = alartItem.communityId == item.comId;
+					var isUserOk = alartItem.hostName == item.hostName;
+					var isKeywordOk = item.isMatchKeyword(alartItem);
 					
+					if ((string.IsNullOrEmpty(alartItem.communityId) !=
+					     	string.IsNullOrEmpty(alartItem.communityName)) ||
+					     (string.IsNullOrEmpty(alartItem.hostId) !=
+					     	 string.IsNullOrEmpty(alartItem.hostName))) continue;
 					
+					if (isUserOk && !isUserIdFromLvidOk(item, alartItem.hostId))
+						isUserOk = false;
+					
+					if (!isAlartMatch(alartItem, isComOk, 
+							isUserOk, isKeywordOk, isNosetComId, 
+							isNosetHostName, isNosetKeyword)) {
+						if ((!isNosetComId && isComOk) ||
+							    (!isNosetHostName && isUserOk)) {
+							nearAlartAi = alartItem;
+							setUserId(item);
+							//isUserIdFromLvidOk(item, alartItem.hostId);
+						}
+						continue;
+					}
+					
+					util.debugWriteLine("ok alart item " + item.lvId + " " + isComOk + " " + isUserOk + " " + isKeywordOk + " noset " + isNosetComId + " " + isNosetHostName + " " + isNosetKeyword + " ai.hostId " + alartItem.hostId + " rss.hostId " + item.userId);
+					setUserId(item);
+					
+					/*
+					if (isUserOk && !isUserIdFromLvidOk(item, alartItem.hostId)) {
+						if (!isAlartMatch(alartItem, isComOk, 
+								false, isKeywordOk, isNosetComId, 
+								isNosetHostName, isNosetKeyword)) {
+							if ((!isNosetComId && isComOk) ||
+						    		(!isNosetHostName && isUserOk))
+								nearAlartAi = alartItem;
+							continue;
+						}
+					}
+					*/
 					if (alartItem.AppliA) isAppliA = true;
 					if (alartItem.AppliB) isAppliB = true;
 					if (alartItem.AppliC) isAppliC = true;
@@ -136,10 +168,12 @@ namespace namaichi.alart
 					if (alartItem.sound) isSound = true;
 					isLog = true;
 					
-					form.updateLastHosoDate(i, DateTime.Parse(item.pubDate).ToString("yyyy/MM/dd HH:mm:ss"), item.lvId);
+					if (isSetLastHosoDate(isNosetComId, isNosetHostName , isNosetKeyword,
+							isComOk, isUserOk, isKeywordOk))
+						form.updateLastHosoDate(i, DateTime.Parse(item.pubDate).ToString("yyyy/MM/dd HH:mm:ss"), item.lvId);
 					isChanged = true;
-					targetAi = alartItem;
-					
+					//targetAi = alartItem;
+					targetAi.Add(alartItem);
 				}
 				
 				if (processedLvidList.IndexOf(item.lvId) > -1) {
@@ -200,11 +234,11 @@ namespace namaichi.alart
 					var args = form.config.get("appliJArgs");
 					appliProcess(appliJPath, item.lvId, args);
 				}
-				if (isPopup && !form.notifyOffList[2]) {
-					displayPopup(item, targetAi);
+				if (isPopup && !form.notifyOffList[2] && targetAi.Count > 0) {
+					displayPopup(item, targetAi[0]);
 				}
-				if (isBaloon && !form.notifyOffList[3]) {
-					displayBaloon(item, targetAi);
+				if (isBaloon && !form.notifyOffList[3] && targetAi.Count > 0) {
+					displayBaloon(item, targetAi[0]);
 				}
 				if (isBrowser && !form.notifyOffList[4]) {
 					openBrowser(item);
@@ -212,19 +246,52 @@ namespace namaichi.alart
 				if (isMail && !form.notifyOffList[5]) {
 					mail(item);
 				}
-				if (isSound && !form.notifyOffList[6]) {
-					sound(item);
+				if (isSound && !form.notifyOffList[6] && targetAi.Count > 0) {
+					sound(item, targetAi[0]);
 				}
 				if (isLog && form.config.get("log") == "true")
 					writFavoriteLog(item);
 				
-				
+				if (targetAi.Count > 0)
+					addLogList(item, targetAi);
+				if (nearAlartAi != null)
+					addNearAlartList(item, nearAlartAi);
 			}
+			
 			return isChanged;
+		}
+		private bool isAlartMatch(AlartInfo alartItem, bool isComOk, 
+				bool isUserOk, bool isKeywordOk, bool isNosetComId, 
+				bool isNosetHostName, bool isNosetKeyword) {
+			if (!isComOk && !isUserOk && !isKeywordOk) return false;
+			if (alartItem.isMustCom && !isNosetComId && !isComOk) 
+				return false;
+			if (alartItem.isMustUser && !isNosetHostName && !isUserOk) 
+				return false;
+			if (alartItem.isMustKeyword && !isNosetKeyword && !isKeywordOk) 
+				return false;
+			
+			/*
+			if ((!isNosetComId && isComOk) ||
+				    (!isNosetHostName && isUserOk) ||
+				    (!isNosetKeyword && isKeywordOk)) {
+				
+			} else {
+				continue;
+			}
+			*/
+			
+			if (!(!isNosetComId && isComOk) &&
+				    !(!isNosetHostName && isUserOk) &&
+				    !(!isNosetKeyword && isKeywordOk)) {
+				return false;
+			}
+			
+			return true;
 		}
 		private void appliProcess(string appliPath, string lvid, string args) {
 			if (appliPath == null || appliPath == "") return;
-			var url = "http://live2.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
+			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
 
 			try {
 				appliPath = appliPath.Trim();
@@ -312,21 +379,26 @@ namespace namaichi.alart
 			}
 			
 			if (alartListDataSource.Count > 0) {
-				Task.Run(() => new FollowChecker(form, this).check());
+				Task.Run(() => new FollowChecker(form, container).check());
 			}
 		}
 		public bool isUserIdFromLvidOk(RssItem rssItem, string alartUserId) {
+			util.debugWriteLine("isUserIdFromLvidOk id " + alartUserId);
 			if (string.IsNullOrEmpty(alartUserId)) return true;
 			
-			var uid = (rssItem.userId != null) ? rssItem.userId : getUserIdFromLvid(rssItem.lvId);
-			if (rssItem.userId == null && uid != null) rssItem.userId = uid;
+			setUserId(rssItem);
+			//var uid = (rssItem.userId != null) ? rssItem.userId : getUserIdFromLvid(rssItem.lvId);
+			//if (rssItem.userId == null && uid != null) rssItem.userId = uid;
 			/*
 			var res = util.getPageSource("http://live.nicovideo.jp/api/getplayerstatus/" + lvid, container);
 			if (res == null) return false;
 			var uid = util.getRegGroup(res, "<owner_id>(.+?)</owner_id>");
 			*/
-			if (uid == null) return false;
-			return uid == alartUserId;
+			
+			//if (uid == null) return false;
+			util.debugWriteLine("isUserIdFromLvidOk rssItem.userId " + rssItem.userId);
+			if (rssItem.userId == null) return true;
+			return rssItem.userId == alartUserId;
 		}
 		public string getUserIdFromLvid(string lvid) {
 			var url = "https://live2.nicovideo.jp/watch/" + lvid;
@@ -334,6 +406,11 @@ namespace namaichi.alart
 			if (res == null) return null;
 			var uid = util.getRegGroup(res, "user/(\\d+)");
 			return uid;
+		}
+		private void setUserId(RssItem rssItem) {
+			var uid = (rssItem.userId != null) ? rssItem.userId : getUserIdFromLvid(rssItem.lvId);
+			if (rssItem.comId.StartsWith("ch")) uid = "";
+			if (rssItem.userId == null && uid != null) rssItem.userId = uid;
 		}
 		private void reserveStreamCheck() {
 			while (true) {
@@ -409,8 +486,8 @@ namespace namaichi.alart
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
-		private void sound(RssItem ri) {
-			util.playSound(form.config);
+		private void sound(RssItem ri, AlartInfo ai) {
+			util.playSound(form.config, ai);
 			/*
 			try {
 				if (soundPlayer == null) 
@@ -422,7 +499,7 @@ namespace namaichi.alart
 			*/
 		}
 		private void openBrowser(RssItem item) {
-			var url = "http://live2.nicovideo.jp/watch/lv" + util.getRegGroup(item.lvId, "(\\d+)");
+			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(item.lvId, "(\\d+)");
 			util.openUrlBrowser(url, form.config);
 		}
 		public void foundLive(List<RssItem> items) {
@@ -479,13 +556,16 @@ namespace namaichi.alart
 			userNameUpdateInterval = int.Parse(form.config.get("userNameUpdateInterval"));
 		}
 		public void regularlyProcess() {
+			var lastUserNameCheckTime = DateTime.Now;
 			var lastCheckLastRecentLiveTime = DateTime.Now;
+			var lastSaveListTime = DateTime.Now;
+			var lastCheckHistoryLiveTime = DateTime.Now;
 			while (true) {
 				var ut = userNameUpdateInterval;
 				if (ut < 15) ut = 15;
 				if (DateTime.Now - lastUserNameCheckTime > TimeSpan.FromSeconds(ut * 60)) {
 					Task.Run(() => {
-					    new FollowChecker(form, this).check();
+					    new FollowChecker(form, container).check();
 					    
 					    lastUserNameCheckTime = DateTime.MaxValue;
 			         	checkUserNameAndFollow();
@@ -502,6 +582,22 @@ namespace namaichi.alart
 					    lastCheckLastRecentLiveTime = DateTime.MaxValue;
 					    form.recentLiveCheck();
 			         	lastCheckLastRecentLiveTime = DateTime.Now;
+					});
+				}
+				
+				if (DateTime.Now - form.lastChangeListDt > TimeSpan.FromMinutes(5)) {
+					form.lastChangeListDt = DateTime.MaxValue;
+					Task.Run(() => {
+						new AlartListFileManager().save(form);
+						new TaskListFileManager().save(form);
+					});
+				}
+				
+				if (DateTime.Now - lastCheckHistoryLiveTime > TimeSpan.FromMinutes(1)) {
+					lastCheckHistoryLiveTime = DateTime.MaxValue;
+					Task.Run(() => {
+					    form.checkHistoryLive();
+						lastCheckHistoryLiveTime = DateTime.Now;
 					});
 				}
 				Thread.Sleep(10000);
@@ -521,11 +617,11 @@ namespace namaichi.alart
 					title = "[ニコ生]" + item.comName + "の放送開始";
 					body += item.comName + " で " + item.title + " - " + dt + "開始 を開始しました。\n";
 				}
-				body += "http://live.nicovideo.jp/watch/" + item.lvId + "\n";
+				body += "https://live.nicovideo.jp/watch/" + item.lvId + "\n";
 				if (item.comId != null && item.comId.StartsWith("co"))
-					body += "http://com.nicovideo.jp/community/" + item.comId;
+					body += "https://com.nicovideo.jp/community/" + item.comId;
 				else if (item.comId != null && item.comId.StartsWith("ch"))
-					body += "http://ch.nicovideo.jp/" + item.comId;
+					body += "https://ch.nicovideo.jp/" + item.comId;
 				
 				util.debugWriteLine("title " + title);
 				util.debugWriteLine("body " + body);
@@ -540,5 +636,46 @@ namespace namaichi.alart
 			}
 			
 		}
+		private bool isSetLastHosoDate(bool isNosetComId, 
+				bool isNosetHostName, bool isNosetKeyword,
+				bool isComOk, bool isUserOk, bool isKeywordOk) {
+			if (!bool.Parse(form.config.get("IsNotAllMatchNotifyNoRecent")))
+				return true;
+			if (!isNosetComId && !isComOk) return false;
+			if (!isNosetHostName && !isUserOk) return false;
+			if (!isNosetKeyword && !isKeywordOk) return false;
+			return true;
+		}
+		private void addLogList(RssItem item, List<AlartInfo> targetAi) {
+			var hi = new HistoryInfo(item, form.alartListDataSource, targetAi);
+			//hi.userId = item.userId;
+			form.addHistoryList(hi);
+		}
+		private void addNearAlartList(RssItem item, AlartInfo nearAlartAi) {
+			var a = new List<AlartInfo>(){nearAlartAi};
+			var hi = new HistoryInfo(item, form.alartListDataSource, a);
+			
+			var isNosetComId = nearAlartAi.communityId == "" ||
+					nearAlartAi.communityId == null;
+			var isNosetHostName = nearAlartAi.hostName == "" ||
+					nearAlartAi.hostName == null;
+			var isNosetKeyword = (nearAlartAi.isCustomKeyword && nearAlartAi.cki == null) ||
+				(!nearAlartAi.isCustomKeyword && nearAlartAi.keyword == "" || nearAlartAi.keyword == null);
+			//if (isNosetComId && isNosetHostName && isNosetKeyword) continue;
+			
+			var isComOk = nearAlartAi.communityId == item.comId;
+			var isUserOk = nearAlartAi.hostName == item.hostName;
+			var isKeywordOk = item.isMatchKeyword(nearAlartAi);
+					
+			hi.isInListCom = (!isNosetComId && isComOk);
+			hi.isInListUser = (!isNosetHostName && isUserOk);
+			hi.isInListKeyword = (!isNosetKeyword && isKeywordOk);
+			hi.backColor = nearAlartAi.backColor;
+			hi.textColor = nearAlartAi.textColor;
+			//hi.userId = nearAlartAi.hostId;
+			hi.keyword = nearAlartAi.keyword;
+			form.addNotAlartList(hi);
+		}
+		
 	}
 }

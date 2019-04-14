@@ -49,6 +49,8 @@ namespace namaichi.rec
 				headers.Add("Upgrade-Insecure-Requests", "1");
 				headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36");
 				try {
+					var ccc = form.check.container;
+					/*
 					var cg = new CookieGetter(cfg);
 					var cgret = cg.getHtml5RecordCookie(url, isSub);
 					cgret.Wait();
@@ -62,8 +64,9 @@ namespace namaichi.rec
 					var _cc = cgret.Result[0];
 //					var _cc = cgret.Result[(isSub) ? 1 : 0];
 //					util.debugWriteLine(cg.pageSource);
+					*/
 					
-					var isJidouShounin = util.getPageSource(url, ref headers, _cc, comUrl).IndexOf("自動承認されます") > -1;
+					var isJidouShounin = util.getPageSource(url, ref headers, ccc, url).IndexOf("自動承認されます") > -1;
 	//				var _compage = util.getPageSource(url, ref headers, cc);
 	//				var gateurl = "http://live.nicovideo.jp/gate/lv313793991";
 	//				var __gatePage = util.getPageSource(gateurl, ref headers, cc);

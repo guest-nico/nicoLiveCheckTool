@@ -32,6 +32,8 @@ namespace namaichi
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
+			
+			
 			var now = DateTime.Now;
 			try {
 				yearList.Text = now.Year.ToString();
@@ -122,5 +124,6 @@ namespace namaichi
 				getInfoFromHosoIdBtn.PerformClick();
 			}
 		}
+		
 	}
 }

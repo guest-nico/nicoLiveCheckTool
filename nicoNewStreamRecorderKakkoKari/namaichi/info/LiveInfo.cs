@@ -45,33 +45,44 @@ namespace namaichi.info
 		public DateTime addTime;
 		public string thumbnailUrl;
 		
+		public Color textColor = Color.Black;
+		//public Color backColor = Color.FromArgb(255,224,255);
+		public Color backColor = Color.White;
+		public RssItem ri = null;
+		
 		public LiveInfo(List<KeyValuePair<string, string>> item, SortableBindingList<AlartInfo> alartData)
 		{
 			foreach (var l in item) {
-				if (l.Key == "title") title = l.Value;
-				else if (l.Key == "guid") lvId = l.Value;
-				else if (l.Key == "pubDate") pubDateDt = DateTime.Parse(l.Value);
-				else if (l.Key == "description") description = l.Value;
-				else if (l.Key == "category") category.Add(l.Value);
-				else if (l.Key == "thumbnail") {
-					thumbnail = getThumbnail(l.Value);
-					thumbnailUrl = l.Value;
-				}
-				else if (l.Key == "community_name") comName = l.Value;
-				else if (l.Key == "community_id") comId = l.Value;
-				else if (l.Key == "member_only") memberOnly = bool.Parse(l.Value) ? "限定" : "";
-				else if (l.Key == "community_id") comId = l.Value;
-				else if (l.Key == "type") type = l.Value;
-				else if (l.Key == "owner_name") hostName = l.Value;
-				else if (l.Key == "type") type = l.Value;
-				else {
-					var pass = new string[]{"creator", "link",
-							"num_res", "view"};
-					if (Array.IndexOf(pass, l.Key) > -1) continue;
-					
+				try {
+					if (l.Key == "title") title = l.Value;
+					else if (l.Key == "guid") lvId = l.Value;
+					else if (l.Key == "pubDate") pubDateDt = DateTime.Parse(l.Value);
+					else if (l.Key == "description") description = l.Value;
+					else if (l.Key == "category") category.Add(l.Value);
+					else if (l.Key == "thumbnail") {
+						thumbnail = getThumbnail(l.Value);
+						thumbnailUrl = l.Value;
+					}
+					else if (l.Key == "community_name") comName = l.Value;
+					else if (l.Key == "community_id") comId = l.Value;
+					else if (l.Key == "member_only") memberOnly = bool.Parse(l.Value) ? "限定" : "";
+					else if (l.Key == "community_id") comId = l.Value;
+					else if (l.Key == "type") type = l.Value;
+					else if (l.Key == "owner_name") hostName = l.Value;
+					else if (l.Key == "type") type = l.Value;
+					else {
+						var pass = new string[]{"creator", "link",
+								"num_res", "view"};
+						if (Array.IndexOf(pass, l.Key) > -1) continue;
+						
+					}
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			}
+			this.ri = new RssItem(title, lvId, "", description, comName, comId, hostName, thumbnailUrl, memberOnly, "");
 			setFavorite(alartData);
+			
 			//thumbnailUrl = getThumbnail(comId);
 		}
 		public Image getThumbnail(string url) {
@@ -82,23 +93,97 @@ namespace namaichi.info
 			
 			try {
 				foreach (var ai in aiList) {
+					if (!getTargetOk(ai)) continue;
+					
 					if (comId != null && comId == ai.communityId) {
 						if (favorite != "") favorite += ",";
 						favorite += "コミュニティID";
 						if (memo != "") memo += ",";
 						memo += ai.memo;
+						textColor = ai.textColor;
+						backColor = ai.backColor;
 					}
 					if (hostName != null && hostName == ai.hostName) {
 						if (favorite != "") favorite += ",";
 						favorite += "ユーザー名?";
 						if (memo != "") memo += ",";
 						memo += ai.memo;
+						textColor = ai.textColor;
+						backColor = ai.backColor;
+					}
+					if (!string.IsNullOrEmpty(ai.Keyword) && ri.isMatchKeyword(ai)) {
+						if (favorite != "") favorite += ",";
+						favorite += "ｷｰﾜｰﾄ:" + ai.Keyword;
+						if (memo != "") memo += ",";
+						memo += ai.memo;
+						textColor = ai.textColor;
+						backColor = ai.backColor;
 					}
 				}
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 			
+		}
+		private bool getTargetOk(AlartInfo alartItem) {
+			//var targetAi = new List<AlartInfo>();
+			//for (var i = 0; i < aiList.Count; i++) {
+			//	var alartItem = (AlartInfo)aiList[i];
+
+				var isNosetComId = alartItem.communityId == "" ||
+						alartItem.communityId == null;
+				var isNosetHostName = alartItem.hostName == "" ||
+						alartItem.hostName == null;
+				var isNosetKeyword = (alartItem.isCustomKeyword && alartItem.cki == null) ||
+					(!alartItem.isCustomKeyword && alartItem.keyword == "" || alartItem.keyword == null);
+				if (isNosetComId && isNosetHostName && isNosetKeyword) return false;
+				
+				var isComOk = alartItem.communityId == ri.comId;
+				var isUserOk = alartItem.hostName == ri.hostName;
+				var isKeywordOk = ri.isMatchKeyword(alartItem);
+				
+				if ((string.IsNullOrEmpty(alartItem.communityId) !=
+				     	string.IsNullOrEmpty(alartItem.communityName)) ||
+				     (string.IsNullOrEmpty(alartItem.hostId) !=
+				     	 string.IsNullOrEmpty(alartItem.hostName))) return false;
+				
+				if (!isAlartMatch(alartItem, isComOk, 
+						isUserOk, isKeywordOk, isNosetComId, 
+						isNosetHostName, isNosetKeyword))
+					return false;
+				
+				return true;
+			
+			
+		}
+		private bool isAlartMatch(AlartInfo alartItem, bool isComOk, 
+				bool isUserOk, bool isKeywordOk, bool isNosetComId, 
+				bool isNosetHostName, bool isNosetKeyword) {
+			if (!isComOk && !isUserOk && !isKeywordOk) return false;
+			if (alartItem.isMustCom && !isNosetComId && !isComOk) 
+				return false;
+			if (alartItem.isMustUser && !isNosetHostName && !isUserOk) 
+				return false;
+			if (alartItem.isMustKeyword && !isNosetKeyword && !isKeywordOk) 
+				return false;
+			
+			/*
+			if ((!isNosetComId && isComOk) ||
+				    (!isNosetHostName && isUserOk) ||
+				    (!isNosetKeyword && isKeywordOk)) {
+				
+			} else {
+				continue;
+			}
+			*/
+			
+			if (!(!isNosetComId && isComOk) &&
+				    !(!isNosetHostName && isUserOk) &&
+				    !(!isNosetKeyword && isKeywordOk)) {
+				return false;
+			}
+			
+			return true;
 		}
 		public Image ThumbnailUrl
         {

@@ -25,6 +25,7 @@ namespace namaichi.alart
 		public static Image getThumbnailRssUrl(string url) {
 			
 			var id = util.getRegGroup(url, "(c[oh]\\d+)");
+			if (id == null) return null;
 			var dir = "ImageCommunity";
 			Image img = null;
 			if (isExist(id, out img, dir))

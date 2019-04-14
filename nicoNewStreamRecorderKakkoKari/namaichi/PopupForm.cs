@@ -24,7 +24,11 @@ namespace namaichi
 	{
 //		private config.config config;
 //		private RssItem ri; 
-		public PopupForm(RssItem item, config.config config, PopupDisplay pd, int showIndex, AlartInfo ai)
+		public PopupForm(RssItem item, config.config config, 
+				PopupDisplay pd, int showIndex, AlartInfo ai,
+				bool isTest = false, string poploc = null, int poptime = 0,
+				bool isClickClose = true,  
+				bool isTopMost = true, bool isColor = true, double opacity = 0.9)
 		{
 			this.config = config;
 			this.ri = item;
@@ -54,13 +58,32 @@ namespace namaichi
 			descryptionLabel.Text = item.description;
 			//var _Text = item.hostName + "/" + item.comName;
 			if (ai != null && ai.keyword != null && ai.keyword != "") Text = ai.keyword + "-" + Text;
+			if (ai != null && bool.Parse(config.get("IsColorPopup"))) {
+				BackColor = ai.backColor;
+				ForeColor = ai.textColor;
+			}
 			//Text = _Text;
-			var url = "http://live2.nicovideo.jp/watch/" + item.lvId;
+			if (isTest && isColor) {
+				BackColor = Color.FromArgb(255,224,255);
+				ForeColor = Color.Black;
+			} else if (ai != null && bool.Parse(config.get("IsColorPopup"))) {
+				BackColor = ai.backColor;
+				ForeColor = ai.textColor;
+			}
+			
+			var url = "https://live2.nicovideo.jp/watch/" + item.lvId;
 			titleLabel.Links.Add(0, titleLabel.Text.Length, url);
-			TopMost = bool.Parse(config.get("IsTopMostPopup"));
+			if (isTest) TopMost = isTopMost;
+			else TopMost = bool.Parse(config.get("IsTopMostPopup"));
+			
+			Opacity = isTest ? (opacity / 100) : double.Parse(config.get("popupOpacity")) / 100;
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
+			this.isTestClosePopup = isClickClose;
+			this.testPopTime = poptime;
+			this.isTest = isTest;
+			
 			ContextMenuStrip = contextMenuStrip1;
 			setAppliMenuVisible();
 		}
@@ -69,7 +92,27 @@ namespace namaichi
 			return (w < titleLabel.Width * 2 - 2); 
 		}
 		public void setSamune(string url) {
-			if (url == "") return;
+			//if (string.IsNullOrEmpty(url)) return;
+			if (isTest) {
+				thumbnailPictureBox.Image = new Bitmap(Image.FromFile(ri.thumbnailUrl), thumbnailPictureBox.Size);
+				return;
+			}
+			Image img;
+			var dt0 = DateTime.Now;
+			if (!ThumbnailManager.isExist(ri.comId, out img)) {
+				util.debugWriteLine("is not exist thumbnail time " + (DateTime.Now - dt0) + " " + ri.comName);
+				
+				img = ThumbnailManager.getImageId(ri.comId);
+				if (img != null) ThumbnailManager.saveImage(img, ri.comId);
+				if (img == null && !string.IsNullOrEmpty(url)) 
+					img = ThumbnailManager.getThumbnailRssUrl(url);
+			} else {
+				util.debugWriteLine("is exist thumbnail time " + (DateTime.Now - dt0) + " " + ri.comName);
+			}
+			thumbnailPictureBox.Image = img;
+			
+			util.debugWriteLine("is set thumbnail time " + (DateTime.Now - dt0) + " " + ri.comName);
+			/*
        		if (!util.isShowWindow) return;
        		if (IsDisposed) return;
        		WebClient cl = new WebClient();
@@ -106,7 +149,7 @@ namespace namaichi
 					
        			
 //       			Icon = new System.Drawing.Icon(url);
-			
+			*/
 		}
 		
 		void TitleLabelLinkClicked(object _sender, LinkLabelLinkClickedEventArgs e)
@@ -117,7 +160,8 @@ namespace namaichi
 					string url = (string)sender.Links[0].LinkData;
 					util.openUrlBrowser(url, config);
 				}
-				if (config.get("Isclosepopup") == "true")
+				if ((isTest && isTestClosePopup) ||
+			    		(!isTest && config.get("Isclosepopup") == "true"))
 					Close();
 			} else {
 //				if (sender.Links.Count > 0 && sender.Links[0].Length != 0) {
@@ -127,9 +171,9 @@ namespace namaichi
 			}
 		}
 		void timeoutCloseProcess() {
-			var t = int.Parse(config.get("poptime")) * 1000;
-			Thread.Sleep(t);
-			for (var o = 1.0; o > -0.05; o -= 0.05) {
+			var t = (isTest) ? testPopTime : int.Parse(config.get("poptime"));
+			Thread.Sleep(t * 1000);
+			for (var o = Opacity; o > -0.00; o -= 0.05) {
 				setOpacity(o);
 				Thread.Sleep(100);
 			}
@@ -167,7 +211,8 @@ namespace namaichi
 		
 		void PopupFormLoad(object sender, EventArgs e)
 		{
-			Task.Run(() => setSamune(ri.thumbnailUrl));
+			setSamune(ri.thumbnailUrl);
+			//Task.Run(() => setSamune(ri.thumbnailUrl));
 			Task.Run(() => timeoutCloseProcess());
 		}
 		
@@ -175,5 +220,6 @@ namespace namaichi
 		{
 			pd.posList.Remove(showIndex);
 		}
+		
 	}
 }

@@ -27,11 +27,11 @@ namespace namaichi.rec
 		private config.config cfg;
 		public string log = "";
 		public string id = null;
-		static readonly Uri TargetUrl = new Uri("http://live.nicovideo.jp/");
-		static readonly Uri TargetUrl2 = new Uri("http://live2.nicovideo.jp");
+		static readonly Uri TargetUrl = new Uri("https://live.nicovideo.jp/");
+		static readonly Uri TargetUrl2 = new Uri("https://live2.nicovideo.jp");
 		static readonly Uri TargetUrl3 = new Uri("https://com.nicovideo.jp");
-		static readonly Uri TargetUrl4 = new Uri("http://watch.live.nicovideo.jp/api/");
-		static readonly Uri TargetUrl5 = new Uri("http://www.nicovideo.jp/");
+		static readonly Uri TargetUrl4 = new Uri("https://watch.live.nicovideo.jp/api/");
+		static readonly Uri TargetUrl5 = new Uri("https://www.nicovideo.jp/");
 		static readonly Uri TargetUrl6 = new Uri("https://public.api.nicovideo.jp/");
 		static readonly Uri TargetUrl7 = new Uri("https://ch.nicovideo.jp/");
 		
@@ -231,7 +231,7 @@ namespace namaichi.rec
 				var headers = new WebHeaderCollection();
 				try {
 					util.debugWriteLine("ishtml5login getpage " + url + util.getMainSubStr(isSub));
-					var _url = (isRtmp) ? ("http://live.nicovideo.jp/api/getplayerstatus/" + util.getRegGroup(url, "(lv\\d+)")) : url;
+					var _url = (isRtmp) ? ("https://live.nicovideo.jp/api/getplayerstatus/" + util.getRegGroup(url, "(lv\\d+)")) : url;
 					pageSource = util.getPageSource(_url, ref headers, cc);
 //					util.debugWriteLine(cc.GetCookieHeader(new Uri(_url)));
 					util.debugWriteLine("ishtml5login getpage ok" + util.getMainSubStr(isSub));
@@ -282,8 +282,8 @@ namespace namaichi.rec
 					{"mail", mail}, {"password", pass}
 				});
 				
-				var _res = await http.PostAsync(loginUrl, content);
-				var res = await _res.Content.ReadAsStringAsync();
+				var _res = await http.PostAsync(loginUrl, content).ConfigureAwait(false);
+				var res = await _res.Content.ReadAsStringAsync().ConfigureAwait(false);
 	//			var a = _res.Headers;
 				
 	//			if (res.IndexOf("login_status = 'login'") < 0) return null;

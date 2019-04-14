@@ -16,6 +16,7 @@
     <StartupObject>namaichi.Program</StartupObject>
     <StartAction>Project</StartAction>
     <AssemblyOriginatorKeyMode>File</AssemblyOriginatorKeyMode>
+    <ApplicationIcon>..\%28check.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -161,7 +162,18 @@
     <Compile Include="alart\RssCheck.cs" />
     <Compile Include="alart\TaskCheck.cs" />
     <Compile Include="alart\ThumbnailManager.cs" />
+    <Compile Include="BulkAddFromFollowAccountForm.cs" />
+    <Compile Include="BulkAddFromFollowAccountForm.Designer.cs">
+      <DependentUpon>BulkAddFromFollowAccountForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomKeywordForm.cs" />
+    <Compile Include="CustomKeywordForm.Designer.cs">
+      <DependentUpon>CustomKeywordForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="info\HistoryInfo.cs" />
+    <Compile Include="info\CustomKeywordInfo.cs" />
     <Compile Include="info\LiveInfo.cs" />
+    <Compile Include="info\LogInfo.cs" />
     <Compile Include="info\TaskInfo.cs" />
     <Compile Include="PopupForm.cs" />
     <Compile Include="PopupForm.Designer.cs">
@@ -204,6 +216,7 @@
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="Properties\Settings.Designer.cs" />
     <Compile Include="rec\CookieGetter.cs" />
+    <Compile Include="rec\ToolMenuChecker.cs" />
     <Compile Include="rec\FollowChannel.cs" />
     <Compile Include="rec\FollowCommunity.cs" />
     <Compile Include="rec\FollowUser.cs" />
@@ -241,6 +254,12 @@
     <EmbeddedResource Include="addTaskForm.resx">
       <DependentUpon>addTaskForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="BulkAddFromFollowAccountForm.resx">
+      <DependentUpon>BulkAddFromFollowAccountForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomKeywordForm.resx">
+      <DependentUpon>CustomKeywordForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PopupForm.resx">
       <DependentUpon>PopupForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -277,6 +296,9 @@
   <ItemGroup>
     <Folder Include="info" />
     <Folder Include="alart" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ProfilingSessions\Session20190401_054741.sdps" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SnkLib.App.CookieGetter.2.1.0.0\build\net40\SnkLib.App.CookieGetter.targets" Condition="Exists('..\packages\SnkLib.App.CookieGetter.2.1.0.0\build\net40\SnkLib.App.CookieGetter.targets')" />

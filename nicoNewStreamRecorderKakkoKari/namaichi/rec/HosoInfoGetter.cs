@@ -32,7 +32,7 @@ namespace namaichi.rec
 		}
 		public bool get(string _url) {
 			var lvid = util.getRegGroup(_url, "((lv|c[oh])\\d+)");
-			var url =  "http://live2.nicovideo.jp/watch/" + lvid;
+			var url =  "https://live2.nicovideo.jp/watch/" + lvid;
 			var res = util.getPageSource(url, null);
 			if (res == null) return false;
 			
@@ -45,7 +45,9 @@ namespace namaichi.rec
 				_dt = util.getRegGroup(_dt, "(\\d{4}/\\d{1,2}/\\d{1,2})") + " " + util.getRegGroup(_dt, "(\\d{4}:\\d{1,2}(:\\d{1,2})*)");
 				util.debugWriteLine("dt1 " + _dt);
 				dt = DateTime.Parse(_dt);
-			} else util.debugWriteLine("not dt res " + res);
+			} else {
+//				util.debugWriteLine("not dt res " + res);
+			}
 			var isJikken = res.IndexOf("siteId&quot;:&quot;nicocas") > -1;
 			var ret = false;
 			if (isJikken) {
@@ -102,14 +104,14 @@ namespace namaichi.rec
 				} else {
 					var isChannel = util.getRegGroup(data, "visualProviderType\":\"(channel)\",\"title\"") != null;
 					communityId = util.getRegGroup(data, "\"socialGroup\".+?\"id\".\"(.+?)\"");
-					userId = (isChannel) ? null : (util.getRegGroup(data, "supplier\":{\"name\".+?pageUrl\":\"http://www.nicovideo.jp/user/(\\d+?)\""));
+					userId = (isChannel) ? null : (util.getRegGroup(data, "supplier\":{\"name\".+?pageUrl\":\"http[s]*://www.nicovideo.jp/user/(\\d+?)\""));
 				}
 				description = util.getRegGroup(data, "\"description\":\"(.*?[^\\\\])\",");
 				
 			} else {
 				var isChannel = type == "channel";
 				if (!isChannel)
-					userId = util.getRegGroup(res, "<a href=\"https://www.nicovideo.jp/user/(\\d+)\" target=\"_blank\">");
+					userId = util.getRegGroup(res, "<a href=\"https*://www.nicovideo.jp/user/(\\d+)\" target=\"_blank\">");
 				communityId = util.getRegGroup(res, "<a href=\"http.+?/channel/(ch\\d+)\" target=\"_blank\">");
 				if (communityId == null) communityId = util.getRegGroup(res, "<a href=\"http.+?/community/(co\\d+)\" target=\"_blank\">");
 				

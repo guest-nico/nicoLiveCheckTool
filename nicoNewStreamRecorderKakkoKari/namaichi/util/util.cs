@@ -27,10 +27,11 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7";
-	public static string versionDayStr = "2019/04/14";
+	public static string versionStr = "ver0.1.7.16";
+	public static string versionDayStr = "2019/06/30";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
+	public static string[] jarPath = null;
 	
 	public static string getRegGroup(string target, string reg, int group = 1, Regex r = null) {
 		if (r == null)
@@ -56,6 +57,8 @@ class util {
 		return (int)(((TimeSpan)(DateTime.Now - new DateTime(1970, 1, 1))).TotalSeconds);
 	}
 	public static String[] getJarPath() {
+		if (jarPath != null) return jarPath;
+		
 		bool isTestMode = false;
 		
 		if (isTestMode) {	
@@ -73,7 +76,9 @@ class util {
 			
 			util.debugWriteLine(getPath() + " " +withoutKakutyousi+" "+kakutyousi);
 			//0-dir 1-withoutKakutyousi 2-kakutyousi
-			return new String[]{getPath(), withoutKakutyousi, kakutyousi};
+			var ret = new String[]{getPath(), withoutKakutyousi, kakutyousi};
+			jarPath = ret;
+			return ret;
 		}
 	}
 
@@ -1223,5 +1228,111 @@ class util {
 		                res = MessageBox(new IntPtr(0), text, caption, (uint)style)
 		);
 		return res;
+	}
+	public static string removeTag(string s) {
+		var ret = new Regex("</*font.*?>").Replace(s, "");
+		ret = new Regex("<br.*?>").Replace(ret, "");
+		ret = ret.Replace("<b>", "").Replace("</b>", "");
+		ret = ret.Replace("<i>", "").Replace("</i>", "");
+		ret = ret.Replace("<s>", "").Replace("</s>", "");
+		ret = ret.Replace("<u>", "").Replace("</u>", "");
+		return ret;
+	}
+	public enum NotifyFlags {
+        NIF_MESSAGE = 0x01, NIF_ICON = 0x02, NIF_TIP = 0x04, NIF_INFO = 0x10, NIF_STATE = 0x08,
+        NIF_GUID = 0x20, NIF_SHOWTIP = 0x80, NIF_REALTIME = 0x40,
+    }
+	[DllImport("shell32.dll")]
+	public static extern System.Int32 Shell_NotifyIcon(NotifyCommand cmd, ref NOTIFYICONDATA data);
+	    
+    public enum NotifyCommand { NIM_ADD = 0x0, NIM_DELETE = 0x2, NIM_MODIFY = 0x1, NIM_SETVERSION = 0x4 }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct NOTIFYICONDATA {
+        public Int32 cbSize;
+        public IntPtr hWnd;
+        public Int32 uID;
+        public NotifyFlags uFlags;
+        public Int32 uCallbackMessage;
+        public IntPtr hIcon;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+        public String szTip;
+        public Int32 dwState;
+        public Int32 dwStateMask;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+        public String szInfo;
+        public Int32 uVersion;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
+        public String szInfoTitle;
+        public Int32 dwInfoFlags;
+        public Guid guidItem; //> IE 6
+        public IntPtr hBalloonIcon;
+    }
+	public static bool displayIconBalloon(string title, string mes, 
+			IntPtr icon, IntPtr hwnd) {
+		NOTIFYICONDATA data = new NOTIFYICONDATA();
+        var NIIF_USER = 4;
+        var NIIF_NONE = 0;
+        var NIIF_LARGE_ICON = 0x20;
+        var dwInfoFlags = NIIF_USER;// | NIIF_LARGE_ICON;
+        //dwInfoFlags = NIIF_NONE;
+
+        data.cbSize = Marshal.SizeOf(data);
+        data.uID = 0;
+        data.hWnd = hwnd;
+        data.dwInfoFlags = dwInfoFlags;
+        data.hIcon = IntPtr.Zero;
+        data.hBalloonIcon = IntPtr.Zero;
+        if (icon != IntPtr.Zero)
+        {
+        	//Debug.WriteLine(icon);
+            data.hBalloonIcon = icon;
+            //data.hBalloonIcon = ((Bitmap)image).GetHicon();
+            //data.dwInfoFlags |= NIIF_LARGE_ICON;
+        }
+        
+        data.szInfo = mes;
+        data.szInfoTitle = title;
+        //data.szInfo = "aaa";
+        //data.szInfoTitle = "title";
+
+        //data.uFlags = NotifyFlags.NIF_INFO | NotifyFlags.NIF_SHOWTIP | NotifyFlags.NIF_REALTIME;
+		data.uFlags = NotifyFlags.NIF_INFO;
+	
+        var r = Shell_NotifyIcon(NotifyCommand.NIM_MODIFY, ref data);
+        //var r = Shell_NotifyIcon(NotifyCommand.NIM_ADD, ref data);
+        Debug.WriteLine("displayIconBalloon " + r);
+        return r == 1;
+	}
+	public static bool addNotifyIcon(IntPtr hwnd) {
+		NOTIFYICONDATA nid = new NOTIFYICONDATA();
+    	//ZeroMemory(&nid, sizeof(NOTIFYICONDATA));
+    	var NIIF_NONE = 0;
+    	var dwInfoFlags = NIIF_NONE;
+        nid.cbSize = Marshal.SizeOf(nid);
+        nid.hWnd = hwnd;
+        nid.uID = 0;
+        nid.uFlags = NotifyFlags.NIF_ICON | NotifyFlags.NIF_MESSAGE | NotifyFlags.NIF_TIP;
+        //nid.uCallbackMessage = ""MY_NOTIFYICON;
+        nid.dwInfoFlags = dwInfoFlags;
+        nid.hIcon = IntPtr.Zero;
+        //nid.szTip = 
+        var r = Shell_NotifyIcon(NotifyCommand.NIM_ADD, ref nid);
+        debugWriteLine("addNotifyIcon " + r);
+        return r == 1;
+	}
+	public static bool deleteNotifyIcon(IntPtr hwnd) {
+		NOTIFYICONDATA nid = new NOTIFYICONDATA();
+    	//ZeroMemory(&nid, sizeof(NOTIFYICONDATA));
+        nid.cbSize = Marshal.SizeOf(nid);
+        nid.hWnd = hwnd;
+        nid.uID = 0;
+        nid.uFlags = NotifyFlags.NIF_ICON | NotifyFlags.NIF_MESSAGE | NotifyFlags.NIF_TIP;
+        //nid.uCallbackMessage = ""MY_NOTIFYICON;
+        nid.hIcon = IntPtr.Zero;
+        //nid.szTip = 
+        var r = Shell_NotifyIcon(NotifyCommand.NIM_DELETE, ref nid);
+        debugWriteLine("deleteNotifyIcon " + r);
+        return r == 1;
 	}
 }

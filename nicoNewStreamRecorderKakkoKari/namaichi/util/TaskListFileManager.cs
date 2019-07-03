@@ -24,11 +24,19 @@ namespace namaichi.utility
 		}
 		public void save(MainForm form)
 		{
-			if (File.Exists("tasklist.ini")) {
-				File.Copy("tasklist.ini", "tasklist_backup.ini", true);
+			var path = util.getJarPath()[0] + "\\";
+			
+			if (File.Exists(path + "tasklist.ini")) {
+				try {
+					var _lineLen = File.ReadAllLines(path + "tasklist.ini").Length;
+					if (_lineLen > 5)
+						File.Copy(path + "tasklist.ini", path + "tasklist_backup.ini", true);
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				}
 			}
 			
-			var sw = new StreamWriter("tasklist.ini");
+			var sw = new StreamWriter(path + "tasklist.ini");
 			sw.WriteLine("200");
 			foreach (var ti in form.taskListDataSource) {
 				for (var i = 0; i < 22; i++) { //namaroku 29 save 32
@@ -62,7 +70,7 @@ namespace namaichi.utility
 		}
 		public void load(MainForm form)
 		{
-			ReadNamarokuList(form, form.taskListDataSource, "tasklist.ini");
+			ReadNamarokuList(form, form.taskListDataSource, util.getJarPath()[0] + "\\tasklist.ini");
 			
 		}
 		public void ReadNamarokuList(MainForm form, SortableBindingList<TaskInfo> alartListDataSource, string fileName)

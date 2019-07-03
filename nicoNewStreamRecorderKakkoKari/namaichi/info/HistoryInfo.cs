@@ -9,6 +9,7 @@
 using System;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Net;
 
 namespace namaichi.info
 {
@@ -33,8 +34,8 @@ namespace namaichi.info
 		public Color backColor = Color.White;
 		public RssItem ri;
 		public string keyword = null;
-		public bool isOnAir = true;
-		
+		public int onAirMode = 1;//0-no 1-onAir 2-followerOnly
+		/*
 		public HistoryInfo(DateTime dt, string lvid,
 				string title, string userName, 
 				string comName, string userId, 
@@ -49,17 +50,19 @@ namespace namaichi.info
 			this.communityId = comId;
 			this.description = description;
 		}
+		*/
 		public HistoryInfo(RssItem ri, SortableBindingList<AlartInfo> alartData, List<AlartInfo> targetAi)
 		{
 			this.dt = DateTime.Parse(ri.pubDate);
 			this.lvid = ri.lvId;
-			this.title = ri.title;
-			this.userName = ri.hostName;
-			this.communityName = ri.comName;
+			this.title = util.removeTag(ri.title);
+			this.userName = util.removeTag(ri.hostName);
+			this.communityName = util.removeTag(ri.comName);
 			this.userId = ri.userId;
 			this.communityId = ri.comId;
-			this.description = ri.description;
+			this.description = util.removeTag(ri.description);
 			this.ri = ri;
+			onAirMode = ri.isMemberOnly ? 2 : 1;
 			
 			setFavoriteFromAiList(targetAi);
 		}
@@ -194,5 +197,6 @@ namespace namaichi.info
 			get { return description; }
             set { this.description = value; }
         }
+		
 	}
 }

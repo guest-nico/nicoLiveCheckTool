@@ -27,6 +27,8 @@ namespace namaichi.rec
 		public string[] tags = null;
 		public string thumbnail = null;
 		public string group = null;
+		public List<string> category = null;
+		public bool isMemberOnly = false;
 		public HosoInfoGetter()
 		{
 		}
@@ -58,6 +60,19 @@ namespace namaichi.rec
 				
 			}
 			if (description != null) description = description.Trim(new char[]{'\n', '\r', ' ', '\t'});
+			
+			var _category = res.StartsWith("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01") ?
+				util.getRegGroup(res, "content.category = '(.+?)'")
+				: util.getRegGroup(res, "\"category\":\"(.+?)\"");
+			if (_category != null) {
+				var cat = new List<string>();
+				cat.AddRange(_category.Split(','));
+				category = cat;
+			}
+			
+			isMemberOnly = res.IndexOf("isFollowerOnly&quot;:true,&quot;") > -1
+				|| res.IndexOf("\"program_icon onlym\">フォロワー限定") > -1
+				|| res.IndexOf("\"program-status-icon community-only\">フォロワー限定") > -1;
 			return ret;
 		}
 		private bool setJikkenInfo(string res) {
@@ -147,7 +162,10 @@ namespace namaichi.rec
 			return ret.ToArray();
 		}
 		private string getThumbnail(string res) {
-			return util.getRegGroup(res, "<meta property=\"og:image\" content=\"(.+?)\"");
+			var url = util.getRegGroup(res, "&quot;thumbnailSmallImageUrl&quot;:&quot;(.+?)&quot;");
+			if (url == null)
+			url = util.getRegGroup(res, "<meta property=\"og:image\" content=\"(.+?)\"");
+			return url;
 		}
 	}
 }

@@ -31,11 +31,19 @@ namespace namaichi.utility
 		}
 		public void save(MainForm form)
 		{
-			if (File.Exists("favoritecom.ini")) {
-				File.Copy("favoritecom.ini", "favoritecom_backup.ini", true);
+			var path = util.getJarPath()[0] + "\\";
+			
+			if (File.Exists(path + "favoritecom.ini")) {
+				try {
+					var _lineLen = File.ReadAllLines(path + "favoritecom.ini").Length;
+					if (_lineLen > 5)
+						File.Copy(path + "favoritecom.ini", path + "favoritecom_backup.ini", true);
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				}
 			}
 			
-			var sw = new StreamWriter("favoritecom.ini");
+			var sw = new StreamWriter(path + "favoritecom.ini");
 			sw.WriteLine("130");
 			foreach (AlartInfo ai in form.alartListDataSource) {
 				for (var i = 0; i < 36; i++) { //namaroku 29 save 32
@@ -91,7 +99,7 @@ namespace namaichi.utility
 		public void load(MainForm form)
 		{
 			try {
-				ReadNamarokuList(form, form.alartListDataSource, "favoritecom.ini", false, false);
+				ReadNamarokuList(form, form.alartListDataSource, util.getJarPath()[0] + "\\favoritecom.ini", false, false);
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
@@ -256,8 +264,6 @@ namespace namaichi.utility
 			var dupliNumList = (isDuplicateCheck) ? getDuplicateNum(readAiList, form) : null;
 			if (isDuplicateCheck && dupliNumList.Count > 0) {
 				form.showMessageBox(dupliNumList.Count.ToString() + "件の重複が見つかりました");
-				
-				
 			}
 			
 			var addList = new List<AlartInfo>();

@@ -61,6 +61,7 @@ namespace namaichi.alart
 		public void stop() {
 			util.debugWriteLine("app push stop");
 			isRetry = false;
+			if (sslStream == null) return;
 			try {
 				sslStream.Close();
 			} catch (Exception e) {
@@ -429,6 +430,7 @@ namespace namaichi.alart
 				
 				var hg = new namaichi.rec.HosoInfoGetter();
 				var r = hg.get(lvid);
+				
 				bool isCom;
 				if (!r) {
 					hg.description = hg.userId = hg.communityId = hg.thumbnail = "";
@@ -482,11 +484,12 @@ namespace namaichi.alart
 					
 				}
 				
-				var i = new RssItem(title, lvid, dt.ToString(), hg.description, comName, hg.communityId, hostName, hg.thumbnail, "", "");
+				var i = new RssItem(title, lvid, dt.ToString(), hg.description, comName, hg.communityId, hostName, hg.thumbnail, hg.isMemberOnly.ToString(), "");
 				i.setUserId(hg.userId);
 				i.setTag(hg.tags);
+				i.category = hg.category;
+				i.type = hg.type;
 				var ret = new List<RssItem>();
-				
 				ret.Add(i);
 				return ret;
 				

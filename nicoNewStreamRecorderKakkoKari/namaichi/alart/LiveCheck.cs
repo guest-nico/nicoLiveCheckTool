@@ -39,21 +39,30 @@ namespace namaichi.alart
 			
 			
 			var newItems = getLiveItems();
-			
+
 			var delMin = double.Parse(form.config.get("liveListDelMinutes"));
 			var now = DateTime.Now;
 			lock (form.liveListLock) {
+				var scrollI = form.liveList.FirstDisplayedScrollingRowIndex;
 				var curCellLv = (form.liveList.CurrentCell == null) ? null : form.liveListDataSource[form.liveList.CurrentCell.RowIndex].lvId;
 				var curCellCellI = (form.liveList.CurrentCell == null) ? -1 : form.liveList.CurrentCell.ColumnIndex;
 				
 				var delList = new List<LiveInfo>();
 				foreach (var l in form.liveListDataSource) {
+					/*
 					if (newItems.Find((x) => x.lvId == l.lvId) == null)
 						delList.Add(l);
+					*/
+					if (newItems.Find((x) => x.lvId == l.lvId) == null) {
+						if (now - l.lastExistTime > TimeSpan.FromMinutes(5))
+							delList.Add(l);
+					} else l.lastExistTime = now;
 				}
 				foreach (var l in form.liveListDataReserve) {
-					if (newItems.Find((x) => x.lvId == l.lvId) == null)
-						delList.Add(l);
+					if (newItems.Find((x) => x.lvId == l.lvId) == null) {
+						if (now - l.lastExistTime > TimeSpan.FromMinutes(5))
+							delList.Add(l);
+					} else l.lastExistTime = now;
 				}
 				
 				util.debugWriteLine("l");
@@ -68,6 +77,7 @@ namespace namaichi.alart
 				var isBlindA = bool.Parse(form.config.get("BlindOnlyA"));
 				var isBlindB = bool.Parse(form.config.get("BlindOnlyB"));
 				var isBlindQuestion = bool.Parse(form.config.get("BlindQuestion"));
+				var isFavoriteOnly = bool.Parse(form.config.get("FavoriteOnly"));
 				var cateChar = form.getCategoryChar();
 				foreach (var i in newItems) {
 					if (delMin != 0 && ((TimeSpan)(now - i.pubDateDt)).TotalMinutes > delMin)
@@ -84,12 +94,14 @@ namespace namaichi.alart
 					if (isContain) 
 						continue;
 
-					form.addLiveListItem(i, cateChar, isBlindA, isBlindB, isBlindQuestion);
+					
+					form.addLiveListItem(i, cateChar, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly);
 				}
 				
 				var ccc = form.liveListDataSource.Count + form.liveListDataReserve.Count;
 				util.debugWriteLine("j");
 				form.getVisiRow();
+				
 				
 				if (bool.Parse(form.config.get("AutoSort")))
 					form.sortLiveList();
@@ -129,8 +141,14 @@ namespace namaichi.alart
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 				
-				
+				try {
+					if (scrollI != -1)
+						form.formAction(() => form.liveList.FirstDisplayedScrollingRowIndex = scrollI);
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				}
 			}
+			
 			form.setLiveListNum();
 			
 			isLoading = false;
@@ -157,7 +175,7 @@ namespace namaichi.alart
 								rssItem.Add(new KeyValuePair<string, string>(_it.Name.LocalName, _it.Attribute(XName.Get("url")).Value));
 							else rssItem.Add(new KeyValuePair<string, string>(_it.Name.LocalName, _it.Value));
 						}
-						var li = new LiveInfo(rssItem, form.alartListDataSource);
+						var li = new LiveInfo(rssItem, form.alartListDataSource, form.config);
 						buf.Add(li);
 						itemCount++;
 						//Debug.WriteLine("");
@@ -178,7 +196,8 @@ namespace namaichi.alart
 			Task.Run(() => {
 				while (autoUpdateO == t) {
 					load();
-					Thread.Sleep(int.Parse(form.config.get("liveListUpdateMinutes")) * 60000);
+					Thread.Sleep((int)(double.Parse(form.config.get("liveListUpdateMinutes")) * 60000));
+					//Thread.Sleep(10000);
 				}
 			});
 		}

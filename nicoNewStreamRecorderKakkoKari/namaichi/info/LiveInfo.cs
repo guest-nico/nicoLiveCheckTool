@@ -49,8 +49,9 @@ namespace namaichi.info
 		//public Color backColor = Color.FromArgb(255,224,255);
 		public Color backColor = Color.White;
 		public RssItem ri = null;
+		public DateTime lastExistTime = DateTime.Now;
 		
-		public LiveInfo(List<KeyValuePair<string, string>> item, SortableBindingList<AlartInfo> alartData)
+		public LiveInfo(List<KeyValuePair<string, string>> item, SortableBindingList<AlartInfo> alartData, config.config config)
 		{
 			foreach (var l in item) {
 				try {
@@ -60,16 +61,19 @@ namespace namaichi.info
 					else if (l.Key == "description") description = l.Value;
 					else if (l.Key == "category") category.Add(l.Value);
 					else if (l.Key == "thumbnail") {
-						thumbnail = getThumbnail(l.Value);
+						thumbnail = getThumbnail(l.Value, bool.Parse(config.get("liveListCacheIcon")));
 						thumbnailUrl = l.Value;
 					}
 					else if (l.Key == "community_name") comName = l.Value;
 					else if (l.Key == "community_id") comId = l.Value;
 					else if (l.Key == "member_only") memberOnly = bool.Parse(l.Value) ? "限定" : "";
-					else if (l.Key == "community_id") comId = l.Value;
-					else if (l.Key == "type") type = l.Value;
+					//else if (l.Key == "community_id") comId = l.Value;
+					else if (l.Key == "type") {
+						type = l.Value;
+						if (type == "user") type = "community";
+					}
 					else if (l.Key == "owner_name") hostName = l.Value;
-					else if (l.Key == "type") type = l.Value;
+					//else if (l.Key == "type") type = l.Value;
 					else {
 						var pass = new string[]{"creator", "link",
 								"num_res", "view"};
@@ -85,8 +89,26 @@ namespace namaichi.info
 			
 			//thumbnailUrl = getThumbnail(comId);
 		}
-		public Image getThumbnail(string url) {
-			return ThumbnailManager.getThumbnailRssUrl(url);
+		public LiveInfo(RssItem item, SortableBindingList<AlartInfo> alartData, config.config config) {
+			this.ri = item;
+			title = ri.title;
+			lvId = ri.lvId;
+			pubDateDt = DateTime.Parse(ri.pubDate);
+			description = ri.description;
+			thumbnail = getThumbnail(ri.thumbnailUrl, bool.Parse(config.get("liveListCacheIcon")));
+			thumbnailUrl = ri.thumbnailUrl;
+			comName = ri.comName;
+			comId = ri.comId;
+			memberOnly = ri.isMemberOnly ? "限定" : "";
+			type = ri.type;
+			if (type == "user") type = "community";
+			category = ri.category;
+			hostName = ri.hostName;
+			
+			setFavorite(alartData);
+		}
+		public Image getThumbnail(string url, bool isSaveCache) {
+			return ThumbnailManager.getThumbnailRssUrl(url, isSaveCache);
 
 		}
 		private void setFavorite(SortableBindingList<AlartInfo> aiList) {
@@ -233,7 +255,15 @@ namespace namaichi.info
         }
 		public string MainCategory
         {
-			get { return category[0]; }
+			get { 
+				try {
+					return category[0]; 
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					return "";
+				}
+				
+			}
             set {  }
         }
 		public string Face

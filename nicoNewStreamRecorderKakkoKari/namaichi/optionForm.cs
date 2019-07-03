@@ -55,6 +55,8 @@ namespace namaichi
 			var formData = getFormData();
 			cfg.saveFromForm(formData);
 			
+			setStartUpMenu(!bool.Parse(cfg.get("IsStartUp")));
+				
 			//main cookie
 			var importer = nicoSessionComboBox1.Selector.SelectedImporter;
 			if (importer != null && importer.SourceInfo != null) {
@@ -119,12 +121,16 @@ namespace namaichi
 				{"Ischeck30min",isCheck30minRadioBtn.Checked.ToString().ToLower()},
 				{"IscheckOnAir",isCheckOnAirRadioBtn.Checked.ToString().ToLower()},
 				{"IschangeIcon",isChangeIconChkBox.Checked.ToString().ToLower()},
+				{"IsAlartListRecentColor",isAlartListColorRecent.Checked.ToString().ToLower()},
+				{"recentColor",ColorTranslator.ToHtml(recentSampleColorText.BackColor)},
+				{"IsFollowerOnlyOtherColor",isFollowerOnlyOtherColor.Checked.ToString().ToLower()},
+				{"followerOnlyColor",ColorTranslator.ToHtml(followerOnlySampleColorText.BackColor)},
+				
 				{"IstasktrayStart",isTasktrayStartChkBox.Checked.ToString().ToLower()},
 				{"IsdragCom",isdragComChkBox.Checked.ToString().ToLower()},
 				{"doublecmode",doublecmodeList.Text},
 				{"IsNotAllMatchNotifyNoRecent",isNotAllMatchNotifyNoRecentChkBox.Checked.ToString().ToLower()},
-				{"IsAlartListRecentColor",isAlartListColorRecent.Checked.ToString().ToLower()},
-				{"recentColor",ColorTranslator.ToHtml(recentSampleColorText.BackColor)},
+				{"delThumb",delThumbChkBox.Checked.ToString().ToLower()},
 				
 				{"rssUpdateInterval",rssUpdateIntervalList.Text},
 				{"userNameUpdateInterval",userNameUpdateIntervalList.Text},
@@ -133,6 +139,7 @@ namespace namaichi
 				{"maxHistoryDisplay",maxHistoryDisplayList.Text},
 				{"maxNotAlartDisplay",maxNotAlartDisplayList.Text},
 				{"maxLogDisplay",maxLogDisplayList.Text},
+				{"IsStartUp",isStartUpChkBox.Checked.ToString().ToLower()},
 				{"poploc",poplocList.Text},
 				{"poptime",poptimeList.Text},
 				{"Isclosepopup",IsclosepopupChkBox.Checked.ToString().ToLower()},
@@ -169,9 +176,11 @@ namespace namaichi
 				{"thresholdpage",thresholdpageList.Value.ToString()},
 				{"brodouble",brodoubleList.SelectedIndex.ToString()},
 				{"liveListUpdateMinutes",liveListUpdateMinutesList.Value.ToString()},
+				{"liveListCacheIcon",liveListCacheIconChkBox.Checked.ToString().ToLower()},
 				
 				{"cookieFile",cookieFileText.Text},
 				{"iscookie",isCookieFileSiteiChkBox.Checked.ToString().ToLower()},
+				{"IsBrowserShowAll",checkBoxShowAll.Checked.ToString().ToLower()},
 				{"user_session",""},
 				{"user_session_secure",""},
 				
@@ -289,14 +298,20 @@ namespace namaichi
 			isCheckOnAirRadioBtn.Checked = bool.Parse(cfg.get("IscheckOnAir"));
 			isChangeIconChkBox.Checked = bool.Parse(cfg.get("IschangeIcon"));
 			isCheckRecentChkBox_Update();
+			//var a = ColorTranslator.FromHtml(cfg.get("recentColor"));
+			recentColorBtn.BackColor = recentSampleColorText.BackColor = ColorTranslator.FromHtml(cfg.get("recentColor"));
+			isAlartListColorRecent.Checked = bool.Parse(cfg.get("IsAlartListRecentColor"));
+			//a = ColorTranslator.FromHtml(cfg.get("followerOnlyColor"));
+			followerOnlyColorBtn.BackColor = followerOnlySampleColorText.BackColor = ColorTranslator.FromHtml(cfg.get("followerOnlyColor"));
+			isFollowerOnlyOtherColor.Checked = bool.Parse(cfg.get("IsFollowerOnlyOtherColor"));
+			isFollowerOnlyOtherColor.Enabled = isCheckOnAirRadioBtn.Checked;
+			IsFollowerOnlyOtherColorChecked_update();
 			
 			isTasktrayStartChkBox.Checked = bool.Parse(cfg.get("IstasktrayStart"));
 			isdragComChkBox.Checked = bool.Parse(cfg.get("IsdragCom"));
 			doublecmodeList.Text = cfg.get("doublecmode");
 			isNotAllMatchNotifyNoRecentChkBox.Checked = bool.Parse(cfg.get("IsNotAllMatchNotifyNoRecent"));
-			var a = ColorTranslator.FromHtml(cfg.get("recentColor"));
-			recentColorBtn.BackColor = recentSampleColorText.BackColor = ColorTranslator.FromHtml(cfg.get("recentColor"));
-			isAlartListColorRecent.Checked = bool.Parse(cfg.get("IsAlartListRecentColor"));
+			delThumbChkBox.Checked = bool.Parse(cfg.get("delThumb"));
 			
 			rssUpdateIntervalList.Text = cfg.get("rssUpdateInterval");
 			userNameUpdateIntervalList.Text = cfg.get("userNameUpdateInterval");
@@ -305,6 +320,7 @@ namespace namaichi
 			maxHistoryDisplayList.Text = cfg.get("maxHistoryDisplay");
 			maxNotAlartDisplayList.Text = cfg.get("maxNotAlartDisplay");
 			maxLogDisplayList.Text = cfg.get("maxLogDisplay");
+			isStartUpChkBox.Checked = bool.Parse(cfg.get("IsStartUp"));
 //			setConvertList(int.Parse(cfg.get("afterConvertMode")));
 			poplocList.Text = cfg.get("poploc");
 			poptimeList.Text = cfg.get("poptime");
@@ -342,11 +358,12 @@ namespace namaichi
 			thresholdpageList.Value = int.Parse(cfg.get("thresholdpage"));
 			brodoubleList.SelectedIndex = int.Parse(cfg.get("brodouble"));
 			liveListUpdateMinutesList.Value = decimal.Parse(cfg.get("liveListUpdateMinutes"));
-			
+			liveListCacheIconChkBox.Checked = bool.Parse(cfg.get("liveListCacheIcon"));
 			
         	isCookieFileSiteiChkBox.Checked = bool.Parse(cfg.get("iscookie"));
         	isCookieFileSiteiChkBox_UpdateAction();
         	cookieFileText.Text = cfg.get("cookieFile");
+        	checkBoxShowAll.Checked = bool.Parse(cfg.get("IsBrowserShowAll"));
 	
         	var si = SourceInfoSerialize.load(false);
         	nicoSessionComboBox1.Selector.SetInfoAsync(si);
@@ -431,6 +448,10 @@ namespace namaichi
 			isCheck30minRadioBtn.Enabled = isRecentCheckRadioBtn.Checked;
 			isCheckOnAirRadioBtn.Enabled = isRecentCheckRadioBtn.Checked;
 			isChangeIconChkBox.Enabled = isRecentCheckRadioBtn.Checked;
+			recentColorBtn.Enabled = recentSampleColorText.Enabled =
+					defaultRecentColorBtn.Enabled = 
+					isAlartListColorRecent.Enabled =
+						isRecentCheckRadioBtn.Checked;
 		}
 		void IsRecentChkBoxCheckedChanged(object sender, EventArgs e)
 		{
@@ -538,6 +559,7 @@ namespace namaichi
 					continue;
 				CheckBox chkbox = (CheckBox)defaultBehaviorGroupBox.Controls[i];
 				l.Add(chkbox.Checked ? "1" : "0");
+				if (l.Count == 15) break;
 			}
 			return string.Join(",", l);
 		}
@@ -626,7 +648,110 @@ namespace namaichi
 		{
 			recentColorBtn.Enabled = recentSampleColorText.Enabled = !isAlartListColorRecent.Checked;
 		}
+		void setStartUpMenu(bool isDelete) {
+			try {
+				var exe = Application.ExecutablePath;
+				
+				var dir = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+				util.debugWriteLine(dir);
+				
+				var files = Directory.GetFiles(dir);
+				foreach (var f in files) {
+					util.debugWriteLine("f " + f);
+					if (!f.EndsWith(".lnk")) continue;
+					
+					IWshRuntimeLibrary.WshShell shell = new IWshRuntimeLibrary.WshShell();
+		            IWshRuntimeLibrary.IWshShortcut shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(f);
+		            string targetPath = shortcut.TargetPath.ToString();
+		            
+		            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shortcut);
+		            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shell);
+			    
+		            if (Path.GetFullPath(targetPath) == Path.GetFullPath(exe)) {
+		            	util.debugWriteLine("exist " + targetPath);
+		            	if (isDelete) File.Delete(f);
+		            	else return;
+		            }
+				}
+				util.debugWriteLine(files.Length);
+				if (isDelete) return;
+				
+			    IWshRuntimeLibrary.WshShell shell2 = new IWshRuntimeLibrary.WshShell();
+			    IWshRuntimeLibrary.IWshShortcut shortcut2 = (IWshRuntimeLibrary.IWshShortcut)shell2.CreateShortcut(dir + "/放送チェックツール（仮.lnk");
+			    shortcut2.TargetPath = exe;
+			    shortcut2.WorkingDirectory = util.getJarPath()[0];
+			    shortcut2.WindowStyle = 1;
+			    //shortcut.IconLocation = Application.ExecutablePath + ",0";
+			    shortcut2.Save();
+			 
+			    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shortcut2);
+			    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shell2);
+			    
+				
+				
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+		}
 		
 		
+		void CheckBoxShowAllCheckedChanged(object sender, EventArgs e)
+		{
+			nicoSessionComboBox1.Selector.IsAllBrowserMode = checkBoxShowAll.Checked;
+		}
+		
+		void IsCookieFileSiteiChkBoxCheckedChanged(object sender, EventArgs e)
+		{
+			isCookieFileSiteiChkBox_UpdateAction();
+		}
+		
+		void CookieFileSanshouBtnClick(object sender, EventArgs e)
+		{
+			var dialog = new OpenFileDialog();
+			dialog.Multiselect = false;
+			var result = dialog.ShowDialog();
+			if (result != DialogResult.OK) return;
+			
+			cookieFileText.Text = dialog.FileName;
+		}
+		
+		void BtnReloadClick(object sender, EventArgs e)
+		{
+			var tsk = nicoSessionComboBox1.Selector.UpdateAsync();
+		}
+		
+		void IsCheckOnAirRadioBtnCheckedChanged(object sender, EventArgs e)
+		{
+			isFollowerOnlyOtherColor.Enabled = isCheckOnAirRadioBtn.Checked;
+			IsFollowerOnlyOtherColorChecked_update();
+		}
+		void IsFollowerOnlyOtherColorCheckedChanged(object sender, EventArgs e)
+		{
+			IsFollowerOnlyOtherColorChecked_update();
+		}
+		void IsFollowerOnlyOtherColorChecked_update()
+		{
+			var isEnabled = 
+				isCheckOnAirRadioBtn.Checked && isFollowerOnlyOtherColor.Checked;
+			followerOnlyColorBtn.Enabled = isEnabled;
+			followerOnlySampleColorText.Enabled = isEnabled;
+			defaultFollowerOnlyColorBtn.Enabled = isEnabled;
+		}
+		
+		void FollowerOnlyColorBtnClick(object sender, EventArgs e)
+		{
+			var c = new ColorDialog();
+			c.FullOpen = true;
+			c.Color = followerOnlyColorBtn.BackColor;
+			if (c.ShowDialog() != DialogResult.OK) return;
+			followerOnlyColorBtn.BackColor = c.Color;
+			followerOnlySampleColorText.BackColor = c.Color;
+		}
+		
+		void DefaultFollowerOnlyColorBtnClick(object sender, EventArgs e)
+		{
+			followerOnlyColorBtn.BackColor = Color.FromArgb(255,224,255);
+			followerOnlySampleColorText.BackColor = Color.FromArgb(255,224,255);
+		}
 	}
 }

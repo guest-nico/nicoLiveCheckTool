@@ -94,171 +94,195 @@ namespace namaichi.alart
 			util.debugWriteLine("gotStreamProcess itemCount");
 			var isChanged = false;
 			items.Reverse();
-			foreach (var item in items) {
-				bool isAppliA, isAppliB, isAppliC, isAppliD, isAppliE, isAppliF, isAppliG, isAppliH, isAppliI, isAppliJ, isPopup, isBaloon, isBrowser, isMail, isSound, isLog;
-				isAppliA = isAppliB = isAppliC = isAppliD = isAppliE = isAppliF = isAppliG = isAppliH = isAppliI = isAppliJ = isPopup = isBaloon = isBrowser = isMail = isSound = isLog = false;
-				//var alartListCount = form.getAlartListCount();
+			foreach (var _item in items) {
+				try {
+					var item = _item;
+					bool isAppliA, isAppliB, isAppliC, isAppliD, isAppliE, isAppliF, isAppliG, isAppliH, isAppliI, isAppliJ, isPopup, isBaloon, isBrowser, isMail, isSound, isLog;
+					isAppliA = isAppliB = isAppliC = isAppliD = isAppliE = isAppliF = isAppliG = isAppliH = isAppliI = isAppliJ = isPopup = isBaloon = isBrowser = isMail = isSound = isLog = false;
+					//var alartListCount = form.getAlartListCount();
 				
-				var targetAi = new List<AlartInfo>();
-				AlartInfo nearAlartAi = null;
-				for (var i = 0; i < alartListDataSource.Count; i++) {
-					var alartItem = (info.AlartInfo)alartListDataSource[i];
-
-					var isNosetComId = alartItem.communityId == "" ||
-							alartItem.communityId == null;
-					var isNosetHostName = alartItem.hostName == "" ||
-							alartItem.hostName == null;
-					var isNosetKeyword = (alartItem.isCustomKeyword && alartItem.cki == null) ||
-						(!alartItem.isCustomKeyword && alartItem.keyword == "" || alartItem.keyword == null);
-					if (isNosetComId && isNosetHostName && isNosetKeyword) continue;
+					var targetAi = new List<AlartInfo>();
+					AlartInfo nearAlartAi = null;
 					
-					var isComOk = alartItem.communityId == item.comId;
-					var isUserOk = alartItem.hostName == item.hostName;
-					var isKeywordOk = item.isMatchKeyword(alartItem);
-					
-					if ((string.IsNullOrEmpty(alartItem.communityId) !=
-					     	string.IsNullOrEmpty(alartItem.communityName)) ||
-					     (string.IsNullOrEmpty(alartItem.hostId) !=
-					     	 string.IsNullOrEmpty(alartItem.hostName))) continue;
-					
-					if (isUserOk && !isUserIdFromLvidOk(item, alartItem.hostId))
-						isUserOk = false;
-					
-					if (!isAlartMatch(alartItem, isComOk, 
-							isUserOk, isKeywordOk, isNosetComId, 
-							isNosetHostName, isNosetKeyword)) {
-						if ((!isNosetComId && isComOk) ||
-							    (!isNosetHostName && isUserOk)) {
-							nearAlartAi = alartItem;
-							setUserId(item);
-							//isUserIdFromLvidOk(item, alartItem.hostId);
-						}
-						continue;
+					bool isSuccessAccess = getAlartProcess(ref isAppliA, ref isAppliB,
+							ref isAppliC, ref isAppliD, ref isAppliE,
+							ref isAppliF, ref isAppliG, ref isAppliH,
+							ref isAppliI, ref isAppliJ, ref isPopup,
+							ref isBaloon, ref isBrowser, ref isMail, 
+							ref isSound, ref isLog, ref isChanged, 
+							ref targetAi, ref nearAlartAi, ref item);
+					if (isSuccessAccess) {
+						doProcess(item, targetAi, 
+					        isAppliA, isAppliB, isAppliC,
+							isAppliD, isAppliE,	isAppliF, 
+							isAppliG, isAppliH, isAppliI,
+							isAppliJ, isPopup, isBaloon,
+							isBrowser, isMail, isSound, 
+							isLog, nearAlartAi);
+					} else {
+						Task.Run(() => {
+							while (true) {
+								isSuccessAccess = getAlartProcess(ref isAppliA, ref isAppliB,
+									ref isAppliC, ref isAppliD, ref isAppliE,
+									ref isAppliF, ref isAppliG, ref isAppliH,
+									ref isAppliI, ref isAppliJ, ref isPopup,
+									ref isBaloon, ref isBrowser, ref isMail, 
+									ref isSound, ref isLog, ref isChanged, 
+									ref targetAi, ref nearAlartAi, ref item);
+								if (isSuccessAccess) break;
+							}
+						    doProcess(item, targetAi, 
+						        isAppliA, isAppliB, isAppliC,
+								isAppliD, isAppliE,	isAppliF, 
+								isAppliG, isAppliH, isAppliI,
+								isAppliJ, isPopup, isBaloon,
+								isBrowser, isMail, isSound, 
+								isLog, nearAlartAi);
+						});
 					}
 					
-					util.debugWriteLine("ok alart item " + item.lvId + " " + isComOk + " " + isUserOk + " " + isKeywordOk + " noset " + isNosetComId + " " + isNosetHostName + " " + isNosetKeyword + " ai.hostId " + alartItem.hostId + " rss.hostId " + item.userId);
-					setUserId(item);
-					
-					/*
-					if (isUserOk && !isUserIdFromLvidOk(item, alartItem.hostId)) {
-						if (!isAlartMatch(alartItem, isComOk, 
-								false, isKeywordOk, isNosetComId, 
-								isNosetHostName, isNosetKeyword)) {
-							if ((!isNosetComId && isComOk) ||
-						    		(!isNosetHostName && isUserOk))
-								nearAlartAi = alartItem;
-							continue;
-						}
-					}
-					*/
-					if (alartItem.AppliA) isAppliA = true;
-					if (alartItem.AppliB) isAppliB = true;
-					if (alartItem.AppliC) isAppliC = true;
-					if (alartItem.AppliD) isAppliD = true;
-					if (alartItem.AppliE) isAppliE = true;
-					if (alartItem.AppliF) isAppliF = true;
-					if (alartItem.AppliG) isAppliG = true;
-					if (alartItem.AppliH) isAppliH = true;
-					if (alartItem.AppliI) isAppliI = true;
-					if (alartItem.AppliJ) isAppliJ = true;
-					if (alartItem.Popup) isPopup = true;
-					if (alartItem.Baloon) isBaloon = true;
-					if (alartItem.Browser) isBrowser = true;
-					if (alartItem.mail) isMail = true;
-					if (alartItem.sound) isSound = true;
-					isLog = true;
-					
-					if (isSetLastHosoDate(isNosetComId, isNosetHostName , isNosetKeyword,
-							isComOk, isUserOk, isKeywordOk))
-						form.updateLastHosoDate(i, DateTime.Parse(item.pubDate).ToString("yyyy/MM/dd HH:mm:ss"), item.lvId);
-					isChanged = true;
-					//targetAi = alartItem;
-					targetAi.Add(alartItem);
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
-				
-				if (processedLvidList.IndexOf(item.lvId) > -1) {
-					util.debugWriteLine("process lvid found " + item.lvId + " " + item.comName + " " + item.hostName);
-					continue;
-				}
-				processedLvidList.Add(item.lvId);
-					
-				util.debugWriteLine(item.lvId + " A " + isAppliA + " B " + isAppliB + " C " + isAppliC + " D " + isAppliD + " E " + isAppliE + " F " + isAppliF + " G " + isAppliG + " H " + isAppliH + " I " + isAppliI + " J " + isAppliJ + " pop " + isPopup + " balloon " + isBaloon);
-				
-				if (isAppliA && !form.notifyOffList[7]) {
-					var appliAPath = form.config.get("appliAPath");
-					var args = form.config.get("appliAArgs");
-					appliProcess(appliAPath, item.lvId, args);
-				}
-				if (isAppliB && !form.notifyOffList[8]) {
-					var appliBPath = form.config.get("appliBPath");
-					var args = form.config.get("appliBArgs");
-					appliProcess(appliBPath, item.lvId, args);
-				}
-				if (isAppliC && !form.notifyOffList[9]) {
-					var appliCPath = form.config.get("appliCPath");
-					var args = form.config.get("appliCArgs");
-					appliProcess(appliCPath, item.lvId, args);
-				}
-				if (isAppliD && !form.notifyOffList[10]) {
-					var appliDPath = form.config.get("appliDPath");
-					var args = form.config.get("appliDArgs");
-					appliProcess(appliDPath, item.lvId, args);
-				}
-				if (isAppliE && !form.notifyOffList[11]) {
-					var appliEPath = form.config.get("appliEPath");
-					var args = form.config.get("appliEArgs");
-					appliProcess(appliEPath, item.lvId, args);
-				}
-				if (isAppliF && !form.notifyOffList[12]) {
-					var appliFPath = form.config.get("appliFPath");
-					var args = form.config.get("appliFArgs");
-					appliProcess(appliFPath, item.lvId, args);
-				}
-				if (isAppliG && !form.notifyOffList[13]) {
-					var appliGPath = form.config.get("appliGPath");
-					var args = form.config.get("appliGArgs");
-					appliProcess(appliGPath, item.lvId, args);
-				}
-				if (isAppliH && !form.notifyOffList[14]) {
-					var appliHPath = form.config.get("appliHPath");
-					var args = form.config.get("appliHArgs");
-					appliProcess(appliHPath, item.lvId, args);
-				}
-				if (isAppliI && !form.notifyOffList[15]) {
-					var appliIPath = form.config.get("appliIPath");
-					var args = form.config.get("appliIArgs");
-					appliProcess(appliIPath, item.lvId, args);
-				}
-				if (isAppliJ && !form.notifyOffList[16]) {
-					var appliJPath = form.config.get("appliJPath");
-					var args = form.config.get("appliJArgs");
-					appliProcess(appliJPath, item.lvId, args);
-				}
-				if (isPopup && !form.notifyOffList[2] && targetAi.Count > 0) {
-					displayPopup(item, targetAi[0]);
-				}
-				if (isBaloon && !form.notifyOffList[3] && targetAi.Count > 0) {
-					displayBaloon(item, targetAi[0]);
-				}
-				if (isBrowser && !form.notifyOffList[4]) {
-					openBrowser(item);
-				}
-				if (isMail && !form.notifyOffList[5]) {
-					mail(item);
-				}
-				if (isSound && !form.notifyOffList[6] && targetAi.Count > 0) {
-					sound(item, targetAi[0]);
-				}
-				if (isLog && form.config.get("log") == "true")
-					writFavoriteLog(item);
-				
-				if (targetAi.Count > 0)
-					addLogList(item, targetAi);
-				if (nearAlartAi != null)
-					addNearAlartList(item, nearAlartAi);
 			}
 			
 			return isChanged;
+		}
+		private bool getAlartProcess(ref bool isAppliA, ref bool isAppliB,
+				ref bool isAppliC, ref bool isAppliD, ref bool isAppliE,
+				ref bool isAppliF, ref bool isAppliG, ref bool isAppliH,
+				ref bool isAppliI, ref bool isAppliJ, ref bool isPopup,
+				ref bool isBaloon, ref bool isBrowser, ref bool isMail,
+				ref bool isSound, ref bool isLog, ref bool isChanged, 
+				ref List<AlartInfo> targetAi,
+				ref AlartInfo nearAlartAi, ref RssItem item) {
+			//return isSuccessAccess
+			while (true) {
+				try {
+					foreach (var alartItem in alartListDataSource) {
+						//var alartItem = (info.AlartInfo)alartListDataSource[i];
+						//var i = alartListDataSource.IndexOf(alartItem);
+						//if (item.comId.IndexOf("939") > -1 &&
+						//   		alartItem.communityId.IndexOf("939") > -1)
+						//	util.debugWriteLine("test");
+						
+						var isNosetComId = alartItem.communityId == "" ||
+								alartItem.communityId == null;
+						var isNosetHostName = alartItem.hostName == "" ||
+								alartItem.hostName == null;
+						var isNosetKeyword = (alartItem.isCustomKeyword && alartItem.cki == null) ||
+							(!alartItem.isCustomKeyword && alartItem.keyword == "" || alartItem.keyword == null);
+						if (isNosetComId && isNosetHostName && isNosetKeyword) continue;
+						
+						var isComOk = alartItem.communityId == item.comId;
+						var isUserOk = alartItem.hostName == item.hostName;
+						var isKeywordOk = item.isMatchKeyword(alartItem);
+						
+						if ((string.IsNullOrEmpty(alartItem.communityId) !=
+						     	string.IsNullOrEmpty(alartItem.communityName)) ||
+						     (string.IsNullOrEmpty(alartItem.hostId) !=
+						     	 string.IsNullOrEmpty(alartItem.hostName))) continue;
+						
+						var isSuccessAccess = true;
+						if (isUserOk && !isUserIdFromLvidOk(item, alartItem.hostId, out isSuccessAccess))
+							isUserOk = false;
+						if (!isSuccessAccess) return false;
+						
+						
+						if (!isAlartMatch(alartItem, isComOk, 
+								isUserOk, isKeywordOk, isNosetComId, 
+								isNosetHostName, isNosetKeyword)) {
+							if ((!isNosetComId && isComOk) ||
+								    (!isNosetHostName && isUserOk)) {
+								nearAlartAi = alartItem;
+								isSuccessAccess = setUserId(item);
+								if (!isSuccessAccess) return false;
+								//isUserIdFromLvidOk(item, alartItem.hostId);
+							}
+							continue;
+						}
+						
+						util.debugWriteLine("ok alart item " + item.lvId + " " + isComOk + " " + isUserOk + " " + isKeywordOk + " noset " + isNosetComId + " " + isNosetHostName + " " + isNosetKeyword + " ai.hostId " + alartItem.hostId + " rss.hostId " + item.userId);
+						isSuccessAccess = setUserId(item);
+						if (!isSuccessAccess) return false;
+						
+						/*
+						if (isUserOk && !isUserIdFromLvidOk(item, alartItem.hostId)) {
+							if (!isAlartMatch(alartItem, isComOk, 
+									false, isKeywordOk, isNosetComId, 
+									isNosetHostName, isNosetKeyword)) {
+								if ((!isNosetComId && isComOk) ||
+							    		(!isNosetHostName && isUserOk))
+									nearAlartAi = alartItem;
+								continue;
+							}
+						}
+						*/
+						if (alartItem.AppliA) isAppliA = true;
+						if (alartItem.AppliB) isAppliB = true;
+						if (alartItem.AppliC) isAppliC = true;
+						if (alartItem.AppliD) isAppliD = true;
+						if (alartItem.AppliE) isAppliE = true;
+						if (alartItem.AppliF) isAppliF = true;
+						if (alartItem.AppliG) isAppliG = true;
+						if (alartItem.AppliH) isAppliH = true;
+						if (alartItem.AppliI) isAppliI = true;
+						if (alartItem.AppliJ) isAppliJ = true;
+						if (alartItem.Popup) isPopup = true;
+						if (alartItem.Baloon) isBaloon = true;
+						if (alartItem.Browser) isBrowser = true;
+						if (alartItem.mail) isMail = true;
+						if (alartItem.sound) isSound = true;
+						isLog = true;
+						
+						if (isSetLastHosoDate(isNosetComId, isNosetHostName , isNosetKeyword,
+								isComOk, isUserOk, isKeywordOk))
+							form.updateLastHosoDate(alartItem, DateTime.Parse(item.pubDate).ToString("yyyy/MM/dd HH:mm:ss"), item.lvId, item.isMemberOnly);
+						else {
+							//debug
+							//form.addLogText("[最近の放送日時　非更新debug]" + DateTime.Now + item.lvId);
+						}
+						isChanged = true;
+						//targetAi = alartItem;
+						targetAi.Add(alartItem);
+					}
+					break;
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					//return false;
+				}
+			}
+			return true;
+		}
+		private void doProcess(RssItem item, 
+		        List<AlartInfo> targetAi, bool isAppliA, 
+		        bool isAppliB, bool isAppliC,
+				bool isAppliD, bool isAppliE, bool isAppliF, 
+				bool isAppliG, bool isAppliH, bool isAppliI,
+				bool isAppliJ, bool isPopup, bool isBaloon,
+				bool isBrowser, bool isMail, bool isSound, 
+				bool isLog, AlartInfo nearAlartAi) {
+			if (processedLvidList.IndexOf(item.lvId) > -1) {
+				util.debugWriteLine("process lvid found " + item.lvId + " " + item.comName + " " + item.hostName);
+				return;
+			}
+			processedLvidList.Add(item.lvId);
+
+			util.debugWriteLine(item.lvId + " A " + isAppliA + " B " + isAppliB + " C " + isAppliC + " D " + isAppliD + " E " + isAppliE + " F " + isAppliF + " G " + isAppliG + " H " + isAppliH + " I " + isAppliI + " J " + isAppliJ + " pop " + isPopup + " balloon " + isBaloon);
+			processAlart(item, targetAi, 
+			        isAppliA, isAppliB, isAppliC,
+					isAppliD, isAppliE,	isAppliF, 
+					isAppliG, isAppliH, isAppliI,
+					isAppliJ, isPopup, isBaloon,
+					isBrowser, isMail, isSound);
+			
+			if (isLog && form.config.get("log") == "true")
+				writFavoriteLog(item);
+			
+			if (targetAi.Count > 0)
+				addLogList(item, targetAi);
+			else if (nearAlartAi != null)
+				addNearAlartList(item, nearAlartAi);
 		}
 		private bool isAlartMatch(AlartInfo alartItem, bool isComOk, 
 				bool isUserOk, bool isKeywordOk, bool isNosetComId, 
@@ -366,6 +390,79 @@ namespace namaichi.alart
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
+		private void processAlart(RssItem item, 
+		        List<AlartInfo> targetAi, bool isAppliA, 
+		        bool isAppliB, bool isAppliC,
+				bool isAppliD, bool isAppliE, bool isAppliF, 
+				bool isAppliG, bool isAppliH, bool isAppliI,
+				bool isAppliJ, bool isPopup, bool isBaloon,
+				bool isBrowser, bool isMail, bool isSound) {
+			if (isAppliA && !form.notifyOffList[7]) {
+				var appliAPath = form.config.get("appliAPath");
+				var args = form.config.get("appliAArgs");
+				appliProcess(appliAPath, item.lvId, args);
+			}
+			if (isAppliB && !form.notifyOffList[8]) {
+				var appliBPath = form.config.get("appliBPath");
+				var args = form.config.get("appliBArgs");
+				appliProcess(appliBPath, item.lvId, args);
+			}
+			if (isAppliC && !form.notifyOffList[9]) {
+				var appliCPath = form.config.get("appliCPath");
+				var args = form.config.get("appliCArgs");
+				appliProcess(appliCPath, item.lvId, args);
+			}
+			if (isAppliD && !form.notifyOffList[10]) {
+				var appliDPath = form.config.get("appliDPath");
+				var args = form.config.get("appliDArgs");
+				appliProcess(appliDPath, item.lvId, args);
+			}
+			if (isAppliE && !form.notifyOffList[11]) {
+				var appliEPath = form.config.get("appliEPath");
+				var args = form.config.get("appliEArgs");
+				appliProcess(appliEPath, item.lvId, args);
+			}
+			if (isAppliF && !form.notifyOffList[12]) {
+				var appliFPath = form.config.get("appliFPath");
+				var args = form.config.get("appliFArgs");
+				appliProcess(appliFPath, item.lvId, args);
+			}
+			if (isAppliG && !form.notifyOffList[13]) {
+				var appliGPath = form.config.get("appliGPath");
+				var args = form.config.get("appliGArgs");
+				appliProcess(appliGPath, item.lvId, args);
+			}
+			if (isAppliH && !form.notifyOffList[14]) {
+				var appliHPath = form.config.get("appliHPath");
+				var args = form.config.get("appliHArgs");
+				appliProcess(appliHPath, item.lvId, args);
+			}
+			if (isAppliI && !form.notifyOffList[15]) {
+				var appliIPath = form.config.get("appliIPath");
+				var args = form.config.get("appliIArgs");
+				appliProcess(appliIPath, item.lvId, args);
+			}
+			if (isAppliJ && !form.notifyOffList[16]) {
+				var appliJPath = form.config.get("appliJPath");
+				var args = form.config.get("appliJArgs");
+				appliProcess(appliJPath, item.lvId, args);
+			}
+			if (isPopup && !form.notifyOffList[2] && targetAi.Count > 0) {
+				displayPopup(item, targetAi[0]);
+			}
+			if (isBaloon && !form.notifyOffList[3] && targetAi.Count > 0) {
+				displayBaloon(item, targetAi[0]);
+			}
+			if (isBrowser && !form.notifyOffList[4]) {
+				openBrowser(item);
+			}
+			if (isMail && !form.notifyOffList[5]) {
+				mail(item);
+			}
+			if (isSound && !form.notifyOffList[6] && targetAi.Count > 0) {
+				sound(item, targetAi[0]);
+			}
+		}
 		public void setCookie() {
 			var url = "https://www.nicovideo.jp/my";
 			var cg = new CookieGetter(form.config);
@@ -382,11 +479,13 @@ namespace namaichi.alart
 				Task.Run(() => new FollowChecker(form, container).check());
 			}
 		}
-		public bool isUserIdFromLvidOk(RssItem rssItem, string alartUserId) {
+		public bool isUserIdFromLvidOk(RssItem rssItem, string alartUserId, out bool isSuccessAccess) {
 			util.debugWriteLine("isUserIdFromLvidOk id " + alartUserId);
+			isSuccessAccess = true;
 			if (string.IsNullOrEmpty(alartUserId)) return true;
 			
-			setUserId(rssItem);
+			isSuccessAccess = setUserId(rssItem);
+			if (!isSuccessAccess) return true; 
 			//var uid = (rssItem.userId != null) ? rssItem.userId : getUserIdFromLvid(rssItem.lvId);
 			//if (rssItem.userId == null && uid != null) rssItem.userId = uid;
 			/*
@@ -400,17 +499,24 @@ namespace namaichi.alart
 			if (rssItem.userId == null) return true;
 			return rssItem.userId == alartUserId;
 		}
-		public string getUserIdFromLvid(string lvid) {
+		public string getUserIdFromLvid(string lvid, out bool isFailureAccess) {
 			var url = "https://live2.nicovideo.jp/watch/" + lvid;
 			var res = util.getPageSource(url, container);
-			if (res == null) return null;
+			isFailureAccess = res == null;
+			if (isFailureAccess) {
+				return null;
+			}
 			var uid = util.getRegGroup(res, "user/(\\d+)");
 			return uid;
 		}
-		private void setUserId(RssItem rssItem) {
-			var uid = (rssItem.userId != null) ? rssItem.userId : getUserIdFromLvid(rssItem.lvId);
+		private bool setUserId(RssItem rssItem) {
+			//return isSuccess
+			var isFailureAccess = false;
+			var uid = (rssItem.userId != null) ? rssItem.userId : getUserIdFromLvid(rssItem.lvId, out isFailureAccess);
+			if (isFailureAccess) return false;  
 			if (rssItem.comId.StartsWith("ch")) uid = "";
 			if (rssItem.userId == null && uid != null) rssItem.userId = uid;
+			return true;
 		}
 		private void reserveStreamCheck() {
 			while (true) {
@@ -438,7 +544,7 @@ namespace namaichi.alart
 				if (!Directory.Exists("Log")) Directory.CreateDirectory("Log");
 				foreach(var ri in items) {
 					var dt = DateTime.Parse(ri.pubDate);
-					var p = "Log/broadLog-" + dt.ToString("yyyy-MM-dd") + ".txt";
+					var p = util.getJarPath()[0] + "/Log/broadLog-" + dt.ToString("yyyy-MM-dd") + ".txt";
 					var sw = new StreamWriter(p, true);
 					writeLog(sw, ri);
 					sw.Close();
@@ -454,7 +560,7 @@ namespace namaichi.alart
 			//2019/01/16 19:49:57 公式生放送－ lv317613421 official
 	
 			if (!Directory.Exists("Log")) Directory.CreateDirectory("Log");
-			var sw = new StreamWriter("Log/favoriteLog.txt", true);
+			var sw = new StreamWriter(util.getJarPath()[0] + "/Log/favoriteLog.txt", true);
 			writeLog(sw, ri);
 			sw.Close();
 		}
@@ -514,6 +620,8 @@ namespace namaichi.alart
 				var isChanged = gotStreamProcess(items);
 				if (isChanged) form.sortAlartList();
 			}
+			
+			addLiveList(items);
 		}
 		public void resetCheck() {
 			if (pr != null) {
@@ -676,6 +784,35 @@ namespace namaichi.alart
 			hi.keyword = nearAlartAi.keyword;
 			form.addNotAlartList(hi);
 		}
-		
+		private void addLiveList(List<RssItem> items) {
+			try {
+				var isBlindA = bool.Parse(form.config.get("BlindOnlyA"));
+				var isBlindB = bool.Parse(form.config.get("BlindOnlyB"));
+				var isBlindQuestion = bool.Parse(form.config.get("BlindQuestion"));
+				var isFavoriteOnly = bool.Parse(form.config.get("FavoriteOnly"));
+				var cateChar = form.getCategoryChar();
+				lock (form.liveListLock) {
+					foreach (var item in items) {
+						var li = new LiveInfo(item, form.alartListDataSource, form.config);
+						//li.category = item.category;
+						//li.type = item.type;
+						
+						var isContain = false;
+						foreach (var a in form.liveListDataSource)
+							if (a.lvId == item.lvId) 
+								isContain = true;
+						foreach (var a in form.liveListDataReserve)
+							if (a.lvId == item.lvId) 
+								isContain = true;
+						if (isContain) 
+							continue;
+						
+						form.addLiveListItem(li, cateChar, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly);
+					}
+				}
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+		}
 	}
 }

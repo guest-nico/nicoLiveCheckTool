@@ -16,7 +16,7 @@
     <StartupObject>namaichi.Program</StartupObject>
     <StartAction>Project</StartAction>
     <AssemblyOriginatorKeyMode>File</AssemblyOriginatorKeyMode>
-    <ApplicationIcon>..\%28check.ico</ApplicationIcon>
+    <ApplicationIcon>..\%28check3.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -299,6 +299,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ProfilingSessions\Session20190401_054741.sdps" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="IWshRuntimeLibrary">
+      <Guid>{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SnkLib.App.CookieGetter.2.1.0.0\build\net40\SnkLib.App.CookieGetter.targets" Condition="Exists('..\packages\SnkLib.App.CookieGetter.2.1.0.0\build\net40\SnkLib.App.CookieGetter.targets')" />

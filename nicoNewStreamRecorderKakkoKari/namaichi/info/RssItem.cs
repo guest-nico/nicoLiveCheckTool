@@ -9,6 +9,7 @@
 using System;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Net;
 
 namespace namaichi.info
 {
@@ -29,21 +30,30 @@ namespace namaichi.info
 		public string itemRes;
 		public string userId = null;
 		
+		public List<string> category = null;
+		public string type = null;
+		
 		public RssItem(string title, string lvId, 
 				string pubDate, string description,
 		        string comName, string comId,
 		        string hostName, string thumbnailUrl,
 		        string menberOnly, string itemRes) {
 			this.lvId = lvId;
-			this.hostName = hostName;
+			this.hostName = WebUtility.HtmlDecode(hostName);
 			this.comId = comId;
-			this.comName = comName;
-			this.description = description;
+			this.comName = WebUtility.HtmlDecode(comName);
+			this.description = WebUtility.HtmlDecode(description);
 			this.pubDate = pubDate;
-			this.title = title;
+			this.title = WebUtility.HtmlDecode(title);
 			this.thumbnailUrl = thumbnailUrl;
-			this.isMemberOnly = menberOnly == "true";
+			try {
+				this.isMemberOnly = menberOnly.ToString().ToLower() == "true";
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				
+			}
 			this.itemRes = itemRes;
+			
 		}
 		public bool isContainKeyword(string keyword) {
 			return util.getRegGroup(lvId, "(" + keyword + ")") != null ||

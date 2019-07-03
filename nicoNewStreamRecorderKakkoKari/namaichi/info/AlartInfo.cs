@@ -46,7 +46,7 @@ namespace namaichi.info
 		public string keyword = "";
 		
 		public DateTime lastHosoDt = DateTime.MinValue;
-		public bool isRecentColor = false;
+		public int recentColorMode = 0;//0-no 1-recent 2-followerOnly
 		public int userIdColorType = 0;
 		public int comIdColorType = 0;
 		

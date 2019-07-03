@@ -47,6 +47,7 @@ namespace namaichi.rec
 						MessageBoxDefaultButton.Button2);
 				if (res == DialogResult.Cancel) return;
 				setExistsCheckLock(isUser, null);
+				setToolMenuStatusBar();
 			} else {
 				var res = form.showMessageBox("チェック完了までに" + str + "ID登録件数の\"約2倍の秒数\"がかかります。チェックしますか？",
 						"確認", MessageBoxButtons.OKCancel, 
@@ -152,6 +153,7 @@ namespace namaichi.rec
 						MessageBoxDefaultButton.Button2);
 				if (res == DialogResult.Cancel) return;
 				setUserInfoLock = null;
+				setToolMenuStatusBar();
 			} else {
 				var res = form.showMessageBox("取得完了までに未取得ユーザーID数の\"約2倍の秒数\"がかかります。取得しますか？", 
 						"確認", MessageBoxButtons.OKCancel, 
@@ -228,6 +230,7 @@ namespace namaichi.rec
 						MessageBoxDefaultButton.Button2);
 				if (res == DialogResult.Cancel) return;
 				bulkAddFromFollowComLock = null;
+				setToolMenuStatusBar();
 			} else {
 				Task.Run(() => {
 					var f = new BulkAddFromFollowAccountForm();
@@ -368,6 +371,7 @@ namespace namaichi.rec
 				if (res == DialogResult.Cancel) return;
 				if (isUser) userThumbLock = null;
 				else comThumbLock = null;
+				setToolMenuStatusBar();
 			} else {
 				var res = form.showMessageBox("取得完了までに未取得" + (isUser ? "ユーザ" : "コミュ") + "画数のの\"約3倍の秒数\"がかかります。チェックしますか？",
 						"確認", MessageBoxButtons.OKCancel, 
@@ -411,14 +415,16 @@ namespace namaichi.rec
 					setToolMenuStatusBar();
 					return;
 				}
-				var img = ThumbnailManager.getImageId((isUser ? ai.hostId : ai.communityId));
+				var id = isUser ? ai.hostId : ai.communityId;
+				var img = ThumbnailManager.getImageId(id, form);
 				if (img == null) {
 					error++;
-					continue;
+					form.alartListExistColorChange(id, isUser, 2);
+				} else {
+					ThumbnailManager.saveImage(img, id);
+					got++;
+					form.alartListExistColorChange(id, isUser, 0);
 				}
-				
-				ThumbnailManager.saveImage(img, isUser ? ai.hostId : ai.communityId);
-				got++;
 				Thread.Sleep(3000);
 			}
 			util.showModelessMessageBox("取得：" + got + "　画像無し：" + no + "　エラー：" + error, "未取得" + (isUser ? "ユーザ" : "コミュ") + "画取得終了", form);

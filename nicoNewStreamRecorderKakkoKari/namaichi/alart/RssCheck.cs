@@ -26,7 +26,7 @@ namespace namaichi.alart
 		config.config config;
 		private bool isRetry = true;
 		
-		private Regex rssReg = new Regex("<item>[\\s\\S]*?<title>([\\s\\S]*?)</title>[\\s\\S]*?<guid [\\s\\S]*?(lv\\d*)</guid>[\\s\\S]*?<pubDate>([\\s\\S]*?)</pubDate>[\\s\\S]*?<description>([\\s\\S]*?)</description>[\\s\\S]*?<media:thumbnail url=\"(.+?)\"[\\s\\S]*?<nicolive:community_name>([\\s\\S]*?)</nicolive:community_name>[\\s\\S]*?<nicolive:community_id>([\\s\\S]*?)</nicolive:community_id>[\\s\\S]*?<nicolive:member_only>(.*?)</nicolive:member_only>[\\s\\S]*?<nicolive:owner_name>([\\s\\S]*?)</nicolive:owner_name>");
+		private Regex rssReg = new Regex("<item>[\\s\\S]*?<title>([\\s\\S]*?)</title>[\\s\\S]*?<guid [\\s\\S]*?(lv\\d*)</guid>[\\s\\S]*?<pubDate>([\\s\\S]*?)</pubDate>[\\s\\S]*?<description>([\\s\\S]*?)</description>[\\s\\S]*?<category>([\\s\\S]*?)</category>[\\s\\S]*?<media:thumbnail url=\"(.+?)\"[\\s\\S]*?<nicolive:community_name>([\\s\\S]*?)</nicolive:community_name>[\\s\\S]*?<nicolive:community_id>([\\s\\S]*?)</nicolive:community_id>[\\s\\S]*?<nicolive:member_only>(.*?)</nicolive:member_only>[\\s\\S]*?<nicolive:type>([\\s\\S]*?)</nicolive:type>[\\s\\S]*?<nicolive:owner_name>([\\s\\S]*?)</nicolive:owner_name>");
 		
 		
 		public RssCheck(Check check, config.config config)
@@ -90,11 +90,14 @@ namespace namaichi.alart
 			foreach(Match _m in m) {
 				var item = new RssItem(_m.Groups[1].Value,
 						_m.Groups[2].Value, _m.Groups[3].Value,
-						_m.Groups[4].Value, _m.Groups[6].Value,
-						_m.Groups[7].Value, _m.Groups[9].Value, 
-						_m.Groups[5].Value, _m.Groups[8].Value,
+						_m.Groups[4].Value, _m.Groups[7].Value,
+						_m.Groups[8].Value, _m.Groups[11].Value,
+						_m.Groups[6].Value, _m.Groups[9].Value,
 						_m.Groups[0].Value);
-				
+				var cate = new List<string>();
+				cate.AddRange(_m.Groups[5].Value.Split(','));
+				item.category = cate;
+				item.type = _m.Groups[10].Value;
 //				util.debugWriteLine("m check mae " + item.lvId + " " + item.title + " " + item.comId);
 //				if (item.lvId == lastLv) return false;
 //				if (checkedLvIdList.IndexOf(item.lvId) > -1) return false;

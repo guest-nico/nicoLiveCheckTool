@@ -51,18 +51,18 @@ namespace namaichi
 			var t = item.title;
 			if (isOkStrWidth(t + " - ")) t += " - ";
 			if (isOkStrWidth(t + dtStr)) t += dtStr;
-			titleLabel.Text = t;
+			titleLabel.Text = (item.isMemberOnly ? "(限定)" : "") + util.removeTag(t);
 			
-			hostNameLabel.Text = item.hostName;
-			communityNameLabel.Text = item.comName;
-			descryptionLabel.Text = item.description;
+			hostNameLabel.Text = util.removeTag(item.hostName);
+			communityNameLabel.Text = util.removeTag(item.comName);
+			descryptionLabel.Text = util.removeTag(item.description);
 			//var _Text = item.hostName + "/" + item.comName;
 			if (ai != null && ai.keyword != null && ai.keyword != "") Text = ai.keyword + "-" + Text;
 			if (ai != null && bool.Parse(config.get("IsColorPopup"))) {
 				BackColor = ai.backColor;
 				ForeColor = ai.textColor;
 			}
-			//Text = _Text;
+			//Text = Text;
 			if (isTest && isColor) {
 				BackColor = Color.FromArgb(255,224,255);
 				ForeColor = Color.Black;
@@ -86,6 +86,12 @@ namespace namaichi
 			
 			ContextMenuStrip = contextMenuStrip1;
 			setAppliMenuVisible();
+			
+			if (item.isMemberOnly) {
+				ShowIcon = true;
+				var icon = new Icon(util.getJarPath()[0] + "/Icon/lock.ico");
+				Icon = icon;
+			}
 		}
 		private bool isOkStrWidth(string s) {
 			var w = TextRenderer.MeasureText(s, titleLabel.Font).Width;
@@ -105,7 +111,7 @@ namespace namaichi
 				img = ThumbnailManager.getImageId(ri.comId);
 				if (img != null) ThumbnailManager.saveImage(img, ri.comId);
 				if (img == null && !string.IsNullOrEmpty(url)) 
-					img = ThumbnailManager.getThumbnailRssUrl(url);
+					img = ThumbnailManager.getThumbnailRssUrl(url, true);
 			} else {
 				util.debugWriteLine("is exist thumbnail time " + (DateTime.Now - dt0) + " " + ri.comName);
 			}

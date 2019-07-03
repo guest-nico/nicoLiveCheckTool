@@ -387,9 +387,11 @@ namespace namaichi.alart
 //				util.debugWriteLine("userid " + hg.userId);
 //				util.debugWriteLine("description " + hg.description);
 				
-				var i = new RssItem(title, lvid, dt, hg.description, comName, hg.communityId, hostName, thumbnail, "", "");
+				var i = new RssItem(title, lvid, dt, hg.description, comName, hg.communityId, hostName, hg.thumbnail, hg.isMemberOnly.ToString(), "");
 				i.setUserId(hg.userId);
 				i.setTag(hg.tags);
+				i.category = hg.category;
+				i.type = hg.type;
 				var ret = new List<RssItem>();
 				
 				ret.Add(i);

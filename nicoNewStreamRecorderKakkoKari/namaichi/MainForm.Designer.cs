@@ -75,6 +75,7 @@ namespace namaichi
 			this.update6hourDelMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
 			this.updateTopFavoriteMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.updateOnlyFavoriteMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.updateAutoSortMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.updateHideMemberOnlyWithoutFavoriteMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.updateHideMemberOnlyWithFavoriteMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -244,6 +245,8 @@ namespace namaichi
 			this.bulkCommunityFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.bulkChannelFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+			this.duplicateCheckMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator29 = new System.Windows.Forms.ToolStripSeparator();
 			this.optionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.バージョン情報VToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -413,7 +416,7 @@ namespace namaichi
 			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
 			this.taskListRemoveLineMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
-			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.historySplitContainer = new System.Windows.Forms.SplitContainer();
 			this.label1 = new System.Windows.Forms.Label();
 			this.historyList = new System.Windows.Forms.DataGridView();
 			this.放送開始日時 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -489,10 +492,10 @@ namespace namaichi
 			((System.ComponentModel.ISupportInitialize)(this.taskList)).BeginInit();
 			this.contextMenuStrip2.SuspendLayout();
 			this.tabPage4.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-			this.splitContainer1.Panel1.SuspendLayout();
-			this.splitContainer1.Panel2.SuspendLayout();
-			this.splitContainer1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.historySplitContainer)).BeginInit();
+			this.historySplitContainer.Panel1.SuspendLayout();
+			this.historySplitContainer.Panel2.SuspendLayout();
+			this.historySplitContainer.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.historyList)).BeginInit();
 			this.historyListMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.notAlartList)).BeginInit();
@@ -576,6 +579,7 @@ namespace namaichi
 									this.updateAutoDeleteMenu,
 									this.toolStripSeparator17,
 									this.updateTopFavoriteMenu,
+									this.updateOnlyFavoriteMenu,
 									this.updateAutoSortMenu,
 									this.updateHideMemberOnlyWithoutFavoriteMenu,
 									this.updateHideMemberOnlyWithFavoriteMenu,
@@ -768,6 +772,14 @@ namespace namaichi
 			this.updateTopFavoriteMenu.Size = new System.Drawing.Size(323, 22);
 			this.updateTopFavoriteMenu.Text = "お気に入り放送を上位に表示する(&T)";
 			this.updateTopFavoriteMenu.CheckedChanged += new System.EventHandler(this.UpdateTopFavoriteMenuCheckedChanged);
+			// 
+			// updateOnlyFavoriteMenu
+			// 
+			this.updateOnlyFavoriteMenu.CheckOnClick = true;
+			this.updateOnlyFavoriteMenu.Name = "updateOnlyFavoriteMenu";
+			this.updateOnlyFavoriteMenu.Size = new System.Drawing.Size(323, 22);
+			this.updateOnlyFavoriteMenu.Text = "お気に入り放送のみを表示する(&F)";
+			this.updateOnlyFavoriteMenu.CheckedChanged += new System.EventHandler(this.UpdateOnlyFavoriteMenuCheckedChanged);
 			// 
 			// updateAutoSortMenu
 			// 
@@ -1955,6 +1967,8 @@ namespace namaichi
 									this.bulkCommunityFollowMenu,
 									this.bulkChannelFollowMenu,
 									this.toolStripSeparator9,
+									this.duplicateCheckMenu,
+									this.toolStripSeparator29,
 									this.optionMenuItem});
 			this.toolMenuItem.Name = "toolMenuItem";
 			this.toolMenuItem.ShowShortcutKeys = false;
@@ -2031,6 +2045,18 @@ namespace namaichi
 			// 
 			this.toolStripSeparator9.Name = "toolStripSeparator9";
 			this.toolStripSeparator9.Size = new System.Drawing.Size(355, 6);
+			// 
+			// duplicateCheckMenu
+			// 
+			this.duplicateCheckMenu.Name = "duplicateCheckMenu";
+			this.duplicateCheckMenu.Size = new System.Drawing.Size(358, 22);
+			this.duplicateCheckMenu.Text = "重複チェック";
+			this.duplicateCheckMenu.Click += new System.EventHandler(this.DuplicateCheckMenuClick);
+			// 
+			// toolStripSeparator29
+			// 
+			this.toolStripSeparator29.Name = "toolStripSeparator29";
+			this.toolStripSeparator29.Size = new System.Drawing.Size(355, 6);
 			// 
 			// optionMenuItem
 			// 
@@ -3747,35 +3773,36 @@ namespace namaichi
 			// tabPage4
 			// 
 			this.tabPage4.BackColor = System.Drawing.SystemColors.Control;
-			this.tabPage4.Controls.Add(this.splitContainer1);
+			this.tabPage4.Controls.Add(this.historySplitContainer);
 			this.tabPage4.Location = new System.Drawing.Point(4, 22);
 			this.tabPage4.Name = "tabPage4";
 			this.tabPage4.Size = new System.Drawing.Size(878, 362);
 			this.tabPage4.TabIndex = 3;
 			this.tabPage4.Text = "通知履歴";
 			// 
-			// splitContainer1
+			// historySplitContainer
 			// 
-			this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.historySplitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 									| System.Windows.Forms.AnchorStyles.Left) 
 									| System.Windows.Forms.AnchorStyles.Right)));
-			this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.splitContainer1.Location = new System.Drawing.Point(6, 0);
-			this.splitContainer1.Name = "splitContainer1";
-			this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			this.historySplitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.historySplitContainer.Location = new System.Drawing.Point(6, 0);
+			this.historySplitContainer.Name = "historySplitContainer";
+			this.historySplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
-			// splitContainer1.Panel1
+			// historySplitContainer.Panel1
 			// 
-			this.splitContainer1.Panel1.Controls.Add(this.label1);
-			this.splitContainer1.Panel1.Controls.Add(this.historyList);
+			this.historySplitContainer.Panel1.Controls.Add(this.label1);
+			this.historySplitContainer.Panel1.Controls.Add(this.historyList);
 			// 
-			// splitContainer1.Panel2
+			// historySplitContainer.Panel2
 			// 
-			this.splitContainer1.Panel2.Controls.Add(this.label3);
-			this.splitContainer1.Panel2.Controls.Add(this.notAlartList);
-			this.splitContainer1.Size = new System.Drawing.Size(871, 359);
-			this.splitContainer1.SplitterDistance = 170;
-			this.splitContainer1.TabIndex = 30;
+			this.historySplitContainer.Panel2.Controls.Add(this.label3);
+			this.historySplitContainer.Panel2.Controls.Add(this.notAlartList);
+			this.historySplitContainer.Size = new System.Drawing.Size(871, 359);
+			this.historySplitContainer.SplitterDistance = 170;
+			this.historySplitContainer.TabIndex = 30;
+			this.historySplitContainer.Layout += new System.Windows.Forms.LayoutEventHandler(this.HistorySplitContainerLayout);
 			// 
 			// label1
 			// 
@@ -3988,7 +4015,7 @@ namespace namaichi
 			// 
 			this.label3.Location = new System.Drawing.Point(0, 3);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(582, 14);
+			this.label3.Size = new System.Drawing.Size(595, 14);
 			this.label3.TabIndex = 28;
 			this.label3.Text = "通知しなかった履歴(コミュニティまたはユーザーの条件に適合していたが、その他の条件が外れていたため通知しなかった放送)";
 			// 
@@ -4347,10 +4374,10 @@ namespace namaichi
 			((System.ComponentModel.ISupportInitialize)(this.taskList)).EndInit();
 			this.contextMenuStrip2.ResumeLayout(false);
 			this.tabPage4.ResumeLayout(false);
-			this.splitContainer1.Panel1.ResumeLayout(false);
-			this.splitContainer1.Panel2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-			this.splitContainer1.ResumeLayout(false);
+			this.historySplitContainer.Panel1.ResumeLayout(false);
+			this.historySplitContainer.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.historySplitContainer)).EndInit();
+			this.historySplitContainer.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.historyList)).EndInit();
 			this.historyListMenu.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.notAlartList)).EndInit();
@@ -4360,6 +4387,9 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripMenuItem updateOnlyFavoriteMenu;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator29;
+		private System.Windows.Forms.ToolStripMenuItem duplicateCheckMenu;
 		private System.Windows.Forms.TextBox logText;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label label5;
@@ -4375,7 +4405,7 @@ namespace namaichi
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem22;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem21;
 		private System.Windows.Forms.ToolStripMenuItem colorHistoryColorColumnMenu;
-		private System.Windows.Forms.SplitContainer splitContainer1;
+		private System.Windows.Forms.SplitContainer historySplitContainer;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator28;
 		private System.Windows.Forms.ToolStripMenuItem notAlartListAddAlartListMenu;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator27;
@@ -4794,6 +4824,6 @@ namespace namaichi
 		private System.Windows.Forms.ToolStripMenuItem fileMenuItem;
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.Label groupLabel;
-		
+
 	}
 }

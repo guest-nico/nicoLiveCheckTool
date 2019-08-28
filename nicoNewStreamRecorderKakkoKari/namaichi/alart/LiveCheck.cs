@@ -146,6 +146,7 @@ namespace namaichi.alart
 						form.formAction(() => form.liveList.FirstDisplayedScrollingRowIndex = scrollI);
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					util.debugWriteLine("scrollI exception " + scrollI);
 				}
 			}
 			
@@ -175,7 +176,8 @@ namespace namaichi.alart
 								rssItem.Add(new KeyValuePair<string, string>(_it.Name.LocalName, _it.Attribute(XName.Get("url")).Value));
 							else rssItem.Add(new KeyValuePair<string, string>(_it.Name.LocalName, _it.Value));
 						}
-						var li = new LiveInfo(rssItem, form.alartListDataSource, form.config);
+						
+						var li = new LiveInfo(rssItem, form.alartListDataSource, form.config, form.userAlartListDataSource);
 						buf.Add(li);
 						itemCount++;
 						//Debug.WriteLine("");

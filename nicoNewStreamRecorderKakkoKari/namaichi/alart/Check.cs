@@ -110,8 +110,17 @@ namespace namaichi.alart
 							ref isAppliI, ref isAppliJ, ref isPopup,
 							ref isBaloon, ref isBrowser, ref isMail, 
 							ref isSound, ref isLog, ref isChanged, 
-							ref targetAi, ref nearAlartAi, ref item);
-					if (isSuccessAccess) {
+							ref targetAi, ref nearAlartAi, ref item,
+							alartListDataSource);
+					bool isSuccessAccess2 = getAlartProcess(ref isAppliA, ref isAppliB,
+							ref isAppliC, ref isAppliD, ref isAppliE,
+							ref isAppliF, ref isAppliG, ref isAppliH,
+							ref isAppliI, ref isAppliJ, ref isPopup,
+							ref isBaloon, ref isBrowser, ref isMail, 
+							ref isSound, ref isLog, ref isChanged, 
+							ref targetAi, ref nearAlartAi, ref item,
+							form.userAlartListDataSource);
+					if (isSuccessAccess && isSuccessAccess2) {
 						doProcess(item, targetAi, 
 					        isAppliA, isAppliB, isAppliC,
 							isAppliD, isAppliE,	isAppliF, 
@@ -121,15 +130,25 @@ namespace namaichi.alart
 							isLog, nearAlartAi);
 					} else {
 						Task.Run(() => {
-							while (true) {
+							for (var i = 0; i < 200; i++) {
 								isSuccessAccess = getAlartProcess(ref isAppliA, ref isAppliB,
 									ref isAppliC, ref isAppliD, ref isAppliE,
 									ref isAppliF, ref isAppliG, ref isAppliH,
 									ref isAppliI, ref isAppliJ, ref isPopup,
 									ref isBaloon, ref isBrowser, ref isMail, 
 									ref isSound, ref isLog, ref isChanged, 
-									ref targetAi, ref nearAlartAi, ref item);
-								if (isSuccessAccess) break;
+									ref targetAi, ref nearAlartAi, ref item,
+								alartListDataSource);
+						        isSuccessAccess2 = getAlartProcess(ref isAppliA, ref isAppliB,
+									ref isAppliC, ref isAppliD, ref isAppliE,
+									ref isAppliF, ref isAppliG, ref isAppliH,
+									ref isAppliI, ref isAppliJ, ref isPopup,
+									ref isBaloon, ref isBrowser, ref isMail, 
+									ref isSound, ref isLog, ref isChanged, 
+									ref targetAi, ref nearAlartAi, ref item,
+								form.userAlartListDataSource);
+								if (isSuccessAccess && isSuccessAccess2) break;
+								Thread.Sleep(3000);
 							}
 						    doProcess(item, targetAi, 
 						        isAppliA, isAppliB, isAppliC,
@@ -155,11 +174,12 @@ namespace namaichi.alart
 				ref bool isBaloon, ref bool isBrowser, ref bool isMail,
 				ref bool isSound, ref bool isLog, ref bool isChanged, 
 				ref List<AlartInfo> targetAi,
-				ref AlartInfo nearAlartAi, ref RssItem item) {
+				ref AlartInfo nearAlartAi, ref RssItem item, 
+				SortableBindingList<AlartInfo> dataSource) {
 			//return isSuccessAccess
 			while (true) {
 				try {
-					foreach (var alartItem in alartListDataSource) {
+					foreach (var alartItem in dataSource) {
 						//var alartItem = (info.AlartInfo)alartListDataSource[i];
 						//var i = alartListDataSource.IndexOf(alartItem);
 						//if (item.comId.IndexOf("939") > -1 &&
@@ -250,6 +270,7 @@ namespace namaichi.alart
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 					//return false;
+					Thread.Sleep(3000);
 				}
 			}
 			return true;
@@ -277,12 +298,13 @@ namespace namaichi.alart
 					isBrowser, isMail, isSound);
 			
 			if (isLog && form.config.get("log") == "true")
-				writFavoriteLog(item);
+				writeFavoriteLog(item);
 			
 			if (targetAi.Count > 0)
 				addLogList(item, targetAi);
 			else if (nearAlartAi != null)
 				addNearAlartList(item, nearAlartAi);
+				
 		}
 		private bool isAlartMatch(AlartInfo alartItem, bool isComOk, 
 				bool isUserOk, bool isKeywordOk, bool isNosetComId, 
@@ -340,12 +362,14 @@ namespace namaichi.alart
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
-		private void checkUserNameAndFollow() {
+		private void checkUserNameAndFollow(bool isUserMode) {
 			try {
-				var count = form.getAlartListCount();
+				var count = form.getAlartListCount(isUserMode);
+				var dataSource = isUserMode ? form.userAlartListDataSource : form.alartListDataSource;
+				
 				var idList = new List<string>();
 				for (var i = 0; i < count; i++) {
-					var ai = (AlartInfo)alartListDataSource[i];
+					var ai = (AlartInfo)dataSource[i];
 					if (ai.hostId != null && ai.hostId != "") idList.Add(ai.hostId);
 					if (ai.communityId != null && ai.communityId != "") idList.Add(ai.communityId);
 				}
@@ -376,9 +400,9 @@ namespace namaichi.alart
 							}
 							
 							for (var i = 0; i < count; i++) {
-								var ai = (AlartInfo)alartListDataSource[i];
+								var ai = (AlartInfo)dataSource[i];
 								if (ai.hostId == id) {
-									form.updateUserName(i, userName, isFollow);
+									form.updateUserName(i, userName, isFollow, isUserMode);
 								}
 							}
 						}
@@ -475,7 +499,7 @@ namespace namaichi.alart
 				
 			}
 			
-			if (alartListDataSource.Count > 0) {
+			if (alartListDataSource.Count > 0 || form.userAlartListDataSource.Count > 0) {
 				Task.Run(() => new FollowChecker(form, container).check());
 			}
 		}
@@ -540,35 +564,58 @@ namespace namaichi.alart
 			//namaroku
 			//2019/01/16 19:03:17 lv317993742,co2209093,21119
 			//2019/01/16 19:03:19 lv317993753,co1640324,21001654
+			
 			try {
-				if (!Directory.Exists("Log")) Directory.CreateDirectory("Log");
-				foreach(var ri in items) {
-					var dt = DateTime.Parse(ri.pubDate);
-					var p = util.getJarPath()[0] + "/Log/broadLog-" + dt.ToString("yyyy-MM-dd") + ".txt";
-					var sw = new StreamWriter(p, true);
-					writeLog(sw, ri);
-					sw.Close();
+				if (!Directory.Exists(util.getJarPath()[0] + "/Log")) Directory.CreateDirectory("Log");
+				while (true) {
+					try {
+						foreach(var ri in items) {
+							var dt = DateTime.Parse(ri.pubDate);
+							var p = util.getJarPath()[0] + "/Log/broadLog-" + dt.ToString("yyyy-MM-dd") + ".txt";
+							var sw = new StreamWriter(p, true);
+							writeLog(sw, ri);
+							sw.Close();
+						}
+						return;
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
 				}
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
-		private void writFavoriteLog(RssItem ri) {
+		//private StreamWriter favoriteLogSw = null;  
+		private void writeFavoriteLog(RssItem ri) {
 			//namaroku
 			//2019/01/16 19:26:35 さくらこ♡－ lv317994167 co3871789
 			//実験放送？　2019/01/16 19:30:00 － lv317992746 co2652877
 			//2019/01/16 19:49:57 公式生放送－ lv317613421 official
-	
-			if (!Directory.Exists("Log")) Directory.CreateDirectory("Log");
-			var sw = new StreamWriter(util.getJarPath()[0] + "/Log/favoriteLog.txt", true);
-			writeLog(sw, ri);
-			sw.Close();
+			try {
+				if (!Directory.Exists(util.getJarPath()[0] + "/Log")) 
+					Directory.CreateDirectory("Log");
+				while (true) {
+					try {
+						var dt = DateTime.Parse(ri.pubDate);
+						var sw = new StreamWriter(util.getJarPath()[0] + "/Log/favoriteLog-" + dt.ToString("yyyy-MM-dd") + ".txt", true);
+						//	favoriteLogSw = new StreamWriter(util.getJarPath()[0] + "/Log/favoriteLog.txt", true);
+						writeLog(sw, ri);
+						sw.Close();
+						return;
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
+				}
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
 		}
 		private void writeLog(StreamWriter sw, RssItem ri) {
 			var tags = ri.getTag(categoryReg);
 			var isJikken = Array.IndexOf(tags, "実験放送") > -1;
 			var br = "";
-			sw.WriteLine("[放送開始時間] " + DateTime.Parse(ri.pubDate).ToString("yyyy/MM/dd HH:mm:ss") + br);
+			//sw.WriteLine("[放送開始時間] " + DateTime.Parse(ri.pubDate).ToString("yyyy/MM/dd HH:mm:ss") + br);
+			sw.WriteLine("[放送開始時間] " + ri.pubDate + br);
 			sw.WriteLine("[タイトル] " + ri.title + br);
 			sw.WriteLine("[限定] " + ((ri.isMemberOnly) ? "限定" : "オープン") + br);
 			sw.WriteLine("[放送タイプ] " + ((isJikken) ? "nicocas" : "nicolive"));
@@ -618,7 +665,10 @@ namespace namaichi.alart
 			
 			lock (foundLiveLock) {
 				var isChanged = gotStreamProcess(items);
-				if (isChanged) form.sortAlartList();
+				if (isChanged) {
+					form.sortAlartList(false);
+					form.sortAlartList(true);
+				}
 			}
 			
 			addLiveList(items);
@@ -676,7 +726,8 @@ namespace namaichi.alart
 					    new FollowChecker(form, container).check();
 					    
 					    lastUserNameCheckTime = DateTime.MaxValue;
-			         	checkUserNameAndFollow();
+			         	checkUserNameAndFollow(true);
+			         	checkUserNameAndFollow(false);
 			         	lastUserNameCheckTime = DateTime.Now;
 					});
 					//Task.Run(() => new FollowChecker(form, this).check());
@@ -696,8 +747,12 @@ namespace namaichi.alart
 				if (DateTime.Now - form.lastChangeListDt > TimeSpan.FromMinutes(5)) {
 					form.lastChangeListDt = DateTime.MaxValue;
 					Task.Run(() => {
-						new AlartListFileManager().save(form);
+						new AlartListFileManager(false, form).save();
+						new AlartListFileManager(true, form).save();
 						new TaskListFileManager().save(form);
+						new HistoryListFileManager().save(form);
+						new NotAlartListFileManager().save(form);
+						
 					});
 				}
 				
@@ -755,13 +810,13 @@ namespace namaichi.alart
 			return true;
 		}
 		private void addLogList(RssItem item, List<AlartInfo> targetAi) {
-			var hi = new HistoryInfo(item, form.alartListDataSource, targetAi);
+			var hi = new HistoryInfo(item, targetAi);
 			//hi.userId = item.userId;
 			form.addHistoryList(hi);
 		}
 		private void addNearAlartList(RssItem item, AlartInfo nearAlartAi) {
 			var a = new List<AlartInfo>(){nearAlartAi};
-			var hi = new HistoryInfo(item, form.alartListDataSource, a);
+			var hi = new HistoryInfo(item, a);
 			
 			var isNosetComId = nearAlartAi.communityId == "" ||
 					nearAlartAi.communityId == null;
@@ -793,7 +848,7 @@ namespace namaichi.alart
 				var cateChar = form.getCategoryChar();
 				lock (form.liveListLock) {
 					foreach (var item in items) {
-						var li = new LiveInfo(item, form.alartListDataSource, form.config);
+						var li = new LiveInfo(item, form.alartListDataSource, form.config, form.userAlartListDataSource);
 						//li.category = item.category;
 						//li.type = item.type;
 						

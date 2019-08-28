@@ -122,9 +122,9 @@ namespace namaichi
 			this.Name = "PopupForm";
 			this.Opacity = 0.9D;
 			this.ShowIcon = false;
+			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "ニコ生放送開始の通知";
-			this.TopMost = true;
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PopupFormFormClosed);
 			this.Load += new System.EventHandler(this.PopupFormLoad);
 			this.Click += new System.EventHandler(this.allClick);

@@ -33,11 +33,12 @@ namespace namaichi.info
 		public List<string> category = null;
 		public string type = null;
 		
+		static Regex getStringToWordsListReg = new Regex("(\\s)(\"\"|\".*?[^\\\\]\")(\\s)");
 		public RssItem(string title, string lvId, 
 				string pubDate, string description,
 		        string comName, string comId,
 		        string hostName, string thumbnailUrl,
-		        string menberOnly, string itemRes) {
+		        string memberOnly, string itemRes) {
 			this.lvId = lvId;
 			this.hostName = WebUtility.HtmlDecode(hostName);
 			this.comId = comId;
@@ -47,7 +48,7 @@ namespace namaichi.info
 			this.title = WebUtility.HtmlDecode(title);
 			this.thumbnailUrl = thumbnailUrl;
 			try {
-				this.isMemberOnly = menberOnly.ToString().ToLower() == "true";
+				this.isMemberOnly = memberOnly != null && memberOnly.ToLower() == "true";
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				
@@ -75,8 +76,8 @@ namespace namaichi.info
 		private bool isMatchSimpleKeyword(string keyword) {
 			var keys = getStringToWordsList(keyword);
 			//var keys = keyword.Split(new char[]{' ', '　'});
-			if (description.IndexOf("ロク") > -1)
-				util.debugWriteLine(keyword);
+			//if (description.IndexOf("ロク") > -1)
+			//	util.debugWriteLine(keyword);
 			
 			//not
 			foreach (var k in keys) {
@@ -131,11 +132,13 @@ namespace namaichi.info
 			}
 			return false;
 		}
+		
 		private List<string> getStringToWordsList(string s) {
 			var quot = new List<string>();
 			s = " " + s + " ";
 			for (var i = 0; i < 100; i++) {
-				Match m = Regex.Match(s, "(\\s)(\"\"|\".*?[^\\\\]\")(\\s)");
+				//Match m = Regex.Match(s, "(\\s)(\"\"|\".*?[^\\\\]\")(\\s)");
+				Match m = getStringToWordsListReg.Match(s);
 				if (m.Length == 0) break;
 				s = s.Remove(m.Index, m.Length - 1);
 				if (m.Groups[2].Value.Length == 2) continue;

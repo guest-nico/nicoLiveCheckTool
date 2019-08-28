@@ -29,16 +29,23 @@ namespace namaichi
 		private string lastGetThumbCom = null;
 		private AlartInfo editAi = null;
 		private List<CustomKeywordInfo> customKw = null;
-		public addForm(MainForm form, string id, AlartInfo editAi = null)
+		private bool isUserMode = false;
+		private SortableBindingList<AlartInfo> dataSource = null;
+		public addForm(MainForm form, string id, AlartInfo editAi = null, bool isUserMode = false)
 		{
 			this.form = form;
 			this.editAi = editAi;
+			this.isUserMode = isUserMode;
+			
+			dataSource = isUserMode ? form.userAlartListDataSource : form.alartListDataSource;
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
 			if (editAi != null) {
 				setEditModeDisplay(editAi);
+				
+				if (isUserMode) setUserModeForm();
 				return;
 			}
 			
@@ -47,7 +54,10 @@ namespace namaichi
 			//
 			setDefaultBehavior();
 			
-			if (id == null) return;
+			if (id == null) {
+				if (isUserMode) setUserModeForm();
+				return;
+			}
 			
 			if (id.StartsWith("lv")) hosoIdText.Text = id;
 			else if (id.StartsWith("c")) {
@@ -58,7 +68,11 @@ namespace namaichi
 			}
 			else userIdText.Text = id;
 			
-			
+			if (isUserMode) {
+				//communityId.Text = communityNameText.Text = "";
+				//keywordText.Text = "";
+				setUserModeForm();
+			}
 		}
 		
 		void Button4Click(object sender, EventArgs e)
@@ -319,18 +333,18 @@ namespace namaichi
 		}
 		bool duplicationCheckOk(AlartInfo ai) {
 			try {
-				var count = form.getAlartListCount();
+				var count = form.getAlartListCount(isUserMode);
 				for (var i = 0; i < count; i++) {
-					if (ai.communityId != null && ai.communityId != "" && form.alartListDataSource[i].communityId == 
+					if (ai.communityId != null && ai.communityId != "" && dataSource[i].communityId == 
 					    	ai.communityId) {
 						var m = (ai.communityId.StartsWith("co")) ? "コミュニティ" : "チャンネル";
 						
 					    //var res = MessageBox.Show(m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除　いいえ＝削除　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
-					    form.setAlartListScrollIndex(i);
-					    var res = MessageBox.Show(m + "ID:" + ai.communityId + "は既に登録されています。\n(" + form.alartListDataSource[i].toString() + ")\n\n既に存在している行を削除しますか？\nはい=削除して登録　いいえ=既に存在する行を削除せず登録　キャンセル=登録しない", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+					    form.setAlartListScrollIndex(i, isUserMode);
+					    var res = MessageBox.Show(m + "ID:" + ai.communityId + "は既に登録されています。\n(" + dataSource[i].toString() + ")\n\n既に存在している行を削除しますか？\nはい=削除して登録　いいえ=既に存在する行を削除せず登録　キャンセル=登録しない", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 					    
 					    if (res == DialogResult.Yes) {
-					    	form.alartListRemove(form.alartListDataSource[i]);
+					    	form.alartListRemove(dataSource[i], isUserMode);
 					    	i--;
 					    	count--;
 	//				    	form.alartListAdd(ai);
@@ -341,17 +355,17 @@ namespace namaichi
 					    else if (res == DialogResult.Cancel) return false;
 					}
 				}
-				count = form.getAlartListCount();
+				count = form.getAlartListCount(isUserMode);
 				for (var i = 0; i < count; i++) {
-					if (ai.hostId != null && ai.hostId != "" && form.alartListDataSource[i].hostId ==
+					if (ai.hostId != null && ai.hostId != "" && dataSource[i].hostId ==
 						   ai.hostId) {
 						var m = "ユーザー";
 					    //var res = MessageBox.Show(m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除して登録　いいえ＝登録　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
-					    form.setAlartListScrollIndex(i);
-					    var res = MessageBox.Show(m + "ID:" + ai.hostId + "は既に登録されています。\n(" + form.alartListDataSource[i].toString() + ")\n\n既に存在している行を削除しますか？\nはい=削除して登録　いいえ=既に存在する行を削除せず登録　キャンセル=登録しない", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+					    form.setAlartListScrollIndex(i, isUserMode);
+					    var res = MessageBox.Show(m + "ID:" + ai.hostId + "は既に登録されています。\n(" + dataSource[i].toString() + ")\n\n既に存在している行を削除しますか？\nはい=削除して登録　いいえ=既に存在する行を削除せず登録　キャンセル=登録しない", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 					    
 					    if (res == DialogResult.Yes) {
-					    	form.alartListRemove(form.alartListDataSource[i]);
+					    	form.alartListRemove(dataSource[i], isUserMode);
 					    	i--;
 					    	count--;
 	//				    	form.alartListAdd(ai);
@@ -573,6 +587,16 @@ namespace namaichi
 				 		(!(comId == null || !File.Exists(util.getJarPath()[0] + "/Sound/" + comId + ".wav")) ||
 				 		!(userId == null || !File.Exists(util.getJarPath()[0] + "/Sound/" + userId + ".wav")));
 			
+		}
+		void setUserModeForm() {
+			label1.Visible = label2.Visible = 
+					communityId.Visible = communityNameText.Visible =
+					getCommunityInfoBtn.Visible = communityFollowChkBox.Visible = 
+					isMustComChkBox.Visible = 
+					label6.Visible = label9.Visible = 
+					keywordText.Visible = customKeywordBtn.Visible =
+					isCustomKeywordRadioBtn.Visible = isMustKeywordChkBox.Visible = 
+					isSimpleKeywordRadioBtn.Visible = false;
 		}
 	}
 }

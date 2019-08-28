@@ -175,6 +175,10 @@
     <Compile Include="info\LiveInfo.cs" />
     <Compile Include="info\LogInfo.cs" />
     <Compile Include="info\TaskInfo.cs" />
+    <Compile Include="NamarokuRecordCheckSettingForm.cs" />
+    <Compile Include="NamarokuRecordCheckSettingForm.Designer.cs">
+      <DependentUpon>NamarokuRecordCheckSettingForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="PopupForm.cs" />
     <Compile Include="PopupForm.Designer.cs">
       <DependentUpon>PopupForm.cs</DependentUpon>
@@ -232,7 +236,9 @@
     <Compile Include="util\AlartListFileManager.cs" />
     <Compile Include="util\ArgReader.cs" />
     <Compile Include="util\checkin_pb.cs" />
+    <Compile Include="util\HistoryListFileManager.cs" />
     <Compile Include="util\mcs_pb.cs" />
+    <Compile Include="util\NotAlartListFileManager.cs" />
     <Compile Include="util\RegGetter.cs" />
     <Compile Include="util\SourceInfoSerialize.cs" />
     <Compile Include="util\TaskListFileManager.cs" />
@@ -259,6 +265,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CustomKeywordForm.resx">
       <DependentUpon>CustomKeywordForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NamarokuRecordCheckSettingForm.resx">
+      <DependentUpon>NamarokuRecordCheckSettingForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PopupForm.resx">
       <DependentUpon>PopupForm.cs</DependentUpon>

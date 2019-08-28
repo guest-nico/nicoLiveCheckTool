@@ -47,6 +47,7 @@ namespace namaichi.alart
 			var posI = 0;
 			var pos = getPos(isSmall, out posI, form.config.get("poploc"),
 					bool.Parse(form.config.get("Isfixpopup")));
+			util.debugWriteLine("popupDisplay posI " + posI + " pos " + pos + " " + ri.lvId);
 			//test
 //			if (posList.Count > 10) return;
 			form.DisplayPopup(ri, pos, isSmall, this, posI, ai);

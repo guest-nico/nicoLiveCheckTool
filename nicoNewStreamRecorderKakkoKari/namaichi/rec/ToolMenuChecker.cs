@@ -70,6 +70,11 @@ namespace namaichi.rec
 						if (string.IsNullOrEmpty(id)) continue;
 						idList.Add(id);
 					}
+					foreach (var ai in form.userAlartListDataSource) {
+						var id = isUser ? ai.hostId : ai.communityId;
+						if (string.IsNullOrEmpty(id)) continue;
+						idList.Add(id);
+					}
 					break;
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
@@ -134,6 +139,19 @@ namespace namaichi.rec
 							form.alartListSetName(ai, isUser, name);
 						}
 					}
+					foreach (var ai in form.userAlartListDataSource) {
+						if (isUser && ai.hostId == id 
+						    	&& string.IsNullOrEmpty(ai.hostName)) {
+							string name = util.getRegGroup(res, "name=\"(.+?)\"");
+							form.alartListSetName(ai, isUser, name);
+						} else if (!isUser && ai.communityId == id 
+						    	&& string.IsNullOrEmpty(ai.communityName)) {
+							string name;
+							if (id.StartsWith("ch")) name = util.getRegGroup(res, "name=\"(.+?)\"");
+							else name = util.getRegGroup(res, "name=\"(.+?)\"");
+							form.alartListSetName(ai, isUser, name);
+						}
+					}
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
@@ -178,6 +196,7 @@ namespace namaichi.rec
 							if (getAiList.IndexOf(ai) == -1)
 								getAiList.Add(ai);
 					}
+					
 					break;
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
@@ -305,6 +324,11 @@ namespace namaichi.rec
 								    (!id[0].StartsWith("c") && id[0] == ai.hostId))
 									isContain = true;
 							}
+							foreach (var ai in form.userAlartListDataSource) {
+								if ((id[0].StartsWith("c") && id[0] == ai.communityId) ||
+								    (!id[0].StartsWith("c") && id[0] == ai.hostId))
+									isContain = true;
+							}
 							if (!isContain) noList.Add(id);
 							break;
 						} catch (Exception e) {
@@ -390,6 +414,19 @@ namespace namaichi.rec
 			while (true) {
 				try {
 					foreach (var ai in form.alartListDataSource) {
+						Image img = null;
+						if (isUser && 
+							    !string.IsNullOrEmpty(ai.hostId) &&
+							    !ThumbnailManager.isExist(ai.hostId, out img) &&
+								getAiList.IndexOf(ai) == -1)
+							getAiList.Add(ai);
+						if (!isUser && 
+							    !string.IsNullOrEmpty(ai.communityId) &&
+							    !ThumbnailManager.isExist(ai.communityId, out img) &&
+								getAiList.IndexOf(ai) == -1)
+							getAiList.Add(ai);
+					}
+					foreach (var ai in form.userAlartListDataSource) {
 						Image img = null;
 						if (isUser && 
 							    !string.IsNullOrEmpty(ai.hostId) &&

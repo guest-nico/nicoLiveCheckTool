@@ -365,6 +365,14 @@ namespace namaichi.alart
 				var hg = new namaichi.rec.HosoInfoGetter();
 				var r = hg.get(lvid);
 				//description = hg.description;
+				
+				if (r && hg.category == null) {
+					#if DEBUG
+						check.form.addLogText("not found category " + lvid);
+						util.debugWriteLine("not found category " + lvid);
+					#endif
+				}
+				
 				if (!r) {
 					hg.description = hg.userId = hg.communityId = "";
 					hg.tags = new string[]{};

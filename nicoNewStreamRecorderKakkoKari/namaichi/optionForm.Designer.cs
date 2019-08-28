@@ -266,6 +266,7 @@ namespace namaichi
 			this.cookieFileSanshouBtn = new System.Windows.Forms.Button();
 			this.btnReload = new System.Windows.Forms.Button();
 			this.useSecondLoginChkBox = new System.Windows.Forms.CheckBox();
+			this.isLogFileChkBox = new System.Windows.Forms.CheckBox();
 			this.appliTab.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -1417,7 +1418,7 @@ namespace namaichi
 			this.defaultBehaviorGroupBox.Controls.Add(this.isDefaultSoundIdChkBox);
 			this.defaultBehaviorGroupBox.Controls.Add(this.defaultSoundList);
 			this.defaultBehaviorGroupBox.Controls.Add(this.label57);
-			this.defaultBehaviorGroupBox.Location = new System.Drawing.Point(5, 216);
+			this.defaultBehaviorGroupBox.Location = new System.Drawing.Point(5, 239);
 			this.defaultBehaviorGroupBox.Name = "defaultBehaviorGroupBox";
 			this.defaultBehaviorGroupBox.Size = new System.Drawing.Size(420, 161);
 			this.defaultBehaviorGroupBox.TabIndex = 3;
@@ -1650,7 +1651,7 @@ namespace namaichi
 			// 
 			this.groupBox12.Controls.Add(this.isTasktrayStartChkBox);
 			this.groupBox12.Controls.Add(this.isStartUpChkBox);
-			this.groupBox12.Location = new System.Drawing.Point(5, 141);
+			this.groupBox12.Location = new System.Drawing.Point(5, 164);
 			this.groupBox12.Name = "groupBox12";
 			this.groupBox12.Size = new System.Drawing.Size(420, 69);
 			this.groupBox12.TabIndex = 2;
@@ -1677,6 +1678,7 @@ namespace namaichi
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.isLogFileChkBox);
 			this.groupBox1.Controls.Add(this.maxLogDisplayList);
 			this.groupBox1.Controls.Add(this.maxNotAlartDisplayList);
 			this.groupBox1.Controls.Add(this.label62);
@@ -1687,14 +1689,14 @@ namespace namaichi
 			this.groupBox1.Controls.Add(this.isLogChkBtn);
 			this.groupBox1.Location = new System.Drawing.Point(5, 10);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(420, 125);
+			this.groupBox1.Size = new System.Drawing.Size(420, 148);
 			this.groupBox1.TabIndex = 2;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "ログ・履歴";
 			// 
 			// maxLogDisplayList
 			// 
-			this.maxLogDisplayList.Location = new System.Drawing.Point(227, 119);
+			this.maxLogDisplayList.Location = new System.Drawing.Point(351, 142);
 			this.maxLogDisplayList.Maximum = new decimal(new int[] {
 									10000,
 									0,
@@ -1739,7 +1741,7 @@ namespace namaichi
 			// 
 			// label62
 			// 
-			this.label62.Location = new System.Drawing.Point(19, 120);
+			this.label62.Location = new System.Drawing.Point(143, 143);
 			this.label62.Name = "label62";
 			this.label62.Size = new System.Drawing.Size(205, 18);
 			this.label62.TabIndex = 11;
@@ -2664,6 +2666,15 @@ namespace namaichi
 			this.useSecondLoginChkBox.Text = "ブラウザからクッキーが取得できなかった場合、次のアカウントでログインする";
 			this.useSecondLoginChkBox.UseVisualStyleBackColor = true;
 			// 
+			// isLogFileChkBox
+			// 
+			this.isLogFileChkBox.Location = new System.Drawing.Point(19, 120);
+			this.isLogFileChkBox.Name = "isLogFileChkBox";
+			this.isLogFileChkBox.Size = new System.Drawing.Size(271, 19);
+			this.isLogFileChkBox.TabIndex = 13;
+			this.isLogFileChkBox.Text = "ログをファイルに出力する(通常時は非推奨)";
+			this.isLogFileChkBox.UseVisualStyleBackColor = true;
+			// 
 			// optionForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -2720,6 +2731,7 @@ namespace namaichi
 			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.CheckBox isLogFileChkBox;
 		private System.Windows.Forms.CheckBox delThumbChkBox;
 		private System.Windows.Forms.CheckBox liveListCacheIconChkBox;
 		private System.Windows.Forms.CheckBox isFollowerOnlyOtherColor;

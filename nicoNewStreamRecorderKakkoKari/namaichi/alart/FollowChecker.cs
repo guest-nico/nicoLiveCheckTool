@@ -72,8 +72,8 @@ namespace namaichi.alart
 			return ret;
 		}
 		private void updateAlartList(List<string[]> followList) {
-			form.followUpdate(followList);
-			
+			form.followUpdate(followList, false);
+			form.followUpdate(followList, true);
 			
 		}
 	}

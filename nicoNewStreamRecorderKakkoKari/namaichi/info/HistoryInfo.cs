@@ -10,6 +10,7 @@ using System;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 
 namespace namaichi.info
 {
@@ -51,12 +52,16 @@ namespace namaichi.info
 			this.description = description;
 		}
 		*/
-		public HistoryInfo(RssItem ri, SortableBindingList<AlartInfo> alartData, List<AlartInfo> targetAi)
+		public HistoryInfo() {
+			
+		}
+		//public HistoryInfo(RssItem ri, SortableBindingList<AlartInfo> alartData, List<AlartInfo> targetAi)
+		public HistoryInfo(RssItem ri, List<AlartInfo> targetAi)
 		{
 			this.dt = DateTime.Parse(ri.pubDate);
 			this.lvid = ri.lvId;
 			this.title = util.removeTag(ri.title);
-			this.userName = util.removeTag(ri.hostName);
+			this.userName = ri.hostName == null ? "" : util.removeTag(ri.hostName);
 			this.communityName = util.removeTag(ri.comName);
 			this.userId = ri.userId;
 			this.communityId = ri.comId;
@@ -64,7 +69,9 @@ namespace namaichi.info
 			this.ri = ri;
 			onAirMode = ri.isMemberOnly ? 2 : 1;
 			
+			
 			setFavoriteFromAiList(targetAi);
+			
 		}
 		private void setFavoriteFromAiList(List<AlartInfo> targetAi) {
 			while (true) {
@@ -104,6 +111,7 @@ namespace namaichi.info
 					break;
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					Thread.Sleep(1000);
 				}
 			}
 		}

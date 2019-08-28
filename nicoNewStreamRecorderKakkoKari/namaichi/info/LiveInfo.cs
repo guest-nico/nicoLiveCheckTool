@@ -51,7 +51,7 @@ namespace namaichi.info
 		public RssItem ri = null;
 		public DateTime lastExistTime = DateTime.Now;
 		
-		public LiveInfo(List<KeyValuePair<string, string>> item, SortableBindingList<AlartInfo> alartData, config.config config)
+		public LiveInfo(List<KeyValuePair<string, string>> item, SortableBindingList<AlartInfo> alartData, config.config config, SortableBindingList<AlartInfo> userAlartData)
 		{
 			foreach (var l in item) {
 				try {
@@ -86,10 +86,19 @@ namespace namaichi.info
 			}
 			this.ri = new RssItem(title, lvId, "", description, comName, comId, hostName, thumbnailUrl, memberOnly, "");
 			setFavorite(alartData);
+			setFavorite(userAlartData);
+			
+			if (category == null) {
+				util.debugWriteLine("not found category 11 " + lvId);
+				category = new List<string>(){"一般(その他)"};
+			}
 			
 			//thumbnailUrl = getThumbnail(comId);
 		}
-		public LiveInfo(RssItem item, SortableBindingList<AlartInfo> alartData, config.config config) {
+		public LiveInfo(RssItem item, 
+				SortableBindingList<AlartInfo> alartData, 
+				config.config config, 
+				SortableBindingList<AlartInfo> userAlartData) {
 			this.ri = item;
 			title = ri.title;
 			lvId = ri.lvId;
@@ -102,10 +111,13 @@ namespace namaichi.info
 			memberOnly = ri.isMemberOnly ? "限定" : "";
 			type = ri.type;
 			if (type == "user") type = "community";
-			category = ri.category;
+			
+			category = ri.category != null ? ri.category : new List<string>(){"一般(その他)"};
+			
 			hostName = ri.hostName;
 			
 			setFavorite(alartData);
+			setFavorite(userAlartData);
 		}
 		public Image getThumbnail(string url, bool isSaveCache) {
 			return ThumbnailManager.getThumbnailRssUrl(url, isSaveCache);
@@ -257,7 +269,7 @@ namespace namaichi.info
         {
 			get { 
 				try {
-					return category[0]; 
+					return category[0];
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 					return "";

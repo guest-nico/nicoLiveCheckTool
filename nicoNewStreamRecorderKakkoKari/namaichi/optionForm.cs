@@ -136,6 +136,7 @@ namespace namaichi
 				{"userNameUpdateInterval",userNameUpdateIntervalList.Text},
 				{"log",isLogChkBtn.Checked.ToString().ToLower()},
 				{"IsbroadLog",isBroadLogChkBox.Checked.ToString().ToLower()},
+				{"IsLogFile",isLogFileChkBox.Checked.ToString().ToLower()},
 				{"maxHistoryDisplay",maxHistoryDisplayList.Text},
 				{"maxNotAlartDisplay",maxNotAlartDisplayList.Text},
 				{"maxLogDisplay",maxLogDisplayList.Text},
@@ -317,6 +318,7 @@ namespace namaichi
 			userNameUpdateIntervalList.Text = cfg.get("userNameUpdateInterval");
 			isLogChkBtn.Checked = bool.Parse(cfg.get("log"));
 			isBroadLogChkBox.Checked = bool.Parse(cfg.get("IsbroadLog"));
+			isLogFileChkBox.Checked = bool.Parse(cfg.get("IsLogFile"));
 			maxHistoryDisplayList.Text = cfg.get("maxHistoryDisplay");
 			maxNotAlartDisplayList.Text = cfg.get("maxNotAlartDisplay");
 			maxLogDisplayList.Text = cfg.get("maxLogDisplay");

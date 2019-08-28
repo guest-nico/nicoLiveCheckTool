@@ -25,27 +25,35 @@ namespace namaichi.utility
 	/// </summary>
 	public class AlartListFileManager
 	{
-		public AlartListFileManager()
+		private bool isUserMode = false;
+		private SortableBindingList<AlartInfo> dataSource = null;
+		private DataGridView list = null;
+		private MainForm form = null;
+		public AlartListFileManager(bool isUserMode, MainForm form)
 		{
-			
+			this.isUserMode = isUserMode;
+			dataSource = isUserMode ? form.userAlartListDataSource : form.alartListDataSource;
+			list = isUserMode ? form.userAlartList : form.alartList;
+			this.form = form;
 		}
-		public void save(MainForm form)
+		public void save()
 		{
 			var path = util.getJarPath()[0] + "\\";
+			var mode = isUserMode ? "user" : "com";
 			
-			if (File.Exists(path + "favoritecom.ini")) {
+			if (File.Exists(path + "favorite" + mode + ".ini")) {
 				try {
-					var _lineLen = File.ReadAllLines(path + "favoritecom.ini").Length;
+					var _lineLen = File.ReadAllLines(path + "favorite" + mode + ".ini").Length;
 					if (_lineLen > 5)
-						File.Copy(path + "favoritecom.ini", path + "favoritecom_backup.ini", true);
+						File.Copy(path + "favorite" + mode + ".ini", path + "favorite" + mode + "_backup.ini", true);
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			}
 			
-			var sw = new StreamWriter(path + "favoritecom.ini");
+			var sw = new StreamWriter(path + "favorite" + mode + ".ini");
 			sw.WriteLine("130");
-			foreach (AlartInfo ai in form.alartListDataSource) {
+			foreach (AlartInfo ai in dataSource) {
 				for (var i = 0; i < 36; i++) { //namaroku 29 save 32
 					if (i == 1) sw.WriteLine(ai.communityId);
 					else if (i == 2) sw.WriteLine(ai.hostId);
@@ -96,15 +104,17 @@ namespace namaichi.utility
 			sw.WriteLine("EndLine");
 			sw.Close();
 		}
-		public void load(MainForm form)
+		public void load()
 		{
 			try {
-				ReadNamarokuList(form, form.alartListDataSource, util.getJarPath()[0] + "\\favoritecom.ini", false, false);
+				var mode = isUserMode ? "user" : "com";
+				//var dataSource = isUserMode ? form.userAlartListDataSource : form.alartListDataSource;
+				ReadNamarokuList(form, dataSource, util.getJarPath()[0] + "\\favorite" + mode + ".ini", false, false);
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
-		public void ReadNamarokuList(MainForm form, SortableBindingList<AlartInfo> alartListDataSource, string fileName, bool isUpdateComHost, bool isDuplicateCheck)
+		public void ReadNamarokuList(MainForm form, SortableBindingList<AlartInfo> dataSource, string fileName, bool isUpdateComHost, bool isDuplicateCheck)
 		{
 			string[] lines;
 			
@@ -121,6 +131,14 @@ namespace namaichi.utility
 			if ((lines.Length - 3) % itemLineNum != 0) {
 				form.showMessageBox("読み込めませんでした", "");
 				return;
+			}
+			
+			string namarokuRecRead = null;
+			if (itemLineNum == 29) {
+				var f = new NamarokuRecordCheckSettingForm();
+				form.formAction(() => f.ShowDialog());
+				if (f.recordCheck == null) return;
+				else namarokuRecRead = f.recordCheck;
 			}
 			
 			var readAiList = new List<AlartInfo>();
@@ -215,7 +233,7 @@ namespace namaichi.utility
 							lines[i + 24] == "true", 
 							lines[i + 25] == "true", 
 							lines[i + 26] == "true",
-							false, 
+							false,
 							false, 
 							false,
 							false,
@@ -226,7 +244,8 @@ namespace namaichi.utility
 							comFollow, userFollow, lines[i + 13], 
 							lines[i + 3], textColor, 
 							backColor, defaultSound, isDefaultSoundId, 
-							true, true, true, null, false);
+							false, false, false, null, false);
+					if (lines[i + 23] == "true") setNamarokuRead(ai, namarokuRecRead);
 				} else {
 					ai = new AlartInfo(lines[i + 1], 
 							lines[i + 2], lines[i + 4], lines[i + 5], 
@@ -255,6 +274,8 @@ namespace namaichi.utility
 				}
 				//if ((ai.communityId == null || ai.communityId == "") &&
 				//    (ai.hostId == null || ai.hostId == "")) continue;
+				if (isUserMode && string.IsNullOrEmpty(ai.hostId)) continue;
+				
 				readAiList.Add(ai);
 			}
 			for (var j = 0; j < 100; j++) {
@@ -268,23 +289,42 @@ namespace namaichi.utility
 			
 			var addList = new List<AlartInfo>();
 			var isContinueCancel = 0;
+			var isContinueYes = 0;
+			var isContinueNo = 0;
+			var allMode = -1;//-1-none 0-cancel 1-yes 2-no
 			for (var i = 0; i < readAiList.Count; i++) {
 				var ai = readAiList[i];
 				if (isDuplicateCheck) {
-					if (!isDuplicateOk(ai, dupliNumList, i, form)) {
+					var dialogRet = isDuplicateOk(ai, dupliNumList, i, form, allMode); 
+					if (dialogRet == DialogResult.Cancel) {
 						isContinueCancel++;
-						if (isContinueCancel % 5 == 0) {
+						isContinueYes = isContinueNo = 0;
+						if (isContinueCancel % 5 == 0 && allMode < 1) {
 							var res = form.showMessageBox("全てキャンセルしますか？", "", MessageBoxButtons.YesNo);
 							if (res == DialogResult.Yes) break;
 						}
 						continue;//break;
-					} else isContinueCancel = 0;
+					} else if (dialogRet == DialogResult.Yes) {
+						isContinueYes++;
+						isContinueCancel = isContinueNo = 0;
+						if (isContinueYes % 5 == 0 && allMode < 1) {
+							var res = form.showMessageBox("全て「はい」を選択しますか？", "", MessageBoxButtons.YesNo);
+							if (res == DialogResult.Yes) allMode = 1;
+						}
+					} else if (dialogRet == DialogResult.No) {
+						isContinueNo++;
+						isContinueCancel = isContinueYes = 0;
+						if (isContinueNo % 5 == 0 && allMode < 1) {
+							var res = form.showMessageBox("全て「いいえ」を選択しますか？", "", MessageBoxButtons.YesNo);
+							if (res == DialogResult.Yes) allMode = 2;
+						}
+					} 
 				}
 				addList.Add(ai);
 				//form.alartListAdd(ai);
 			}
 			foreach (var ai in addList)
-				form.alartListAdd(ai);
+				form.alartListAdd(ai, isUserMode);
 			
 			if (form.check.container != null) 
 				new FollowChecker(form, form.check.container).check();
@@ -292,8 +332,9 @@ namespace namaichi.utility
 			form.recentLiveCheck();
 		}
 		private List<int> getDuplicateNum(List<AlartInfo> readAiList, MainForm form) {
+			
 			var ret = new List<int>();
-			var c = form.getAlartListCount();
+			var c = form.getAlartListCount(isUserMode);
 			for (var i = 0; i < readAiList.Count; i++) {
 				var ai = readAiList[i];
 				for (var j = 0; j < c; j++) {
@@ -308,24 +349,29 @@ namespace namaichi.utility
 			}
 			return ret;
 		}
-		private bool isDuplicateOk(AlartInfo ai, List<int> dupList, int _i, MainForm form) {
-			if (dupList.IndexOf(_i) == -1) return true;
-			
-			
+		private DialogResult isDuplicateOk(AlartInfo ai, List<int> dupList, int _i, MainForm form, int allMode) {
+			var ret = DialogResult.None;
+			if (dupList.IndexOf(_i) == -1) return ret;
 			
 			try {
-				var count = form.getAlartListCount();
+				var count = form.getAlartListCount(isUserMode);
 				for (var i = 0; i < count; i++) {
 					if (ai.communityId != null && ai.communityId != "" && form.alartListDataSource[i].communityId == 
 					    	ai.communityId) {
 						var m = (ai.communityId.StartsWith("co")) ? "コミュニティ" : "チャンネル";
 						
-						form.setAlartListScrollIndex(i);
+						form.setAlartListScrollIndex(i, isUserMode);
 					    //var res = MessageBox.Show(m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除　いいえ＝削除　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
-					    var res = form.showMessageBox(m + "ID:" + ai.communityId + "は既に登録されています。\n(" + form.alartListDataSource[i].toString() + ")\n\n既に存在している行を削除しますか？\nはい=削除して登録　いいえ=既に存在する行を削除せず登録　キャンセル=登録しない(" + _i.ToString() + "/" + dupList.Count + ")", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+					    DialogResult res;
+					    if (allMode == 1) res = DialogResult.Yes;
+					    else if (allMode == 2) res = DialogResult.No;
+					    else {
+							res = form.showMessageBox(m + "ID:" + ai.communityId + "は既に登録されています。\n(" + form.alartListDataSource[i].toString() + ")\n\n既に存在している行を削除しますか？\nはい=削除して登録　いいえ=既に存在する行を削除せず登録　キャンセル=登録しない(" + _i.ToString() + "/" + dupList.Count + ")", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+					    }
+					    ret = res;
 					    
 					    if (res == DialogResult.Yes) {
-					    	form.alartListRemove(form.alartListDataSource[i]);
+					    	form.alartListRemove(form.alartListDataSource[i], isUserMode);
 					    	i--;
 					    	count--;
 	//				    	form.alartListAdd(ai);
@@ -333,20 +379,28 @@ namespace namaichi.utility
 					    else if (res == DialogResult.No) {
 	//				    	form.alartListAdd(ai);
 					    }
-					    else if (res == DialogResult.Cancel) return false;
+					    else if (res == DialogResult.Cancel) return ret;
 					}
 				}
-				count = form.getAlartListCount();
+				count = form.getAlartListCount(isUserMode);
 				for (var i = 0; i < count; i++) {
 					if (ai.hostId != null && ai.hostId != "" && form.alartListDataSource[i].hostId ==
 						   ai.hostId) {
-						form.setAlartListScrollIndex(i);
+						form.setAlartListScrollIndex(i, isUserMode);
 						var m = "ユーザー";
-					    //var res = MessageBox.Show(m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除して登録　いいえ＝登録　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
-					    var res = form.showMessageBox(m + "ID:" + ai.hostId + "は既に登録されています。\n(" + form.alartListDataSource[i].toString() + ")\n\n既に存在している行を削除しますか？\nはい=削除して登録　いいえ=既に存在する行を削除せず登録　キャンセル=登録しない(" + _i.ToString() + "/" + dupList.Count + ")", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+						
+						//var res = MessageBox.Show(m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除　いいえ＝削除　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+					    DialogResult res;
+					    if (allMode == 1) res = DialogResult.Yes;
+					    else if (allMode == 2) res = DialogResult.No;
+					    else {
+					    	//var res = MessageBox.Show(m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除して登録　いいえ＝登録　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+							res = form.showMessageBox(m + "ID:" + ai.hostId + "は既に登録されています。\n(" + form.alartListDataSource[i].toString() + ")\n\n既に存在している行を削除しますか？\nはい=削除して登録　いいえ=既に存在する行を削除せず登録　キャンセル=登録しない(" + _i.ToString() + "/" + dupList.Count + ")", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+					    }
+					    ret = res;
 					    
 					    if (res == DialogResult.Yes) {
-					    	form.alartListRemove(form.alartListDataSource[i]);
+					    	form.alartListRemove(form.alartListDataSource[i], isUserMode);
 					    	i--;
 					    	count--;
 	//				    	form.alartListAdd(ai);
@@ -354,15 +408,27 @@ namespace namaichi.utility
 					    else if (res == DialogResult.No) {
 	//				    	form.alartListAdd(ai);
 					    }
-					    else if (res == DialogResult.Cancel) return false;
+					    else if (res == DialogResult.Cancel) return ret;
 						
 					}
 				}
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				return false;
+				return ret;
 			}
-			return true;
+			return ret;
+		}
+		private void setNamarokuRead(AlartInfo ai, string namarokuRecRead) {
+			if (namarokuRecRead == "appliA") ai.appliA = true;
+			else if (namarokuRecRead == "appliB") ai.appliB = true;
+			else if (namarokuRecRead == "appliC") ai.appliC = true;
+			else if (namarokuRecRead == "appliD") ai.appliD = true;
+			else if (namarokuRecRead == "appliE") ai.appliE = true;
+			else if (namarokuRecRead == "appliF") ai.appliF = true;
+			else if (namarokuRecRead == "appliG") ai.appliG = true;
+			else if (namarokuRecRead == "appliH") ai.appliH = true;
+			else if (namarokuRecRead == "appliI") ai.appliI = true;
+			else if (namarokuRecRead == "appliJ") ai.appliJ = true;
 		}
 	}
 }

@@ -118,10 +118,10 @@ namespace namaichi
 			this.Name = "SmallPopupForm";
 			this.Opacity = 0.9D;
 			this.ShowIcon = false;
+			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "公式生放送";
-			this.TopMost = true;
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SmallPopupFormFormClosed);
 			this.Load += new System.EventHandler(this.SmallPopupFormLoad);
 			this.Click += new System.EventHandler(this.allClick);

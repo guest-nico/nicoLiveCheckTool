@@ -69,12 +69,18 @@ namespace namaichi.rec
 							    _followList.Add(ai);
 							}
 						}
+						foreach (var ai in form.userAlartListDataSource) {
+							if (followMode == "user" && ai.hostFollow == "フォローする") {
+							    _followList.Add(ai);
+							}
+						}
 					}
 					form.addLogText(_followList.Count + "件見つかりました");
 					foreach (var ai in _followList) {
 						if ((followMode == "user" || followMode == "custom") && ai.hostFollow == "フォローする") {
 						   
-							var res = form.userFollowCellClick(ai);
+							var res = form.userFollowCellClick(ai, form.alartListDataSource, form.alartList);
+							res = form.userFollowCellClick(ai, form.userAlartListDataSource, form.userAlartList);
 							if (res) okNum++;
 							else {
 								ngNum++;

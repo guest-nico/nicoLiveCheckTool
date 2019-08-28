@@ -33,6 +33,7 @@ namespace namaichi.alart
 			
 			//img = getImage(url);
 			img = getImageId(id);
+			
 			if (isSaveCache)
 				saveImage(img, id, dir);
 			return img;

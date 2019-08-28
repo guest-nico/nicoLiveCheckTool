@@ -27,8 +27,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.16";
-	public static string versionDayStr = "2019/06/30";
+	public static string versionStr = "ver0.1.7.26";
+	public static string versionDayStr = "2019/08/27";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -502,7 +502,7 @@ class util {
 	}
 	public static string getPageSource(string _url, ref WebHeaderCollection getheaders, CookieContainer container = null, string referer = null, bool isFirstLog = true, int timeoutMs = 5000) {
 		//util.debugWriteLine("getpage 01");
-		timeoutMs = 2000;
+		timeoutMs = 5000;
 		/*
 		string a;
 		try {
@@ -561,7 +561,7 @@ class util {
 		return null;
 	}
 	public static string getPageSource(string _url, CookieContainer container = null, string referer = null, bool isFirstLog = true, int timeoutMs = 5000) {
-		timeoutMs = 2000;
+		timeoutMs = 5000;
 		/*
 		string a = "";
 		try {
@@ -1230,6 +1230,10 @@ class util {
 		return res;
 	}
 	public static string removeTag(string s) {
+		if (s == null) {
+			util.debugWriteLine("removeTag s null");
+			return "";
+		}
 		var ret = new Regex("</*font.*?>").Replace(s, "");
 		ret = new Regex("<br.*?>").Replace(ret, "");
 		ret = ret.Replace("<b>", "").Replace("</b>", "");

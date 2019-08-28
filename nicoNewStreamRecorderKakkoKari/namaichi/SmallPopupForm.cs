@@ -24,6 +24,8 @@ namespace namaichi
 	{
 //		private config.config config;
 //		private RssItem ri;
+		private bool isTopMostPara = false;
+		
 		public SmallPopupForm(RssItem item, config.config config, 
 				PopupDisplay pd, int showIndex, AlartInfo ai,
 				bool isTest = false, string poploc = null, int poptime = 0,
@@ -34,6 +36,7 @@ namespace namaichi
 			this.ri = item;
 			this.pd = pd;
 			this.showIndex = showIndex;
+			
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
@@ -51,7 +54,8 @@ namespace namaichi
 			var t = item.title;
 			if (isOkStrWidth(t + " - ")) t += " - ";
 			if (isOkStrWidth(t + dtStr)) t += dtStr;
-			titleLabel.Text = (item.isMemberOnly ? "(限定)" : "") + util.removeTag(t);
+			titleLabel.Text = util.removeTag(t);
+			//titleLabel.Text = (item.isMemberOnly ? "(限定)" : "") + titleLabel.Text;
 			
 			hostNameLabel.Text = util.removeTag(item.hostName);
 			communityNameLabel.Text = util.removeTag(item.comName);
@@ -69,8 +73,8 @@ namespace namaichi
 			}
 			var url = "https://live2.nicovideo.jp/watch/" + item.lvId;
 			titleLabel.Links.Add(0, titleLabel.Text.Length, url);
-			if (isTest) TopMost = isTopMost;
-			else TopMost = bool.Parse(config.get("IsTopMostPopup"));
+			if (isTest) this.isTopMostPara = isTopMost;
+			else this.isTopMostPara = bool.Parse(config.get("IsTopMostPopup"));
 			
 			Opacity = isTest ? (opacity / 100) : double.Parse(config.get("popupOpacity")) / 100;
 			
@@ -209,9 +213,27 @@ namespace namaichi
 		
 		void SmallPopupFormFormClosed(object sender, FormClosedEventArgs e)
 		{
-			pd.posList.Remove(showIndex);
+			try {
+				pd.posList.Remove(showIndex);
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
 		}
-		
+		protected override bool ShowWithoutActivation {
+	        get {
+	            return true;
+	        }
+	    }
+		protected override CreateParams CreateParams {
+	        get {
+				CreateParams p = base.CreateParams;
+				if (isTopMostPara) {
+					 var WS_EX_TOPMOST = 0x00000008;
+					p.ExStyle |= WS_EX_TOPMOST;
+				}
+	            return p;
+	        }
+	    }
 		
 	}
 }

@@ -207,20 +207,26 @@ namespace namaichi.alart
 				var urlCookie = check.container.GetCookieHeader(new Uri("https://live2.nicovideo.jp")) + ";";
 				var userSession = util.getRegGroup(urlCookie, "user_session=(.+?);");
 				                          
-				var url = "https://api.gadget.nicovideo.jp/notification/clientapp/registration"; 
+				var url = "https://api.gadget.nicovideo.jp/notification/clientapp/registration";
+				
+				//ok
 				var headers = new Dictionary<string, string>() {
-					{"Content-Type", "application/x-www-form-urlencoded"},
-					{"User-Agent", "Niconico/1.0 (Linux; U; Android 5.1.1; ja-jp; nicoandroid SM-G9550) Version/5.06.0"},
+					{"Content-Type", "application/x-www-form-urlencoded; charset=utf-8"},
+					{"User-Agent", "Niconico/1.0 (Linux; U; Android 5.1.1; ja-jp; nicoandroid SM-G9550) Version/5.16.0"},
 					{"Cookie", "SP_SESSION_KEY=" + userSession},
-					{"Cookie2", "$Version=1"},
+					//{"Cookie2", "$Version=1"},
 					{"Accept-Language", "ja-jp"},
 					{"X-Nicovideo-Connection-Type", "wifi"},
 					{"X-Frontend-Id", "1"},
-					{"X-Frontend-Version", "5.06.0"},
+					{"X-Frontend-Version", "5.16.0"},
 					{"X-Os-Version", "5.1.1"},
-					{"X-Request-With", ""},
-					{"X-Model-Name", "dream2qltechn"}
+					{"X-Request-With", "nicoandroid"},
+					{"X-Model-Name", "dreamqltecmcc"},
+					{"Connection", "Keep-Alive"},
+					{"Accept-Encoding", "gzip"},
 				};
+				
+				
 				
 				var param = "token=" + userSession;
 				param += "&registerId=" + pushToken;
@@ -395,6 +401,18 @@ namespace namaichi.alart
 									var items = getItem(lvid, lresp);
 									if (items != null) 
 										check.foundLive(items);
+									else {
+										var gir = new GetItemRetryApr(lvid, lresp, this);
+										Task.Run(() => {
+											for (var i = 0; i < 10; i++) {
+								         		Thread.Sleep(5000);
+								         		items = gir.getItem();
+								         		if (items == null) continue;
+								         		check.foundLive(items);
+								         		break;
+											}
+										});
+									}
 								}
 									
 								
@@ -421,7 +439,7 @@ namespace namaichi.alart
 				return false;
 			}
 		}
-		private List<RssItem> getItem(string lvid, DataMessageStanza msg) {
+		public List<RssItem> getItem(string lvid, DataMessageStanza msg) {
 			try {
 				string title, thumbnail, comName, hostName, description;
 				DateTime dt = util.getUnixToDatetime(msg.Sent / 1000);
@@ -431,15 +449,12 @@ namespace namaichi.alart
 				var hg = new namaichi.rec.HosoInfoGetter();
 				var r = hg.get(lvid);
 				
-				if (r && hg.category == null) {
-					#if DEBUG
-						check.form.addLogText("not found category " + lvid);
-						util.debugWriteLine("not found category " + lvid);
-					#endif
-				}
-				
 				bool isCom;
 				if (!r) {
+					check.form.addLogText("app push page error !r " + lvid);
+					util.debugWriteLine("app push page error !r " + lvid);
+					return null;
+					
 					hg.description = hg.userId = hg.communityId = hg.thumbnail = "";
 					hg.tags = new String[]{};
 					var reg = new Regex("\\[生放送開始\\](.+?)さんが「(.+?)」を開始しました。");
@@ -510,4 +525,18 @@ namespace namaichi.alart
 			config.set("appPushToken", "");
 		}
 	}
+	class GetItemRetryApr {
+		private string lvid;
+		private DataMessageStanza lresp;
+		private AppPushReceiver pr;
+		public GetItemRetryApr(string lvid, DataMessageStanza lresp, AppPushReceiver pr) {
+			this.lvid = lvid;
+			this.lresp = lresp;
+			this.pr = pr;
+		}
+		public List<RssItem> getItem() {
+			return pr.getItem(lvid, lresp);
+		}
+	}
 }
+

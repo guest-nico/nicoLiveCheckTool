@@ -507,9 +507,10 @@ namespace namaichi.alart
 			util.debugWriteLine("isUserIdFromLvidOk id " + alartUserId);
 			isSuccessAccess = true;
 			if (string.IsNullOrEmpty(alartUserId)) return true;
+			if (rssItem.comId != null && rssItem.comId.StartsWith("ch")) return true;
 			
 			isSuccessAccess = setUserId(rssItem);
-			if (!isSuccessAccess) return true; 
+			if (!isSuccessAccess) return true;
 			//var uid = (rssItem.userId != null) ? rssItem.userId : getUserIdFromLvid(rssItem.lvId);
 			//if (rssItem.userId == null && uid != null) rssItem.userId = uid;
 			/*
@@ -527,11 +528,22 @@ namespace namaichi.alart
 			var url = "https://live2.nicovideo.jp/watch/" + lvid;
 			var res = util.getPageSource(url, container);
 			isFailureAccess = res == null;
-			if (isFailureAccess) {
+			//if (isFailureAccess) {
+			//	return null;
+			//}
+			if (res == null) {
 				return null;
 			}
 			var uid = util.getRegGroup(res, "user/(\\d+)");
-			return uid;
+			if (uid == null) {
+				util.debugWriteLine("getUserIdFromLvid uid null");
+			}
+			
+			var hig = new HosoInfoGetter();
+			hig.setNicoLiveInfo(res);
+			return hig.userId;
+			
+			//return uid;
 		}
 		private bool setUserId(RssItem rssItem) {
 			//return isSuccess

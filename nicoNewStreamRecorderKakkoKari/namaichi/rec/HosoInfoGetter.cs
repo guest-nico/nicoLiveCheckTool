@@ -97,7 +97,7 @@ namespace namaichi.rec
 			tags = getTag(data);
 			return communityId != null && userId != null;
 		}
-		private bool setNicoLiveInfo(string res) {
+		public bool setNicoLiveInfo(string res) {
 			var pageType = util.getPageType(res);
 			var data = util.getRegGroup(res, "<script id=\"embedded-data\" data-props=\"([\\d\\D]+?)</script>");
 			var isRtmpOnlyPage = res.IndexOf("%3Cgetplayerstatus%20") > -1;

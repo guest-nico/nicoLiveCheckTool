@@ -10,14 +10,16 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Security.Authentication;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Net;
-
+using namaichi.alart;
 using WebSocket4Net;
 using namaichi.info;
+
 namespace namaichi.alart
 {
 	/// <summary>
@@ -243,8 +245,20 @@ namespace namaichi.alart
 					   	dec == null) return;
 					
 					var items = getItem(dec);
-					if (items == null) return;
-					check.foundLive(items);
+					if (items != null) check.foundLive(items);
+					else {
+						var gir = new GetItemRetryPr(dec, this);
+						Task.Run(() => {
+							for (var i = 0; i < 10; i++) {
+				         		Thread.Sleep(5000);
+				         		items = gir.getItem();
+				         		if (items == null) continue;
+				         		check.foundLive(items);
+				         		break;
+							}
+						});
+					}
+					
 				} catch (Exception ee) {
 					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 					return;
@@ -336,7 +350,7 @@ namespace namaichi.alart
 			}
 			return false;
 		}
-		private List<RssItem> getItem(string dec) {
+		public List<RssItem> getItem(string dec) {
 			//com "{\"title\":\"すのーまんさんが生放送を開始\",\"body\":\"名作探訪録 で、「【GB】ポケットキョロちゃん【初見プレイ】」を放送\",\"icon\":\"https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/3122/31221850.jpg?1496114222\",\"data\":{\"on_click\":\"http://live.nicovideo.jp/watch/lv318353209?from=webpush&_topic=live_user_program_onairs\",\"created_at\":\"2019-02-06T09:00:05.738+09:00\",\"ttl\":600,\"log_params\":{\"content_type\":\"live.user.program.onairs\",\"content_ids\":\"lv318353209\"}}}";
 			//ch "{\"title\":\"KawaiianTVが生放送を開始\",\"body\":\"～夢アド可鈴の深堀り情報番組！？～ YUMEステーション #62\",\"icon\":\"https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/ch2601967.jpg?1548247262\",\"data\":{\"on_click\":\"http://live.nicovideo.jp/watch/lv318248031?from=webpush&_topic=live_channel_program_onairs\",\"created_at\":\"2019-02-06T19:30:10.941+09:00\",\"ttl\":600,\"log_params\":{\"content_type\":\"live.channel.program.onairs\",\"content_ids\":\"lv318248031\"}}}";
 			
@@ -361,21 +375,16 @@ namespace namaichi.alart
 					comName = util.getRegGroup(dec, "\"title\":\"(.+?)が生放送を開始\"");
 				}
 				
-//				lvid = util.getRegGroup("http://live.nicovideo.jp/searchresult?v=lv318381478&pp=,10&zroute=search&track=&sort=recent&date=&keyword=%E3%80%82&filter=%3Aclosed%3A+%3Achannel%3A+%3Acommunity%3A&kind=", "(lv\\d+)");
 				var hg = new namaichi.rec.HosoInfoGetter();
 				var r = hg.get(lvid);
 				//description = hg.description;
 				
-				if (r && hg.category == null) {
-					#if DEBUG
-						check.form.addLogText("not found category " + lvid);
-						util.debugWriteLine("not found category " + lvid);
-					#endif
-				}
-				
 				if (!r) {
 					hg.description = hg.userId = hg.communityId = "";
 					hg.tags = new string[]{};
+					check.form.addLogText("push page error !r " + lvid);
+					util.debugWriteLine("push page error !r " + lvid);
+					return null;
 				}
 				util.debugWriteLine("description " + hg.description);
 				util.debugWriteLine("userId " + hg.userId);
@@ -401,7 +410,6 @@ namespace namaichi.alart
 				i.category = hg.category;
 				i.type = hg.type;
 				var ret = new List<RssItem>();
-				
 				ret.Add(i);
 				return ret;
 			} catch (Exception ee) {
@@ -425,7 +433,19 @@ namespace namaichi.alart
 			config.saveFromForm(resetDict);
 		}
 	}
+	class GetItemRetryPr {
+		private string dec;
+		private PushReceiver pr;
+		public GetItemRetryPr(string dec, PushReceiver pr) {
+			this.dec = dec;
+			this.pr = pr;
+		}
+		public List<RssItem> getItem() {
+			return pr.getItem(dec);
+		}
+	}
 }
+
 /*
 \"{\"title\":\"すのーまんさんが生放送を開始\",\"body\":\"名作探訪録 で、「【GB】ポケットキョロちゃん【初見プレイ】」を放送\",\"icon\":\"https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/3122/31221850.jpg?1496114222\",\"data\":{\"on_click\":\"http://live.nicovideo.jp/watch/lv318353209?from=webpush&_topic=live_user_program_onairs\",\"created_at\":\"2019-02-06T09:00:05.738+09:00\",\"ttl\":600,\"log_params\":{\"content_type\":\"live.user.program.onairs\",\"content_ids\":\"lv318353209\"}}}\";
 

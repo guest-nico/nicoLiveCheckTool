@@ -27,8 +27,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.26";
-	public static string versionDayStr = "2019/08/27";
+	public static string versionStr = "ver0.1.7.29";
+	public static string versionDayStr = "2019/09/04";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -726,6 +726,8 @@ class util {
 					req.ContentType = h.Value;
 				else if (h.Key.ToLower().Replace("-", "") == "useragent")
 					req.UserAgent = h.Value;
+				else if (h.Key.ToLower().Replace("-", "") == "connection")
+					req.KeepAlive = h.Value.ToLower().Replace("-", "") == "keepalive";
 				else req.Headers.Add(h.Key, h.Value);
 			}
 			

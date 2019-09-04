@@ -176,6 +176,7 @@ namespace namaichi
 			this.isTasktrayStartChkBox = new System.Windows.Forms.CheckBox();
 			this.isStartUpChkBox = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.isLogFileChkBox = new System.Windows.Forms.CheckBox();
 			this.maxLogDisplayList = new System.Windows.Forms.NumericUpDown();
 			this.maxNotAlartDisplayList = new System.Windows.Forms.NumericUpDown();
 			this.label62 = new System.Windows.Forms.Label();
@@ -266,7 +267,6 @@ namespace namaichi
 			this.cookieFileSanshouBtn = new System.Windows.Forms.Button();
 			this.btnReload = new System.Windows.Forms.Button();
 			this.useSecondLoginChkBox = new System.Windows.Forms.CheckBox();
-			this.isLogFileChkBox = new System.Windows.Forms.CheckBox();
 			this.appliTab.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -1694,6 +1694,15 @@ namespace namaichi
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "ログ・履歴";
 			// 
+			// isLogFileChkBox
+			// 
+			this.isLogFileChkBox.Location = new System.Drawing.Point(19, 120);
+			this.isLogFileChkBox.Name = "isLogFileChkBox";
+			this.isLogFileChkBox.Size = new System.Drawing.Size(271, 19);
+			this.isLogFileChkBox.TabIndex = 13;
+			this.isLogFileChkBox.Text = "ログをファイルに出力する(通常時は非推奨)";
+			this.isLogFileChkBox.UseVisualStyleBackColor = true;
+			// 
 			// maxLogDisplayList
 			// 
 			this.maxLogDisplayList.Location = new System.Drawing.Point(351, 142);
@@ -2244,6 +2253,7 @@ namespace namaichi
 			this.sendTestMailBtn.TabIndex = 13;
 			this.sendTestMailBtn.Text = "テストメール送信";
 			this.sendTestMailBtn.UseVisualStyleBackColor = true;
+			this.sendTestMailBtn.Click += new System.EventHandler(this.SendTestMailBtnClick);
 			// 
 			// isMailSslChkBox
 			// 
@@ -2665,15 +2675,6 @@ namespace namaichi
 			this.useSecondLoginChkBox.TabIndex = 20;
 			this.useSecondLoginChkBox.Text = "ブラウザからクッキーが取得できなかった場合、次のアカウントでログインする";
 			this.useSecondLoginChkBox.UseVisualStyleBackColor = true;
-			// 
-			// isLogFileChkBox
-			// 
-			this.isLogFileChkBox.Location = new System.Drawing.Point(19, 120);
-			this.isLogFileChkBox.Name = "isLogFileChkBox";
-			this.isLogFileChkBox.Size = new System.Drawing.Size(271, 19);
-			this.isLogFileChkBox.TabIndex = 13;
-			this.isLogFileChkBox.Text = "ログをファイルに出力する(通常時は非推奨)";
-			this.isLogFileChkBox.UseVisualStyleBackColor = true;
 			// 
 			// optionForm
 			// 

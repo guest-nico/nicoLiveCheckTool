@@ -48,8 +48,9 @@ namespace namaichi.info
 		public Color textColor = Color.Black;
 		//public Color backColor = Color.FromArgb(255,224,255);
 		public Color backColor = Color.White;
-		public RssItem ri = null;
+		//private RssItem ri = null;
 		public DateTime lastExistTime = DateTime.Now;
+		
 		
 		public LiveInfo(List<KeyValuePair<string, string>> item, SortableBindingList<AlartInfo> alartData, config.config config, SortableBindingList<AlartInfo> userAlartData)
 		{
@@ -84,9 +85,9 @@ namespace namaichi.info
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			}
-			this.ri = new RssItem(title, lvId, "", description, comName, comId, hostName, thumbnailUrl, memberOnly, "");
-			setFavorite(alartData);
-			setFavorite(userAlartData);
+			var ri = new RssItem(title, lvId, "", description, comName, comId, hostName, thumbnailUrl, memberOnly, "");
+			favorite = getFavorite(alartData, ri, favorite);
+			favorite = getFavorite(userAlartData, ri, favorite);
 			
 			if (category == null) {
 				util.debugWriteLine("not found category 11 " + lvId);
@@ -99,7 +100,7 @@ namespace namaichi.info
 				SortableBindingList<AlartInfo> alartData, 
 				config.config config, 
 				SortableBindingList<AlartInfo> userAlartData) {
-			this.ri = item;
+			var ri = item;
 			title = ri.title;
 			lvId = ri.lvId;
 			pubDateDt = DateTime.Parse(ri.pubDate);
@@ -116,38 +117,40 @@ namespace namaichi.info
 			
 			hostName = ri.hostName;
 			
-			setFavorite(alartData);
-			setFavorite(userAlartData);
+			favorite = getFavorite(alartData, ri, favorite);
+			favorite = getFavorite(userAlartData, ri, favorite);
+			
 		}
 		public Image getThumbnail(string url, bool isSaveCache) {
-			return ThumbnailManager.getThumbnailRssUrl(url, isSaveCache);
-
+			//return ThumbnailManager.getThumbnailRssUrl(url, isSaveCache);
+			return new Bitmap(ThumbnailManager.getThumbnailRssUrl(url, isSaveCache), 50, 50);
 		}
-		private void setFavorite(SortableBindingList<AlartInfo> aiList) {
-			
+		private string getFavorite(SortableBindingList<AlartInfo> aiList, RssItem ri, string _favorite) {
 			try {
 				foreach (var ai in aiList) {
-					if (!getTargetOk(ai)) continue;
+					if (!getTargetOk(ai, ri, type)) continue;
 					
-					if (comId != null && comId == ai.communityId) {
-						if (favorite != "") favorite += ",";
-						favorite += "コミュニティID";
+					
+					if ((!string.IsNullOrEmpty(comId) && (comId == ai.communityId)) ||
+							(type == "official" && ai.communityId == "official")) {
+						if (_favorite != "") _favorite += ",";
+						_favorite += "コミュニティID";
 						if (memo != "") memo += ",";
 						memo += ai.memo;
 						textColor = ai.textColor;
 						backColor = ai.backColor;
 					}
-					if (hostName != null && hostName == ai.hostName) {
-						if (favorite != "") favorite += ",";
-						favorite += "ユーザー名?";
+					if (!string.IsNullOrEmpty(hostName) && hostName == ai.hostName) {
+						if (_favorite != "") _favorite += ",";
+						_favorite += "ユーザー名?";
 						if (memo != "") memo += ",";
 						memo += ai.memo;
 						textColor = ai.textColor;
 						backColor = ai.backColor;
 					}
 					if (!string.IsNullOrEmpty(ai.Keyword) && ri.isMatchKeyword(ai)) {
-						if (favorite != "") favorite += ",";
-						favorite += "ｷｰﾜｰﾄ:" + ai.Keyword;
+						if (_favorite != "") _favorite += ",";
+						_favorite += "ｷｰﾜｰﾄ:" + ai.Keyword;
 						if (memo != "") memo += ",";
 						memo += ai.memo;
 						textColor = ai.textColor;
@@ -157,9 +160,9 @@ namespace namaichi.info
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
-			
+			return _favorite;
 		}
-		private bool getTargetOk(AlartInfo alartItem) {
+		private static bool getTargetOk(AlartInfo alartItem, RssItem ri, string type) {
 			//var targetAi = new List<AlartInfo>();
 			//for (var i = 0; i < aiList.Count; i++) {
 			//	var alartItem = (AlartInfo)aiList[i];
@@ -172,7 +175,7 @@ namespace namaichi.info
 					(!alartItem.isCustomKeyword && alartItem.keyword == "" || alartItem.keyword == null);
 				if (isNosetComId && isNosetHostName && isNosetKeyword) return false;
 				
-				var isComOk = alartItem.communityId == ri.comId;
+				var isComOk = alartItem.communityId == ri.comId || (alartItem.communityId == "official" && type == "official");
 				var isUserOk = alartItem.hostName == ri.hostName;
 				var isKeywordOk = ri.isMatchKeyword(alartItem);
 				
@@ -190,7 +193,7 @@ namespace namaichi.info
 			
 			
 		}
-		private bool isAlartMatch(AlartInfo alartItem, bool isComOk, 
+		private static bool isAlartMatch(AlartInfo alartItem, bool isComOk, 
 				bool isUserOk, bool isKeywordOk, bool isNosetComId, 
 				bool isNosetHostName, bool isNosetKeyword) {
 			if (!isComOk && !isUserOk && !isKeywordOk) return false;
@@ -257,11 +260,12 @@ namespace namaichi.info
 		public string elapsedTime
         {
             get {
-				var d = DateTime.Now - pubDateDt;
-				if (d.TotalDays >= 1) return d.ToString("d'日'hh'時間'mm'分'ss'秒'");
-				else if (d.TotalHours >= 1) return d.ToString("hh'時間'mm'分'ss'秒'");
-				else if (d.TotalMinutes >= 1) return d.ToString("mm'分'ss'秒'");
-				else return d.ToString("ss'秒'");
+				TimeSpan d = DateTime.Now - pubDateDt;
+				var sign = d.TotalDays < 0 ? "-" : "";
+				if (Math.Abs(d.TotalDays) >= 1) return sign + d.ToString("d'日'hh'時間'mm'分'ss'秒'");
+				else if (Math.Abs(d.TotalHours) >= 1) return sign + d.ToString("hh'時間'mm'分'ss'秒'");
+				else if (Math.Abs(d.TotalMinutes) >= 1) return sign + d.ToString("mm'分'ss'秒'");
+				else return sign + d.ToString("ss'秒'");
 			}
             set {  }
         }
@@ -272,7 +276,7 @@ namespace namaichi.info
 					return category[0];
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-					return "";
+					return "一般(その他)";
 				}
 				
 			}

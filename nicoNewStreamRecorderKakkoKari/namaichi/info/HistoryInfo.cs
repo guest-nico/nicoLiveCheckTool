@@ -33,7 +33,7 @@ namespace namaichi.info
 		public string favorite = "";
 		public Color textColor = Color.Black;
 		public Color backColor = Color.White;
-		public RssItem ri;
+		//public RssItem ri;
 		public string keyword = null;
 		public int onAirMode = 1;//0-no 1-onAir 2-followerOnly
 		/*
@@ -66,19 +66,20 @@ namespace namaichi.info
 			this.userId = ri.userId;
 			this.communityId = ri.comId;
 			this.description = util.removeTag(ri.description);
-			this.ri = ri;
+			//this.ri = ri;
 			onAirMode = ri.isMemberOnly ? 2 : 1;
 			
 			
-			setFavoriteFromAiList(targetAi);
+			setFavoriteFromAiList(targetAi, ri);
 			
 		}
-		private void setFavoriteFromAiList(List<AlartInfo> targetAi) {
+		private void setFavoriteFromAiList(List<AlartInfo> targetAi, RssItem ri) {
 			while (true) {
 				try {
 					foreach (var ai in targetAi) {
 						if (!string.IsNullOrEmpty(ai.communityId)) {
-							if (ai.communityId == communityId) {
+							if (ai.communityId == communityId || 
+							    	(ai.communityId == "official" && ri.type == "official")) {
 								if (favorite != "") favorite += ",";
 								favorite += "ｺﾐｭﾆﾃｨID";
 	//							if (memo != "") memo += ",";
@@ -89,7 +90,7 @@ namespace namaichi.info
 							} else isInListCom = false; 
 						}
 						if (!string.IsNullOrEmpty(ai.hostId)) {
-							if (ai.hostId == userId) {
+							if (ai.hostName == userName) {
 								if (favorite != "") favorite += ",";
 								favorite += "ﾕｰｻﾞｰ名?";
 	//							if (memo != "") memo += ",";

@@ -9,6 +9,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
@@ -39,9 +40,10 @@ namespace namaichi.utility
 			
 			try {
 				var json = JToken.FromObject(form.historyListDataSource).ToString(Formatting.None);
-				var sw = new StreamWriter(path + "historylist.ini");
-				sw.Write(json);
-				sw.Close();
+				using (var sw = new StreamWriter(path + "historylist.ini", false, Encoding.UTF8)) {
+					sw.Write(json);
+					//sw.Close();
+				}
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
@@ -58,9 +60,10 @@ namespace namaichi.utility
 			
 			try {
 				if (!File.Exists(fileName)) return;
-				var sr = new StreamReader(fileName);
-				data = sr.ReadToEnd().Replace("\r", "");
-				sr.Close();
+				using (var sr = new StreamReader(fileName, Encoding.UTF8)) {
+					data = sr.ReadToEnd().Replace("\r", "");
+					//sr.Close();
+				}
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 				return;

@@ -65,7 +65,7 @@ namespace namaichi.alart
 				if (res == null) break;
 				var mm = myPageFollowRegex.Matches(res);
 				foreach (Match m in mm) {
-					ret.Add(new string[]{idType + m.Groups[1].Value, m.Groups[2].Value});
+					ret.Add(new string[]{idType + m.Groups[1].Value, WebUtility.HtmlDecode(m.Groups[2].Value)});
 				}
 				if (res.IndexOf(">次へ</a></div>") == -1) break;
 			}

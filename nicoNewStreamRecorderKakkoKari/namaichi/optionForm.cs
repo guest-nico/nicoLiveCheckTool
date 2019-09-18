@@ -131,6 +131,7 @@ namespace namaichi
 				{"doublecmode",doublecmodeList.Text},
 				{"IsNotAllMatchNotifyNoRecent",isNotAllMatchNotifyNoRecentChkBox.Checked.ToString().ToLower()},
 				{"delThumb",delThumbChkBox.Checked.ToString().ToLower()},
+				{"IsConfirmFollow",IsConfirmFollowChkBox.Checked.ToString().ToLower()},
 				
 				{"rssUpdateInterval",rssUpdateIntervalList.Text},
 				{"userNameUpdateInterval",userNameUpdateIntervalList.Text},
@@ -173,6 +174,7 @@ namespace namaichi
 				{"IsRss",isRssChkBox.Checked.ToString().ToLower()},
 				{"IsPush",isPushChkBox.Checked.ToString().ToLower()},
 				{"IsAppPush",isAppPushChkBox.Checked.ToString().ToLower()},
+				{"IsTimeTable",isTimeTableChkBox.Checked.ToString().ToLower()},
 				
 				{"thresholdpage",thresholdpageList.Value.ToString()},
 				{"brodouble",brodoubleList.SelectedIndex.ToString()},
@@ -313,6 +315,7 @@ namespace namaichi
 			doublecmodeList.Text = cfg.get("doublecmode");
 			isNotAllMatchNotifyNoRecentChkBox.Checked = bool.Parse(cfg.get("IsNotAllMatchNotifyNoRecent"));
 			delThumbChkBox.Checked = bool.Parse(cfg.get("delThumb"));
+			IsConfirmFollowChkBox.Checked = bool.Parse(cfg.get("IsConfirmFollow"));
 			
 			rssUpdateIntervalList.Text = cfg.get("rssUpdateInterval");
 			userNameUpdateIntervalList.Text = cfg.get("userNameUpdateInterval");
@@ -356,6 +359,7 @@ namespace namaichi
 			isRssChkBox.Checked = bool.Parse(cfg.get("IsRss"));
 			isPushChkBox.Checked = bool.Parse(cfg.get("IsPush"));
 			isAppPushChkBox.Checked = bool.Parse(cfg.get("IsAppPush"));
+			isTimeTableChkBox.Checked = bool.Parse(cfg.get("IsTimeTable"));
 			
 			thresholdpageList.Value = int.Parse(cfg.get("thresholdpage"));
 			brodoubleList.SelectedIndex = int.Parse(cfg.get("brodouble"));

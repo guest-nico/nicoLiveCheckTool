@@ -154,13 +154,15 @@ namespace namaichi.alart
 					return false;
 				}
 				var parser = new Google.Protobuf.MessageParser<CheckinResponse>(() => new CheckinResponse());
-				var checkinRes = parser.ParseFrom(new MemoryStream(rb));
-	            
-				util.debugWriteLine("androidId " + checkinRes.AndroidId);
-	            util.debugWriteLine("securityToken " + checkinRes.SecurityToken);
-	            id = checkinRes.AndroidId.ToString();
-	            token = checkinRes.SecurityToken.ToString();
-	            return true;
+				using (var ms = new MemoryStream(rb)) {
+					var checkinRes = parser.ParseFrom(ms);
+					util.debugWriteLine("androidId " + checkinRes.AndroidId);
+		            util.debugWriteLine("securityToken " + checkinRes.SecurityToken);
+		            id = checkinRes.AndroidId.ToString();
+		            token = checkinRes.SecurityToken.ToString();
+		            return true;
+				}
+				
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return false;
@@ -302,7 +304,9 @@ namespace namaichi.alart
 				    
 				    Task.Run(() => {
 		             	while (isRetry) {
-							Thread.Sleep(15000);
+							//Thread.Sleep(15000);
+							
+							Thread.Sleep(60 * 60 * 1000);
 							util.debugWriteLine(DateTime.Now.ToString() + " ping " + sslStream.GetHashCode());
 							try {
 								sslStream.Write(new byte[]{0x07, 0x0e, 0x10, 0x01, 0x1a, 0x00, 0x3a, 0x04, 0x08, 0x0d, 0x12, 0x00, 0x50, 0x03, 0x60, 0x00});
@@ -312,6 +316,7 @@ namespace namaichi.alart
 								break;
 							}
 		             	}
+				        util.debugWriteLine("ping end " + sslStream.GetHashCode());
 					});
 				    
 				    while (isRetry) {

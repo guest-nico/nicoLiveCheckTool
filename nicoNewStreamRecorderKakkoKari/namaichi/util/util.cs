@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Windows.Forms;
@@ -27,8 +28,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.29";
-	public static string versionDayStr = "2019/09/04";
+	public static string versionStr = "ver0.1.7.34";
+	public static string versionDayStr = "2019/09/19";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -533,22 +534,26 @@ class util {
 //				util.debugWriteLine("getpage 0");
 				var res = (HttpWebResponse)req.GetResponse();
 //				util.debugWriteLine("getpage 1");
-				var dataStream = res.GetResponseStream();
-//				util.debugWriteLine("getpage 2");
-				var reader = new StreamReader(dataStream);
-				
-				/*
-				var resStrTask = reader.ReadToEndAsync();
-				if (!resStrTask.Wait(5000)) return null;
-				string resStr = resStrTask.Result;
-				*/
-//				util.debugWriteLine("getpage 3");
-				var resStr = reader.ReadToEnd();
-//				util.debugWriteLine("getpage 4");
-				
-				getheaders = res.Headers;
-				return resStr;
-	
+				using (var dataStream = res.GetResponseStream())
+	//				util.debugWriteLine("getpage 2");
+				using (var reader = new StreamReader(dataStream)) {
+					
+					/*
+					var resStrTask = reader.ReadToEndAsync();
+					if (!resStrTask.Wait(5000)) return null;
+					string resStr = resStrTask.Result;
+					*/
+	//				util.debugWriteLine("getpage 3");
+					var resStr = reader.ReadToEnd();
+	//				util.debugWriteLine("getpage 4");
+					
+					getheaders = res.Headers;
+					
+					dataStream.Dispose();
+					reader.Dispose();
+					
+					return resStr;
+				}
 			} catch (Exception e) {
 				System.Threading.Tasks.Task.Run(() => {
 					util.debugWriteLine("getpage error " + _url + e.Message+e.StackTrace);
@@ -591,21 +596,24 @@ class util {
 //				util.debugWriteLine("getpage 0");
 				var res = (HttpWebResponse)req.GetResponse();
 //				util.debugWriteLine("getpage 1");
-				var dataStream = res.GetResponseStream();
-//				util.debugWriteLine("getpage 2");
-				var reader = new StreamReader(dataStream);
-				
-				/*
-				var resStrTask = reader.ReadToEndAsync();
-				if (!resStrTask.Wait(5000)) return null;
-				string resStr = resStrTask.Result;
-				*/
-//				util.debugWriteLine("getpage 3");
-				var resStr = reader.ReadToEnd();
-//				util.debugWriteLine("getpage 4");
-				
-//				getheaders = res.Headers;
-				return resStr;
+				using (var dataStream = res.GetResponseStream())
+				using (var reader = new StreamReader(dataStream)) {
+					
+					/*
+					var resStrTask = reader.ReadToEndAsync();
+					if (!resStrTask.Wait(5000)) return null;
+					string resStr = resStrTask.Result;
+					*/
+	//				util.debugWriteLine("getpage 3");
+					var resStr = reader.ReadToEnd();
+	//				util.debugWriteLine("getpage 4");
+					
+	//				getheaders = res.Headers;
+					dataStream.Dispose();
+					reader.Dispose();
+	
+					return resStr;
+				}
 	
 			} catch (Exception e) {
 				System.Threading.Tasks.Task.Run(() => {
@@ -632,26 +640,28 @@ class util {
 //				if (referer != null) req.Referer = referer;
 				if (container != null) req.CookieContainer = container;
 				var res = (HttpWebResponse)req.GetResponse();
-				var dataStream = res.GetResponseStream();
-				
-				//test
-				var isMs = true;
-				if (isMs) {
-					var ms = new MemoryStream();
-					dataStream.CopyTo(ms);
-					return ms.ToArray();
-				} else {
-	//				var reader = new StreamReader(dataStream);
-					byte[] b = new byte[10000000];
-					int pos = 0;
-					var r = 0;
-					while ((r = dataStream.Read(b, pos, 1000000)) > 0) {
-	//					if (dataStream.Read(b, (int)j, (int)dataStream.Length) == 0) break;
-	//					j = dataStream.Position;
-						pos += r;
+				using (var dataStream = res.GetResponseStream()) {
+					
+					//test
+					var isMs = true;
+					if (isMs) {
+						using (var ms = new MemoryStream()) {
+							dataStream.CopyTo(ms);
+							return ms.ToArray();
+						}
+					} else {
+		//				var reader = new StreamReader(dataStream);
+						byte[] b = new byte[10000000];
+						int pos = 0;
+						var r = 0;
+						while ((r = dataStream.Read(b, pos, 1000000)) > 0) {
+		//					if (dataStream.Read(b, (int)j, (int)dataStream.Length) == 0) break;
+		//					j = dataStream.Position;
+							pos += r;
+						}
+						Array.Resize(ref b, pos);
+						return b;
 					}
-					Array.Resize(ref b, pos);
-					return b;
 				}
 			} catch (Exception e) {
 				System.Threading.Tasks.Task.Run(() => {
@@ -670,24 +680,26 @@ class util {
 			debugWriteLine(res.StatusCode + " " + res.StatusDescription);
 			
 			//var resStream = res.GetResponseStream();
-			var resStream = new System.IO.StreamReader(res.GetResponseStream());
-			//foreach (var h in res.Headers) Debug.WriteLine("header " + h + " " + res.Headers[h.ToString()]);
-			/*
-			List<byte> rb = new List<byte>();
-			for (var i = 0; i < 10; i++) {
-				var a = new byte[100000];
-				var readC = resStream.Read(a, 0, a.Length);
-				if (readC == 0) break;
-				Debug.WriteLine("read c " + readC);
-				for (var j = 0; j < readC; j++) rb.Add(a[j]);
+			using (var getResStream = res.GetResponseStream())
+			using (var resStream = new System.IO.StreamReader(getResStream)) {
+				//foreach (var h in res.Headers) Debug.WriteLine("header " + h + " " + res.Headers[h.ToString()]);
+				/*
+				List<byte> rb = new List<byte>();
+				for (var i = 0; i < 10; i++) {
+					var a = new byte[100000];
+					var readC = resStream.Read(a, 0, a.Length);
+					if (readC == 0) break;
+					Debug.WriteLine("read c " + readC);
+					for (var j = 0; j < readC; j++) rb.Add(a[j]);
+					
+					Debug.WriteLine("read " + i);
+				}
+				*/
+				var resStr = resStream.ReadToEnd();
+				//return getRegGroup(resStr,
 				
-				Debug.WriteLine("read " + i);
+				return resStr;
 			}
-			*/
-			var resStr = resStream.ReadToEnd();
-			//return getRegGroup(resStr,
-			
-			return resStr;
 		} catch (Exception ee) {
 			debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			return null;
@@ -700,15 +712,16 @@ class util {
 			debugWriteLine(res.StatusCode + " " + res.StatusDescription);
 			
 			//var resStream = res.GetResponseStream();
-			var resStream = res.GetResponseStream();
-			var buf = new List<byte>();
-			for (var k = 0; k < 10; k++) {
-				var b = new byte[1000];
-				var c = resStream.Read(b, 0, b.Length);
-				if (c == 0) break;
-				for (var j = 0; j < c; j++) buf.Add(b[j]);
+			using (var resStream = res.GetResponseStream()) {
+				var buf = new List<byte>();
+				for (var k = 0; k < 10; k++) {
+					var b = new byte[1000];
+					var c = resStream.Read(b, 0, b.Length);
+					if (c == 0) break;
+					for (var j = 0; j < c; j++) buf.Add(b[j]);
+				}
+				return buf.ToArray();
 			}
-			return buf.ToArray();
 			
 		} catch (Exception ee) {
 			debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
@@ -966,10 +979,11 @@ class util {
 				#else
 					if (isStdIO) return; 
 					FileStream fs = new FileStream(logPath, 
-				    		FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
+							FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
 					var w = new System.IO.StreamWriter(fs);
 					w.AutoFlush = true;
 					System.Console.SetOut(w);
+					
 				#endif
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
@@ -1082,8 +1096,11 @@ class util {
 			url = "https://ext.nicovideo.jp/thumb_" + ((isChannel) ? "channel" : "community") + "/" + communityNum;
 			res = getPageSource(url, cc, null, false, 3);
 			title = getRegGroup(res, "<p class=\"chcm_tit\">(.+?)</p>");
+		} else {
+			title = WebUtility.HtmlDecode(title);
 		}
 		if (title == null) isFollow = false;
+		
 		return title;
 	}
 	public static void openUrlBrowser(string url, config config) {
@@ -1341,4 +1358,9 @@ class util {
         debugWriteLine("deleteNotifyIcon " + r);
         return r == 1;
 	}
+    public static string getUnicodeToUtf8(string s) {
+        var b = Encoding.Unicode.GetBytes(s);
+        var utB = Encoding.Convert(Encoding.Unicode, Encoding.UTF8, b);
+        return Encoding.UTF8.GetString(utB);
+    }
 }

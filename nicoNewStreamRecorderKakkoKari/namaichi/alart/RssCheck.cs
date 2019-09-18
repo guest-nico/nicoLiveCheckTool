@@ -32,6 +32,10 @@ namespace namaichi.alart
 		public RssCheck(Check check, config.config config)
 		{
 			isStartTimeAllCheck = bool.Parse(config.get("IsStartTimeAllCheck"));
+			
+			//test
+			isStartTimeAllCheck = false;
+			
 			this.check = check;
 			this.config = config;
 		}

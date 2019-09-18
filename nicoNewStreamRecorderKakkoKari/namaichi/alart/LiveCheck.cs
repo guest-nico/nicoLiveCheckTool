@@ -42,7 +42,7 @@ namespace namaichi.alart
 
 			var delMin = double.Parse(form.config.get("liveListDelMinutes"));
 			var now = DateTime.Now;
-			lock (form.liveListLock) {
+			lock(form.liveListLock) {
 				var scrollI = form.liveList.FirstDisplayedScrollingRowIndex;
 				var curCellLv = (form.liveList.CurrentCell == null) ? null : form.liveListDataSource[form.liveList.CurrentCell.RowIndex].lvId;
 				var curCellCellI = (form.liveList.CurrentCell == null) ? -1 : form.liveList.CurrentCell.ColumnIndex;

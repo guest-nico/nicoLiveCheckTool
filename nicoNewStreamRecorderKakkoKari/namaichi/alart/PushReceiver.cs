@@ -86,7 +86,7 @@ namespace namaichi.alart
 			connect();
 		}
 		public bool connect() {
-			lock (this) {
+			lock(this) {
 				var  isPass = (TimeSpan.FromSeconds(5) > (DateTime.Now - lastWebsocketConnectTime));
 				if (isPass) 
 					Thread.Sleep(5000);
@@ -333,14 +333,16 @@ namespace namaichi.alart
 	
 				var res = req.GetResponse();
 				
-				var resStream = new StreamReader(res.GetResponseStream());
-				foreach (var h in res.Headers) util.debugWriteLine("header " + h + " " + res.Headers[h.ToString()]);
-				var resStr = resStream.ReadToEnd();
-				util.debugWriteLine("nico send post res " + resStr);
-				if (resStr.IndexOf("\"status\":200") > -1) {
-					auth = Convert.FromBase64String(sendAuth);
-					config.set("pushAuth", sendAuth);
-					return true;
+				using (var getResStream = res.GetResponseStream())
+				using (var resStream = new StreamReader(getResStream)) {
+					foreach (var h in res.Headers) util.debugWriteLine("header " + h + " " + res.Headers[h.ToString()]);
+					var resStr = resStream.ReadToEnd();
+					util.debugWriteLine("nico send post res " + resStr);
+					if (resStr.IndexOf("\"status\":200") > -1) {
+						auth = Convert.FromBase64String(sendAuth);
+						config.set("pushAuth", sendAuth);
+						return true;
+					}
 				}
 				
 			} catch (Exception e) {

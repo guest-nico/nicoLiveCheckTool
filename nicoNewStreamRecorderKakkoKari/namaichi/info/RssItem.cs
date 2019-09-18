@@ -34,6 +34,8 @@ namespace namaichi.info
 		public string type = null;
 		
 		static Regex getStringToWordsListReg = new Regex("(\\s)(\"\"|\".*?[^\\\\]\")(\\s)");
+		public DateTime pubDateDt = DateTime.MinValue;
+		
 		public RssItem(string title, string lvId, 
 				string pubDate, string description,
 		        string comName, string comId,
@@ -54,7 +56,6 @@ namespace namaichi.info
 				
 			}
 			this.itemRes = itemRes;
-			
 		}
 		public bool isContainKeyword(string keyword) {
 			return util.getRegGroup(lvId, "(" + keyword + ")") != null ||

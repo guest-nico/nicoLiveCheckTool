@@ -124,14 +124,16 @@ namespace namaichi.rec
 	
 					var res = req.GetResponse();
 					
-					var resStream = new System.IO.StreamReader(res.GetResponseStream());
-					var resStr = resStream.ReadToEnd();
-	
-					var isSuccess = resStr.IndexOf("フォローしました") > -1;
-					//var _m = (form.rec.isPlayOnlyMode) ? "視聴" : "録画";
-					//form.addLogText((isSuccess ?
-					//                 "フォローしました。" + _m + "開始までしばらくお待ちください。" : "フォローに失敗しました。") + util.getMainSubStr(isSub, true));
-					return isSuccess;
+					using (var getResStream = res.GetResponseStream())
+					using (var resStream = new System.IO.StreamReader(getResStream)) {
+						var resStr = resStream.ReadToEnd();
+		
+						var isSuccess = resStr.IndexOf("フォローしました") > -1;
+						//var _m = (form.rec.isPlayOnlyMode) ? "視聴" : "録画";
+						//form.addLogText((isSuccess ?
+						//                 "フォローしました。" + _m + "開始までしばらくお待ちください。" : "フォローに失敗しました。") + util.getMainSubStr(isSub, true));
+						return isSuccess;
+					}
 					
 	//				resStream.Close();
 					
@@ -238,11 +240,13 @@ namespace namaichi.rec
 	
 					var res = req.GetResponse();
 					
-					var resStream = new System.IO.StreamReader(res.GetResponseStream());
-					var resStr = resStream.ReadToEnd();
-	
-					var isSuccess = resStr.IndexOf("このコミュニティのフォローを解除しました") > -1;
-					return isSuccess;
+					using (var getResStream = res.GetResponseStream())
+					using (var resStream = new System.IO.StreamReader(getResStream)) {
+						var resStr = resStream.ReadToEnd();
+		
+						var isSuccess = resStr.IndexOf("このコミュニティのフォローを解除しました") > -1;
+						return isSuccess;
+					}
 					
 				} catch (Exception e) {
 					form.addLogText("フォロー解除に失敗しました。");

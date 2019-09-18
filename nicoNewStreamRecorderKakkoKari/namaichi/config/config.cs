@@ -179,6 +179,7 @@ public class config
 			{"doublecmode","なにもしない"},
 			{"IsNotAllMatchNotifyNoRecent","false"},
 			{"delThumb","false"},
+			{"IsConfirmFollow","false"},
 			
 			{"IsbroadLog","false"},
 			{"IsLogFile","false"},
@@ -303,6 +304,7 @@ public class config
 	        {"IsRss", "true"},
 	        {"IsPush", "true"},
 	        {"IsAppPush", "true"},
+	        {"IsTimeTable", "true"},
 	        {"pushPri", ""},
 	        {"pushPub", ""},
 	        {"pushAuth", ""},
@@ -331,12 +333,14 @@ public class config
 			{"Y",""},
 			{"LiveListColumnWidth",""},
 			{"AlartListColumnWidth",""},
+			{"UserAlartListColumnWidth",""},
 			{"TaskListColumnWidth",""},
 			{"LogListColumnWidth",""},
 			{"HistoryListColumnWidth",""},
 			{"NotAlartListColumnWidth",""},
 			{"HistoryPanelDistance",""},
 			{"activeTab","0"},
+			{"favoriteActiveTab","0"},
 		};
 
 		try {

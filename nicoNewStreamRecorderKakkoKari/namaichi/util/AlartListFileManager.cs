@@ -8,7 +8,9 @@
  */
 using System;
 using System.IO;
+using System.Net;
 using System.Runtime.Remoting.Messaging;
+using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using System.Collections.Generic;
@@ -51,58 +53,59 @@ namespace namaichi.utility
 				}
 			}
 			
-			var sw = new StreamWriter(path + "favorite" + mode + ".ini");
-			sw.WriteLine("130");
-			foreach (AlartInfo ai in dataSource) {
-				for (var i = 0; i < 36; i++) { //namaroku 29 save 32
-					if (i == 1) sw.WriteLine(ai.communityId);
-					else if (i == 2) sw.WriteLine(ai.hostId);
-					else if (i == 4) sw.WriteLine(ai.communityName);
-					else if (i == 5) sw.WriteLine(ai.hostName);
-					else if (i == 7) sw.WriteLine(ai.lastHostDate);
-					else if (i == 10) sw.WriteLine(ColorTranslator.ToHtml(ai.textColor));
-					else if (i == 11) sw.WriteLine(ColorTranslator.ToHtml(ai.backColor));
-					else if (i == 12) sw.WriteLine(ai.soundType + "," + ai.isSoundId.ToString().ToLower());
-					else if (i == 15) sw.WriteLine(ai.addDate);
-					//else if (i == 16) sw.WriteLine(ai.isAnd.ToString().ToLower());
-					else if (i == 17) sw.WriteLine(ai.popup.ToString().ToLower());
-					else if (i == 18) sw.WriteLine(ai.baloon.ToString().ToLower());
-					else if (i == 19) sw.WriteLine(ai.browser.ToString().ToLower());
-					else if (i == 20) sw.WriteLine(ai.mail.ToString().ToLower());
-					else if (i == 21) sw.WriteLine(ai.sound.ToString().ToLower());
-					else if (i == 24) sw.WriteLine(ai.appliA.ToString().ToLower());
-					else if (i == 25) sw.WriteLine(ai.appliB.ToString().ToLower());
-					else if (i == 26) sw.WriteLine(ai.appliC.ToString().ToLower());
-					else if (i == 27) sw.WriteLine(ai.appliD.ToString().ToLower());
-					else if (i == 28) sw.WriteLine(ai.appliE.ToString().ToLower());
-					else if (i == 29) sw.WriteLine(ai.appliF.ToString().ToLower());
-					else if (i == 30) sw.WriteLine(ai.appliG.ToString().ToLower());
-					else if (i == 31) sw.WriteLine(ai.appliH.ToString().ToLower());
-					else if (i == 32) sw.WriteLine(ai.appliI.ToString().ToLower());
-					else if (i == 33) sw.WriteLine(ai.appliJ.ToString().ToLower());
-					else if (i == 34) sw.WriteLine(ai.memo);
-                    else if (i == 8) sw.WriteLine(ai.communityFollow);
-                    else if (i == 9) sw.WriteLine(ai.hostFollow);
-                    else if (i == 13) sw.WriteLine(ai.lastLvid);
-                    else if (i == 3) sw.WriteLine(ai.keyword);
-                    else if (i == 14) sw.WriteLine(ai.isMustCom.ToString().ToLower() + "," + ai.isMustUser.ToString().ToLower() + "," + ai.isMustKeyword.ToString().ToLower());
-                    else if (i == 6) {
-                    	var ckiStr = "";
-                    	try {
-                    		if (ai.cki != null) {
-                    			ckiStr = Newtonsoft.Json.Linq.JToken.FromObject(ai.cki).ToString(Newtonsoft.Json.Formatting.None);
-                    			ckiStr = (ai.isCustomKeyword ? "1" : "0") + ckiStr;
-                    		}
-                    	} catch (Exception e) {
-                    		util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-                    	}
-                    	sw.WriteLine(ckiStr);
-                    }
-					else sw.WriteLine("");
+			using (var sw = new StreamWriter(path + "favorite" + mode + ".ini", false, Encoding.UTF8)) {
+				sw.WriteLine("130");
+				foreach (AlartInfo ai in dataSource) {
+					for (var i = 0; i < 36; i++) { //namaroku 29 save 32
+						if (i == 1) sw.WriteLine(ai.communityId);
+						else if (i == 2) sw.WriteLine(ai.hostId);
+						else if (i == 4) sw.WriteLine(ai.communityName);
+						else if (i == 5) sw.WriteLine(ai.hostName);
+						else if (i == 7) sw.WriteLine(ai.lastHostDate);
+						else if (i == 10) sw.WriteLine(ColorTranslator.ToHtml(ai.textColor));
+						else if (i == 11) sw.WriteLine(ColorTranslator.ToHtml(ai.backColor));
+						else if (i == 12) sw.WriteLine(ai.soundType + "," + ai.isSoundId.ToString().ToLower());
+						else if (i == 15) sw.WriteLine(ai.addDate);
+						//else if (i == 16) sw.WriteLine(ai.isAnd.ToString().ToLower());
+						else if (i == 17) sw.WriteLine(ai.popup.ToString().ToLower());
+						else if (i == 18) sw.WriteLine(ai.baloon.ToString().ToLower());
+						else if (i == 19) sw.WriteLine(ai.browser.ToString().ToLower());
+						else if (i == 20) sw.WriteLine(ai.mail.ToString().ToLower());
+						else if (i == 21) sw.WriteLine(ai.sound.ToString().ToLower());
+						else if (i == 24) sw.WriteLine(ai.appliA.ToString().ToLower());
+						else if (i == 25) sw.WriteLine(ai.appliB.ToString().ToLower());
+						else if (i == 26) sw.WriteLine(ai.appliC.ToString().ToLower());
+						else if (i == 27) sw.WriteLine(ai.appliD.ToString().ToLower());
+						else if (i == 28) sw.WriteLine(ai.appliE.ToString().ToLower());
+						else if (i == 29) sw.WriteLine(ai.appliF.ToString().ToLower());
+						else if (i == 30) sw.WriteLine(ai.appliG.ToString().ToLower());
+						else if (i == 31) sw.WriteLine(ai.appliH.ToString().ToLower());
+						else if (i == 32) sw.WriteLine(ai.appliI.ToString().ToLower());
+						else if (i == 33) sw.WriteLine(ai.appliJ.ToString().ToLower());
+						else if (i == 34) sw.WriteLine(ai.memo);
+	                    else if (i == 8) sw.WriteLine(ai.communityFollow);
+	                    else if (i == 9) sw.WriteLine(ai.hostFollow);
+	                    else if (i == 13) sw.WriteLine(ai.lastLvid);
+	                    else if (i == 3) sw.WriteLine(ai.keyword);
+	                    else if (i == 14) sw.WriteLine(ai.isMustCom.ToString().ToLower() + "," + ai.isMustUser.ToString().ToLower() + "," + ai.isMustKeyword.ToString().ToLower());
+	                    else if (i == 6) {
+	                    	var ckiStr = "";
+	                    	try {
+	                    		if (ai.cki != null) {
+	                    			ckiStr = Newtonsoft.Json.Linq.JToken.FromObject(ai.cki).ToString(Newtonsoft.Json.Formatting.None);
+	                    			ckiStr = (ai.isCustomKeyword ? "1" : "0") + ckiStr;
+	                    		}
+	                    	} catch (Exception e) {
+	                    		util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+	                    	}
+	                    	sw.WriteLine(ckiStr);
+	                    }
+						else sw.WriteLine("");
+					}
 				}
+				sw.WriteLine("EndLine");
+				//sw.Close();
 			}
-			sw.WriteLine("EndLine");
-			sw.Close();
 		}
 		public void load()
 		{
@@ -120,9 +123,10 @@ namespace namaichi.utility
 			
 			try {
 				if (!File.Exists(fileName)) return;
-				var sr = new StreamReader(fileName);
-				lines = sr.ReadToEnd().Replace("\r", "").Split('\n');
-				sr.Close();
+				using (var sr = new StreamReader(fileName, Encoding.UTF8)) {
+					lines = sr.ReadToEnd().Replace("\r", "").Split('\n');
+					//sr.Close();
+				}
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 				return;
@@ -221,9 +225,10 @@ namespace namaichi.utility
 				}
 				//if (lines[i + 1] == "" && lines[i + 2] == "" && lines[i + 3] == "") continue;
 				AlartInfo ai;
+				var comName = string.IsNullOrEmpty(lines[i + 4]) ? lines[i + 4] : WebUtility.HtmlDecode(lines[i + 4]);
 				if (itemLineNum == 29) {
 		            ai = new AlartInfo(lines[i + 1], 
-							lines[i + 2], lines[i + 4], lines[i + 5], 
+							lines[i + 2], comName, lines[i + 5], 
 							lines[i + 7], lines[i + 15], 
 							lines[i + 17] == "true",
 							lines[i + 18] == "true",
@@ -248,7 +253,7 @@ namespace namaichi.utility
 					if (lines[i + 23] == "true") setNamarokuRead(ai, namarokuRecRead);
 				} else {
 					ai = new AlartInfo(lines[i + 1], 
-							lines[i + 2], lines[i + 4], lines[i + 5], 
+							lines[i + 2], comName, lines[i + 5], 
 							lines[i + 7], lines[i + 15], 
 							lines[i + 17] == "true",
 							lines[i + 18] == "true",
@@ -275,7 +280,7 @@ namespace namaichi.utility
 				//if ((ai.communityId == null || ai.communityId == "") &&
 				//    (ai.hostId == null || ai.hostId == "")) continue;
 				if (isUserMode && string.IsNullOrEmpty(ai.hostId)) continue;
-				
+				if (isUserMode) ai.communityId = ai.communityName = "";
 				readAiList.Add(ai);
 			}
 			for (var j = 0; j < 100; j++) {
@@ -356,9 +361,10 @@ namespace namaichi.utility
 			try {
 				var count = form.getAlartListCount(isUserMode);
 				for (var i = 0; i < count; i++) {
-					if (ai.communityId != null && ai.communityId != "" && form.alartListDataSource[i].communityId == 
+					if (ai.communityId != null && ai.communityId != "" && ai.communityId != "official" && form.alartListDataSource[i].communityId == 
 					    	ai.communityId) {
 						var m = (ai.communityId.StartsWith("co")) ? "コミュニティ" : "チャンネル";
+						
 						
 						form.setAlartListScrollIndex(i, isUserMode);
 					    //var res = MessageBox.Show(m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除　いいえ＝削除　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);

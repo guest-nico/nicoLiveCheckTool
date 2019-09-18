@@ -87,7 +87,7 @@ namespace namaichi
 			
 		}
 		void addOkBtnProcess() {
-			var comId = util.getRegGroup(communityId.Text, "((ch|co)*\\d+)");
+			var comId = communityId.Text == "official" ? "official" : util.getRegGroup(communityId.Text, "((ch|co)*\\d+)");
 			var userId = util.getRegGroup(userIdText.Text, "(\\d+)");
 			communityNameText.Text = "";
 			userNameText.Text = "";
@@ -118,11 +118,11 @@ namespace namaichi
 			
 			var now = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
 			var addDate = now;//now.Substring(0, now.Length - 3);
-			var comFollow = string.IsNullOrEmpty(comId) ? "" : 
+			var comFollow = string.IsNullOrEmpty(comId) ? "" :
 					((communityFollowChkBox.Checked) ? "フォロー解除する" : "フォローする");
 			var userFollow = string.IsNullOrEmpty(userId) ? "" :
 					(userFollowChkBox.Checked) ? "フォロー解除する" : "フォローする";
-			if (communityNameText.Text == "") comFollow = "";
+			if (communityNameText.Text == "" || comId == "official") comFollow = "";
 			if (userNameText.Text == "") userFollow = "";
 			var _ret = new AlartInfo(comId, userId, 
 					communityNameText.Text, userNameText.Text, 
@@ -147,7 +147,7 @@ namespace namaichi
 			Close();
 		}
 		void editOkBtnProcess() {
-			var comId = util.getRegGroup(communityId.Text, "((ch|co)*\\d+)");
+			var comId = communityId.Text == "official" ? "official" : util.getRegGroup(communityId.Text, "((ch|co)*\\d+)");
 			var userId = util.getRegGroup(userIdText.Text, "(\\d+)");
 			communityNameText.Text = "";
 			userNameText.Text = "";
@@ -155,6 +155,7 @@ namespace namaichi
 			if (userId != null) GetUserInfoBtnClickProcess(true);
 			var comFollow = string.IsNullOrEmpty(comId) ? "" :
 					(communityFollowChkBox.Checked) ? "フォロー解除する" : "フォローする";
+			if (communityNameText.Text == "" || comId == "official") comFollow = "";
 			var userFollow = string.IsNullOrEmpty(userId) ? "":
 					(userFollowChkBox.Checked) ? "フォロー解除する" : "フォローする";
 			
@@ -233,6 +234,13 @@ namespace namaichi
 		}
 		void GetCommunityInfoBtnClickProcess(bool isOkBtn = false) {
 			util.debugWriteLine("GetCommunityInfoBtnClickProcess " + communityId.Text);
+			if (communityId.Text == "official") {
+				communityNameText.Text = "公式生放送";
+				communityFollowChkBox.Checked = false;
+				setThunb("co00", false);
+				return;
+			}
+			
 			var num = util.getRegGroup(communityId.Text, "((ch|co)*\\d+)");
 			if (num == null) return;
 			var isChannel = num.StartsWith("ch");
@@ -337,7 +345,7 @@ namespace namaichi
 				for (var i = 0; i < count; i++) {
 					if (ai.communityId != null && ai.communityId != "" && dataSource[i].communityId == 
 					    	ai.communityId) {
-						var m = (ai.communityId.StartsWith("co")) ? "コミュニティ" : "チャンネル";
+						var m = (ai.communityId.StartsWith("co")) ? "コミュニティ" : (ai.communityId == "official" ? "official" : "チャンネル");
 						
 					    //var res = MessageBox.Show(m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除　いいえ＝削除　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 					    form.setAlartListScrollIndex(i, isUserMode);
@@ -467,6 +475,7 @@ namespace namaichi
 			} else {
 				comThumbBox.Image = new Bitmap(newImg, comThumbBox.Size);
 			}
+			newImg.Dispose();
 		}
 		void setEditModeDisplay(AlartInfo editAi) {
 			Text = "お気に入り編集";
@@ -502,7 +511,7 @@ namespace namaichi
 			isDefaultSoundIdChkBox.Checked = editAi.isSoundId;
 			
 			Image comThumb = null, userThumb = null;
-			if (!string.IsNullOrEmpty(editAi.communityId))
+			if (!string.IsNullOrEmpty(editAi.communityId) && editAi.communityId != "official")
 				if (ThumbnailManager.isExist(editAi.communityId, out comThumb))
 					comThumbBox.Image = comThumb;
 			if (!string.IsNullOrEmpty(editAi.hostId))
@@ -597,6 +606,12 @@ namespace namaichi
 					keywordText.Visible = customKeywordBtn.Visible =
 					isCustomKeywordRadioBtn.Visible = isMustKeywordChkBox.Visible = 
 					isSimpleKeywordRadioBtn.Visible = false;
+		}
+		
+		void OfficialBtnClick(object sender, EventArgs e)
+		{
+			communityId.Text = "official";
+			getCommunityInfoBtn.PerformClick();
 		}
 	}
 }

@@ -68,6 +68,7 @@ namespace namaichi.rec
 					foreach (var ai in form.alartListDataSource) {
 						var id = isUser ? ai.hostId : ai.communityId;
 						if (string.IsNullOrEmpty(id)) continue;
+						if (id == "official") continue;
 						idList.Add(id);
 					}
 					foreach (var ai in form.userAlartListDataSource) {
@@ -152,6 +153,7 @@ namespace namaichi.rec
 							form.alartListSetName(ai, isUser, name);
 						}
 					}
+					break;
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}

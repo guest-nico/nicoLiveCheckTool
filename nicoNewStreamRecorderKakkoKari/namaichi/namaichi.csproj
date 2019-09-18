@@ -162,6 +162,7 @@
     <Compile Include="alart\RssCheck.cs" />
     <Compile Include="alart\TaskCheck.cs" />
     <Compile Include="alart\ThumbnailManager.cs" />
+    <Compile Include="alart\TimeTableChecker.cs" />
     <Compile Include="BulkAddFromFollowAccountForm.cs" />
     <Compile Include="BulkAddFromFollowAccountForm.Designer.cs">
       <DependentUpon>BulkAddFromFollowAccountForm.cs</DependentUpon>

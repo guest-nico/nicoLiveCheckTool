@@ -48,6 +48,7 @@ namespace namaichi.alart
 		private RssCheck rc = null;
 		private PushReceiver pr = null;
 		private AppPushReceiver apr = null;
+		private TimeTableChecker ttc = null;
 		
 		public Check(SortableBindingList<AlartInfo> alartListDataSource, MainForm form)
 		{
@@ -85,6 +86,12 @@ namespace namaichi.alart
 				Task.Run(() => {
 					apr = new AppPushReceiver(this, form.config);
 					apr.start();
+				});
+			}
+			if (bool.Parse(form.config.get("IsTimeTable"))) {
+				Task.Run(() => {
+					ttc = new TimeTableChecker(this, form.config);
+					ttc.start();
 				});
 			}
 			Task.Run(() => regularlyProcess());
@@ -185,6 +192,13 @@ namespace namaichi.alart
 						//if (item.comId.IndexOf("939") > -1 &&
 						//   		alartItem.communityId.IndexOf("939") > -1)
 						//	util.debugWriteLine("test");
+						//if (
+						
+						if (string.IsNullOrEmpty(alartItem.communityId))
+							alartItem.communityName = "";
+						if (string.IsNullOrEmpty(alartItem.hostId))
+							alartItem.hostName = "";
+						
 						
 						var isNosetComId = alartItem.communityId == "" ||
 								alartItem.communityId == null;
@@ -194,7 +208,7 @@ namespace namaichi.alart
 							(!alartItem.isCustomKeyword && alartItem.keyword == "" || alartItem.keyword == null);
 						if (isNosetComId && isNosetHostName && isNosetKeyword) continue;
 						
-						var isComOk = alartItem.communityId == item.comId;
+						var isComOk = alartItem.communityId == item.comId || (alartItem.communityId == "official" && item.type == "official");
 						var isUserOk = alartItem.hostName == item.hostName;
 						var isKeywordOk = item.isMatchKeyword(alartItem);
 						
@@ -204,7 +218,7 @@ namespace namaichi.alart
 						     	 string.IsNullOrEmpty(alartItem.hostName))) continue;
 						
 						var isSuccessAccess = true;
-						if (isUserOk && !isUserIdFromLvidOk(item, alartItem.hostId, out isSuccessAccess))
+						if (isUserOk && !isNosetHostName && !isUserIdFromLvidOk(item, alartItem.hostId, out isSuccessAccess))
 							isUserOk = false;
 						if (!isSuccessAccess) return false;
 						
@@ -255,6 +269,8 @@ namespace namaichi.alart
 						if (alartItem.sound) isSound = true;
 						isLog = true;
 						
+						if (alartItem.communityId == "official")
+							util.debugWriteLine("official");
 						if (isSetLastHosoDate(isNosetComId, isNosetHostName , isNosetKeyword,
 								isComOk, isUserOk, isKeywordOk))
 							form.updateLastHosoDate(alartItem, DateTime.Parse(item.pubDate).ToString("yyyy/MM/dd HH:mm:ss"), item.lvId, item.isMemberOnly);
@@ -507,7 +523,7 @@ namespace namaichi.alart
 			util.debugWriteLine("isUserIdFromLvidOk id " + alartUserId);
 			isSuccessAccess = true;
 			if (string.IsNullOrEmpty(alartUserId)) return true;
-			if (rssItem.comId != null && rssItem.comId.StartsWith("ch")) return true;
+			if (rssItem.comId == null || rssItem.comId.StartsWith("ch")) return true;
 			
 			isSuccessAccess = setUserId(rssItem);
 			if (!isSuccessAccess) return true;
@@ -531,18 +547,31 @@ namespace namaichi.alart
 			//if (isFailureAccess) {
 			//	return null;
 			//}
+			
+			
 			if (res == null) {
 				return null;
 			}
-			var uid = util.getRegGroup(res, "user/(\\d+)");
-			if (uid == null) {
-				util.debugWriteLine("getUserIdFromLvid uid null");
-			}
-			
 			var hig = new HosoInfoGetter();
 			hig.setNicoLiveInfo(res);
 			return hig.userId;
 			
+			/*
+			if (res != null) {
+				var hig = new HosoInfoGetter();
+				hig.setNicoLiveInfo(res);
+				if (!string.IsNullOrEmpty(hig.userId))
+				    return hig.userId;
+			}
+			if (container == null) return null;
+			
+			util.debugWriteLine("getPlayerStatus userId check " + lvid);
+			url = "https://live.nicovideo.jp/api/getplayerstatus/" + lvid;
+			res = util.getPageSource(url, container);
+			if (res == null) return null;
+			var ret = util.getRegGroup(res, "<owner_name>(.*)</owner_name>");
+			return ret;
+			*/
 			//return uid;
 		}
 		private bool setUserId(RssItem rssItem) {
@@ -550,7 +579,7 @@ namespace namaichi.alart
 			var isFailureAccess = false;
 			var uid = (rssItem.userId != null) ? rssItem.userId : getUserIdFromLvid(rssItem.lvId, out isFailureAccess);
 			if (isFailureAccess) return false;  
-			if (rssItem.comId.StartsWith("ch")) uid = "";
+			if (!rssItem.comId.StartsWith("co")) uid = "";
 			if (rssItem.userId == null && uid != null) rssItem.userId = uid;
 			return true;
 		}
@@ -584,9 +613,10 @@ namespace namaichi.alart
 						foreach(var ri in items) {
 							var dt = DateTime.Parse(ri.pubDate);
 							var p = util.getJarPath()[0] + "/Log/broadLog-" + dt.ToString("yyyy-MM-dd") + ".txt";
-							var sw = new StreamWriter(p, true);
-							writeLog(sw, ri);
-							sw.Close();
+							using (var sw = new StreamWriter(p, true)) {
+								writeLog(sw, ri);
+								//sw.Close();
+							}
 						}
 						return;
 					} catch (Exception ee) {
@@ -609,11 +639,12 @@ namespace namaichi.alart
 				while (true) {
 					try {
 						var dt = DateTime.Parse(ri.pubDate);
-						var sw = new StreamWriter(util.getJarPath()[0] + "/Log/favoriteLog-" + dt.ToString("yyyy-MM-dd") + ".txt", true);
-						//	favoriteLogSw = new StreamWriter(util.getJarPath()[0] + "/Log/favoriteLog.txt", true);
-						writeLog(sw, ri);
-						sw.Close();
-						return;
+						using (var sw = new StreamWriter(util.getJarPath()[0] + "/Log/favoriteLog-" + dt.ToString("yyyy-MM-dd") + ".txt", true)) {
+							//	favoriteLogSw = new StreamWriter(util.getJarPath()[0] + "/Log/favoriteLog.txt", true);
+							writeLog(sw, ri);
+							//sw.Close();
+							return;
+						}
 					} catch (Exception ee) {
 						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 					}
@@ -675,7 +706,8 @@ namespace namaichi.alart
 			if (items.Count > 0 && form.config.get("IsbroadLog") == "true")
 				Task.Run(() => writeBroadLog(items));
 			
-			lock (foundLiveLock) {
+			
+			lock(foundLiveLock) {
 				var isChanged = gotStreamProcess(items);
 				if (isChanged) {
 					form.sortAlartList(false);
@@ -722,7 +754,19 @@ namespace namaichi.alart
 					rc = null;
 				}
 			}
-			
+			if (bool.Parse(form.config.get("IsTimeTable"))) {
+				if (ttc == null) {
+					Task.Run(() => {
+						ttc = new TimeTableChecker(this, form.config);
+						ttc.start();
+					});
+				}
+			} else {
+				if (ttc != null) {
+					ttc.stop();
+					ttc = null;
+				}
+			}
 			userNameUpdateInterval = int.Parse(form.config.get("userNameUpdateInterval"));
 		}
 		public void regularlyProcess() {
@@ -858,7 +902,7 @@ namespace namaichi.alart
 				var isBlindQuestion = bool.Parse(form.config.get("BlindQuestion"));
 				var isFavoriteOnly = bool.Parse(form.config.get("FavoriteOnly"));
 				var cateChar = form.getCategoryChar();
-				lock (form.liveListLock) {
+				lock(form.liveListLock) {
 					foreach (var item in items) {
 						var li = new LiveInfo(item, form.alartListDataSource, form.config, form.userAlartListDataSource);
 						//li.category = item.category;

@@ -29,6 +29,7 @@ namespace namaichi.rec
 		public string group = null;
 		public List<string> category = null;
 		public bool isMemberOnly = false;
+		public DateTime openDt = DateTime.MinValue;
 		public HosoInfoGetter()
 		{
 		}
@@ -44,12 +45,15 @@ namespace namaichi.rec
 			var _dt = util.getRegGroup(res, "(\\d{4}/\\d{1,2}/\\d{1,2}.{0,10}\\d{1,2}:\\d{1,2}(:\\d{1,2})*)");
 			if (_dt != null) {
 				util.debugWriteLine("dt0 " + _dt);
-				_dt = util.getRegGroup(_dt, "(\\d{4}/\\d{1,2}/\\d{1,2})") + " " + util.getRegGroup(_dt, "(\\d{4}:\\d{1,2}(:\\d{1,2})*)");
+				_dt = util.getRegGroup(_dt, "(\\d{4}/\\d{1,2}/\\d{1,2})") + " " + util.getRegGroup(_dt, "(\\d{1,2}:\\d{1,2}(:\\d{1,2})*)");
 				util.debugWriteLine("dt1 " + _dt);
 				dt = DateTime.Parse(_dt);
 			} else {
 //				util.debugWriteLine("not dt res " + res);
 			}
+			
+			setOpenDt(res);
+			
 			var isJikken = res.IndexOf("siteId&quot;:&quot;nicocas") > -1;
 			var ret = false;
 			if (isJikken) {
@@ -166,6 +170,30 @@ namespace namaichi.rec
 			if (url == null)
 			url = util.getRegGroup(res, "<meta property=\"og:image\" content=\"(.+?)\"");
 			return url;
+		}
+		private void setOpenDt(string res) {
+			MatchCollection _openDtMatches = null;
+			try {
+				_openDtMatches = new Regex("<strong>(\\d{4}/\\d{2}/\\d{2})...</strong>&nbsp;開場:<strong>(\\d{2}):(\\d{2})</strong>&nbsp;開演:<strong>(\\d{2}):(\\d{2})</strong>").Matches(res);
+				if (_openDtMatches != null && _openDtMatches.Count > 0) {
+					util.debugWriteLine("open dt0 " + _openDtMatches[0].ToString());
+					var g = _openDtMatches[0].Groups;
+					var dayDt = DateTime.Parse(g[1].ToString());
+					var openTs = new TimeSpan(int.Parse(g[2].Value), int.Parse(g[3].Value), 0);
+					//var startTs = new TimeSpan(g4], g[5]);
+					//if (int.Parse(openTsStr.Substring(3,2)) > 23) openTsStr = new TimeSpan(openTsStr.Substring(0, 3) + int.Parse(openTsStr.Substring(3,2)) - 24
+					//var openTS = new TimeSpan(Parse(_openDtMatches[0].Groups[2].ToString());
+					//var startTS = TimeSpan.Parse(_openDtMatches[0].Groups[3].ToString());
+					//if ((startTS.Hours == 24 && openTS.Hours != 24) || Math.Abs(startTS.Hours - openTS.Hours) > 5)
+					//	dayDt = dayDt.AddDays(-1);
+					var ret = dayDt + openTs;
+					openDt = ret;
+					return;
+				}
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+			openDt = dt;
 		}
 	}
 }

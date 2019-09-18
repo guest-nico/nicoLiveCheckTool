@@ -23,19 +23,24 @@ namespace namaichi.alart
 		{
 		}
 		public static Image getThumbnailRssUrl(string url, bool isSaveCache) {
+			if (url == null) return null;
 			
 			var id = util.getRegGroup(url, "(c[oh]\\d+)");
 			if (id == null) return null;
 			var dir = util.getJarPath()[0] + "/ImageCommunity";
 			Image img = null;
-			if (isExist(id, out img, dir))
+			if (isExist(id, out img, dir)) 
 				return img;
+			
+			
 			
 			//img = getImage(url);
 			img = getImageId(id);
 			
+			
 			if (isSaveCache)
 				saveImage(img, id, dir);
+			
 			return img;
 		}
 		public static Image getThumbnailId(string id) {
@@ -103,6 +108,7 @@ namespace namaichi.alart
 		}
 		public static Image getImage(string url) {
 			try {
+				
 				var req = (HttpWebRequest)WebRequest.Create(url);
 				req.Proxy = null;
 				req.AllowAutoRedirect = true;
@@ -111,12 +117,13 @@ namespace namaichi.alart
 
 				req.Timeout = 5000;
 				var res = (HttpWebResponse)req.GetResponse();
-				var dataStream = res.GetResponseStream();
-				
-				var ret = Image.FromStream(dataStream);
-				dataStream.Close();
-				return ret;
-	
+				using (var dataStream = res.GetResponseStream()) {
+					
+					var ret = Image.FromStream(dataStream);
+					//dataStream.Dispose();
+					//dataStream.Close();
+					return ret;
+				}
 			} catch (Exception e) {
 				//System.Threading.Tasks.Task.Run(() => {
 				//	util.debugWriteLine("thumbnail getpage error " + url + e.Message+e.StackTrace);
@@ -144,6 +151,7 @@ namespace namaichi.alart
 				Bitmap buf;
 				using (var bmp = new Bitmap(img, size)) {
 					buf = (Bitmap)bmp.Clone();
+					bmp.Dispose();
 				}
 				img = buf;
 			}

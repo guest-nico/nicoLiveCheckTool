@@ -61,7 +61,6 @@ namespace namaichi
 			this.appliDChkBox = new System.Windows.Forms.CheckBox();
 			this.appliEChkBox = new System.Windows.Forms.CheckBox();
 			this.appliFChkBox = new System.Windows.Forms.CheckBox();
-			this.existSoundFileLabel = new System.Windows.Forms.Label();
 			this.appliGChkBox = new System.Windows.Forms.CheckBox();
 			this.appliHChkBox = new System.Windows.Forms.CheckBox();
 			this.appliIChkBox = new System.Windows.Forms.CheckBox();
@@ -69,6 +68,7 @@ namespace namaichi
 			this.sampleColorText = new System.Windows.Forms.TextBox();
 			this.backColorBtn = new System.Windows.Forms.Button();
 			this.textColorBtn = new System.Windows.Forms.Button();
+			this.existSoundFileLabel = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
 			this.defaultColorBtn = new System.Windows.Forms.Button();
@@ -99,6 +99,7 @@ namespace namaichi
 			this.radioButton1 = new System.Windows.Forms.RadioButton();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.officialBtn = new System.Windows.Forms.Button();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.behaviorGroupBox.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comThumbBox)).BeginInit();
@@ -146,9 +147,9 @@ namespace namaichi
 			// 
 			// communityId
 			// 
-			this.communityId.Location = new System.Drawing.Point(95, 23);
+			this.communityId.Location = new System.Drawing.Point(97, 23);
 			this.communityId.Name = "communityId";
-			this.communityId.Size = new System.Drawing.Size(146, 19);
+			this.communityId.Size = new System.Drawing.Size(100, 19);
 			this.communityId.TabIndex = 6;
 			// 
 			// communityNameText
@@ -343,16 +344,6 @@ namespace namaichi
 			this.appliFChkBox.Text = "アプリF";
 			this.appliFChkBox.UseVisualStyleBackColor = true;
 			// 
-			// existSoundFileLabel
-			// 
-			this.existSoundFileLabel.ForeColor = System.Drawing.Color.Black;
-			this.existSoundFileLabel.Location = new System.Drawing.Point(25, 188);
-			this.existSoundFileLabel.Name = "existSoundFileLabel";
-			this.existSoundFileLabel.Size = new System.Drawing.Size(196, 15);
-			this.existSoundFileLabel.TabIndex = 19;
-			this.existSoundFileLabel.Text = "該当するサウンドファイルが見つかりました";
-			this.existSoundFileLabel.Visible = false;
-			// 
 			// appliGChkBox
 			// 
 			this.appliGChkBox.Location = new System.Drawing.Point(255, 62);
@@ -418,6 +409,16 @@ namespace namaichi
 			this.textColorBtn.TabIndex = 15;
 			this.textColorBtn.UseVisualStyleBackColor = false;
 			this.textColorBtn.Click += new System.EventHandler(this.TextColorBtnClick);
+			// 
+			// existSoundFileLabel
+			// 
+			this.existSoundFileLabel.ForeColor = System.Drawing.Color.Black;
+			this.existSoundFileLabel.Location = new System.Drawing.Point(25, 188);
+			this.existSoundFileLabel.Name = "existSoundFileLabel";
+			this.existSoundFileLabel.Size = new System.Drawing.Size(196, 15);
+			this.existSoundFileLabel.TabIndex = 19;
+			this.existSoundFileLabel.Text = "該当するサウンドファイルが見つかりました";
+			this.existSoundFileLabel.Visible = false;
 			// 
 			// label11
 			// 
@@ -594,8 +595,6 @@ namespace namaichi
 			// 
 			// isMustComChkBox
 			// 
-			this.isMustComChkBox.Checked = true;
-			this.isMustComChkBox.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.isMustComChkBox.Location = new System.Drawing.Point(251, 72);
 			this.isMustComChkBox.Name = "isMustComChkBox";
 			this.isMustComChkBox.Size = new System.Drawing.Size(81, 15);
@@ -605,8 +604,6 @@ namespace namaichi
 			// 
 			// isMustUserChkBox
 			// 
-			this.isMustUserChkBox.Checked = true;
-			this.isMustUserChkBox.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.isMustUserChkBox.Location = new System.Drawing.Point(251, 155);
 			this.isMustUserChkBox.Name = "isMustUserChkBox";
 			this.isMustUserChkBox.Size = new System.Drawing.Size(81, 15);
@@ -616,8 +613,6 @@ namespace namaichi
 			// 
 			// isMustKeywordChkBox
 			// 
-			this.isMustKeywordChkBox.Checked = true;
-			this.isMustKeywordChkBox.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.isMustKeywordChkBox.Location = new System.Drawing.Point(251, 287);
 			this.isMustKeywordChkBox.Name = "isMustKeywordChkBox";
 			this.isMustKeywordChkBox.Size = new System.Drawing.Size(81, 15);
@@ -707,6 +702,7 @@ namespace namaichi
 			this.panel1.Controls.Add(this.communityId);
 			this.panel1.Controls.Add(this.isSimpleKeywordRadioBtn);
 			this.panel1.Controls.Add(this.communityNameText);
+			this.panel1.Controls.Add(this.officialBtn);
 			this.panel1.Controls.Add(this.getCommunityInfoBtn);
 			this.panel1.Controls.Add(this.label4);
 			this.panel1.Controls.Add(this.label9);
@@ -732,6 +728,16 @@ namespace namaichi
 			this.panel1.Size = new System.Drawing.Size(391, 657);
 			this.panel1.TabIndex = 30;
 			// 
+			// officialBtn
+			// 
+			this.officialBtn.Location = new System.Drawing.Point(203, 21);
+			this.officialBtn.Name = "officialBtn";
+			this.officialBtn.Size = new System.Drawing.Size(39, 23);
+			this.officialBtn.TabIndex = 7;
+			this.officialBtn.Text = "公式";
+			this.officialBtn.UseVisualStyleBackColor = true;
+			this.officialBtn.Click += new System.EventHandler(this.OfficialBtnClick);
+			// 
 			// panel2
 			// 
 			this.panel2.Controls.Add(this.comThumbBox);
@@ -746,7 +752,7 @@ namespace namaichi
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(760, 422);
+			this.ClientSize = new System.Drawing.Size(760, 437);
 			this.Controls.Add(this.panel2);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.button3);
@@ -768,6 +774,7 @@ namespace namaichi
 			this.panel2.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.Button officialBtn;
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Label existSoundFileLabel;

@@ -9,6 +9,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using namaichi.info;
 
@@ -36,37 +37,38 @@ namespace namaichi.utility
 				}
 			}
 			
-			var sw = new StreamWriter(path + "tasklist.ini");
-			sw.WriteLine("200");
-			foreach (var ti in form.taskListDataSource) {
-				for (var i = 0; i < 22; i++) { //namaroku 29 save 32
-					if (i == 0) sw.WriteLine(ti.taskTimeStr);
-					else if (i == 1) sw.WriteLine(ti.lvId);
-					else if (i == 2) sw.WriteLine(ti.args);
-					else if (i == 3) sw.WriteLine(ti.addDate);
-					else if (i == 4) sw.WriteLine(ti.status);
-					else if (i == 5) sw.WriteLine(ti.popup.ToString().ToLower());
-					else if (i == 6) sw.WriteLine(ti.baloon.ToString().ToLower());
-					else if (i == 7) sw.WriteLine(ti.browser.ToString().ToLower());
-					else if (i == 8) sw.WriteLine(ti.sound.ToString().ToLower());
-					else if (i == 9) sw.WriteLine(ti.appliA.ToString().ToLower());
-					else if (i == 10) sw.WriteLine(ti.appliB.ToString().ToLower());
-					else if (i == 11) sw.WriteLine(ti.appliC.ToString().ToLower());
-					else if (i == 12) sw.WriteLine(ti.appliD.ToString().ToLower());
-					else if (i == 13) sw.WriteLine(ti.appliE.ToString().ToLower());
-					else if (i == 14) sw.WriteLine(ti.appliF.ToString().ToLower());
-					else if (i == 15) sw.WriteLine(ti.appliG.ToString().ToLower());
-					else if (i == 16) sw.WriteLine(ti.appliH.ToString().ToLower());
-					else if (i == 17) sw.WriteLine(ti.appliI.ToString().ToLower());
-					else if (i == 18) sw.WriteLine(ti.appliJ.ToString().ToLower());
-					else if (i == 19) sw.WriteLine(ti.memo);
-                    else if (i == 20) sw.WriteLine(ti.isDelete.ToString().ToLower());
-                    else if (i == 21) sw.WriteLine(ti.mail.ToString().ToLower());
-					//else sw.WriteLine("");
+			using (var sw = new StreamWriter(path + "tasklist.ini", false, Encoding.UTF8)) {
+				sw.WriteLine("200");
+				foreach (var ti in form.taskListDataSource) {
+					for (var i = 0; i < 22; i++) { //namaroku 29 save 32
+						if (i == 0) sw.WriteLine(ti.taskTimeStr);
+						else if (i == 1) sw.WriteLine(ti.lvId);
+						else if (i == 2) sw.WriteLine(ti.args);
+						else if (i == 3) sw.WriteLine(ti.addDate);
+						else if (i == 4) sw.WriteLine(ti.status);
+						else if (i == 5) sw.WriteLine(ti.popup.ToString().ToLower());
+						else if (i == 6) sw.WriteLine(ti.baloon.ToString().ToLower());
+						else if (i == 7) sw.WriteLine(ti.browser.ToString().ToLower());
+						else if (i == 8) sw.WriteLine(ti.sound.ToString().ToLower());
+						else if (i == 9) sw.WriteLine(ti.appliA.ToString().ToLower());
+						else if (i == 10) sw.WriteLine(ti.appliB.ToString().ToLower());
+						else if (i == 11) sw.WriteLine(ti.appliC.ToString().ToLower());
+						else if (i == 12) sw.WriteLine(ti.appliD.ToString().ToLower());
+						else if (i == 13) sw.WriteLine(ti.appliE.ToString().ToLower());
+						else if (i == 14) sw.WriteLine(ti.appliF.ToString().ToLower());
+						else if (i == 15) sw.WriteLine(ti.appliG.ToString().ToLower());
+						else if (i == 16) sw.WriteLine(ti.appliH.ToString().ToLower());
+						else if (i == 17) sw.WriteLine(ti.appliI.ToString().ToLower());
+						else if (i == 18) sw.WriteLine(ti.appliJ.ToString().ToLower());
+						else if (i == 19) sw.WriteLine(ti.memo);
+	                    else if (i == 20) sw.WriteLine(ti.isDelete.ToString().ToLower());
+	                    else if (i == 21) sw.WriteLine(ti.mail.ToString().ToLower());
+						//else sw.WriteLine("");
+					}
 				}
+				sw.WriteLine("EndLine");
+				//sw.Close();
 			}
-			sw.WriteLine("EndLine");
-			sw.Close();
 		}
 		public void load(MainForm form)
 		{
@@ -79,9 +81,10 @@ namespace namaichi.utility
 			
 			try {
 				if (!File.Exists(fileName)) return;
-				var sr = new StreamReader(fileName);
-				lines = sr.ReadToEnd().Replace("\r", "").Split('\n');
-				sr.Close();
+				using (var sr = new StreamReader(fileName, Encoding.UTF8)) {
+					lines = sr.ReadToEnd().Replace("\r", "").Split('\n');
+					//sr.Close();
+				}
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 				return;

@@ -119,6 +119,7 @@ namespace namaichi
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.commonTab = new System.Windows.Forms.TabPage();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.IsConfirmFollowChkBox = new System.Windows.Forms.CheckBox();
 			this.delThumbChkBox = new System.Windows.Forms.CheckBox();
 			this.followerOnlySampleColorText = new System.Windows.Forms.TextBox();
 			this.followerOnlyColorBtn = new System.Windows.Forms.Button();
@@ -241,6 +242,7 @@ namespace namaichi
 			this.label42 = new System.Windows.Forms.Label();
 			this.alartTab = new System.Windows.Forms.TabPage();
 			this.groupBox8 = new System.Windows.Forms.GroupBox();
+			this.isTimeTableChkBox = new System.Windows.Forms.CheckBox();
 			this.isAppPushChkBox = new System.Windows.Forms.CheckBox();
 			this.isPushChkBox = new System.Windows.Forms.CheckBox();
 			this.isRssChkBox = new System.Windows.Forms.CheckBox();
@@ -1053,6 +1055,7 @@ namespace namaichi
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.IsConfirmFollowChkBox);
 			this.groupBox2.Controls.Add(this.delThumbChkBox);
 			this.groupBox2.Controls.Add(this.followerOnlySampleColorText);
 			this.groupBox2.Controls.Add(this.followerOnlyColorBtn);
@@ -1073,10 +1076,19 @@ namespace namaichi
 			this.groupBox2.Controls.Add(this.isStartTimeAllCheckChkBox);
 			this.groupBox2.Location = new System.Drawing.Point(5, 10);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(420, 295);
+			this.groupBox2.Size = new System.Drawing.Size(420, 317);
 			this.groupBox2.TabIndex = 1;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "お気に入りのコミュニティタブの設定";
+			// 
+			// IsConfirmFollowChkBox
+			// 
+			this.IsConfirmFollowChkBox.Location = new System.Drawing.Point(19, 290);
+			this.IsConfirmFollowChkBox.Name = "IsConfirmFollowChkBox";
+			this.IsConfirmFollowChkBox.Size = new System.Drawing.Size(405, 19);
+			this.IsConfirmFollowChkBox.TabIndex = 49;
+			this.IsConfirmFollowChkBox.Text = "フォローボタンのクリック時に確認する";
+			this.IsConfirmFollowChkBox.UseVisualStyleBackColor = true;
 			// 
 			// delThumbChkBox
 			// 
@@ -1269,7 +1281,7 @@ namespace namaichi
 			this.groupBox11.Controls.Add(this.thresholdpageList);
 			this.groupBox11.Controls.Add(this.label49);
 			this.groupBox11.Controls.Add(this.label48);
-			this.groupBox11.Location = new System.Drawing.Point(5, 311);
+			this.groupBox11.Location = new System.Drawing.Point(5, 333);
 			this.groupBox11.Name = "groupBox11";
 			this.groupBox11.Size = new System.Drawing.Size(420, 129);
 			this.groupBox11.TabIndex = 1;
@@ -2373,15 +2385,25 @@ namespace namaichi
 			// 
 			// groupBox8
 			// 
+			this.groupBox8.Controls.Add(this.isTimeTableChkBox);
 			this.groupBox8.Controls.Add(this.isAppPushChkBox);
 			this.groupBox8.Controls.Add(this.isPushChkBox);
 			this.groupBox8.Controls.Add(this.isRssChkBox);
 			this.groupBox8.Location = new System.Drawing.Point(5, 10);
 			this.groupBox8.Name = "groupBox8";
-			this.groupBox8.Size = new System.Drawing.Size(420, 145);
+			this.groupBox8.Size = new System.Drawing.Size(420, 184);
 			this.groupBox8.TabIndex = 6;
 			this.groupBox8.TabStop = false;
 			this.groupBox8.Text = "取得元";
+			// 
+			// isTimeTableChkBox
+			// 
+			this.isTimeTableChkBox.Location = new System.Drawing.Point(19, 135);
+			this.isTimeTableChkBox.Name = "isTimeTableChkBox";
+			this.isTimeTableChkBox.Size = new System.Drawing.Size(400, 43);
+			this.isTimeTableChkBox.TabIndex = 8;
+			this.isTimeTableChkBox.Text = "公式放送の番組表から取得する\r\n（公式放送のみ取得できます）";
+			this.isTimeTableChkBox.UseVisualStyleBackColor = true;
 			// 
 			// isAppPushChkBox
 			// 
@@ -2405,9 +2427,9 @@ namespace namaichi
 			// 
 			this.isRssChkBox.Location = new System.Drawing.Point(19, 18);
 			this.isRssChkBox.Name = "isRssChkBox";
-			this.isRssChkBox.Size = new System.Drawing.Size(376, 33);
+			this.isRssChkBox.Size = new System.Drawing.Size(400, 43);
 			this.isRssChkBox.TabIndex = 2;
-			this.isRssChkBox.Text = "RSSから取得する\r\n（フォローしていない放送も取得できますが開始から1,2分遅れます）";
+			this.isRssChkBox.Text = "RSSから取得する\r\n（公式放送を除いてフォローしていない放送も取得できますが開始から1,2分遅れます）";
 			this.isRssChkBox.UseVisualStyleBackColor = true;
 			// 
 			// groupBox7
@@ -2418,7 +2440,7 @@ namespace namaichi
 			this.groupBox7.Controls.Add(this.label7);
 			this.groupBox7.Controls.Add(this.label8);
 			this.groupBox7.Controls.Add(this.rssUpdateIntervalList);
-			this.groupBox7.Location = new System.Drawing.Point(5, 161);
+			this.groupBox7.Location = new System.Drawing.Point(5, 200);
 			this.groupBox7.Name = "groupBox7";
 			this.groupBox7.Size = new System.Drawing.Size(420, 80);
 			this.groupBox7.TabIndex = 5;
@@ -2732,6 +2754,8 @@ namespace namaichi
 			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.CheckBox isTimeTableChkBox;
+		private System.Windows.Forms.CheckBox IsConfirmFollowChkBox;
 		private System.Windows.Forms.CheckBox isLogFileChkBox;
 		private System.Windows.Forms.CheckBox delThumbChkBox;
 		private System.Windows.Forms.CheckBox liveListCacheIconChkBox;

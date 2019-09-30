@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Net;
 //using SuperSocket.ClientEngine;
+using System.IO;
+using System.IO.Compression;
 using namaichi.alart;
 
 namespace namaichi.info
@@ -51,6 +53,8 @@ namespace namaichi.info
 		//private RssItem ri = null;
 		public DateTime lastExistTime = DateTime.Now;
 		
+		//byte[] deflateThumb = null;
+		//Image testImg = null;
 		
 		public LiveInfo(List<KeyValuePair<string, string>> item, SortableBindingList<AlartInfo> alartData, config.config config, SortableBindingList<AlartInfo> userAlartData)
 		{
@@ -95,6 +99,11 @@ namespace namaichi.info
 			}
 			
 			//thumbnailUrl = getThumbnail(comId);
+			
+			
+			
+			//deflateThumb = b;
+			//testImg = new Bitmap(thumbnail);
 		}
 		public LiveInfo(RssItem item, 
 				SortableBindingList<AlartInfo> alartData, 
@@ -120,11 +129,28 @@ namespace namaichi.info
 			favorite = getFavorite(alartData, ri, favorite);
 			favorite = getFavorite(userAlartData, ri, favorite);
 			
+			/*
+			var b = (byte[])new ImageConverter().ConvertTo(thumbnail, typeof(byte[]));
+			b = System.Text.Encoding.UTF8.GetBytes("あああああああああああああ");
+			byte[] outb;
+			using (var m = new MemoryStream()) {
+				//m.Write(b, 0, b.Length);
+				using (var d = new DeflateStream(m, CompressionMode.Compress, true)) {
+					d.Write(b, 0, b.Length);
+					d.Close();
+					outb = m.ToArray();
+				}
+				
+			}
+			 */
+			
 		}
 		public Image getThumbnail(string url, bool isSaveCache) {
 			//return ThumbnailManager.getThumbnailRssUrl(url, isSaveCache);
 			return new Bitmap(ThumbnailManager.getThumbnailRssUrl(url, isSaveCache), 50, 50);
+			//return null;
 		}
+
 		private string getFavorite(SortableBindingList<AlartInfo> aiList, RssItem ri, string _favorite) {
 			try {
 				foreach (var ai in aiList) {
@@ -224,7 +250,15 @@ namespace namaichi.info
 		}
 		public Image ThumbnailUrl
         {
-			get { return thumbnail; }
+			get {
+				//var b = new ImageConverter().ConvertTo(thumbnail, typeof(byte[]));
+				//var t = (Image)new ImageConverter().ConvertFrom(b);
+				
+				//return t;
+				return thumbnail; 
+			}
+			//get { return null; }
+			//get { return new Bitmap(thumbnail, 50, 50); }
             set { this.thumbnail = value; }
         }
 		public string Title

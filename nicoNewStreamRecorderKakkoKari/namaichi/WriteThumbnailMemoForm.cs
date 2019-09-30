@@ -40,7 +40,7 @@ namespace namaichi
 		}
 		void TextEvent(object sender, EventArgs e)
 		{
-			thumbBox.Image = img;
+			thumbBox.Image = resetImage();
 			
 			if (text.Text == "") {
 				//thumbBox.Image = img;

@@ -17,7 +17,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using namaichi.alart;
 using namaichi.info;
 using namaichi.rec;
 using namaichi.utility;
@@ -104,66 +104,39 @@ namespace namaichi.alart
 			foreach (var _item in items) {
 				try {
 					var item = _item;
-					bool isAppliA, isAppliB, isAppliC, isAppliD, isAppliE, isAppliF, isAppliG, isAppliH, isAppliI, isAppliJ, isPopup, isBaloon, isBrowser, isMail, isSound, isLog;
-					isAppliA = isAppliB = isAppliC = isAppliD = isAppliE = isAppliF = isAppliG = isAppliH = isAppliI = isAppliJ = isPopup = isBaloon = isBrowser = isMail = isSound = isLog = false;
+					var dpi = new DoProcessInfo();
+					//bool isAppliA, isAppliB, isAppliC, isAppliD, isAppliE, isAppliF, isAppliG, isAppliH, isAppliI, isAppliJ, isPopup, isBaloon, isBrowser, isMail, isSound, isLog;
+					//isAppliA = isAppliB = isAppliC = isAppliD = isAppliE = isAppliF = isAppliG = isAppliH = isAppliI = isAppliJ = isPopup = isBaloon = isBrowser = isMail = isSound = isLog = false;
 					//var alartListCount = form.getAlartListCount();
 				
 					var targetAi = new List<AlartInfo>();
 					AlartInfo nearAlartAi = null;
 					
-					bool isSuccessAccess = getAlartProcess(ref isAppliA, ref isAppliB,
-							ref isAppliC, ref isAppliD, ref isAppliE,
-							ref isAppliF, ref isAppliG, ref isAppliH,
-							ref isAppliI, ref isAppliJ, ref isPopup,
-							ref isBaloon, ref isBrowser, ref isMail, 
-							ref isSound, ref isLog, ref isChanged, 
+					bool isSuccessAccess = getAlartProcess(dpi,
+							ref isChanged, 
 							ref targetAi, ref nearAlartAi, ref item,
 							alartListDataSource);
-					bool isSuccessAccess2 = getAlartProcess(ref isAppliA, ref isAppliB,
-							ref isAppliC, ref isAppliD, ref isAppliE,
-							ref isAppliF, ref isAppliG, ref isAppliH,
-							ref isAppliI, ref isAppliJ, ref isPopup,
-							ref isBaloon, ref isBrowser, ref isMail, 
-							ref isSound, ref isLog, ref isChanged, 
+					bool isSuccessAccess2 = getAlartProcess(dpi,
+					        ref isChanged,
 							ref targetAi, ref nearAlartAi, ref item,
 							form.userAlartListDataSource);
 					if (isSuccessAccess && isSuccessAccess2) {
 						doProcess(item, targetAi, 
-					        isAppliA, isAppliB, isAppliC,
-							isAppliD, isAppliE,	isAppliF, 
-							isAppliG, isAppliH, isAppliI,
-							isAppliJ, isPopup, isBaloon,
-							isBrowser, isMail, isSound, 
-							isLog, nearAlartAi);
+					        dpi, nearAlartAi);
 					} else {
 						Task.Run(() => {
 							for (var i = 0; i < 200; i++) {
-								isSuccessAccess = getAlartProcess(ref isAppliA, ref isAppliB,
-									ref isAppliC, ref isAppliD, ref isAppliE,
-									ref isAppliF, ref isAppliG, ref isAppliH,
-									ref isAppliI, ref isAppliJ, ref isPopup,
-									ref isBaloon, ref isBrowser, ref isMail, 
-									ref isSound, ref isLog, ref isChanged, 
+								isSuccessAccess = getAlartProcess(dpi, ref isChanged, 
 									ref targetAi, ref nearAlartAi, ref item,
 								alartListDataSource);
-						        isSuccessAccess2 = getAlartProcess(ref isAppliA, ref isAppliB,
-									ref isAppliC, ref isAppliD, ref isAppliE,
-									ref isAppliF, ref isAppliG, ref isAppliH,
-									ref isAppliI, ref isAppliJ, ref isPopup,
-									ref isBaloon, ref isBrowser, ref isMail, 
-									ref isSound, ref isLog, ref isChanged, 
+						        isSuccessAccess2 = getAlartProcess(dpi, ref isChanged, 
 									ref targetAi, ref nearAlartAi, ref item,
 								form.userAlartListDataSource);
 								if (isSuccessAccess && isSuccessAccess2) break;
 								Thread.Sleep(3000);
 							}
 						    doProcess(item, targetAi, 
-						        isAppliA, isAppliB, isAppliC,
-								isAppliD, isAppliE,	isAppliF, 
-								isAppliG, isAppliH, isAppliI,
-								isAppliJ, isPopup, isBaloon,
-								isBrowser, isMail, isSound, 
-								isLog, nearAlartAi);
+						        dpi, nearAlartAi);
 						});
 					}
 					
@@ -174,12 +147,7 @@ namespace namaichi.alart
 			
 			return isChanged;
 		}
-		private bool getAlartProcess(ref bool isAppliA, ref bool isAppliB,
-				ref bool isAppliC, ref bool isAppliD, ref bool isAppliE,
-				ref bool isAppliF, ref bool isAppliG, ref bool isAppliH,
-				ref bool isAppliI, ref bool isAppliJ, ref bool isPopup,
-				ref bool isBaloon, ref bool isBrowser, ref bool isMail,
-				ref bool isSound, ref bool isLog, ref bool isChanged, 
+		private bool getAlartProcess(DoProcessInfo dpi, ref bool isChanged, 
 				ref List<AlartInfo> targetAi,
 				ref AlartInfo nearAlartAi, ref RssItem item, 
 				SortableBindingList<AlartInfo> dataSource) {
@@ -252,22 +220,22 @@ namespace namaichi.alart
 							}
 						}
 						*/
-						if (alartItem.AppliA) isAppliA = true;
-						if (alartItem.AppliB) isAppliB = true;
-						if (alartItem.AppliC) isAppliC = true;
-						if (alartItem.AppliD) isAppliD = true;
-						if (alartItem.AppliE) isAppliE = true;
-						if (alartItem.AppliF) isAppliF = true;
-						if (alartItem.AppliG) isAppliG = true;
-						if (alartItem.AppliH) isAppliH = true;
-						if (alartItem.AppliI) isAppliI = true;
-						if (alartItem.AppliJ) isAppliJ = true;
-						if (alartItem.Popup) isPopup = true;
-						if (alartItem.Baloon) isBaloon = true;
-						if (alartItem.Browser) isBrowser = true;
-						if (alartItem.mail) isMail = true;
-						if (alartItem.sound) isSound = true;
-						isLog = true;
+						if (alartItem.AppliA) dpi.isAppliA = true;
+						if (alartItem.AppliB) dpi.isAppliB = true;
+						if (alartItem.AppliC) dpi.isAppliC = true;
+						if (alartItem.AppliD) dpi.isAppliD = true;
+						if (alartItem.AppliE) dpi.isAppliE = true;
+						if (alartItem.AppliF) dpi.isAppliF = true;
+						if (alartItem.AppliG) dpi.isAppliG = true;
+						if (alartItem.AppliH) dpi.isAppliH = true;
+						if (alartItem.AppliI) dpi.isAppliI = true;
+						if (alartItem.AppliJ) dpi.isAppliJ = true;
+						if (alartItem.Popup) dpi.isPopup = true;
+						if (alartItem.Baloon) dpi.isBaloon = true;
+						if (alartItem.Browser) dpi.isBrowser = true;
+						if (alartItem.mail) dpi.isMail = true;
+						if (alartItem.sound) dpi.isSound = true;
+						dpi.isLog = true;
 						
 						if (alartItem.communityId == "official")
 							util.debugWriteLine("official");
@@ -292,28 +260,22 @@ namespace namaichi.alart
 			return true;
 		}
 		private void doProcess(RssItem item, 
-		        List<AlartInfo> targetAi, bool isAppliA, 
-		        bool isAppliB, bool isAppliC,
-				bool isAppliD, bool isAppliE, bool isAppliF, 
-				bool isAppliG, bool isAppliH, bool isAppliI,
-				bool isAppliJ, bool isPopup, bool isBaloon,
-				bool isBrowser, bool isMail, bool isSound, 
-				bool isLog, AlartInfo nearAlartAi) {
+		        List<AlartInfo> targetAi, 
+		        DoProcessInfo dpi, AlartInfo nearAlartAi) {
 			if (processedLvidList.IndexOf(item.lvId) > -1) {
 				util.debugWriteLine("process lvid found " + item.lvId + " " + item.comName + " " + item.hostName);
 				return;
 			}
-			processedLvidList.Add(item.lvId);
-
-			util.debugWriteLine(item.lvId + " A " + isAppliA + " B " + isAppliB + " C " + isAppliC + " D " + isAppliD + " E " + isAppliE + " F " + isAppliF + " G " + isAppliG + " H " + isAppliH + " I " + isAppliI + " J " + isAppliJ + " pop " + isPopup + " balloon " + isBaloon);
-			processAlart(item, targetAi, 
-			        isAppliA, isAppliB, isAppliC,
-					isAppliD, isAppliE,	isAppliF, 
-					isAppliG, isAppliH, isAppliI,
-					isAppliJ, isPopup, isBaloon,
-					isBrowser, isMail, isSound);
 			
-			if (isLog && form.config.get("log") == "true")
+			if (dpi.isDoProcess())
+				processedLvidList.Add(item.lvId);
+			
+
+			util.debugWriteLine(item.lvId + " A " + dpi.isAppliA + " B " + dpi.isAppliB + " C " + dpi.isAppliC + " D " + dpi.isAppliD + " E " + dpi.isAppliE + " F " + dpi.isAppliF + " G " + dpi.isAppliG + " H " + dpi.isAppliH + " I " + dpi.isAppliI + " J " + dpi.isAppliJ + " pop " + dpi.isPopup + " balloon " + dpi.isBaloon);
+			processAlart(item, targetAi, 
+			        dpi);
+			
+			if (dpi.isLog && form.config.get("log") == "true")
 				writeFavoriteLog(item);
 			
 			if (targetAi.Count > 0)
@@ -431,75 +393,71 @@ namespace namaichi.alart
 			}
 		}
 		private void processAlart(RssItem item, 
-		        List<AlartInfo> targetAi, bool isAppliA, 
-		        bool isAppliB, bool isAppliC,
-				bool isAppliD, bool isAppliE, bool isAppliF, 
-				bool isAppliG, bool isAppliH, bool isAppliI,
-				bool isAppliJ, bool isPopup, bool isBaloon,
-				bool isBrowser, bool isMail, bool isSound) {
-			if (isAppliA && !form.notifyOffList[7]) {
+		        List<AlartInfo> targetAi,
+		        DoProcessInfo dpi) {
+			if (dpi.isAppliA && !form.notifyOffList[7]) {
 				var appliAPath = form.config.get("appliAPath");
 				var args = form.config.get("appliAArgs");
 				appliProcess(appliAPath, item.lvId, args);
 			}
-			if (isAppliB && !form.notifyOffList[8]) {
+			if (dpi.isAppliB && !form.notifyOffList[8]) {
 				var appliBPath = form.config.get("appliBPath");
 				var args = form.config.get("appliBArgs");
 				appliProcess(appliBPath, item.lvId, args);
 			}
-			if (isAppliC && !form.notifyOffList[9]) {
+			if (dpi.isAppliC && !form.notifyOffList[9]) {
 				var appliCPath = form.config.get("appliCPath");
 				var args = form.config.get("appliCArgs");
 				appliProcess(appliCPath, item.lvId, args);
 			}
-			if (isAppliD && !form.notifyOffList[10]) {
+			if (dpi.isAppliD && !form.notifyOffList[10]) {
 				var appliDPath = form.config.get("appliDPath");
 				var args = form.config.get("appliDArgs");
 				appliProcess(appliDPath, item.lvId, args);
 			}
-			if (isAppliE && !form.notifyOffList[11]) {
+			if (dpi.isAppliE && !form.notifyOffList[11]) {
 				var appliEPath = form.config.get("appliEPath");
 				var args = form.config.get("appliEArgs");
 				appliProcess(appliEPath, item.lvId, args);
 			}
-			if (isAppliF && !form.notifyOffList[12]) {
+			if (dpi.isAppliF && !form.notifyOffList[12]) {
 				var appliFPath = form.config.get("appliFPath");
 				var args = form.config.get("appliFArgs");
 				appliProcess(appliFPath, item.lvId, args);
 			}
-			if (isAppliG && !form.notifyOffList[13]) {
+			if (dpi.isAppliG && !form.notifyOffList[13]) {
 				var appliGPath = form.config.get("appliGPath");
 				var args = form.config.get("appliGArgs");
 				appliProcess(appliGPath, item.lvId, args);
 			}
-			if (isAppliH && !form.notifyOffList[14]) {
+			if (dpi.isAppliH && !form.notifyOffList[14]) {
 				var appliHPath = form.config.get("appliHPath");
 				var args = form.config.get("appliHArgs");
 				appliProcess(appliHPath, item.lvId, args);
 			}
-			if (isAppliI && !form.notifyOffList[15]) {
+			if (dpi.isAppliI && !form.notifyOffList[15]) {
 				var appliIPath = form.config.get("appliIPath");
 				var args = form.config.get("appliIArgs");
 				appliProcess(appliIPath, item.lvId, args);
 			}
-			if (isAppliJ && !form.notifyOffList[16]) {
+			if (dpi.isAppliJ && !form.notifyOffList[16]) {
 				var appliJPath = form.config.get("appliJPath");
 				var args = form.config.get("appliJArgs");
 				appliProcess(appliJPath, item.lvId, args);
 			}
-			if (isPopup && !form.notifyOffList[2] && targetAi.Count > 0) {
+			if (dpi.isPopup && !form.notifyOffList[2] && targetAi.Count > 0) {
 				displayPopup(item, targetAi[0]);
 			}
-			if (isBaloon && !form.notifyOffList[3] && targetAi.Count > 0) {
+			if (dpi.isBaloon && !form.notifyOffList[3] && targetAi.Count > 0) {
 				displayBaloon(item, targetAi[0]);
 			}
-			if (isBrowser && !form.notifyOffList[4]) {
+			if (dpi.isBrowser && !form.notifyOffList[4]) {
 				openBrowser(item);
 			}
-			if (isMail && !form.notifyOffList[5]) {
+			if (dpi.isMail && !form.notifyOffList[5]) {
 				mail(item);
 			}
-			if (isSound && !form.notifyOffList[6] && targetAi.Count > 0) {
+			if (dpi.isSound && !form.notifyOffList[6] && targetAi.Count > 0) {
 				sound(item, targetAi[0]);
 			}
 		}
@@ -705,7 +663,6 @@ namespace namaichi.alart
 			
 			if (items.Count > 0 && form.config.get("IsbroadLog") == "true")
 				Task.Run(() => writeBroadLog(items));
-			
 			
 			lock(foundLiveLock) {
 				var isChanged = gotStreamProcess(items);
@@ -918,12 +875,70 @@ namespace namaichi.alart
 						if (isContain) 
 							continue;
 						
+						var sameCommunityLive = new List<LiveInfo>();
+						foreach (var l in form.liveListDataSource)
+							if (!string.IsNullOrEmpty(l.comId) && l.comId.StartsWith("co") && l.comId == item.comId)
+								sameCommunityLive.Add(l);
+						foreach (var l in form.liveListDataReserve)
+							if (!string.IsNullOrEmpty(l.comId) && l.comId.StartsWith("co") && l.comId == item.comId)
+								sameCommunityLive.Add(l);
+						
 						form.addLiveListItem(li, cateChar, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly);
+						foreach (var l in sameCommunityLive)
+							form.removeLiveListItem(l);
 					}
 				}
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
+		}
+	}
+	class DoProcessInfo {
+		public bool isAppliA;
+		public bool isAppliB;
+		public bool isAppliC;
+		public bool isAppliD;
+		public bool isAppliE;
+		public bool isAppliF;
+		public bool isAppliG;
+		public bool isAppliH;
+		public bool isAppliI;
+		public bool isAppliJ;
+		public bool isPopup;
+		public bool isBaloon;
+		public bool isBrowser;
+		public bool isMail;
+		public bool isSound;
+		public bool isLog;
+		public DoProcessInfo() {}
+		public DoProcessInfo(bool isAppliA, bool isAppliB, 
+		        bool isAppliC, bool isAppliD, bool isAppliE, 
+		        bool isAppliF, bool isAppliG, bool isAppliH, 
+		        bool isAppliI, bool isAppliJ, bool isPopup, 
+		        bool isBaloon, bool isBrowser, bool isMail, 
+		        bool isSound, bool isLog) {
+			this.isAppliA = isAppliA;
+			this.isAppliB = isAppliB;
+			this.isAppliC = isAppliC;
+			this.isAppliD = isAppliD;
+			this.isAppliE = isAppliE;
+			this.isAppliF = isAppliF;
+			this.isAppliG = isAppliG;
+			this.isAppliH = isAppliH;
+			this.isAppliI = isAppliI;
+			this.isAppliJ = isAppliJ;
+			this.isPopup = isPopup;
+			this.isBaloon = isBaloon;
+			this.isBrowser = isBrowser;
+			this.isMail = isMail;
+			this.isSound = isSound;
+			this.isLog = isLog;
+		}
+		public bool isDoProcess() {
+			return isAppliA || isAppliB || isAppliC ||
+					isAppliD || isAppliE || isAppliF || isAppliG ||
+					isAppliH || isAppliI || isAppliJ || isPopup ||
+					isBaloon || isBrowser || isMail || isSound;
 		}
 	}
 }

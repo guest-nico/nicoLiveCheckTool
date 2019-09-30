@@ -24,7 +24,7 @@ namespace namaichi.alart
 		Check check;
 		config.config config;
 		private bool isRetry = true;
-		private List<RssItem> liveList = new List<RssItem>();
+		private List<RssItem> timeTableList = new List<RssItem>();
 		private DateTime lastGetTime = DateTime.MinValue;
 		private bool isAllCheck = false;
 		
@@ -39,7 +39,7 @@ namespace namaichi.alart
 			
 			while (isRetry) {
 				try {
-					util.debugWriteLine("timeline check liveList count " + liveList.Count);
+					util.debugWriteLine("timeline check liveList count " + timeTableList.Count);
 					
 					if (DateTime.Now - lastGetTime > TimeSpan.FromHours(3)) {
 						setLiveList();
@@ -47,7 +47,7 @@ namespace namaichi.alart
 					}
 					
 					var alartedItem = new List<RssItem>();
-					foreach (var l in liveList) {
+					foreach (var l in timeTableList) {
 						if (DateTime.Now.AddSeconds(10) > l.pubDateDt) {
 							util.debugWriteLine("timeline alart " + l.lvId + " " + l.title);
 							check.foundLive(new List<RssItem>{l});
@@ -55,7 +55,7 @@ namespace namaichi.alart
 						}
 					}
 					foreach (var l in alartedItem)
-						liveList.Remove(l);
+						timeTableList.Remove(l);
 					isAllCheck = false;
 					Thread.Sleep(3000);
 				} catch (Exception e) {
@@ -69,14 +69,14 @@ namespace namaichi.alart
 				var url = "https://live.nicovideo.jp/api/getZeroTimeline?date=";//2019-09-15";
 				addLiveListDay(url + DateTime.Now.ToString("yyyy-MM-dd"));
 				addLiveListDay(url + DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"));
-				liveList.Sort((RssItem x,RssItem y) => string.Compare(x.pubDate, y.pubDate));
+				timeTableList.Sort((RssItem x,RssItem y) => string.Compare(x.pubDate, y.pubDate));
 				
 				if (!isAllCheck) {
 					var delList = new List<RssItem>();
-					foreach (var l in liveList)
+					foreach (var l in timeTableList)
 						if (DateTime.Now > l.pubDateDt) delList.Add(l);
 					foreach (var l in delList)
-						liveList.Remove(l);
+						timeTableList.Remove(l);
 				}
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
@@ -91,7 +91,7 @@ namespace namaichi.alart
 					if (l.provider_type != "official") continue;
 					
 					l.startTime = DateTime.Parse(l.start_date + " " + l.start_time);
-					if ((l.status == "onair" || l.startTime > DateTime.Now.AddHours(-2)) && liveList.Find(n => n.lvId == l.id) == null) {
+					if ((l.status == "onair" || l.startTime > DateTime.Now.AddHours(-2)) && timeTableList.Find(n => n.lvId == "lv" + l.id) == null) {
 					//if (((isAllCheck && l.status == "onair") || l.startTime > DateTime.Now.AddHours(-2)) && liveList.Find(n => n.lvId == l.id) == null) {
 						var hig = new HosoInfoGetter();
 						hig.get("https://live.nicovideo.jp/watch/lv" + l.id);
@@ -99,15 +99,16 @@ namespace namaichi.alart
 						var ri = new RssItem(l.title, "lv" + l.id, hig.dt.ToString(),
 								hig.description, 
 								util.getCommunityName(hig.communityId, out _isFollow, null), 
-								hig.communityId, 
-								util.getUserName(hig.userId, out _isFollow, null), 
+								hig.communityId,
+								"", 
 								hig.thumbnail, "false", "");
 						ri.type = hig.type;
 						ri.tags = hig.tags;
 						ri.pubDateDt = hig.openDt;
+						if (!string.IsNullOrEmpty(hig.userName)) ri.hostName = hig.userName;
 						if (hig.openDt != hig.dt) util.debugWriteLine("hig open start tigau " + hig.openDt + " " + hig.dt);
 						else util.debugWriteLine("hig open start onaji " + hig.openDt + " " + hig.dt);
-						liveList.Add(ri);
+						timeTableList.Add(ri);
 					}
 				}
 				                                         

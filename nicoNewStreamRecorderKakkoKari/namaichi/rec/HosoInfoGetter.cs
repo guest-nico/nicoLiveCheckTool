@@ -30,6 +30,7 @@ namespace namaichi.rec
 		public List<string> category = null;
 		public bool isMemberOnly = false;
 		public DateTime openDt = DateTime.MinValue;
+		public string userName = null;
 		public HosoInfoGetter()
 		{
 		}
@@ -124,6 +125,7 @@ namespace namaichi.rec
 					var isChannel = util.getRegGroup(data, "visualProviderType\":\"(channel)\",\"title\"") != null;
 					communityId = util.getRegGroup(data, "\"socialGroup\".+?\"id\".\"(.+?)\"");
 					userId = (isChannel) ? null : (util.getRegGroup(data, "supplier\":{\"name\".+?pageUrl\":\"http[s]*://www.nicovideo.jp/user/(\\d+?)\""));
+					userName = util.getRegGroup(data, "supplier\":{\"name\":\"(.+?)\"");
 				}
 				description = util.getRegGroup(data, "\"description\":\"(.*?[^\\\\])\",");
 				
@@ -131,6 +133,10 @@ namespace namaichi.rec
 				var isChannel = type == "channel";
 				if (!isChannel)
 					userId = util.getRegGroup(res, "<a href=\"https*://www.nicovideo.jp/user/(\\d+)\" target=\"_blank\">");
+				else {
+					userName = util.getRegGroup(res, "（提供:<strong><span itemprop=\"name\">(.+?)</span></strong>）");
+					var i = 0;
+				}
 				communityId = util.getRegGroup(res, "<a href=\"http.+?/channel/(ch\\d+)\" target=\"_blank\">");
 				if (communityId == null) communityId = util.getRegGroup(res, "<a href=\"http.+?/community/(co\\d+)\" target=\"_blank\">");
 				

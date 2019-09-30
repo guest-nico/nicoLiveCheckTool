@@ -605,7 +605,7 @@ namespace namaichi
 					label6.Visible = label9.Visible = 
 					keywordText.Visible = customKeywordBtn.Visible =
 					isCustomKeywordRadioBtn.Visible = isMustKeywordChkBox.Visible = 
-					isSimpleKeywordRadioBtn.Visible = false;
+					isSimpleKeywordRadioBtn.Visible = officialBtn.Visible = false;
 		}
 		
 		void OfficialBtnClick(object sender, EventArgs e)

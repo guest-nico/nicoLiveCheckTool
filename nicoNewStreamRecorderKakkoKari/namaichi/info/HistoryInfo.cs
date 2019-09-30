@@ -53,7 +53,7 @@ namespace namaichi.info
 		}
 		*/
 		public HistoryInfo() {
-			
+			description = null;
 		}
 		//public HistoryInfo(RssItem ri, SortableBindingList<AlartInfo> alartData, List<AlartInfo> targetAi)
 		public HistoryInfo(RssItem ri, List<AlartInfo> targetAi)
@@ -70,43 +70,44 @@ namespace namaichi.info
 			onAirMode = ri.isMemberOnly ? 2 : 1;
 			
 			
-			setFavoriteFromAiList(targetAi, ri);
+			setFavoriteFromAiList(targetAi, ri, this);
+			
 			
 		}
-		private void setFavoriteFromAiList(List<AlartInfo> targetAi, RssItem ri) {
+		private static void setFavoriteFromAiList(List<AlartInfo> targetAi, RssItem ri, HistoryInfo hi) {
 			while (true) {
 				try {
 					foreach (var ai in targetAi) {
 						if (!string.IsNullOrEmpty(ai.communityId)) {
-							if (ai.communityId == communityId || 
+							if (ai.communityId == hi.communityId || 
 							    	(ai.communityId == "official" && ri.type == "official")) {
-								if (favorite != "") favorite += ",";
-								favorite += "ｺﾐｭﾆﾃｨID";
+								if (hi.favorite != "") hi.favorite += ",";
+								hi.favorite += "ｺﾐｭﾆﾃｨID";
 	//							if (memo != "") memo += ",";
 	//							memo += ai.memo;
-								textColor = ai.textColor;
-								backColor = ai.backColor;
+								hi.textColor = ai.textColor;
+								hi.backColor = ai.backColor;
 								
-							} else isInListCom = false; 
+							} else hi.isInListCom = false; 
 						}
 						if (!string.IsNullOrEmpty(ai.hostId)) {
-							if (ai.hostName == userName) {
-								if (favorite != "") favorite += ",";
-								favorite += "ﾕｰｻﾞｰ名?";
+							if (ai.hostName == hi.userName) {
+								if (hi.favorite != "") hi.favorite += ",";
+								hi.favorite += "ﾕｰｻﾞｰ名?";
 	//							if (memo != "") memo += ",";
 	//							memo += ai.memo;
-								textColor = ai.textColor;
-								backColor = ai.backColor;
-							} else isInListUser = false;
+								hi.textColor = ai.textColor;
+								hi.backColor = ai.backColor;
+							} else hi.isInListUser = false;
 						}
 						
 						if (!string.IsNullOrEmpty(ai.Keyword) && ri.isMatchKeyword(ai)) {
-							if (favorite != "") favorite += ",";
-							favorite += "ｷｰﾜｰﾄ:" + ai.Keyword;
+							if (hi.favorite != "") hi.favorite += ",";
+							hi.favorite += "ｷｰﾜｰﾄ:" + ai.Keyword;
 //							if (memo != "") memo += ",";
 //							memo += ai.memo;
-							textColor = ai.textColor;
-							backColor = ai.backColor;
+							hi.textColor = ai.textColor;
+							hi.backColor = ai.backColor;
 						}
 					}
 					break;

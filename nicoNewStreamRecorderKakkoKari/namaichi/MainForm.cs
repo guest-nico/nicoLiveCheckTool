@@ -506,31 +506,24 @@ namespace namaichi
 			});
 			categoryBtnDisplayUpdate();
 			
-			
-			return;
-			
-			var a = util.getJarPath();
-			var desc = System.Diagnostics.FileVersionInfo.GetVersionInfo(util.getJarPath()[0] + "/websocket4net.dll");
-			if (desc.FileDescription != "WebSocket4Net for .NET 4.5 gettable data bytes") {
-				Invoke((MethodInvoker)delegate() {
-					System.Windows.Forms.MessageBox.Show("「WebSocket4Net.dll」をver0.86.9以降に同梱されているものと置き換えてください");
-				});
-			}
-			
-			
-			
 			//.net
 			var ver = util.Get45PlusFromRegistry();  
+			util.debugWriteLine(".net ver " + ver);
 			if (ver < 4.52) {
 				
-				Task.Run(() => {
-				    Invoke((MethodInvoker)delegate() {
-						var b = new DotNetMessageBox(ver);
-						b.Show(this); 
-//						System.Windows.Forms.MessageBox.Show("「動作には.NET 4.5.2以上が推奨です。現在は" + ver + "です。");
-					});
-				});
+				//Task.Run(() => {
+				    //Invoke((MethodInvoker)delegate() {
+						//var b = new DotNetMessageBox(ver);
+						//b.Show(this); 
+						System.Windows.Forms.MessageBox.Show("動作には.NET 4.5.2以上が推奨です。");
+					//});
+				//});
 			}
+			
+			//dll
+			var task = Task.Factory.StartNew(() => {
+				util.dllCheck(this);
+			});
 		}
 		
 		void versionMenu_Click(object sender, EventArgs e)
@@ -2505,19 +2498,21 @@ namespace namaichi
 		}
 		public void removeLiveListItem(LiveInfo li) {
 			lock(liveListLock) {
-				for (var i = liveList.Rows.Count - 1; i > -1; i--) {
-					if (liveList.Rows[i].DataBoundItem == li) {
-						
-//						util.debugWriteLine("remove mae [0] " + liveList.Rows[0].Visible + " " + liveList.Rows[0].Cells[3].Value + " " + liveListDataSource[0].hostName);
-						formAction(() => {liveList.Rows.RemoveAt(i);});
-//						util.debugWriteLine("remove ato [0] " + liveList.Rows[0].Visible + " " + liveList.Rows[0].Cells[3].Value + " " + liveListDataSource[0].hostName);
-						util.debugWriteLine("remove " + i + " " + li.hostName);
-						
+				try {
+					var img = li.thumbnail;
+					for (var i = liveList.Rows.Count - 1; i > -1; i--) {
+						if (liveList.Rows[i].DataBoundItem == li) {
+	//						util.debugWriteLine("remove mae [0] " + liveList.Rows[0].Visible + " " + liveList.Rows[0].Cells[3].Value + " " + liveListDataSource[0].hostName);
+							formAction(() => {liveList.Rows.RemoveAt(i);});
+							util.debugWriteLine("remove " + i + " " + li.hostName);
+							
+						}
 					}
+					liveListDataReserve.Remove(li);
+					img.Dispose();
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
-					//liveListDataSource.Remove(li);
-				
-				liveListDataReserve.Remove(li);
 			}
 		}
 		public void addLiveListItem(LiveInfo li, char cateChar, bool blindOnlyA, bool blindOnlyB, bool blindQuestion, bool isFavoriteOnly) {
@@ -2571,8 +2566,6 @@ namespace namaichi
 			*/
 		}
 		private void liveListTimeProcess() {
-			
-			
 			while (liveList.Rows.Count > 0) {
 				Thread.Sleep(10000);
 				try {
@@ -2594,18 +2587,26 @@ namespace namaichi
 				util.debugWriteLine("deletelivelistTime 0");
 				formAction(() => {
 					for (var i = liveListDataSource.Count - 1; i > -1; i--) {
-				    	if (delMin != 0 && ((TimeSpan)(now - liveListDataSource[i].pubDateDt)).TotalMinutes > delMin) {
-				           	 var th = liveListDataSource[i].thumbnail;
+				        var li = liveListDataSource[i];
+				        var isDelete = (delMin != 0 && ((TimeSpan)(now - li.pubDateDt)).TotalMinutes > delMin) ||
+				           			(!string.IsNullOrEmpty(li.comId) && li.comId.StartsWith("co") && now - li.pubDateDt > TimeSpan.FromHours(6));
+				    	if (isDelete) {
+				           	 var th = li.thumbnail;
 							 liveListDataSource.RemoveAt(i);
 							 if (th != null) th.Dispose();
 						}
 						else liveList.UpdateCellValue(8, i);
+						
 					}
 				});
 				util.debugWriteLine("deletelivelistTime 1");
 				for (var i = liveListDataReserve.Count - 1; i > -1; i--) {
-					if (delMin != 0 && ((TimeSpan)(now - liveListDataReserve[i].pubDateDt)).TotalMinutes > delMin) {
-						var th = liveListDataReserve[i].thumbnail;
+					var li = liveListDataReserve[i];
+					var isDelete = (delMin != 0 && ((TimeSpan)(now - li.pubDateDt)).TotalMinutes > delMin) ||
+				    		(string.IsNullOrEmpty(li.comId) && li.comId.StartsWith("co") && now - li.pubDateDt > TimeSpan.FromHours(6));
+					
+					if (isDelete) {
+						var th = li.thumbnail;
 						liveListDataReserve.RemoveAt(i);
 						if (th != null) th.Dispose();
 					}
@@ -3135,11 +3136,12 @@ namespace namaichi
 				util.debugWriteLine("liveListUpdateSamuneMenuClick li.thumbnailUrl null");
 				return;
 			}
+			
 			var img = ThumbnailManager.getImage(li.thumbnailUrl);
-			//liveListDataSource[cur.RowIndex].thumbnail = img;
 			if (img == null) return;
-			li.thumbnail = img;
-			ThumbnailManager.saveImage(img, li.comId);
+			li.thumbnail = new Bitmap(img, 50, 50);
+			if (bool.Parse(config.get("liveListCacheIcon")))
+				ThumbnailManager.saveImage(img, li.comId);
 			
 			try {
 				var rowI = liveListDataSource.IndexOf(li);
@@ -3161,13 +3163,13 @@ namespace namaichi
 			var cur = liveList.CurrentCell;
 			if (cur == null || cur.RowIndex == -1) return;
 			var li = liveListDataSource[cur.RowIndex];
-			if (li.thumbnail == null) {
-				li.thumbnail = ThumbnailManager.getThumbnailRssUrl(li.thumbnailUrl, false);
-				if (li.thumbnail == null) return;
-			}
-			var img = ThumbnailManager.writeMemo(li.thumbnail);
+			
+			var originThumb = ThumbnailManager.getThumbnailRssUrl(li.thumbnailUrl, false);
+			if (originThumb == null) return;
+			
+			var img = ThumbnailManager.writeMemo(originThumb);
 			if (img == null) return;
-			li.thumbnail = img;
+			li.thumbnail = new Bitmap(img, 50, 50);
 			ThumbnailManager.saveImage(img, li.comId);
 			
 			try {
@@ -3184,13 +3186,13 @@ namespace namaichi
 			var cur = liveList.CurrentCell;
 			if (cur == null || cur.RowIndex == -1) return;
 			var li = liveListDataSource[cur.RowIndex];
-			if (li.thumbnail == null) {
-				li.thumbnail = ThumbnailManager.getThumbnailRssUrl(li.thumbnailUrl, false);
-				if (li.thumbnail == null) return;
-			}
-			var img = ThumbnailManager.writeNG(li.thumbnail);
+			
+			var originThumb = ThumbnailManager.getThumbnailRssUrl(li.thumbnailUrl, false);
+			if (originThumb == null) return;
+			
+			var img = ThumbnailManager.writeNG(originThumb);
 			if (img == null) return;
-			li.thumbnail = img;
+			li.thumbnail = new Bitmap(img, 50, 50);
 			ThumbnailManager.saveImage(img, li.comId);
 			
 			try {

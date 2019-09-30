@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -28,11 +29,13 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.34";
-	public static string versionDayStr = "2019/09/19";
+	public static string versionStr = "ver0.1.7.36";
+	public static string versionDayStr = "2019/09/29";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
+	
+	private static HttpClient httpClient = new HttpClient(new HttpClientHandler { UseCookies = false });
 	
 	public static string getRegGroup(string target, string reg, int group = 1, Regex r = null) {
 		if (r == null)
@@ -519,40 +522,33 @@ class util {
 //		util.debugWriteLine("getpage 02");
 		for (int i = 0; i < 1; i++) {
 			try {
-//				util.debugWriteLine("getpage 00");
-				var req = (HttpWebRequest)WebRequest.Create(_url);
-				req.Proxy = null;
-				req.AllowAutoRedirect = true;
-	//			req.Headers = getheaders;
-//				util.debugWriteLine("getpage 03");
-				if (referer != null) req.Referer = referer;
-//				util.debugWriteLine("getpage 04");
-				if (container != null) req.CookieContainer = container;
-//				util.debugWriteLine("getpage 05");
-
-				req.Timeout = timeoutMs;
-//				util.debugWriteLine("getpage 0");
-				var res = (HttpWebResponse)req.GetResponse();
-//				util.debugWriteLine("getpage 1");
-				using (var dataStream = res.GetResponseStream())
-	//				util.debugWriteLine("getpage 2");
-				using (var reader = new StreamReader(dataStream)) {
+				var isWebRequest = true;
+				if (isWebRequest) {
+					var req = (HttpWebRequest)WebRequest.Create(_url);
 					
-					/*
-					var resStrTask = reader.ReadToEndAsync();
-					if (!resStrTask.Wait(5000)) return null;
-					string resStr = resStrTask.Result;
-					*/
-	//				util.debugWriteLine("getpage 3");
-					var resStr = reader.ReadToEnd();
-	//				util.debugWriteLine("getpage 4");
+					req.Proxy = null;
+					req.AllowAutoRedirect = true;
+					if (referer != null) req.Referer = referer;
+					if (container != null) req.CookieContainer = container;
 					
-					getheaders = res.Headers;
+	
+					req.Timeout = timeoutMs;
+					var res = (HttpWebResponse)req.GetResponse();
+					using (var dataStream = res.GetResponseStream())
+					using (var reader = new StreamReader(dataStream)) {
+						var resStr = reader.ReadToEnd();
+						getheaders = res.Headers;
+						
+						//dataStream.Dispose();
+						//reader.Dispose();
+						return resStr;
+					}
+				} else {
+					//var handler = new HttpClientHandler();
+					//handler.CookieContainer = container;
+					var s = getHttpStringAsync(container, _url).Result;
+					return s;
 					
-					dataStream.Dispose();
-					reader.Dispose();
-					
-					return resStr;
 				}
 			} catch (Exception e) {
 				System.Threading.Tasks.Task.Run(() => {
@@ -581,40 +577,49 @@ class util {
 //		util.debugWriteLine("getpage 02");
 		for (int i = 0; i < 1; i++) {
 			try {
-//				util.debugWriteLine("getpage 00");
-				var req = (HttpWebRequest)WebRequest.Create(_url);
-				req.Proxy = null;
-				req.AllowAutoRedirect = true;
-	//			req.Headers = getheaders;
-//				util.debugWriteLine("getpage 03");
-				if (referer != null) req.Referer = referer;
-//				util.debugWriteLine("getpage 04");
-				if (container != null) req.CookieContainer = container;
-//				util.debugWriteLine("getpage 05");
-
-				req.Timeout = timeoutMs;
-//				util.debugWriteLine("getpage 0");
-				var res = (HttpWebResponse)req.GetResponse();
-//				util.debugWriteLine("getpage 1");
-				using (var dataStream = res.GetResponseStream())
-				using (var reader = new StreamReader(dataStream)) {
-					
-					/*
-					var resStrTask = reader.ReadToEndAsync();
-					if (!resStrTask.Wait(5000)) return null;
-					string resStr = resStrTask.Result;
-					*/
-	//				util.debugWriteLine("getpage 3");
-					var resStr = reader.ReadToEnd();
-	//				util.debugWriteLine("getpage 4");
-					
-	//				getheaders = res.Headers;
-					dataStream.Dispose();
-					reader.Dispose();
+				var isWebRequest = true;
+				if (isWebRequest) {
+	//				util.debugWriteLine("getpage 00");
+					var req = (HttpWebRequest)WebRequest.Create(_url);
+					req.Proxy = null;
+					req.AllowAutoRedirect = true;
+		//			req.Headers = getheaders;
+	//				util.debugWriteLine("getpage 03");
+					if (referer != null) req.Referer = referer;
+	//				util.debugWriteLine("getpage 04");
+					if (container != null) req.CookieContainer = container;
+	//				util.debugWriteLine("getpage 05");
 	
-					return resStr;
+					req.Timeout = timeoutMs;
+	//				util.debugWriteLine("getpage 0");
+					var res = (HttpWebResponse)req.GetResponse();
+	//				util.debugWriteLine("getpage 1");
+					using (var dataStream = res.GetResponseStream())
+					using (var reader = new StreamReader(dataStream)) {
+						
+						/*
+						var resStrTask = reader.ReadToEndAsync();
+						if (!resStrTask.Wait(5000)) return null;
+						string resStr = resStrTask.Result;
+						*/
+		//				util.debugWriteLine("getpage 3");
+						var resStr = reader.ReadToEnd();
+		//				util.debugWriteLine("getpage 4");
+						
+		//				getheaders = res.Headers;
+						//dataStream.Dispose();
+						//reader.Dispose();
+		
+						return resStr;
+					}
+				} else {
+					//var handler = new HttpClientHandler();
+					//handler.CookieContainer = container;
+					var s = getHttpStringAsync(container, _url).Result;
+					
+					return s;
+					
 				}
-	
 			} catch (Exception e) {
 				System.Threading.Tasks.Task.Run(() => {
 					util.debugWriteLine("getpage error " + _url + e.Message+e.StackTrace);
@@ -626,7 +631,17 @@ class util {
 			
 		return null;
 	}
-	
+	async private static System.Threading.Tasks.Task<string> getHttpStringAsync(CookieContainer container, string url) {
+		try {
+			if (container != null)
+				httpClient.DefaultRequestHeaders.Add("Cookie", container.GetCookieHeader(new Uri(url)));
+			var s = await httpClient.GetStringAsync(url);
+			return s;
+		} catch (Exception e) {
+			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			return null;
+		}
+	}
 	public static byte[] getFileBytes(string url, CookieContainer container) {
 //		var a = container.GetCookieHeader(new Uri(_url));
 		//util.debugWriteLine("getfilebyte " + url);
@@ -640,6 +655,7 @@ class util {
 //				if (referer != null) req.Referer = referer;
 				if (container != null) req.CookieContainer = container;
 				var res = (HttpWebResponse)req.GetResponse();
+				byte[] ret = null;
 				using (var dataStream = res.GetResponseStream()) {
 					
 					//test
@@ -647,7 +663,7 @@ class util {
 					if (isMs) {
 						using (var ms = new MemoryStream()) {
 							dataStream.CopyTo(ms);
-							return ms.ToArray();
+							ret = ms.ToArray();
 						}
 					} else {
 		//				var reader = new StreamReader(dataStream);
@@ -660,9 +676,10 @@ class util {
 							pos += r;
 						}
 						Array.Resize(ref b, pos);
-						return b;
+						ret = b;
 					}
 				}
+				return ret;
 			} catch (Exception e) {
 				System.Threading.Tasks.Task.Run(() => {
 					util.debugWriteLine("getfile error " + url + e.Message+e.StackTrace);
@@ -763,8 +780,7 @@ class util {
 	public static bool isEndedProgram(string lvid, CookieContainer container, bool isSub) {
 		var url = "https://live2.nicovideo.jp/watch/" + lvid;
 		
-		var a = new System.Net.WebHeaderCollection();
-		var res = util.getPageSource(url, ref a, container);
+		var res = util.getPageSource(url, container);
 		util.debugWriteLine("isendedprogram url " + url + " res==null " + (res == null) + util.getMainSubStr(isSub, true));
 //			util.debugWriteLine("isendedprogram res " + res + util.getMainSubStr(isSub, true));
 		if (res == null) return false;
@@ -1363,4 +1379,22 @@ class util {
         var utB = Encoding.Convert(Encoding.Unicode, Encoding.UTF8, b);
         return Encoding.UTF8.GetString(utB);
     }
+    public static void dllCheck(namaichi.MainForm form) {
+		var path = getJarPath()[0];
+		var dlls = new string[]{"websocket4net.dll", "NAudio.dll",
+				"Interop.IWshRuntimeLibrary.dll", "SnkLib.App.CookieGetter.Forms.dll",
+				"SnkLib.App.CookieGetter.dll", "SuperSocket.ClientEngine.dll",
+				"Microsoft.Web.XmlTransform.dll", "Newtonsoft.Json.dll",
+				"System.Data.SQLite.dll", "x64/SQLite.Interop.dll",
+				"x86/SQLite.Interop.dll", "x86/SnkLib.App.CookieGetter.x86Proxy.exe",
+				"Google.Protobuf.dll", "Google.Protobuf.dll", "BouncyCastle.Crypto.dll"};
+		var isOk = new string[dlls.Length];
+		var msg = "";
+		foreach (var n in dlls) {
+			if (!File.Exists(path + "/" + n)) 
+				msg += (msg == "" ? "" : ",") + n;
+		}
+		if (msg == "") return;
+		form.formAction(() => System.Windows.Forms.MessageBox.Show(path + "“à‚É" + msg + "‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½"));
+	}
 }

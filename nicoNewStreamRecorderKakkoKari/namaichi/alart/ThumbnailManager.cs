@@ -72,6 +72,8 @@ namespace namaichi.alart
 		}
 		public static Image getImageId(string id, MainForm form = null) {
 			util.debugWriteLine("getimageid id " + id);
+			
+			
 			string url = null;
 			if (!id.StartsWith("c")) {
 				var thumbUrl = "https://ext.nicovideo.jp/thumb_user/" + id;
@@ -110,6 +112,7 @@ namespace namaichi.alart
 			try {
 				
 				var req = (HttpWebRequest)WebRequest.Create(url);
+				
 				req.Proxy = null;
 				req.AllowAutoRedirect = true;
 				//if (referer != null) req.Referer = referer;
@@ -117,13 +120,15 @@ namespace namaichi.alart
 
 				req.Timeout = 5000;
 				var res = (HttpWebResponse)req.GetResponse();
+				Image _ret = null;
 				using (var dataStream = res.GetResponseStream()) {
 					
 					var ret = Image.FromStream(dataStream);
 					//dataStream.Dispose();
 					//dataStream.Close();
-					return ret;
+					_ret = ret;
 				}
+				return _ret;
 			} catch (Exception e) {
 				//System.Threading.Tasks.Task.Run(() => {
 				//	util.debugWriteLine("thumbnail getpage error " + url + e.Message+e.StackTrace);

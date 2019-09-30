@@ -490,6 +490,7 @@ namespace namaichi.alart
 						comName = m.Groups[1].Value;
 						title = m.Groups[2].Value;
 						isCom = false;
+						if (!string.IsNullOrEmpty(hg.userName)) hostName = hg.userName;
 					}
 					
 				}

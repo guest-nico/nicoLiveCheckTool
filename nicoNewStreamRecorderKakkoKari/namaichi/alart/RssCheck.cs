@@ -33,9 +33,6 @@ namespace namaichi.alart
 		{
 			isStartTimeAllCheck = bool.Parse(config.get("IsStartTimeAllCheck"));
 			
-			//test
-			isStartTimeAllCheck = false;
-			
 			this.check = check;
 			this.config = config;
 		}
@@ -72,7 +69,7 @@ namespace namaichi.alart
 				util.debugWriteLine("checked lv list count " + check.checkedLvIdList.Count);
 				util.debugWriteLine("get rss items " + items.Count);
 				if (items.Count > -1) {
-					foreach (RssItem it in items) util.debugWriteLine(it.lvId + " " + it.comId + " " + it.hostName + " " + it.title);
+					foreach (RssItem it in items) util.debugWriteLine(it.lvId + " " + it.comId + " " + it.hostName + " " + it.title + " " + it.pubDate);
 				}
 				
 				check.foundLive(items);
@@ -91,6 +88,7 @@ namespace namaichi.alart
 			util.debugWriteLine("rss reg matches count " + m.Count);
 			
 			var ret = true;
+			var now = DateTime.Now;
 			foreach(Match _m in m) {
 				var item = new RssItem(_m.Groups[1].Value,
 						_m.Groups[2].Value, _m.Groups[3].Value,
@@ -106,6 +104,11 @@ namespace namaichi.alart
 //				if (item.lvId == lastLv) return false;
 //				if (checkedLvIdList.IndexOf(item.lvId) > -1) return false;
 				if (items.IndexOf(item) == -1 && check.checkedLvIdList.IndexOf(item.lvId) == -1) {
+					var pubDate = DateTime.Parse(item.pubDate); 
+					if (pubDate > now) {
+						item.pubDate = now.ToString();
+						util.debugWriteLine("rss future pubdate " + item.lvId + " " + item.pubDate + " " + pubDate);
+					}
 					items.Add(item);
 					check.checkedLvIdList.Add(item.lvId);
 					

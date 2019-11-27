@@ -147,7 +147,9 @@ namespace namaichi.info
 		}
 		public Image getThumbnail(string url, bool isSaveCache) {
 			//return ThumbnailManager.getThumbnailRssUrl(url, isSaveCache);
-			return new Bitmap(ThumbnailManager.getThumbnailRssUrl(url, isSaveCache), 50, 50);
+			var img = ThumbnailManager.getThumbnailRssUrl(url, isSaveCache);
+			if (img == null) return null;
+			return new Bitmap(img, 50, 50);
 			//return null;
 		}
 
@@ -255,6 +257,7 @@ namespace namaichi.info
 				//var t = (Image)new ImageConverter().ConvertFrom(b);
 				
 				//return t;
+				//return null;
 				return thumbnail; 
 			}
 			//get { return null; }

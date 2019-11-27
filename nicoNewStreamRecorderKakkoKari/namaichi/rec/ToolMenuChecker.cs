@@ -298,6 +298,7 @@ namespace namaichi.rec
 			
 			try {
 				var cg = new rec.CookieGetter(form.config);
+				//var cc = cg.getAccountCookie(mail, pass).Result;
 				var cc = cg.getAccountCookie(mail, pass).Result;
 				
 				if (cc == null || 

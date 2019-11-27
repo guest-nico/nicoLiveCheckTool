@@ -60,7 +60,6 @@ namespace namaichi
 			util.debugWriteLine("unhandled exception");
 			var eo = (Exception)e.ExceptionObject;
 			util.showException(eo);
-			                    
 		}
 		static void threadException(object sender, System.Threading.ThreadExceptionEventArgs e) {
 		    util.debugWriteLine("thread exception");
@@ -74,7 +73,6 @@ namespace namaichi
 			var eo = (Exception)e.Exception;
 			util.showException(eo);
 			e.SetObserved();
-			
 		}
 		static private void firstChanceException(object sender,
 			System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e) {

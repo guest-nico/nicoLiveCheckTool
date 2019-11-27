@@ -430,9 +430,9 @@ namespace namaichi
 			// 
 			this.label26.Location = new System.Drawing.Point(291, 361);
 			this.label26.Name = "label26";
-			this.label26.Size = new System.Drawing.Size(42, 15);
+			this.label26.Size = new System.Drawing.Size(60, 15);
 			this.label26.TabIndex = 46;
-			this.label26.Text = "引数";
+			this.label26.Text = "追加引数";
 			// 
 			// argJText
 			// 
@@ -445,9 +445,9 @@ namespace namaichi
 			// 
 			this.label27.Location = new System.Drawing.Point(291, 323);
 			this.label27.Name = "label27";
-			this.label27.Size = new System.Drawing.Size(42, 15);
+			this.label27.Size = new System.Drawing.Size(60, 15);
 			this.label27.TabIndex = 44;
-			this.label27.Text = "引数";
+			this.label27.Text = "追加引数";
 			// 
 			// argIText
 			// 
@@ -460,9 +460,9 @@ namespace namaichi
 			// 
 			this.label28.Location = new System.Drawing.Point(291, 285);
 			this.label28.Name = "label28";
-			this.label28.Size = new System.Drawing.Size(42, 15);
+			this.label28.Size = new System.Drawing.Size(60, 15);
 			this.label28.TabIndex = 42;
-			this.label28.Text = "引数";
+			this.label28.Text = "追加引数";
 			// 
 			// argHText
 			// 
@@ -505,9 +505,9 @@ namespace namaichi
 			// 
 			this.label29.Location = new System.Drawing.Point(291, 247);
 			this.label29.Name = "label29";
-			this.label29.Size = new System.Drawing.Size(42, 15);
+			this.label29.Size = new System.Drawing.Size(60, 15);
 			this.label29.TabIndex = 37;
-			this.label29.Text = "引数";
+			this.label29.Text = "追加引数";
 			// 
 			// argGText
 			// 
@@ -545,9 +545,9 @@ namespace namaichi
 			// 
 			this.label16.Location = new System.Drawing.Point(291, 209);
 			this.label16.Name = "label16";
-			this.label16.Size = new System.Drawing.Size(42, 15);
+			this.label16.Size = new System.Drawing.Size(60, 15);
 			this.label16.TabIndex = 32;
-			this.label16.Text = "引数";
+			this.label16.Text = "追加引数";
 			// 
 			// argFText
 			// 
@@ -560,9 +560,9 @@ namespace namaichi
 			// 
 			this.label17.Location = new System.Drawing.Point(291, 171);
 			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(42, 15);
+			this.label17.Size = new System.Drawing.Size(60, 15);
 			this.label17.TabIndex = 30;
-			this.label17.Text = "引数";
+			this.label17.Text = "追加引数";
 			// 
 			// argEText
 			// 
@@ -575,9 +575,9 @@ namespace namaichi
 			// 
 			this.label18.Location = new System.Drawing.Point(291, 133);
 			this.label18.Name = "label18";
-			this.label18.Size = new System.Drawing.Size(42, 15);
+			this.label18.Size = new System.Drawing.Size(60, 15);
 			this.label18.TabIndex = 28;
-			this.label18.Text = "引数";
+			this.label18.Text = "追加引数";
 			// 
 			// argDText
 			// 
@@ -710,9 +710,9 @@ namespace namaichi
 			// 
 			this.label15.Location = new System.Drawing.Point(291, 95);
 			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(42, 15);
+			this.label15.Size = new System.Drawing.Size(60, 15);
 			this.label15.TabIndex = 17;
-			this.label15.Text = "引数";
+			this.label15.Text = "追加引数";
 			// 
 			// argCText
 			// 
@@ -725,9 +725,9 @@ namespace namaichi
 			// 
 			this.label14.Location = new System.Drawing.Point(291, 57);
 			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(42, 15);
+			this.label14.Size = new System.Drawing.Size(60, 15);
 			this.label14.TabIndex = 15;
-			this.label14.Text = "引数";
+			this.label14.Text = "追加引数";
 			// 
 			// argBText
 			// 
@@ -820,9 +820,9 @@ namespace namaichi
 			// 
 			this.argA.Location = new System.Drawing.Point(291, 19);
 			this.argA.Name = "argA";
-			this.argA.Size = new System.Drawing.Size(42, 15);
+			this.argA.Size = new System.Drawing.Size(60, 15);
 			this.argA.TabIndex = 13;
-			this.argA.Text = "引数";
+			this.argA.Text = "追加引数";
 			// 
 			// nameJText
 			// 
@@ -2711,6 +2711,7 @@ namespace namaichi
 			this.MaximizeBox = false;
 			this.Name = "optionForm";
 			this.Text = "オプション";
+			this.Load += new System.EventHandler(this.OptionFormLoad);
 			this.appliTab.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
 			this.groupBox6.PerformLayout();

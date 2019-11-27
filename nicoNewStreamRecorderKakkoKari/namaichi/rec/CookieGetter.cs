@@ -144,6 +144,7 @@ namespace namaichi.rec
 			    isSecondLogin == "true") {
 				var mail = accountId;
 				var pass = accountPass;
+				//var accCC = await getAccountCookie(mail, pass).ConfigureAwait(false);
 				var accCC = await getAccountCookie(mail, pass).ConfigureAwait(false);
 				log += (accCC == null) ? "アカウントログインからユーザーセッションを取得できませんでした。" : "アカウントログインからユーザーセッションを取得しました。";
 				if (accCC != null) {
@@ -227,6 +228,7 @@ namespace namaichi.rec
 			
 		}
 		private bool isHtml5Login(CookieContainer cc, string url) {
+			var c = cc.GetCookieHeader(new Uri(url));
 			for (var i = 0; i < 10; i++) {
 				var headers = new WebHeaderCollection();
 				try {
@@ -282,6 +284,7 @@ namespace namaichi.rec
 					{"mail", mail}, {"password", pass}
 				});
 				
+				http.DefaultRequestHeaders.Add( "User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36");
 				var _res = await http.PostAsync(loginUrl, content).ConfigureAwait(false);
 				var res = await _res.Content.ReadAsStringAsync().ConfigureAwait(false);
 	//			var a = _res.Headers;
@@ -313,6 +316,97 @@ namespace namaichi.rec
 			if (xml.IndexOf("not login") != -1) return null;
 			*/
 			return cc;
+				
+		}
+		async public Task<CookieContainer> getAppAccountCookie(string mail, string pass) {
+			
+			if (mail == null || pass == null) return null;
+			
+			var loginUrl = "https://account.nicovideo.jp/api/v2/login/mail_or_tel_password?site=nicocas_android&is_send_mfa_mail=1";
+//			var param = "mail=" + mail + "&password=" + pass;
+			
+			try {
+				var acPassHeaders = new Dictionary<string, string>() {
+					{"Content-Type", "application/json; charset=UTF-8"},
+					{"User-Agent", "okhttp/3.10.0"},
+					//{"Cookie", "user_session=" + userSession},
+					{"X-Frontend-Id", "90"},
+					{"X-Frontend-Version", "3.3.0"},
+					//{"X-Os-Version", "22"},
+					{"X-Request-With", "dream2qltechn"},
+					//{"X-Connection-Environment", "wifi"},
+					{"Connection", "Keep-Alive"},
+					//{"Accept-Encoding", "gzip"},
+				};
+				var _content = "{\"mail_or_tel\": \"" +  mail + "\",\"mfa_trusted_device_token\": \"\", \"password\": \"" + pass + "\"}";
+				util.debugWriteLine(_content);
+				var content = System.Text.Encoding.ASCII.GetBytes(_content);
+				
+				var req = (HttpWebRequest)WebRequest.Create(loginUrl);
+				req.Method = "POST";
+				req.Proxy = null;
+				
+				
+				foreach (var h in acPassHeaders) {
+					if (h.Key.ToLower().Replace("-", "") == "contenttype")
+						req.ContentType = h.Value;
+					else if (h.Key.ToLower().Replace("-", "") == "useragent")
+						req.UserAgent = h.Value;
+					else if (h.Key.ToLower().Replace("-", "") == "connection")
+						req.KeepAlive = h.Value.ToLower().Replace("-", "") == "keepalive";
+					else req.Headers.Add(h.Key, h.Value);
+				}
+				
+				using (var stream = req.GetRequestStream()) {
+					try {
+						stream.Write(content, 0, content.Length);
+					} catch (Exception ee) {
+			       		util.debugWriteLine(ee.Message + " " + ee.StackTrace + " " + ee.Source + " " + ee.TargetSite);
+			       	}
+				}
+	
+				using (var res = (HttpWebResponse)req.GetResponse())
+				using (var resStream = res.GetResponseStream())
+				using (var resSr = new System.IO.StreamReader(resStream)) {
+					var r = resSr.ReadToEnd();
+					var cc = new CookieContainer();
+					
+					var c = new Cookie("user_session", util.getRegGroup(r, "user_session\":\\s*\"(.+?)\""));
+					var secureC = new Cookie("user_session_secure", util.getRegGroup(r, "user_session_secure\":\\s*\"(.+?)\""));
+					//var c = cc.GetCookies(new Uri(loginUrl))["user_session"];
+					//var secureC = cc.GetCookies(new Uri(loginUrl))["user_session_secure"];
+					cc = copyUserSession(cc, c, secureC);
+					log += (c == null) ? "ユーザーセッションが見つかりませんでした。" : "ユーザーセッションが見つかりました。";
+					log += (secureC == null) ? "secureユーザーセッションが見つかりませんでした。" : "secureユーザーセッションが見つかりました。";
+					if (c == null && secureC == null) return null;
+					
+					//passport
+					var acPassHeaders2 = new Dictionary<string, string>() {
+						//{"Content-Type", "application/json; charset=UTF-8"},
+						{"User-Agent", "okhttp/3.10.0"},
+						{"Cookie", "user_session=" + c.Value},
+						{"X-Frontend-Id", "90"},
+						{"X-Frontend-Version", "3.3.0"},
+						//{"X-Os-Version", "22"},
+						{"X-Request-With", "dream2qltechn"},
+						//{"X-Connection-Environment", "wifi"},
+						{"Connection", "Keep-Alive"},
+						//{"Accept-Encoding", "gzip"},
+					};
+					
+					var url = "https://account.nicovideo.jp/api/v1/users/account_passport";
+					var _r = util.postResStr(url, acPassHeaders2, null);
+					util.debugWriteLine("account_passport " + _r);
+				
+				
+					return cc;
+				}
+				
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message+e.StackTrace + util.getMainSubStr(isSub));
+				return null;
+			}
+			
 				
 		}
 		private CookieContainer copyUserSession(CookieContainer cc, 

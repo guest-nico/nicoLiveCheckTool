@@ -384,7 +384,7 @@ namespace namaichi.alart
 				if (!r) {
 					hg.description = hg.userId = hg.communityId = "";
 					hg.tags = new string[]{};
-					check.form.addLogText("push page error !r " + lvid);
+					check.form.addLogText("プッシュ通知から取得した放送のページが取得できませんでした " + lvid);
 					util.debugWriteLine("push page error !r " + lvid);
 					return null;
 				}

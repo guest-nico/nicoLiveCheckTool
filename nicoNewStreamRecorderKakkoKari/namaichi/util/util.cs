@@ -29,8 +29,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.36";
-	public static string versionDayStr = "2019/09/29";
+	public static string versionStr = "ver0.1.7.38";
+	public static string versionDayStr = "2019/11/28";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -692,7 +692,11 @@ class util {
 	}
 	public static string postResStr(string url, Dictionary<string, string> headers, byte[] content) {
 		try {
-			var res = postRequest(url, headers, content);
+			var res = sendRequest(url, headers, content, "POST");
+			if (res == null) {
+				debugWriteLine("postResStr res null");
+				return null;
+			}
 			
 			debugWriteLine(res.StatusCode + " " + res.StatusDescription);
 			
@@ -724,7 +728,7 @@ class util {
 	}
 	public static byte[] postResBytes(string url, Dictionary<string, string> headers, byte[] content) {
 		try {
-			var res = postRequest(url, headers, content);
+			var res = sendRequest(url, headers, content, "POST");
 			
 			debugWriteLine(res.StatusCode + " " + res.StatusDescription);
 			
@@ -745,10 +749,10 @@ class util {
 			return null;
 		}
 	}
-	private static HttpWebResponse postRequest(string url, Dictionary<string, string> headers, byte[] content) {
+	public static HttpWebResponse sendRequest(string url, Dictionary<string, string> headers, byte[] content, string method) {
 		try {
 			var req = (HttpWebRequest)WebRequest.Create(url);
-			req.Method = "POST";
+			req.Method = method;
 			req.Proxy = null;
 			
 			foreach (var h in headers) {
@@ -761,15 +765,16 @@ class util {
 				else req.Headers.Add(h.Key, h.Value);
 			}
 			
-			using (var stream = req.GetRequestStream()) {
-				try {
-					stream.Write(content, 0, content.Length);
-				} catch (Exception ee) {
-		       		debugWriteLine(ee.Message + " " + ee.StackTrace + " " + ee.Source + " " + ee.TargetSite);
-		       	}
+			if (content != null) {
+				using (var stream = req.GetRequestStream()) {
+					try {
+						stream.Write(content, 0, content.Length);
+					} catch (Exception ee) {
+			       		debugWriteLine(ee.Message + " " + ee.StackTrace + " " + ee.Source + " " + ee.TargetSite);
+			       	}
+				}
 			}
 //					stream.Close();
-			
 
 			return (HttpWebResponse)req.GetResponse();
 		} catch (Exception ee) {
@@ -777,6 +782,7 @@ class util {
 			return null;
 		}
 	}
+	
 	public static bool isEndedProgram(string lvid, CookieContainer container, bool isSub) {
 		var url = "https://live2.nicovideo.jp/watch/" + lvid;
 		
@@ -906,6 +912,7 @@ class util {
 		return a.GetString(a.GetBytes(s)).Replace("?", "_");
 	}
 	public static bool isLogFile = false;
+	public static StreamWriter exceptionSw = null;
 	public static List<string> debugWriteBuf = new List<string>();
 	//public static Task debugWriteTask = null;
 	public static void debugWriteLine(object str) {
@@ -949,13 +956,19 @@ class util {
 		
 		
 		util.debugWriteLine("exception stacktrace framecount " + frameCount);
-		
 		util.debugWriteLine("show exception eo " + eo);
 		if (eo == null) return;
+		var dt = DateTime.Now.ToLongTimeString();
 		
 		util.debugWriteLine("0 message " + eo.Message + "\nsource " + 
 				eo.Source + "\nstacktrace " + eo.StackTrace + 
 				"\n targetsite " + eo.TargetSite + "\n\n");
+		if (exceptionSw != null) {
+			exceptionSw.WriteLine(dt + " 0 message " + eo.Message + "\nsource " + 
+				eo.Source + "\nstacktrace " + eo.StackTrace + 
+				"\n targetsite " + eo.TargetSite + "\n\n");
+			exceptionSw.Flush();
+		}
 		
 		var _eo = eo.GetBaseException();
 		util.debugWriteLine("eo " + _eo);
@@ -963,6 +976,12 @@ class util {
 			util.debugWriteLine("1 message " + _eo.Message + "\nsource " + 
 					_eo.Source + "\nstacktrace " + _eo.StackTrace + 
 					"\n targetsite " + _eo.TargetSite + "\n\n");
+			if (exceptionSw != null) {
+				exceptionSw.WriteLine(dt + " 1 message " + _eo.Message + "\nsource " + 
+					_eo.Source + "\nstacktrace " + _eo.StackTrace + 
+					"\n targetsite " + _eo.TargetSite + "\n\n");
+				exceptionSw.Flush();
+			}
 		}
 		
 		_eo = eo.InnerException;
@@ -971,7 +990,14 @@ class util {
 			util.debugWriteLine("2 message " + _eo.Message + "\nsource " + 
 					_eo.Source + "\nstacktrace " + _eo.StackTrace + 
 					"\n targetsite " + _eo.TargetSite);
+			if (exceptionSw != null) {
+				exceptionSw.WriteLine(dt + " 2 message " + _eo.Message + "\nsource " + 
+					_eo.Source + "\nstacktrace " + _eo.StackTrace + 
+					"\n targetsite " + _eo.TargetSite);
+				exceptionSw.Flush();
+			}
 		}
+		
 		
 		#if DEBUG
 			if (isMessageBox && isLogFile)
@@ -1005,6 +1031,7 @@ class util {
 				util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
 			}
 			util.isLogFile = true;
+			exceptionSw = new StreamWriter(util.getJarPath()[0] + "/errorLog.txt", true);
 		}
 	}
 	public static bool isOkDotNet() {

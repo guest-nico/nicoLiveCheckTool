@@ -91,10 +91,21 @@ namespace namaichi.alart
 					if (l.provider_type != "official") continue;
 					
 					l.startTime = DateTime.Parse(l.start_date + " " + l.start_time);
-					if ((l.status == "onair" || l.startTime > DateTime.Now.AddHours(-2)) && timeTableList.Find(n => n.lvId == "lv" + l.id) == null) {
+					if ((l.status == "onair" || l.startTime > DateTime.Now.AddHours(-2))) {
+						 var listRi = timeTableList.Find(n => n.lvId == "lv" + l.id);
 					//if (((isAllCheck && l.status == "onair") || l.startTime > DateTime.Now.AddHours(-2)) && liveList.Find(n => n.lvId == l.id) == null) {
+						
 						var hig = new HosoInfoGetter();
-						hig.get("https://live.nicovideo.jp/watch/lv" + l.id);
+						for (var i = 0; i < 10; i++) {
+							#if DEBUG
+								if (i > 0) check.form.addLogText("timetable higget false " + l.id + " " + i);
+							#endif
+							var r = hig.get("https://live.nicovideo.jp/watch/lv" + l.id);
+							if (r) break;
+							Thread.Sleep(2000);
+						}
+						if (hig.openDt == DateTime.MinValue) continue;
+						
 						var _isFollow = false; 
 						var ri = new RssItem(l.title, "lv" + l.id, hig.dt.ToString(),
 								hig.description, 
@@ -108,7 +119,17 @@ namespace namaichi.alart
 						if (!string.IsNullOrEmpty(hig.userName)) ri.hostName = hig.userName;
 						if (hig.openDt != hig.dt) util.debugWriteLine("hig open start tigau " + hig.openDt + " " + hig.dt);
 						else util.debugWriteLine("hig open start onaji " + hig.openDt + " " + hig.dt);
-						timeTableList.Add(ri);
+						if (listRi == null) timeTableList.Add(ri);
+						else {
+							#if DEBUG
+								if (listRi.pubDateDt != ri.pubDateDt) {
+									check.form.addLogText("timetable pubDateDt change " + DateTime.Now + " " + listRi.lvId + " " + listRi.pubDateDt + " " + ri.pubDateDt);
+									util.debugWriteLine("timetable pubDateDt change " + listRi.lvId + " " + listRi.pubDateDt + " " + ri.pubDateDt + " " + res);
+								}
+							#endif                      
+							listRi.pubDateDt = ri.pubDateDt;
+						}
+						
 					}
 				}
 				                                         

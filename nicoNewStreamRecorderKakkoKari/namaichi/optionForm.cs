@@ -47,7 +47,7 @@ namespace namaichi
 			
 			nicoSessionComboBox1.Selector.PropertyChanged += Selector_PropertyChanged;
 //			nicoSessionComboBox2.Selector.PropertyChanged += Selector2_PropertyChanged;
-			setFormFromConfig();
+			//setFormFromConfig();
 		}
 		
 		void optionOk_Click(object sender, EventArgs e)
@@ -404,6 +404,7 @@ namespace namaichi
 		{
 			
 			var cg = new rec.CookieGetter(cfg);
+			//var cc = await cg.getAccountCookie(mailText.Text, passText.Text);
 			var cc = await cg.getAccountCookie(mailText.Text, passText.Text);
 			if (cc == null) {
 				MessageBox.Show("login error", "", MessageBoxButtons.OK);
@@ -758,6 +759,11 @@ namespace namaichi
 		{
 			followerOnlyColorBtn.BackColor = Color.FromArgb(255,224,255);
 			followerOnlySampleColorText.BackColor = Color.FromArgb(255,224,255);
+		}
+		
+		void OptionFormLoad(object sender, EventArgs e)
+		{
+			setFormFromConfig();
 		}
 	}
 }

@@ -120,6 +120,9 @@ namespace namaichi.alart
 					        ref isChanged,
 							ref targetAi, ref nearAlartAi, ref item,
 							form.userAlartListDataSource);
+					
+					//if (items[0].comName.IndexOf("ウェザー") > -1)
+					//	util.debugWriteLine("ch");
 					if (isSuccessAccess && isSuccessAccess2) {
 						doProcess(item, targetAi, 
 					        dpi, nearAlartAi);
@@ -661,9 +664,6 @@ namespace namaichi.alart
 				form.setHosoLogStatusBar(items[0]);
 			}
 			
-			if (items.Count > 0 && form.config.get("IsbroadLog") == "true")
-				Task.Run(() => writeBroadLog(items));
-			
 			lock(foundLiveLock) {
 				var isChanged = gotStreamProcess(items);
 				if (isChanged) {
@@ -671,6 +671,9 @@ namespace namaichi.alart
 					form.sortAlartList(true);
 				}
 			}
+			
+			if (items.Count > 0 && form.config.get("IsbroadLog") == "true")
+				Task.Run(() => writeBroadLog(items));
 			
 			addLiveList(items);
 		}
@@ -859,37 +862,50 @@ namespace namaichi.alart
 				var isBlindQuestion = bool.Parse(form.config.get("BlindQuestion"));
 				var isFavoriteOnly = bool.Parse(form.config.get("FavoriteOnly"));
 				var cateChar = form.getCategoryChar();
+
+				if (Thread.CurrentThread == form.madeThread)
+					util.debugWriteLine("lock form thread addLiveList");
 				lock(form.liveListLock) {
-					foreach (var item in items) {
-						var li = new LiveInfo(item, form.alartListDataSource, form.config, form.userAlartListDataSource);
-						//li.category = item.category;
-						//li.type = item.type;
-						
-						var isContain = false;
-						foreach (var a in form.liveListDataSource)
-							if (a.lvId == item.lvId) 
-								isContain = true;
-						foreach (var a in form.liveListDataReserve)
-							if (a.lvId == item.lvId) 
-								isContain = true;
-						if (isContain) 
-							continue;
-						
-						var sameCommunityLive = new List<LiveInfo>();
-						foreach (var l in form.liveListDataSource)
-							if (!string.IsNullOrEmpty(l.comId) && l.comId.StartsWith("co") && l.comId == item.comId)
-								sameCommunityLive.Add(l);
-						foreach (var l in form.liveListDataReserve)
-							if (!string.IsNullOrEmpty(l.comId) && l.comId.StartsWith("co") && l.comId == item.comId)
-								sameCommunityLive.Add(l);
-						
-						form.addLiveListItem(li, cateChar, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly);
-						foreach (var l in sameCommunityLive)
-							form.removeLiveListItem(l);
+					try {
+ 
+						_addLiveList(items, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly, cateChar);
+
+					} catch (Exception e) {
+						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 					}
 				}
+					
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+		}
+		private void _addLiveList(List<RssItem> items, bool isBlindA, bool isBlindB, bool isBlindQuestion, bool isFavoriteOnly, char cateChar) {
+			foreach (var item in items) {
+				var li = new LiveInfo(item, form.alartListDataSource, form.config, form.userAlartListDataSource);
+				//li.category = item.category;
+				//li.type = item.type;
+				
+				var isContain = false;
+				foreach (var a in form.liveListDataSource)
+					if (a.lvId == item.lvId) 
+						isContain = true;
+				foreach (var a in form.liveListDataReserve)
+					if (a.lvId == item.lvId) 
+						isContain = true;
+				if (isContain) 
+					continue;
+				
+				var sameCommunityLive = new List<LiveInfo>();
+				foreach (var l in form.liveListDataSource)
+					if (!string.IsNullOrEmpty(l.comId) && l.comId.StartsWith("co") && l.comId == item.comId)
+						sameCommunityLive.Add(l);
+				foreach (var l in form.liveListDataReserve)
+					if (!string.IsNullOrEmpty(l.comId) && l.comId.StartsWith("co") && l.comId == item.comId)
+						sameCommunityLive.Add(l);
+				
+				form.addLiveListItem(li, cateChar, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly);
+				foreach (var l in sameCommunityLive)
+					form.removeLiveListItem(l);
 			}
 		}
 	}

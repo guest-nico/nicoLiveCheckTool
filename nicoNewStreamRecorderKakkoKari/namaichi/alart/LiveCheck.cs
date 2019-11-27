@@ -37,122 +37,131 @@ namespace namaichi.alart
 			
 			isLoading = true;
 			
-			
 			var newItems = getLiveItems();
 
 			var delMin = double.Parse(form.config.get("liveListDelMinutes"));
 			var now = DateTime.Now;
+			
+			if (Thread.CurrentThread == form.madeThread)
+					util.debugWriteLine("lock form thread load");
 			lock(form.liveListLock) {
-				var scrollI = form.liveList.FirstDisplayedScrollingRowIndex;
-				var curCellLv = (form.liveList.CurrentCell == null) ? null : form.liveListDataSource[form.liveList.CurrentCell.RowIndex].lvId;
-				var curCellCellI = (form.liveList.CurrentCell == null) ? -1 : form.liveList.CurrentCell.ColumnIndex;
-				
-				var delList = new List<LiveInfo>();
-				foreach (var l in form.liveListDataSource) {
-					/*
-					if (newItems.Find((x) => x.lvId == l.lvId) == null)
-						delList.Add(l);
-					*/
-					if (newItems.Find((x) => x.lvId == l.lvId) == null) {
-						if (now - l.lastExistTime > TimeSpan.FromMinutes(5))
-							delList.Add(l);
-					} else l.lastExistTime = now;
-				}
-				foreach (var l in form.liveListDataReserve) {
-					if (newItems.Find((x) => x.lvId == l.lvId) == null) {
-						if (now - l.lastExistTime > TimeSpan.FromMinutes(5))
-							delList.Add(l);
-					} else l.lastExistTime = now;
-				}
-				
-				util.debugWriteLine("l");
-				form.getVisiRow(true);
-				
-				foreach (var d in delList) 
-					form.removeLiveListItem(d);
-				
-				util.debugWriteLine("k");
-				form.getVisiRow();
-				
-				var isBlindA = bool.Parse(form.config.get("BlindOnlyA"));
-				var isBlindB = bool.Parse(form.config.get("BlindOnlyB"));
-				var isBlindQuestion = bool.Parse(form.config.get("BlindQuestion"));
-				var isFavoriteOnly = bool.Parse(form.config.get("FavoriteOnly"));
-				var cateChar = form.getCategoryChar();
-				foreach (var i in newItems) {
-					if (delMin != 0 && ((TimeSpan)(now - i.pubDateDt)).TotalMinutes > delMin)
-						continue;
-						
-					var isContain = false;
-					foreach (var a in form.liveListDataSource)
-						if (a.lvId == i.lvId) 
-							isContain = true;
-//					for (var j = 0; j < form.liveListDataSource.Count; j++)
-//						if (form.liveListDataSource[j].lvId == i.lvId)
-//							util.debugWriteLine("conta " + j + " " + i.lvId + " " + form.liveListDataSource.Count);
-					if (form.liveListDataReserve.Find((LiveInfo li) => li.lvId == i.lvId) != null) isContain = true;
-					if (isContain) 
-						continue;
-
-					
-					form.addLiveListItem(i, cateChar, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly);
-				}
-				
-				var ccc = form.liveListDataSource.Count + form.liveListDataReserve.Count;
-				util.debugWriteLine("j");
-				form.getVisiRow();
-				
-				
-				if (bool.Parse(form.config.get("AutoSort")))
-					form.sortLiveList();
-				if (bool.Parse(form.config.get("FavoriteUp")))
-					form.upLiveListFavorite();
-				
 				try {
-					var c = form.liveList.Rows.Count;
-					form.formAction(() => {
-					                	
-						foreach (var r in form.liveListDataSource) {
-							var isDisp = (r.MainCategory[0] == cateChar || 
-							            cateChar == '全');
-					        
-									
-								
-					        /*
-							if (form.liveList.CurrentCell != null && 
-									form.liveList.CurrentCell.RowIndex == r.Index && !vi) {
-								form.liveList.CurrentCell = null;
-								util.debugWriteLine("currencell null set");
-							}
-							*/
-							if (!isDisp) {
-								form.liveListDataReserve.Add(r);
-								form.liveListDataSource.Remove(r);
-							}
-							
-						}
-					    if (curCellLv != null) {
-							for (var i = 0; i < form.liveListDataSource.Count; i++)
-								if (form.liveListDataSource[i].lvId == curCellLv)
-									form.liveList.CurrentCell = form.liveList[curCellCellI, i];
-						}
-					});
+					_load(newItems, delMin, now);
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				}
-				
-				try {
-					if (scrollI != -1)
-						form.formAction(() => form.liveList.FirstDisplayedScrollingRowIndex = scrollI);
-				} catch (Exception e) {
-					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-					util.debugWriteLine("scrollI exception " + scrollI);
 				}
 			}
 			
 			form.setLiveListNum();
 			
 			isLoading = false;
+		}
+		private void _load(List<LiveInfo> newItems, double delMin, DateTime now) {
+			var scrollI = form.liveList.FirstDisplayedScrollingRowIndex;
+			var curCellLv = (form.liveList.CurrentCell == null) ? null : form.liveListDataSource[form.liveList.CurrentCell.RowIndex].lvId;
+			var curCellCellI = (form.liveList.CurrentCell == null) ? -1 : form.liveList.CurrentCell.ColumnIndex;
+			
+			var delList = new List<LiveInfo>();
+			foreach (var l in form.liveListDataSource) {
+				/*
+				if (newItems.Find((x) => x.lvId == l.lvId) == null)
+					delList.Add(l);
+				*/
+				if (newItems.Find((x) => x.lvId == l.lvId) == null) {
+					if (now - l.lastExistTime > TimeSpan.FromMinutes(5))
+						delList.Add(l);
+				} else l.lastExistTime = now;
+			}
+			foreach (var l in form.liveListDataReserve) {
+				if (newItems.Find((x) => x.lvId == l.lvId) == null) {
+					if (now - l.lastExistTime > TimeSpan.FromMinutes(5))
+						delList.Add(l);
+				} else l.lastExistTime = now;
+			}
+			
+			util.debugWriteLine("l");
+			form.getVisiRow(true);
+			
+			foreach (var d in delList) 
+				form.removeLiveListItem(d);
+			
+			util.debugWriteLine("k");
+			form.getVisiRow();
+			
+			var isBlindA = bool.Parse(form.config.get("BlindOnlyA"));
+			var isBlindB = bool.Parse(form.config.get("BlindOnlyB"));
+			var isBlindQuestion = bool.Parse(form.config.get("BlindQuestion"));
+			var isFavoriteOnly = bool.Parse(form.config.get("FavoriteOnly"));
+			var cateChar = form.getCategoryChar();
+			foreach (var i in newItems) {
+				if (delMin != 0 && ((TimeSpan)(now - i.pubDateDt)).TotalMinutes > delMin)
+					continue;
+					
+				var isContain = false;
+				foreach (var a in form.liveListDataSource)
+					if (a.lvId == i.lvId) 
+						isContain = true;
+//					for (var j = 0; j < form.liveListDataSource.Count; j++)
+//						if (form.liveListDataSource[j].lvId == i.lvId)
+//							util.debugWriteLine("conta " + j + " " + i.lvId + " " + form.liveListDataSource.Count);
+				if (form.liveListDataReserve.Find((LiveInfo li) => li.lvId == i.lvId) != null) isContain = true;
+				if (isContain) 
+					continue;
+
+				
+				form.addLiveListItem(i, cateChar, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly);
+			}
+			
+			var ccc = form.liveListDataSource.Count + form.liveListDataReserve.Count;
+			util.debugWriteLine("j");
+			form.getVisiRow();
+			
+			
+			if (bool.Parse(form.config.get("AutoSort")))
+				form.sortLiveList();
+			if (bool.Parse(form.config.get("FavoriteUp")))
+				form.upLiveListFavorite();
+			
+			try {
+				var c = form.liveList.Rows.Count;
+				form.formAction(() => {
+				                	
+					foreach (var r in form.liveListDataSource) {
+						var isDisp = (r.MainCategory[0] == cateChar || 
+						            cateChar == '全');
+				        
+								
+							
+				        /*
+						if (form.liveList.CurrentCell != null && 
+								form.liveList.CurrentCell.RowIndex == r.Index && !vi) {
+							form.liveList.CurrentCell = null;
+							util.debugWriteLine("currencell null set");
+						}
+						*/
+						if (!isDisp) {
+							form.liveListDataReserve.Add(r);
+							form.liveListDataSource.Remove(r);
+						}
+						
+					}
+				    if (curCellLv != null) {
+						for (var i = 0; i < form.liveListDataSource.Count; i++)
+							if (form.liveListDataSource[i].lvId == curCellLv)
+								form.liveList.CurrentCell = form.liveList[curCellCellI, i];
+					}
+				});
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+			
+			try {
+				if (scrollI != -1)
+					form.formAction(() => form.liveList.FirstDisplayedScrollingRowIndex = scrollI);
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				util.debugWriteLine("scrollI exception " + scrollI);
+			}
 		}
 		private List<LiveInfo> getLiveItems() {
 			var loadTime = DateTime.Now;

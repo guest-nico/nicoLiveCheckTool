@@ -11,6 +11,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Net;
 using System.Net.Sockets;
 using System.Net.Security;
 using System.Threading;
@@ -76,7 +77,7 @@ namespace namaichi.alart
 			if (!checkin(out _id, out _token)) return false;
 			var pushToken = getToken(_id, _token);
 			if (pushToken == null) return false;
-			if (!sendTokenNico(pushToken)) return false;
+			if (!sendTokenNico2(pushToken)) return false;
 			
 			id = _id;
 			token = _token;
@@ -151,6 +152,7 @@ namespace namaichi.alart
 				var rb = util.postResBytes(url, headers, postDataBytes);
 				if (rb == null) {
 					util.debugWriteLine("checkin post error");
+					check.form.addLogText("スマホ通知のチェックインのPOSTに失敗しました");
 					return false;
 				}
 				var parser = new Google.Protobuf.MessageParser<CheckinResponse>(() => new CheckinResponse());
@@ -165,6 +167,7 @@ namespace namaichi.alart
 				
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				check.form.addLogText("スマホ通知のチェックインの取得中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return false;
 			}
 		}
@@ -175,18 +178,26 @@ namespace namaichi.alart
 					{"Authorization","AidLogin " + androidId + ":" + securityToken},
 					{"contenttype", "application/x-www-form-urlencoded"}
 				};
-				
-				var param = "app=jp.nicovideo.android";
-				param += "&sender=812879448480";
+				string param;
+				var isNicoCas = true;
+				if (isNicoCas) {
+					param = "app=jp.co.dwango.nicocas";
+					param += "&sender=13323994513";
+				} else {
+					param = "app=jp.nicovideo.android";
+					param += "&sender=812879448480"; //niconicoアプリ
+					//param += "&cert=8b25f54d3ab466dba54bef9302f27acdfdd70cb1";
+					//param += "&cert=0005f54d3ab466dba54bef9302f27acdfdd70cb1";
+					
+				}
 				param += "&device=" + androidId;
-				//param += "&cert=8b25f54d3ab466dba54bef9302f27acdfdd70cb1";
-				//param += "&cert=0005f54d3ab466dba54bef9302f27acdfdd70cb1";
 				param += "&app_ver=107";
 				param += "&gcm_ver=15090013";
 				//param += "&X-appid=$randomString";
 				param += "&X-scope=GCM";
 				param += "&X-app_ver_name=4.48.0";
 				//param += "&info=sxu5CRtfHmsco0hB01boBVwFAxLXkBY";
+				
 				byte[] postDataBytes = Encoding.ASCII.GetBytes(param);
 				util.debugWriteLine(param);
 				
@@ -196,16 +207,23 @@ namespace namaichi.alart
 				var token = new Regex("token=(.+)").Match(r).Groups[1].Value;
 				util.debugWriteLine(token);
 				
+				if (token == null) {
+					check.form.addLogText("スマホ通知のトークンの取得に失敗しました");
+				}
 				return token;
 			} catch (Exception e) {
 				util.debugWriteLine("gettoken error " + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				check.form.addLogText("スマホ通知のトークンの取得中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return null;
 			}
 		}
 		private bool sendTokenNico(string pushToken) {
 			util.debugWriteLine("app push sendTokenNico " + pushToken);
 			try {
-				if (check.container == null) return false;
+				if (check.container == null) {
+					check.form.addLogText("Cookieが確認できなかったためスマホ通知のトークンを送信できませんでした");
+					return false;
+				}
 				var urlCookie = check.container.GetCookieHeader(new Uri("https://live2.nicovideo.jp")) + ";";
 				var userSession = util.getRegGroup(urlCookie, "user_session=(.+?);");
 				                          
@@ -235,10 +253,97 @@ namespace namaichi.alart
 				
 				byte[] postDataBytes = Encoding.ASCII.GetBytes(param);
 				var r = util.postResStr(url, headers, postDataBytes);
+				if (r == null) check.form.addLogText("スマホ通知のトークンの送信に失敗しました");
 				util.debugWriteLine(r);
 				return r == "{}";
 			} catch (Exception e) {
 				util.debugWriteLine("gettoken error " + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				check.form.addLogText("スマホ通知のトークンの送信中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return false;
+			}
+		}
+		private bool sendTokenNico2(string pushToken) {
+			util.debugWriteLine("app push sendTokenNico " + pushToken);
+			try {
+				if (check.container == null) {
+					check.form.addLogText("Cookieが確認できなかったためスマホ通知のトークンを送信できませんでした");
+					return false;
+				}
+				
+				//ok
+				var urlCookie = check.container.GetCookieHeader(new Uri("https://live2.nicovideo.jp")) + ";";
+				var userSession = util.getRegGroup(urlCookie, "user_session=(.+?);");
+				var headers = new Dictionary<string, string>() {
+					{"Content-Type", "application/json; charset=UTF-8"},
+					{"User-Agent", "nicocas-Android/3.3.0"},
+					{"Cookie", "user_session=" + userSession},
+					{"X-Frontend-Id", "90"},
+					{"X-Frontend-Version", "3.3.0"},
+					{"X-Os-Version", "22"},
+					{"X-Model-Name", "dream2qltechn"},
+					{"X-Connection-Environment", "wifi"},
+					{"Connection", "Keep-Alive"},
+					//{"Accept-Encoding", "gzip"},
+				};
+				var acPassHeaders = new Dictionary<string, string>() {
+					//{"Content-Type", "application/json; charset=UTF-8"},
+					{"User-Agent", "okhttp/3.10.0"},
+					{"Cookie", "user_session=" + userSession},
+					{"X-Frontend-Id", "90"},
+					{"X-Frontend-Version", "3.3.0"},
+					//{"X-Os-Version", "22"},
+					{"X-Request-With", "dream2qltechn"},
+					//{"X-Connection-Environment", "wifi"},
+					{"Connection", "Keep-Alive"},
+					//{"Accept-Encoding", "gzip"},
+				};
+				
+				//var url = "https://account.nicovideo.jp/api/v1/users/account_passport";
+				//var r = util.postResStr(url, acPassHeaders, null);
+				//util.debugWriteLine("account_passport " + r);
+				
+				var url = "https://api.cas.nicovideo.jp/v1/services/ex/app/nicocas_android/installations";
+				
+				var param = "{\"token\": \"" + pushToken + "\"}";
+				byte[] postDataBytes = Encoding.ASCII.GetBytes(param);
+				var res = util.postResStr(url, headers, postDataBytes);
+				if (res == null) check.form.addLogText("スマホ通知のトークンの送信に失敗しました");
+				util.debugWriteLine("app push send token " + res);
+				
+				url = "https://api.cas.nicovideo.jp/v1/services/ex/app/nicocas_android/notification/blocks";
+				param = "{\"all\": [\"nicocas\"],\"channel\": [],\"user\": []}";
+				postDataBytes = Encoding.ASCII.GetBytes(param);
+				var _res = util.sendRequest(url, headers, postDataBytes, "DELETE");
+				if (res == null) check.form.addLogText("スマホ通知のブロック設定の送信に失敗しました");
+				if (res != null) {
+					using (var getResStream = _res.GetResponseStream())
+					using (var resStream = new System.IO.StreamReader(getResStream)) {
+						var _r = resStream.ReadToEnd();
+						util.debugWriteLine("app push blocks delete " + _r);
+						if (_r == null || _r.IndexOf("200") == -1) 
+							check.form.addLogText("スマホ通知のブロック設定に失敗しました " + _r);
+					}
+				} else util.debugWriteLine("app push blocks delete null");
+				
+				url = "https://api.cas.nicovideo.jp/v1/services/ex/app/nicocas_android/notification/time";
+				param = "{\"status\": \"disabled\",\"time\": {\"end\": \"0:00\", \"start\": \"7:00\"}}";
+				postDataBytes = Encoding.ASCII.GetBytes(param);
+				_res = util.sendRequest(url, headers, postDataBytes, "PUT");
+				if (res == null) check.form.addLogText("スマホ通知の時間設定の送信に失敗しました");
+				if (res != null) {
+					using (var getResStream = _res.GetResponseStream())
+					using (var resStream = new System.IO.StreamReader(getResStream)) {
+						var _r = resStream.ReadToEnd();
+						util.debugWriteLine("app push time put " + _r);
+						if (_r == null || _r.IndexOf("200") == -1) 
+							check.form.addLogText("スマホ通知の時間設定に失敗しました" + _r);
+					}
+				} else util.debugWriteLine("app push time put null");
+				
+				return res != null;
+			} catch (Exception e) {
+				util.debugWriteLine("gettoken error " + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				check.form.addLogText("スマホ通知のトークンの送信中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return false;
 			}
 		}
@@ -400,13 +505,15 @@ namespace namaichi.alart
 								//dms = mcs_pb2.DataMessageStanza();
 								//dms.ParseFromString(msg);
 								util.debugWriteLine("RECV DATA MESSAGE " + lresp);//lresp.Id + " time " + lresp.ServerTimestamp + " streamid " + lresp.StreamId + " ");
-								var lvid = util.getRegGroup(lresp.AppData.ToString(), "\"lvid\"[\\s\\S]+(lv\\d+)");
+								//var lvid = util.getRegGroup(lresp.AppData.ToString(), "\"lvid\"[\\s\\S]+(lv\\d+)");
+								//var lvid = util.getRegGroup(lresp.AppData.ToString(), "\"program_id\":\"(lv\\d+)");
+								var lvid = util.getRegGroup(lresp.AppData.ToString(), "program_id\\\\\":\\\\\"(lv\\d+)");
 								if (lvid != null) {
 									util.debugWriteLine("appData lvid " + lvid);
-									var items = getItem(lvid, lresp);
-									if (items != null) 
+									var items = getNicoCasItem(lvid, lresp);
+									if (items != null) {
 										check.foundLive(items);
-									else {
+									} else {
 										var gir = new GetItemRetryApr(lvid, lresp, this);
 										Task.Run(() => {
 											for (var i = 0; i < 10; i++) {
@@ -444,6 +551,7 @@ namespace namaichi.alart
 				return false;
 			}
 		}
+		
 		public List<RssItem> getItem(string lvid, DataMessageStanza msg) {
 			try {
 				string title, thumbnail, comName, hostName, description;
@@ -456,7 +564,7 @@ namespace namaichi.alart
 				
 				bool isCom;
 				if (!r) {
-					check.form.addLogText("app push page error !r " + lvid);
+					check.form.addLogText("スマホプッシュ通知から取得した放送のページが取得できませんでした " + lvid);
 					util.debugWriteLine("app push page error !r " + lvid);
 					return null;
 					
@@ -526,6 +634,89 @@ namespace namaichi.alart
 				return null;
 			}
 		}
+		public List<RssItem> getNicoCasItem(string lvid, DataMessageStanza msg) {
+			try {
+				string title, thumbnail, comName, hostName, description;
+				DateTime dt = util.getUnixToDatetime(msg.Sent / 1000);
+				if (dt < startTime) return null;
+				hostName = "";
+				
+				var hg = new namaichi.rec.HosoInfoGetter();
+				var r = hg.get(lvid);
+				
+				var appData = msg.AppData.ToString();
+				bool isCom;
+				if (!r) {
+					check.form.addLogText("スマホプッシュ通知から取得した放送のページが取得できませんでした " + lvid);
+					util.debugWriteLine("app push page error !r " + lvid);
+					return null;
+					
+					hg.description = hg.userId = hg.communityId = hg.thumbnail = "";
+					hg.tags = new String[]{};
+					
+					
+					if (appData.IndexOf("\"user_id\\\":") > -1) {
+						hostName = util.getRegGroup(appData, "user_name\\\\\":\\\\\"(.+?)\\\\\"");
+						isCom = true;
+						comName = "";
+					} else {
+						//reg = new Regex("\\[生放送開始\\](.+?)「(.+?)」を開始しました。");
+						//m = reg.Match(msg.AppData.ToString());
+						comName = util.getRegGroup(appData, "channel_name\\\\\":\\\\\"(.+?)\\\\\"");
+						isCom = false;
+						hostName = "";
+					}
+					title = util.getRegGroup(appData, "program_title\\\\\":\\\\\"(.+?)\\\\\"");
+				} else {
+					if (hg.type == "community" || hg.type == "user") {
+						//var reg = new Regex("\\[生放送開始\\](.+?)さんが「(.+?)」を開始しました。");
+						//var m = reg.Match(msg.AppData.ToString());
+						hostName = util.getRegGroup(appData, "user_name\\\\\":\\\\\"(.+?)\\\\\"");
+						comName = (hg.group != null) ? hg.group : "";
+						isCom = true;
+					} else {
+						//var reg = new Regex("\\[生放送開始\\](.+?)「(.+?)」を開始しました。");
+						//var m = reg.Match(msg.AppData.ToString());
+						comName = util.getRegGroup(appData, "channel_name\\\\\":\\\\\"(.+?)\\\\\"");
+						//comId = util.getRegGroup(appData, "channel_id\\\\\":\\\\\"(.+?)\\\\\"");
+						isCom = false;
+						if (!string.IsNullOrEmpty(hg.userName)) hostName = hg.userName;
+					}
+					title = util.getRegGroup(appData, "program_title\\\\\":\\\\\"(.+?)\\\\\"");
+					
+				}
+				
+				
+				util.debugWriteLine("description " + hg.description);
+				util.debugWriteLine("userId " + hg.userId);
+				util.debugWriteLine("userName " + hostName);
+				util.debugWriteLine("comName " + comName);
+				//thumbnail = "";
+				
+				if (title == null || lvid == null || hg.thumbnail == null ||
+				    	dt == DateTime.MinValue || comName == null || hg.communityId == null ||
+				    	hg.tags == null || hg.description == null ||
+				    	(isCom && (hostName == null || hg.userId == null))) {
+					check.form.addLogText("app push error " + msg);
+					util.debugWriteLine("app push error nullinfo " + msg);
+					return null;
+					
+				}
+				
+				var i = new RssItem(title, lvid, dt.ToString(), hg.description, comName, hg.communityId, hostName, hg.thumbnail, hg.isMemberOnly.ToString(), "");
+				i.setUserId(hg.userId);
+				i.setTag(hg.tags);
+				i.category = hg.category;
+				i.type = hg.type;
+				var ret = new List<RssItem>();
+				ret.Add(i);
+				return ret;
+				
+			} catch (Exception e) {
+				util.debugWriteLine("app push getitem error " + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return null;
+			}
+		}
 		public void clearConfigSetting() {
 			config.set("appPushId", "");
 			config.set("appPushToken", "");
@@ -541,8 +732,9 @@ namespace namaichi.alart
 			this.pr = pr;
 		}
 		public List<RssItem> getItem() {
-			return pr.getItem(lvid, lresp);
+			return pr.getNicoCasItem(lvid, lresp);
 		}
 	}
 }
-
+//RECV DATA MESSAGE { "id": "6D44DD46", "from": "13323994513", "category": "jp.nicovideo.android", "appData": [ { "key": "nx", "value": "{\"type\":\"start_channel_publish\",\"relation\":\"follower\",\"channel_id\":\"ch2604516\",\"program_id\":\"lv322411981\",\"program_title\":\"⛔【限定】[ ASMR/耳舐め ] ハロウィン♡魔女ウィッチがご奉仕♡【実写カメラ】Ear  licking Video Stream\",\"channel_name\":\"all standard is ｃ☆。\",\"channel_icon\":\"https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/ch2604516.jpg?1572956462\"}" }, { "key": "message", "value": "all standard is ｃ☆。が番組を開始しました" } ], "persistentId": "0:1573920045367966%75f5c14df9fd7ecd", "ttl": 86357, "sent": "1573920045351" }
+//RECV DATA MESSAGE { "id": "6D44DD3E", "from": "13323994513", "category": "jp.nicovideo.android", "appData": [ { "key": "nx", "value": "{\"type\":\"start_publish\",\"relation\":\"follower\",\"user_id\":\"14508141\",\"program_id\":\"lv322948514\",\"program_title\":\"真夜中の 【怪談 UMA 怪事件 超常現象 】 鑑賞会\",\"user_name\":\"ジャワ男\",\"user_icon\":\"https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/1450/14508141.jpg?1539494321\"}" }, { "key": "message", "value": "ジャワ男さんが番組を開始しました" } ], "persistentId": "0:1573914974863994%75f5c14df9fd7ecd", "ttl": 86400, "sent": "1573914974858" }

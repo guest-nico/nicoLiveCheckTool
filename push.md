@@ -5,6 +5,8 @@
 アラートツールを製作されている方に少しでもお役に立てていただければ幸いです。
 また、アラートAPIがなくなることによるニコニコへのサーバー負荷の軽減に繋がることを願い
 
+これまでniconicoアプリのプッシュ通知機能を使用しておりましたが、うまく動作できなくなってしまったために、2019年11月17日更新のver0.1.7.37よりニコニコ生放送アプリのプッシュ通知機能を使用するように修正致しました。
+
 ### ブラウザプッシュ通知
 このツールではFirefoxのプッシュ通知の仕組みを使っています。
 
@@ -266,9 +268,18 @@ var headers = new Dictionary<string, string>(){
     {"Authorization","AidLogin " + androidId + ":" + securityToken},
     {"contenttype", "application/x-www-form-urlencoded"}
 };
-var param = "app=jp.nicovideo.android";
+
 //ニコニコのsenderId
-param += "&sender=812879448480";
+string param;
+var isNicoCas = true; //[ver0.1.7.38]ニコニコ生放送アプリ用
+if (isNicoCas) {
+    param = "app=jp.co.dwango.nicocas";
+    param += "&sender=13323994513";
+} else {
+    param = "app=jp.nicovideo.android";
+    param += "&sender=812879448480"; //niconicoアプリ
+}
+                
 param += "&device=" + androidId;
 param += "&app_ver=107";
 param += "&gcm_ver=15090013";
@@ -282,27 +293,81 @@ var r = util.postResStr(url, headers, postDataBytes);
 
 4.ニコニコにトークンを登録します
 ```
-var url = "https://api.gadget.nicovideo.jp/notification/clientapp/registration"; 
-var headers = new Dictionary<string, string>() {
-    {"Content-Type", "application/x-www-form-urlencoded"},
-    {"User-Agent", "Niconico/1.0 (Linux; U; Android 5.1.1; ja-jp; nicoandroid SM-G9550) Version/5.06.0"},
-    //Cookieのuser_sessionを指定
-    {"Cookie", "SP_SESSION_KEY=" + userSession},
-    {"Cookie2", "$Version=1"},
-    {"Accept-Language", "ja-jp"},
-    {"X-Nicovideo-Connection-Type", "wifi"},
-    {"X-Frontend-Id", "1"},
-    {"X-Frontend-Version", "5.06.0"},
-    {"X-Os-Version", "5.1.1"},
-    {"X-Request-With", ""},
-    {"X-Model-Name", "dream2qltechn"}
-};
-//tokenにはuser_sessionを指定し、registerIdに3で取得したトークンを指定する
-var param = "token=" + userSession;
-param += "&registerId=" + pushToken;
+string param;
+var isNicoCas = true; //[ver0.1.7.38]ニコニコ生放送アプリ用
+if (isNicoCas) {
+    var url = "https://api.gadget.nicovideo.jp/notification/clientapp/registration";
+    var headers = new Dictionary<string, string>() {
+        {"Content-Type", "application/x-www-form-urlencoded"},
+        {"User-Agent", "Niconico/1.0 (Linux; U; Android 5.1.1; ja-jp; nicoandroid SM-G9550) Version/5.06.0"},
+        //Cookieのuser_sessionを指定
+        {"Cookie", "SP_SESSION_KEY=" + userSession},
+        {"Cookie2", "$Version=1"},
+        {"Accept-Language", "ja-jp"},
+        {"X-Nicovideo-Connection-Type", "wifi"},
+        {"X-Frontend-Id", "1"},
+        {"X-Frontend-Version", "5.06.0"},
+        {"X-Os-Version", "5.1.1"},
+        {"X-Request-With", ""},
+        {"X-Model-Name", "dream2qltechn"}
+    };
+    //tokenにはuser_sessionを指定し、registerIdに3で取得したトークンを指定する
+    var param = "token=" + userSession;
+    param += "&registerId=" + pushToken;
+    byte[] postDataBytes = Encoding.ASCII.GetBytes(param);
+	var r = util.postResStr(url, headers, postDataBytes);
+} else {
+	var url = "https://api.cas.nicovideo.jp/v1/services/ex/app/nicocas_android/installations";
+	var headers = new Dictionary<string, string>() {
+        {"Content-Type", "application/json; charset=UTF-8"},
+        {"User-Agent", "nicocas-Android/3.3.0"},
+        {"Cookie", "user_session=" + userSession},
+        {"X-Frontend-Id", "90"},
+        {"X-Frontend-Version", "3.3.0"},
+        {"X-Os-Version", "22"},
+        {"X-Model-Name", "dream2qltechn"},
+        {"X-Connection-Environment", "wifi"},
+        {"Connection", "Keep-Alive"},
+        //{"Accept-Encoding", "gzip"},
+    };
+    var param = "{\"token\": \"" + pushToken + "\"}";
+    byte[] postDataBytes = Encoding.ASCII.GetBytes(param);
+    var res = util.postResStr(url, headers, postDataBytes);
+    
+    //プッシュ通知のブロック機能をオフ
+    url = "https://api.cas.nicovideo.jp/v1/services/ex/app/nicocas_android/notification/blocks";
+    param = "{\"all\": [\"nicocas\"],\"channel\": [],\"user\": []}";
+    postDataBytes = Encoding.ASCII.GetBytes(param);
+    var _res = util.sendRequest(url, headers, postDataBytes, "DELETE");
+	if (res == null) check.form.addLogText("スマホ通知のブロック設定の送信に失敗しました");
+    else {
+        using (var getResStream = _res.GetResponseStream())
+        using (var resStream = new System.IO.StreamReader(getResStream)) {
+            var _r = resStream.ReadToEnd();
+            util.debugWriteLine("app push blocks delete " + _r);
+            if (_r == null || _r.IndexOf("200") == -1) 
+                check.form.addLogText("スマホ通知のブロック設定に失敗しました " + _r);
+        }
+    }
+    
+    //プッシュ通知の時間指定をオフ
+    url = "https://api.cas.nicovideo.jp/v1/services/ex/app/nicocas_android/notification/time";
+    param = "{\"status\": \"disabled\",\"time\": {\"end\": \"0:00\", \"start\": \"7:00\"}}";
+    postDataBytes = Encoding.ASCII.GetBytes(param);
+    _res = util.sendRequest(url, headers, postDataBytes, "PUT");
+    if (res == null) check.form.addLogText("スマホ通知の時間設定の送信に失敗しました");
+    else {
+        using (var getResStream = _res.GetResponseStream())
+        using (var resStream = new System.IO.StreamReader(getResStream)) {
+            var _r = resStream.ReadToEnd();
+            util.debugWriteLine("app push time put " + _r);
+            if (_r == null || _r.IndexOf("200") == -1) 
+                check.form.addLogText("スマホ通知の時間設定に失敗しました" + _r);
+        }
+    }
+}
 
-byte[] postDataBytes = Encoding.ASCII.GetBytes(param);
-var r = util.postResStr(url, headers, postDataBytes);
+
 ```
 
 5.プッシュサーバーに接続します
@@ -391,6 +456,11 @@ while (isRetry) {
 }
 ```
 ニコ生のユーザー放送の場合は
-{ "id": "00000000", "from": "812879448480", "category": "jp.nicovideo.android", "appData": [ { "key": "lvid", "value": "lv000000000" }, { "key": "message", "value": "[生放送開始]{ユーザー名}さんが「{タイトル}」を開始しました。" } ], "persistentId": "0:0000000000000000%0000000000000000", "lastStreamIdReceived": 0, "ttl": 0000000, "sent": "1551366000000" }
+~~{ "id": "00000000", "from": "812879448480", "category": "jp.nicovideo.android", "appData": [ { "key": "lvid", "value": "lv000000000" }, { "key": "message", "value": "[生放送開始]{ユーザー名}さんが「{タイトル}」を開始しました。" } ], "persistentId": "0:0000000000000000%0000000000000000", "lastStreamIdReceived": 0, "ttl": 0000000, "sent": "1551366000000" }~~
+niconicoアプリではこのようなメッセージでした。
+
+{ "id": "6D44DD46", "from": "13323994513", "category": "jp.nicovideo.android", "appData": [ { "key": "nx", "value": "{\"type\":\"start_channel_publish\",\"relation\":\"follower\",\"channel_id\":\"ch2604516\",\"program_id\":\"lv322411981\",\"program_title\":\"⛔【限定】[ ASMR/耳舐め ] ハロウィン♡魔女ウィッチがご奉仕♡【実写カメラ】Ear  licking Video Stream\",\"channel_name\":\"all standard is ｃ☆。\",\"channel_icon\":\"https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/ch2604516.jpg?1572956462\"}" }, { "key": "message", "value": "all standard is ｃ☆。が番組を開始しました" } ], "persistentId": "0:1573920045367966%75f5c14df9fd7ecd", "ttl": 86357, "sent": "1573920045351" }
+{ "id": "6D44DD3E", "from": "13323994513", "category": "jp.nicovideo.android", "appData": [ { "key": "nx", "value": "{\"type\":\"start_publish\",\"relation\":\"follower\",\"user_id\":\"14508141\",\"program_id\":\"lv322948514\",\"program_title\":\"真夜中の 【怪談 UMA 怪事件 超常現象 】 鑑賞会\",\"user_name\":\"ジャワ男\",\"user_icon\":\"https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/1450/14508141.jpg?1539494321\"}" }, { "key": "message", "value": "ジャワ男さんが番組を開始しました" } ], "persistentId": "0:1573914974863994%75f5c14df9fd7ecd", "ttl": 86400, "sent": "1573914974858" }
+
 のような文字列が取得できます。
 AndroidIdとSecurityTokenは保存しておくと次回以降は同じIDを使うことができます。

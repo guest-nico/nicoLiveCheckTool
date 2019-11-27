@@ -455,7 +455,7 @@ while (isRetry) {
     }
 }
 ```
-ニコ生のユーザー放送の場合は
+
 ~~{ "id": "00000000", "from": "812879448480", "category": "jp.nicovideo.android", "appData": [ { "key": "lvid", "value": "lv000000000" }, { "key": "message", "value": "[生放送開始]{ユーザー名}さんが「{タイトル}」を開始しました。" } ], "persistentId": "0:0000000000000000%0000000000000000", "lastStreamIdReceived": 0, "ttl": 0000000, "sent": "1551366000000" }~~
 niconicoアプリではこのようなメッセージでした。
 
@@ -463,4 +463,4 @@ niconicoアプリではこのようなメッセージでした。
 { "id": "6D44DD3E", "from": "13323994513", "category": "jp.nicovideo.android", "appData": [ { "key": "nx", "value": "{\"type\":\"start_publish\",\"relation\":\"follower\",\"user_id\":\"14508141\",\"program_id\":\"lv322948514\",\"program_title\":\"真夜中の 【怪談 UMA 怪事件 超常現象 】 鑑賞会\",\"user_name\":\"ジャワ男\",\"user_icon\":\"https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/1450/14508141.jpg?1539494321\"}" }, { "key": "message", "value": "ジャワ男さんが番組を開始しました" } ], "persistentId": "0:1573914974863994%75f5c14df9fd7ecd", "ttl": 86400, "sent": "1573914974858" }
 
 のような文字列が取得できます。
-AndroidIdとSecurityTokenは保存しておくと次回以降は同じIDを使うことができます。
+AndroidIdとSecurityTokenを保存しておくと次回以降は同じIDを使うことができます。

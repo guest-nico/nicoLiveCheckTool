@@ -5,7 +5,7 @@
 アラートツールを製作されている方に少しでもお役に立てていただければ幸いです。
 また、アラートAPIがなくなることによるニコニコへのサーバー負荷の軽減に繋がることを願い
 
-これまでniconicoアプリのプッシュ通知機能を使用しておりましたが、うまく動作できなくなってしまったために、2019年11月17日更新のver0.1.7.37よりニコニコ生放送アプリのプッシュ通知機能を使用するように修正致しました。
+これまでniconicoアプリのプッシュ通知機能を使用しておりましたが、通知を登録・取得できなくなってしまったために、2019年11月17日更新のver0.1.7.37よりニコニコ生放送アプリのプッシュ通知機能を使用するように修正致しました。
 
 ### ブラウザプッシュ通知
 このツールではFirefoxのプッシュ通知の仕組みを使っています。
@@ -271,7 +271,7 @@ var headers = new Dictionary<string, string>(){
 
 //ニコニコのsenderId
 string param;
-var isNicoCas = true; //[ver0.1.7.38]ニコニコ生放送アプリ用
+var isNicoCas = true; //[ver0.1.7.37]ニコニコ生放送アプリ用
 if (isNicoCas) {
     param = "app=jp.co.dwango.nicocas";
     param += "&sender=13323994513";
@@ -294,7 +294,7 @@ var r = util.postResStr(url, headers, postDataBytes);
 4.ニコニコにトークンを登録します
 ```
 string param;
-var isNicoCas = true; //[ver0.1.7.38]ニコニコ生放送アプリ用
+var isNicoCas = true; //[ver0.1.7.37]ニコニコ生放送アプリ用
 if (isNicoCas) {
     var url = "https://api.gadget.nicovideo.jp/notification/clientapp/registration";
     var headers = new Dictionary<string, string>() {

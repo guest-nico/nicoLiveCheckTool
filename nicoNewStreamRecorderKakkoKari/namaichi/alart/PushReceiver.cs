@@ -248,7 +248,7 @@ namespace namaichi.alart
 					if (items != null) check.foundLive(items);
 					else {
 						var gir = new GetItemRetryPr(dec, this);
-						Task.Run(() => {
+						Task.Factory.StartNew(() => {
 							for (var i = 0; i < 10; i++) {
 				         		Thread.Sleep(5000);
 				         		items = gir.getItem();
@@ -378,7 +378,7 @@ namespace namaichi.alart
 				}
 				
 				var hg = new namaichi.rec.HosoInfoGetter();
-				var r = hg.get(lvid);
+				var r = hg.get(lvid, check.container);
 				//description = hg.description;
 				
 				if (!r) {

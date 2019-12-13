@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Net;
 using Newtonsoft.Json;
 
 using namaichi.info;
@@ -47,15 +48,30 @@ namespace namaichi.alart
 					}
 					
 					var alartedItem = new List<RssItem>();
-					foreach (var l in timeTableList) {
+					var alartedItem2 = new List<RssItem>();
+					foreach (var _l in timeTableList) {
+						var l = _l;
 						if (DateTime.Now.AddSeconds(10) > l.pubDateDt) {
 							util.debugWriteLine("timeline alart " + l.lvId + " " + l.title);
+							if (string.IsNullOrEmpty(l.description)) {
+								l = setHosoInfo(l);
+								if (l == null) continue;
+							}
 							check.foundLive(new List<RssItem>{l});
 							alartedItem.Add(l);
+							alartedItem2.Add(_l);
 						}
 					}
-					foreach (var l in alartedItem)
-						timeTableList.Remove(l);
+					foreach (var l in alartedItem) {
+						util.debugWriteLine("timeline alarted item remove index " + l.lvId + " " + timeTableList.IndexOf(l));
+						var r = timeTableList.Remove(l);
+						util.debugWriteLine("timeline alarted item remove " + l.lvId + " " + r);
+					}
+					foreach (var l in alartedItem2) {
+						util.debugWriteLine("timeline2 alarted item remove index " + l.lvId + " " + timeTableList.IndexOf(l));
+						var r = timeTableList.Remove(l);
+						util.debugWriteLine("timeline2 alarted item remove " + l.lvId + " " + r);
+					}
 					isAllCheck = false;
 					Thread.Sleep(3000);
 				} catch (Exception e) {
@@ -86,6 +102,7 @@ namespace namaichi.alart
 			try {
 				var res = util.getPageSource(url);
 				if (res == null) return;
+				string ceCommingSoonRes = null;
 				var list = JsonConvert.DeserializeObject<timelineTop>(res);
 				foreach (var l in list.timeline.stream_list) {
 					if (l.provider_type != "official") continue;
@@ -100,11 +117,24 @@ namespace namaichi.alart
 							#if DEBUG
 								if (i > 0) check.form.addLogText("timetable higget false " + l.id + " " + i);
 							#endif
-							var r = hig.get("https://live.nicovideo.jp/watch/lv" + l.id);
+							var r = hig.get("https://live.nicovideo.jp/watch/lv" + l.id, check.container);
 							if (r) break;
 							Thread.Sleep(2000);
 						}
-						if (hig.openDt == DateTime.MinValue) continue;
+						if (hig.openDt == DateTime.MinValue) {
+							if (ceCommingSoonRes == null) {
+								ceCommingSoonRes = util.getPageSource("http://api.ce.nicovideo.jp/liveapi/v1/video.comingsoon?__format=xml&from=0&limit=148&pt=official");
+								//ceCommingSoonRes = util.getPageSource("http://api.ce.nicovideo.jp/liveapi/v1/video.onairlist?__format=xml&from=0&limit=148&pt=official");
+								if (ceCommingSoonRes == null) continue;
+								ceCommingSoonRes = WebUtility.HtmlDecode(ceCommingSoonRes);
+							}
+							hig = new HosoInfoGetter();
+							var openDt = getOpenDt(l.id, ceCommingSoonRes);
+							if (l.startTime < DateTime.Now || openDt == DateTime.MinValue)
+								hig.openDt = l.startTime;
+							else hig.openDt = openDt;
+						}
+						
 						
 						var _isFollow = false; 
 						var ri = new RssItem(l.title, "lv" + l.id, hig.dt.ToString(),
@@ -136,6 +166,42 @@ namespace namaichi.alart
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
+		}
+		private DateTime getOpenDt(string id, string res) {
+			
+			if (res == null) return DateTime.MinValue;
+			var ind = res.IndexOf("<id>lv" + id + "</id>");
+			if (ind == -1) return DateTime.MinValue;
+			var ot = util.getRegGroup(res.Substring(ind), "open_time>(.+?)</open_time");
+			util.debugWriteLine("timetable getOpenDt " + id + " " + ot);
+			var ret = DateTime.Parse(ot);
+			return ret;
+			
+		}
+		private RssItem setHosoInfo(RssItem item) {
+			for (var i = 0; i < 10; i++) {
+				var hig = new HosoInfoGetter();
+				var r = hig.get("https://live.nicovideo.jp/watch/" + item.lvId, check.container);
+				if (!r) {
+					Thread.Sleep(3000);
+					continue;
+				}
+				
+				var _isFollow = false;
+				var lvid = item.lvId.StartsWith("lv") ? item.lvId : ("lv" + item.lvId);
+				var ri = new RssItem(hig.title, lvid, hig.dt.ToString(),
+						hig.description, 
+						util.getCommunityName(hig.communityId, out _isFollow, null), 
+						hig.communityId,
+						"", 
+						hig.thumbnail, "false", "");
+				ri.type = hig.type;
+				ri.tags = hig.tags;
+				ri.pubDateDt = hig.openDt;
+				if (!string.IsNullOrEmpty(hig.userName)) ri.hostName = hig.userName;
+				return ri;
+			}
+			return null;
 		}
 		public void stop() {
 			isRetry = false;

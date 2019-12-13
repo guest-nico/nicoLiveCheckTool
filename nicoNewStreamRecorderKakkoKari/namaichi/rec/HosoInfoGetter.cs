@@ -10,6 +10,7 @@ using System;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Net;
 
 namespace namaichi.rec
 {
@@ -34,10 +35,10 @@ namespace namaichi.rec
 		public HosoInfoGetter()
 		{
 		}
-		public bool get(string _url) {
+		public bool get(string _url, CookieContainer container) {
 			var lvid = util.getRegGroup(_url, "((lv|c[oh])\\d+)");
 			var url =  "https://live2.nicovideo.jp/watch/" + lvid;
-			var res = util.getPageSource(url, null);
+			var res = util.getPageSource(url, container);
 			if (res == null) return false;
 			
 			title = util.getRegGroup(res, "<meta property=\"og:title\" content=\"(.*?)\"");
@@ -114,7 +115,7 @@ namespace namaichi.rec
 			group = util.getRegGroup(data, "\"socialGroup\".+?\"name\".\"(.+?)\"");
 			if (group == null) group = util.getRegGroup(res, "COMMUNITY INFO[\\s\\S]+target=\"_blank\"><span itemprop=\"name\">(.+?)</span>");
 			util.debugWriteLine(pageType);
-			if (pageType == 0 || pageType == 7) {
+			if ((pageType == 0 || pageType == 7 && isRtmpOnlyPage) || true) {
 				if (type == "official") {
 					communityId = util.getRegGroup(data, "\"socialGroup\".+?\"id\".\"(.+?)\"");
 //					if (communityId == null) communityId = "official";
@@ -178,9 +179,16 @@ namespace namaichi.rec
 			return url;
 		}
 		private void setOpenDt(string res) {
-			MatchCollection _openDtMatches = null;
+			
 			try {
-				_openDtMatches = new Regex("<strong>(\\d{4}/\\d{2}/\\d{2})...</strong>&nbsp;開場:<strong>(\\d{2}):(\\d{2})</strong>&nbsp;開演:<strong>(\\d{2}):(\\d{2})</strong>").Matches(res);
+				var openD = util.getRegGroup(res, "openTime&quot;:(\\d+)");
+				if (openD != null) {
+					openDt = util.getUnixToDatetime(long.Parse(openD));
+					return;
+				}
+				//MatchCollection _openDtMatches = null;
+				//_openDtMatches = new Regex("<strong>(\\d{4}/\\d{2}/\\d{2})...</strong>&nbsp;開場:<strong>(\\d{2}):(\\d{2})</strong>&nbsp;開演:<strong>(\\d{2}):(\\d{2})</strong>").Matches(res);
+				/*
 				if (_openDtMatches != null && _openDtMatches.Count > 0) {
 					util.debugWriteLine("open dt0 " + _openDtMatches[0].ToString());
 					var g = _openDtMatches[0].Groups;
@@ -196,10 +204,13 @@ namespace namaichi.rec
 					openDt = ret;
 					return;
 				}
+				*/
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 			openDt = dt;
 		}
+
+		
 	}
 }

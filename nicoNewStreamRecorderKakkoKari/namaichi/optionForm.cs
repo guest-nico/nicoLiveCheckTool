@@ -544,7 +544,7 @@ namespace namaichi
 			var title = "[ニコ生]ユーザー名の放送開始";
 			var msg = DateTime.Now.ToString() + "\nユーザー名 が コミュニティ名 で 放送タイトル を開始しました。\nhttps://live.nicovideo.jp/watch/lv********\nhttps://com.nicovideo.jp/community/co*******";
 			
-			Task.Run(() => {
+			Task.Factory.StartNew(() => {
 				string eMsg;
 				var ret = util.sendMail(mailFromText.Text, mailToText.Text, 
 						title, msg, mailSmtpText.Text, mailPortText.Text, 

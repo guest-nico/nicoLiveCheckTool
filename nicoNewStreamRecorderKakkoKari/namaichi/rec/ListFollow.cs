@@ -101,7 +101,7 @@ namespace namaichi.rec
 					}
 					var t = okNum.ToString() + "件のフォローに成功しました";
 					if (ngNum > 0) t += "\n" + ngNum + "件のフォローに失敗しました";//\n(" + string.Join(", ", failedList) + ")";
-					form.showMessageBox(t, "一括ユーザーフォロー結果");
+					form.showMessageBox(t, "一括" + (modeStr.Substring(0, modeStr.Length - 1)) + "フォロー結果");
 					break;
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);

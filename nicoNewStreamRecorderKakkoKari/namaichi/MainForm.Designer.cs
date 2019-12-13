@@ -57,6 +57,7 @@ namespace namaichi
 			this.updateCateTryMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.updateCatePlayMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.updateCatePresenMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.updateCateSuperIchibaMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.updateCateFaceMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.updateCateRushMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.updateCateR18Menu = new System.Windows.Forms.ToolStripMenuItem();
@@ -361,20 +362,9 @@ namespace namaichi
 			this.categoryBtnPanel = new System.Windows.Forms.FlowLayoutPanel();
 			this.allCategoryBtn = new System.Windows.Forms.RadioButton();
 			this.commonCategoryBtn = new System.Windows.Forms.RadioButton();
-			this.politicsCategoryBtn = new System.Windows.Forms.RadioButton();
-			this.animalCategoryBtn = new System.Windows.Forms.RadioButton();
-			this.cookCategoryBtn = new System.Windows.Forms.RadioButton();
-			this.playCategoryBtn = new System.Windows.Forms.RadioButton();
-			this.singCategoryBtn = new System.Windows.Forms.RadioButton();
-			this.danceCategoryBtn = new System.Windows.Forms.RadioButton();
-			this.drawCategoryBtn = new System.Windows.Forms.RadioButton();
-			this.lectureCategoryBtn = new System.Windows.Forms.RadioButton();
-			this.gameCategoryBtn = new System.Windows.Forms.RadioButton();
-			this.introCategoryBtn = new System.Windows.Forms.RadioButton();
-			this.r18CategoryBtn = new System.Windows.Forms.RadioButton();
-			this.faceCategoryBtn = new System.Windows.Forms.RadioButton();
-			this.rushCategoryBtn = new System.Windows.Forms.RadioButton();
-			this.cruiseCategoryBtn = new System.Windows.Forms.RadioButton();
+			this.tryCategoryBtn = new System.Windows.Forms.RadioButton();
+			this.liveCategoryBtn = new System.Windows.Forms.RadioButton();
+			this.reqCategoryBtn = new System.Windows.Forms.RadioButton();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.favoriteCommunityPanel = new System.Windows.Forms.Panel();
 			this.upButton = new System.Windows.Forms.Button();
@@ -674,6 +664,7 @@ namespace namaichi
 									this.updateCateTryMenu,
 									this.updateCatePlayMenu,
 									this.updateCatePresenMenu,
+									this.updateCateSuperIchibaMenu,
 									this.updateCateFaceMenu,
 									this.updateCateRushMenu,
 									this.updateCateR18Menu});
@@ -687,50 +678,59 @@ namespace namaichi
 			this.updateCateAllMenu.Checked = true;
 			this.updateCateAllMenu.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.updateCateAllMenu.Name = "updateCateAllMenu";
-			this.updateCateAllMenu.Size = new System.Drawing.Size(155, 22);
+			this.updateCateAllMenu.Size = new System.Drawing.Size(154, 22);
 			this.updateCateAllMenu.Text = "すべて(&A)";
 			// 
 			// updateCateCommon
 			// 
 			this.updateCateCommon.Name = "updateCateCommon";
-			this.updateCateCommon.Size = new System.Drawing.Size(155, 22);
+			this.updateCateCommon.Size = new System.Drawing.Size(154, 22);
 			this.updateCateCommon.Text = "一般(&B)";
 			// 
 			// updateCateTryMenu
 			// 
 			this.updateCateTryMenu.Name = "updateCateTryMenu";
-			this.updateCateTryMenu.Size = new System.Drawing.Size(155, 22);
+			this.updateCateTryMenu.Size = new System.Drawing.Size(154, 22);
 			this.updateCateTryMenu.Text = "やってみた(&C)";
 			// 
 			// updateCatePlayMenu
 			// 
 			this.updateCatePlayMenu.Name = "updateCatePlayMenu";
-			this.updateCatePlayMenu.Size = new System.Drawing.Size(155, 22);
-			this.updateCatePlayMenu.Text = "ゲーム実況(&D)";
+			this.updateCatePlayMenu.Size = new System.Drawing.Size(154, 22);
+			this.updateCatePlayMenu.Text = "ゲーム(&D)";
 			// 
 			// updateCatePresenMenu
 			// 
 			this.updateCatePresenMenu.Name = "updateCatePresenMenu";
-			this.updateCatePresenMenu.Size = new System.Drawing.Size(155, 22);
+			this.updateCatePresenMenu.Size = new System.Drawing.Size(154, 22);
 			this.updateCatePresenMenu.Text = "動画紹介(&E)";
+			// 
+			// updateCateSuperIchibaMenu
+			// 
+			this.updateCateSuperIchibaMenu.Name = "updateCateSuperIchibaMenu";
+			this.updateCateSuperIchibaMenu.Size = new System.Drawing.Size(154, 22);
+			this.updateCateSuperIchibaMenu.Text = "遊ぶ(&F)";
+			this.updateCateSuperIchibaMenu.Visible = false;
 			// 
 			// updateCateFaceMenu
 			// 
 			this.updateCateFaceMenu.Name = "updateCateFaceMenu";
-			this.updateCateFaceMenu.Size = new System.Drawing.Size(155, 22);
-			this.updateCateFaceMenu.Text = "顔出し(&F)";
+			this.updateCateFaceMenu.Size = new System.Drawing.Size(154, 22);
+			this.updateCateFaceMenu.Text = "顔出し(&G)";
+			this.updateCateFaceMenu.Visible = false;
 			// 
 			// updateCateRushMenu
 			// 
 			this.updateCateRushMenu.Name = "updateCateRushMenu";
-			this.updateCateRushMenu.Size = new System.Drawing.Size(155, 22);
-			this.updateCateRushMenu.Text = "凸待ち(&G)";
+			this.updateCateRushMenu.Size = new System.Drawing.Size(154, 22);
+			this.updateCateRushMenu.Text = "凸待ち(&H)";
+			this.updateCateRushMenu.Visible = false;
 			// 
 			// updateCateR18Menu
 			// 
 			this.updateCateR18Menu.Name = "updateCateR18Menu";
-			this.updateCateR18Menu.Size = new System.Drawing.Size(155, 22);
-			this.updateCateR18Menu.Text = "R-18(&H)";
+			this.updateCateR18Menu.Size = new System.Drawing.Size(154, 22);
+			this.updateCateR18Menu.Text = "R-18(&I)";
 			this.updateCateR18Menu.Visible = false;
 			// 
 			// toolStripSeparator15
@@ -2774,6 +2774,7 @@ namespace namaichi
 			this.liveList.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.LiveListCellMouseDoubleClick);
 			this.liveList.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.LiveListCellMouseDown);
 			this.liveList.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.LiveListColumnWidthChanged);
+			this.liveList.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.LiveListRowsAdded);
 			this.liveList.Sorted += new System.EventHandler(this.LiveListSorted);
 			// 
 			// dataGridViewTextBoxColumn4
@@ -3138,20 +3139,9 @@ namespace namaichi
 									| System.Windows.Forms.AnchorStyles.Right)));
 			this.categoryBtnPanel.Controls.Add(this.allCategoryBtn);
 			this.categoryBtnPanel.Controls.Add(this.commonCategoryBtn);
-			this.categoryBtnPanel.Controls.Add(this.politicsCategoryBtn);
-			this.categoryBtnPanel.Controls.Add(this.animalCategoryBtn);
-			this.categoryBtnPanel.Controls.Add(this.cookCategoryBtn);
-			this.categoryBtnPanel.Controls.Add(this.playCategoryBtn);
-			this.categoryBtnPanel.Controls.Add(this.singCategoryBtn);
-			this.categoryBtnPanel.Controls.Add(this.danceCategoryBtn);
-			this.categoryBtnPanel.Controls.Add(this.drawCategoryBtn);
-			this.categoryBtnPanel.Controls.Add(this.lectureCategoryBtn);
-			this.categoryBtnPanel.Controls.Add(this.gameCategoryBtn);
-			this.categoryBtnPanel.Controls.Add(this.introCategoryBtn);
-			this.categoryBtnPanel.Controls.Add(this.r18CategoryBtn);
-			this.categoryBtnPanel.Controls.Add(this.faceCategoryBtn);
-			this.categoryBtnPanel.Controls.Add(this.rushCategoryBtn);
-			this.categoryBtnPanel.Controls.Add(this.cruiseCategoryBtn);
+			this.categoryBtnPanel.Controls.Add(this.tryCategoryBtn);
+			this.categoryBtnPanel.Controls.Add(this.liveCategoryBtn);
+			this.categoryBtnPanel.Controls.Add(this.reqCategoryBtn);
 			this.categoryBtnPanel.Location = new System.Drawing.Point(1, 1);
 			this.categoryBtnPanel.Name = "categoryBtnPanel";
 			this.categoryBtnPanel.Size = new System.Drawing.Size(703, 22);
@@ -3195,243 +3185,56 @@ namespace namaichi
 			this.commonCategoryBtn.UseMnemonic = false;
 			this.commonCategoryBtn.UseVisualStyleBackColor = true;
 			// 
-			// politicsCategoryBtn
+			// tryCategoryBtn
 			// 
-			this.politicsCategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
-			this.politicsCategoryBtn.AutoSize = true;
-			this.politicsCategoryBtn.BackColor = System.Drawing.SystemColors.Control;
-			this.politicsCategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-			this.politicsCategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.politicsCategoryBtn.Location = new System.Drawing.Point(138, 0);
-			this.politicsCategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.politicsCategoryBtn.Name = "politicsCategoryBtn";
-			this.politicsCategoryBtn.Size = new System.Drawing.Size(67, 22);
-			this.politicsCategoryBtn.TabIndex = 3;
-			this.politicsCategoryBtn.Text = "政治(0/0)";
-			this.politicsCategoryBtn.UseCompatibleTextRendering = true;
-			this.politicsCategoryBtn.UseMnemonic = false;
-			this.politicsCategoryBtn.UseVisualStyleBackColor = true;
+			this.tryCategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
+			this.tryCategoryBtn.AutoSize = true;
+			this.tryCategoryBtn.BackColor = System.Drawing.SystemColors.Control;
+			this.tryCategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+			this.tryCategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.tryCategoryBtn.Location = new System.Drawing.Point(138, 0);
+			this.tryCategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.tryCategoryBtn.Name = "tryCategoryBtn";
+			this.tryCategoryBtn.Size = new System.Drawing.Size(91, 22);
+			this.tryCategoryBtn.TabIndex = 3;
+			this.tryCategoryBtn.Text = "やってみた(0/0)";
+			this.tryCategoryBtn.UseCompatibleTextRendering = true;
+			this.tryCategoryBtn.UseMnemonic = false;
+			this.tryCategoryBtn.UseVisualStyleBackColor = true;
 			// 
-			// animalCategoryBtn
+			// liveCategoryBtn
 			// 
-			this.animalCategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
-			this.animalCategoryBtn.AutoSize = true;
-			this.animalCategoryBtn.BackColor = System.Drawing.SystemColors.Control;
-			this.animalCategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-			this.animalCategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.animalCategoryBtn.Location = new System.Drawing.Point(208, 0);
-			this.animalCategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.animalCategoryBtn.Name = "animalCategoryBtn";
-			this.animalCategoryBtn.Size = new System.Drawing.Size(67, 22);
-			this.animalCategoryBtn.TabIndex = 4;
-			this.animalCategoryBtn.Text = "動物(0/0)";
-			this.animalCategoryBtn.UseCompatibleTextRendering = true;
-			this.animalCategoryBtn.UseMnemonic = false;
-			this.animalCategoryBtn.UseVisualStyleBackColor = true;
+			this.liveCategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
+			this.liveCategoryBtn.AutoSize = true;
+			this.liveCategoryBtn.BackColor = System.Drawing.SystemColors.Control;
+			this.liveCategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+			this.liveCategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.liveCategoryBtn.Location = new System.Drawing.Point(232, 0);
+			this.liveCategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.liveCategoryBtn.Name = "liveCategoryBtn";
+			this.liveCategoryBtn.Size = new System.Drawing.Size(73, 22);
+			this.liveCategoryBtn.TabIndex = 4;
+			this.liveCategoryBtn.Text = "ゲーム(0/0)";
+			this.liveCategoryBtn.UseCompatibleTextRendering = true;
+			this.liveCategoryBtn.UseMnemonic = false;
+			this.liveCategoryBtn.UseVisualStyleBackColor = true;
 			// 
-			// cookCategoryBtn
+			// reqCategoryBtn
 			// 
-			this.cookCategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
-			this.cookCategoryBtn.AutoSize = true;
-			this.cookCategoryBtn.BackColor = System.Drawing.SystemColors.Control;
-			this.cookCategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-			this.cookCategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.cookCategoryBtn.Location = new System.Drawing.Point(278, 0);
-			this.cookCategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.cookCategoryBtn.Name = "cookCategoryBtn";
-			this.cookCategoryBtn.Size = new System.Drawing.Size(67, 22);
-			this.cookCategoryBtn.TabIndex = 5;
-			this.cookCategoryBtn.Text = "料理(0/0)";
-			this.cookCategoryBtn.UseCompatibleTextRendering = true;
-			this.cookCategoryBtn.UseMnemonic = false;
-			this.cookCategoryBtn.UseVisualStyleBackColor = true;
-			// 
-			// playCategoryBtn
-			// 
-			this.playCategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
-			this.playCategoryBtn.AutoSize = true;
-			this.playCategoryBtn.BackColor = System.Drawing.SystemColors.Control;
-			this.playCategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-			this.playCategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.playCategoryBtn.Location = new System.Drawing.Point(348, 0);
-			this.playCategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.playCategoryBtn.Name = "playCategoryBtn";
-			this.playCategoryBtn.Size = new System.Drawing.Size(107, 22);
-			this.playCategoryBtn.TabIndex = 6;
-			this.playCategoryBtn.Text = "演奏してみた(0/0)";
-			this.playCategoryBtn.UseCompatibleTextRendering = true;
-			this.playCategoryBtn.UseMnemonic = false;
-			this.playCategoryBtn.UseVisualStyleBackColor = true;
-			// 
-			// singCategoryBtn
-			// 
-			this.singCategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
-			this.singCategoryBtn.AutoSize = true;
-			this.singCategoryBtn.BackColor = System.Drawing.SystemColors.Control;
-			this.singCategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-			this.singCategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.singCategoryBtn.Location = new System.Drawing.Point(458, 0);
-			this.singCategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.singCategoryBtn.Name = "singCategoryBtn";
-			this.singCategoryBtn.Size = new System.Drawing.Size(93, 22);
-			this.singCategoryBtn.TabIndex = 7;
-			this.singCategoryBtn.Text = "歌ってみた(0/0)";
-			this.singCategoryBtn.UseCompatibleTextRendering = true;
-			this.singCategoryBtn.UseMnemonic = false;
-			this.singCategoryBtn.UseVisualStyleBackColor = true;
-			// 
-			// danceCategoryBtn
-			// 
-			this.danceCategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
-			this.danceCategoryBtn.AutoSize = true;
-			this.danceCategoryBtn.BackColor = System.Drawing.SystemColors.Control;
-			this.danceCategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-			this.danceCategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.danceCategoryBtn.Location = new System.Drawing.Point(554, 0);
-			this.danceCategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.danceCategoryBtn.Name = "danceCategoryBtn";
-			this.danceCategoryBtn.Size = new System.Drawing.Size(93, 22);
-			this.danceCategoryBtn.TabIndex = 8;
-			this.danceCategoryBtn.Text = "踊ってみた(0/0)";
-			this.danceCategoryBtn.UseCompatibleTextRendering = true;
-			this.danceCategoryBtn.UseMnemonic = false;
-			this.danceCategoryBtn.UseVisualStyleBackColor = true;
-			// 
-			// drawCategoryBtn
-			// 
-			this.drawCategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
-			this.drawCategoryBtn.AutoSize = true;
-			this.drawCategoryBtn.BackColor = System.Drawing.SystemColors.Control;
-			this.drawCategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-			this.drawCategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.drawCategoryBtn.Location = new System.Drawing.Point(650, 0);
-			this.drawCategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.drawCategoryBtn.Name = "drawCategoryBtn";
-			this.drawCategoryBtn.Size = new System.Drawing.Size(95, 22);
-			this.drawCategoryBtn.TabIndex = 9;
-			this.drawCategoryBtn.Text = "描いてみた(0/0)";
-			this.drawCategoryBtn.UseCompatibleTextRendering = true;
-			this.drawCategoryBtn.UseMnemonic = false;
-			this.drawCategoryBtn.UseVisualStyleBackColor = true;
-			// 
-			// lectureCategoryBtn
-			// 
-			this.lectureCategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
-			this.lectureCategoryBtn.AutoSize = true;
-			this.lectureCategoryBtn.BackColor = System.Drawing.SystemColors.Control;
-			this.lectureCategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-			this.lectureCategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.lectureCategoryBtn.Location = new System.Drawing.Point(748, 0);
-			this.lectureCategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.lectureCategoryBtn.Name = "lectureCategoryBtn";
-			this.lectureCategoryBtn.Size = new System.Drawing.Size(67, 22);
-			this.lectureCategoryBtn.TabIndex = 10;
-			this.lectureCategoryBtn.Text = "講座(0/0)";
-			this.lectureCategoryBtn.UseCompatibleTextRendering = true;
-			this.lectureCategoryBtn.UseMnemonic = false;
-			this.lectureCategoryBtn.UseVisualStyleBackColor = true;
-			// 
-			// gameCategoryBtn
-			// 
-			this.gameCategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
-			this.gameCategoryBtn.AutoSize = true;
-			this.gameCategoryBtn.BackColor = System.Drawing.SystemColors.Control;
-			this.gameCategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-			this.gameCategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.gameCategoryBtn.Location = new System.Drawing.Point(818, 0);
-			this.gameCategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.gameCategoryBtn.Name = "gameCategoryBtn";
-			this.gameCategoryBtn.Size = new System.Drawing.Size(73, 22);
-			this.gameCategoryBtn.TabIndex = 11;
-			this.gameCategoryBtn.Text = "ゲーム(0/0)";
-			this.gameCategoryBtn.UseCompatibleTextRendering = true;
-			this.gameCategoryBtn.UseMnemonic = false;
-			this.gameCategoryBtn.UseVisualStyleBackColor = true;
-			// 
-			// introCategoryBtn
-			// 
-			this.introCategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
-			this.introCategoryBtn.AutoSize = true;
-			this.introCategoryBtn.BackColor = System.Drawing.SystemColors.Control;
-			this.introCategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-			this.introCategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.introCategoryBtn.Location = new System.Drawing.Point(894, 0);
-			this.introCategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.introCategoryBtn.Name = "introCategoryBtn";
-			this.introCategoryBtn.Size = new System.Drawing.Size(92, 22);
-			this.introCategoryBtn.TabIndex = 12;
-			this.introCategoryBtn.Text = "動画紹介(0/0)";
-			this.introCategoryBtn.UseCompatibleTextRendering = true;
-			this.introCategoryBtn.UseMnemonic = false;
-			this.introCategoryBtn.UseVisualStyleBackColor = true;
-			// 
-			// r18CategoryBtn
-			// 
-			this.r18CategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
-			this.r18CategoryBtn.AutoSize = true;
-			this.r18CategoryBtn.BackColor = System.Drawing.SystemColors.Control;
-			this.r18CategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-			this.r18CategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.r18CategoryBtn.Location = new System.Drawing.Point(989, 0);
-			this.r18CategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.r18CategoryBtn.Name = "r18CategoryBtn";
-			this.r18CategoryBtn.Size = new System.Drawing.Size(63, 22);
-			this.r18CategoryBtn.TabIndex = 13;
-			this.r18CategoryBtn.Text = "R18(0/0)";
-			this.r18CategoryBtn.UseCompatibleTextRendering = true;
-			this.r18CategoryBtn.UseMnemonic = false;
-			this.r18CategoryBtn.UseVisualStyleBackColor = true;
-			// 
-			// faceCategoryBtn
-			// 
-			this.faceCategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
-			this.faceCategoryBtn.AutoSize = true;
-			this.faceCategoryBtn.BackColor = System.Drawing.SystemColors.Control;
-			this.faceCategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-			this.faceCategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.faceCategoryBtn.Location = new System.Drawing.Point(1055, 0);
-			this.faceCategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.faceCategoryBtn.Name = "faceCategoryBtn";
-			this.faceCategoryBtn.Size = new System.Drawing.Size(76, 22);
-			this.faceCategoryBtn.TabIndex = 14;
-			this.faceCategoryBtn.Text = "顔出し(0/0)";
-			this.faceCategoryBtn.UseCompatibleTextRendering = true;
-			this.faceCategoryBtn.UseMnemonic = false;
-			this.faceCategoryBtn.UseVisualStyleBackColor = true;
-			// 
-			// rushCategoryBtn
-			// 
-			this.rushCategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
-			this.rushCategoryBtn.AutoSize = true;
-			this.rushCategoryBtn.BackColor = System.Drawing.SystemColors.Control;
-			this.rushCategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-			this.rushCategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.rushCategoryBtn.Location = new System.Drawing.Point(1134, 0);
-			this.rushCategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.rushCategoryBtn.Name = "rushCategoryBtn";
-			this.rushCategoryBtn.Size = new System.Drawing.Size(77, 22);
-			this.rushCategoryBtn.TabIndex = 15;
-			this.rushCategoryBtn.Text = "凸待ち(0/0)";
-			this.rushCategoryBtn.UseCompatibleTextRendering = true;
-			this.rushCategoryBtn.UseMnemonic = false;
-			this.rushCategoryBtn.UseVisualStyleBackColor = true;
-			// 
-			// cruiseCategoryBtn
-			// 
-			this.cruiseCategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
-			this.cruiseCategoryBtn.AutoSize = true;
-			this.cruiseCategoryBtn.BackColor = System.Drawing.SystemColors.Control;
-			this.cruiseCategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-			this.cruiseCategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.cruiseCategoryBtn.Location = new System.Drawing.Point(1214, 0);
-			this.cruiseCategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.cruiseCategoryBtn.Name = "cruiseCategoryBtn";
-			this.cruiseCategoryBtn.Size = new System.Drawing.Size(103, 22);
-			this.cruiseCategoryBtn.TabIndex = 16;
-			this.cruiseCategoryBtn.Text = "クルーズ待ち(0/0)";
-			this.cruiseCategoryBtn.UseCompatibleTextRendering = true;
-			this.cruiseCategoryBtn.UseMnemonic = false;
-			this.cruiseCategoryBtn.UseVisualStyleBackColor = true;
+			this.reqCategoryBtn.Appearance = System.Windows.Forms.Appearance.Button;
+			this.reqCategoryBtn.AutoSize = true;
+			this.reqCategoryBtn.BackColor = System.Drawing.SystemColors.Control;
+			this.reqCategoryBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+			this.reqCategoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.reqCategoryBtn.Location = new System.Drawing.Point(308, 0);
+			this.reqCategoryBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.reqCategoryBtn.Name = "reqCategoryBtn";
+			this.reqCategoryBtn.Size = new System.Drawing.Size(92, 22);
+			this.reqCategoryBtn.TabIndex = 5;
+			this.reqCategoryBtn.Text = "動画紹介(0/0)";
+			this.reqCategoryBtn.UseCompatibleTextRendering = true;
+			this.reqCategoryBtn.UseMnemonic = false;
+			this.reqCategoryBtn.UseVisualStyleBackColor = true;
 			// 
 			// tabPage1
 			// 
@@ -4484,6 +4287,7 @@ namespace namaichi
 			this.historyList.TabIndex = 25;
 			this.historyList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.HistoryListCellFormatting);
 			this.historyList.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.HistoryListCellMouseDown);
+			this.historyList.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.HistoryListRowsAdded);
 			// 
 			// 放送開始日時
 			// 
@@ -4691,6 +4495,7 @@ namespace namaichi
 			this.notAlartList.TabIndex = 29;
 			this.notAlartList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.NotAlartListCellFormatting);
 			this.notAlartList.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.NotAlartListCellMouseDown);
+			this.notAlartList.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.NotAlartListRowsAdded);
 			// 
 			// dataGridViewTextBoxColumn16
 			// 
@@ -5031,6 +4836,7 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripMenuItem updateCateSuperIchibaMenu;
 		private System.Windows.Forms.ToolStripMenuItem readNamarokuUserListMenu;
 		private System.Windows.Forms.ToolStripMenuItem openAppliJUserFavoriteMenu;
 		private System.Windows.Forms.ToolStripMenuItem openAppliIUserFavoriteMenu;
@@ -5328,22 +5134,11 @@ namespace namaichi
 		private System.Windows.Forms.TextBox liveListSearchText;
 		private System.Windows.Forms.Button categoryRightBtn;
 		private System.Windows.Forms.Button categoryLeftBtn;
-		private System.Windows.Forms.RadioButton cruiseCategoryBtn;
-		private System.Windows.Forms.RadioButton rushCategoryBtn;
-		private System.Windows.Forms.RadioButton faceCategoryBtn;
-		private System.Windows.Forms.RadioButton r18CategoryBtn;
-		private System.Windows.Forms.RadioButton introCategoryBtn;
-		private System.Windows.Forms.RadioButton gameCategoryBtn;
-		private System.Windows.Forms.RadioButton lectureCategoryBtn;
-		private System.Windows.Forms.RadioButton drawCategoryBtn;
-		private System.Windows.Forms.RadioButton danceCategoryBtn;
-		private System.Windows.Forms.RadioButton singCategoryBtn;
-		private System.Windows.Forms.RadioButton playCategoryBtn;
-		private System.Windows.Forms.RadioButton cookCategoryBtn;
-		private System.Windows.Forms.RadioButton animalCategoryBtn;
+		private System.Windows.Forms.RadioButton reqCategoryBtn;
+		private System.Windows.Forms.RadioButton liveCategoryBtn;
 		private System.Windows.Forms.RadioButton commonCategoryBtn;
 		public System.Windows.Forms.FlowLayoutPanel categoryBtnPanel;
-		private System.Windows.Forms.RadioButton politicsCategoryBtn;
+		private System.Windows.Forms.RadioButton tryCategoryBtn;
 		private System.Windows.Forms.RadioButton allCategoryBtn;
 		private System.Windows.Forms.ToolStripMenuItem updateCateCategoryMenu;
 		private System.Windows.Forms.ToolStripMenuItem updateLiveListMenu;

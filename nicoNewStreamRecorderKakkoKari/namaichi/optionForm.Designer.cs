@@ -2429,7 +2429,7 @@ namespace namaichi
 			this.isRssChkBox.Name = "isRssChkBox";
 			this.isRssChkBox.Size = new System.Drawing.Size(400, 43);
 			this.isRssChkBox.TabIndex = 2;
-			this.isRssChkBox.Text = "RSSから取得する\r\n（公式放送を除いてフォローしていない放送も取得できますが開始から1,2分遅れます）";
+			this.isRssChkBox.Text = "カテゴリページから取得する\r\n（公式放送を除いてフォローしていない放送も取得できますが開始から1分程遅れます）";
 			this.isRssChkBox.UseVisualStyleBackColor = true;
 			// 
 			// groupBox7
@@ -2496,11 +2496,11 @@ namespace namaichi
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(19, 23);
+			this.label8.Location = new System.Drawing.Point(6, 23);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(122, 14);
+			this.label8.Size = new System.Drawing.Size(135, 14);
 			this.label8.TabIndex = 10;
-			this.label8.Text = "RSSの更新間隔：";
+			this.label8.Text = "カテゴリページの更新間隔：";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// rssUpdateIntervalList

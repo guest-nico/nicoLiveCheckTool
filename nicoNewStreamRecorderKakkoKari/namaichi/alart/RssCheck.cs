@@ -48,7 +48,9 @@ namespace namaichi.alart
 					util.debugWriteLine("rss page i " + i);
 					var res = util.getPageSource(url + i.ToString(), null);
 					if (res == null) {
-						Thread.Sleep(3000);
+						var t = int.Parse(config.get("rssUpdateInterval"));
+						if (t < 15) t = 15;
+						Thread.Sleep(t * 1000);
 						break;
 					}
 					var isEndFile = false;
@@ -77,9 +79,9 @@ namespace namaichi.alart
 				if (check.checkedLvIdList.Count > 20000)
 					check.deleteOldCheckedLvIdList();
 				
-				var t = int.Parse(config.get("rssUpdateInterval"));
-				if (t < 15) t = 15;
-				Thread.Sleep(t * 1000);
+				var _t = int.Parse(config.get("rssUpdateInterval"));
+				if (_t < 15) _t = 15;
+				Thread.Sleep(_t * 1000);
 			}
 			check.form.addLogText("RSSからの取得を終了します");
 		}

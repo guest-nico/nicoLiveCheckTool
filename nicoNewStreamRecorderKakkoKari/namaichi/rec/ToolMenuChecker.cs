@@ -26,12 +26,12 @@ namespace namaichi.rec
 	public class ToolMenuProcess
 	{
 		private MainForm form;
-		object bulkAddFromFollowComLock = null;
-		object setUserInfoLock = null;
-		object coChExistsCheckLock = null;
-		object userExistsCheckLock = null;
-		object comThumbLock = null;
-		object userThumbLock = null;
+		ToolMenuLock bulkAddFromFollowComLock = null;
+		ToolMenuLock setUserInfoLock = null;
+		ToolMenuLock coChExistsCheckLock = null;
+		ToolMenuLock userExistsCheckLock = null;
+		ToolMenuLock comThumbLock = null;
+		ToolMenuLock userThumbLock = null;
 		
 		public ToolMenuProcess(MainForm form)
 		{
@@ -54,13 +54,13 @@ namespace namaichi.rec
 						MessageBoxIcon.Warning, 
 						MessageBoxDefaultButton.Button2);
 				if (res == DialogResult.Cancel) return;
-				var l = new Object();
+				var l = isUser ? new ToolMenuLock("ユーザー存在チェック中", -1) : new ToolMenuLock("コミュ存在チェック中", -1); 
 				setExistsCheckLock(isUser, l);
 				setToolMenuStatusBar();
-				Task.Run(() => existsCheck(l, form, str, isUser));
+				Task.Factory.StartNew(() => existsCheck(l, form, str, isUser));
 			}
 		}
-		private void existsCheck(Object _lock, MainForm form, string str, bool isUser) {
+		private void existsCheck(ToolMenuLock _lock, MainForm form, string str, bool isUser) {
 			var idList = new List<string>();
 			while (true) {
 				try {
@@ -81,10 +81,13 @@ namespace namaichi.rec
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			}
+			_lock.all = idList.Count;
+			setToolMenuStatusBar();
 			
 			//var notExistList = new List<string>();
 			int exist = 0, delete = 0, error = 0;
-			foreach (var id in idList) {
+			for (var i = 0; i < idList.Count; i++) {
+				var id = idList[i];
 				if ((isUser && userExistsCheckLock != _lock) ||
 				    	(!isUser && coChExistsCheckLock != _lock)) {
 					util.showModelessMessageBox(str + "存在チェックが中断されました", "", form);
@@ -112,6 +115,8 @@ namespace namaichi.rec
 						form.alartListExistColorChange(id, isUser, 1);
 					}
 				}
+				_lock.end = i;
+				setToolMenuStatusBar();
 				Thread.Sleep(2000);
 			}
 			util.showModelessMessageBox("存在：" + exist + "　削除：" + delete + "　エラー：" + error, str + "存在チェック終了", form);
@@ -120,7 +125,7 @@ namespace namaichi.rec
 			//コミュニティ存在チェック終了
 			//存在：128　　削除：0　エラー：159
 		}
-		private void setExistsCheckLock(bool isUser, object val) {
+		private void setExistsCheckLock(bool isUser, ToolMenuLock val) {
 			if (isUser) userExistsCheckLock = val;
 			else coChExistsCheckLock = val;
 		}
@@ -160,9 +165,15 @@ namespace namaichi.rec
 			}
 		}
 		private void setToolMenuStatusBar() {
-			form.setToolMenuStatusBar(bulkAddFromFollowComLock, 
-			        coChExistsCheckLock, userExistsCheckLock, 
-			        setUserInfoLock, comThumbLock, userThumbLock);
+			string t = "";
+			if (bulkAddFromFollowComLock != null) t += bulkAddFromFollowComLock.getLabel();
+			if (setUserInfoLock != null) t += setUserInfoLock.getLabel();
+			if (coChExistsCheckLock != null) t += coChExistsCheckLock.getLabel();
+			if (userExistsCheckLock != null) t += userExistsCheckLock.getLabel();
+			if (comThumbLock != null) t += comThumbLock.getLabel();
+			if (userThumbLock != null) t += userThumbLock.getLabel();
+	        
+			form.setToolMenuStatusBar(t);
 		}
 		public void getUserInfoFromComStart() 
 		{
@@ -180,13 +191,13 @@ namespace namaichi.rec
 						MessageBoxIcon.Warning, 
 						MessageBoxDefaultButton.Button2);
 				if (res == DialogResult.Cancel) return;
-				var l = new Object();
+				var l = new ToolMenuLock("未取得ユーザー取得中", -1);
 				setUserInfoLock = l;
 				setToolMenuStatusBar();
-				Task.Run(() => getUserInfoFromCom(l, form));
+				Task.Factory.StartNew(() => getUserInfoFromCom(l, form));
 			}
 		}
-		private void getUserInfoFromCom(object _lock, MainForm form) {
+		private void getUserInfoFromCom(ToolMenuLock _lock, MainForm form) {
 			var getAiList = new List<AlartInfo>();
 			while (true) {
 				try {
@@ -204,23 +215,31 @@ namespace namaichi.rec
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			}
+			_lock.all = getAiList.Count;
+			setToolMenuStatusBar();
+			
 			int got = 0, error = 0;
-			foreach (var ai in getAiList) {
+			for (var i = 0; i < getAiList.Count; i++) {
+				var ai = getAiList[i];
 				if (setUserInfoLock != _lock) {
 					util.showModelessMessageBox("未取得ユーザー情報取得が中断されました", "", form);
 					setToolMenuStatusBar();
 					return;
 				}
 				var hig = new HosoInfoGetter();
-				var r = hig.get("https://live.nicovideo.jp/watch/" + ai.communityId);
+				var r = hig.get("https://live.nicovideo.jp/watch/" + ai.communityId, form.check.container);
 				if (!r) {
 					error++;
+					_lock.end = i;
+					setToolMenuStatusBar();
 					continue;
 				}
 				var isFollow = false;
 				var name = util.getUserName(hig.userId, out isFollow, form.check.container);
 				if (string.IsNullOrEmpty(name)) {
 					error++;
+					_lock.end = i;
+					setToolMenuStatusBar();
 					continue;
 				}
 				form.formAction(() => {
@@ -228,14 +247,16 @@ namespace namaichi.rec
 	           		ai.hostName = name;
 	           		if (form.check.container == null) ai.hostFollow = "";
 	           		else ai.hostFollow = isFollow ? "フォロー解除する" : "フォローする";
-	           		var i = form.alartListDataSource.IndexOf(ai);
-	           		if (i > -1) {
-	           			form.alartList.UpdateCellValue(1, i);
-	           			form.alartList.UpdateCellValue(3, i);
+	           		var j = form.alartListDataSource.IndexOf(ai);
+	           		if (j > -1) {
+	           			form.alartList.UpdateCellValue(1, j);
+	           			form.alartList.UpdateCellValue(3, j);
 	           		}
 	           		
 				});
 				got++;
+				_lock.end = i;
+				setToolMenuStatusBar();
 				Thread.Sleep(2000);
 			}
 			util.showModelessMessageBox("取得：" + got + "　失敗：" + error, "未取得ユーザー取得終了", form);
@@ -253,9 +274,9 @@ namespace namaichi.rec
 				bulkAddFromFollowComLock = null;
 				setToolMenuStatusBar();
 			} else {
-				Task.Run(() => {
+				Task.Factory.StartNew(() => {
 					var f = new BulkAddFromFollowAccountForm();
-					Task.Run(() => {
+					Task.Factory.StartNew(() => {
 						form.formAction(() => f.ShowDialog(form));
 					}).Wait();
 					
@@ -278,15 +299,15 @@ namespace namaichi.rec
 					var followList = new FollowChecker(form, cc).getFollowList(f.follow);
 					var addFollowList = getAddFollowList(followList);
 					var isStartRet = -1;
-					Task.Run(() =>
+					Task.Factory.StartNew(() =>
 						isStartRet = util.showModelessMessageBox(name + "(" + id + ") の参加コミュは\r\n未登録：" + addFollowList.Count + "件　登録済み：" + (followList.Count - addFollowList.Count) + "　です。\r\n未登録の参加コミュニティを登録しますか？", "確認", form, 1 | 0x100 | 0x20)
 					).Wait();
 					if (isStartRet != 1) return;
 					
-					var l = new Object();
+					var l = new ToolMenuLock("参加コミュ一括登録中", addFollowList.Count);
 					bulkAddFromFollowComLock = l;
 					setToolMenuStatusBar();
-					Task.Run(() => bulkAddFromFollowCom(l, addFollowList, followList.Count, f.follow));
+					Task.Factory.StartNew(() => bulkAddFromFollowCom(l, addFollowList, followList.Count, f.follow));
 					
 				});
 				
@@ -342,14 +363,15 @@ namespace namaichi.rec
 //			}
 			return noList;
 		}
-		private void bulkAddFromFollowCom(object _lock, List<string[]> addList, int allNum, bool[] followMode) {
+		private void bulkAddFromFollowCom(ToolMenuLock _lock, List<string[]> addList, int allNum, bool[] followMode) {
 			var mainFollowList = new FollowChecker(form, form.check.container)
 					.getFollowList(followMode);
 			var behaviors = form.config.get("defaultBehavior").Split(',').Select<string, bool>(x => x == "1").ToArray();
 			var textColor = ColorTranslator.FromHtml(form.config.get("defaultTextColor"));
 			var backColor = ColorTranslator.FromHtml(form.config.get("defaultBackColor"));
 			int got = 0, error = 0;
-			foreach (var id in addList) {
+			for (var i = 0; i < addList.Count; i++) {
+				var id = addList[i];
 				if (bulkAddFromFollowComLock != _lock) {
 					util.showModelessMessageBox("参加コミュ一括登録が中断されました", "", form);
 					setToolMenuStatusBar();
@@ -381,6 +403,8 @@ namespace namaichi.rec
 					form.alartListDataSource.Add(ai)
 				);
 				got++;
+				_lock.end = i;
+				setToolMenuStatusBar();
 				//Thread.Sleep(2000);
 			}
 			util.showModelessMessageBox("新規登録：" + got + "　登録済み：" + (allNum - got) + "　エラー：" + error, "参加コミュ登録完了", form);
@@ -405,14 +429,14 @@ namespace namaichi.rec
 						MessageBoxIcon.Warning, 
 						MessageBoxDefaultButton.Button2);
 				if (res == DialogResult.Cancel) return;
-				var l = new Object();
+				var l = isUser ? new ToolMenuLock("未取得ユーザ画取得中", -1) : new ToolMenuLock("未取得コミュ画取得中", -1); 
 				if (isUser) userThumbLock = l;
 				else comThumbLock = l;
 				setToolMenuStatusBar();
-				Task.Run(() => getThumbBulkCore(l, form, isUser));
+				Task.Factory.StartNew(() => getThumbBulkCore(l, form, isUser));
 			}
 		}
-		public void getThumbBulkCore(object _lock, MainForm form, bool isUser) {
+		public void getThumbBulkCore(ToolMenuLock _lock, MainForm form, bool isUser) {
 			var getAiList = new List<AlartInfo>();
 			while (true) {
 				try {
@@ -447,8 +471,12 @@ namespace namaichi.rec
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			}
+			_lock.all = getAiList.Count;
+			setToolMenuStatusBar();
+			
 			int got = 0, error = 0, no = 0;
-			foreach (var ai in getAiList) {
+			for (var i = 0; i < getAiList.Count; i++) {
+				var ai = getAiList[i];
 				if ((isUser && userThumbLock != _lock) ||
 				    	(!isUser && comThumbLock != _lock)) {
 					util.showModelessMessageBox("未取得" + (isUser ? "ユーザ" : "コミュ") + "画取得が中断されました", "", form);
@@ -465,12 +493,27 @@ namespace namaichi.rec
 					got++;
 					form.alartListExistColorChange(id, isUser, 0);
 				}
+				_lock.end = i;
+				setToolMenuStatusBar();
 				Thread.Sleep(3000);
 			}
 			util.showModelessMessageBox("取得：" + got + "　画像無し：" + no + "　エラー：" + error, "未取得" + (isUser ? "ユーザ" : "コミュ") + "画取得終了", form);
 			if (isUser) userThumbLock = null;
 			else comThumbLock = null;
 			setToolMenuStatusBar();
+		}
+		public class ToolMenuLock {
+			private string mode = null;
+			public int all;
+			public int end;
+			public ToolMenuLock (string mode, int all) {
+				this.mode = mode;
+				this.all = all;
+			}
+			public string getLabel() {
+				return all != -1 ? ("[" + mode + "(" + end + "/" + all + "]")
+						:  ("[" + mode + "]");
+			}
 		}
 	}
 }

@@ -187,7 +187,7 @@ namespace namaichi.info
 		}
 		bool isNotOk(List<CustomKeywordInfo> ckis) {
 			foreach (var c in ckis) {
-				if (c.type == "文字") {
+				if (c.type == "ワード") {
 					if (string.IsNullOrEmpty(c.str)) continue;
 					if (c.matchType == "含まない" && isContainKeyword(c.str))
 						return false;
@@ -202,14 +202,14 @@ namespace namaichi.info
 		}
 		bool isAndOk(List<CustomKeywordInfo> ckis) {
 			foreach (var c in ckis) {
-				if (c.type == "文字") {
+				if (c.type == "ワード") {
 					if (string.IsNullOrEmpty(c.str)) continue;
-					if (c.matchType == "全て含む" && !isContainKeyword(c.str))
+					if (c.matchType == "必ず含む" && !isContainKeyword(c.str))
 						return false;
 				} else {
 					//カスタム
 					if (c.cki == null) continue;
-					if (c.matchType == "全て含む" && !isMatchCustomKeyword(c.cki))
+					if (c.matchType == "必ず含む" && !isMatchCustomKeyword(c.cki))
 						return false;
 				}
 			}
@@ -218,7 +218,7 @@ namespace namaichi.info
 		bool isOrOk(List<CustomKeywordInfo> ckis) {
 			var isOr = false;
 			foreach (var c in ckis) {
-				if (c.type == "文字") {
+				if (c.type == "ワード") {
 					if (string.IsNullOrEmpty(c.str)) continue;
 					
 					if (c.matchType == "いずれかを含む") {

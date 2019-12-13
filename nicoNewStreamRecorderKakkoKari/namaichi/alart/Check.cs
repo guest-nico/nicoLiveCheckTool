@@ -45,7 +45,7 @@ namespace namaichi.alart
 		
 		public PopupDisplay popup = null;
 		private object foundLiveLock = new object();
-		private RssCheck rc = null;
+		private CategoryCheck rc = null;
 		private PushReceiver pr = null;
 		private AppPushReceiver apr = null;
 		private TimeTableChecker ttc = null;
@@ -68,33 +68,33 @@ namespace namaichi.alart
 		public void start() {
 			setCookie();
 			
-			//Task.Run(() => reserveStreamCheck());
+			//Task.Factory.StartNew(() => reserveStreamCheck());
 			if (bool.Parse(form.config.get("IsRss"))) {
-				Task.Run(() => {
-				    rc = new RssCheck(this, form.config);
+				Task.Factory.StartNew(() => {
+				    rc = new CategoryCheck(this, form.config);
 				    rc.start();
 		         	
 		        });
 			}
 			if (bool.Parse(form.config.get("IsPush"))) {
-				Task.Run(() => {
+				Task.Factory.StartNew(() => {
 					pr = new PushReceiver(this, form.config);
 					pr.start();
 				});
 			}
 			if (bool.Parse(form.config.get("IsAppPush"))) {
-				Task.Run(() => {
+				Task.Factory.StartNew(() => {
 					apr = new AppPushReceiver(this, form.config);
 					apr.start();
 				});
 			}
 			if (bool.Parse(form.config.get("IsTimeTable"))) {
-				Task.Run(() => {
+				Task.Factory.StartNew(() => {
 					ttc = new TimeTableChecker(this, form.config);
 					ttc.start();
 				});
 			}
-			Task.Run(() => regularlyProcess());
+			Task.Factory.StartNew(() => regularlyProcess());
 		}
 		
 		private bool gotStreamProcess(List<RssItem> items) {
@@ -127,7 +127,7 @@ namespace namaichi.alart
 						doProcess(item, targetAi, 
 					        dpi, nearAlartAi);
 					} else {
-						Task.Run(() => {
+						Task.Factory.StartNew(() => {
 							for (var i = 0; i < 200; i++) {
 								isSuccessAccess = getAlartProcess(dpi, ref isChanged, 
 									ref targetAi, ref nearAlartAi, ref item,
@@ -465,19 +465,21 @@ namespace namaichi.alart
 			}
 		}
 		public void setCookie() {
-			var url = "https://www.nicovideo.jp/my";
-			var cg = new CookieGetter(form.config);
-			var res = cg.getHtml5RecordCookie(url, false).Result;
-			if (res == null || res[0] == null) {
-				form.addLogText("Cookieの取得を確認できませんでした", true);
-			} else {
-				form.addLogText("Cookieの取得に成功しました", true);
-				container = res[0];
-				
-			}
+			try {
+				var url = "https://www.nicovideo.jp/my";
+				var cg = new CookieGetter(form.config);
+				var res = cg.getHtml5RecordCookie(url, false).Result;
+				if (res == null || res[0] == null) {
+					form.addLogText("Cookieの取得を確認できませんでした", true);
+				} else {
+					form.addLogText("Cookieの取得に成功しました", true);
+					container = res[0];
+					
+				}
+			} catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);}
 			
 			if (alartListDataSource.Count > 0 || form.userAlartListDataSource.Count > 0) {
-				Task.Run(() => new FollowChecker(form, container).check());
+				Task.Factory.StartNew(() => new FollowChecker(form, container).check());
 			}
 		}
 		public bool isUserIdFromLvidOk(RssItem rssItem, string alartUserId, out bool isSuccessAccess) {
@@ -673,7 +675,7 @@ namespace namaichi.alart
 			}
 			
 			if (items.Count > 0 && form.config.get("IsbroadLog") == "true")
-				Task.Run(() => writeBroadLog(items));
+				Task.Factory.StartNew(() => writeBroadLog(items));
 			
 			addLiveList(items);
 		}
@@ -689,13 +691,13 @@ namespace namaichi.alart
 				apr = null;
 			}
 			if (bool.Parse(form.config.get("IsPush"))) {
-				Task.Run(() => {
+				Task.Factory.StartNew(() => {
 					pr = new PushReceiver(this, form.config);
 					pr.start();
 				});
 			}
 			if (bool.Parse(form.config.get("IsAppPush"))) {
-				Task.Run(() => {
+				Task.Factory.StartNew(() => {
 					apr = new AppPushReceiver(this, form.config);
 					apr.start();
 				});
@@ -703,8 +705,8 @@ namespace namaichi.alart
 			
 			if (bool.Parse(form.config.get("IsRss"))) {
 				if (rc == null) {
-					Task.Run(() => {
-						rc = new RssCheck(this, form.config);
+					Task.Factory.StartNew(() => {
+						rc = new CategoryCheck(this, form.config);
 						rc.start();
 					});
 				}
@@ -716,7 +718,7 @@ namespace namaichi.alart
 			}
 			if (bool.Parse(form.config.get("IsTimeTable"))) {
 				if (ttc == null) {
-					Task.Run(() => {
+					Task.Factory.StartNew(() => {
 						ttc = new TimeTableChecker(this, form.config);
 						ttc.start();
 					});
@@ -738,7 +740,7 @@ namespace namaichi.alart
 				var ut = userNameUpdateInterval;
 				if (ut < 15) ut = 15;
 				if (DateTime.Now - lastUserNameCheckTime > TimeSpan.FromSeconds(ut * 60)) {
-					Task.Run(() => {
+					Task.Factory.StartNew(() => {
 					    new FollowChecker(form, container).check();
 					    
 					    lastUserNameCheckTime = DateTime.MaxValue;
@@ -746,14 +748,14 @@ namespace namaichi.alart
 			         	checkUserNameAndFollow(false);
 			         	lastUserNameCheckTime = DateTime.Now;
 					});
-					//Task.Run(() => new FollowChecker(form, this).check());
+					//Task.Factory.StartNew(() => new FollowChecker(form, this).check());
 					
 				}
 				
 				var intervalSec = bool.Parse(form.config.get("IscheckOnAir")) ? 180 : 60;
 				if (bool.Parse(form.config.get("IscheckRecent")) && 
 				 	   DateTime.Now - lastCheckLastRecentLiveTime > TimeSpan.FromSeconds(intervalSec)) {
-					Task.Run(() => {
+					Task.Factory.StartNew(() => {
 					    lastCheckLastRecentLiveTime = DateTime.MaxValue;
 					    form.recentLiveCheck();
 			         	lastCheckLastRecentLiveTime = DateTime.Now;
@@ -762,7 +764,7 @@ namespace namaichi.alart
 				
 				if (DateTime.Now - form.lastChangeListDt > TimeSpan.FromMinutes(5)) {
 					form.lastChangeListDt = DateTime.MaxValue;
-					Task.Run(() => {
+					Task.Factory.StartNew(() => {
 						new AlartListFileManager(false, form).save();
 						new AlartListFileManager(true, form).save();
 						new TaskListFileManager().save(form);
@@ -774,7 +776,7 @@ namespace namaichi.alart
 				
 				if (DateTime.Now - lastCheckHistoryLiveTime > TimeSpan.FromMinutes(1)) {
 					lastCheckHistoryLiveTime = DateTime.MaxValue;
-					Task.Run(() => {
+					Task.Factory.StartNew(() => {
 					    form.checkHistoryLive();
 						lastCheckHistoryLiveTime = DateTime.Now;
 					});
@@ -907,6 +909,10 @@ namespace namaichi.alart
 				foreach (var l in sameCommunityLive)
 					form.removeLiveListItem(l);
 			}
+			if (bool.Parse(form.config.get("AutoSort")))
+				form.sortLiveList();
+			if (bool.Parse(form.config.get("FavoriteUp")))
+				form.upLiveListFavorite();
 		}
 	}
 	class DoProcessInfo {

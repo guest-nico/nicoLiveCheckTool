@@ -77,7 +77,7 @@ namespace namaichi.rec
             	try {
             		if (!arr[0].StartsWith("http") && System.IO.File.Exists(arr[0]) ||
 	            	   		System.IO.Directory.Exists(arr[0])) {
-            			Task.Run(() => new ArgConcat(this, arr).concat());
+            			Task.Factory.StartNew(() => new ArgConcat(this, arr).concat());
 	            		return;
 	            	}
             	} catch (Exception e) {
@@ -124,7 +124,7 @@ namespace namaichi.rec
 				}
 
 				rfu = new RecordFromUrl(this);
-				Task.Run(() => {
+				Task.Factory.StartNew(() => {
 					try {
 					    var _rfu = rfu;
 					    util.debugWriteLine("rm rec 録画開始" + rfu);

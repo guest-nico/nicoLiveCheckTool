@@ -26,22 +26,24 @@ namespace namaichi.alart
 			if (url == null) return null;
 			
 			var id = util.getRegGroup(url, "(c[oh]\\d+)");
-			if (id == null) return null;
-			var dir = util.getJarPath()[0] + "/ImageCommunity";
-			Image img = null;
-			if (isExist(id, out img, dir)) 
+			if (id != null) {
+				//if (id == null) return null;
+				var dir = util.getJarPath()[0] + "/ImageCommunity";
+				Image img = null;
+				if (isExist(id, out img, dir)) 
+					return img;
+				
+				//img = getImage(url);
+				img = getImageId(id);
+				
+				
+				if (isSaveCache)
+					saveImage(img, id, dir);
+				
 				return img;
-			
-			
-			
-			//img = getImage(url);
-			img = getImageId(id);
-			
-			
-			if (isSaveCache)
-				saveImage(img, id, dir);
-			
-			return img;
+			} else {
+				return getImage(url);
+			}
 		}
 		public static Image getThumbnailId(string id) {
 			
@@ -130,7 +132,7 @@ namespace namaichi.alart
 				}
 				return _ret;
 			} catch (Exception e) {
-				//System.Threading.Tasks.Task.Run(() => {
+				//System.Threading.Tasks.Task.Factory.StartNew(() => {
 				//	util.debugWriteLine("thumbnail getpage error " + url + e.Message+e.StackTrace);
 				//});
 				util.debugWriteLine("getImage url exception " + url + " " + e.StackTrace);

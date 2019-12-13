@@ -309,16 +309,47 @@ namespace namaichi.info
 		public string MainCategory
         {
 			get { 
+				//{"一般(その他)", "政治",
+				//		"動物", "料理", "演奏してみた", "歌ってみた", "踊ってみた",
+				//		"描いてみた", "講座", "ゲーム", "動画紹介", "R18",
+				//		"顔出し", "凸待ち", "クルーズ待ち"};
+			
 				try {
+					/*
+					
+					*/                             
 					return category[0];
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-					return "一般(その他)";
+					//return "一般(その他)";
+					return "一般";
 				}
 				
 			}
             set {  }
         }
+		public bool isDisplay(char cateChar) {
+			if (cateChar == '全') return true;
+			
+			var okList = new List<string>();
+			if (cateChar == '一') okList.AddRange(new string[]{"一般(その他)", "政治", "動物", "一般"});
+			else if (cateChar == 'や') okList.AddRange(new string[]{"料理", "演奏してみた", "歌ってみた", "描いてみた", "踊ってみた", "講座", "やってみた"});
+			else if (cateChar == 'ゲ') okList.AddRange(new string[]{"ゲーム"});
+			else if (cateChar == '動') okList.AddRange(new string[]{"動画紹介"});
+			//else if (cateChar == '生') okList.AddRange(new string[]{"生ゲームで遊ぶ"});
+			//else if (cateChar == '顔') okList.AddRange(new string[]{"顔出し"});
+			//else if (cateChar == '凸') okList.AddRange(new string[]{"凸待ち"});
+			
+			try {
+				foreach (var c in category) {
+					if (okList.IndexOf(c) > -1) return true;
+				}
+				return false;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return false;
+			}
+		}
 		public string Face
         {
 			get { return (category.IndexOf("顔出し") > -1) ? "顔" : "";}

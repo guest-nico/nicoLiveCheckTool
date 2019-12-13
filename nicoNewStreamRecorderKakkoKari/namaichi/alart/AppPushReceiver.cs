@@ -9,6 +9,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Net;
@@ -17,9 +18,13 @@ using System.Net.Security;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Google.Protobuf;
-using namaichi.info;
+//using Google.Protobuf;
 
+using namaichi.info;
+using McsProto;
+using CheckinProto;
+using ProtoBuf;
+ 
 namespace namaichi.alart
 {
 	/// <summary>
@@ -93,45 +98,52 @@ namespace namaichi.alart
 				
 				//cr.Imei = "109269993813709";// # "".join(random.choice("0123456789") for _ in range(15))
 				cr.Imei = "000000000000000";// # "".join(random.choice("0123456789") for _ in range(15))
-				cr.AndroidId= 0;
+				cr.androidId = 0;
 				
-				var build = new CheckinRequest.Types.Checkin.Types.Build();
+				
+				var build = new CheckinRequest.Checkin.Build();
 				build.Fingerprint = "google/razor/flo:5.0.1/LRX22C/1602158:user/release-keys";
 				build.Hardware = "flo";
 				build.Brand = "google";
 				build.Radio = "FLO-04.04";
 				//build.bootloader = "FLO-04.04"
-				build.ClientId = "android-google";
+				build.clientId = "android-google";
 				
-				var checkinM = new CheckinRequest.Types.Checkin();
-				checkinM.Build = build;
-				cr.Checkin = checkinM;
+				var checkinM = new CheckinRequest.Checkin();
+				checkinM.build = build;
+				cr.checkin = checkinM;
 				
-				cr.Checkin.LastCheckinMs = 0;
+				cr.checkin.lastCheckinMs = 0;
 				
 				cr.Locale = "en";
 				//cr.loggingId = random.getrandbits(63)
-				cr.LoggingId = 1;
+				cr.loggingId = 1;
 				//cr.marketCheckin
 				//cr.macAddress.append("".join(random.choice("ABCDEF0123456789") for _ in range(12)))
 				//cr.MacAddress.Add("47D435B5CCCA");
-				cr.MacAddress.Add("111111111111");
+				cr.macAddresses.Add("111111111111");
 				//cr.meid = "".join(random.choice("0123456789") for _ in range(14))
 				cr.Meid = "01234567890123";
-				cr.AccountCookie.Add("");
-				cr.TimeZone = "GMT";
+				cr.accountCookies.Add("");
+				cr.timeZone = "GMT";
 				cr.Version = 3;
-				cr.OtaCert.Add("--no-output--"); // 71Q6Rn2DDZl1zPDVaaeEHItd
+				cr.otaCerts.Add("--no-output--"); // 71Q6Rn2DDZl1zPDVaaeEHItd
 				//cr.serial 
 				//cr.esn = "".join(random.choice("ABCDEF0123456789") for _ in range(8))
 				cr.Esn = "01234567";
 				//cr.deviceConfiguration
-				cr.MacAddressType.Add("wifi");
+				cr.macAddressTypes.Add("wifi");
 				cr.Fragment = 0;
 				//cr.username
-				cr.UserSerialNumber = 0;
+				cr.userSerialNumber = 0;
 				
-				var postDataBytes = cr.ToByteArray();
+				//var postDataBytes = cr.ToByteArray();
+				byte[] postDataBytes;
+				using (var ms = new MemoryStream()) {
+				    Serializer.Serialize(ms, cr);
+				    postDataBytes = ms.ToArray();
+				}
+				
 				//foreach (var _p in postDataBytes) Debug.Write((char)_p);
 				//util.debugWriteLine("");
 				//foreach (var _p in postDataBytes) Debug.Write(_p + " ");
@@ -155,6 +167,17 @@ namespace namaichi.alart
 					check.form.addLogText("スマホ通知のチェックインのPOSTに失敗しました");
 					return false;
 				}
+				
+				using (var ms = new MemoryStream(rb)) {
+					var checkinRes = new CheckinResponse();
+					checkinRes = Serializer.Deserialize<CheckinResponse>(ms);
+					util.debugWriteLine("androidId " + checkinRes.androidId);
+		            util.debugWriteLine("securityToken " + checkinRes.securityToken);
+		            id = checkinRes.androidId.ToString();
+		            token = checkinRes.securityToken.ToString();
+		            return true;
+				}
+				/*
 				var parser = new Google.Protobuf.MessageParser<CheckinResponse>(() => new CheckinResponse());
 				using (var ms = new MemoryStream(rb)) {
 					var checkinRes = parser.ParseFrom(ms);
@@ -164,7 +187,7 @@ namespace namaichi.alart
 		            token = checkinRes.SecurityToken.ToString();
 		            return true;
 				}
-				
+				*/
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				check.form.addLogText("スマホ通知のチェックインの取得中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
@@ -360,7 +383,7 @@ namespace namaichi.alart
 			try {
 				var lr = new LoginRequest();
 				lr.AdaptiveHeartbeat = false;
-				lr.AuthService = LoginRequest.Types.AuthService.AndroidId;
+				lr.auth_service = LoginRequest.AuthService.AndroidId;
 				lr.AuthToken = securityToken;
 				lr.Id = "android-11";
 				lr.Domain = "mcs.android.com";
@@ -370,12 +393,18 @@ namespace namaichi.alart
 				lr.User = androidId;
 				lr.UseRmq2 = true;
 				lr.AccountId = long.Parse(androidId);
-				lr.ReceivedPersistentId.Add("");  //# possible source of error
+				lr.ReceivedPersistentIds.Add("");  //# possible source of error
 				var setting = new Setting();
 				setting.Name = "new_vc";
 				setting.Value = "1";
-				lr.Setting.Add(setting);
-				var x = lr.ToByteArray();
+				lr.Settings.Add(setting);
+				//var x = lr.ToByteArray();
+				
+				byte[] x;
+				using (var ms = new MemoryStream()) {
+				    Serializer.Serialize(ms, lr);
+				    x = ms.ToArray();
+				}
 				
 				
 				using (var client = new TcpClient("mtalk.google.com", 5228))
@@ -407,7 +436,7 @@ namespace namaichi.alart
 				    var version = sslStream.ReadByte();
 				    util.debugWriteLine(version);
 				    
-				    Task.Run(() => {
+				    Task.Factory.StartNew(() => {
 		             	while (isRetry) {
 							//Thread.Sleep(15000);
 							
@@ -473,15 +502,25 @@ namespace namaichi.alart
 						
 						if (responseTag == 0x03) {
 							var lresp = new LoginResponse();
+							using (var ms = new MemoryStream(msg.ToArray())) {
+								lresp = Serializer.Deserialize<LoginResponse>(ms);
+							}
+							/*
 							using (var ms = new MemoryStream(msg.ToArray()))
-							using (var cs = new CodedInputStream(ms)) {
+							using (var cs = new  CodedInputStream(ms)) {
 								lresp.MergeFrom(cs);
 								
-							} 
+							}
+							*/ 
 							util.debugWriteLine("RECV LOGIN RESP " + lresp);
 						} else if (responseTag == 0x07) {
 							//var lresp = LoginResponse.Parser.ParseFrom(msg.ToArray());
 							var lresp = new IqStanza();
+							
+							using (var ms = new MemoryStream(msg.ToArray())) {
+								lresp = Serializer.Deserialize<IqStanza>(ms);
+							}
+							/*
 							using (var ms = new MemoryStream(msg.ToArray()))
 							using (var cs = new CodedInputStream(ms)) {
 								//lresp.MergeFrom(cs);
@@ -494,20 +533,29 @@ namespace namaichi.alart
 								//util.debugWriteLine(iqstanza);
 								//LoginResponse.Descriptor.
 							} 
-							
+							*/
 							//iqs = mcs_pb2.IqStanza();
 							//iqs.ParseFromString(msg);
 							util.debugWriteLine("RECV IQ  id " + lresp);// + lresp.Id + " time " + lresp.ServerTimestamp + " streamid " + lresp.StreamId + " ");
 							
 						} else if (responseTag == 0x08) {
 							try {
-								var lresp = DataMessageStanza.Parser.ParseFrom(msg.ToArray());
+								DataMessageStanza lresp;
+								using (var ms = new MemoryStream(msg.ToArray())) {
+									lresp = Serializer.Deserialize<DataMessageStanza>(ms);
+								}
+								
+								//var lresp = DataMessageStanza.Parser.ParseFrom(msg.ToArray());
+								
 								//dms = mcs_pb2.DataMessageStanza();
 								//dms.ParseFromString(msg);
 								util.debugWriteLine("RECV DATA MESSAGE " + lresp);//lresp.Id + " time " + lresp.ServerTimestamp + " streamid " + lresp.StreamId + " ");
 								//var lvid = util.getRegGroup(lresp.AppData.ToString(), "\"lvid\"[\\s\\S]+(lv\\d+)");
 								//var lvid = util.getRegGroup(lresp.AppData.ToString(), "\"program_id\":\"(lv\\d+)");
-								var lvid = util.getRegGroup(lresp.AppData.ToString(), "program_id\\\\\":\\\\\"(lv\\d+)");
+								var d = "";
+								foreach (var a in lresp.AppDatas) d += a.Value;
+								//var lvid = util.getRegGroup(d, "program_id\\\\\":\\\\\"(lv\\d+)"); google protobuf
+								var lvid = util.getRegGroup(d, "program_id\":\"(lv\\d+)"); //google protobuf 
 								if (lvid != null) {
 									util.debugWriteLine("appData lvid " + lvid);
 									var items = getNicoCasItem(lvid, lresp);
@@ -515,7 +563,7 @@ namespace namaichi.alart
 										check.foundLive(items);
 									} else {
 										var gir = new GetItemRetryApr(lvid, lresp, this);
-										Task.Run(() => {
+										Task.Factory.StartNew(() => {
 											for (var i = 0; i < 10; i++) {
 								         		Thread.Sleep(5000);
 								         		items = gir.getItem();
@@ -552,7 +600,7 @@ namespace namaichi.alart
 			}
 		}
 		
-		public List<RssItem> getItem(string lvid, DataMessageStanza msg) {
+		public List<RssItem> getItem(string lvid, McsProto.DataMessageStanza msg) {
 			try {
 				string title, thumbnail, comName, hostName, description;
 				DateTime dt = util.getUnixToDatetime(msg.Sent / 1000);
@@ -560,7 +608,7 @@ namespace namaichi.alart
 				hostName = "";
 				
 				var hg = new namaichi.rec.HosoInfoGetter();
-				var r = hg.get(lvid);
+				var r = hg.get(lvid, check.container);
 				
 				bool isCom;
 				if (!r) {
@@ -571,14 +619,14 @@ namespace namaichi.alart
 					hg.description = hg.userId = hg.communityId = hg.thumbnail = "";
 					hg.tags = new String[]{};
 					var reg = new Regex("\\[生放送開始\\](.+?)さんが「(.+?)」を開始しました。");
-					var m = reg.Match(msg.AppData.ToString());
+					var m = reg.Match(msg.AppDatas.ToString());
 					if (m.Length != 0) {
 						hostName = m.Groups[1].Value;
 						isCom = true;
 						comName = "";
 					} else {
 						reg = new Regex("\\[生放送開始\\](.+?)「(.+?)」を開始しました。");
-						m = reg.Match(msg.AppData.ToString());
+						m = reg.Match(msg.AppDatas.ToString());
 						comName = m.Groups[1].Value;
 						isCom = false;
 						hostName = "";
@@ -587,14 +635,18 @@ namespace namaichi.alart
 				} else {
 					if (hg.type == "community" || hg.type == "user") {
 						var reg = new Regex("\\[生放送開始\\](.+?)さんが「(.+?)」を開始しました。");
-						var m = reg.Match(msg.AppData.ToString());
+						var d = "";
+						foreach (var a in msg.AppDatas) d += a.Value;
+						var m = reg.Match(d);
 						hostName = m.Groups[1].Value;
 						comName = (hg.group != null) ? hg.group : "";
 						title = m.Groups[2].Value;
 						isCom = true;
 					} else {
 						var reg = new Regex("\\[生放送開始\\](.+?)「(.+?)」を開始しました。");
-						var m = reg.Match(msg.AppData.ToString());
+						var d = "";
+						foreach (var a in msg.AppDatas) d += a.Value;
+						var m = reg.Match(d);
 						comName = m.Groups[1].Value;
 						title = m.Groups[2].Value;
 						isCom = false;
@@ -634,17 +686,19 @@ namespace namaichi.alart
 				return null;
 			}
 		}
-		public List<RssItem> getNicoCasItem(string lvid, DataMessageStanza msg) {
+		public List<RssItem> getNicoCasItem(string lvid, McsProto.DataMessageStanza msg) {
 			try {
 				string title, thumbnail, comName, hostName, description;
 				DateTime dt = util.getUnixToDatetime(msg.Sent / 1000);
-				if (dt < startTime) return null;
+				if (dt < startTime || dt < DateTime.Now - TimeSpan.FromMinutes(10)) return null;
 				hostName = "";
 				
 				var hg = new namaichi.rec.HosoInfoGetter();
-				var r = hg.get(lvid);
+				var r = hg.get(lvid, check.container);
 				
-				var appData = msg.AppData.ToString();
+				var d = "";
+				foreach (var a in msg.AppDatas) d += a.Value;
+				var appData = d;
 				bool isCom;
 				if (!r) {
 					check.form.addLogText("スマホプッシュ通知から取得した放送のページが取得できませんでした " + lvid);
@@ -671,18 +725,21 @@ namespace namaichi.alart
 					if (hg.type == "community" || hg.type == "user") {
 						//var reg = new Regex("\\[生放送開始\\](.+?)さんが「(.+?)」を開始しました。");
 						//var m = reg.Match(msg.AppData.ToString());
-						hostName = util.getRegGroup(appData, "user_name\\\\\":\\\\\"(.+?)\\\\\"");
+						//hostName = util.getRegGroup(appData, "user_name\\\\\":\\\\\"(.+?)\\\\\"");
+						hostName = util.getRegGroup(appData, "user_name\":\"(.+?)\"");
 						comName = (hg.group != null) ? hg.group : "";
 						isCom = true;
 					} else {
 						//var reg = new Regex("\\[生放送開始\\](.+?)「(.+?)」を開始しました。");
 						//var m = reg.Match(msg.AppData.ToString());
-						comName = util.getRegGroup(appData, "channel_name\\\\\":\\\\\"(.+?)\\\\\"");
+						//comName = util.getRegGroup(appData, "channel_name\\\\\":\\\\\"(.+?)\\\\\"");
+						comName = util.getRegGroup(appData, "channel_name\":\"(.+?)\"");
 						//comId = util.getRegGroup(appData, "channel_id\\\\\":\\\\\"(.+?)\\\\\"");
 						isCom = false;
 						if (!string.IsNullOrEmpty(hg.userName)) hostName = hg.userName;
 					}
-					title = util.getRegGroup(appData, "program_title\\\\\":\\\\\"(.+?)\\\\\"");
+					//title = util.getRegGroup(appData, "program_title\\\\\":\\\\\"(.+?)\\\\\"");
+					title = util.getRegGroup(appData, "program_title\":\"(.+?)\"");
 					
 				}
 				
@@ -724,9 +781,9 @@ namespace namaichi.alart
 	}
 	class GetItemRetryApr {
 		private string lvid;
-		private DataMessageStanza lresp;
+		private McsProto.DataMessageStanza lresp;
 		private AppPushReceiver pr;
-		public GetItemRetryApr(string lvid, DataMessageStanza lresp, AppPushReceiver pr) {
+		public GetItemRetryApr(string lvid, McsProto.DataMessageStanza lresp, AppPushReceiver pr) {
 			this.lvid = lvid;
 			this.lresp = lresp;
 			this.pr = pr;
@@ -735,6 +792,22 @@ namespace namaichi.alart
 			return pr.getNicoCasItem(lvid, lresp);
 		}
 	}
+	
 }
 //RECV DATA MESSAGE { "id": "6D44DD46", "from": "13323994513", "category": "jp.nicovideo.android", "appData": [ { "key": "nx", "value": "{\"type\":\"start_channel_publish\",\"relation\":\"follower\",\"channel_id\":\"ch2604516\",\"program_id\":\"lv322411981\",\"program_title\":\"⛔【限定】[ ASMR/耳舐め ] ハロウィン♡魔女ウィッチがご奉仕♡【実写カメラ】Ear  licking Video Stream\",\"channel_name\":\"all standard is ｃ☆。\",\"channel_icon\":\"https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/ch2604516.jpg?1572956462\"}" }, { "key": "message", "value": "all standard is ｃ☆。が番組を開始しました" } ], "persistentId": "0:1573920045367966%75f5c14df9fd7ecd", "ttl": 86357, "sent": "1573920045351" }
 //RECV DATA MESSAGE { "id": "6D44DD3E", "from": "13323994513", "category": "jp.nicovideo.android", "appData": [ { "key": "nx", "value": "{\"type\":\"start_publish\",\"relation\":\"follower\",\"user_id\":\"14508141\",\"program_id\":\"lv322948514\",\"program_title\":\"真夜中の 【怪談 UMA 怪事件 超常現象 】 鑑賞会\",\"user_name\":\"ジャワ男\",\"user_icon\":\"https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/1450/14508141.jpg?1539494321\"}" }, { "key": "message", "value": "ジャワ男さんが番組を開始しました" } ], "persistentId": "0:1573914974863994%75f5c14df9fd7ecd", "ttl": 86400, "sent": "1573914974858" }
+
+/*
+ * using (var ms = new MemoryStream())
+  {
+    Serializer.Serialize(ms, human);
+    byte[] bytes = ms.ToArray();
+    Console.WriteLine(BitConverter.ToString(bytes));
+
+    // デシリアライズ
+    // human = Serializer.Deserialize<Human>(ms);
+  }
+  
+  Task.Factory.StartNew() 
+  
+ */

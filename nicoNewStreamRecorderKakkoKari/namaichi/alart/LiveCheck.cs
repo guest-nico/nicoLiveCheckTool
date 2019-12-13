@@ -37,8 +37,8 @@ namespace namaichi.alart
 			
 			isLoading = true;
 			
-			var newItems = getLiveItems();
-
+			var newItems = getCategoryLiveItems();
+			if (newItems == null) return;
 			var delMin = double.Parse(form.config.get("liveListDelMinutes"));
 			var now = DateTime.Now;
 			
@@ -127,11 +127,9 @@ namespace namaichi.alart
 				form.formAction(() => {
 				                	
 					foreach (var r in form.liveListDataSource) {
-						var isDisp = (r.MainCategory[0] == cateChar || 
-						            cateChar == '全');
-				        
-								
-							
+						//var isDisp = (r.MainCategory[0] == cateChar || 
+						//            cateChar == '全');
+						var isDisp = r.isDisplay(cateChar);
 				        /*
 						if (form.liveList.CurrentCell != null && 
 								form.liveList.CurrentCell.RowIndex == r.Index && !vi) {
@@ -201,10 +199,58 @@ namespace namaichi.alart
 			util.debugWriteLine("load rss item " + buf.Count);
 			return buf;
 		}
+		private List<LiveInfo> getCategoryLiveItems() {
+			var loadTime = DateTime.Now;
+			var tab = getTabName();
+			var categoryNames = new string[]{"common", "try", "live", "req"};
+			
+			var readNum = int.Parse(form.config.get("thresholdpage"));
+			var buf = new List<LiveInfo>();
+			foreach (var name in categoryNames) {
+				if (name != tab && tab != "") continue;
+				var url = "https://live.nicovideo.jp/front/api/pages/recent/v1/programs?tab=" + name + "&offset=#&sortOrder=recentDesc";
+				util.debugWriteLine(url);
+				
+				for (var i = 0; i < readNum; i++) {
+					util.debugWriteLine("rss page i " + i);
+					try {
+						
+						var res = util.getPageSource(url.Replace("#", i.ToString()), null);
+						if (res == null) {
+							Thread.Sleep(10000);
+							continue;
+						}
+						var categoryObj = (CategoryRecent)Newtonsoft.Json.JsonConvert.DeserializeObject<CategoryRecent>(res);
+						if (categoryObj.meta.errorCode != "OK") continue;
+						
+						var itemCount = 0;
+						foreach(var d in categoryObj.data) {
+							try {
+								var item = d.getRssItem(name);
+								if (item == null) continue;
+							
+								var li = new LiveInfo(item, form.alartListDataSource, form.config, form.userAlartListDataSource);
+								buf.Add(li);
+								itemCount++;
+							} catch (Exception e) {
+								util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+							}
+						}
+						if (itemCount == 0) break;
+						
+					} catch (Exception e) {
+						util.debugWriteLine("getliveitems xml " + e.Message + e.Source + e.StackTrace + e.TargetSite);
+						Thread.Sleep(180000);
+					}
+				}
+			}
+			util.debugWriteLine("load category item " + buf.Count);
+			return buf;
+		}
 		public void startAutoUpdate() {
 			autoUpdateO = new object();
 			var t = autoUpdateO;
-			Task.Run(() => {
+			Task.Factory.StartNew(() => {
 				while (autoUpdateO == t) {
 					load();
 					Thread.Sleep((int)(double.Parse(form.config.get("liveListUpdateMinutes")) * 60000));
@@ -221,8 +267,9 @@ namespace namaichi.alart
 			else if (c == "2") return "try";
 			else if (c == "3") return "live";
 			else if (c == "4") return "req";
-			else if (c == "5") return "face";
-			else if (c == "6") return "totu";
+			//else if (c == "5") return "superichiba";
+			//else if (c == "6") return "face";
+			//else if (c == "7") return "totu";
 			//else if (c == "7") return "r18";
 			else return "";
 		}

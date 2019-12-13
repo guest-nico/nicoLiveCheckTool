@@ -65,8 +65,9 @@ namespace namaichi.rec
 //					var _cc = cgret.Result[(isSub) ? 1 : 0];
 //					util.debugWriteLine(cg.pageSource);
 					*/
-					
-					var isJidouShounin = util.getPageSource(url, ref headers, ccc, url).IndexOf("自動承認されます") > -1;
+					var res = util.getPageSource(url, ref headers, ccc, url);
+					if (res == null) return false;
+					var isJidouShounin = res.IndexOf("自動承認されます") > -1; 
 	//				var _compage = util.getPageSource(url, ref headers, cc);
 	//				var gateurl = "http://live.nicovideo.jp/gate/lv313793991";
 	//				var __gatePage = util.getPageSource(gateurl, ref headers, cc);

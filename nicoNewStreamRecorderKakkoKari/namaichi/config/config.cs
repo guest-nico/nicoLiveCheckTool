@@ -128,6 +128,7 @@ public class config
 			{"browserNum","1"},
 			{"browserPath",""},
 			{"issecondlogin","false"},
+			{"age_auth","0"},
 			
 			{"IsdefaultBrowserPath","true"},
 			{"appliAPath",""},

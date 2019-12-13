@@ -29,8 +29,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.38";
-	public static string versionDayStr = "2019/11/28";
+	public static string versionStr = "ver0.1.7.46";
+	public static string versionDayStr = "2019/12/14";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -530,7 +530,7 @@ class util {
 					req.AllowAutoRedirect = true;
 					if (referer != null) req.Referer = referer;
 					if (container != null) req.CookieContainer = container;
-					
+					req.UserAgent = "NicoLiveCheckTool " + versionStr + " guestnicon@gmail.com";
 	
 					req.Timeout = timeoutMs;
 					var res = (HttpWebResponse)req.GetResponse();
@@ -551,7 +551,7 @@ class util {
 					
 				}
 			} catch (Exception e) {
-				System.Threading.Tasks.Task.Run(() => {
+				System.Threading.Tasks.Task.Factory.StartNew(() => {
 					util.debugWriteLine("getpage error " + _url + e.Message+e.StackTrace);
 				});
 	//				System.Threading.Thread.Sleep(3000);
@@ -589,6 +589,7 @@ class util {
 	//				util.debugWriteLine("getpage 04");
 					if (container != null) req.CookieContainer = container;
 	//				util.debugWriteLine("getpage 05");
+					req.UserAgent = "NicoLiveCheckTool " + versionStr + " guestnicon@gmail.com";
 	
 					req.Timeout = timeoutMs;
 	//				util.debugWriteLine("getpage 0");
@@ -621,7 +622,7 @@ class util {
 					
 				}
 			} catch (Exception e) {
-				System.Threading.Tasks.Task.Run(() => {
+				System.Threading.Tasks.Task.Factory.StartNew(() => {
 					util.debugWriteLine("getpage error " + _url + e.Message+e.StackTrace);
 				});
 	//				System.Threading.Thread.Sleep(3000);
@@ -681,7 +682,7 @@ class util {
 				}
 				return ret;
 			} catch (Exception e) {
-				System.Threading.Tasks.Task.Run(() => {
+				System.Threading.Tasks.Task.Factory.StartNew(() => {
 					util.debugWriteLine("getfile error " + url + e.Message+e.StackTrace);
 				});
 //				System.Threading.Thread.Sleep(3000);
@@ -832,17 +833,22 @@ class util {
 		//if (res.IndexOf("siteId&quot;:&quot;nicolive2") > -1) {
 			var data = util.getRegGroup(res, "<script id=\"embedded-data\" data-props=\"([\\d\\D]+?)</script>");
 			var status = (data == null) ? null : util.getRegGroup(data, "&quot;status&quot;:&quot;(.+?)&quot;");
-			if (res.IndexOf("<!doctype html>") > -1 && data != null && status == "ON_AIR") return 0;
-			else if (res.IndexOf("<!doctype html>") > -1 && data != null && status == "ENDED") return 7;
+			if (res.IndexOf("<!doctype html>") > -1 && data != null && status == "ON_AIR" && data.IndexOf("webSocketUrl&quot;:&quot;ws") > -1) return 0;
+			else if (res.IndexOf("<!doctype html>") > -1 && data != null && status == "ENDED" && data.IndexOf("webSocketUrl&quot;:&quot;ws") > -1) return 7;
 			else if (util.getRegGroup(res, "(混雑中ですが、プレミアム会員の方は優先して入場ができます)") != null ||
 			        util.getRegGroup(res, "(ただいま、満員のため入場できません)") != null) return 1;
 	//		else if (util.getRegGroup(res, "<div id=\"comment_arealv\\d+\">[^<]+この番組は\\d+/\\d+/\\d+\\(.\\) \\d+:\\d+に終了いたしました。<br>") != null) return 2;
 			else if (res.IndexOf(" onclick=\"Nicolive.ProductSerial") > -1) return 8;
-			else if (res.IndexOf("※この放送はタイムシフトに対応しておりません。") > -1 && 
-			         res.IndexOf("に終了いたしました") > -1) return 2;
-			else if (util.getRegGroup(res, "(コミュニティフォロワー限定番組です。<br>)") != null) return 4;
-			else if (util.getRegGroup(res, "(に終了いたしました)") != null && res.IndexOf(" onclick=\"Nicolive.WatchingReservation") > -1) return 9;
-			else if (util.getRegGroup(res, "(に終了いたしました)") != null) return 2;
+			//else if (res.IndexOf("※この放送はタイムシフトに対応しておりません。") > -1 && 
+			//         res.IndexOf("に終了いたしました") > -1) return 2;
+			//else if (util.getRegGroup(res, "(コミュニティフォロワー限定番組です。<br>)") != null) return 4;
+			else if (res.IndexOf("isFollowerOnly&quot;:true") > -1 && res.IndexOf("isFollowed&quot;:false") > -1) return 4;
+			else if (data.IndexOf("webSocketUrl&quot;:&quot;ws") == -1 && 
+			         status == "ENDED") return 2;
+			
+			else if (status == "ENDED" && res.IndexOf(" onclick=\"Nicolive.WatchingReservation") > -1) return 9;
+			//else if (util.getRegGroup(res, "(に終了いたしました)") != null) return 2;
+			else if (status == "ENDED") return 2;
 			else if (util.getRegGroup(res, "(<archive>1</archive>)") != null) return 3;
 			else if (util.getRegGroup(res, "(チャンネル会員限定番組です。<br>)") != null) return 4;
 			else if (util.getRegGroup(res, "(<h3>【会場のご案内】</h3>)") != null) return 6;
@@ -1111,7 +1117,7 @@ class util {
 		
 //			var wc = new WebHeaderCollection();
 		var res = util.getPageSource(url, cc);
-//			util.debugWriteLine(container.GetCookieHeader(new Uri(url)) + util.getMainSubStr(isSub, true));
+		//util.debugWriteLine(cc.GetCookieHeader(new Uri(url)));
 		
 		if (res == null) {
 			url = (isChannel) ? 
@@ -1414,7 +1420,9 @@ class util {
 				"Microsoft.Web.XmlTransform.dll", "Newtonsoft.Json.dll",
 				"System.Data.SQLite.dll", "x64/SQLite.Interop.dll",
 				"x86/SQLite.Interop.dll", "x86/SnkLib.App.CookieGetter.x86Proxy.exe",
-				"Google.Protobuf.dll", "Google.Protobuf.dll", "BouncyCastle.Crypto.dll"};
+				//"Google.Protobuf.dll", "Google.Protobuf.dll",
+				"protobuf-net.dll",
+				"BouncyCastle.Crypto.dll"};
 		var isOk = new string[dlls.Length];
 		var msg = "";
 		foreach (var n in dlls) {

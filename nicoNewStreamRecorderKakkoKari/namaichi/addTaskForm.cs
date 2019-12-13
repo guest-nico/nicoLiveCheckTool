@@ -93,7 +93,7 @@ namespace namaichi
 			lvidText.Text = lvid;
 			
 			var hig = new HosoInfoGetter();
-			if (hig.get(lvidText.Text)) {
+			if (hig.get(lvidText.Text, form.check.container)) {
 				var t = "";
 
 				if (hig.title != null) t += hig.title;

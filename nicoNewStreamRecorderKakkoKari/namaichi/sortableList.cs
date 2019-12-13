@@ -10,6 +10,7 @@ using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.ComponentModel;
+using namaichi.info;
 
 namespace namaichi
 {
@@ -23,6 +24,8 @@ namespace namaichi
         private PropertyDescriptor _sortProperty;
         
         private string columnName = null;
+        public config.config cfg = null; 
+        public bool isFavoriteUp = false;
  
         /// <summary>
         /// Initializes a new instance of the <see cref="SortableBindingList{T}"/> class.
@@ -97,8 +100,8 @@ namespace namaichi
             List<T> list = Items as List<T>;
             if (list == null) return;
  
-            //list.Sort(
             
+                
             list.Sort(Compare);
  
             _isSorted = true;
@@ -128,7 +131,16 @@ namespace namaichi
             {
                 return 1; //first has value, second doesn't
             }
-            
+            /*
+            try {
+	            if (isFavoriteUp && false) {
+	            	var isFavL = ((LiveInfo)(object)lhs).favorite == "";
+	            	var isFavR = ((LiveInfo)(object)rhs).favorite == "";
+	            	if (isFavL && !isFavR) return 1;
+	            	else if (!isFavL && isFavR) return -1;
+	            }
+            } catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);}
+            */
             if (columnName == "HostId") {
             	int intL, intR;
             	var _l = int.TryParse(lhsValue.ToString(), out intL);

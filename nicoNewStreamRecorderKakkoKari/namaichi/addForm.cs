@@ -303,7 +303,7 @@ namespace namaichi
 			
 			var url =  "https://live2.nicovideo.jp/watch/" + id;
 			var hig = new HosoInfoGetter();
-			hig.get(url);
+			hig.get(url, form.check.container);
 			
 			communityId.Text = hig.communityId;
 			userIdText.Text = hig.userId;

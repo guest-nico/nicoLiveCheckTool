@@ -206,8 +206,8 @@ namespace namaichi
 		void SmallPopupFormLoad(object sender, EventArgs e)
 		{
 			setSamune(ri.thumbnailUrl);
-			//Task.Run(() => setSamune(ri.thumbnailUrl));
-			Task.Run(() => timeoutCloseProcess());
+			//Task.Factory.StartNew(() => setSamune(ri.thumbnailUrl));
+			Task.Factory.StartNew(() => timeoutCloseProcess());
 		}
 		
 		

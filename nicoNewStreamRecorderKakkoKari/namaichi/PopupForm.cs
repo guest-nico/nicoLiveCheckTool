@@ -221,8 +221,8 @@ namespace namaichi
 		void PopupFormLoad(object sender, EventArgs e)
 		{
 			setSamune(ri.thumbnailUrl);
-			//Task.Run(() => setSamune(ri.thumbnailUrl));
-			Task.Run(() => timeoutCloseProcess());
+			//Task.Factory.StartNew(() => setSamune(ri.thumbnailUrl));
+			Task.Factory.StartNew(() => timeoutCloseProcess());
 		}
 		
 		void PopupFormFormClosed(object sender, FormClosedEventArgs e)

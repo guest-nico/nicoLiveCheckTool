@@ -63,12 +63,12 @@ namespace namaichi.rec
 			isRtmpTimeShiftEnabled = isRtmpMain;
 			
 			
-			var mainT = Task.Run<int>(() => {return _rec(this.url, false);});
+			var mainT = Task.Factory.StartNew<int>(() => {return _rec(this.url, false);});
 			Task subT = null;
 //			var isSecond = true;
 			if (rm.cfg.get("IsHokan") == "true" && !isRtmpMain && !rm.isPlayOnlyMode && isSubAccountHokan) {
 				subGotNumTaskInfo = new List<numTaskInfo>();
-				subT = Task.Run(() => {_rec(this.url, true);});
+				subT = Task.Factory.StartNew(() => {_rec(this.url, true);});
 			}
 			try {
 				while (true) {

@@ -316,6 +316,7 @@ public class config
 			
 	        {"thresholdpage", "10"},
 	        {"brodouble", "0"},
+	        {"alartAddLive", "1"},
 	        {"cateCategoryType", "0"},
 	        {"liveListDelMinutes", "30"},
 	        {"FavoriteUp", "true"},
@@ -327,6 +328,7 @@ public class config
 	        {"AutoStart", "false"},
 	        {"liveListUpdateMinutes", "1"},
 	        {"liveListCacheIcon", "true"},
+	        
 	        
 			{"Height","480"},
 			{"Width","830"},

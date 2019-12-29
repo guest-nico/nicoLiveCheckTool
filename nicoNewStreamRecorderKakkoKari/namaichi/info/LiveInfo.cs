@@ -161,24 +161,31 @@ namespace namaichi.info
 					
 					if ((!string.IsNullOrEmpty(comId) && (comId == ai.communityId)) ||
 							(type == "official" && ai.communityId == "official")) {
-						if (_favorite != "") _favorite += ",";
-						_favorite += "コミュニティID";
+						if (_favorite.IndexOf("コミュニティID") == -1) {
+							if (_favorite != "") _favorite += ",";
+							_favorite += "コミュニティID";
+						}
 						if (memo != "") memo += ",";
 						memo += ai.memo;
 						textColor = ai.textColor;
 						backColor = ai.backColor;
 					}
 					if (!string.IsNullOrEmpty(hostName) && hostName == ai.hostName) {
-						if (_favorite != "") _favorite += ",";
-						_favorite += "ユーザー名?";
+						
+						if (_favorite.IndexOf("ユーザー名?") == -1) {
+							if (_favorite != "") _favorite += ",";
+							_favorite += "ユーザー名?";
+						}
 						if (memo != "") memo += ",";
 						memo += ai.memo;
 						textColor = ai.textColor;
 						backColor = ai.backColor;
 					}
 					if (!string.IsNullOrEmpty(ai.Keyword) && ri.isMatchKeyword(ai)) {
-						if (_favorite != "") _favorite += ",";
-						_favorite += "ｷｰﾜｰﾄ:" + ai.Keyword;
+						if (_favorite.IndexOf("ｷｰﾜｰﾄ:") == -1) {
+							if (_favorite != "") _favorite += ",";
+							_favorite += "ｷｰﾜｰﾄ:" + ai.Keyword;
+						}
 						if (memo != "") memo += ",";
 						memo += ai.memo;
 						textColor = ai.textColor;

@@ -275,42 +275,52 @@ namespace namaichi.rec
 				setToolMenuStatusBar();
 			} else {
 				Task.Factory.StartNew(() => {
-					var f = new BulkAddFromFollowAccountForm();
-					Task.Factory.StartNew(() => {
-						form.formAction(() => f.ShowDialog(form));
-					}).Wait();
-					
-					if (f.mail == null) return;
-					
-					if (f.mail == "" || f.pass == "") {
-						util.showModelessMessageBox("メールアドレスとパスワードを入力してください", "", form);
-						return;
+					try {
+						var f = new BulkAddFromFollowAccountForm();
+						Task.Factory.StartNew(() => {
+							form.formAction(() => f.ShowDialog(form));
+						}).Wait();
+						
+						if (f.mail == null) return;
+						
+						if (f.mail == "" || f.pass == "") {
+							util.showModelessMessageBox("メールアドレスとパスワードを入力してください", "", form);
+							return;
+						}
+								
+						var cc = getUserSession(f.mail, f.pass);
+						if (cc == null) return;
+						var res = util.getPageSource("https://www.nicovideo.jp/my/", cc);
+						if (res == null) {
+							form.showMessageBox("マイページが取得できませんでした", "");
+							return;
+						}
+						var name = util.getRegGroup(res, "<span id=\"siteHeaderUserNickNameContainer\">(.+?)</span>");
+						var id = util.getRegGroup(res, "User = \\{ id: (\\d+)");
+						if (name == null || id == null) {
+							form.showMessageBox("マイページからの取得に失敗しました", "");
+							return;
+						}
+						var followList = new FollowChecker(form, cc).getFollowList(f.follow);
+						if (followList == null) return;
+						var addFollowList = getAddFollowList(followList);
+						if (addFollowList == null) return;
+						var isStartRet = -1;
+						Task.Factory.StartNew(() =>
+							isStartRet = util.showModelessMessageBox(name + "(" + id + ") の参加コミュは\r\n未登録：" + addFollowList.Count + "件　登録済み：" + (followList.Count - addFollowList.Count) + "　です。\r\n未登録の参加コミュニティを登録しますか？", "確認", form, 1 | 0x100 | 0x20)
+						).Wait();
+						if (isStartRet != 1) return;
+						
+						var l = new ToolMenuLock("参加コミュ一括登録中", addFollowList.Count);
+						bulkAddFromFollowComLock = l;
+						setToolMenuStatusBar();
+						Task.Factory.StartNew(() => bulkAddFromFollowCom(l, addFollowList, followList.Count, f.follow));
+						
+					} catch (Exception e) {
+						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+						form.addLogText("一括登録中に未知のエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
 					}
-							
-					var cc = getUserSession(f.mail, f.pass);
-					if (cc == null) return;
-					var res = util.getPageSource("https://www.nicovideo.jp/my/", cc);
-					var name = util.getRegGroup(res, "<span id=\"siteHeaderUserNickNameContainer\">(.+?)</span>");
-					var id = util.getRegGroup(res, "User = \\{ id: (\\d+)");
-					if (name == null || id == null) {
-						form.showMessageBox("マイページからの取得に失敗しました", "");
-						return;
-					}
-					var followList = new FollowChecker(form, cc).getFollowList(f.follow);
-					var addFollowList = getAddFollowList(followList);
-					var isStartRet = -1;
-					Task.Factory.StartNew(() =>
-						isStartRet = util.showModelessMessageBox(name + "(" + id + ") の参加コミュは\r\n未登録：" + addFollowList.Count + "件　登録済み：" + (followList.Count - addFollowList.Count) + "　です。\r\n未登録の参加コミュニティを登録しますか？", "確認", form, 1 | 0x100 | 0x20)
-					).Wait();
-					if (isStartRet != 1) return;
-					
-					var l = new ToolMenuLock("参加コミュ一括登録中", addFollowList.Count);
-					bulkAddFromFollowComLock = l;
-					setToolMenuStatusBar();
-					Task.Factory.StartNew(() => bulkAddFromFollowCom(l, addFollowList, followList.Count, f.follow));
-					
 				});
-				
 				
 			}
 		}
@@ -336,32 +346,37 @@ namespace namaichi.rec
 			}
 		}
 		private List<string[]> getAddFollowList(List<string[]> followList) {
-			
-			var noList = new List<string[]>();
-//			foreach (var _followList in followList) {
-				foreach (var id in followList) {
-					while (true) {
-						try {
-							var isContain = false;
-							foreach (var ai in form.alartListDataSource) {
-								if ((id[0].StartsWith("c") && id[0] == ai.communityId) ||
-								    (!id[0].StartsWith("c") && id[0] == ai.hostId))
-									isContain = true;
+			try {
+				var noList = new List<string[]>();
+	//			foreach (var _followList in followList) {
+					foreach (var id in followList) {
+						while (true) {
+							try {
+								var isContain = false;
+								foreach (var ai in form.alartListDataSource) {
+									if ((id[0].StartsWith("c") && id[0] == ai.communityId) ||
+									    (!id[0].StartsWith("c") && id[0] == ai.hostId))
+										isContain = true;
+								}
+								foreach (var ai in form.userAlartListDataSource) {
+									if ((id[0].StartsWith("c") && id[0] == ai.communityId) ||
+									    (!id[0].StartsWith("c") && id[0] == ai.hostId))
+										isContain = true;
+								}
+								if (!isContain) noList.Add(id);
+								break;
+							} catch (Exception e) {
+								util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 							}
-							foreach (var ai in form.userAlartListDataSource) {
-								if ((id[0].StartsWith("c") && id[0] == ai.communityId) ||
-								    (!id[0].StartsWith("c") && id[0] == ai.hostId))
-									isContain = true;
-							}
-							if (!isContain) noList.Add(id);
-							break;
-						} catch (Exception e) {
-							util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 						}
 					}
-				}
-//			}
-			return noList;
+	//			}
+				return noList;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				form.addLogText("追加するIDの作成中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return null;
+			}
 		}
 		private void bulkAddFromFollowCom(ToolMenuLock _lock, List<string[]> addList, int allNum, bool[] followMode) {
 			var mainFollowList = new FollowChecker(form, form.check.container)

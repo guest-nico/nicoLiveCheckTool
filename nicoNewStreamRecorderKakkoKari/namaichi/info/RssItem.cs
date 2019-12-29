@@ -35,6 +35,7 @@ namespace namaichi.info
 		
 		static Regex getStringToWordsListReg = new Regex("(\\s)(\"\"|\".*?[^\\\\]\")(\\s)");
 		public DateTime pubDateDt = DateTime.MinValue;
+		public bool isAlarted = false;
 		
 		public RssItem(string title, string lvId, 
 				string pubDate, string description,
@@ -162,6 +163,7 @@ namespace namaichi.info
 		}
 		public string[] getTag(Regex r) {
 			if (tags != null) return tags;
+			if (itemRes == null) return new string[]{""};
 			
 			var m = r.Matches(itemRes);
 			var ret = new string[m.Count];

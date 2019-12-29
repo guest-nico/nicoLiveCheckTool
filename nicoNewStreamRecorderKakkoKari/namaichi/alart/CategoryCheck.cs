@@ -52,59 +52,63 @@ namespace namaichi.alart
 				//util.debugWriteLine("category check lastlv" + lastLv + " " + DateTime.Now);
 				util.debugWriteLine("checked lv list start count " + check.checkedLvIdList.Count);
 				
-				var items = new List<RssItem>();
-				for (var j = 0; j < urls.Length; j++) {
-					var url = urls[j];
-					
-					var end = 1000 ;
-					for (var i = 0; i < 1000 && i < end; i++) {
-						util.debugWriteLine("category page i " + i + url);
-					
+				try {
+					var items = new List<RssItem>();
+					for (var j = 0; j < urls.Length; j++) {
+						var url = urls[j];
 						
-						var res = util.getPageSource(url.Replace("#", i.ToString()), null);
-						if (res == null) {
-							var t = int.Parse(config.get("rssUpdateInterval"));
-							if (t < 15) t = 15;
-							Thread.Sleep(t * 1000);
-							break;
+						var end = 1000 ;
+						for (var i = 0; i < 1000 && i < end; i++) {
+							util.debugWriteLine("category page i " + i + " " + url);
+						
+							
+							var res = util.getPageSource(url.Replace("#", i.ToString()), null);
+							if (res == null) {
+								var t = int.Parse(config.get("rssUpdateInterval"));
+								if (t < 15) t = 15;
+								Thread.Sleep(t * 1000);
+								break;
+							}
+							var isEndFile = false;
+							var isContainAddedLv = getRssItems(res, ref items, ref isEndFile, categoryNames[j]);
+							if (isContainAddedLv) {
+								var isContainLv = items.FindIndex(x => check.checkedLvIdList.IndexOf(x.lvId) > -1) != -1;
+								if (end == 1000 && 
+									    (!isStartTimeAllCheck || (isContainLv)) && 
+									    !isStartTimeAllCheck) end = i + 1;
+		//						break;
+							}
+							if (isEndFile) 
+								break;
+							if (isFirst && !isStartTimeAllCheck) 
+								break;
 						}
-						var isEndFile = false;
-						var isContainAddedLv = getRssItems(res, ref items, ref isEndFile, categoryNames[j]);
-						if (isContainAddedLv) {
-							var isContainLv = items.FindIndex(x => check.checkedLvIdList.IndexOf(x.lvId) > -1) != -1;
-							if (end == 1000 && 
-								    (!isStartTimeAllCheck || (isContainLv)) && 
-								    !isStartTimeAllCheck) end = i + 1;
-	//						break;
+						//if (items.Count > 0)
+						//	lastLv = items[0].lvId;
+						
+						util.debugWriteLine("checked lv list count " + check.checkedLvIdList.Count);
+						util.debugWriteLine("get category items " + items.Count);
+						if (items.Count > -1) {
+							foreach (RssItem it in items) util.debugWriteLine(it.lvId + " " + it.comId + " " + it.hostName + " " + it.title + " " + it.pubDate);
 						}
-						if (isEndFile) 
-							break;
-						if (isFirst && !isStartTimeAllCheck) 
-							break;
+						
 					}
-					//if (items.Count > 0)
-					//	lastLv = items[0].lvId;
+					check.foundLive(items);
+					setDescription(items);
 					
-					util.debugWriteLine("checked lv list count " + check.checkedLvIdList.Count);
-					util.debugWriteLine("get category items " + items.Count);
-					if (items.Count > -1) {
-						foreach (RssItem it in items) util.debugWriteLine(it.lvId + " " + it.comId + " " + it.hostName + " " + it.title + " " + it.pubDate);
-					}
+					isStartTimeAllCheck = false;
+					isFirst = false;
 					
+					
+					if (check.checkedLvIdList.Count > 20000)
+						check.deleteOldCheckedLvIdList();
+					
+					var _t = int.Parse(config.get("rssUpdateInterval"));
+					if (_t < 15) _t = 15;
+					Thread.Sleep(_t * 1000);
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
-				check.foundLive(items);
-				setDescription(items);
-				
-				isStartTimeAllCheck = false;
-				isFirst = false;
-				
-				
-				if (check.checkedLvIdList.Count > 20000)
-					check.deleteOldCheckedLvIdList();
-				
-				var _t = int.Parse(config.get("rssUpdateInterval"));
-				if (_t < 15) _t = 15;
-				Thread.Sleep(_t * 1000);
 			}
 			check.form.addLogText("カテゴリページからの取得を終了します");
 		}
@@ -156,6 +160,8 @@ namespace namaichi.alart
 					foreach (var o in tanzakuObj.data.items) {
 						var ri = items.Find(x => x.lvId == o.id);
 						if (ri == null) continue;
+						if (o.description.Length > 100) 
+							o.description = o.description.Substring(0, 100);
 						ri.description = o.description;
 						
 						var li = check.form.liveListDataSource.FirstOrDefault(x => x.lvId == o.id);
@@ -164,7 +170,7 @@ namespace namaichi.alart
 							var liI = check.form.liveListDataSource.IndexOf(li);
 							if (liI > -1) check.form.liveList.UpdateCellValue(5, liI);
 						} else {
-							util.debugWriteLine("aa");
+							//util.debugWriteLine("aa");
 						}
 						li = check.form.liveListDataReserve.Find(x => x.lvId == o.id);
 						if (li != null) li.description = o.description;

@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -151,13 +152,20 @@ namespace namaichi
             	return 0;
             }
             if (columnName == "elapsedTime") {
-            	DateTime intL, intR;
-            	var _l = DateTime.TryParse(lhsValue.ToString().Replace("間", ""), out intL);
-            	var _r = DateTime.TryParse(rhsValue.ToString().Replace("間", ""), out intR);
-            	if (_l && _r) return intL.CompareTo(intR);
-            	else if (_l && !_r) return 1;
-            	else if (!_l && _r) return -1;
-            	return 0;
+           		var lLi = (LiveInfo)(object)lhs;
+           		var rLi = (LiveInfo)(object)rhs;
+            	//TimeSpan intL, intR;
+            	//var _l = TimeSpan.TryParse(lhsValue.ToString().Replace("日", ".").Replace("時間", ":").Replace("分", ":").Replace("秒", ""), out intL);
+            	//var _r = TimeSpan.TryParse(rhsValue.ToString().Replace("日", ".").Replace("時間", ":").Replace("分", ":").Replace("秒", ""), out intR);
+            	var ret = DateTime.Compare(lLi.pubDateDt, rLi.pubDateDt);
+            	if (ret == 0 && lLi.lvId != rLi.lvId)
+            		ret = string.Compare(lLi.lvId, rLi.lvId);
+            	return DateTime.Compare(lLi.pubDateDt, rLi.pubDateDt);
+            	
+            	//if (_l && _r) return intL.CompareTo(intR);
+            	//else if (_l && !_r) return 1;
+            	//else if (!_l && _r) return -1;
+            	//return 0;
             }
             
             if (lhsValue is IComparable)

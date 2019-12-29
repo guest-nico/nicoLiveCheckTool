@@ -148,192 +148,200 @@ namespace namaichi.utility
 			var readAiList = new List<AlartInfo>();
 			
 			for (var i = 1; i < lines.Length - 2; i += itemLineNum) {
+				try {
+					var isFollow = false;
+					var comFollow = "";
+					var userFollow = "";
+					Color textColor = Color.Black, backColor = Color.FromArgb(255,224,255);
+					if (lines[i + 10] != "" && lines[i + 11] != "") {
+						try {
+							textColor = ColorTranslator.FromHtml(lines[i + 10]);
+							backColor = ColorTranslator.FromHtml(lines[i + 11]);
+						} catch (Exception e) {
+	//						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+						}
+					}
+					int defaultSound = 0;
+					bool isDefaultSoundId = true;
+					if (itemLineNum != 29 && lines[i + 12] != "") {
+						try {
+							var b = lines[i + 12].Split(',');
+							defaultSound = int.Parse(b[0]);
+							isDefaultSoundId = bool.Parse(b[1]);
+						} catch (Exception e) {
+							util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+						}
+					}
+					/*
+					bool isAnd = true;
+					if (lines[i + 16] != "") {
+						try {
+							isAnd = lines[i + 16] == "true";
+						} catch (Exception e) {
+							util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+						}
+					}
+					*/
+					bool isMustCom = true, isMustUser = true, isMustKeyword = true;
+					if (itemLineNum != 29 && lines[i + 14] != "") {
+						try {
+							var isMustArr = lines[i + 14].Split(',');
+							isMustCom = bool.Parse(isMustArr[0]);
+							isMustUser = bool.Parse(isMustArr[1]);
+							isMustKeyword = bool.Parse(isMustArr[2]);
+						} catch (Exception e) {
+							util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+						}
+					}
+					List<CustomKeywordInfo> cki = null;
+					bool isCustomKeyword = false;
+					if (itemLineNum != 29 && lines[i + 6] != "") {
+						try {
+							cki = Newtonsoft.Json.JsonConvert.DeserializeObject< List<CustomKeywordInfo>>(lines[i + 6].Substring(1));
+							isCustomKeyword = lines[i + 6][0] == '1';
+						} catch (Exception e) {
+							util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+							cki = null;
+							isCustomKeyword = false;
+						}
+					}
+					if (isUpdateComHost) {
+						/*
+						if (lines[i + 1] != null && lines[i + 1] != "") {
+							var comName = util.getCommunityName(lines[i + 1], out isFollow, form.check.container);
+							if (comName != null)
+								comFollow = (isFollow) ? "フォロー解除する" : "フォローする";
+							else lines[i + 1] = "";
+						} else lines[i + 4] = "";
+						*/
+						/*
+						if (lines[i + 2] != null && lines[i + 2] != "") {
+							var userName = util.getUserName(lines[i + 2], out isFollow, form.check.container);
+							if (userName != null)
+								userFollow = (isFollow) ? "フォロー解除する" : "フォローする";
+							else lines[i + 2] = "";
+						} else lines[i + 5] = "";
+						*/
+					}
+					//if (lines[i + 1] == "" && lines[i + 2] == "" && lines[i + 3] == "") continue;
+					AlartInfo ai;
+					var comName = string.IsNullOrEmpty(lines[i + 4]) ? lines[i + 4] : WebUtility.HtmlDecode(lines[i + 4]);
+					if (itemLineNum == 29) {
+			            ai = new AlartInfo(lines[i + 1], 
+								lines[i + 2], comName, lines[i + 5], 
+								lines[i + 7], lines[i + 15], 
+								lines[i + 17] == "true",
+								lines[i + 18] == "true",
+								lines[i + 19] == "true", 
+								lines[i + 20] == "true",
+								lines[i + 21] == "true",
+								lines[i + 24] == "true", 
+								lines[i + 25] == "true", 
+								lines[i + 26] == "true",
+								false,
+								false, 
+								false,
+								false,
+								false,
+								false,
+								false,
+								lines[i + 28],
+								comFollow, userFollow, lines[i + 13], 
+								lines[i + 3], textColor, 
+								backColor, defaultSound, isDefaultSoundId, 
+								false, false, false, null, false);
+						if (lines[i + 23] == "true") setNamarokuRead(ai, namarokuRecRead);
+					} else {
+						ai = new AlartInfo(lines[i + 1], 
+								lines[i + 2], comName, lines[i + 5], 
+								lines[i + 7], lines[i + 15], 
+								lines[i + 17] == "true",
+								lines[i + 18] == "true",
+								lines[i + 19] == "true", 
+								lines[i + 20] == "true",
+								lines[i + 21] == "true",
+								lines[i + 24] == "true", 
+								lines[i + 25] == "true", 
+								lines[i + 26] == "true",
+								lines[i + 27] == "true", 
+								lines[i + 28] == "true", 
+								lines[i + 29] == "true",
+								lines[i + 30] == "true",
+								lines[i + 31] == "true",
+								lines[i + 32] == "true",
+								lines[i + 33] == "true",
+								lines[i + 34],
+								comFollow, userFollow, lines[i + 13], 
+								lines[i + 3], textColor,
+								backColor, defaultSound, isDefaultSoundId,
+								isMustCom, isMustUser, isMustKeyword, cki,
+								isCustomKeyword);
+					}
+					//if ((ai.communityId == null || ai.communityId == "") &&
+					//    (ai.hostId == null || ai.hostId == "")) continue;
+					if (isUserMode && string.IsNullOrEmpty(ai.hostId)) continue;
+					if (isUserMode) ai.communityId = ai.communityName = "";
+					readAiList.Add(ai);
+				} catch (Exception e) {
+					form.addLogText(i + "行目から始まるお気に入りが読み込めませんでした");
+				}
+			}
+			
+			try {
+				for (var j = 0; j < 100; j++) {
+		       		if (!form.IsDisposed && form.IsHandleCreated) break;
+		       		Thread.Sleep(1000);
+				}
+				var dupliNumList = (isDuplicateCheck) ? getDuplicateNum(readAiList, form) : null;
+				if (isDuplicateCheck && dupliNumList.Count > 0) {
+					form.showMessageBox(dupliNumList.Count.ToString() + "件の重複が見つかりました");
+				}
 				
-				var isFollow = false;
-				var comFollow = "";
-				var userFollow = "";
-				Color textColor = Color.Black, backColor = Color.FromArgb(255,224,255);
-				if (lines[i + 10] != "" && lines[i + 11] != "") {
-					try {
-						textColor = ColorTranslator.FromHtml(lines[i + 10]);
-						backColor = ColorTranslator.FromHtml(lines[i + 11]);
-					} catch (Exception e) {
-//						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				var addList = new List<AlartInfo>();
+				var isContinueCancel = 0;
+				var isContinueYes = 0;
+				var isContinueNo = 0;
+				var allMode = -1;//-1-none 0-cancel 1-yes 2-no
+				for (var i = 0; i < readAiList.Count; i++) {
+					var ai = readAiList[i];
+					if (isDuplicateCheck) {
+						var dialogRet = isDuplicateOk(ai, dupliNumList, i, form, allMode); 
+						if (dialogRet == DialogResult.Cancel) {
+							isContinueCancel++;
+							isContinueYes = isContinueNo = 0;
+							if (isContinueCancel % 5 == 0 && allMode < 1) {
+								var res = form.showMessageBox("全てキャンセルしますか？", "", MessageBoxButtons.YesNo);
+								if (res == DialogResult.Yes) break;
+							}
+							continue;//break;
+						} else if (dialogRet == DialogResult.Yes) {
+							isContinueYes++;
+							isContinueCancel = isContinueNo = 0;
+							if (isContinueYes % 5 == 0 && allMode < 1) {
+								var res = form.showMessageBox("全て「はい」を選択しますか？", "", MessageBoxButtons.YesNo);
+								if (res == DialogResult.Yes) allMode = 1;
+							}
+						} else if (dialogRet == DialogResult.No) {
+							isContinueNo++;
+							isContinueCancel = isContinueYes = 0;
+							if (isContinueNo % 5 == 0 && allMode < 1) {
+								var res = form.showMessageBox("全て「いいえ」を選択しますか？", "", MessageBoxButtons.YesNo);
+								if (res == DialogResult.Yes) allMode = 2;
+							}
+						} 
 					}
+					addList.Add(ai);
+					//form.alartListAdd(ai);
 				}
-				int defaultSound = 0;
-				bool isDefaultSoundId = true;
-				if (itemLineNum != 29 && lines[i + 12] != "") {
-					try {
-						var b = lines[i + 12].Split(',');
-						defaultSound = int.Parse(b[0]);
-						isDefaultSoundId = bool.Parse(b[1]);
-					} catch (Exception e) {
-						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-					}
-				}
-				/*
-				bool isAnd = true;
-				if (lines[i + 16] != "") {
-					try {
-						isAnd = lines[i + 16] == "true";
-					} catch (Exception e) {
-						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-					}
-				}
-				*/
-				bool isMustCom = true, isMustUser = true, isMustKeyword = true;
-				if (itemLineNum != 29 && lines[i + 14] != "") {
-					try {
-						var isMustArr = lines[i + 14].Split(',');
-						isMustCom = bool.Parse(isMustArr[0]);
-						isMustUser = bool.Parse(isMustArr[1]);
-						isMustKeyword = bool.Parse(isMustArr[2]);
-					} catch (Exception e) {
-						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-					}
-				}
-				List<CustomKeywordInfo> cki = null;
-				bool isCustomKeyword = false;
-				if (itemLineNum != 29 && lines[i + 6] != "") {
-					try {
-						cki = Newtonsoft.Json.JsonConvert.DeserializeObject< List<CustomKeywordInfo>>(lines[i + 6].Substring(1));
-						isCustomKeyword = lines[i + 6][0] == '1';
-					} catch (Exception e) {
-						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-						cki = null;
-						isCustomKeyword = false;
-					}
-				}
-				if (isUpdateComHost) {
-					/*
-					if (lines[i + 1] != null && lines[i + 1] != "") {
-						var comName = util.getCommunityName(lines[i + 1], out isFollow, form.check.container);
-						if (comName != null)
-							comFollow = (isFollow) ? "フォロー解除する" : "フォローする";
-						else lines[i + 1] = "";
-					} else lines[i + 4] = "";
-					*/
-					/*
-					if (lines[i + 2] != null && lines[i + 2] != "") {
-						var userName = util.getUserName(lines[i + 2], out isFollow, form.check.container);
-						if (userName != null)
-							userFollow = (isFollow) ? "フォロー解除する" : "フォローする";
-						else lines[i + 2] = "";
-					} else lines[i + 5] = "";
-					*/
-				}
-				//if (lines[i + 1] == "" && lines[i + 2] == "" && lines[i + 3] == "") continue;
-				AlartInfo ai;
-				var comName = string.IsNullOrEmpty(lines[i + 4]) ? lines[i + 4] : WebUtility.HtmlDecode(lines[i + 4]);
-				if (itemLineNum == 29) {
-		            ai = new AlartInfo(lines[i + 1], 
-							lines[i + 2], comName, lines[i + 5], 
-							lines[i + 7], lines[i + 15], 
-							lines[i + 17] == "true",
-							lines[i + 18] == "true",
-							lines[i + 19] == "true", 
-							lines[i + 20] == "true",
-							lines[i + 21] == "true",
-							lines[i + 24] == "true", 
-							lines[i + 25] == "true", 
-							lines[i + 26] == "true",
-							false,
-							false, 
-							false,
-							false,
-							false,
-							false,
-							false,
-							lines[i + 28],
-							comFollow, userFollow, lines[i + 13], 
-							lines[i + 3], textColor, 
-							backColor, defaultSound, isDefaultSoundId, 
-							false, false, false, null, false);
-					if (lines[i + 23] == "true") setNamarokuRead(ai, namarokuRecRead);
-				} else {
-					ai = new AlartInfo(lines[i + 1], 
-							lines[i + 2], comName, lines[i + 5], 
-							lines[i + 7], lines[i + 15], 
-							lines[i + 17] == "true",
-							lines[i + 18] == "true",
-							lines[i + 19] == "true", 
-							lines[i + 20] == "true",
-							lines[i + 21] == "true",
-							lines[i + 24] == "true", 
-							lines[i + 25] == "true", 
-							lines[i + 26] == "true",
-							lines[i + 27] == "true", 
-							lines[i + 28] == "true", 
-							lines[i + 29] == "true",
-							lines[i + 30] == "true",
-							lines[i + 31] == "true",
-							lines[i + 32] == "true",
-							lines[i + 33] == "true",
-							lines[i + 34],
-							comFollow, userFollow, lines[i + 13], 
-							lines[i + 3], textColor,
-							backColor, defaultSound, isDefaultSoundId,
-							isMustCom, isMustUser, isMustKeyword, cki,
-							isCustomKeyword);
-				}
-				//if ((ai.communityId == null || ai.communityId == "") &&
-				//    (ai.hostId == null || ai.hostId == "")) continue;
-				if (isUserMode && string.IsNullOrEmpty(ai.hostId)) continue;
-				if (isUserMode) ai.communityId = ai.communityName = "";
-				readAiList.Add(ai);
+				foreach (var ai in addList)
+					form.alartListAdd(ai, isUserMode);
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				form.addLogText("読み込んだリストを追加中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
-			for (var j = 0; j < 100; j++) {
-	       		if (!form.IsDisposed && form.IsHandleCreated) break;
-	       		Thread.Sleep(1000);
-			}
-			var dupliNumList = (isDuplicateCheck) ? getDuplicateNum(readAiList, form) : null;
-			if (isDuplicateCheck && dupliNumList.Count > 0) {
-				form.showMessageBox(dupliNumList.Count.ToString() + "件の重複が見つかりました");
-			}
-			
-			var addList = new List<AlartInfo>();
-			var isContinueCancel = 0;
-			var isContinueYes = 0;
-			var isContinueNo = 0;
-			var allMode = -1;//-1-none 0-cancel 1-yes 2-no
-			for (var i = 0; i < readAiList.Count; i++) {
-				var ai = readAiList[i];
-				if (isDuplicateCheck) {
-					var dialogRet = isDuplicateOk(ai, dupliNumList, i, form, allMode); 
-					if (dialogRet == DialogResult.Cancel) {
-						isContinueCancel++;
-						isContinueYes = isContinueNo = 0;
-						if (isContinueCancel % 5 == 0 && allMode < 1) {
-							var res = form.showMessageBox("全てキャンセルしますか？", "", MessageBoxButtons.YesNo);
-							if (res == DialogResult.Yes) break;
-						}
-						continue;//break;
-					} else if (dialogRet == DialogResult.Yes) {
-						isContinueYes++;
-						isContinueCancel = isContinueNo = 0;
-						if (isContinueYes % 5 == 0 && allMode < 1) {
-							var res = form.showMessageBox("全て「はい」を選択しますか？", "", MessageBoxButtons.YesNo);
-							if (res == DialogResult.Yes) allMode = 1;
-						}
-					} else if (dialogRet == DialogResult.No) {
-						isContinueNo++;
-						isContinueCancel = isContinueYes = 0;
-						if (isContinueNo % 5 == 0 && allMode < 1) {
-							var res = form.showMessageBox("全て「いいえ」を選択しますか？", "", MessageBoxButtons.YesNo);
-							if (res == DialogResult.Yes) allMode = 2;
-						}
-					} 
-				}
-				addList.Add(ai);
-				//form.alartListAdd(ai);
-			}
-			foreach (var ai in addList)
-				form.alartListAdd(ai, isUserMode);
-			
 			if (form.check.container != null) 
 				new FollowChecker(form, form.check.container).check();
-			
+				
 			form.recentLiveCheck();
 		}
 		private List<int> getDuplicateNum(List<AlartInfo> readAiList, MainForm form) {

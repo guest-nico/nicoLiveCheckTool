@@ -178,6 +178,7 @@ namespace namaichi
 				
 				{"thresholdpage",thresholdpageList.Value.ToString()},
 				{"brodouble",brodoubleList.SelectedIndex.ToString()},
+				{"alartAddLive",alartAddLiveBox.SelectedIndex.ToString()},
 				{"liveListUpdateMinutes",liveListUpdateMinutesList.Value.ToString()},
 				{"liveListCacheIcon",liveListCacheIconChkBox.Checked.ToString().ToLower()},
 				
@@ -363,6 +364,8 @@ namespace namaichi
 			
 			thresholdpageList.Value = int.Parse(cfg.get("thresholdpage"));
 			brodoubleList.SelectedIndex = int.Parse(cfg.get("brodouble"));
+			alartAddLiveBox.SelectedIndex = int.Parse(cfg.get("alartAddLive"));
+			
 			liveListUpdateMinutesList.Value = decimal.Parse(cfg.get("liveListUpdateMinutes"));
 			liveListCacheIconChkBox.Checked = bool.Parse(cfg.get("liveListCacheIcon"));
 			

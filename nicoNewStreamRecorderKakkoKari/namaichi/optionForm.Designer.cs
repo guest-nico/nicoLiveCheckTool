@@ -139,8 +139,10 @@ namespace namaichi
 			this.isRecentCheckRadioBtn = new System.Windows.Forms.CheckBox();
 			this.isStartTimeAllCheckChkBox = new System.Windows.Forms.CheckBox();
 			this.groupBox11 = new System.Windows.Forms.GroupBox();
+			this.alartAddLiveBox = new System.Windows.Forms.ComboBox();
 			this.liveListCacheIconChkBox = new System.Windows.Forms.CheckBox();
 			this.liveListUpdateMinutesList = new System.Windows.Forms.NumericUpDown();
+			this.label63 = new System.Windows.Forms.Label();
 			this.label51 = new System.Windows.Forms.Label();
 			this.label50 = new System.Windows.Forms.Label();
 			this.brodoubleList = new System.Windows.Forms.ComboBox();
@@ -1273,8 +1275,10 @@ namespace namaichi
 			// 
 			// groupBox11
 			// 
+			this.groupBox11.Controls.Add(this.alartAddLiveBox);
 			this.groupBox11.Controls.Add(this.liveListCacheIconChkBox);
 			this.groupBox11.Controls.Add(this.liveListUpdateMinutesList);
+			this.groupBox11.Controls.Add(this.label63);
 			this.groupBox11.Controls.Add(this.label51);
 			this.groupBox11.Controls.Add(this.label50);
 			this.groupBox11.Controls.Add(this.brodoubleList);
@@ -1283,14 +1287,27 @@ namespace namaichi
 			this.groupBox11.Controls.Add(this.label48);
 			this.groupBox11.Location = new System.Drawing.Point(5, 333);
 			this.groupBox11.Name = "groupBox11";
-			this.groupBox11.Size = new System.Drawing.Size(420, 129);
+			this.groupBox11.Size = new System.Drawing.Size(420, 143);
 			this.groupBox11.TabIndex = 1;
 			this.groupBox11.TabStop = false;
 			this.groupBox11.Text = "放送中タブの設定";
 			// 
+			// alartAddLiveBox
+			// 
+			this.alartAddLiveBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.alartAddLiveBox.FormattingEnabled = true;
+			this.alartAddLiveBox.Items.AddRange(new object[] {
+									"追加しない",
+									"追加する",
+									"お気に入りの放送のみを追加する"});
+			this.alartAddLiveBox.Location = new System.Drawing.Point(175, 92);
+			this.alartAddLiveBox.Name = "alartAddLiveBox";
+			this.alartAddLiveBox.Size = new System.Drawing.Size(194, 20);
+			this.alartAddLiveBox.TabIndex = 13;
+			// 
 			// liveListCacheIconChkBox
 			// 
-			this.liveListCacheIconChkBox.Location = new System.Drawing.Point(19, 94);
+			this.liveListCacheIconChkBox.Location = new System.Drawing.Point(19, 116);
 			this.liveListCacheIconChkBox.Name = "liveListCacheIconChkBox";
 			this.liveListCacheIconChkBox.Size = new System.Drawing.Size(350, 19);
 			this.liveListCacheIconChkBox.TabIndex = 11;
@@ -1318,6 +1335,15 @@ namespace namaichi
 									0,
 									0,
 									0});
+			// 
+			// label63
+			// 
+			this.label63.Location = new System.Drawing.Point(6, 93);
+			this.label63.Name = "label63";
+			this.label63.Size = new System.Drawing.Size(166, 18);
+			this.label63.TabIndex = 12;
+			this.label63.Text = "アラートで取得した放送の追加：";
+			this.label63.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label51
 			// 
@@ -2442,7 +2468,7 @@ namespace namaichi
 			this.groupBox7.Controls.Add(this.rssUpdateIntervalList);
 			this.groupBox7.Location = new System.Drawing.Point(5, 200);
 			this.groupBox7.Name = "groupBox7";
-			this.groupBox7.Size = new System.Drawing.Size(420, 80);
+			this.groupBox7.Size = new System.Drawing.Size(420, 53);
 			this.groupBox7.TabIndex = 5;
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "更新頻度";
@@ -2454,6 +2480,7 @@ namespace namaichi
 			this.label12.Size = new System.Drawing.Size(30, 14);
 			this.label12.TabIndex = 15;
 			this.label12.Text = "分";
+			this.label12.Visible = false;
 			// 
 			// label13
 			// 
@@ -2463,6 +2490,7 @@ namespace namaichi
 			this.label13.TabIndex = 13;
 			this.label13.Text = "ユーザー名の更新間隔：";
 			this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label13.Visible = false;
 			// 
 			// userNameUpdateIntervalList
 			// 
@@ -2485,6 +2513,7 @@ namespace namaichi
 									0,
 									0,
 									0});
+			this.userNameUpdateIntervalList.Visible = false;
 			// 
 			// label7
 			// 
@@ -2755,6 +2784,8 @@ namespace namaichi
 			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.Label label63;
+		private System.Windows.Forms.ComboBox alartAddLiveBox;
 		private System.Windows.Forms.CheckBox isTimeTableChkBox;
 		private System.Windows.Forms.CheckBox IsConfirmFollowChkBox;
 		private System.Windows.Forms.CheckBox isLogFileChkBox;

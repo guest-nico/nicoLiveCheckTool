@@ -121,6 +121,8 @@ namespace namaichi
 			System.Diagnostics.Debug.Listeners.Clear();
 			System.Diagnostics.Debug.Listeners.Add(new Logger.TraceListener());
 		    
+			
+			
 			InitializeComponent();
 			Text = "放送チェックツール（仮 " + util.versionStr;
 			
@@ -236,6 +238,7 @@ namespace namaichi
 					Color.Empty : ColorTranslator.FromHtml(config.get("recentColor"));
 			followerOnlyColor = bool.Parse(config.get("IsFollowerOnlyOtherColor")) ?
 				ColorTranslator.FromHtml(config.get("followerOnlyColor")) : Color.Empty;
+			
 			
 		}
 		 
@@ -568,7 +571,6 @@ namespace namaichi
 		void xpTest() {
 			try {
 				_xpText();
-				//Task.Factory.StartNew(() => {});
 			} catch (Exception e) {
 				addLogText("正常に非同期処理が行えませんでした。Microsoft .NET Framework 4 KB2468871 https://www.microsoft.com/en-us/download/details.aspx?id=3556を導入してみると動作するかもしれません。");
 				MessageBox.Show("正常に非同期処理が行えませんでした。Microsoft .NET Framework 4 KB2468871 https://www.microsoft.com/en-us/download/details.aspx?id=3556を導入してみると動作するかもしれません。");
@@ -578,6 +580,7 @@ namespace namaichi
 		async Task _xpText() {
 			await Task.Factory.StartNew(() => {});
 		}
+		
 		void versionMenu_Click(object sender, EventArgs e)
 		{
 			var v = new VersionForm(config);
@@ -712,6 +715,7 @@ namespace namaichi
 					if (i > -1)
 						userAlartListDataSource.ResetItem(i);
 					changedListContent();
+					setNotifyIcon();
    		       	} catch (Exception e) {
    		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
    		       		//debug
@@ -2348,11 +2352,28 @@ namespace namaichi
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
 		}
-		public void recentLiveCheck() {
-			recentLiveCheckCore(false);
-			recentLiveCheckCore(true);
+		private void setNotifyIcon() {
+			//changeIcon(recentNum);
+			if (bool.Parse(config.get("IschangeIcon"))) {
+		    	//(bool.Parse(config.get("IscheckOnAir")) ? 0 : 1) != -1)
+		    	var c = 0;
+				foreach (var ai in alartListDataSource)
+					if (ai.recentColorMode != 0) c++;
+				changeIcon(c);
+			} else if (notifyIcon.Icon != defaultNotifyIcon) {
+				notifyIcon.Icon = defaultNotifyIcon;
+			}
+			
+			
 		}
-		public void recentLiveCheckCore(bool isUserMode) {
+		public void recentLiveCheck() {
+			
+			var recentNum = recentLiveCheckCore(true);
+			recentNum += recentLiveCheckCore(false);
+			
+			
+		}
+		public int recentLiveCheckCore(bool isUserMode) {
 			//var isCheck30min = bool.Parse(config.get("Ischeck30min"));
 			//-1-no check 0-onair 1-30min
 			var checkMode = bool.Parse(config.get("IscheckOnAir")) ? 0 : 1;
@@ -2391,13 +2412,8 @@ namespace namaichi
 						
 					}
 					//var ii = notifyIcon.Icon == Icon;
-					if (bool.Parse(config.get("IschangeIcon")) &&
-					    	checkMode != -1)
-						changeIcon(recentNum);
-					else if (notifyIcon.Icon != defaultNotifyIcon) 
-						notifyIcon.Icon = defaultNotifyIcon;
+					return recentNum;
 					
-					return;
 					
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
@@ -2662,28 +2678,34 @@ namespace namaichi
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
-		public void addLiveListItem(LiveInfo li, char cateChar, bool blindOnlyA, bool blindOnlyB, bool blindQuestion, bool isFavoriteOnly) {
+		public void addLiveListItem(List<LiveInfo> liList, char cateChar, bool blindOnlyA, bool blindOnlyB, bool blindQuestion, bool isFavoriteOnly) {
 			//var isDisp = (cateChar == '全' || li.MainCategory[0] == cateChar);
-			var isDisp = li.isDisplay(cateChar);
-			var isMemberOnly = !string.IsNullOrEmpty(li.memberOnly); 
-	        if (blindOnlyA && isMemberOnly &&
-			   		!string.IsNullOrEmpty(li.favorite))
-	        	isDisp = false;
-	        if (blindOnlyB && isMemberOnly)
-	        	isDisp = false;
-	        if (blindQuestion && cateChar != '全' &&
-	            	string.IsNullOrEmpty(li.lvId))
-	        	isDisp = false;
-	        if (isFavoriteOnly && li.favorite == "")
-	        	isDisp = false;
-			
-	        if (isDisp)	formAction(() => {
-				var scrollI = liveList.FirstDisplayedScrollingRowIndex;
-				liveListDataSource.Add(li);
-				if (scrollI != -1)
-					liveList.FirstDisplayedScrollingRowIndex = scrollI;
+			formAction(() => {
+				foreach (var li in liList) {
+					var isDisp = li.isDisplay(cateChar);
+					var isMemberOnly = !string.IsNullOrEmpty(li.memberOnly); 
+			        if (blindOnlyA && isMemberOnly &&
+					   		!string.IsNullOrEmpty(li.favorite))
+			        	isDisp = false;
+			        if (blindOnlyB && isMemberOnly)
+			        	isDisp = false;
+			        if (blindQuestion && cateChar != '全' &&
+			            	string.IsNullOrEmpty(li.lvId))
+			        	isDisp = false;
+			        if (isFavoriteOnly && li.favorite == "")
+			        	isDisp = false;
+					
+			        if (isDisp)	{
+			        	
+						var scrollI = liveList.FirstDisplayedScrollingRowIndex;
+						liveListDataSource.Add(li);
+						
+						if (scrollI != -1)
+							liveList.FirstDisplayedScrollingRowIndex = scrollI;
+						
+			        } else liveListDataReserve.Add(li);
+				}
 			});
-			else liveListDataReserve.Add(li);
 			
 			if (!isLiveListTimeProcessing) {
 			//lock(liveListLock) {

@@ -180,7 +180,7 @@ namespace namaichi.alart
 						if (isNosetComId && isNosetHostName && isNosetKeyword) continue;
 						
 						var isComOk = alartItem.communityId == item.comId || (alartItem.communityId == "official" && item.type == "official");
-						var isUserOk = alartItem.hostName == item.hostName;
+						var isUserOk = alartItem.hostName == item.hostName || alartItem.hostId == item.userId;
 						var isKeywordOk = item.isMatchKeyword(alartItem);
 						
 						if ((string.IsNullOrEmpty(alartItem.communityId) !=
@@ -252,6 +252,7 @@ namespace namaichi.alart
 						isChanged = true;
 						//targetAi = alartItem;
 						targetAi.Add(alartItem);
+						item.isAlarted = true;
 					}
 					break;
 				} catch (Exception e) {
@@ -677,7 +678,9 @@ namespace namaichi.alart
 			if (items.Count > 0 && form.config.get("IsbroadLog") == "true")
 				Task.Factory.StartNew(() => writeBroadLog(items));
 			
-			addLiveList(items);
+			var addLiveMode = form.config.get("alartAddLive");
+			if (addLiveMode != "0")
+				addLiveList(items);
 		}
 		public void resetCheck() {
 			if (pr != null) {
@@ -737,6 +740,7 @@ namespace namaichi.alart
 			var lastSaveListTime = DateTime.Now;
 			var lastCheckHistoryLiveTime = DateTime.Now;
 			while (true) {
+				/*
 				var ut = userNameUpdateInterval;
 				if (ut < 15) ut = 15;
 				if (DateTime.Now - lastUserNameCheckTime > TimeSpan.FromSeconds(ut * 60)) {
@@ -751,7 +755,7 @@ namespace namaichi.alart
 					//Task.Factory.StartNew(() => new FollowChecker(form, this).check());
 					
 				}
-				
+				*/
 				var intervalSec = bool.Parse(form.config.get("IscheckOnAir")) ? 180 : 60;
 				if (bool.Parse(form.config.get("IscheckRecent")) && 
 				 	   DateTime.Now - lastCheckLastRecentLiveTime > TimeSpan.FromSeconds(intervalSec)) {
@@ -882,7 +886,11 @@ namespace namaichi.alart
 			}
 		}
 		private void _addLiveList(List<RssItem> items, bool isBlindA, bool isBlindB, bool isBlindQuestion, bool isFavoriteOnly, char cateChar) {
+			var alartAddLive = form.config.get("alartAddLive");
+			var addItems = new List<LiveInfo>();
 			foreach (var item in items) {
+				if (alartAddLive == "2" && !item.isAlarted) continue;
+				
 				var li = new LiveInfo(item, form.alartListDataSource, form.config, form.userAlartListDataSource);
 				//li.category = item.category;
 				//li.type = item.type;
@@ -904,11 +912,14 @@ namespace namaichi.alart
 				foreach (var l in form.liveListDataReserve)
 					if (!string.IsNullOrEmpty(l.comId) && l.comId.StartsWith("co") && l.comId == item.comId)
 						sameCommunityLive.Add(l);
-				
-				form.addLiveListItem(li, cateChar, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly);
 				foreach (var l in sameCommunityLive)
 					form.removeLiveListItem(l);
+				
+				addItems.Add(li);
 			}
+			
+			form.addLiveListItem(addItems, cateChar, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly);
+			
 			if (bool.Parse(form.config.get("AutoSort")))
 				form.sortLiveList();
 			if (bool.Parse(form.config.get("FavoriteUp")))

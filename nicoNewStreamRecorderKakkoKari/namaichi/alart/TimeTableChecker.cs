@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Net;
+using System.Xml.Linq;
 using Newtonsoft.Json;
 
 using namaichi.info;
@@ -82,9 +83,10 @@ namespace namaichi.alart
 		}
 		private void setLiveList() {
 			try {
+				var openTimeList = getCasOpenTimeList();
 				var url = "https://live.nicovideo.jp/api/getZeroTimeline?date=";//2019-09-15";
-				addLiveListDay(url + DateTime.Now.ToString("yyyy-MM-dd"));
-				addLiveListDay(url + DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"));
+				addLiveListDay(url + DateTime.Now.ToString("yyyy-MM-dd"), openTimeList);
+				addLiveListDay(url + DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"), openTimeList);
 				timeTableList.Sort((RssItem x,RssItem y) => string.Compare(x.pubDate, y.pubDate));
 				
 				if (!isAllCheck) {
@@ -98,11 +100,11 @@ namespace namaichi.alart
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
-		private void addLiveListDay(string url) {
+		private void addLiveListDay(string url, List<TanzakuItem> openTimeList) {
 			try {
 				var res = util.getPageSource(url);
 				if (res == null) return;
-				string ceCommingSoonRes = null;
+				
 				var list = JsonConvert.DeserializeObject<timelineTop>(res);
 				foreach (var l in list.timeline.stream_list) {
 					if (l.provider_type != "official") continue;
@@ -110,17 +112,54 @@ namespace namaichi.alart
 					l.startTime = DateTime.Parse(l.start_date + " " + l.start_time);
 					if ((l.status == "onair" || l.startTime > DateTime.Now.AddHours(-2))) {
 						 var listRi = timeTableList.Find(n => n.lvId == "lv" + l.id);
-					//if (((isAllCheck && l.status == "onair") || l.startTime > DateTime.Now.AddHours(-2)) && liveList.Find(n => n.lvId == l.id) == null) {
+						//if (((isAllCheck && l.status == "onair") || l.startTime > DateTime.Now.AddHours(-2)) && liveList.Find(n => n.lvId == l.id) == null) {
 						
-						var hig = new HosoInfoGetter();
-						for (var i = 0; i < 10; i++) {
-							#if DEBUG
-								if (i > 0) check.form.addLogText("timetable higget false " + l.id + " " + i);
-							#endif
-							var r = hig.get("https://live.nicovideo.jp/watch/lv" + l.id, check.container);
-							if (r) break;
-							Thread.Sleep(2000);
+						RssItem ri = null;
+						var opentimeItem = openTimeList.Find(x => x.id == "lv" + l.id);
+						if (opentimeItem != null) {
+							
+							ri = new RssItem(l.title, "lv" + l.id, opentimeItem.showTime.beginAt.ToString(),
+									opentimeItem.description, 
+									opentimeItem.contentOwner.name, 
+									opentimeItem.socialGroupId,
+									"", 
+									opentimeItem.thumbnailUrl, opentimeItem.isMemberOnly.ToString(), "");
+							ri.type = "official";
+							ri.tags = new string[]{""};
+							ri.pubDateDt = opentimeItem.onAirTime.beginAt;
+							//if (!string.IsNullOrEmpty(hig.userName)) ri.hostName = hig.userName;
+							//if (hig.openDt != hig.dt) util.debugWriteLine("hig open start tigau " + hig.openDt + " " + hig.dt);
+							//else util.debugWriteLine("hig open start onaji " + hig.openDt + " " + hig.dt);
+							
+							
+						} else {
+							
+							var hig = new HosoInfoGetter();
+							for (var i = 0; i < 2; i++) {
+								#if DEBUG
+									if (i > 0) check.form.addLogText("timetable higget false " + l.id + " " + i);
+								#endif
+								var r = hig.get("https://live.nicovideo.jp/watch/lv" + l.id, check.container);
+								if (r) break;
+								Thread.Sleep(2000);
+							}
+							var _isFollow = false; 
+							ri = new RssItem(l.title, "lv" + l.id, hig.dt.ToString(),
+									hig.description, 
+									util.getCommunityName(hig.communityId, out _isFollow, null), 
+									hig.communityId,
+									"", 
+									hig.thumbnail, "false", "");
+							ri.type = hig.type;
+							ri.tags = hig.tags;
+							ri.pubDateDt = hig.openDt;
+							if (!string.IsNullOrEmpty(hig.userName)) ri.hostName = hig.userName;
+							if (hig.openDt != hig.dt) util.debugWriteLine("hig open start tigau " + hig.openDt + " " + hig.dt + " " + ri.lvId);
+							else util.debugWriteLine("hig open start onaji " + hig.openDt + " " + hig.dt + " " + ri.lvId);
+						
 						}
+						
+						/*
 						if (hig.openDt == DateTime.MinValue) {
 							if (ceCommingSoonRes == null) {
 								ceCommingSoonRes = util.getPageSource("http://api.ce.nicovideo.jp/liveapi/v1/video.comingsoon?__format=xml&from=0&limit=148&pt=official");
@@ -134,21 +173,9 @@ namespace namaichi.alart
 								hig.openDt = l.startTime;
 							else hig.openDt = openDt;
 						}
+						*/
 						
 						
-						var _isFollow = false; 
-						var ri = new RssItem(l.title, "lv" + l.id, hig.dt.ToString(),
-								hig.description, 
-								util.getCommunityName(hig.communityId, out _isFollow, null), 
-								hig.communityId,
-								"", 
-								hig.thumbnail, "false", "");
-						ri.type = hig.type;
-						ri.tags = hig.tags;
-						ri.pubDateDt = hig.openDt;
-						if (!string.IsNullOrEmpty(hig.userName)) ri.hostName = hig.userName;
-						if (hig.openDt != hig.dt) util.debugWriteLine("hig open start tigau " + hig.openDt + " " + hig.dt);
-						else util.debugWriteLine("hig open start onaji " + hig.openDt + " " + hig.dt);
 						if (listRi == null) timeTableList.Add(ri);
 						else {
 							#if DEBUG
@@ -206,7 +233,63 @@ namespace namaichi.alart
 		public void stop() {
 			isRetry = false;
 		}
+		private List<TanzakuItem> getCasOpenTimeList() {
+			var ret = new List<TanzakuItem>();
+			var endTime = DateTime.Parse(DateTime.Now.AddDays(2).ToShortDateString());
+			try {
+				for (var i = 10; i < 200; i += 10) {
+					var url = "https://api.cas.nicovideo.jp/v2/tanzakus/topic/live/content-groups/reserved/items?cursor=" + i + "/cursorEnd/" + (i - 10) + "";
+					var res = util.getPageSource(url);
+					if (res == null) break;
+					
+					var tanzakuObj = Newtonsoft.Json.JsonConvert.DeserializeObject<TanzakuOnAir>(res);
+					if (tanzakuObj.meta.status != "200") break;
+					
+					var isEnd = false;
+					foreach (var o in tanzakuObj.data.items) {
+						util.debugWriteLine("getCasOpentime " + o.showTime.beginAt);
+						if (o.showTime.beginAt > endTime || !o.isChannelRelatedOfficial) {
+							isEnd = true;
+							break;
+						} else ret.Add(o); 
+					}
+					if (tanzakuObj.data.cursor.IndexOf("cursorEnd/cursorEnd") > -1) isEnd = true;
+					if (isEnd) break;
+				}
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+			util.debugWriteLine("getCasOpenTime onair " + ret.Count);
+			try {
+				for (var i = 10; i < 200; i += 10) {
+					var url = "https://api.cas.nicovideo.jp/v2/tanzakus/topic/live/content-groups/onair/items?cursor=" + i + "/cursorEnd/" + (i - 10) + "";
+					var res = util.getPageSource(url);
+					if (res == null) break;
+					
+					var tanzakuObj = Newtonsoft.Json.JsonConvert.DeserializeObject<TanzakuOnAir>(res);
+					if (tanzakuObj.meta.status != "200") break;
+					
+					var isEnd = false;
+					foreach (var o in tanzakuObj.data.items) {
+						util.debugWriteLine("getCasOpentime " + o.showTime.beginAt);
+						if (!o.isChannelRelatedOfficial) {
+							isEnd = true;
+							break;
+						} else 
+							ret.Add(o);
+					}
+					if (tanzakuObj.data.cursor.IndexOf("cursorEnd/cursorEnd") > -1) isEnd = true;
+					if (isEnd) break;
+				}
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+			
+			util.debugWriteLine("load cas opentimelist item " + ret.Count);
+			return ret;
+		}
 	}
+	
 	class timelineTop {
 		public timelineSemi timeline;
 	}

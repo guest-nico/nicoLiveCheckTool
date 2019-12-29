@@ -81,8 +81,10 @@ namespace namaichi.info
 						if (!string.IsNullOrEmpty(ai.communityId)) {
 							if (ai.communityId == hi.communityId || 
 							    	(ai.communityId == "official" && ri.type == "official")) {
-								if (hi.favorite != "") hi.favorite += ",";
-								hi.favorite += "ｺﾐｭﾆﾃｨID";
+								if (hi.favorite.IndexOf("ｺﾐｭﾆﾃｨID") == -1) {
+									if (hi.favorite != "") hi.favorite += ",";
+									hi.favorite += "ｺﾐｭﾆﾃｨID";
+								}
 	//							if (memo != "") memo += ",";
 	//							memo += ai.memo;
 								hi.textColor = ai.textColor;
@@ -92,8 +94,10 @@ namespace namaichi.info
 						}
 						if (!string.IsNullOrEmpty(ai.hostId)) {
 							if (ai.hostName == hi.userName) {
-								if (hi.favorite != "") hi.favorite += ",";
-								hi.favorite += "ﾕｰｻﾞｰ名?";
+								if (hi.favorite.IndexOf("ﾕｰｻﾞｰ名?") == -1) {
+									if (hi.favorite != "") hi.favorite += ",";
+									hi.favorite += "ﾕｰｻﾞｰ名?";
+								}
 	//							if (memo != "") memo += ",";
 	//							memo += ai.memo;
 								hi.textColor = ai.textColor;
@@ -102,8 +106,10 @@ namespace namaichi.info
 						}
 						
 						if (!string.IsNullOrEmpty(ai.Keyword) && ri.isMatchKeyword(ai)) {
-							if (hi.favorite != "") hi.favorite += ",";
-							hi.favorite += "ｷｰﾜｰﾄ:" + ai.Keyword;
+							if (hi.favorite.IndexOf("ｷｰﾜｰﾄ:") == -1) {
+								if (hi.favorite != "") hi.favorite += ",";
+								hi.favorite += "ｷｰﾜｰﾄ:" + ai.Keyword;
+							}
 //							if (memo != "") memo += ",";
 //							memo += ai.memo;
 							hi.textColor = ai.textColor;

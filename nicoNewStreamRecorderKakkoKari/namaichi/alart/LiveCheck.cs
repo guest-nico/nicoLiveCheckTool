@@ -108,8 +108,8 @@ namespace namaichi.alart
 				if (isContain) 
 					continue;
 
-				
-				form.addLiveListItem(i, cateChar, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly);
+				var _i = new List<LiveInfo>(){i};
+				form.addLiveListItem(_i, cateChar, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly);
 			}
 			
 			var ccc = form.liveListDataSource.Count + form.liveListDataReserve.Count;
@@ -212,9 +212,8 @@ namespace namaichi.alart
 				util.debugWriteLine(url);
 				
 				for (var i = 0; i < readNum; i++) {
-					util.debugWriteLine("rss page i " + i);
+					util.debugWriteLine("livecheck category page i " + i + " " + name);
 					try {
-						
 						var res = util.getPageSource(url.Replace("#", i.ToString()), null);
 						if (res == null) {
 							Thread.Sleep(10000);
@@ -228,6 +227,7 @@ namespace namaichi.alart
 							try {
 								var item = d.getRssItem(name);
 								if (item == null) continue;
+								if (buf.Find(x => x.lvId == item.lvId) != null)	continue;
 							
 								var li = new LiveInfo(item, form.alartListDataSource, form.config, form.userAlartListDataSource);
 								buf.Add(li);

@@ -37,39 +37,52 @@ namespace namaichi.alart
 			updateAlartList(followList);
 		}
 		public List<string[]> getFollowList(bool[] types = null) {
-			var ret = new List<string[]>();
-			var urls = new string[] {
-				"https://www.nicovideo.jp/my/fav/user",
-				"https://www.nicovideo.jp/my/channel",
-				"https://www.nicovideo.jp/my/community"
-			};
-			for (var i = 0; i < urls.Length; i++) {
-				if (types != null && !types[i]) continue;
-				
-				var l = checkFollowPage(urls[i]);
-				//if (l == null) continue;
-				ret.AddRange(l);
+			try {
+				var ret = new List<string[]>();
+				var urls = new string[] {
+					"https://www.nicovideo.jp/my/fav/user",
+					"https://www.nicovideo.jp/my/channel",
+					"https://www.nicovideo.jp/my/community"
+				};
+				for (var i = 0; i < urls.Length; i++) {
+					if (types != null && !types[i]) continue;
+					
+					var l = checkFollowPage(urls[i]);
+					if (l == null) continue;
+					//if (l == null) continue;
+					ret.AddRange(l);
+				}
+				return ret;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				form.addLogText("フォローリストの作成中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return null;
 			}
-			return ret;
 		}
 		private List<string[]> checkFollowPage(string url) {
-			var ret = new List<string[]>();
-			var idType = (url.IndexOf("user") > -1) ? "" : ((url.IndexOf("community") > -1) ? "co" : "ch");
-			for (var i = 1; i < 50; i++) {
-				var res = "";
-				for (var j = 0; j < 10; j++) {
-					res = util.getPageSource(url + ((i == 1) ? "" : ("?page=" + i)), container);
-					if (res != null) break;
-					Thread.Sleep(3000);
+			try {
+				var ret = new List<string[]>();
+				var idType = (url.IndexOf("user") > -1) ? "" : ((url.IndexOf("community") > -1) ? "co" : "ch");
+				for (var i = 1; i < 50; i++) {
+					var res = "";
+					for (var j = 0; j < 10; j++) {
+						res = util.getPageSource(url + ((i == 1) ? "" : ("?page=" + i)), container);
+						if (res != null) break;
+						Thread.Sleep(3000);
+					}
+					if (res == null) break;
+					var mm = myPageFollowRegex.Matches(res);
+					foreach (Match m in mm) {
+						ret.Add(new string[]{idType + m.Groups[1].Value, WebUtility.HtmlDecode(m.Groups[2].Value)});
+					}
+					if (res.IndexOf(">次へ</a></div>") == -1) break;
 				}
-				if (res == null) break;
-				var mm = myPageFollowRegex.Matches(res);
-				foreach (Match m in mm) {
-					ret.Add(new string[]{idType + m.Groups[1].Value, WebUtility.HtmlDecode(m.Groups[2].Value)});
-				}
-				if (res.IndexOf(">次へ</a></div>") == -1) break;
+				return ret;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				form.addLogText("フォローのチェック中に問題が発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return null;
 			}
-			return ret;
 		}
 		private void updateAlartList(List<string[]> followList) {
 			form.followUpdate(followList, false);

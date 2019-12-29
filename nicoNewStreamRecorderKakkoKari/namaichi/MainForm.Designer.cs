@@ -41,6 +41,36 @@ namespace namaichi
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+			
+			 
+			//icon
+			System.Drawing.Icon setIcon = (((System.Drawing.Icon)(resources.GetObject("$this.Icon"))));
+			try {
+				var ver = System.Environment.OSVersion.Version;
+				var vver = ver.Major + ver.Minor / 10.0;
+				if (ver.Major + ver.Minor / 10.0 < 6.1) {
+					
+					util.debugWriteLine("under 7");
+					
+					var bmp = setIcon.ToBitmap();
+					for (var y = 0; y < bmp.Size.Height; y++) {
+						for (var x = 0; x < bmp.Size.Width; x++) {
+							//util.debugWriteLine(x + " " + y + " " + bmp.GetPixel(x, y));
+							var p = bmp.GetPixel(x, y);
+							if (p.R == 195 && p.G == 195 && p.B == 195) 
+								p = System.Drawing.Color.Black;
+							bmp.SetPixel(x, y, p);
+						}
+					}
+					setIcon = System.Drawing.Icon.FromHandle(bmp.GetHicon());
+				}
+				//notifyIcon.Icon = Icon;//Icon.FromHandle(bmp.GetHicon());
+				//defaultNotifyIcon = Icon;
+			} catch (System.Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+			
+			
 			this.groupLabel = new System.Windows.Forms.Label();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -2667,11 +2697,13 @@ namespace namaichi
 			this.notifyIcon.BalloonTipText = "https://www.youtube.com/watch?v=kzEDjatOkM0";
 			this.notifyIcon.BalloonTipTitle = "title";
 			this.notifyIcon.ContextMenuStrip = this.notifyIconMenuStrip;
-			this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+			//this.notifyIcon.Icon = setIcon == null ? ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon"))) : setIcon;
+			this.notifyIcon.Icon = setIcon;
 			this.notifyIcon.Text = "ニコ生放送チェックツール（仮";
 			this.notifyIcon.Visible = true;
 			this.notifyIcon.BalloonTipClicked += new System.EventHandler(this.NotifyIconBalloonTipClicked);
 			this.notifyIcon.DoubleClick += new System.EventHandler(this.NotifyIconDoubleClick);
+			
 			// 
 			// notifyIconMenuStrip
 			// 
@@ -4788,7 +4820,8 @@ namespace namaichi
 			this.Controls.Add(this.TabPages);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.menuStrip1);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			//this.Icon = setIcon == null ? ((System.Drawing.Icon)(resources.GetObject("$this.Icon"))) : setIcon;
+			this.Icon = setIcon;
 			this.MainMenuStrip = this.menuStrip1;
 			this.Margin = new System.Windows.Forms.Padding(2);
 			this.Name = "MainForm";
@@ -4835,6 +4868,8 @@ namespace namaichi
 			this.logListMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
+			
+			
 		}
 		private System.Windows.Forms.ToolStripMenuItem updateCateSuperIchibaMenu;
 		private System.Windows.Forms.ToolStripMenuItem readNamarokuUserListMenu;
@@ -5321,6 +5356,7 @@ namespace namaichi
 		private System.Windows.Forms.ToolStripMenuItem fileMenuItem;
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.Label groupLabel;
-
+		
 	}
+	
 }

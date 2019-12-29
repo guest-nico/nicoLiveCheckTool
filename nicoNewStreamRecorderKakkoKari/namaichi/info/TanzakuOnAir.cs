@@ -27,12 +27,23 @@ namespace namaichi.info
 	}
 	public class TanzakuItem {
 		public string id;
-		//public string title;
+		public string title;
 		public string description;
-		public TanzakuShowTime showTime; 
+		public TanzakuShowTime showTime;
+		public TanzakuShowTime onAirTime;
+		public string thumbnailUrl;
+		public bool isMemberOnly;
+		public ContentOwner contentOwner;
+		public bool isChannelRelatedOfficial;
+		public string socialGroupId;
 	}
 	public class TanzakuShowTime {
 		public DateTime beginAt;
 		public DateTime endAt;
+	}
+	public class ContentOwner {
+		public string  type;
+		public string id;
+		public string name;
 	}
 }

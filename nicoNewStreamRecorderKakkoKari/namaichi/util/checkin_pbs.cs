@@ -6,1371 +6,1371 @@
 [global::ProtoBuf.ProtoContract()]
 public partial class CheckinRequest : global::ProtoBuf.IExtensible
 {
-    private global::ProtoBuf.IExtension __pbn__extensionData;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-    {
-        return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
-    }
-    public CheckinRequest()
-    {
-        macAddresses = new global::System.Collections.Generic.List<string>();
-        accountCookies = new global::System.Collections.Generic.List<string>();
-        otaCerts = new global::System.Collections.Generic.List<string>();
-        macAddressTypes = new global::System.Collections.Generic.List<string>();
-        OnConstructor();
-    }
-
-    partial void OnConstructor();
-
-    [global::ProtoBuf.ProtoMember(1, Name = @"imei")]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string Imei
-    {
-        get { return __pbn__Imei ?? ""; }
-        set { __pbn__Imei = value; }
-    }
-    public bool ShouldSerializeImei()
-    {
-        return __pbn__Imei != null;
-    }
-    public void ResetImei()
-    {
-        __pbn__Imei = null;
-    }
-    private string __pbn__Imei;
-
-    [global::ProtoBuf.ProtoMember(2)]
-    public long androidId
-    {
-        get { return __pbn__androidId.GetValueOrDefault(); }
-        set { __pbn__androidId = value; }
-    }
-    public bool ShouldSerializeandroidId()
-    {
-        return __pbn__androidId != null;
-    }
-    public void ResetandroidId()
-    {
-        __pbn__androidId = null;
-    }
-    private long? __pbn__androidId;
-
-    [global::ProtoBuf.ProtoMember(3, Name = @"digest")]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string Digest
-    {
-        get { return __pbn__Digest ?? ""; }
-        set { __pbn__Digest = value; }
-    }
-    public bool ShouldSerializeDigest()
-    {
-        return __pbn__Digest != null;
-    }
-    public void ResetDigest()
-    {
-        __pbn__Digest = null;
-    }
-    private string __pbn__Digest;
-
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true)]
-    public Checkin checkin { get; set; }
-
-    [global::ProtoBuf.ProtoMember(5)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string desiredBuild
-    {
-        get { return __pbn__desiredBuild ?? ""; }
-        set { __pbn__desiredBuild = value; }
-    }
-    public bool ShouldSerializedesiredBuild()
-    {
-        return __pbn__desiredBuild != null;
-    }
-    public void ResetdesiredBuild()
-    {
-        __pbn__desiredBuild = null;
-    }
-    private string __pbn__desiredBuild;
-
-    [global::ProtoBuf.ProtoMember(6, Name = @"locale")]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string Locale
-    {
-        get { return __pbn__Locale ?? ""; }
-        set { __pbn__Locale = value; }
-    }
-    public bool ShouldSerializeLocale()
-    {
-        return __pbn__Locale != null;
-    }
-    public void ResetLocale()
-    {
-        __pbn__Locale = null;
-    }
-    private string __pbn__Locale;
-
-    [global::ProtoBuf.ProtoMember(7)]
-    public long loggingId
-    {
-        get { return __pbn__loggingId.GetValueOrDefault(); }
-        set { __pbn__loggingId = value; }
-    }
-    public bool ShouldSerializeloggingId()
-    {
-        return __pbn__loggingId != null;
-    }
-    public void ResetloggingId()
-    {
-        __pbn__loggingId = null;
-    }
-    private long? __pbn__loggingId;
-
-    [global::ProtoBuf.ProtoMember(8)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string marketCheckin
-    {
-        get { return __pbn__marketCheckin ?? ""; }
-        set { __pbn__marketCheckin = value; }
-    }
-    public bool ShouldSerializemarketCheckin()
-    {
-        return __pbn__marketCheckin != null;
-    }
-    public void ResetmarketCheckin()
-    {
-        __pbn__marketCheckin = null;
-    }
-    private string __pbn__marketCheckin;
-
-    [global::ProtoBuf.ProtoMember(9, Name = @"macAddress")]
-    public global::System.Collections.Generic.List<string> macAddresses { get; private set; }
-
-    [global::ProtoBuf.ProtoMember(10, Name = @"meid")]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string Meid
-    {
-        get { return __pbn__Meid ?? ""; }
-        set { __pbn__Meid = value; }
-    }
-    public bool ShouldSerializeMeid()
-    {
-        return __pbn__Meid != null;
-    }
-    public void ResetMeid()
-    {
-        __pbn__Meid = null;
-    }
-    private string __pbn__Meid;
-
-    [global::ProtoBuf.ProtoMember(11, Name = @"accountCookie")]
-    public global::System.Collections.Generic.List<string> accountCookies { get; private set; }
-
-    [global::ProtoBuf.ProtoMember(12)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string timeZone
-    {
-        get { return __pbn__timeZone ?? ""; }
-        set { __pbn__timeZone = value; }
-    }
-    public bool ShouldSerializetimeZone()
-    {
-        return __pbn__timeZone != null;
-    }
-    public void ResettimeZone()
-    {
-        __pbn__timeZone = null;
-    }
-    private string __pbn__timeZone;
-
-    [global::ProtoBuf.ProtoMember(13, DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
-    public ulong securityToken
-    {
-        get { return __pbn__securityToken.GetValueOrDefault(); }
-        set { __pbn__securityToken = value; }
-    }
-    public bool ShouldSerializesecurityToken()
-    {
-        return __pbn__securityToken != null;
-    }
-    public void ResetsecurityToken()
-    {
-        __pbn__securityToken = null;
-    }
-    private ulong? __pbn__securityToken;
-
-    [global::ProtoBuf.ProtoMember(14, Name = @"version")]
-    public int Version
-    {
-        get { return __pbn__Version.GetValueOrDefault(); }
-        set { __pbn__Version = value; }
-    }
-    public bool ShouldSerializeVersion()
-    {
-        return __pbn__Version != null;
-    }
-    public void ResetVersion()
-    {
-        __pbn__Version = null;
-    }
-    private int? __pbn__Version;
-
-    [global::ProtoBuf.ProtoMember(15, Name = @"otaCert")]
-    public global::System.Collections.Generic.List<string> otaCerts { get; private set; }
-
-    [global::ProtoBuf.ProtoMember(16, Name = @"serial")]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string Serial
-    {
-        get { return __pbn__Serial ?? ""; }
-        set { __pbn__Serial = value; }
-    }
-    public bool ShouldSerializeSerial()
-    {
-        return __pbn__Serial != null;
-    }
-    public void ResetSerial()
-    {
-        __pbn__Serial = null;
-    }
-    private string __pbn__Serial;
-
-    [global::ProtoBuf.ProtoMember(17, Name = @"esn")]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string Esn
-    {
-        get { return __pbn__Esn ?? ""; }
-        set { __pbn__Esn = value; }
-    }
-    public bool ShouldSerializeEsn()
-    {
-        return __pbn__Esn != null;
-    }
-    public void ResetEsn()
-    {
-        __pbn__Esn = null;
-    }
-    private string __pbn__Esn;
-
-    [global::ProtoBuf.ProtoMember(18)]
-    public DeviceConfig deviceConfiguration { get; set; }
-
-    [global::ProtoBuf.ProtoMember(19, Name = @"macAddressType")]
-    public global::System.Collections.Generic.List<string> macAddressTypes { get; private set; }
-
-    [global::ProtoBuf.ProtoMember(20, Name = @"fragment", IsRequired = true)]
-    public int Fragment { get; set; }
-
-    [global::ProtoBuf.ProtoMember(21)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string userName
-    {
-        get { return __pbn__userName ?? ""; }
-        set { __pbn__userName = value; }
-    }
-    public bool ShouldSerializeuserName()
-    {
-        return __pbn__userName != null;
-    }
-    public void ResetuserName()
-    {
-        __pbn__userName = null;
-    }
-    private string __pbn__userName;
-
-    [global::ProtoBuf.ProtoMember(22)]
-    public int userSerialNumber
-    {
-        get { return __pbn__userSerialNumber.GetValueOrDefault(); }
-        set { __pbn__userSerialNumber = value; }
-    }
-    public bool ShouldSerializeuserSerialNumber()
-    {
-        return __pbn__userSerialNumber != null;
-    }
-    public void ResetuserSerialNumber()
-    {
-        __pbn__userSerialNumber = null;
-    }
-    private int? __pbn__userSerialNumber;
-
-    [global::ProtoBuf.ProtoContract()]
-    public partial class Checkin : global::ProtoBuf.IExtensible
-    {
-        private global::ProtoBuf.IExtension __pbn__extensionData;
-        global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-        {
-            return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
-        }
-        public Checkin()
-        {
-            Events = new global::System.Collections.Generic.List<Event>();
-            Stats = new global::System.Collections.Generic.List<Statistic>();
-            requestedGroups = new global::System.Collections.Generic.List<string>();
-            OnConstructor();
-        }
-
-        partial void OnConstructor();
-
-        [global::ProtoBuf.ProtoMember(1, IsRequired = true)]
-        public Build build { get; set; }
-
-        [global::ProtoBuf.ProtoMember(2)]
-        public long lastCheckinMs
-        {
-            get { return __pbn__lastCheckinMs.GetValueOrDefault(); }
-            set { __pbn__lastCheckinMs = value; }
-        }
-        public bool ShouldSerializelastCheckinMs()
-        {
-            return __pbn__lastCheckinMs != null;
-        }
-        public void ResetlastCheckinMs()
-        {
-            __pbn__lastCheckinMs = null;
-        }
-        private long? __pbn__lastCheckinMs;
-
-        [global::ProtoBuf.ProtoMember(3, Name = @"event")]
-        public global::System.Collections.Generic.List<Event> Events { get; private set; }
-
-        [global::ProtoBuf.ProtoMember(4, Name = @"stat")]
-        public global::System.Collections.Generic.List<Statistic> Stats { get; private set; }
-
-        [global::ProtoBuf.ProtoMember(5, Name = @"requestedGroup")]
-        public global::System.Collections.Generic.List<string> requestedGroups { get; private set; }
-
-        [global::ProtoBuf.ProtoMember(6)]
-        [global::System.ComponentModel.DefaultValue("")]
-        public string cellOperator
-        {
-            get { return __pbn__cellOperator ?? ""; }
-            set { __pbn__cellOperator = value; }
-        }
-        public bool ShouldSerializecellOperator()
-        {
-            return __pbn__cellOperator != null;
-        }
-        public void ResetcellOperator()
-        {
-            __pbn__cellOperator = null;
-        }
-        private string __pbn__cellOperator;
-
-        [global::ProtoBuf.ProtoMember(7)]
-        [global::System.ComponentModel.DefaultValue("")]
-        public string simOperator
-        {
-            get { return __pbn__simOperator ?? ""; }
-            set { __pbn__simOperator = value; }
-        }
-        public bool ShouldSerializesimOperator()
-        {
-            return __pbn__simOperator != null;
-        }
-        public void ResetsimOperator()
-        {
-            __pbn__simOperator = null;
-        }
-        private string __pbn__simOperator;
-
-        [global::ProtoBuf.ProtoMember(8, Name = @"roaming")]
-        [global::System.ComponentModel.DefaultValue("")]
-        public string Roaming
-        {
-            get { return __pbn__Roaming ?? ""; }
-            set { __pbn__Roaming = value; }
-        }
-        public bool ShouldSerializeRoaming()
-        {
-            return __pbn__Roaming != null;
-        }
-        public void ResetRoaming()
-        {
-            __pbn__Roaming = null;
-        }
-        private string __pbn__Roaming;
-
-        [global::ProtoBuf.ProtoMember(9)]
-        public int userNumber
-        {
-            get { return __pbn__userNumber.GetValueOrDefault(); }
-            set { __pbn__userNumber = value; }
-        }
-        public bool ShouldSerializeuserNumber()
-        {
-            return __pbn__userNumber != null;
-        }
-        public void ResetuserNumber()
-        {
-            __pbn__userNumber = null;
-        }
-        private int? __pbn__userNumber;
-
-        [global::ProtoBuf.ProtoContract()]
-        public partial class Build : global::ProtoBuf.IExtensible
-        {
-            private global::ProtoBuf.IExtension __pbn__extensionData;
-            global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-            {
-                return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
-            }
-            public Build()
-            {
-                OnConstructor();
-            }
-
-            partial void OnConstructor();
-
-            [global::ProtoBuf.ProtoMember(1, Name = @"fingerprint")]
-            [global::System.ComponentModel.DefaultValue("")]
-            public string Fingerprint
-            {
-                get { return __pbn__Fingerprint ?? ""; }
-                set { __pbn__Fingerprint = value; }
-            }
-            public bool ShouldSerializeFingerprint()
-            {
-                return __pbn__Fingerprint != null;
-            }
-            public void ResetFingerprint()
-            {
-                __pbn__Fingerprint = null;
-            }
-            private string __pbn__Fingerprint;
-
-            [global::ProtoBuf.ProtoMember(2, Name = @"hardware")]
-            [global::System.ComponentModel.DefaultValue("")]
-            public string Hardware
-            {
-                get { return __pbn__Hardware ?? ""; }
-                set { __pbn__Hardware = value; }
-            }
-            public bool ShouldSerializeHardware()
-            {
-                return __pbn__Hardware != null;
-            }
-            public void ResetHardware()
-            {
-                __pbn__Hardware = null;
-            }
-            private string __pbn__Hardware;
-
-            [global::ProtoBuf.ProtoMember(3, Name = @"brand")]
-            [global::System.ComponentModel.DefaultValue("")]
-            public string Brand
-            {
-                get { return __pbn__Brand ?? ""; }
-                set { __pbn__Brand = value; }
-            }
-            public bool ShouldSerializeBrand()
-            {
-                return __pbn__Brand != null;
-            }
-            public void ResetBrand()
-            {
-                __pbn__Brand = null;
-            }
-            private string __pbn__Brand;
-
-            [global::ProtoBuf.ProtoMember(4, Name = @"radio")]
-            [global::System.ComponentModel.DefaultValue("")]
-            public string Radio
-            {
-                get { return __pbn__Radio ?? ""; }
-                set { __pbn__Radio = value; }
-            }
-            public bool ShouldSerializeRadio()
-            {
-                return __pbn__Radio != null;
-            }
-            public void ResetRadio()
-            {
-                __pbn__Radio = null;
-            }
-            private string __pbn__Radio;
-
-            [global::ProtoBuf.ProtoMember(5, Name = @"bootloader")]
-            [global::System.ComponentModel.DefaultValue("")]
-            public string Bootloader
-            {
-                get { return __pbn__Bootloader ?? ""; }
-                set { __pbn__Bootloader = value; }
-            }
-            public bool ShouldSerializeBootloader()
-            {
-                return __pbn__Bootloader != null;
-            }
-            public void ResetBootloader()
-            {
-                __pbn__Bootloader = null;
-            }
-            private string __pbn__Bootloader;
-
-            [global::ProtoBuf.ProtoMember(6)]
-            [global::System.ComponentModel.DefaultValue("")]
-            public string clientId
-            {
-                get { return __pbn__clientId ?? ""; }
-                set { __pbn__clientId = value; }
-            }
-            public bool ShouldSerializeclientId()
-            {
-                return __pbn__clientId != null;
-            }
-            public void ResetclientId()
-            {
-                __pbn__clientId = null;
-            }
-            private string __pbn__clientId;
-
-            [global::ProtoBuf.ProtoMember(7, Name = @"time")]
-            public long Time
-            {
-                get { return __pbn__Time.GetValueOrDefault(); }
-                set { __pbn__Time = value; }
-            }
-            public bool ShouldSerializeTime()
-            {
-                return __pbn__Time != null;
-            }
-            public void ResetTime()
-            {
-                __pbn__Time = null;
-            }
-            private long? __pbn__Time;
-
-            [global::ProtoBuf.ProtoMember(8)]
-            public int packageVersionCode
-            {
-                get { return __pbn__packageVersionCode.GetValueOrDefault(); }
-                set { __pbn__packageVersionCode = value; }
-            }
-            public bool ShouldSerializepackageVersionCode()
-            {
-                return __pbn__packageVersionCode != null;
-            }
-            public void ResetpackageVersionCode()
-            {
-                __pbn__packageVersionCode = null;
-            }
-            private int? __pbn__packageVersionCode;
-
-            [global::ProtoBuf.ProtoMember(9, Name = @"device")]
-            [global::System.ComponentModel.DefaultValue("")]
-            public string Device
-            {
-                get { return __pbn__Device ?? ""; }
-                set { __pbn__Device = value; }
-            }
-            public bool ShouldSerializeDevice()
-            {
-                return __pbn__Device != null;
-            }
-            public void ResetDevice()
-            {
-                __pbn__Device = null;
-            }
-            private string __pbn__Device;
-
-            [global::ProtoBuf.ProtoMember(10)]
-            public int sdkVersion
-            {
-                get { return __pbn__sdkVersion.GetValueOrDefault(); }
-                set { __pbn__sdkVersion = value; }
-            }
-            public bool ShouldSerializesdkVersion()
-            {
-                return __pbn__sdkVersion != null;
-            }
-            public void ResetsdkVersion()
-            {
-                __pbn__sdkVersion = null;
-            }
-            private int? __pbn__sdkVersion;
-
-            [global::ProtoBuf.ProtoMember(11, Name = @"model")]
-            [global::System.ComponentModel.DefaultValue("")]
-            public string Model
-            {
-                get { return __pbn__Model ?? ""; }
-                set { __pbn__Model = value; }
-            }
-            public bool ShouldSerializeModel()
-            {
-                return __pbn__Model != null;
-            }
-            public void ResetModel()
-            {
-                __pbn__Model = null;
-            }
-            private string __pbn__Model;
-
-            [global::ProtoBuf.ProtoMember(12, Name = @"manufacturer")]
-            [global::System.ComponentModel.DefaultValue("")]
-            public string Manufacturer
-            {
-                get { return __pbn__Manufacturer ?? ""; }
-                set { __pbn__Manufacturer = value; }
-            }
-            public bool ShouldSerializeManufacturer()
-            {
-                return __pbn__Manufacturer != null;
-            }
-            public void ResetManufacturer()
-            {
-                __pbn__Manufacturer = null;
-            }
-            private string __pbn__Manufacturer;
-
-            [global::ProtoBuf.ProtoMember(13, Name = @"product")]
-            [global::System.ComponentModel.DefaultValue("")]
-            public string Product
-            {
-                get { return __pbn__Product ?? ""; }
-                set { __pbn__Product = value; }
-            }
-            public bool ShouldSerializeProduct()
-            {
-                return __pbn__Product != null;
-            }
-            public void ResetProduct()
-            {
-                __pbn__Product = null;
-            }
-            private string __pbn__Product;
-
-            [global::ProtoBuf.ProtoMember(14)]
-            public bool otaInstalled
-            {
-                get { return __pbn__otaInstalled.GetValueOrDefault(); }
-                set { __pbn__otaInstalled = value; }
-            }
-            public bool ShouldSerializeotaInstalled()
-            {
-                return __pbn__otaInstalled != null;
-            }
-            public void ResetotaInstalled()
-            {
-                __pbn__otaInstalled = null;
-            }
-            private bool? __pbn__otaInstalled;
-
-        }
-
-        [global::ProtoBuf.ProtoContract()]
-        public partial class Event : global::ProtoBuf.IExtensible
-        {
-            private global::ProtoBuf.IExtension __pbn__extensionData;
-            global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-            {
-                return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
-            }
-            public Event()
-            {
-                OnConstructor();
-            }
-
-            partial void OnConstructor();
-
-            [global::ProtoBuf.ProtoMember(1, Name = @"tag")]
-            [global::System.ComponentModel.DefaultValue("")]
-            public string Tag
-            {
-                get { return __pbn__Tag ?? ""; }
-                set { __pbn__Tag = value; }
-            }
-            public bool ShouldSerializeTag()
-            {
-                return __pbn__Tag != null;
-            }
-            public void ResetTag()
-            {
-                __pbn__Tag = null;
-            }
-            private string __pbn__Tag;
-
-            [global::ProtoBuf.ProtoMember(2, Name = @"value")]
-            [global::System.ComponentModel.DefaultValue("")]
-            public string Value
-            {
-                get { return __pbn__Value ?? ""; }
-                set { __pbn__Value = value; }
-            }
-            public bool ShouldSerializeValue()
-            {
-                return __pbn__Value != null;
-            }
-            public void ResetValue()
-            {
-                __pbn__Value = null;
-            }
-            private string __pbn__Value;
-
-            [global::ProtoBuf.ProtoMember(3)]
-            public long timeMs
-            {
-                get { return __pbn__timeMs.GetValueOrDefault(); }
-                set { __pbn__timeMs = value; }
-            }
-            public bool ShouldSerializetimeMs()
-            {
-                return __pbn__timeMs != null;
-            }
-            public void ResettimeMs()
-            {
-                __pbn__timeMs = null;
-            }
-            private long? __pbn__timeMs;
-
-        }
-
-        [global::ProtoBuf.ProtoContract()]
-        public partial class Statistic : global::ProtoBuf.IExtensible
-        {
-            private global::ProtoBuf.IExtension __pbn__extensionData;
-            global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-            {
-                return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
-            }
-            public Statistic()
-            {
-                OnConstructor();
-            }
-
-            partial void OnConstructor();
-
-            [global::ProtoBuf.ProtoMember(1, Name = @"tag", IsRequired = true)]
-            public string Tag { get; set; }
-
-            [global::ProtoBuf.ProtoMember(2, Name = @"count")]
-            public int Count
-            {
-                get { return __pbn__Count.GetValueOrDefault(); }
-                set { __pbn__Count = value; }
-            }
-            public bool ShouldSerializeCount()
-            {
-                return __pbn__Count != null;
-            }
-            public void ResetCount()
-            {
-                __pbn__Count = null;
-            }
-            private int? __pbn__Count;
-
-            [global::ProtoBuf.ProtoMember(3, Name = @"sum")]
-            public float Sum
-            {
-                get { return __pbn__Sum.GetValueOrDefault(); }
-                set { __pbn__Sum = value; }
-            }
-            public bool ShouldSerializeSum()
-            {
-                return __pbn__Sum != null;
-            }
-            public void ResetSum()
-            {
-                __pbn__Sum = null;
-            }
-            private float? __pbn__Sum;
-
-        }
-
-    }
-
-    [global::ProtoBuf.ProtoContract()]
-    public partial class DeviceConfig : global::ProtoBuf.IExtensible
-    {
-        private global::ProtoBuf.IExtension __pbn__extensionData;
-        global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-        {
-            return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
-        }
-        public DeviceConfig()
-        {
-            sharedLibraries = new global::System.Collections.Generic.List<string>();
-            availableFeatures = new global::System.Collections.Generic.List<string>();
-            nativePlatforms = new global::System.Collections.Generic.List<string>();
-            Locales = new global::System.Collections.Generic.List<string>();
-            glExtensions = new global::System.Collections.Generic.List<string>();
-            OnConstructor();
-        }
-
-        partial void OnConstructor();
-
-        [global::ProtoBuf.ProtoMember(1)]
-        public int touchScreen
-        {
-            get { return __pbn__touchScreen.GetValueOrDefault(); }
-            set { __pbn__touchScreen = value; }
-        }
-        public bool ShouldSerializetouchScreen()
-        {
-            return __pbn__touchScreen != null;
-        }
-        public void ResettouchScreen()
-        {
-            __pbn__touchScreen = null;
-        }
-        private int? __pbn__touchScreen;
-
-        [global::ProtoBuf.ProtoMember(2)]
-        public int keyboardType
-        {
-            get { return __pbn__keyboardType.GetValueOrDefault(); }
-            set { __pbn__keyboardType = value; }
-        }
-        public bool ShouldSerializekeyboardType()
-        {
-            return __pbn__keyboardType != null;
-        }
-        public void ResetkeyboardType()
-        {
-            __pbn__keyboardType = null;
-        }
-        private int? __pbn__keyboardType;
-
-        [global::ProtoBuf.ProtoMember(3, Name = @"navigation")]
-        public int Navigation
-        {
-            get { return __pbn__Navigation.GetValueOrDefault(); }
-            set { __pbn__Navigation = value; }
-        }
-        public bool ShouldSerializeNavigation()
-        {
-            return __pbn__Navigation != null;
-        }
-        public void ResetNavigation()
-        {
-            __pbn__Navigation = null;
-        }
-        private int? __pbn__Navigation;
-
-        [global::ProtoBuf.ProtoMember(4)]
-        public int screenLayout
-        {
-            get { return __pbn__screenLayout.GetValueOrDefault(); }
-            set { __pbn__screenLayout = value; }
-        }
-        public bool ShouldSerializescreenLayout()
-        {
-            return __pbn__screenLayout != null;
-        }
-        public void ResetscreenLayout()
-        {
-            __pbn__screenLayout = null;
-        }
-        private int? __pbn__screenLayout;
-
-        [global::ProtoBuf.ProtoMember(5)]
-        public bool hasHardKeyboard
-        {
-            get { return __pbn__hasHardKeyboard.GetValueOrDefault(); }
-            set { __pbn__hasHardKeyboard = value; }
-        }
-        public bool ShouldSerializehasHardKeyboard()
-        {
-            return __pbn__hasHardKeyboard != null;
-        }
-        public void ResethasHardKeyboard()
-        {
-            __pbn__hasHardKeyboard = null;
-        }
-        private bool? __pbn__hasHardKeyboard;
-
-        [global::ProtoBuf.ProtoMember(6)]
-        public bool hasFiveWayNavigation
-        {
-            get { return __pbn__hasFiveWayNavigation.GetValueOrDefault(); }
-            set { __pbn__hasFiveWayNavigation = value; }
-        }
-        public bool ShouldSerializehasFiveWayNavigation()
-        {
-            return __pbn__hasFiveWayNavigation != null;
-        }
-        public void ResethasFiveWayNavigation()
-        {
-            __pbn__hasFiveWayNavigation = null;
-        }
-        private bool? __pbn__hasFiveWayNavigation;
-
-        [global::ProtoBuf.ProtoMember(7)]
-        public int densityDpi
-        {
-            get { return __pbn__densityDpi.GetValueOrDefault(); }
-            set { __pbn__densityDpi = value; }
-        }
-        public bool ShouldSerializedensityDpi()
-        {
-            return __pbn__densityDpi != null;
-        }
-        public void ResetdensityDpi()
-        {
-            __pbn__densityDpi = null;
-        }
-        private int? __pbn__densityDpi;
-
-        [global::ProtoBuf.ProtoMember(8)]
-        public int glEsVersion
-        {
-            get { return __pbn__glEsVersion.GetValueOrDefault(); }
-            set { __pbn__glEsVersion = value; }
-        }
-        public bool ShouldSerializeglEsVersion()
-        {
-            return __pbn__glEsVersion != null;
-        }
-        public void ResetglEsVersion()
-        {
-            __pbn__glEsVersion = null;
-        }
-        private int? __pbn__glEsVersion;
-
-        [global::ProtoBuf.ProtoMember(9, Name = @"sharedLibrary")]
-        public global::System.Collections.Generic.List<string> sharedLibraries { get; private set; }
-
-        [global::ProtoBuf.ProtoMember(10, Name = @"availableFeature")]
-        public global::System.Collections.Generic.List<string> availableFeatures { get; private set; }
-
-        [global::ProtoBuf.ProtoMember(11, Name = @"nativePlatform")]
-        public global::System.Collections.Generic.List<string> nativePlatforms { get; private set; }
-
-        [global::ProtoBuf.ProtoMember(12)]
-        public int widthPixels
-        {
-            get { return __pbn__widthPixels.GetValueOrDefault(); }
-            set { __pbn__widthPixels = value; }
-        }
-        public bool ShouldSerializewidthPixels()
-        {
-            return __pbn__widthPixels != null;
-        }
-        public void ResetwidthPixels()
-        {
-            __pbn__widthPixels = null;
-        }
-        private int? __pbn__widthPixels;
-
-        [global::ProtoBuf.ProtoMember(13)]
-        public int heightPixels
-        {
-            get { return __pbn__heightPixels.GetValueOrDefault(); }
-            set { __pbn__heightPixels = value; }
-        }
-        public bool ShouldSerializeheightPixels()
-        {
-            return __pbn__heightPixels != null;
-        }
-        public void ResetheightPixels()
-        {
-            __pbn__heightPixels = null;
-        }
-        private int? __pbn__heightPixels;
-
-        [global::ProtoBuf.ProtoMember(14, Name = @"locale")]
-        public global::System.Collections.Generic.List<string> Locales { get; private set; }
-
-        [global::ProtoBuf.ProtoMember(15, Name = @"glExtension")]
-        public global::System.Collections.Generic.List<string> glExtensions { get; private set; }
-
-        [global::ProtoBuf.ProtoMember(16)]
-        public int deviceClass
-        {
-            get { return __pbn__deviceClass.GetValueOrDefault(); }
-            set { __pbn__deviceClass = value; }
-        }
-        public bool ShouldSerializedeviceClass()
-        {
-            return __pbn__deviceClass != null;
-        }
-        public void ResetdeviceClass()
-        {
-            __pbn__deviceClass = null;
-        }
-        private int? __pbn__deviceClass;
-
-        [global::ProtoBuf.ProtoMember(17)]
-        public int maxApkDownloadSizeMb
-        {
-            get { return __pbn__maxApkDownloadSizeMb.GetValueOrDefault(); }
-            set { __pbn__maxApkDownloadSizeMb = value; }
-        }
-        public bool ShouldSerializemaxApkDownloadSizeMb()
-        {
-            return __pbn__maxApkDownloadSizeMb != null;
-        }
-        public void ResetmaxApkDownloadSizeMb()
-        {
-            __pbn__maxApkDownloadSizeMb = null;
-        }
-        private int? __pbn__maxApkDownloadSizeMb;
-
-    }
+	private global::ProtoBuf.IExtension __pbn__extensionData;
+	global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+	{
+		return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+	}
+	public CheckinRequest()
+	{
+		macAddresses = new global::System.Collections.Generic.List<string>();
+		accountCookies = new global::System.Collections.Generic.List<string>();
+		otaCerts = new global::System.Collections.Generic.List<string>();
+		macAddressTypes = new global::System.Collections.Generic.List<string>();
+		OnConstructor();
+	}
+
+	partial void OnConstructor();
+
+	[global::ProtoBuf.ProtoMember(1, Name = @"imei")]
+	[global::System.ComponentModel.DefaultValue("")]
+	public string Imei
+	{
+		get { return __pbn__Imei ?? ""; }
+		set { __pbn__Imei = value; }
+	}
+	public bool ShouldSerializeImei()
+	{
+		return __pbn__Imei != null;
+	}
+	public void ResetImei()
+	{
+		__pbn__Imei = null;
+	}
+	private string __pbn__Imei;
+
+	[global::ProtoBuf.ProtoMember(2)]
+	public long androidId
+	{
+		get { return __pbn__androidId.GetValueOrDefault(); }
+		set { __pbn__androidId = value; }
+	}
+	public bool ShouldSerializeandroidId()
+	{
+		return __pbn__androidId != null;
+	}
+	public void ResetandroidId()
+	{
+		__pbn__androidId = null;
+	}
+	private long? __pbn__androidId;
+
+	[global::ProtoBuf.ProtoMember(3, Name = @"digest")]
+	[global::System.ComponentModel.DefaultValue("")]
+	public string Digest
+	{
+		get { return __pbn__Digest ?? ""; }
+		set { __pbn__Digest = value; }
+	}
+	public bool ShouldSerializeDigest()
+	{
+		return __pbn__Digest != null;
+	}
+	public void ResetDigest()
+	{
+		__pbn__Digest = null;
+	}
+	private string __pbn__Digest;
+
+	[global::ProtoBuf.ProtoMember(4, IsRequired = true)]
+	public Checkin checkin { get; set; }
+
+	[global::ProtoBuf.ProtoMember(5)]
+	[global::System.ComponentModel.DefaultValue("")]
+	public string desiredBuild
+	{
+		get { return __pbn__desiredBuild ?? ""; }
+		set { __pbn__desiredBuild = value; }
+	}
+	public bool ShouldSerializedesiredBuild()
+	{
+		return __pbn__desiredBuild != null;
+	}
+	public void ResetdesiredBuild()
+	{
+		__pbn__desiredBuild = null;
+	}
+	private string __pbn__desiredBuild;
+
+	[global::ProtoBuf.ProtoMember(6, Name = @"locale")]
+	[global::System.ComponentModel.DefaultValue("")]
+	public string Locale
+	{
+		get { return __pbn__Locale ?? ""; }
+		set { __pbn__Locale = value; }
+	}
+	public bool ShouldSerializeLocale()
+	{
+		return __pbn__Locale != null;
+	}
+	public void ResetLocale()
+	{
+		__pbn__Locale = null;
+	}
+	private string __pbn__Locale;
+
+	[global::ProtoBuf.ProtoMember(7)]
+	public long loggingId
+	{
+		get { return __pbn__loggingId.GetValueOrDefault(); }
+		set { __pbn__loggingId = value; }
+	}
+	public bool ShouldSerializeloggingId()
+	{
+		return __pbn__loggingId != null;
+	}
+	public void ResetloggingId()
+	{
+		__pbn__loggingId = null;
+	}
+	private long? __pbn__loggingId;
+
+	[global::ProtoBuf.ProtoMember(8)]
+	[global::System.ComponentModel.DefaultValue("")]
+	public string marketCheckin
+	{
+		get { return __pbn__marketCheckin ?? ""; }
+		set { __pbn__marketCheckin = value; }
+	}
+	public bool ShouldSerializemarketCheckin()
+	{
+		return __pbn__marketCheckin != null;
+	}
+	public void ResetmarketCheckin()
+	{
+		__pbn__marketCheckin = null;
+	}
+	private string __pbn__marketCheckin;
+
+	[global::ProtoBuf.ProtoMember(9, Name = @"macAddress")]
+	public global::System.Collections.Generic.List<string> macAddresses { get; private set; }
+
+	[global::ProtoBuf.ProtoMember(10, Name = @"meid")]
+	[global::System.ComponentModel.DefaultValue("")]
+	public string Meid
+	{
+		get { return __pbn__Meid ?? ""; }
+		set { __pbn__Meid = value; }
+	}
+	public bool ShouldSerializeMeid()
+	{
+		return __pbn__Meid != null;
+	}
+	public void ResetMeid()
+	{
+		__pbn__Meid = null;
+	}
+	private string __pbn__Meid;
+
+	[global::ProtoBuf.ProtoMember(11, Name = @"accountCookie")]
+	public global::System.Collections.Generic.List<string> accountCookies { get; private set; }
+
+	[global::ProtoBuf.ProtoMember(12)]
+	[global::System.ComponentModel.DefaultValue("")]
+	public string timeZone
+	{
+		get { return __pbn__timeZone ?? ""; }
+		set { __pbn__timeZone = value; }
+	}
+	public bool ShouldSerializetimeZone()
+	{
+		return __pbn__timeZone != null;
+	}
+	public void ResettimeZone()
+	{
+		__pbn__timeZone = null;
+	}
+	private string __pbn__timeZone;
+
+	[global::ProtoBuf.ProtoMember(13, DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
+	public ulong securityToken
+	{
+		get { return __pbn__securityToken.GetValueOrDefault(); }
+		set { __pbn__securityToken = value; }
+	}
+	public bool ShouldSerializesecurityToken()
+	{
+		return __pbn__securityToken != null;
+	}
+	public void ResetsecurityToken()
+	{
+		__pbn__securityToken = null;
+	}
+	private ulong? __pbn__securityToken;
+
+	[global::ProtoBuf.ProtoMember(14, Name = @"version")]
+	public int Version
+	{
+		get { return __pbn__Version.GetValueOrDefault(); }
+		set { __pbn__Version = value; }
+	}
+	public bool ShouldSerializeVersion()
+	{
+		return __pbn__Version != null;
+	}
+	public void ResetVersion()
+	{
+		__pbn__Version = null;
+	}
+	private int? __pbn__Version;
+
+	[global::ProtoBuf.ProtoMember(15, Name = @"otaCert")]
+	public global::System.Collections.Generic.List<string> otaCerts { get; private set; }
+
+	[global::ProtoBuf.ProtoMember(16, Name = @"serial")]
+	[global::System.ComponentModel.DefaultValue("")]
+	public string Serial
+	{
+		get { return __pbn__Serial ?? ""; }
+		set { __pbn__Serial = value; }
+	}
+	public bool ShouldSerializeSerial()
+	{
+		return __pbn__Serial != null;
+	}
+	public void ResetSerial()
+	{
+		__pbn__Serial = null;
+	}
+	private string __pbn__Serial;
+
+	[global::ProtoBuf.ProtoMember(17, Name = @"esn")]
+	[global::System.ComponentModel.DefaultValue("")]
+	public string Esn
+	{
+		get { return __pbn__Esn ?? ""; }
+		set { __pbn__Esn = value; }
+	}
+	public bool ShouldSerializeEsn()
+	{
+		return __pbn__Esn != null;
+	}
+	public void ResetEsn()
+	{
+		__pbn__Esn = null;
+	}
+	private string __pbn__Esn;
+
+	[global::ProtoBuf.ProtoMember(18)]
+	public DeviceConfig deviceConfiguration { get; set; }
+
+	[global::ProtoBuf.ProtoMember(19, Name = @"macAddressType")]
+	public global::System.Collections.Generic.List<string> macAddressTypes { get; private set; }
+
+	[global::ProtoBuf.ProtoMember(20, Name = @"fragment", IsRequired = true)]
+	public int Fragment { get; set; }
+
+	[global::ProtoBuf.ProtoMember(21)]
+	[global::System.ComponentModel.DefaultValue("")]
+	public string userName
+	{
+		get { return __pbn__userName ?? ""; }
+		set { __pbn__userName = value; }
+	}
+	public bool ShouldSerializeuserName()
+	{
+		return __pbn__userName != null;
+	}
+	public void ResetuserName()
+	{
+		__pbn__userName = null;
+	}
+	private string __pbn__userName;
+
+	[global::ProtoBuf.ProtoMember(22)]
+	public int userSerialNumber
+	{
+		get { return __pbn__userSerialNumber.GetValueOrDefault(); }
+		set { __pbn__userSerialNumber = value; }
+	}
+	public bool ShouldSerializeuserSerialNumber()
+	{
+		return __pbn__userSerialNumber != null;
+	}
+	public void ResetuserSerialNumber()
+	{
+		__pbn__userSerialNumber = null;
+	}
+	private int? __pbn__userSerialNumber;
+
+	[global::ProtoBuf.ProtoContract()]
+	public partial class Checkin : global::ProtoBuf.IExtensible
+	{
+		private global::ProtoBuf.IExtension __pbn__extensionData;
+		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+		{
+			return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+		}
+		public Checkin()
+		{
+			Events = new global::System.Collections.Generic.List<Event>();
+			Stats = new global::System.Collections.Generic.List<Statistic>();
+			requestedGroups = new global::System.Collections.Generic.List<string>();
+			OnConstructor();
+		}
+
+		partial void OnConstructor();
+
+		[global::ProtoBuf.ProtoMember(1, IsRequired = true)]
+		public Build build { get; set; }
+
+		[global::ProtoBuf.ProtoMember(2)]
+		public long lastCheckinMs
+		{
+			get { return __pbn__lastCheckinMs.GetValueOrDefault(); }
+			set { __pbn__lastCheckinMs = value; }
+		}
+		public bool ShouldSerializelastCheckinMs()
+		{
+			return __pbn__lastCheckinMs != null;
+		}
+		public void ResetlastCheckinMs()
+		{
+			__pbn__lastCheckinMs = null;
+		}
+		private long? __pbn__lastCheckinMs;
+
+		[global::ProtoBuf.ProtoMember(3, Name = @"event")]
+		public global::System.Collections.Generic.List<Event> Events { get; private set; }
+
+		[global::ProtoBuf.ProtoMember(4, Name = @"stat")]
+		public global::System.Collections.Generic.List<Statistic> Stats { get; private set; }
+
+		[global::ProtoBuf.ProtoMember(5, Name = @"requestedGroup")]
+		public global::System.Collections.Generic.List<string> requestedGroups { get; private set; }
+
+		[global::ProtoBuf.ProtoMember(6)]
+		[global::System.ComponentModel.DefaultValue("")]
+		public string cellOperator
+		{
+			get { return __pbn__cellOperator ?? ""; }
+			set { __pbn__cellOperator = value; }
+		}
+		public bool ShouldSerializecellOperator()
+		{
+			return __pbn__cellOperator != null;
+		}
+		public void ResetcellOperator()
+		{
+			__pbn__cellOperator = null;
+		}
+		private string __pbn__cellOperator;
+
+		[global::ProtoBuf.ProtoMember(7)]
+		[global::System.ComponentModel.DefaultValue("")]
+		public string simOperator
+		{
+			get { return __pbn__simOperator ?? ""; }
+			set { __pbn__simOperator = value; }
+		}
+		public bool ShouldSerializesimOperator()
+		{
+			return __pbn__simOperator != null;
+		}
+		public void ResetsimOperator()
+		{
+			__pbn__simOperator = null;
+		}
+		private string __pbn__simOperator;
+
+		[global::ProtoBuf.ProtoMember(8, Name = @"roaming")]
+		[global::System.ComponentModel.DefaultValue("")]
+		public string Roaming
+		{
+			get { return __pbn__Roaming ?? ""; }
+			set { __pbn__Roaming = value; }
+		}
+		public bool ShouldSerializeRoaming()
+		{
+			return __pbn__Roaming != null;
+		}
+		public void ResetRoaming()
+		{
+			__pbn__Roaming = null;
+		}
+		private string __pbn__Roaming;
+
+		[global::ProtoBuf.ProtoMember(9)]
+		public int userNumber
+		{
+			get { return __pbn__userNumber.GetValueOrDefault(); }
+			set { __pbn__userNumber = value; }
+		}
+		public bool ShouldSerializeuserNumber()
+		{
+			return __pbn__userNumber != null;
+		}
+		public void ResetuserNumber()
+		{
+			__pbn__userNumber = null;
+		}
+		private int? __pbn__userNumber;
+
+		[global::ProtoBuf.ProtoContract()]
+		public partial class Build : global::ProtoBuf.IExtensible
+		{
+			private global::ProtoBuf.IExtension __pbn__extensionData;
+			global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+			{
+				return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+			}
+			public Build()
+			{
+				OnConstructor();
+			}
+
+			partial void OnConstructor();
+
+			[global::ProtoBuf.ProtoMember(1, Name = @"fingerprint")]
+			[global::System.ComponentModel.DefaultValue("")]
+			public string Fingerprint
+			{
+				get { return __pbn__Fingerprint ?? ""; }
+				set { __pbn__Fingerprint = value; }
+			}
+			public bool ShouldSerializeFingerprint()
+			{
+				return __pbn__Fingerprint != null;
+			}
+			public void ResetFingerprint()
+			{
+				__pbn__Fingerprint = null;
+			}
+			private string __pbn__Fingerprint;
+
+			[global::ProtoBuf.ProtoMember(2, Name = @"hardware")]
+			[global::System.ComponentModel.DefaultValue("")]
+			public string Hardware
+			{
+				get { return __pbn__Hardware ?? ""; }
+				set { __pbn__Hardware = value; }
+			}
+			public bool ShouldSerializeHardware()
+			{
+				return __pbn__Hardware != null;
+			}
+			public void ResetHardware()
+			{
+				__pbn__Hardware = null;
+			}
+			private string __pbn__Hardware;
+
+			[global::ProtoBuf.ProtoMember(3, Name = @"brand")]
+			[global::System.ComponentModel.DefaultValue("")]
+			public string Brand
+			{
+				get { return __pbn__Brand ?? ""; }
+				set { __pbn__Brand = value; }
+			}
+			public bool ShouldSerializeBrand()
+			{
+				return __pbn__Brand != null;
+			}
+			public void ResetBrand()
+			{
+				__pbn__Brand = null;
+			}
+			private string __pbn__Brand;
+
+			[global::ProtoBuf.ProtoMember(4, Name = @"radio")]
+			[global::System.ComponentModel.DefaultValue("")]
+			public string Radio
+			{
+				get { return __pbn__Radio ?? ""; }
+				set { __pbn__Radio = value; }
+			}
+			public bool ShouldSerializeRadio()
+			{
+				return __pbn__Radio != null;
+			}
+			public void ResetRadio()
+			{
+				__pbn__Radio = null;
+			}
+			private string __pbn__Radio;
+
+			[global::ProtoBuf.ProtoMember(5, Name = @"bootloader")]
+			[global::System.ComponentModel.DefaultValue("")]
+			public string Bootloader
+			{
+				get { return __pbn__Bootloader ?? ""; }
+				set { __pbn__Bootloader = value; }
+			}
+			public bool ShouldSerializeBootloader()
+			{
+				return __pbn__Bootloader != null;
+			}
+			public void ResetBootloader()
+			{
+				__pbn__Bootloader = null;
+			}
+			private string __pbn__Bootloader;
+
+			[global::ProtoBuf.ProtoMember(6)]
+			[global::System.ComponentModel.DefaultValue("")]
+			public string clientId
+			{
+				get { return __pbn__clientId ?? ""; }
+				set { __pbn__clientId = value; }
+			}
+			public bool ShouldSerializeclientId()
+			{
+				return __pbn__clientId != null;
+			}
+			public void ResetclientId()
+			{
+				__pbn__clientId = null;
+			}
+			private string __pbn__clientId;
+
+			[global::ProtoBuf.ProtoMember(7, Name = @"time")]
+			public long Time
+			{
+				get { return __pbn__Time.GetValueOrDefault(); }
+				set { __pbn__Time = value; }
+			}
+			public bool ShouldSerializeTime()
+			{
+				return __pbn__Time != null;
+			}
+			public void ResetTime()
+			{
+				__pbn__Time = null;
+			}
+			private long? __pbn__Time;
+
+			[global::ProtoBuf.ProtoMember(8)]
+			public int packageVersionCode
+			{
+				get { return __pbn__packageVersionCode.GetValueOrDefault(); }
+				set { __pbn__packageVersionCode = value; }
+			}
+			public bool ShouldSerializepackageVersionCode()
+			{
+				return __pbn__packageVersionCode != null;
+			}
+			public void ResetpackageVersionCode()
+			{
+				__pbn__packageVersionCode = null;
+			}
+			private int? __pbn__packageVersionCode;
+
+			[global::ProtoBuf.ProtoMember(9, Name = @"device")]
+			[global::System.ComponentModel.DefaultValue("")]
+			public string Device
+			{
+				get { return __pbn__Device ?? ""; }
+				set { __pbn__Device = value; }
+			}
+			public bool ShouldSerializeDevice()
+			{
+				return __pbn__Device != null;
+			}
+			public void ResetDevice()
+			{
+				__pbn__Device = null;
+			}
+			private string __pbn__Device;
+
+			[global::ProtoBuf.ProtoMember(10)]
+			public int sdkVersion
+			{
+				get { return __pbn__sdkVersion.GetValueOrDefault(); }
+				set { __pbn__sdkVersion = value; }
+			}
+			public bool ShouldSerializesdkVersion()
+			{
+				return __pbn__sdkVersion != null;
+			}
+			public void ResetsdkVersion()
+			{
+				__pbn__sdkVersion = null;
+			}
+			private int? __pbn__sdkVersion;
+
+			[global::ProtoBuf.ProtoMember(11, Name = @"model")]
+			[global::System.ComponentModel.DefaultValue("")]
+			public string Model
+			{
+				get { return __pbn__Model ?? ""; }
+				set { __pbn__Model = value; }
+			}
+			public bool ShouldSerializeModel()
+			{
+				return __pbn__Model != null;
+			}
+			public void ResetModel()
+			{
+				__pbn__Model = null;
+			}
+			private string __pbn__Model;
+
+			[global::ProtoBuf.ProtoMember(12, Name = @"manufacturer")]
+			[global::System.ComponentModel.DefaultValue("")]
+			public string Manufacturer
+			{
+				get { return __pbn__Manufacturer ?? ""; }
+				set { __pbn__Manufacturer = value; }
+			}
+			public bool ShouldSerializeManufacturer()
+			{
+				return __pbn__Manufacturer != null;
+			}
+			public void ResetManufacturer()
+			{
+				__pbn__Manufacturer = null;
+			}
+			private string __pbn__Manufacturer;
+
+			[global::ProtoBuf.ProtoMember(13, Name = @"product")]
+			[global::System.ComponentModel.DefaultValue("")]
+			public string Product
+			{
+				get { return __pbn__Product ?? ""; }
+				set { __pbn__Product = value; }
+			}
+			public bool ShouldSerializeProduct()
+			{
+				return __pbn__Product != null;
+			}
+			public void ResetProduct()
+			{
+				__pbn__Product = null;
+			}
+			private string __pbn__Product;
+
+			[global::ProtoBuf.ProtoMember(14)]
+			public bool otaInstalled
+			{
+				get { return __pbn__otaInstalled.GetValueOrDefault(); }
+				set { __pbn__otaInstalled = value; }
+			}
+			public bool ShouldSerializeotaInstalled()
+			{
+				return __pbn__otaInstalled != null;
+			}
+			public void ResetotaInstalled()
+			{
+				__pbn__otaInstalled = null;
+			}
+			private bool? __pbn__otaInstalled;
+
+		}
+
+		[global::ProtoBuf.ProtoContract()]
+		public partial class Event : global::ProtoBuf.IExtensible
+		{
+			private global::ProtoBuf.IExtension __pbn__extensionData;
+			global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+			{
+				return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+			}
+			public Event()
+			{
+				OnConstructor();
+			}
+
+			partial void OnConstructor();
+
+			[global::ProtoBuf.ProtoMember(1, Name = @"tag")]
+			[global::System.ComponentModel.DefaultValue("")]
+			public string Tag
+			{
+				get { return __pbn__Tag ?? ""; }
+				set { __pbn__Tag = value; }
+			}
+			public bool ShouldSerializeTag()
+			{
+				return __pbn__Tag != null;
+			}
+			public void ResetTag()
+			{
+				__pbn__Tag = null;
+			}
+			private string __pbn__Tag;
+
+			[global::ProtoBuf.ProtoMember(2, Name = @"value")]
+			[global::System.ComponentModel.DefaultValue("")]
+			public string Value
+			{
+				get { return __pbn__Value ?? ""; }
+				set { __pbn__Value = value; }
+			}
+			public bool ShouldSerializeValue()
+			{
+				return __pbn__Value != null;
+			}
+			public void ResetValue()
+			{
+				__pbn__Value = null;
+			}
+			private string __pbn__Value;
+
+			[global::ProtoBuf.ProtoMember(3)]
+			public long timeMs
+			{
+				get { return __pbn__timeMs.GetValueOrDefault(); }
+				set { __pbn__timeMs = value; }
+			}
+			public bool ShouldSerializetimeMs()
+			{
+				return __pbn__timeMs != null;
+			}
+			public void ResettimeMs()
+			{
+				__pbn__timeMs = null;
+			}
+			private long? __pbn__timeMs;
+
+		}
+
+		[global::ProtoBuf.ProtoContract()]
+		public partial class Statistic : global::ProtoBuf.IExtensible
+		{
+			private global::ProtoBuf.IExtension __pbn__extensionData;
+			global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+			{
+				return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+			}
+			public Statistic()
+			{
+				OnConstructor();
+			}
+
+			partial void OnConstructor();
+
+			[global::ProtoBuf.ProtoMember(1, Name = @"tag", IsRequired = true)]
+			public string Tag { get; set; }
+
+			[global::ProtoBuf.ProtoMember(2, Name = @"count")]
+			public int Count
+			{
+				get { return __pbn__Count.GetValueOrDefault(); }
+				set { __pbn__Count = value; }
+			}
+			public bool ShouldSerializeCount()
+			{
+				return __pbn__Count != null;
+			}
+			public void ResetCount()
+			{
+				__pbn__Count = null;
+			}
+			private int? __pbn__Count;
+
+			[global::ProtoBuf.ProtoMember(3, Name = @"sum")]
+			public float Sum
+			{
+				get { return __pbn__Sum.GetValueOrDefault(); }
+				set { __pbn__Sum = value; }
+			}
+			public bool ShouldSerializeSum()
+			{
+				return __pbn__Sum != null;
+			}
+			public void ResetSum()
+			{
+				__pbn__Sum = null;
+			}
+			private float? __pbn__Sum;
+
+		}
+
+	}
+
+	[global::ProtoBuf.ProtoContract()]
+	public partial class DeviceConfig : global::ProtoBuf.IExtensible
+	{
+		private global::ProtoBuf.IExtension __pbn__extensionData;
+		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+		{
+			return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+		}
+		public DeviceConfig()
+		{
+			sharedLibraries = new global::System.Collections.Generic.List<string>();
+			availableFeatures = new global::System.Collections.Generic.List<string>();
+			nativePlatforms = new global::System.Collections.Generic.List<string>();
+			Locales = new global::System.Collections.Generic.List<string>();
+			glExtensions = new global::System.Collections.Generic.List<string>();
+			OnConstructor();
+		}
+
+		partial void OnConstructor();
+
+		[global::ProtoBuf.ProtoMember(1)]
+		public int touchScreen
+		{
+			get { return __pbn__touchScreen.GetValueOrDefault(); }
+			set { __pbn__touchScreen = value; }
+		}
+		public bool ShouldSerializetouchScreen()
+		{
+			return __pbn__touchScreen != null;
+		}
+		public void ResettouchScreen()
+		{
+			__pbn__touchScreen = null;
+		}
+		private int? __pbn__touchScreen;
+
+		[global::ProtoBuf.ProtoMember(2)]
+		public int keyboardType
+		{
+			get { return __pbn__keyboardType.GetValueOrDefault(); }
+			set { __pbn__keyboardType = value; }
+		}
+		public bool ShouldSerializekeyboardType()
+		{
+			return __pbn__keyboardType != null;
+		}
+		public void ResetkeyboardType()
+		{
+			__pbn__keyboardType = null;
+		}
+		private int? __pbn__keyboardType;
+
+		[global::ProtoBuf.ProtoMember(3, Name = @"navigation")]
+		public int Navigation
+		{
+			get { return __pbn__Navigation.GetValueOrDefault(); }
+			set { __pbn__Navigation = value; }
+		}
+		public bool ShouldSerializeNavigation()
+		{
+			return __pbn__Navigation != null;
+		}
+		public void ResetNavigation()
+		{
+			__pbn__Navigation = null;
+		}
+		private int? __pbn__Navigation;
+
+		[global::ProtoBuf.ProtoMember(4)]
+		public int screenLayout
+		{
+			get { return __pbn__screenLayout.GetValueOrDefault(); }
+			set { __pbn__screenLayout = value; }
+		}
+		public bool ShouldSerializescreenLayout()
+		{
+			return __pbn__screenLayout != null;
+		}
+		public void ResetscreenLayout()
+		{
+			__pbn__screenLayout = null;
+		}
+		private int? __pbn__screenLayout;
+
+		[global::ProtoBuf.ProtoMember(5)]
+		public bool hasHardKeyboard
+		{
+			get { return __pbn__hasHardKeyboard.GetValueOrDefault(); }
+			set { __pbn__hasHardKeyboard = value; }
+		}
+		public bool ShouldSerializehasHardKeyboard()
+		{
+			return __pbn__hasHardKeyboard != null;
+		}
+		public void ResethasHardKeyboard()
+		{
+			__pbn__hasHardKeyboard = null;
+		}
+		private bool? __pbn__hasHardKeyboard;
+
+		[global::ProtoBuf.ProtoMember(6)]
+		public bool hasFiveWayNavigation
+		{
+			get { return __pbn__hasFiveWayNavigation.GetValueOrDefault(); }
+			set { __pbn__hasFiveWayNavigation = value; }
+		}
+		public bool ShouldSerializehasFiveWayNavigation()
+		{
+			return __pbn__hasFiveWayNavigation != null;
+		}
+		public void ResethasFiveWayNavigation()
+		{
+			__pbn__hasFiveWayNavigation = null;
+		}
+		private bool? __pbn__hasFiveWayNavigation;
+
+		[global::ProtoBuf.ProtoMember(7)]
+		public int densityDpi
+		{
+			get { return __pbn__densityDpi.GetValueOrDefault(); }
+			set { __pbn__densityDpi = value; }
+		}
+		public bool ShouldSerializedensityDpi()
+		{
+			return __pbn__densityDpi != null;
+		}
+		public void ResetdensityDpi()
+		{
+			__pbn__densityDpi = null;
+		}
+		private int? __pbn__densityDpi;
+
+		[global::ProtoBuf.ProtoMember(8)]
+		public int glEsVersion
+		{
+			get { return __pbn__glEsVersion.GetValueOrDefault(); }
+			set { __pbn__glEsVersion = value; }
+		}
+		public bool ShouldSerializeglEsVersion()
+		{
+			return __pbn__glEsVersion != null;
+		}
+		public void ResetglEsVersion()
+		{
+			__pbn__glEsVersion = null;
+		}
+		private int? __pbn__glEsVersion;
+
+		[global::ProtoBuf.ProtoMember(9, Name = @"sharedLibrary")]
+		public global::System.Collections.Generic.List<string> sharedLibraries { get; private set; }
+
+		[global::ProtoBuf.ProtoMember(10, Name = @"availableFeature")]
+		public global::System.Collections.Generic.List<string> availableFeatures { get; private set; }
+
+		[global::ProtoBuf.ProtoMember(11, Name = @"nativePlatform")]
+		public global::System.Collections.Generic.List<string> nativePlatforms { get; private set; }
+
+		[global::ProtoBuf.ProtoMember(12)]
+		public int widthPixels
+		{
+			get { return __pbn__widthPixels.GetValueOrDefault(); }
+			set { __pbn__widthPixels = value; }
+		}
+		public bool ShouldSerializewidthPixels()
+		{
+			return __pbn__widthPixels != null;
+		}
+		public void ResetwidthPixels()
+		{
+			__pbn__widthPixels = null;
+		}
+		private int? __pbn__widthPixels;
+
+		[global::ProtoBuf.ProtoMember(13)]
+		public int heightPixels
+		{
+			get { return __pbn__heightPixels.GetValueOrDefault(); }
+			set { __pbn__heightPixels = value; }
+		}
+		public bool ShouldSerializeheightPixels()
+		{
+			return __pbn__heightPixels != null;
+		}
+		public void ResetheightPixels()
+		{
+			__pbn__heightPixels = null;
+		}
+		private int? __pbn__heightPixels;
+
+		[global::ProtoBuf.ProtoMember(14, Name = @"locale")]
+		public global::System.Collections.Generic.List<string> Locales { get; private set; }
+
+		[global::ProtoBuf.ProtoMember(15, Name = @"glExtension")]
+		public global::System.Collections.Generic.List<string> glExtensions { get; private set; }
+
+		[global::ProtoBuf.ProtoMember(16)]
+		public int deviceClass
+		{
+			get { return __pbn__deviceClass.GetValueOrDefault(); }
+			set { __pbn__deviceClass = value; }
+		}
+		public bool ShouldSerializedeviceClass()
+		{
+			return __pbn__deviceClass != null;
+		}
+		public void ResetdeviceClass()
+		{
+			__pbn__deviceClass = null;
+		}
+		private int? __pbn__deviceClass;
+
+		[global::ProtoBuf.ProtoMember(17)]
+		public int maxApkDownloadSizeMb
+		{
+			get { return __pbn__maxApkDownloadSizeMb.GetValueOrDefault(); }
+			set { __pbn__maxApkDownloadSizeMb = value; }
+		}
+		public bool ShouldSerializemaxApkDownloadSizeMb()
+		{
+			return __pbn__maxApkDownloadSizeMb != null;
+		}
+		public void ResetmaxApkDownloadSizeMb()
+		{
+			__pbn__maxApkDownloadSizeMb = null;
+		}
+		private int? __pbn__maxApkDownloadSizeMb;
+
+	}
 
 }
 
 [global::ProtoBuf.ProtoContract()]
 public partial class CheckinResponse : global::ProtoBuf.IExtensible
 {
-    private global::ProtoBuf.IExtension __pbn__extensionData;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-    {
-        return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
-    }
-    public CheckinResponse()
-    {
-        Intents = new global::System.Collections.Generic.List<Intent>();
-        Settings = new global::System.Collections.Generic.List<GservicesSetting>();
-        deleteSettings = new global::System.Collections.Generic.List<string>();
-        OnConstructor();
-    }
+	private global::ProtoBuf.IExtension __pbn__extensionData;
+	global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+	{
+		return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+	}
+	public CheckinResponse()
+	{
+		Intents = new global::System.Collections.Generic.List<Intent>();
+		Settings = new global::System.Collections.Generic.List<GservicesSetting>();
+		deleteSettings = new global::System.Collections.Generic.List<string>();
+		OnConstructor();
+	}
 
-    partial void OnConstructor();
+	partial void OnConstructor();
 
-    [global::ProtoBuf.ProtoMember(1)]
-    public bool statsOk
-    {
-        get { return __pbn__statsOk.GetValueOrDefault(); }
-        set { __pbn__statsOk = value; }
-    }
-    public bool ShouldSerializestatsOk()
-    {
-        return __pbn__statsOk != null;
-    }
-    public void ResetstatsOk()
-    {
-        __pbn__statsOk = null;
-    }
-    private bool? __pbn__statsOk;
+	[global::ProtoBuf.ProtoMember(1)]
+	public bool statsOk
+	{
+		get { return __pbn__statsOk.GetValueOrDefault(); }
+		set { __pbn__statsOk = value; }
+	}
+	public bool ShouldSerializestatsOk()
+	{
+		return __pbn__statsOk != null;
+	}
+	public void ResetstatsOk()
+	{
+		__pbn__statsOk = null;
+	}
+	private bool? __pbn__statsOk;
 
-    [global::ProtoBuf.ProtoMember(2, Name = @"intent")]
-    public global::System.Collections.Generic.List<Intent> Intents { get; private set; }
+	[global::ProtoBuf.ProtoMember(2, Name = @"intent")]
+	public global::System.Collections.Generic.List<Intent> Intents { get; private set; }
 
-    [global::ProtoBuf.ProtoMember(3)]
-    public long timeMs
-    {
-        get { return __pbn__timeMs.GetValueOrDefault(); }
-        set { __pbn__timeMs = value; }
-    }
-    public bool ShouldSerializetimeMs()
-    {
-        return __pbn__timeMs != null;
-    }
-    public void ResettimeMs()
-    {
-        __pbn__timeMs = null;
-    }
-    private long? __pbn__timeMs;
+	[global::ProtoBuf.ProtoMember(3)]
+	public long timeMs
+	{
+		get { return __pbn__timeMs.GetValueOrDefault(); }
+		set { __pbn__timeMs = value; }
+	}
+	public bool ShouldSerializetimeMs()
+	{
+		return __pbn__timeMs != null;
+	}
+	public void ResettimeMs()
+	{
+		__pbn__timeMs = null;
+	}
+	private long? __pbn__timeMs;
 
-    [global::ProtoBuf.ProtoMember(4, Name = @"digest")]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string Digest
-    {
-        get { return __pbn__Digest ?? ""; }
-        set { __pbn__Digest = value; }
-    }
-    public bool ShouldSerializeDigest()
-    {
-        return __pbn__Digest != null;
-    }
-    public void ResetDigest()
-    {
-        __pbn__Digest = null;
-    }
-    private string __pbn__Digest;
+	[global::ProtoBuf.ProtoMember(4, Name = @"digest")]
+	[global::System.ComponentModel.DefaultValue("")]
+	public string Digest
+	{
+		get { return __pbn__Digest ?? ""; }
+		set { __pbn__Digest = value; }
+	}
+	public bool ShouldSerializeDigest()
+	{
+		return __pbn__Digest != null;
+	}
+	public void ResetDigest()
+	{
+		__pbn__Digest = null;
+	}
+	private string __pbn__Digest;
 
-    [global::ProtoBuf.ProtoMember(5, Name = @"setting")]
-    public global::System.Collections.Generic.List<GservicesSetting> Settings { get; private set; }
+	[global::ProtoBuf.ProtoMember(5, Name = @"setting")]
+	public global::System.Collections.Generic.List<GservicesSetting> Settings { get; private set; }
 
-    [global::ProtoBuf.ProtoMember(6)]
-    public bool marketOk
-    {
-        get { return __pbn__marketOk.GetValueOrDefault(); }
-        set { __pbn__marketOk = value; }
-    }
-    public bool ShouldSerializemarketOk()
-    {
-        return __pbn__marketOk != null;
-    }
-    public void ResetmarketOk()
-    {
-        __pbn__marketOk = null;
-    }
-    private bool? __pbn__marketOk;
+	[global::ProtoBuf.ProtoMember(6)]
+	public bool marketOk
+	{
+		get { return __pbn__marketOk.GetValueOrDefault(); }
+		set { __pbn__marketOk = value; }
+	}
+	public bool ShouldSerializemarketOk()
+	{
+		return __pbn__marketOk != null;
+	}
+	public void ResetmarketOk()
+	{
+		__pbn__marketOk = null;
+	}
+	private bool? __pbn__marketOk;
 
-    [global::ProtoBuf.ProtoMember(7, DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
-    public ulong androidId
-    {
-        get { return __pbn__androidId.GetValueOrDefault(); }
-        set { __pbn__androidId = value; }
-    }
-    public bool ShouldSerializeandroidId()
-    {
-        return __pbn__androidId != null;
-    }
-    public void ResetandroidId()
-    {
-        __pbn__androidId = null;
-    }
-    private ulong? __pbn__androidId;
+	[global::ProtoBuf.ProtoMember(7, DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
+	public ulong androidId
+	{
+		get { return __pbn__androidId.GetValueOrDefault(); }
+		set { __pbn__androidId = value; }
+	}
+	public bool ShouldSerializeandroidId()
+	{
+		return __pbn__androidId != null;
+	}
+	public void ResetandroidId()
+	{
+		__pbn__androidId = null;
+	}
+	private ulong? __pbn__androidId;
 
-    [global::ProtoBuf.ProtoMember(8, DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
-    public ulong securityToken
-    {
-        get { return __pbn__securityToken.GetValueOrDefault(); }
-        set { __pbn__securityToken = value; }
-    }
-    public bool ShouldSerializesecurityToken()
-    {
-        return __pbn__securityToken != null;
-    }
-    public void ResetsecurityToken()
-    {
-        __pbn__securityToken = null;
-    }
-    private ulong? __pbn__securityToken;
+	[global::ProtoBuf.ProtoMember(8, DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
+	public ulong securityToken
+	{
+		get { return __pbn__securityToken.GetValueOrDefault(); }
+		set { __pbn__securityToken = value; }
+	}
+	public bool ShouldSerializesecurityToken()
+	{
+		return __pbn__securityToken != null;
+	}
+	public void ResetsecurityToken()
+	{
+		__pbn__securityToken = null;
+	}
+	private ulong? __pbn__securityToken;
 
-    [global::ProtoBuf.ProtoMember(9)]
-    public bool settingsDiff
-    {
-        get { return __pbn__settingsDiff.GetValueOrDefault(); }
-        set { __pbn__settingsDiff = value; }
-    }
-    public bool ShouldSerializesettingsDiff()
-    {
-        return __pbn__settingsDiff != null;
-    }
-    public void ResetsettingsDiff()
-    {
-        __pbn__settingsDiff = null;
-    }
-    private bool? __pbn__settingsDiff;
+	[global::ProtoBuf.ProtoMember(9)]
+	public bool settingsDiff
+	{
+		get { return __pbn__settingsDiff.GetValueOrDefault(); }
+		set { __pbn__settingsDiff = value; }
+	}
+	public bool ShouldSerializesettingsDiff()
+	{
+		return __pbn__settingsDiff != null;
+	}
+	public void ResetsettingsDiff()
+	{
+		__pbn__settingsDiff = null;
+	}
+	private bool? __pbn__settingsDiff;
 
-    [global::ProtoBuf.ProtoMember(10, Name = @"deleteSetting")]
-    public global::System.Collections.Generic.List<string> deleteSettings { get; private set; }
+	[global::ProtoBuf.ProtoMember(10, Name = @"deleteSetting")]
+	public global::System.Collections.Generic.List<string> deleteSettings { get; private set; }
 
-    [global::ProtoBuf.ProtoMember(11)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string versionInfo
-    {
-        get { return __pbn__versionInfo ?? ""; }
-        set { __pbn__versionInfo = value; }
-    }
-    public bool ShouldSerializeversionInfo()
-    {
-        return __pbn__versionInfo != null;
-    }
-    public void ResetversionInfo()
-    {
-        __pbn__versionInfo = null;
-    }
-    private string __pbn__versionInfo;
+	[global::ProtoBuf.ProtoMember(11)]
+	[global::System.ComponentModel.DefaultValue("")]
+	public string versionInfo
+	{
+		get { return __pbn__versionInfo ?? ""; }
+		set { __pbn__versionInfo = value; }
+	}
+	public bool ShouldSerializeversionInfo()
+	{
+		return __pbn__versionInfo != null;
+	}
+	public void ResetversionInfo()
+	{
+		__pbn__versionInfo = null;
+	}
+	private string __pbn__versionInfo;
 
-    [global::ProtoBuf.ProtoMember(12)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string deviceDataVersionInfo
-    {
-        get { return __pbn__deviceDataVersionInfo ?? ""; }
-        set { __pbn__deviceDataVersionInfo = value; }
-    }
-    public bool ShouldSerializedeviceDataVersionInfo()
-    {
-        return __pbn__deviceDataVersionInfo != null;
-    }
-    public void ResetdeviceDataVersionInfo()
-    {
-        __pbn__deviceDataVersionInfo = null;
-    }
-    private string __pbn__deviceDataVersionInfo;
+	[global::ProtoBuf.ProtoMember(12)]
+	[global::System.ComponentModel.DefaultValue("")]
+	public string deviceDataVersionInfo
+	{
+		get { return __pbn__deviceDataVersionInfo ?? ""; }
+		set { __pbn__deviceDataVersionInfo = value; }
+	}
+	public bool ShouldSerializedeviceDataVersionInfo()
+	{
+		return __pbn__deviceDataVersionInfo != null;
+	}
+	public void ResetdeviceDataVersionInfo()
+	{
+		__pbn__deviceDataVersionInfo = null;
+	}
+	private string __pbn__deviceDataVersionInfo;
 
-    [global::ProtoBuf.ProtoContract()]
-    public partial class Intent : global::ProtoBuf.IExtensible
-    {
-        private global::ProtoBuf.IExtension __pbn__extensionData;
-        global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-        {
-            return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
-        }
-        public Intent()
-        {
-            Extras = new global::System.Collections.Generic.List<Extra>();
-            OnConstructor();
-        }
+	[global::ProtoBuf.ProtoContract()]
+	public partial class Intent : global::ProtoBuf.IExtensible
+	{
+		private global::ProtoBuf.IExtension __pbn__extensionData;
+		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+		{
+			return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+		}
+		public Intent()
+		{
+			Extras = new global::System.Collections.Generic.List<Extra>();
+			OnConstructor();
+		}
 
-        partial void OnConstructor();
+		partial void OnConstructor();
 
-        [global::ProtoBuf.ProtoMember(1, Name = @"action")]
-        [global::System.ComponentModel.DefaultValue("")]
-        public string Action
-        {
-            get { return __pbn__Action ?? ""; }
-            set { __pbn__Action = value; }
-        }
-        public bool ShouldSerializeAction()
-        {
-            return __pbn__Action != null;
-        }
-        public void ResetAction()
-        {
-            __pbn__Action = null;
-        }
-        private string __pbn__Action;
+		[global::ProtoBuf.ProtoMember(1, Name = @"action")]
+		[global::System.ComponentModel.DefaultValue("")]
+		public string Action
+		{
+			get { return __pbn__Action ?? ""; }
+			set { __pbn__Action = value; }
+		}
+		public bool ShouldSerializeAction()
+		{
+			return __pbn__Action != null;
+		}
+		public void ResetAction()
+		{
+			__pbn__Action = null;
+		}
+		private string __pbn__Action;
 
-        [global::ProtoBuf.ProtoMember(2)]
-        [global::System.ComponentModel.DefaultValue("")]
-        public string dataUri
-        {
-            get { return __pbn__dataUri ?? ""; }
-            set { __pbn__dataUri = value; }
-        }
-        public bool ShouldSerializedataUri()
-        {
-            return __pbn__dataUri != null;
-        }
-        public void ResetdataUri()
-        {
-            __pbn__dataUri = null;
-        }
-        private string __pbn__dataUri;
+		[global::ProtoBuf.ProtoMember(2)]
+		[global::System.ComponentModel.DefaultValue("")]
+		public string dataUri
+		{
+			get { return __pbn__dataUri ?? ""; }
+			set { __pbn__dataUri = value; }
+		}
+		public bool ShouldSerializedataUri()
+		{
+			return __pbn__dataUri != null;
+		}
+		public void ResetdataUri()
+		{
+			__pbn__dataUri = null;
+		}
+		private string __pbn__dataUri;
 
-        [global::ProtoBuf.ProtoMember(3)]
-        [global::System.ComponentModel.DefaultValue("")]
-        public string mimeType
-        {
-            get { return __pbn__mimeType ?? ""; }
-            set { __pbn__mimeType = value; }
-        }
-        public bool ShouldSerializemimeType()
-        {
-            return __pbn__mimeType != null;
-        }
-        public void ResetmimeType()
-        {
-            __pbn__mimeType = null;
-        }
-        private string __pbn__mimeType;
+		[global::ProtoBuf.ProtoMember(3)]
+		[global::System.ComponentModel.DefaultValue("")]
+		public string mimeType
+		{
+			get { return __pbn__mimeType ?? ""; }
+			set { __pbn__mimeType = value; }
+		}
+		public bool ShouldSerializemimeType()
+		{
+			return __pbn__mimeType != null;
+		}
+		public void ResetmimeType()
+		{
+			__pbn__mimeType = null;
+		}
+		private string __pbn__mimeType;
 
-        [global::ProtoBuf.ProtoMember(4)]
-        [global::System.ComponentModel.DefaultValue("")]
-        public string javaClass
-        {
-            get { return __pbn__javaClass ?? ""; }
-            set { __pbn__javaClass = value; }
-        }
-        public bool ShouldSerializejavaClass()
-        {
-            return __pbn__javaClass != null;
-        }
-        public void ResetjavaClass()
-        {
-            __pbn__javaClass = null;
-        }
-        private string __pbn__javaClass;
+		[global::ProtoBuf.ProtoMember(4)]
+		[global::System.ComponentModel.DefaultValue("")]
+		public string javaClass
+		{
+			get { return __pbn__javaClass ?? ""; }
+			set { __pbn__javaClass = value; }
+		}
+		public bool ShouldSerializejavaClass()
+		{
+			return __pbn__javaClass != null;
+		}
+		public void ResetjavaClass()
+		{
+			__pbn__javaClass = null;
+		}
+		private string __pbn__javaClass;
 
-        [global::ProtoBuf.ProtoMember(5, Name = @"extra")]
-        public global::System.Collections.Generic.List<Extra> Extras { get; private set; }
+		[global::ProtoBuf.ProtoMember(5, Name = @"extra")]
+		public global::System.Collections.Generic.List<Extra> Extras { get; private set; }
 
-        [global::ProtoBuf.ProtoContract()]
-        public partial class Extra : global::ProtoBuf.IExtensible
-        {
-            private global::ProtoBuf.IExtension __pbn__extensionData;
-            global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-            {
-                return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
-            }
-            public Extra()
-            {
-                OnConstructor();
-            }
+		[global::ProtoBuf.ProtoContract()]
+		public partial class Extra : global::ProtoBuf.IExtensible
+		{
+			private global::ProtoBuf.IExtension __pbn__extensionData;
+			global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+			{
+				return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+			}
+			public Extra()
+			{
+				OnConstructor();
+			}
 
-            partial void OnConstructor();
+			partial void OnConstructor();
 
-            [global::ProtoBuf.ProtoMember(6, Name = @"name")]
-            [global::System.ComponentModel.DefaultValue("")]
-            public string Name
-            {
-                get { return __pbn__Name ?? ""; }
-                set { __pbn__Name = value; }
-            }
-            public bool ShouldSerializeName()
-            {
-                return __pbn__Name != null;
-            }
-            public void ResetName()
-            {
-                __pbn__Name = null;
-            }
-            private string __pbn__Name;
+			[global::ProtoBuf.ProtoMember(6, Name = @"name")]
+			[global::System.ComponentModel.DefaultValue("")]
+			public string Name
+			{
+				get { return __pbn__Name ?? ""; }
+				set { __pbn__Name = value; }
+			}
+			public bool ShouldSerializeName()
+			{
+				return __pbn__Name != null;
+			}
+			public void ResetName()
+			{
+				__pbn__Name = null;
+			}
+			private string __pbn__Name;
 
-            [global::ProtoBuf.ProtoMember(7, Name = @"value")]
-            [global::System.ComponentModel.DefaultValue("")]
-            public string Value
-            {
-                get { return __pbn__Value ?? ""; }
-                set { __pbn__Value = value; }
-            }
-            public bool ShouldSerializeValue()
-            {
-                return __pbn__Value != null;
-            }
-            public void ResetValue()
-            {
-                __pbn__Value = null;
-            }
-            private string __pbn__Value;
+			[global::ProtoBuf.ProtoMember(7, Name = @"value")]
+			[global::System.ComponentModel.DefaultValue("")]
+			public string Value
+			{
+				get { return __pbn__Value ?? ""; }
+				set { __pbn__Value = value; }
+			}
+			public bool ShouldSerializeValue()
+			{
+				return __pbn__Value != null;
+			}
+			public void ResetValue()
+			{
+				__pbn__Value = null;
+			}
+			private string __pbn__Value;
 
-        }
+		}
 
-    }
+	}
 
-    [global::ProtoBuf.ProtoContract()]
-    public partial class GservicesSetting : global::ProtoBuf.IExtensible
-    {
-        private global::ProtoBuf.IExtension __pbn__extensionData;
-        global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-        {
-            return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
-        }
-        public GservicesSetting()
-        {
-            OnConstructor();
-        }
+	[global::ProtoBuf.ProtoContract()]
+	public partial class GservicesSetting : global::ProtoBuf.IExtensible
+	{
+		private global::ProtoBuf.IExtension __pbn__extensionData;
+		global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+		{
+			return global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+		}
+		public GservicesSetting()
+		{
+			OnConstructor();
+		}
 
-        partial void OnConstructor();
+		partial void OnConstructor();
 
-        [global::ProtoBuf.ProtoMember(1, Name = @"name")]
-        public byte[] Name
-        {
-            get { return __pbn__Name; }
-            set { __pbn__Name = value; }
-        }
-        public bool ShouldSerializeName()
-        {
-            return __pbn__Name != null;
-        }
-        public void ResetName()
-        {
-            __pbn__Name = null;
-        }
-        private byte[] __pbn__Name;
+		[global::ProtoBuf.ProtoMember(1, Name = @"name")]
+		public byte[] Name
+		{
+			get { return __pbn__Name; }
+			set { __pbn__Name = value; }
+		}
+		public bool ShouldSerializeName()
+		{
+			return __pbn__Name != null;
+		}
+		public void ResetName()
+		{
+			__pbn__Name = null;
+		}
+		private byte[] __pbn__Name;
 
-        [global::ProtoBuf.ProtoMember(2, Name = @"value")]
-        public byte[] Value
-        {
-            get { return __pbn__Value; }
-            set { __pbn__Value = value; }
-        }
-        public bool ShouldSerializeValue()
-        {
-            return __pbn__Value != null;
-        }
-        public void ResetValue()
-        {
-            __pbn__Value = null;
-        }
-        private byte[] __pbn__Value;
+		[global::ProtoBuf.ProtoMember(2, Name = @"value")]
+		public byte[] Value
+		{
+			get { return __pbn__Value; }
+			set { __pbn__Value = value; }
+		}
+		public bool ShouldSerializeValue()
+		{
+			return __pbn__Value != null;
+		}
+		public void ResetValue()
+		{
+			__pbn__Value = null;
+		}
+		private byte[] __pbn__Value;
 
-    }
+	}
 
 }
 

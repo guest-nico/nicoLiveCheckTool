@@ -6,7 +6,6 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using System.Collections.Generic;
 
 namespace namaichi.info
@@ -21,35 +20,37 @@ namespace namaichi.info
 		public string str = null;
 		public string type = "ワード"; //ワード　条件の入れ子
 		public List<CustomKeywordInfo> cki = null;
-		public CustomKeywordInfo() {
-			
+		public CustomKeywordInfo()
+		{
+
 		}
-		public CustomKeywordInfo(string matchType, string str, List<CustomKeywordInfo> cki, string name = null) {
+		public CustomKeywordInfo(string matchType, string str, List<CustomKeywordInfo> cki, string name = null)
+		{
 			this.matchType = matchType;
 			this.str = str;
 			this.cki = cki;
 			this.name = name;
 		}
 		public string MatchType
-        {
-        	get { return matchType; }
-            set { this.matchType = value; }
-        }
-		
+		{
+			get { return matchType; }
+			set { this.matchType = value; }
+		}
+
 		public string Type
-        {
-        	get { return type; }
-            set { this.type = value; }
-        }
+		{
+			get { return type; }
+			set { this.type = value; }
+		}
 		public string Str
-        {
-        	get { return str; }
-            set { this.str = value; }
-        }
+		{
+			get { return str; }
+			set { this.str = value; }
+		}
 		public string CustomBtn
-        {
-        	get { return "入れ子設定"; }
-            set {  }
-        }
+		{
+			get { return "入れ子設定"; }
+			set { }
+		}
 	}
 }

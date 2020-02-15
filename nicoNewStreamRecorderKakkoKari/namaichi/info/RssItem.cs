@@ -7,16 +7,17 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace namaichi.info
 {
 	/// <summary>
 	/// Description of RssItem.
 	/// </summary>
-	public class RssItem {
+	public class RssItem
+	{
 		public string lvId;
 		public string hostName;
 		public string comId;
@@ -29,19 +30,20 @@ namespace namaichi.info
 		public string[] tags = null;
 		public string itemRes;
 		public string userId = null;
-		
+
 		public List<string> category = null;
 		public string type = null;
-		
+
 		static Regex getStringToWordsListReg = new Regex("(\\s)(\"\"|\".*?[^\\\\]\")(\\s)");
 		public DateTime pubDateDt = DateTime.MinValue;
 		public bool isAlarted = false;
-		
-		public RssItem(string title, string lvId, 
+
+		public RssItem(string title, string lvId,
 				string pubDate, string description,
-		        string comName, string comId,
-		        string hostName, string thumbnailUrl,
-		        string memberOnly, string itemRes) {
+				string comName, string comId,
+				string hostName, string thumbnailUrl,
+				string memberOnly, string itemRes)
+		{
 			this.lvId = lvId;
 			this.hostName = WebUtility.HtmlDecode(hostName);
 			this.comId = comId;
@@ -50,51 +52,64 @@ namespace namaichi.info
 			this.pubDate = pubDate;
 			this.title = WebUtility.HtmlDecode(title);
 			this.thumbnailUrl = thumbnailUrl;
-			try {
+			try
+			{
 				this.isMemberOnly = memberOnly != null && memberOnly.ToLower() == "true";
-			} catch (Exception e) {
+			}
+			catch (Exception e)
+			{
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				
+
 			}
 			this.itemRes = itemRes;
 		}
-		public bool isContainKeyword(string keyword) {
+		public bool isContainKeyword(string keyword)
+		{
 			return util.getRegGroup(lvId, "(" + keyword + ")") != null ||
 				util.getRegGroup(hostName == null ? "" : hostName, "(" + keyword + ")") != null ||
-			    util.getRegGroup(comId, "(" + keyword + ")") != null ||
-			    util.getRegGroup(comName, "(" + keyword + ")") != null ||
-			    util.getRegGroup(description, "(" + keyword + ")") != null ||
-			    util.getRegGroup(title, "(" + keyword + ")") != null;
+				util.getRegGroup(comId, "(" + keyword + ")") != null ||
+				util.getRegGroup(comName, "(" + keyword + ")") != null ||
+				util.getRegGroup(description, "(" + keyword + ")") != null ||
+				util.getRegGroup(title, "(" + keyword + ")") != null;
 
 		}
-		public bool isMatchKeyword(AlartInfo ai) {
-			if (ai.isCustomKeyword) {
+		public bool isMatchKeyword(AlartInfo ai)
+		{
+			if (ai.isCustomKeyword)
+			{
 				return isMatchCustomKeyword(ai.cki);
-			} else {
+			}
+			else
+			{
 				return isMatchSimpleKeyword(ai.keyword);
 			}
-			
+
 		}
-		private bool isMatchSimpleKeyword(string keyword) {
+		private bool isMatchSimpleKeyword(string keyword)
+		{
 			var keys = getStringToWordsList(keyword);
 			//var keys = keyword.Split(new char[]{' ', '　'});
 			//if (description.IndexOf("ロク") > -1)
 			//	util.debugWriteLine(keyword);
-			
+
 			//not
-			foreach (var k in keys) {
-				try {
+			foreach (var k in keys)
+			{
+				try
+				{
 					var isNot = k.StartsWith("-") || k.StartsWith("ー");
 					if (!isNot) continue;
-					var _k = k.Remove(0,1);
+					var _k = k.Remove(0, 1);
 					if (isNot && (util.getRegGroup(lvId, "(" + _k + ")") != null ||
 							util.getRegGroup(hostName == null ? "" : hostName, "(" + _k + ")") != null ||
-						    util.getRegGroup(comId, "(" + _k + ")") != null ||
-						    util.getRegGroup(comName, "(" + _k + ")") != null ||
-						    util.getRegGroup(description, "(" + _k + ")") != null ||
-						    util.getRegGroup(title, "(" + _k + ")") != null))
+							util.getRegGroup(comId, "(" + _k + ")") != null ||
+							util.getRegGroup(comName, "(" + _k + ")") != null ||
+							util.getRegGroup(description, "(" + _k + ")") != null ||
+							util.getRegGroup(title, "(" + _k + ")") != null))
 						return false;
-				} catch (Exception e) {
+				}
+				catch (Exception e)
+				{
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			}
@@ -117,28 +132,34 @@ namespace namaichi.info
 			}
 			*/
 			//or
-			foreach (var k in keys) {
-				try {
+			foreach (var k in keys)
+			{
+				try
+				{
 					var isNot = k.StartsWith("-") || k.StartsWith("ー");
 					if (isNot) continue;
-					if (!isNot && (util.getRegGroup(lvId, "(" + k + ")") != null || 
+					if (!isNot && (util.getRegGroup(lvId, "(" + k + ")") != null ||
 							util.getRegGroup(hostName == null ? "" : hostName, "(" + k + ")") != null ||
-						    util.getRegGroup(comId, "(" + k + ")") != null ||
-						    util.getRegGroup(comName, "(" + k + ")") != null ||
-						    util.getRegGroup(description, "(" + k + ")") != null ||
-						    util.getRegGroup(title, "(" + k + ")") != null))
+							util.getRegGroup(comId, "(" + k + ")") != null ||
+							util.getRegGroup(comName, "(" + k + ")") != null ||
+							util.getRegGroup(description, "(" + k + ")") != null ||
+							util.getRegGroup(title, "(" + k + ")") != null))
 						return true;
-				} catch (Exception e) {
+				}
+				catch (Exception e)
+				{
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			}
 			return false;
 		}
-		
-		private List<string> getStringToWordsList(string s) {
+
+		private List<string> getStringToWordsList(string s)
+		{
 			var quot = new List<string>();
 			s = " " + s + " ";
-			for (var i = 0; i < 100; i++) {
+			for (var i = 0; i < 100; i++)
+			{
 				//Match m = Regex.Match(s, "(\\s)(\"\"|\".*?[^\\\\]\")(\\s)");
 				Match m = getStringToWordsListReg.Match(s);
 				if (m.Length == 0) break;
@@ -146,31 +167,35 @@ namespace namaichi.info
 				if (m.Groups[2].Value.Length == 2) continue;
 				quot.Add(m.Groups[2].Value);
 			}
-//			Debug.WriteLine(a  + " " + quot);
-			
+			//			Debug.WriteLine(a  + " " + quot);
+
 			var ret = new List<string>();
-			foreach (var c in s.Split(new char[]{' ', '　'})) {
+			foreach (var c in s.Split(new char[] { ' ', '　' }))
+			{
 				var d = c.Trim();
 				if (d.Length == 0) continue;
-//				Debug.WriteLine(d);
+				//				Debug.WriteLine(d);
 				ret.Add(d);
 			}
-			foreach (var q in quot) {
-//				Debug.WriteLine(q.Trim('"'));
-				ret.Add(q.Trim(new char[]{'"', ' ', '　'}));
+			foreach (var q in quot)
+			{
+				//				Debug.WriteLine(q.Trim('"'));
+				ret.Add(q.Trim(new char[] { '"', ' ', '　' }));
 			}
 			return ret;
 		}
-		public string[] getTag(Regex r) {
+		public string[] getTag(Regex r)
+		{
 			if (tags != null) return tags;
-			if (itemRes == null) return new string[]{""};
-			
+			if (itemRes == null) return new string[] { "" };
+
 			var m = r.Matches(itemRes);
 			var ret = new string[m.Count];
-			for(var i = 0; i < m.Count; i++) {
+			for (var i = 0; i < m.Count; i++)
+			{
 				ret[i] = m[i].Groups[1].Value;
 			}
-			tags = ret; 
+			tags = ret;
 			return ret;
 		}
 		public void setUserId(string userId)
@@ -181,19 +206,25 @@ namespace namaichi.info
 		{
 			this.tags = tag;
 		}
-		private bool isMatchCustomKeyword(List<CustomKeywordInfo> ckis) {
+		private bool isMatchCustomKeyword(List<CustomKeywordInfo> ckis)
+		{
 			if (!isNotOk(ckis)) return false;
 			if (!isAndOk(ckis)) return false;
 			if (!isOrOk(ckis)) return false;
 			return true;
 		}
-		bool isNotOk(List<CustomKeywordInfo> ckis) {
-			foreach (var c in ckis) {
-				if (c.type == "ワード") {
+		bool isNotOk(List<CustomKeywordInfo> ckis)
+		{
+			foreach (var c in ckis)
+			{
+				if (c.type == "ワード")
+				{
 					if (string.IsNullOrEmpty(c.str)) continue;
 					if (c.matchType == "含まない" && isContainKeyword(c.str))
 						return false;
-				} else {
+				}
+				else
+				{
 					//カスタム
 					if (c.cki == null) continue;
 					if (c.matchType == "含まない" && isMatchCustomKeyword(c.cki))
@@ -202,13 +233,18 @@ namespace namaichi.info
 			}
 			return true;
 		}
-		bool isAndOk(List<CustomKeywordInfo> ckis) {
-			foreach (var c in ckis) {
-				if (c.type == "ワード") {
+		bool isAndOk(List<CustomKeywordInfo> ckis)
+		{
+			foreach (var c in ckis)
+			{
+				if (c.type == "ワード")
+				{
 					if (string.IsNullOrEmpty(c.str)) continue;
 					if (c.matchType == "必ず含む" && !isContainKeyword(c.str))
 						return false;
-				} else {
+				}
+				else
+				{
 					//カスタム
 					if (c.cki == null) continue;
 					if (c.matchType == "必ず含む" && !isMatchCustomKeyword(c.cki))
@@ -217,22 +253,29 @@ namespace namaichi.info
 			}
 			return true;
 		}
-		bool isOrOk(List<CustomKeywordInfo> ckis) {
+		bool isOrOk(List<CustomKeywordInfo> ckis)
+		{
 			var isOr = false;
-			foreach (var c in ckis) {
-				if (c.type == "ワード") {
+			foreach (var c in ckis)
+			{
+				if (c.type == "ワード")
+				{
 					if (string.IsNullOrEmpty(c.str)) continue;
-					
-					if (c.matchType == "いずれかを含む") {
-						if (isContainKeyword(c.str)) 
+
+					if (c.matchType == "いずれかを含む")
+					{
+						if (isContainKeyword(c.str))
 							return true;
 						isOr = true;
 					}
-				} else {
+				}
+				else
+				{
 					//カスタム
 					if (c.cki == null) continue;
-					if (c.matchType == "いずれかを含む") {
-						if (isMatchCustomKeyword(c.cki)) 
+					if (c.matchType == "いずれかを含む")
+					{
+						if (isMatchCustomKeyword(c.cki))
 							return true;
 						isOr = true;
 					}

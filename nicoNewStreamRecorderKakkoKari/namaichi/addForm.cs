@@ -6,14 +6,14 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Collections.Generic;
-using System.IO;
+using namaichi.alart;
 using namaichi.info;
 using namaichi.rec;
-using namaichi.alart;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 
 namespace namaichi
 {
@@ -22,7 +22,7 @@ namespace namaichi
 	/// </summary>
 	public partial class addForm : Form
 	{
-//		public int addType = -1; //-1-no 0-user 1-community or channel 2-official
+		//		public int addType = -1; //-1-no 0-user 1-community or channel 2-official
 		public AlartInfo ret = null;
 		private MainForm form;
 		private string lastGetThumbUser = null;
@@ -36,57 +36,63 @@ namespace namaichi
 			this.form = form;
 			this.editAi = editAi;
 			this.isUserMode = isUserMode;
-			
+
 			dataSource = isUserMode ? form.userAlartListDataSource : form.alartListDataSource;
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
-			if (editAi != null) {
+			if (editAi != null)
+			{
 				setEditModeDisplay(editAi);
-				
+
 				if (isUserMode) setUserModeForm();
 				return;
 			}
-			
+
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
 			setDefaultBehavior();
-			
-			if (id == null) {
+
+			if (id == null)
+			{
 				if (isUserMode) setUserModeForm();
 				return;
 			}
-			
+
 			if (id.StartsWith("lv")) hosoIdText.Text = id;
-			else if (id.StartsWith("c")) {
-				if (bool.Parse(form.config.get("IsdragCom"))) {
+			else if (id.StartsWith("c"))
+			{
+				if (bool.Parse(form.config.get("IsdragCom")))
+				{
 					hosoIdText.Text = id;
 				}
 				communityId.Text = id;
 			}
 			else userIdText.Text = id;
-			
-			if (isUserMode) {
+
+			if (isUserMode)
+			{
 				//communityId.Text = communityNameText.Text = "";
 				//keywordText.Text = "";
 				setUserModeForm();
 			}
 		}
-		
+
 		void Button4Click(object sender, EventArgs e)
 		{
 			Close();
 		}
-		
+
 		void Button3Click(object sender, EventArgs e)
 		{
 			if (editAi != null) editOkBtnProcess();
 			else addOkBtnProcess();
-			
+
 		}
-		void addOkBtnProcess() {
+		void addOkBtnProcess()
+		{
 			var comId = communityId.Text == "official" ? "official" : util.getRegGroup(communityId.Text, "((ch|co)*\\d+)");
 			var userId = util.getRegGroup(userIdText.Text, "(\\d+)");
 			communityNameText.Text = "";
@@ -95,27 +101,32 @@ namespace namaichi
 			if (userId != null) GetUserInfoBtnClickProcess(true);
 			var isNoKeyword = (isSimpleKeywordRadioBtn.Checked && keywordText.Text == "") ||
 					(isCustomKeywordRadioBtn.Checked && customKw == null);
-			if (communityNameText.Text == "" && userNameText.Text == "" && isNoKeyword) {
+			if (communityNameText.Text == "" && userNameText.Text == "" && isNoKeyword)
+			{
 				MessageBox.Show("有効なコミュニティIDかユーザーIDかキーワードが入力されていないです");
 				return;
 			}
-			
-			if (isCustomKeywordRadioBtn.Checked) {
-				if (customKw == null) {
+
+			if (isCustomKeywordRadioBtn.Checked)
+			{
+				if (customKw == null)
+				{
 					MessageBox.Show("カスタムキーワードが未設定です");
 					return;
 				}
 				var isAllNot = true;
-				foreach (var c in customKw) {
+				foreach (var c in customKw)
+				{
 					if (c.matchType != "含まない") isAllNot = false;
 				}
-				if (communityNameText.Text == "" && userNameText.Text == "" && isAllNot) {
+				if (communityNameText.Text == "" && userNameText.Text == "" && isAllNot)
+				{
 					MessageBox.Show("「含まない」以外の行が必要です");
 					return;
 				}
 			}
-			
-			
+
+
 			var now = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
 			var addDate = now;//now.Substring(0, now.Length - 3);
 			var comFollow = string.IsNullOrEmpty(comId) ? "" :
@@ -124,20 +135,20 @@ namespace namaichi
 					(userFollowChkBox.Checked) ? "フォロー解除する" : "フォローする";
 			if (communityNameText.Text == "" || comId == "official") comFollow = "";
 			if (userNameText.Text == "") userFollow = "";
-			var _ret = new AlartInfo(comId, userId, 
-					communityNameText.Text, userNameText.Text, 
-					"", addDate, isPopupChkBox.Checked, 
-					isBaloonChkBox.Checked, isWebChkBox.Checked, 
+			var _ret = new AlartInfo(comId, userId,
+					communityNameText.Text, userNameText.Text,
+					"", addDate, isPopupChkBox.Checked,
+					isBaloonChkBox.Checked, isWebChkBox.Checked,
 					isMailChkBox.Checked, isSoundChkBox.Checked,
-					appliAChkBox.Checked, appliBChkBox.Checked, 
-					appliCChkBox.Checked, appliDChkBox.Checked, 
+					appliAChkBox.Checked, appliBChkBox.Checked,
+					appliCChkBox.Checked, appliDChkBox.Checked,
 					appliEChkBox.Checked, appliFChkBox.Checked,
-					appliGChkBox.Checked, appliHChkBox.Checked,					
+					appliGChkBox.Checked, appliHChkBox.Checked,
 					appliIChkBox.Checked, appliJChkBox.Checked,
 					memoText.Text, comFollow,
-					userFollow, "", keywordText.Text, 
+					userFollow, "", keywordText.Text,
 					textColorBtn.BackColor, backColorBtn.BackColor,
-					defaultSoundList.SelectedIndex, 
+					defaultSoundList.SelectedIndex,
 					isDefaultSoundIdChkBox.Checked, isMustComChkBox.Checked,
 					isMustUserChkBox.Checked, isMustKeywordChkBox.Checked,
 					customKw, isCustomKeywordRadioBtn.Checked);
@@ -146,7 +157,8 @@ namespace namaichi
 			util.debugWriteLine("addform add okbtn " + _ret.hostId + " " + _ret.communityId + " " + _ret.keyword);
 			Close();
 		}
-		void editOkBtnProcess() {
+		void editOkBtnProcess()
+		{
 			var comId = communityId.Text == "official" ? "official" : util.getRegGroup(communityId.Text, "((ch|co)*\\d+)");
 			var userId = util.getRegGroup(userIdText.Text, "(\\d+)");
 			communityNameText.Text = "";
@@ -156,27 +168,31 @@ namespace namaichi
 			var comFollow = string.IsNullOrEmpty(comId) ? "" :
 					(communityFollowChkBox.Checked) ? "フォロー解除する" : "フォローする";
 			if (communityNameText.Text == "" || comId == "official") comFollow = "";
-			var userFollow = string.IsNullOrEmpty(userId) ? "":
+			var userFollow = string.IsNullOrEmpty(userId) ? "" :
 					(userFollowChkBox.Checked) ? "フォロー解除する" : "フォローする";
-			
+
 			var isNoKeyword = (isSimpleKeywordRadioBtn.Checked && keywordText.Text == "") ||
 					(isCustomKeywordRadioBtn.Checked && customKw == null);
-			if (communityNameText.Text == "" && userNameText.Text == "" && isNoKeyword) {
+			if (communityNameText.Text == "" && userNameText.Text == "" && isNoKeyword)
+			{
 				MessageBox.Show("有効なコミュニティIDかユーザーIDかキーワードが入力されていないです");
 				return;
 			}
-			
-			if (customKw != null) {
+
+			if (customKw != null)
+			{
 				var isAllNot = true;
-				foreach (var c in customKw) {
+				foreach (var c in customKw)
+				{
 					if (c.matchType != "含まない") isAllNot = false;
 				}
-				if (communityNameText.Text == "" && userNameText.Text == "" && isAllNot) {
+				if (communityNameText.Text == "" && userNameText.Text == "" && isAllNot)
+				{
 					MessageBox.Show("「含まない」以外の行が必要です");
 					return;
 				}
 			}
-			
+
 			editAi.communityId = comId;
 			editAi.hostId = userId;
 			editAi.communityName = communityNameText.Text;
@@ -232,15 +248,17 @@ namespace namaichi
 		{
 			GetCommunityInfoBtnClickProcess();
 		}
-		void GetCommunityInfoBtnClickProcess(bool isOkBtn = false) {
+		void GetCommunityInfoBtnClickProcess(bool isOkBtn = false)
+		{
 			util.debugWriteLine("GetCommunityInfoBtnClickProcess " + communityId.Text);
-			if (communityId.Text == "official") {
+			if (communityId.Text == "official")
+			{
 				communityNameText.Text = "公式生放送";
 				communityFollowChkBox.Checked = false;
 				setThunb("co00", false);
 				return;
 			}
-			
+
 			var num = util.getRegGroup(communityId.Text, "((ch|co)*\\d+)");
 			if (num == null) return;
 			var isChannel = num.StartsWith("ch");
@@ -256,15 +274,16 @@ namespace namaichi
 			if (comName == null) return;
 			communityFollowChkBox.Checked = isFollow;
 			communityNameText.Text = comName;
-			
+
 			setThunb(num, isOkBtn);
 		}
-		
+
 		void GetUserInfoBtnClick(object sender, EventArgs e)
 		{
 			GetUserInfoBtnClickProcess();
 		}
-		void GetUserInfoBtnClickProcess(bool isOkBtn = false) {
+		void GetUserInfoBtnClickProcess(bool isOkBtn = false)
+		{
 			util.debugWriteLine("GetUserInfoBtnClickProcess " + userIdText.Text);
 			var num = util.getRegGroup(userIdText.Text, "(\\d+)");
 			if (num == null) return;
@@ -274,21 +293,23 @@ namespace namaichi
 			if (userName == null) return;
 			userFollowChkBox.Checked = isFollow;
 			userNameText.Text = userName;
-			
+
 			setThunb(num, isOkBtn);
 		}
 		void GetInfoFromHosoIdBtnClick(object sender, EventArgs e)
 		{
 			if (hosoIdText.Text == "") return;
-			
+
 			var t = hosoIdText.Text;
 			string id = null;
 			var lv = util.getRegGroup(t, "(lv\\d+)");
 			if (lv != null) id = lv;
-			else {
+			else
+			{
 				var coch = util.getRegGroup(t, "(c[oh]\\d+)");
 				if (coch != null) id = coch;
-				else {
+				else
+				{
 					var user = util.getRegGroup(t, "user/(\\d+)");
 					if (user != null) id = user;
 				}
@@ -296,23 +317,23 @@ namespace namaichi
 			hosoIdText.Text = id;
 			if (id == null || (!id.StartsWith("l") && !id.StartsWith("c")))
 				MessageBox.Show("しっぱい");
-			
-			communityId.Text = communityNameText.Text = 
+
+			communityId.Text = communityNameText.Text =
 					userIdText.Text = userNameText.Text = "";
 			communityFollowChkBox.Checked = userFollowChkBox.Checked = false;
-			
-			var url =  "https://live2.nicovideo.jp/watch/" + id;
+
+			var url = "https://live2.nicovideo.jp/watch/" + id;
 			var hig = new HosoInfoGetter();
 			hig.get(url, form.check.container);
-			
+
 			communityId.Text = hig.communityId;
 			userIdText.Text = hig.userId;
 			GetCommunityInfoBtnClick(null, null);
 			GetUserInfoBtnClick(null, null);
-			
+
 			if (hig.communityId == null && hig.userId == null)
 				MessageBox.Show(hig.type == "official" ? "公式放送でした" : "しっぱい");
-				
+
 			/*
 			if (id.StartsWith("c")) {
 				if (hig.communityId != null) {
@@ -339,59 +360,71 @@ namespace namaichi
 			}
 			*/
 		}
-		bool duplicationCheckOk(AlartInfo ai) {
-			try {
+		bool duplicationCheckOk(AlartInfo ai)
+		{
+			try
+			{
 				var count = form.getAlartListCount(isUserMode);
-				for (var i = 0; i < count; i++) {
-					if (ai.communityId != null && ai.communityId != "" && dataSource[i].communityId == 
-					    	ai.communityId) {
+				for (var i = 0; i < count; i++)
+				{
+					if (ai.communityId != null && ai.communityId != "" && dataSource[i].communityId ==
+							ai.communityId)
+					{
 						var m = (ai.communityId.StartsWith("co")) ? "コミュニティ" : (ai.communityId == "official" ? "official" : "チャンネル");
-						
-					    //var res = MessageBox.Show(m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除　いいえ＝削除　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
-					    form.setAlartListScrollIndex(i, isUserMode);
-					    var res = MessageBox.Show(m + "ID:" + ai.communityId + "は既に登録されています。\n(" + dataSource[i].toString() + ")\n\n既に存在している行を削除しますか？\nはい=削除して登録　いいえ=既に存在する行を削除せず登録　キャンセル=登録しない", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
-					    
-					    if (res == DialogResult.Yes) {
-					    	form.alartListRemove(dataSource[i], isUserMode);
-					    	i--;
-					    	count--;
-	//				    	form.alartListAdd(ai);
-					    }
-					    else if (res == DialogResult.No) {
-	//				    	form.alartListAdd(ai);
-					    }
-					    else if (res == DialogResult.Cancel) return false;
+
+						//var res = MessageBox.Show(m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除　いいえ＝削除　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+						form.setAlartListScrollIndex(i, isUserMode);
+						var res = MessageBox.Show(m + "ID:" + ai.communityId + "は既に登録されています。\n(" + dataSource[i].toString() + ")\n\n既に存在している行を削除しますか？\nはい=削除して登録　いいえ=既に存在する行を削除せず登録　キャンセル=登録しない", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+
+						if (res == DialogResult.Yes)
+						{
+							form.alartListRemove(dataSource[i], isUserMode);
+							i--;
+							count--;
+							//				    	form.alartListAdd(ai);
+						}
+						else if (res == DialogResult.No)
+						{
+							//				    	form.alartListAdd(ai);
+						}
+						else if (res == DialogResult.Cancel) return false;
 					}
 				}
 				count = form.getAlartListCount(isUserMode);
-				for (var i = 0; i < count; i++) {
+				for (var i = 0; i < count; i++)
+				{
 					if (ai.hostId != null && ai.hostId != "" && dataSource[i].hostId ==
-						   ai.hostId) {
+						   ai.hostId)
+					{
 						var m = "ユーザー";
-					    //var res = MessageBox.Show(m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除して登録　いいえ＝登録　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
-					    form.setAlartListScrollIndex(i, isUserMode);
-					    var res = MessageBox.Show(m + "ID:" + ai.hostId + "は既に登録されています。\n(" + dataSource[i].toString() + ")\n\n既に存在している行を削除しますか？\nはい=削除して登録　いいえ=既に存在する行を削除せず登録　キャンセル=登録しない", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
-					    
-					    if (res == DialogResult.Yes) {
-					    	form.alartListRemove(dataSource[i], isUserMode);
-					    	i--;
-					    	count--;
-	//				    	form.alartListAdd(ai);
-					    }
-					    else if (res == DialogResult.No) {
-	//				    	form.alartListAdd(ai);
-					    }
-					    else if (res == DialogResult.Cancel) return false;
-						
+						//var res = MessageBox.Show(m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除して登録　いいえ＝登録　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+						form.setAlartListScrollIndex(i, isUserMode);
+						var res = MessageBox.Show(m + "ID:" + ai.hostId + "は既に登録されています。\n(" + dataSource[i].toString() + ")\n\n既に存在している行を削除しますか？\nはい=削除して登録　いいえ=既に存在する行を削除せず登録　キャンセル=登録しない", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+
+						if (res == DialogResult.Yes)
+						{
+							form.alartListRemove(dataSource[i], isUserMode);
+							i--;
+							count--;
+							//				    	form.alartListAdd(ai);
+						}
+						else if (res == DialogResult.No)
+						{
+							//				    	form.alartListAdd(ai);
+						}
+						else if (res == DialogResult.Cancel) return false;
+
 					}
 				}
-			} catch (Exception e) {
+			}
+			catch (Exception e)
+			{
 				util.debugWriteLine("duplicationcheckok " + e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return false;
 			}
 			return true;
 		}
-		
+
 		void AddFormLoad(object sender, EventArgs e)
 		{
 			if (editAi != null) return;
@@ -399,85 +432,106 @@ namespace namaichi
 			if (communityId.Text != "") getCommunityInfoBtn.PerformClick();
 			if (userIdText.Text != "") getUserInfoBtn.PerformClick();
 		}
-		
+
 		void AddFormDragDrop(object sender, DragEventArgs e)
 		{
-			try {
+			try
+			{
 				util.debugWriteLine("dragdrop");
-				
+
 				var t = e.Data.GetData(DataFormats.Text).ToString();
 				string id = null;
 				var lv = util.getRegGroup(t, "(lv\\d+)");
 				if (lv != null) id = lv;
-				else {
+				else
+				{
 					var coch = util.getRegGroup(t, "(c[oh]\\d+)");
 					if (coch != null) id = coch;
-					else {
+					else
+					{
 						var user = util.getRegGroup(t, "user/(\\d+)");
 						if (user != null) id = user;
 					}
 				}
 				if (id == null) return;
-				
-				if (id.StartsWith("l") || id.StartsWith("c")) {
+
+				if (id.StartsWith("l") || id.StartsWith("c"))
+				{
 					hosoIdText.Text = id.ToString();
 					getInfoFromHosoIdBtn.PerformClick();
-				} else {
+				}
+				else
+				{
 					userIdText.Text = id;
 					getUserInfoBtn.PerformClick();
 				}
-				
-				
-			} catch (Exception ee) {
+
+
+			}
+			catch (Exception ee)
+			{
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
 		}
 		void AddFormDragEnter(object sender, DragEventArgs e)
 		{
 			if (e.Data.GetDataPresent("UniformResourceLocator") ||
-			    e.Data.GetDataPresent("UniformResourceLocatorW") ||
-			    e.Data.GetDataPresent(DataFormats.Text)) {
+				e.Data.GetDataPresent("UniformResourceLocatorW") ||
+				e.Data.GetDataPresent(DataFormats.Text))
+			{
 				util.debugWriteLine(e.Effect);
 				e.Effect = DragDropEffects.Copy;
-				
+
 			}
 		}
-		private void setThunb(string num, bool isOkBtn) {
+		private void setThunb(string num, bool isOkBtn)
+		{
 			var isUser = !num.StartsWith("c");
 			Image img;
-			if (ThumbnailManager.isExist(num, out img)) {
+			if (ThumbnailManager.isExist(num, out img))
+			{
 				var type = isUser ? "ユーザー" : "コミュニティ";
 				if (isUser) userThumbBox.Image = new Bitmap(img, userThumbBox.Size);
 				else comThumbBox.Image = new Bitmap(img, comThumbBox.Size);
-			
+
 				var res = DialogResult.No;
-				if (!isOkBtn) {
-					res = MessageBox.Show(type + "画像を取得し直しますか？", 
+				if (!isOkBtn)
+				{
+					res = MessageBox.Show(type + "画像を取得し直しますか？",
 							type + "画像が既に存在します", MessageBoxButtons.YesNo,
 							MessageBoxIcon.Warning);
 				}
-				if (res == DialogResult.No) {
-					if (isUser) {
+				if (res == DialogResult.No)
+				{
+					if (isUser)
+					{
 						userThumbBox.Image = new Bitmap(img, userThumbBox.Size);
-					} else {
+					}
+					else
+					{
 						comThumbBox.Image = new Bitmap(img, comThumbBox.Size);
 					}
 					return;
 				}
 			}
 			var newImg = ThumbnailManager.getImageId(num);
-			if (newImg == null) {
+			if (newImg == null)
+			{
 				return;
 			}
 			ThumbnailManager.saveImage(newImg, num);
-			if (isUser) {
+			if (isUser)
+			{
 				userThumbBox.Image = new Bitmap(newImg, userThumbBox.Size);
-			} else {
+			}
+			else
+			{
 				comThumbBox.Image = new Bitmap(newImg, comThumbBox.Size);
 			}
 			newImg.Dispose();
 		}
-		void setEditModeDisplay(AlartInfo editAi) {
+		void setEditModeDisplay(AlartInfo editAi)
+		{
 			Text = "お気に入り編集";
 			communityId.Text = string.IsNullOrEmpty(editAi.communityId) ? "" : editAi.communityId;
 			communityNameText.Text = string.IsNullOrEmpty(editAi.communityName) ? "" : editAi.communityName;
@@ -487,7 +541,7 @@ namespace namaichi
 			memoText.Text = string.IsNullOrEmpty(editAi.memo) ? "" : editAi.memo;
 			communityFollowChkBox.Checked = editAi.communityFollow == "フォロー解除する";
 			userFollowChkBox.Checked = editAi.hostFollow == "フォロー解除する";
-			
+
 			isPopupChkBox.Checked = editAi.popup;
 			isBaloonChkBox.Checked = editAi.baloon;
 			isWebChkBox.Checked = editAi.browser;
@@ -503,13 +557,13 @@ namespace namaichi
 			appliHChkBox.Checked = editAi.appliH;
 			appliIChkBox.Checked = editAi.appliI;
 			appliJChkBox.Checked = editAi.appliJ;
-			textColorBtn.BackColor = sampleColorText.ForeColor = 
+			textColorBtn.BackColor = sampleColorText.ForeColor =
 				editAi.textColor;
-			backColorBtn.BackColor = sampleColorText.BackColor = 
+			backColorBtn.BackColor = sampleColorText.BackColor =
 				editAi.backColor;
 			defaultSoundList.SelectedIndex = editAi.soundType;
 			isDefaultSoundIdChkBox.Checked = editAi.isSoundId;
-			
+
 			Image comThumb = null, userThumb = null;
 			if (!string.IsNullOrEmpty(editAi.communityId) && editAi.communityId != "official")
 				if (ThumbnailManager.isExist(editAi.communityId, out comThumb))
@@ -524,22 +578,24 @@ namespace namaichi
 			if (customKw != null) customKeywordBtn.Text = "カスタム設定(" + customKw[0].name + ")";
 			if (editAi.isCustomKeyword) isCustomKeywordRadioBtn.Checked = true;
 		}
-		private void setDefaultBehavior() {
+		private void setDefaultBehavior()
+		{
 			var conf = form.config.get("defaultBehavior");
 			var l = conf.Split(',');
-			for (var i = 0; i < l.Length; i++) {
-				if (typeof(CheckBox) != behaviorGroupBox.Controls[i].GetType()) 
+			for (var i = 0; i < l.Length; i++)
+			{
+				if (typeof(CheckBox) != behaviorGroupBox.Controls[i].GetType())
 					continue;
 				CheckBox chkbox = (CheckBox)behaviorGroupBox.Controls[i];
 				chkbox.Checked = l[i] == "1";
 			}
-			
+
 			textColorBtn.BackColor = sampleColorText.ForeColor = ColorTranslator.FromHtml(form.config.get("defaultTextColor"));
 			backColorBtn.BackColor = sampleColorText.BackColor = ColorTranslator.FromHtml(form.config.get("defaultBackColor"));
 			defaultSoundList.SelectedIndex = int.Parse(form.config.get("defaultSound"));
 			isDefaultSoundIdChkBox.Checked = bool.Parse(form.config.get("IsDefaultSoundId"));
 		}
-		
+
 		void TextColorBtnClick(object sender, EventArgs e)
 		{
 			var c = new ColorDialog();
@@ -560,8 +616,8 @@ namespace namaichi
 		}
 		void DefaultColorBtnClick(object sender, EventArgs e)
 		{
-			backColorBtn.BackColor = Color.FromArgb(255,224,255);
-			sampleColorText.BackColor = Color.FromArgb(255,224,255);
+			backColorBtn.BackColor = Color.FromArgb(255, 224, 255);
+			sampleColorText.BackColor = Color.FromArgb(255, 224, 255);
 			textColorBtn.BackColor = Color.Black;
 			sampleColorText.ForeColor = Color.Black;
 		}
@@ -569,8 +625,10 @@ namespace namaichi
 		{
 			var f = new CustomKeywordForm(true, customKw);
 			f.ShowDialog();
-			if (f.ret == null) {
-				if (f.DialogResult == DialogResult.OK) {
+			if (f.ret == null)
+			{
+				if (f.DialogResult == DialogResult.OK)
+				{
 					customKeywordBtn.Text = "カスタム設定(未設定)";
 					customKw = null;
 				}
@@ -579,35 +637,36 @@ namespace namaichi
 			customKw = f.ret;
 			customKeywordBtn.Text = "カスタム設定(" + customKw[0].name + ")";
 		}
-		
+
 		void LinkLabel1LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			var url = "\"" + util.getJarPath()[0] + "/readme.html\"";
 			util.openUrlBrowser(url, form.config);
 		}
-		
+
 		void IsDefaultSoundIdChkBoxCheckedChanged(object sender, EventArgs e)
 		{
-			 
+
 			var comId = util.getRegGroup(communityId.Text, "(c[oh]\\d+)");
 			var userId = util.getRegGroup(userIdText.Text, "(\\d+)");
 			existSoundFileLabel.Visible =
 					isDefaultSoundIdChkBox.Checked &&
 				 		(!(comId == null || !File.Exists(util.getJarPath()[0] + "/Sound/" + comId + ".wav")) ||
 				 		!(userId == null || !File.Exists(util.getJarPath()[0] + "/Sound/" + userId + ".wav")));
-			
+
 		}
-		void setUserModeForm() {
-			label1.Visible = label2.Visible = 
+		void setUserModeForm()
+		{
+			label1.Visible = label2.Visible =
 					communityId.Visible = communityNameText.Visible =
-					getCommunityInfoBtn.Visible = communityFollowChkBox.Visible = 
-					isMustComChkBox.Visible = 
-					label6.Visible = label9.Visible = 
+					getCommunityInfoBtn.Visible = communityFollowChkBox.Visible =
+					isMustComChkBox.Visible =
+					label6.Visible = label9.Visible =
 					keywordText.Visible = customKeywordBtn.Visible =
-					isCustomKeywordRadioBtn.Visible = isMustKeywordChkBox.Visible = 
+					isCustomKeywordRadioBtn.Visible = isMustKeywordChkBox.Visible =
 					isSimpleKeywordRadioBtn.Visible = officialBtn.Visible = false;
 		}
-		
+
 		void OfficialBtnClick(object sender, EventArgs e)
 		{
 			communityId.Text = "official";

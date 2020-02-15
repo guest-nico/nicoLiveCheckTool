@@ -354,9 +354,9 @@ namespace namaichi.alart
 			
 			X9ECParameters ecPars = NistNamedCurves.GetByName("P-256");
   			ECDomainParameters ecDomPars = new ECDomainParameters(ecPars.Curve, ecPars.G, ecPars.N, ecPars.H, ecPars.GetSeed());
-		    ECCurve curve = ecDomPars.Curve;
+		    var curve = ecDomPars.Curve;
 		    
-		    ECPoint pubQ = curve.DecodePoint(pub);
+		    var pubQ = curve.DecodePoint(pub);
 		    //ECPoint pubQ = ecPars.Curve.DecodePoint(pub);
 		    //ECPoint priQ = curve.DecodePoint(pri);
 		    IBasicAgreement _aliceKeyAgree = AgreementUtilities.GetBasicAgreement (Algorithm);

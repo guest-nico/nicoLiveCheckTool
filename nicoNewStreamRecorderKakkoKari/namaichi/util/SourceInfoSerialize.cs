@@ -6,55 +6,64 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using SunokoLibrary.Application;
+using System;
 using System.Xml.Serialization;
-using System.IO;
 
 
-	/// <summary>
-	/// Description of namaichiUtil.
-	/// </summary>
+/// <summary>
+/// Description of namaichiUtil.
+/// </summary>
 public class SourceInfoSerialize
 {
-	public static void save(CookieSourceInfo si, bool isSub) {
-//		var sio = new SourceInfoObject(si);
-//		XmlSerializer serializer = new XmlSerializer(typeof(SourceInfoObject));
+	public static void save(CookieSourceInfo si, bool isSub)
+	{
+		//		var sio = new SourceInfoObject(si);
+		//		XmlSerializer serializer = new XmlSerializer(typeof(SourceInfoObject));
 		XmlSerializer serializer = new XmlSerializer(typeof(CookieSourceInfo));
-		
+
 		var jarPath = util.getJarPath();
-		try {
+		try
+		{
 			var uri = (isSub) ? (jarPath[0] + "\\" + jarPath[1] + "0.xml") :
 				(jarPath[0] + "\\" + jarPath[1] + ".xml");
-			using (var sw = new System.IO.StreamWriter(uri, false, System.Text.Encoding.UTF8)) {
-		
+			using (var sw = new System.IO.StreamWriter(uri, false, System.Text.Encoding.UTF8))
+			{
+
 				serializer.Serialize(sw, si);
 				//sw.Close();
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.TargetSite);
 		}
 	}
-	public static CookieSourceInfo load(bool isSub) {
-//		var sio = new SourceInfoObject(si);
-//		XmlSerializer serializer = new XmlSerializer(typeof(SourceInfoObject));
+	public static CookieSourceInfo load(bool isSub)
+	{
+		//		var sio = new SourceInfoObject(si);
+		//		XmlSerializer serializer = new XmlSerializer(typeof(SourceInfoObject));
 		XmlSerializer serializer = new XmlSerializer(typeof(CookieSourceInfo));
-		
-//		var sr = new System.IO.StreamReader(util.getJarPath()[1] + ".xml", System.Text.Encoding.UTF8);
-//		var str = sr.ReadToEnd();
-		
+
+		//		var sr = new System.IO.StreamReader(util.getJarPath()[1] + ".xml", System.Text.Encoding.UTF8);
+		//		var str = sr.ReadToEnd();
+
 		bool IsCustomized = false;
 		string BrowserName = "", ProfileName = "", CookiePath = "", EngineId = "";
 		var x = new System.Xml.XmlDocument();
 		var jarPath = util.getJarPath();
-		try {
+		try
+		{
 			var uri = (isSub) ? (jarPath[0] + "\\" + jarPath[1] + "0.xml") :
 				(jarPath[0] + "\\" + jarPath[1] + ".xml");
 			x.Load(uri);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			return null;
 		}
-		foreach (System.Xml.XmlNode n in x.LastChild.ChildNodes) {
+		foreach (System.Xml.XmlNode n in x.LastChild.ChildNodes)
+		{
 			util.debugWriteLine(n.Name + " " + n.InnerText);
 			if (n.Name == "IsCustomized") IsCustomized = bool.Parse(n.InnerText);
 			if (n.Name == "BrowserName") BrowserName = n.InnerText;
@@ -62,13 +71,13 @@ public class SourceInfoSerialize
 			if (n.Name == "CookiePath") CookiePath = n.InnerText;
 			if (n.Name == "EngineId") EngineId = n.InnerText;
 		}
-		return new CookieSourceInfo(BrowserName, 
+		return new CookieSourceInfo(BrowserName,
 				ProfileName, CookiePath, EngineId, IsCustomized);
-		
-//		return (CookieSourceInfo)serializer.Deserialize(sr);
-//		sr.Close();
-//		return null;
-		
+
+		//		return (CookieSourceInfo)serializer.Deserialize(sr);
+		//		sr.Close();
+		//		return null;
+
 	}
 	/*
 	public static void ReadXml(CookieSourceInfo si)

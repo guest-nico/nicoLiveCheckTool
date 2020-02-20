@@ -6,20 +6,14 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using System.Drawing;
-using System.Drawing.Text;
-using System.Windows.Forms;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
-using namaichi.config;
-using System.IO;
-using NAudio.Midi;
 using SunokoLibrary.Application;
-using SunokoLibrary.Windows.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Net;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace namaichi
 {
@@ -29,10 +23,10 @@ namespace namaichi
 	public partial class optionForm : Form
 	{
 		private config.config cfg;
-		
+
 		static readonly Uri TargetUrl = new Uri("https://live.nicovideo.jp/");
-		private MainForm form; 
-		
+		private MainForm form;
+
 		public optionForm(config.config cfg, MainForm form)
 		{
 			//
@@ -44,24 +38,25 @@ namespace namaichi
 			//this.Location = p;
 			this.cfg = cfg;
 			this.form = form;
-			
+
 			nicoSessionComboBox1.Selector.PropertyChanged += Selector_PropertyChanged;
-//			nicoSessionComboBox2.Selector.PropertyChanged += Selector2_PropertyChanged;
+			//			nicoSessionComboBox2.Selector.PropertyChanged += Selector2_PropertyChanged;
 			//setFormFromConfig();
 		}
-		
+
 		void optionOk_Click(object sender, EventArgs e)
 		{
 			var formData = getFormData();
 			cfg.saveFromForm(formData);
-			
+
 			setStartUpMenu(!bool.Parse(cfg.get("IsStartUp")));
-				
+
 			//main cookie
 			var importer = nicoSessionComboBox1.Selector.SelectedImporter;
-			if (importer != null && importer.SourceInfo != null) {
+			if (importer != null && importer.SourceInfo != null)
+			{
 				var si = importer.SourceInfo;
-				
+
 				if (isCookieFileSiteiChkBox.Checked)
 					SourceInfoSerialize.save(si.GenerateCopy(si.BrowserName, si.ProfileName, cookieFileText.Text), false);
 				else SourceInfoSerialize.save(si, false);
@@ -71,11 +66,12 @@ namespace namaichi
 			Close();
 		}
 
-		private Dictionary<string, string> getFormData() {
+		private Dictionary<string, string> getFormData()
+		{
 			//var selectedImporter = nicoSessionComboBox1.Selector.SelectedImporter;
-//			var browserName = (selectedImporter != null) ? selectedImporter.SourceInfo.BrowserName : "";
+			//			var browserName = (selectedImporter != null) ? selectedImporter.SourceInfo.BrowserName : "";
 			var browserNum = (useCookieRadioBtn.Checked) ? "2" : "1";
-//			var browserNum2 = (useCookieRadioBtn2.Checked) ? "2" : "1";
+			//			var browserNum2 = (useCookieRadioBtn2.Checked) ? "2" : "1";
 			return new Dictionary<string, string>(){
 				{"accountId",mailText.Text},
 				{"accountPass",passText.Text},
@@ -115,7 +111,7 @@ namespace namaichi
 				{"appliHName",nameHText.Text},
 				{"appliIName",nameIText.Text},
 				{"appliJName",nameJText.Text},
-				
+
 				{"IsStartTimeAllCheck",isStartTimeAllCheckChkBox.Checked.ToString().ToLower()},
 				{"IscheckRecent",isRecentCheckRadioBtn.Checked.ToString().ToLower()},
 				{"Ischeck30min",isCheck30minRadioBtn.Checked.ToString().ToLower()},
@@ -125,14 +121,14 @@ namespace namaichi
 				{"recentColor",ColorTranslator.ToHtml(recentSampleColorText.BackColor)},
 				{"IsFollowerOnlyOtherColor",isFollowerOnlyOtherColor.Checked.ToString().ToLower()},
 				{"followerOnlyColor",ColorTranslator.ToHtml(followerOnlySampleColorText.BackColor)},
-				
+
 				{"IstasktrayStart",isTasktrayStartChkBox.Checked.ToString().ToLower()},
 				{"IsdragCom",isdragComChkBox.Checked.ToString().ToLower()},
 				{"doublecmode",doublecmodeList.Text},
 				{"IsNotAllMatchNotifyNoRecent",isNotAllMatchNotifyNoRecentChkBox.Checked.ToString().ToLower()},
 				{"delThumb",delThumbChkBox.Checked.ToString().ToLower()},
 				{"IsConfirmFollow",IsConfirmFollowChkBox.Checked.ToString().ToLower()},
-				
+
 				{"rssUpdateInterval",rssUpdateIntervalList.Text},
 				{"userNameUpdateInterval",userNameUpdateIntervalList.Text},
 				{"log",isLogChkBtn.Checked.ToString().ToLower()},
@@ -170,101 +166,103 @@ namespace namaichi
 				{"defaultBackColor", ColorTranslator.ToHtml(backColorBtn.BackColor)},
 				{"defaultSound",defaultSoundList.SelectedIndex.ToString()},
 				{"IsDefaultSoundId",isDefaultSoundIdChkBox.Checked.ToString().ToLower()},
-				
+
 				{"IsRss",isRssChkBox.Checked.ToString().ToLower()},
 				{"IsPush",isPushChkBox.Checked.ToString().ToLower()},
 				{"IsAppPush",isAppPushChkBox.Checked.ToString().ToLower()},
 				{"IsTimeTable",isTimeTableChkBox.Checked.ToString().ToLower()},
-				
+
 				{"thresholdpage",thresholdpageList.Value.ToString()},
 				{"brodouble",brodoubleList.SelectedIndex.ToString()},
 				{"alartAddLive",alartAddLiveBox.SelectedIndex.ToString()},
 				{"liveListUpdateMinutes",liveListUpdateMinutesList.Value.ToString()},
 				{"liveListCacheIcon",liveListCacheIconChkBox.Checked.ToString().ToLower()},
-				
+
 				{"cookieFile",cookieFileText.Text},
 				{"iscookie",isCookieFileSiteiChkBox.Checked.ToString().ToLower()},
 				{"IsBrowserShowAll",checkBoxShowAll.Checked.ToString().ToLower()},
 				{"user_session",""},
 				{"user_session_secure",""},
-				
+
 			};
-			
+
 		}
-		
+
 		async void Selector_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
+		{
 			//if (isInitRun) initRec();
-			
-            switch(e.PropertyName)
-            {
-                case "SelectedIndex":
-                    var cookieContainer = new CookieContainer();
-                    var currentGetter = nicoSessionComboBox1.Selector.SelectedImporter;
-                    if (currentGetter != null)
-                    {
-                        var result = await currentGetter.GetCookiesAsync(TargetUrl);
-                        
-                        var cookie = result.Status == CookieImportState.Success ? result.Cookies["user_session"] : null;
-//                        foreach (var c in result.Cookies)
-//                        	util.debugWriteLine(c);
-                        //logText.Text += cookie.Name + cookie.Value+ cookie.Expires;
-                        
-                        //UI更新
-//                        txtCookiePath.Text = currentGetter.SourceInfo.CookiePath;
-//                        btnOpenCookieFileDialog.Enabled = true;
-//                        txtUserSession.Text = cookie != null ? cookie.Value : null;
-//                        txtUserSession.Enabled = result.Status == CookieImportState.Success;
-                        //Properties.Settings.Default.SelectedSourceInfo = currentGetter.SourceInfo;
-                        //Properties.Settings.Default.Save();
-                        //cfg.set("browserNum", nicoSessionComboBox1.Selector.SelectedIndex.ToString());
-                        //if (cookie != null) cfg.set("user_session", cookie.Value);
-                        //cfg.set("isAllBrowserMode", nicoSessionComboBox1.Selector.IsAllBrowserMode.ToString());
-                    }
-                    else
-                    {
-//                        txtCookiePath.Text = null;
-//                        txtUserSession.Text = null;
-//                        txtUserSession.Enabled = false;
-//                        btnOpenCookieFileDialog.Enabled = false;
-                    }
-                    break;
-            }
-        }
-		
+
+			switch (e.PropertyName)
+			{
+				case "SelectedIndex":
+					var cookieContainer = new CookieContainer();
+					var currentGetter = nicoSessionComboBox1.Selector.SelectedImporter;
+					if (currentGetter != null)
+					{
+						var result = await currentGetter.GetCookiesAsync(TargetUrl);
+
+						var cookie = result.Status == CookieImportState.Success ? result.Cookies["user_session"] : null;
+						//                        foreach (var c in result.Cookies)
+						//                        	util.debugWriteLine(c);
+						//logText.Text += cookie.Name + cookie.Value+ cookie.Expires;
+
+						//UI更新
+						//                        txtCookiePath.Text = currentGetter.SourceInfo.CookiePath;
+						//                        btnOpenCookieFileDialog.Enabled = true;
+						//                        txtUserSession.Text = cookie != null ? cookie.Value : null;
+						//                        txtUserSession.Enabled = result.Status == CookieImportState.Success;
+						//Properties.Settings.Default.SelectedSourceInfo = currentGetter.SourceInfo;
+						//Properties.Settings.Default.Save();
+						//cfg.set("browserNum", nicoSessionComboBox1.Selector.SelectedIndex.ToString());
+						//if (cookie != null) cfg.set("user_session", cookie.Value);
+						//cfg.set("isAllBrowserMode", nicoSessionComboBox1.Selector.IsAllBrowserMode.ToString());
+					}
+					else
+					{
+						//                        txtCookiePath.Text = null;
+						//                        txtUserSession.Text = null;
+						//                        txtUserSession.Enabled = false;
+						//                        btnOpenCookieFileDialog.Enabled = false;
+					}
+					break;
+			}
+		}
+
 		void btnReload_Click(object sender, EventArgs e)
-        { 
+		{
 			//var si = nicoSessionComboBox1.Selector.SelectedImporter.SourceInfo;
 			//util.debugWriteLine(si.EngineId + " " + si.BrowserName + " " + si.ProfileName);
-//			var a = new SunokoLibrary.Application.Browsers.FirefoxImporterFactory();
-//			foreach (var b in a.GetCookieImporters()) {
-//				var c = b.GetCookiesAsync(TargetUrl);
-//				c.ConfigureAwait(false);
-				
-//				util.debugWriteLine(c.Result.Cookies["user_session"]);
-//			}
-				
-//			a.GetCookieImporter(new CookieSourceInfo("
-			var tsk = nicoSessionComboBox1.Selector.UpdateAsync(); 
-		}
-		
-        void btnOpenCookieFileDialog_Click(object sender, EventArgs e)
-        { var tsk = nicoSessionComboBox1.ShowCookieDialogAsync(); }
-        void checkBoxShowAll_CheckedChanged(object sender, EventArgs e)
-        { nicoSessionComboBox1.Selector.IsAllBrowserMode = checkBoxShowAll.Checked;
-//        	cfg.set("isAllBrowserMode", nicoSessionComboBox1.Selector.IsAllBrowserMode.ToString());
-        }
+			//			var a = new SunokoLibrary.Application.Browsers.FirefoxImporterFactory();
+			//			foreach (var b in a.GetCookieImporters()) {
+			//				var c = b.GetCookiesAsync(TargetUrl);
+			//				c.ConfigureAwait(false);
 
-        private void setFormFromConfig() {
-        	mailText.Text = cfg.get("accountId");
-        	passText.Text = cfg.get("accountPass");
-        	
-        	if (cfg.get("browserNum") == "1") useAccountLoginRadioBtn.Checked = true;
-        	else useCookieRadioBtn.Checked = true; 
-        	useSecondLoginChkBox.Checked = bool.Parse(cfg.get("issecondlogin"));
-        	isDefaultBrowserPathChkBox.Checked = bool.Parse(cfg.get("IsdefaultBrowserPath"));
-        	isDefaultBrowserPathChkBox_UpdateAction();
-        	browserPathText.Text = cfg.get("browserPath");
+			//				util.debugWriteLine(c.Result.Cookies["user_session"]);
+			//			}
+
+			//			a.GetCookieImporter(new CookieSourceInfo("
+			var tsk = nicoSessionComboBox1.Selector.UpdateAsync();
+		}
+
+		void btnOpenCookieFileDialog_Click(object sender, EventArgs e)
+		{ var tsk = nicoSessionComboBox1.ShowCookieDialogAsync(); }
+		void checkBoxShowAll_CheckedChanged(object sender, EventArgs e)
+		{
+			nicoSessionComboBox1.Selector.IsAllBrowserMode = checkBoxShowAll.Checked;
+			//        	cfg.set("isAllBrowserMode", nicoSessionComboBox1.Selector.IsAllBrowserMode.ToString());
+		}
+
+		private void setFormFromConfig()
+		{
+			mailText.Text = cfg.get("accountId");
+			passText.Text = cfg.get("accountPass");
+
+			if (cfg.get("browserNum") == "1") useAccountLoginRadioBtn.Checked = true;
+			else useCookieRadioBtn.Checked = true;
+			useSecondLoginChkBox.Checked = bool.Parse(cfg.get("issecondlogin"));
+			isDefaultBrowserPathChkBox.Checked = bool.Parse(cfg.get("IsdefaultBrowserPath"));
+			isDefaultBrowserPathChkBox_UpdateAction();
+			browserPathText.Text = cfg.get("browserPath");
 			appliAPathText.Text = cfg.get("appliAPath");
 			appliBPathText.Text = cfg.get("appliBPath");
 			appliCPathText.Text = cfg.get("appliCPath");
@@ -296,7 +294,7 @@ namespace namaichi
 			nameIText.Text = cfg.get("appliIName");
 			nameJText.Text = cfg.get("appliJName");
 			isStartTimeAllCheckChkBox.Checked = bool.Parse(cfg.get("IsStartTimeAllCheck"));
-			
+
 			isRecentCheckRadioBtn.Checked = bool.Parse(cfg.get("IscheckRecent"));
 			isCheck30minRadioBtn.Checked = bool.Parse(cfg.get("Ischeck30min"));
 			isCheckOnAirRadioBtn.Checked = bool.Parse(cfg.get("IscheckOnAir"));
@@ -310,14 +308,14 @@ namespace namaichi
 			isFollowerOnlyOtherColor.Checked = bool.Parse(cfg.get("IsFollowerOnlyOtherColor"));
 			isFollowerOnlyOtherColor.Enabled = isCheckOnAirRadioBtn.Checked;
 			IsFollowerOnlyOtherColorChecked_update();
-			
+
 			isTasktrayStartChkBox.Checked = bool.Parse(cfg.get("IstasktrayStart"));
 			isdragComChkBox.Checked = bool.Parse(cfg.get("IsdragCom"));
 			doublecmodeList.Text = cfg.get("doublecmode");
 			isNotAllMatchNotifyNoRecentChkBox.Checked = bool.Parse(cfg.get("IsNotAllMatchNotifyNoRecent"));
 			delThumbChkBox.Checked = bool.Parse(cfg.get("delThumb"));
 			IsConfirmFollowChkBox.Checked = bool.Parse(cfg.get("IsConfirmFollow"));
-			
+
 			rssUpdateIntervalList.Text = cfg.get("rssUpdateInterval");
 			userNameUpdateIntervalList.Text = cfg.get("userNameUpdateInterval");
 			isLogChkBtn.Checked = bool.Parse(cfg.get("log"));
@@ -327,7 +325,7 @@ namespace namaichi
 			maxNotAlartDisplayList.Text = cfg.get("maxNotAlartDisplay");
 			maxLogDisplayList.Text = cfg.get("maxLogDisplay");
 			isStartUpChkBox.Checked = bool.Parse(cfg.get("IsStartUp"));
-//			setConvertList(int.Parse(cfg.get("afterConvertMode")));
+			//			setConvertList(int.Parse(cfg.get("afterConvertMode")));
 			poplocList.Text = cfg.get("poploc");
 			poptimeList.Text = cfg.get("poptime");
 			IsclosepopupChkBox.Checked = bool.Parse(cfg.get("Isclosepopup"));
@@ -356,71 +354,73 @@ namespace namaichi
 			backColorBtn.BackColor = sampleColorText.BackColor = ColorTranslator.FromHtml(cfg.get("defaultBackColor"));
 			defaultSoundList.SelectedIndex = int.Parse(cfg.get("defaultSound"));
 			isDefaultSoundIdChkBox.Checked = bool.Parse(cfg.get("IsDefaultSoundId"));
-			
+
 			isRssChkBox.Checked = bool.Parse(cfg.get("IsRss"));
 			isPushChkBox.Checked = bool.Parse(cfg.get("IsPush"));
 			isAppPushChkBox.Checked = bool.Parse(cfg.get("IsAppPush"));
 			isTimeTableChkBox.Checked = bool.Parse(cfg.get("IsTimeTable"));
-			
+
 			thresholdpageList.Value = int.Parse(cfg.get("thresholdpage"));
 			brodoubleList.SelectedIndex = int.Parse(cfg.get("brodouble"));
 			alartAddLiveBox.SelectedIndex = int.Parse(cfg.get("alartAddLive"));
-			
+
 			liveListUpdateMinutesList.Value = decimal.Parse(cfg.get("liveListUpdateMinutes"));
 			liveListCacheIconChkBox.Checked = bool.Parse(cfg.get("liveListCacheIcon"));
-			
-        	isCookieFileSiteiChkBox.Checked = bool.Parse(cfg.get("iscookie"));
-        	isCookieFileSiteiChkBox_UpdateAction();
-        	cookieFileText.Text = cfg.get("cookieFile");
-        	checkBoxShowAll.Checked = bool.Parse(cfg.get("IsBrowserShowAll"));
-	
-        	var si = SourceInfoSerialize.load(false);
-        	nicoSessionComboBox1.Selector.SetInfoAsync(si);
-        }
-        
+
+			isCookieFileSiteiChkBox.Checked = bool.Parse(cfg.get("iscookie"));
+			isCookieFileSiteiChkBox_UpdateAction();
+			cookieFileText.Text = cfg.get("cookieFile");
+			checkBoxShowAll.Checked = bool.Parse(cfg.get("IsBrowserShowAll"));
+
+			var si = SourceInfoSerialize.load(false);
+			nicoSessionComboBox1.Selector.SetInfoAsync(si);
+		}
+
 		void optionCancel_Click(object sender, EventArgs e)
 		{
 			Close();
 		}
-		
+
 		void cookieFileSiteiSanshouBtn_Click(object sender, EventArgs e)
 		{
 			var dialog = new OpenFileDialog();
 			dialog.Multiselect = false;
 			var result = dialog.ShowDialog();
 			if (result != DialogResult.OK) return;
-			
+
 			cookieFileText.Text = dialog.FileName;
 		}
-		
+
 		void isCookieFileSiteiChkBox_CheckedChanged(object sender, EventArgs e)
 		{
 			isCookieFileSiteiChkBox_UpdateAction();
 		}
-		
-		void isCookieFileSiteiChkBox_UpdateAction() {
-//			cookieFileText.Enabled = isCookieFileSiteiChkBox.Checked;
-//			cookieFileSanshouBtn.Enabled = isCookieFileSiteiChkBox.Checked;
+
+		void isCookieFileSiteiChkBox_UpdateAction()
+		{
+			//			cookieFileText.Enabled = isCookieFileSiteiChkBox.Checked;
+			//			cookieFileSanshouBtn.Enabled = isCookieFileSiteiChkBox.Checked;
 		}
-		
+
 		async void loginBtn_Click(object sender, EventArgs e)
 		{
-			
+
 			var cg = new rec.CookieGetter(cfg);
 			//var cc = await cg.getAccountCookie(mailText.Text, passText.Text);
 			var cc = await cg.getAccountCookie(mailText.Text, passText.Text);
-			if (cc == null) {
+			if (cc == null)
+			{
 				MessageBox.Show("login error", "", MessageBoxButtons.OK);
 				return;
 			}
 			if (cc.GetCookies(TargetUrl)["user_session"] == null &&
-				                   cc.GetCookies(TargetUrl)["user_session_secure"] == null)
+								   cc.GetCookies(TargetUrl)["user_session_secure"] == null)
 				MessageBox.Show("no login", "", MessageBoxButtons.OK);
 			else MessageBox.Show("login ok", "", MessageBoxButtons.OK);
-			
+
 			//MessageBox.Show("aa");
 		}
-		
+
 		void isDefaultBrowserPathChkBox_CheckedChanged(object sender, EventArgs e)
 		{
 			isDefaultBrowserPathChkBox_UpdateAction();
@@ -436,30 +436,32 @@ namespace namaichi
 			dialog.Multiselect = false;
 			var result = dialog.ShowDialog();
 			if (result != DialogResult.OK) return;
-			
+
 			browserPathText.Text = dialog.FileName;
 		}
 		void appliPathSanshouBtn_Click(object sender, EventArgs e)
 		{
 			var n = ((Button)sender).Name[5];
 			var t = this.Controls.Find("appli" + n + "PathText", true)[0];
-			
+
 			appliPathSanshouBtnClickProcess((TextBox)t);
 		}
-		void appliPathSanshouBtnClickProcess(TextBox tb) {
+		void appliPathSanshouBtnClickProcess(TextBox tb)
+		{
 			var dialog = new OpenFileDialog();
 			dialog.Multiselect = false;
 			var result = dialog.ShowDialog();
 			if (result != DialogResult.OK) return;
-			
+
 			tb.Text = dialog.FileName;
 		}
-		private void isCheckRecentChkBox_Update() {
+		private void isCheckRecentChkBox_Update()
+		{
 			isCheck30minRadioBtn.Enabled = isRecentCheckRadioBtn.Checked;
 			isCheckOnAirRadioBtn.Enabled = isRecentCheckRadioBtn.Checked;
 			isChangeIconChkBox.Enabled = isRecentCheckRadioBtn.Checked;
 			recentColorBtn.Enabled = recentSampleColorText.Enabled =
-					defaultRecentColorBtn.Enabled = 
+					defaultRecentColorBtn.Enabled =
 					isAlartListColorRecent.Enabled =
 						isRecentCheckRadioBtn.Checked;
 		}
@@ -481,12 +483,13 @@ namespace namaichi
 			f.Filter = "Wav形式(*.wav)|*.wav*";
 			f.Multiselect = false;
 			var a = f.ShowDialog();
-			if (a == DialogResult.OK) {
-				if (sender == soundASanshouBtn) 
+			if (a == DialogResult.OK)
+			{
+				if (sender == soundASanshouBtn)
 					soundPathAText.Text = f.FileName;
-				if (sender == soundBSanshouBtn) 
+				if (sender == soundBSanshouBtn)
 					soundPathBText.Text = f.FileName;
-				if (sender == soundCSanshouBtn) 
+				if (sender == soundCSanshouBtn)
 					soundPathCText.Text = f.FileName;
 			}
 		}
@@ -518,54 +521,65 @@ namespace namaichi
 		}
 		void SendTestMailBtnClick(object sender, EventArgs e)
 		{
-			if (mailFromText.Text == "") {
+			if (mailFromText.Text == "")
+			{
 				MessageBox.Show("メール送信失敗：パラメータ 'from' を空の文字列にすることはできません。\nパラメータ名: from");
 				return;
 			}
-			if (mailToText.Text == "") {
+			if (mailToText.Text == "")
+			{
 				MessageBox.Show("メール送信失敗：パラメータ 'to' を空の文字列にすることはできません。\nパラメータ名: to");
 				return;
 			}
-			try {
+			try
+			{
 				var s = new System.Net.Mail.MailAddress(mailFromText.Text);
 				s = new System.Net.Mail.MailAddress(mailToText.Text);
-			} catch (Exception ee) {
+			}
+			catch (Exception ee)
+			{
 				MessageBox.Show("メール送信失敗：指定された文字列は、電子メールアドレスに必要な形式ではありません。");
 				return;
 			}
-			if (mailSmtpText.Text == "") {
+			if (mailSmtpText.Text == "")
+			{
 				MessageBox.Show("メール送信失敗：このプロパティに空の文字列を指定することはできません。\nパラメータ名: value");
 				return;
 			}
 			int _p;
-			if (!int.TryParse(mailPortText.Text, out _p)) {
+			if (!int.TryParse(mailPortText.Text, out _p))
+			{
 				MessageBox.Show("メール送信失敗：入力文字列の形式が正しくありません。");
 				return;
 			}
-			
-			
+
+
 			var title = "[ニコ生]ユーザー名の放送開始";
 			var msg = DateTime.Now.ToString() + "\nユーザー名 が コミュニティ名 で 放送タイトル を開始しました。\nhttps://live.nicovideo.jp/watch/lv********\nhttps://com.nicovideo.jp/community/co*******";
-			
-			Task.Factory.StartNew(() => {
+
+			Task.Factory.StartNew(() =>
+			{
 				string eMsg;
-				var ret = util.sendMail(mailFromText.Text, mailToText.Text, 
-						title, msg, mailSmtpText.Text, mailPortText.Text, 
-						mailUserText.Text, mailPassText.Text, 
+				var ret = util.sendMail(mailFromText.Text, mailToText.Text,
+						title, msg, mailSmtpText.Text, mailPortText.Text,
+						mailUserText.Text, mailPassText.Text,
 						isMailSslChkBox.Checked, out eMsg);
 				var msgTitle = (ret) ? "" : "";
 				//var msgText = (ret) ? "メール送信成功" : "メール送信失敗：メールを送信できませんでした。";
 				var msgText = (ret) ? "メール送信成功" : ("メール送信失敗：" + eMsg);
-				
-				this.Invoke((MethodInvoker)delegate() {
+
+				this.Invoke((MethodInvoker)delegate ()
+				{
 					MessageBox.Show(msgText, msgTitle);
 				});
 			});
 		}
-		private string getDefaultBehavior() {
+		private string getDefaultBehavior()
+		{
 			var l = new List<string>();
-			for (var i = 0; i < defaultBehaviorGroupBox.Controls.Count; i++) {
-				if (typeof(CheckBox) != defaultBehaviorGroupBox.Controls[i].GetType()) 
+			for (var i = 0; i < defaultBehaviorGroupBox.Controls.Count; i++)
+			{
+				if (typeof(CheckBox) != defaultBehaviorGroupBox.Controls[i].GetType())
 					continue;
 				CheckBox chkbox = (CheckBox)defaultBehaviorGroupBox.Controls[i];
 				l.Add(chkbox.Checked ? "1" : "0");
@@ -573,10 +587,12 @@ namespace namaichi
 			}
 			return string.Join(",", l);
 		}
-		private void setDefaultBehavior(string conf) {
+		private void setDefaultBehavior(string conf)
+		{
 			var l = conf.Split(',');
-			for (var i = 0; i < l.Length; i++) {
-				if (typeof(CheckBox) != defaultBehaviorGroupBox.Controls[i].GetType()) 
+			for (var i = 0; i < l.Length; i++)
+			{
+				if (typeof(CheckBox) != defaultBehaviorGroupBox.Controls[i].GetType())
 					continue;
 				CheckBox chkbox = (CheckBox)defaultBehaviorGroupBox.Controls[i];
 				chkbox.Checked = l[i] == "1";
@@ -602,8 +618,8 @@ namespace namaichi
 		}
 		void DefaultColorBtnClick(object sender, EventArgs e)
 		{
-			backColorBtn.BackColor = Color.FromArgb(255,224,255);
-			sampleColorText.BackColor = Color.FromArgb(255,224,255);
+			backColorBtn.BackColor = Color.FromArgb(255, 224, 255);
+			sampleColorText.BackColor = Color.FromArgb(255, 224, 255);
 			textColorBtn.BackColor = Color.Black;
 			sampleColorText.ForeColor = Color.Black;
 		}
@@ -612,7 +628,7 @@ namespace namaichi
 			var pm = new namaichi.alart.PopupDisplay(form);
 			pm.showTest(poplocList.Text, int.Parse(poptimeList.Text),
 					IsclosepopupChkBox.Checked, IssmallpopupChkBox.Checked,
-					isTopMostPopupChkBox.Checked, isColorPopupChkBox.Checked, 
+					isTopMostPopupChkBox.Checked, isColorPopupChkBox.Checked,
 					double.Parse(popupOpacityList.Text));
 		}
 		void SoundTestBtnClick(object sender, EventArgs e)
@@ -620,20 +636,28 @@ namespace namaichi
 			var name = ((System.Windows.Forms.Button)sender).Name;
 			string path = null;
 			float volume = -1;
-			if (name == "soundTestBtn") {
+			if (name == "soundTestBtn")
+			{
 				path = util.getJarPath()[0] + "/Sound/se_soc01.wav";
 				volume = (float)volumeBar.Value;
-			} else if (name == "soundATestBtn") {
+			}
+			else if (name == "soundATestBtn")
+			{
 				path = soundPathAText.Text;
 				volume = (float)volumeABar.Value;
-			} else if (name == "soundBTestBtn") {
+			}
+			else if (name == "soundBTestBtn")
+			{
 				path = soundPathBText.Text;
 				volume = (float)volumeBBar.Value;
-			} else if (name == "soundCTestBtn") {
+			}
+			else if (name == "soundCTestBtn")
+			{
 				path = soundPathCText.Text;
 				volume = (float)volumeCBar.Value;
 			}
-			if (!File.Exists(path)) {
+			if (!File.Exists(path))
+			{
 				MessageBox.Show("ファイルが見つかりませんでした");
 				return;
 			}
@@ -650,86 +674,92 @@ namespace namaichi
 		}
 		void DefaultRecentColorBtnClick(object sender, EventArgs e)
 		{
-			recentColorBtn.BackColor = Color.FromArgb(255,224,255);
-			recentSampleColorText.BackColor = Color.FromArgb(255,224,255);
+			recentColorBtn.BackColor = Color.FromArgb(255, 224, 255);
+			recentSampleColorText.BackColor = Color.FromArgb(255, 224, 255);
 		}
-		
+
 		void IsAlartListColorRecentCheckedChanged(object sender, EventArgs e)
 		{
 			recentColorBtn.Enabled = recentSampleColorText.Enabled = !isAlartListColorRecent.Checked;
 		}
-		void setStartUpMenu(bool isDelete) {
-			try {
+		void setStartUpMenu(bool isDelete)
+		{
+			try
+			{
 				var exe = Application.ExecutablePath;
-				
+
 				var dir = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
 				util.debugWriteLine(dir);
-				
+
 				var files = Directory.GetFiles(dir);
-				foreach (var f in files) {
+				foreach (var f in files)
+				{
 					util.debugWriteLine("f " + f);
 					if (!f.EndsWith(".lnk")) continue;
-					
+
 					IWshRuntimeLibrary.WshShell shell = new IWshRuntimeLibrary.WshShell();
-		            IWshRuntimeLibrary.IWshShortcut shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(f);
-		            string targetPath = shortcut.TargetPath.ToString();
-		            
-		            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shortcut);
-		            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shell);
-			    
-		            if (Path.GetFullPath(targetPath) == Path.GetFullPath(exe)) {
-		            	util.debugWriteLine("exist " + targetPath);
-		            	if (isDelete) File.Delete(f);
-		            	else return;
-		            }
+					IWshRuntimeLibrary.IWshShortcut shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(f);
+					string targetPath = shortcut.TargetPath.ToString();
+
+					System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shortcut);
+					System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shell);
+
+					if (Path.GetFullPath(targetPath) == Path.GetFullPath(exe))
+					{
+						util.debugWriteLine("exist " + targetPath);
+						if (isDelete) File.Delete(f);
+						else return;
+					}
 				}
 				util.debugWriteLine(files.Length);
 				if (isDelete) return;
-				
-			    IWshRuntimeLibrary.WshShell shell2 = new IWshRuntimeLibrary.WshShell();
-			    IWshRuntimeLibrary.IWshShortcut shortcut2 = (IWshRuntimeLibrary.IWshShortcut)shell2.CreateShortcut(dir + "/放送チェックツール（仮.lnk");
-			    shortcut2.TargetPath = exe;
-			    shortcut2.WorkingDirectory = util.getJarPath()[0];
-			    shortcut2.WindowStyle = 1;
-			    //shortcut.IconLocation = Application.ExecutablePath + ",0";
-			    shortcut2.Save();
-			 
-			    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shortcut2);
-			    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shell2);
-			    
-				
-				
-			} catch (Exception e) {
+
+				IWshRuntimeLibrary.WshShell shell2 = new IWshRuntimeLibrary.WshShell();
+				IWshRuntimeLibrary.IWshShortcut shortcut2 = (IWshRuntimeLibrary.IWshShortcut)shell2.CreateShortcut(dir + "/放送チェックツール（仮.lnk");
+				shortcut2.TargetPath = exe;
+				shortcut2.WorkingDirectory = util.getJarPath()[0];
+				shortcut2.WindowStyle = 1;
+				//shortcut.IconLocation = Application.ExecutablePath + ",0";
+				shortcut2.Save();
+
+				System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shortcut2);
+				System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shell2);
+
+
+
+			}
+			catch (Exception e)
+			{
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
-		
-		
+
+
 		void CheckBoxShowAllCheckedChanged(object sender, EventArgs e)
 		{
 			nicoSessionComboBox1.Selector.IsAllBrowserMode = checkBoxShowAll.Checked;
 		}
-		
+
 		void IsCookieFileSiteiChkBoxCheckedChanged(object sender, EventArgs e)
 		{
 			isCookieFileSiteiChkBox_UpdateAction();
 		}
-		
+
 		void CookieFileSanshouBtnClick(object sender, EventArgs e)
 		{
 			var dialog = new OpenFileDialog();
 			dialog.Multiselect = false;
 			var result = dialog.ShowDialog();
 			if (result != DialogResult.OK) return;
-			
+
 			cookieFileText.Text = dialog.FileName;
 		}
-		
+
 		void BtnReloadClick(object sender, EventArgs e)
 		{
 			var tsk = nicoSessionComboBox1.Selector.UpdateAsync();
 		}
-		
+
 		void IsCheckOnAirRadioBtnCheckedChanged(object sender, EventArgs e)
 		{
 			isFollowerOnlyOtherColor.Enabled = isCheckOnAirRadioBtn.Checked;
@@ -741,13 +771,13 @@ namespace namaichi
 		}
 		void IsFollowerOnlyOtherColorChecked_update()
 		{
-			var isEnabled = 
+			var isEnabled =
 				isCheckOnAirRadioBtn.Checked && isFollowerOnlyOtherColor.Checked;
 			followerOnlyColorBtn.Enabled = isEnabled;
 			followerOnlySampleColorText.Enabled = isEnabled;
 			defaultFollowerOnlyColorBtn.Enabled = isEnabled;
 		}
-		
+
 		void FollowerOnlyColorBtnClick(object sender, EventArgs e)
 		{
 			var c = new ColorDialog();
@@ -757,13 +787,13 @@ namespace namaichi
 			followerOnlyColorBtn.BackColor = c.Color;
 			followerOnlySampleColorText.BackColor = c.Color;
 		}
-		
+
 		void DefaultFollowerOnlyColorBtnClick(object sender, EventArgs e)
 		{
-			followerOnlyColorBtn.BackColor = Color.FromArgb(255,224,255);
-			followerOnlySampleColorText.BackColor = Color.FromArgb(255,224,255);
+			followerOnlyColorBtn.BackColor = Color.FromArgb(255, 224, 255);
+			followerOnlySampleColorText.BackColor = Color.FromArgb(255, 224, 255);
 		}
-		
+
 		void OptionFormLoad(object sender, EventArgs e)
 		{
 			setFormFromConfig();

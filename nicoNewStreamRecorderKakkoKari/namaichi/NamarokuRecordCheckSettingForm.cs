@@ -7,7 +7,6 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace namaichi
@@ -24,20 +23,21 @@ namespace namaichi
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
-			
+
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
 		}
-		
+
 		void CancelBtnClick(object sender, EventArgs e)
 		{
 			Close();
 		}
-		
+
 		void OkBtnClick(object sender, EventArgs e)
 		{
-			for (var i = 0; i < 11; i++) {
+			for (var i = 0; i < 11; i++)
+			{
 				var c = (RadioButton)groupBox1.Controls[i];
 				if (c.Checked) recordCheck = c.Name;
 			}

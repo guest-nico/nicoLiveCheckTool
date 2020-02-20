@@ -22,8 +22,8 @@ namespace namaichi.info
 		public string url = null;
 		public string userId = null;
 		public string comId = null;
-		
-		public LogInfo(string msg, int type = 0, 
+
+		public LogInfo(string msg, int type = 0,
 				string url = null, string userId = null,
 				string comId = null)
 		{
@@ -35,14 +35,14 @@ namespace namaichi.info
 			dtStr = dt.ToString("yyyy/MM/dd HH:mm:ss");
 		}
 		public string Dt
-        {
+		{
 			get { return dtStr; }
-            set { this.dtStr = value; }
-        }
+			set { this.dtStr = value; }
+		}
 		public string Msg
-        {
-            get { return msg; }
-            set { this.msg = value; }
-        }
+		{
+			get { return msg; }
+			set { this.msg = value; }
+		}
 	}
 }

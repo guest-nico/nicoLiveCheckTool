@@ -6,11 +6,11 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+using namaichi.info;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using namaichi.info;
 
 namespace namaichi.alart
 {
@@ -30,77 +30,88 @@ namespace namaichi.alart
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
-			
+
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
-			
-			workingArea = System.Windows.Forms.Screen.GetWorkingArea(new Point(0,0));
+
+			workingArea = System.Windows.Forms.Screen.GetWorkingArea(new Point(0, 0));
 		}
-		public void show(RssItem ri, AlartInfo ai) {
-			if (popupSize == null) {
+		public void show(RssItem ri, AlartInfo ai)
+		{
+			if (popupSize == null)
+			{
 				popupSize = new Size[]{new PopupForm(ri, form.config, this, 0, ai).Size,
 					new SmallPopupForm(ri, form.config, this, 0, ai).Size};
 			}
-			
+
 			var isSmall = bool.Parse(form.config.get("Issmallpopup"));
 			var posI = 0;
 			var pos = getPos(isSmall, out posI, form.config.get("poploc"),
 					bool.Parse(form.config.get("Isfixpopup")));
 			util.debugWriteLine("popupDisplay posI " + posI + " pos " + pos + " " + ri.lvId);
 			//test
-//			if (posList.Count > 10) return;
+			//			if (posList.Count > 10) return;
 			form.DisplayPopup(ri, pos, isSmall, this, posI, ai);
 		}
-		private Point getPos(bool isSmall, out int posI, string poploc, 
-				bool isFix) {
+		private Point getPos(bool isSmall, out int posI, string poploc,
+				bool isFix)
+		{
 			posI = 0;
 			for (var i = 0; i < posList.Count + 1; i++)
-				if (posList.IndexOf(i) == -1) {
-				posI = i;
-				break;
-			}
-			
+				if (posList.IndexOf(i) == -1)
+				{
+					posI = i;
+					break;
+				}
+
 			//var poploc = form.config.get("poploc");
 			//var isFix = bool.Parse(form.config.get("Isfixpopup"));
 			if (isFix) posI = 0;
-			
+
 			var size = popupSize[isSmall ? 1 : 0];
 			var rowCount = (int)(workingArea.Height / size.Height);
-			
+
 			int x = 0, y = 0;
-			if (poploc.StartsWith("左")) {
+			if (poploc.StartsWith("左"))
+			{
 				x = ((int)(posI / rowCount)) * size.Width;
-			} else {
-				x = workingArea.Width - size.Width 
+			}
+			else
+			{
+				x = workingArea.Width - size.Width
 					- (int)(posI / rowCount) * size.Width;
 			}
-			if (poploc.EndsWith("上")) {
+			if (poploc.EndsWith("上"))
+			{
 				y = (posI % rowCount) * size.Height;
-			} else {
-				y = workingArea.Height - size.Height 
+			}
+			else
+			{
+				y = workingArea.Height - size.Height
 					- (posI % rowCount) * size.Height;
 			}
-			
+
 			posList.Add(posI);
-			return new Point(x,y);
+			return new Point(x, y);
 		}
 		public void showTest(string poploc, int poptime,
 					bool isClickClose, bool isSmall,
-					bool isTopMost, bool isColor, double opacity) {
+					bool isTopMost, bool isColor, double opacity)
+		{
 			var thumbnailUrl = util.getJarPath()[0] + "/ImageCommunity/no thumb com.jpg";
 			var ri = new namaichi.info.RssItem("タイトル", "lv1000000",
 					DateTime.Now.ToString(), "放送説明", "コミュニティ名",
 					"コミュニティID", "放送者名", thumbnailUrl, "true", "");
-			
+
 			popupSize = new Size[]{new PopupForm(ri, form.config, this, 0, null).Size,
 					new SmallPopupForm(ri, form.config, this, 0, null).Size};
-			
+
 			var posI = 0;
 			var pos = getPos(isSmall, out posI, poploc,
 					true);
 			form.DisplayPopup(ri, pos, isSmall, this, posI, null, true,
-					poploc, poptime, isClickClose, 
+					poploc, poptime, isClickClose,
 					isTopMost, isColor, opacity);
 		}
 	}

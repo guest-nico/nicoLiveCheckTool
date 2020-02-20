@@ -14,18 +14,22 @@ namespace namaichi.Logger
 	/// <summary>
 	/// Description of TraceListener.
 	/// </summary>
-	public class TraceListener:DefaultTraceListener
+	public class TraceListener : DefaultTraceListener
 	{
 		public TraceListener()
 		{
 		}
-		public override void WriteLine(string msg) {
-			try {
+		public override void WriteLine(string msg)
+		{
+			try
+			{
 				var dt = DateTime.Now.ToLongTimeString();
 				base.WriteLine(dt + " " + msg);
-			} catch (Exception e) {
-				
-//				util.debugWriteLine("trace listner exception " + e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+			catch (Exception e)
+			{
+
+				//				util.debugWriteLine("trace listner exception " + e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
 	}

@@ -7,9 +7,8 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using System.Drawing;
 using System.Collections.Generic;
-using System.Net;
+using System.Drawing;
 using System.Threading;
 
 namespace namaichi.info
@@ -52,7 +51,8 @@ namespace namaichi.info
 			this.description = description;
 		}
 		*/
-		public HistoryInfo() {
+		public HistoryInfo()
+		{
 			description = null;
 		}
 		//public HistoryInfo(RssItem ri, SortableBindingList<AlartInfo> alartData, List<AlartInfo> targetAi)
@@ -68,56 +68,72 @@ namespace namaichi.info
 			this.description = util.removeTag(ri.description);
 			//this.ri = ri;
 			onAirMode = ri.isMemberOnly ? 2 : 1;
-			
-			
+
+
 			setFavoriteFromAiList(targetAi, ri, this);
-			
-			
+
+
 		}
-		private static void setFavoriteFromAiList(List<AlartInfo> targetAi, RssItem ri, HistoryInfo hi) {
-			while (true) {
-				try {
-					foreach (var ai in targetAi) {
-						if (!string.IsNullOrEmpty(ai.communityId)) {
-							if (ai.communityId == hi.communityId || 
-							    	(ai.communityId == "official" && ri.type == "official")) {
-								if (hi.favorite.IndexOf("ｺﾐｭﾆﾃｨID") == -1) {
+		private static void setFavoriteFromAiList(List<AlartInfo> targetAi, RssItem ri, HistoryInfo hi)
+		{
+			while (true)
+			{
+				try
+				{
+					foreach (var ai in targetAi)
+					{
+						if (!string.IsNullOrEmpty(ai.communityId))
+						{
+							if (ai.communityId == hi.communityId ||
+									(ai.communityId == "official" && ri.type == "official"))
+							{
+								if (hi.favorite.IndexOf("ｺﾐｭﾆﾃｨID") == -1)
+								{
 									if (hi.favorite != "") hi.favorite += ",";
 									hi.favorite += "ｺﾐｭﾆﾃｨID";
 								}
-	//							if (memo != "") memo += ",";
-	//							memo += ai.memo;
+								//							if (memo != "") memo += ",";
+								//							memo += ai.memo;
 								hi.textColor = ai.textColor;
 								hi.backColor = ai.backColor;
-								
-							} else hi.isInListCom = false; 
+
+							}
+							else hi.isInListCom = false;
 						}
-						if (!string.IsNullOrEmpty(ai.hostId)) {
-							if (ai.hostName == hi.userName) {
-								if (hi.favorite.IndexOf("ﾕｰｻﾞｰ名?") == -1) {
+						if (!string.IsNullOrEmpty(ai.hostId))
+						{
+							if (ai.hostName == hi.userName)
+							{
+								if (hi.favorite.IndexOf("ﾕｰｻﾞｰ名?") == -1)
+								{
 									if (hi.favorite != "") hi.favorite += ",";
 									hi.favorite += "ﾕｰｻﾞｰ名?";
 								}
-	//							if (memo != "") memo += ",";
-	//							memo += ai.memo;
+								//							if (memo != "") memo += ",";
+								//							memo += ai.memo;
 								hi.textColor = ai.textColor;
 								hi.backColor = ai.backColor;
-							} else hi.isInListUser = false;
+							}
+							else hi.isInListUser = false;
 						}
-						
-						if (!string.IsNullOrEmpty(ai.Keyword) && ri.isMatchKeyword(ai)) {
-							if (hi.favorite.IndexOf("ｷｰﾜｰﾄ:") == -1) {
+
+						if (!string.IsNullOrEmpty(ai.Keyword) && ri.isMatchKeyword(ai))
+						{
+							if (hi.favorite.IndexOf("ｷｰﾜｰﾄ:") == -1)
+							{
 								if (hi.favorite != "") hi.favorite += ",";
 								hi.favorite += "ｷｰﾜｰﾄ:" + ai.Keyword;
 							}
-//							if (memo != "") memo += ",";
-//							memo += ai.memo;
+							//							if (memo != "") memo += ",";
+							//							memo += ai.memo;
 							hi.textColor = ai.textColor;
 							hi.backColor = ai.backColor;
 						}
 					}
 					break;
-				} catch (Exception e) {
+				}
+				catch (Exception e)
+				{
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 					Thread.Sleep(1000);
 				}
@@ -164,55 +180,55 @@ namespace namaichi.info
 		}
 		*/
 		public string Dt
-        {
+		{
 			get { return dt.ToString("yyyy/MM/dd HH:mm:ss"); }
-            set {  }
-        }
+			set { }
+		}
 		public string Title
-        {
+		{
 			get { return title; }
-            set { this.title = value; }
-        }
+			set { this.title = value; }
+		}
 		public string UserName
-        {
+		{
 			get { return userName; }
-            set { this.userName = value; }
-        }
+			set { this.userName = value; }
+		}
 		public string CommunityName
-        {
+		{
 			get { return communityName; }
-            set { this.communityName = value; }
-        }
+			set { this.communityName = value; }
+		}
 		public string Lvid
-        {
+		{
 			get { return lvid; }
-            set { this.lvid = value; }
-        }
+			set { this.lvid = value; }
+		}
 		public string UserId
-        {
+		{
 			get { return userId; }
-            set { this.userName = value; }
-        }
+			set { this.userName = value; }
+		}
 		public string CommunityId
-        {
+		{
 			get { return communityId; }
-            set { this.communityId = value; }
-        }
+			set { this.communityId = value; }
+		}
 		public string Keyword
-        {
+		{
 			get { return keyword; }
-            set { this.keyword = value; }
-        }
+			set { this.keyword = value; }
+		}
 		public string Favorite
-        {
+		{
 			get { return favorite; }
-            set { this.favorite = value; }
-        }
+			set { this.favorite = value; }
+		}
 		public string Description
-        {
+		{
 			get { return description; }
-            set { this.description = value; }
-        }
-		
+			set { this.description = value; }
+		}
+
 	}
 }

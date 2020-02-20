@@ -6,7 +6,6 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using System.Text.RegularExpressions;
 
 namespace namaichi.utility
@@ -30,10 +29,10 @@ namespace namaichi.utility
 		private Regex lastTsNum;
 		private Regex renameWithoutTime_time;
 		private Regex renameWithoutTime_num;
-		
+
 		private Regex wrVisit;
 		private Regex wrComment;
-		
+
 		public RegGetter()
 		{
 		}
@@ -44,79 +43,94 @@ namespace namaichi.utility
 			return resStreamDuration;
 		}
 		*/
-		public Regex getExtXTargetDuration() {
+		public Regex getExtXTargetDuration()
+		{
 			if (extXTargetDuration == null)
 				extXTargetDuration = new Regex("#EXT-X-TARGETDURATION:(\\d+(\\.\\d+)*(e\\d+)*)");
 			return extXTargetDuration;
 		}
-		public Regex getExtInf() {
+		public Regex getExtInf()
+		{
 			if (extInf == null)
 				extInf = new Regex("^#EXTINF:(.+),");
 			return extInf;
 		}
-		public Regex get_ExtXTargetDuration() {
+		public Regex get_ExtXTargetDuration()
+		{
 			if (_extXTargetDuration == null)
 				_extXTargetDuration = new Regex("^#EXT-X-TARGETDURATION:(\\d+(\\.\\d+)*(e\\d+)*)");
 			return _extXTargetDuration;
 		}
-		public Regex getExtXEndlist() {
+		public Regex getExtXEndlist()
+		{
 			if (extXEndlist == null)
 				extXEndlist = new Regex("^(#EXT-X-ENDLIST)$");
 			return extXEndlist;
 		}
-		public Regex getStreamDuration() {
+		public Regex getStreamDuration()
+		{
 			if (streamDuration == null)
 				streamDuration = new Regex("#STREAM-DURATION:(.+)");
 			return streamDuration;
 		}
-		public Regex getTs() {
+		public Regex getTs()
+		{
 			if (ts == null)
 				ts = new Regex("(\\d+).ts");
 			return ts;
 		}
-		public Regex getTs2() {
+		public Regex getTs2()
+		{
 			if (ts2 == null)
 				ts2 = new Regex("(.+?.ts)\\?");
 			return ts2;
 		}
-		public Regex getFName() {
+		public Regex getFName()
+		{
 			if (fName == null)
 				fName = new Regex(".*(\\\\|/|^)(.+)");
 			return fName;
 		}
-		public Regex getExtXMediaSequence() {
+		public Regex getExtXMediaSequence()
+		{
 			if (extXMediaSequence == null)
 				extXMediaSequence = new Regex("#EXT-X-MEDIA-SEQUENCE\\:(.+)");
 			return extXMediaSequence;
 		}
-		public Regex getMaxNo() {
+		public Regex getMaxNo()
+		{
 			if (maxNo == null)
 				maxNo = new Regex("(\\d+)\\.ts");
 			return maxNo;
 		}
-		public Regex getLastTsNum() {
+		public Regex getLastTsNum()
+		{
 			if (lastTsNum == null)
 				lastTsNum = new Regex("[\\s\\S]+\n(\\d+).ts");
 			return lastTsNum;
 		}
-		public Regex getRenameWithoutTime_time() {
+		public Regex getRenameWithoutTime_time()
+		{
 			if (renameWithoutTime_time == null)
 				renameWithoutTime_time = new Regex("(\\d+h\\d+m\\d+s)");
 			return renameWithoutTime_time;
 		}
-		public Regex getRenameWithoutTime_num() {
+		public Regex getRenameWithoutTime_num()
+		{
 			if (renameWithoutTime_num == null)
 				renameWithoutTime_num = new Regex("\\d+h\\d+m\\d+s_(\\d+)");
 			return renameWithoutTime_num;
 		}
-		
+
 		//websocketRecorder
-		public Regex getWrVisit() {
+		public Regex getWrVisit()
+		{
 			if (wrVisit == null)
 				wrVisit = new Regex("{\"type\":\"watch\",\"body\":{\"command\":\"statistics\",\"params\":\\[\"(\\d+?)\",\"\\d+?\"");
 			return wrVisit;
 		}
-		public Regex getWrComment() {
+		public Regex getWrComment()
+		{
 			if (wrComment == null)
 				wrComment = new Regex("{\"type\":\"watch\",\"body\":{\"command\":\"statistics\",\"params\":\\[\"\\d+?\",\"(\\d+?)\"");
 			return wrComment;

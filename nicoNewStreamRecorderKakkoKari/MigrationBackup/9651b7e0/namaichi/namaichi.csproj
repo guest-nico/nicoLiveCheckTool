@@ -11,8 +11,7 @@
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>8b9ecbd9</NuGetPackageImportStamp>
     <NoWin32Manifest>False</NoWin32Manifest>
     <StartupObject>namaichi.Program</StartupObject>
     <StartAction>Project</StartAction>
@@ -75,15 +74,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="addForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="addForm.cs" />
     <Compile Include="addForm.Designer.cs">
       <DependentUpon>addForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="addTaskForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="addTaskForm.cs" />
     <Compile Include="addTaskForm.Designer.cs">
       <DependentUpon>addTaskForm.cs</DependentUpon>
     </Compile>
@@ -93,9 +88,7 @@
     <Compile Include="alart\Check.cs" />
     <Compile Include="alart\FollowChecker.cs" />
     <Compile Include="alart\LiveCheck.cs" />
-    <Compile Include="alart\PopupDisplay.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="alart\PopupDisplay.cs" />
     <Compile Include="alart\PopupDisplay.Designer.cs">
       <DependentUpon>PopupDisplay.cs</DependentUpon>
     </Compile>
@@ -105,15 +98,11 @@
     <Compile Include="alart\TaskCheck.cs" />
     <Compile Include="alart\ThumbnailManager.cs" />
     <Compile Include="alart\TimeTableChecker.cs" />
-    <Compile Include="BulkAddFromFollowAccountForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="BulkAddFromFollowAccountForm.cs" />
     <Compile Include="BulkAddFromFollowAccountForm.Designer.cs">
       <DependentUpon>BulkAddFromFollowAccountForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="CustomKeywordForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="CustomKeywordForm.cs" />
     <Compile Include="CustomKeywordForm.Designer.cs">
       <DependentUpon>CustomKeywordForm.cs</DependentUpon>
     </Compile>
@@ -124,22 +113,16 @@
     <Compile Include="info\LogInfo.cs" />
     <Compile Include="info\TanzakuOnAir.cs" />
     <Compile Include="info\TaskInfo.cs" />
-    <Compile Include="NamarokuRecordCheckSettingForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="NamarokuRecordCheckSettingForm.cs" />
     <Compile Include="NamarokuRecordCheckSettingForm.Designer.cs">
       <DependentUpon>NamarokuRecordCheckSettingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PopupForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="PopupForm.cs" />
     <Compile Include="PopupForm.Designer.cs">
       <DependentUpon>PopupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="config\config.cs" />
-    <Compile Include="DotNetMessageBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="DotNetMessageBox.cs" />
     <Compile Include="DotNetMessageBox.Designer.cs">
       <DependentUpon>DotNetMessageBox.cs</DependentUpon>
     </Compile>
@@ -158,9 +141,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NicoSessionComboBox2.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="NicoSessionComboBox2.cs" />
     <Compile Include="optionForm.cs">
       <DependentUpon>app.config</DependentUpon>
       <SubType>Form</SubType>
@@ -168,9 +149,7 @@
     <Compile Include="optionForm.Designer.cs">
       <DependentUpon>optionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PopupFormBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="PopupFormBase.cs" />
     <Compile Include="PopupFormBase.Designer.cs">
       <DependentUpon>PopupFormBase.cs</DependentUpon>
     </Compile>
@@ -187,9 +166,7 @@
     <Compile Include="rec\ListFollow.cs" />
     <Compile Include="rec\RecordFromUrl.cs" />
     <Compile Include="rec\RecordingManager.cs" />
-    <Compile Include="SmallPopupForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="SmallPopupForm.cs" />
     <Compile Include="SmallPopupForm.Designer.cs">
       <DependentUpon>SmallPopupForm.cs</DependentUpon>
     </Compile>
@@ -208,15 +185,11 @@
     <Compile Include="util\TaskListFileManager.cs" />
     <Compile Include="util\util.cs" />
     <Compile Include="util\varint.cs" />
-    <Compile Include="VersionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="VersionForm.cs" />
     <Compile Include="VersionForm.Designer.cs">
       <DependentUpon>VersionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="WriteThumbnailMemoForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="WriteThumbnailMemoForm.cs" />
     <Compile Include="WriteThumbnailMemoForm.Designer.cs">
       <DependentUpon>WriteThumbnailMemoForm.cs</DependentUpon>
     </Compile>
@@ -267,63 +240,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="BouncyCastle">
-      <Version>1.8.5</Version>
-    </PackageReference>
-    <PackageReference Include="Google.Protobuf">
-      <Version>3.7.0</Version>
-    </PackageReference>
-    <PackageReference Include="log4net">
-      <Version>2.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Web.Xdt">
-      <Version>2.1.1</Version>
-    </PackageReference>
-    <PackageReference Include="NAudio">
-      <Version>1.8.5</Version>
-    </PackageReference>
-    <PackageReference Include="protobuf-net">
-      <Version>2.1.0</Version>
-    </PackageReference>
-    <PackageReference Include="SnkLib.App.CookieGetter">
-      <Version>2.3.1</Version>
-    </PackageReference>
-    <PackageReference Include="SnkLib.App.CookieGetter.Forms">
-      <Version>1.4.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Data.SQLite.Core">
-      <Version>1.0.108</Version>
-    </PackageReference>
-    <PackageReference Include="WebSocket4Net">
-      <Version>0.15.2</Version>
-    </PackageReference>
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="ProfilingSessions\Session20190401_054741.sdps" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="IWshRuntimeLibrary">
-      <Guid>{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SnkLib.App.CookieGetter.2.1.0.0\build\net40\SnkLib.App.CookieGetter.targets" Condition="Exists('..\packages\SnkLib.App.CookieGetter.2.1.0.0\build\net40\SnkLib.App.CookieGetter.targets')" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.108.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.108.0\build\net451\System.Data.SQLite.Core.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.108.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.108.0\build\net451\System.Data.SQLite.Core.targets'))" />
+    <Error Condition="!Exists('..\packages\SnkLib.App.CookieGetter.2.3.1.0\build\net45\SnkLib.App.CookieGetter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SnkLib.App.CookieGetter.2.3.1.0\build\net45\SnkLib.App.CookieGetter.targets'))" />
+  </Target>
+  <Import Project="..\packages\SnkLib.App.CookieGetter.2.3.1.0\build\net45\SnkLib.App.CookieGetter.targets" Condition="Exists('..\packages\SnkLib.App.CookieGetter.2.3.1.0\build\net45\SnkLib.App.CookieGetter.targets')" />
 </Project>

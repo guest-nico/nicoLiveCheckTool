@@ -8,7 +8,6 @@
  */
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
 
 namespace namaichi.info
 {
@@ -20,12 +19,14 @@ namespace namaichi.info
 		public meta meta;
 		public TanzakuData data;
 	}
-	public class TanzakuData {
+	public class TanzakuData
+	{
 		public List<TanzakuItem> items;
 		public string cursor;
 		public object annotation;
 	}
-	public class TanzakuItem {
+	public class TanzakuItem
+	{
 		public string id;
 		public string title;
 		public string description;
@@ -37,12 +38,14 @@ namespace namaichi.info
 		public bool isChannelRelatedOfficial;
 		public string socialGroupId;
 	}
-	public class TanzakuShowTime {
+	public class TanzakuShowTime
+	{
 		public DateTime beginAt;
 		public DateTime endAt;
 	}
-	public class ContentOwner {
-		public string  type;
+	public class ContentOwner
+	{
+		public string type;
 		public string id;
 		public string name;
 	}

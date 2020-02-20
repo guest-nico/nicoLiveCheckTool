@@ -8,12 +8,8 @@
  */
 using System;
 using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using namaichi.config;
 
 namespace namaichi.rec
 {
@@ -25,36 +21,43 @@ namespace namaichi.rec
 		public FollowUser()
 		{
 		}
-		public bool followUser(string comId, CookieContainer cc, MainForm form, config.config cfg) {
-//			var isJikken = res.IndexOf("siteId&quot;:&quot;nicocas") > -1;
-//			var comId = (isJikken) ? util.getRegGroup(res, "&quot;followPageUrl&quot;\\:&quot;.+?motion/(.+?)&quot;") :
-//					util.getRegGroup(res, "Nicolive_JS_Conf\\.Recommend = \\{type\\: 'community', community_id\\: '(co\\d+)'");
-			if (comId == null) {
+		public bool followUser(string comId, CookieContainer cc, MainForm form, config.config cfg)
+		{
+			//			var isJikken = res.IndexOf("siteId&quot;:&quot;nicocas") > -1;
+			//			var comId = (isJikken) ? util.getRegGroup(res, "&quot;followPageUrl&quot;\\:&quot;.+?motion/(.+?)&quot;") :
+			//					util.getRegGroup(res, "Nicolive_JS_Conf\\.Recommend = \\{type\\: 'community', community_id\\: '(co\\d+)'");
+			if (comId == null)
+			{
 				form.addLogText("このユーザーはフォローできませんでした。");
 				return false;
 			}
-			
-			for (var i = 0; i < 1; i++) {
+
+			for (var i = 0; i < 1; i++)
+			{
 				var isJoinedTask = join(comId, cc, form, cfg);
-				if (isJoinedTask) {
+				if (isJoinedTask)
+				{
 					util.debugWriteLine("user follow ok i " + i);
 					return isJoinedTask;
 				}
 			}
 			return false;
-//			isJoinedTask.Wait();
-			
-//			return false;
+			//			isJoinedTask.Wait();
+
+			//			return false;
 		}
-		private bool join(string comId, CookieContainer cc, MainForm form, config.config cfg) {
+		private bool join(string comId, CookieContainer cc, MainForm form, config.config cfg)
+		{
 			util.debugWriteLine("follow user " + comId);
-			for (int i = 0; i < 3; i++) {
-				var comUrl = "https://www.nicovideo.jp/user/" + comId; 
+			for (int i = 0; i < 3; i++)
+			{
+				var comUrl = "https://www.nicovideo.jp/user/" + comId;
 				var url = "https://www.nicovideo.jp/api/watchitem/add";
 				var headers = new WebHeaderCollection();
-//				headers.Add("Upgrade-Insecure-Requests", "1");
+				//				headers.Add("Upgrade-Insecure-Requests", "1");
 				headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36");
-				try {
+				try
+				{
 					/*
 					var cg = new CookieGetter(cfg);
 					var cgret = cg.getHtml5RecordCookie(url, isSub);
@@ -83,27 +86,31 @@ namespace namaichi.rec
 					
 					if (!isJidouShounin) return false;
 					*/
-				} catch (Exception e) {
+				}
+				catch (Exception e)
+				{
 					return false;
 				}
-				
-				
-				try {
+
+
+				try
+				{
 					var pageRes = util.getPageSource(comUrl, cc);
 					if (pageRes == null) continue;
 					var token = util.getRegGroup(pageRes, "data-csrf-token=\"(.+?)\"");
 					if (token == null) token = util.getRegGroup(pageRes, "Globals.hash = '(.+?)'");
-					if (token == null) {
+					if (token == null)
+					{
 						util.debugWriteLine("user follow token null " + comId);
 						return false;
 					}
-					
+
 					var handler = new System.Net.Http.HttpClientHandler();
 					handler.UseCookies = true;
 					handler.CookieContainer = cc;
 					handler.Proxy = null;
-					
-					
+
+
 					var http = new System.Net.Http.HttpClient(handler);
 					http.DefaultRequestHeaders.Referrer = new Uri(url);
 					/*
@@ -114,10 +121,10 @@ namespace namaichi.rec
 					*/
 					var enc = Encoding.GetEncoding("UTF-8");
 					string data =
-					    "item_type=1&item_id=" + comId + "&token=" + token;
+						"item_type=1&item_id=" + comId + "&token=" + token;
 					util.debugWriteLine(data);
 					byte[] postDataBytes = Encoding.ASCII.GetBytes(data);
-	
+
 					var req = (HttpWebRequest)WebRequest.Create(url);
 					req.Method = "POST";
 					req.Proxy = null;
@@ -126,24 +133,30 @@ namespace namaichi.rec
 					req.ContentLength = postDataBytes.Length;
 					req.ContentType = "application/x-www-form-urlencoded";
 					req.Headers.Add("X-Requested-With", "XMLHttpRequest");
-					using (var stream = req.GetRequestStream()) {
-						try {
+					using (var stream = req.GetRequestStream())
+					{
+						try
+						{
 							stream.Write(postDataBytes, 0, postDataBytes.Length);
-						} catch (Exception e) {
-				       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
-				       	}
+						}
+						catch (Exception e)
+						{
+							util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
+						}
 					}
-	//					stream.Close();
-					
-	
+					//					stream.Close();
+
+
 					var res = req.GetResponse();
-					
+
 					using (var getResStream = res.GetResponseStream())
-					using (var resStream = new System.IO.StreamReader(getResStream)) {
+					using (var resStream = new System.IO.StreamReader(getResStream))
+					{
 						var resStr = resStream.ReadToEnd();
-		
+
 						var isSuccess = resStr.IndexOf("{\"status\":\"ok\"}") > -1;
-						if (!isSuccess) {
+						if (!isSuccess)
+						{
 							util.debugWriteLine(resStr);
 							Thread.Sleep(3000);
 							continue;
@@ -153,53 +166,59 @@ namespace namaichi.rec
 						//                 "フォローしました。" + _m + "開始までしばらくお待ちください。" : "フォローに失敗しました。") + util.getMainSubStr(isSub, true));
 						return isSuccess;
 					}
-					
-	//				resStream.Close();
-					
-					
-	//				Task<HttpResponseMessage> _resTask = http.PostAsync(url, content);
-					
-	//				_resTask.Wait();
-	//				var _res = _resTask.Result;
-					
-	//				var resTask = _res.Content.ReadAsStringAsync();
-	//				resTask.Wait();
-	//				var res = resTask.Result;
-		//			var a = _res.Headers;
-					
-		//			if (res.IndexOf("login_status = 'login'") < 0) return null;
-					
-	//				var cc = handler.CookieContainer;
-					
-				} catch (Exception e) {
+
+					//				resStream.Close();
+
+
+					//				Task<HttpResponseMessage> _resTask = http.PostAsync(url, content);
+
+					//				_resTask.Wait();
+					//				var _res = _resTask.Result;
+
+					//				var resTask = _res.Content.ReadAsStringAsync();
+					//				resTask.Wait();
+					//				var res = resTask.Result;
+					//			var a = _res.Headers;
+
+					//			if (res.IndexOf("login_status = 'login'") < 0) return null;
+
+					//				var cc = handler.CookieContainer;
+
+				}
+				catch (Exception e)
+				{
 					//form.addLogText("フォローに失敗しました。");
-					util.debugWriteLine(e.Message+e.StackTrace);
+					util.debugWriteLine(e.Message + e.StackTrace);
 					continue;
-//					return false;
+					//					return false;
 				}
 			}
 			//form.addLogText("フォローに失敗しました。");
 			util.debugWriteLine("フォロー失敗");
 			return false;
 		}
-		public bool unFollowUser(string comId, CookieContainer cc, MainForm form, config.config cfg) {
-			if (comId == null) {
+		public bool unFollowUser(string comId, CookieContainer cc, MainForm form, config.config cfg)
+		{
+			if (comId == null)
+			{
 				form.addLogText("このユーザーはフォロー解除できませんでした。");
 				return false;
 			}
-			
+
 			var isUnJoinedTask = unJoin(comId, cc, form, cfg);
-//			isJoinedTask.Wait();
+			//			isJoinedTask.Wait();
 			return isUnJoinedTask;
-//			return false;
+			//			return false;
 		}
-		private bool unJoin(string comId, CookieContainer cc, MainForm form, config.config cfg) {
-			for (int i = 0; i < 3; i++) {
-//				var myPageUrl = "http://www.nicovideo.jp/my";
-				var comUrl = "https://www.nicovideo.jp/user/" + comId; 
+		private bool unJoin(string comId, CookieContainer cc, MainForm form, config.config cfg)
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				//				var myPageUrl = "http://www.nicovideo.jp/my";
+				var comUrl = "https://www.nicovideo.jp/user/" + comId;
 				var url = "https://www.nicovideo.jp/api/watchitem/delete";
 				var headers = new WebHeaderCollection();
-//				headers.Add("Upgrade-Insecure-Requests", "1");
+				//				headers.Add("Upgrade-Insecure-Requests", "1");
 				headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36");
 				/*
 				try {
@@ -217,21 +236,23 @@ namespace namaichi.rec
 					return false;
 				}
 				*/
-				
-				try {
+
+				try
+				{
 					var pageRes = util.getPageSource(comUrl, cc);
 					var token = util.getRegGroup(pageRes, "data-csrf-token=\"(.+?)\"");
 					if (token == null) token = util.getRegGroup(pageRes, "Globals.hash = '(.+?)'");
-					if (token == null) {
+					if (token == null)
+					{
 						util.debugWriteLine("user unfollow token null " + comId);
 						return false;
 					}
-					
+
 					var handler = new System.Net.Http.HttpClientHandler();
 					handler.UseCookies = true;
 					handler.CookieContainer = cc;
 					handler.Proxy = null;
-					
+
 					var http = new System.Net.Http.HttpClient(handler);
 					http.DefaultRequestHeaders.Referrer = new Uri(url);
 					/*
@@ -242,9 +263,9 @@ namespace namaichi.rec
 					*/
 					var enc = Encoding.GetEncoding("UTF-8");
 					string data =
-					    "id_list[1][]=" + comId + "&token=" + token;
+						"id_list[1][]=" + comId + "&token=" + token;
 					byte[] postDataBytes = Encoding.ASCII.GetBytes(data);
-					
+
 					var req = (HttpWebRequest)WebRequest.Create(url);
 					req.Method = "POST";
 					req.Proxy = null;
@@ -253,32 +274,40 @@ namespace namaichi.rec
 					req.ContentLength = postDataBytes.Length;
 					req.ContentType = "application/x-www-form-urlencoded";
 					req.Headers.Add("X-Requested-With", "XMLHttpRequest");
-					using (var stream = req.GetRequestStream()) {
-						try {
+					using (var stream = req.GetRequestStream())
+					{
+						try
+						{
 							stream.Write(postDataBytes, 0, postDataBytes.Length);
-						} catch (Exception e) {
-				       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
-				       	}
+						}
+						catch (Exception e)
+						{
+							util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
+						}
 					}
-	
+
 					var res = req.GetResponse();
-					
+
 					using (var getResStream = res.GetResponseStream())
-					using (var resStream = new System.IO.StreamReader(getResStream)) {
+					using (var resStream = new System.IO.StreamReader(getResStream))
+					{
 						var resStr = resStream.ReadToEnd();
-		
+
 						var isSuccess = resStr.IndexOf("{\"delete_count\":1,\"status\":\"ok\"}") > -1;
-						if (!isSuccess) {
+						if (!isSuccess)
+						{
 							util.debugWriteLine(resStr);
 							Thread.Sleep(3000);
 							continue;
 						}
 						return isSuccess;
 					}
-					
-				} catch (Exception e) {
+
+				}
+				catch (Exception e)
+				{
 					//form.addLogText("フォロー解除に失敗しました。");
-					util.debugWriteLine(e.Message+e.StackTrace);
+					util.debugWriteLine(e.Message + e.StackTrace);
 					continue;
 				}
 			}

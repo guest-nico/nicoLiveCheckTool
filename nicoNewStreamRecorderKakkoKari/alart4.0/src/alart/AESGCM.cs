@@ -1,0 +1,127 @@
+﻿using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Modes;
+using Org.BouncyCastle.Crypto.Parameters;
+using System;
+using System.IO;
+using System.Text;
+
+namespace namaichi.alart
+{
+
+    public class AESGCM
+    {
+
+        private const int DEFAULT_KEY_BIT_SIZE = 128;
+        private const int DEFAULT_MAC_BIT_SIZE = 128;
+        private const int DEFAULT_NONCE_BIT_SIZE = 128;
+
+        private readonly int _keySize;
+        private readonly int _macSize;
+        private readonly int _nonceSize;
+
+
+
+        public AESGCM()
+            : this(DEFAULT_KEY_BIT_SIZE, DEFAULT_MAC_BIT_SIZE, DEFAULT_NONCE_BIT_SIZE)
+        { }
+
+        public AESGCM(int keyBitSize, int macBitSize, int nonceBitSize)
+        {
+
+            _keySize = keyBitSize;
+            _macSize = macBitSize;
+            _nonceSize = nonceBitSize;
+        }
+
+        public string DecryptWithKey(string encryptedMessage, string key, int nonSecretPayloadLength = 0)
+        {
+            if (string.IsNullOrEmpty(encryptedMessage))
+            {
+                throw new ArgumentException("Encrypted Message Required!", "encryptedMessage");
+            }
+
+            byte[] decodedKey = Convert.FromBase64String(key);
+
+            byte[] cipherText = Convert.FromBase64String(encryptedMessage);
+
+            byte[] plaintext = DecryptWithKey(cipherText, decodedKey, new byte[16]);
+
+            return Encoding.UTF8.GetString(plaintext);
+        }
+        /*
+        public string EncryptWithKey(string messageToEncrypt, string key, byte[] nonSecretPayload = null)
+        {
+            if (string.IsNullOrEmpty(messageToEncrypt))
+            {
+                throw new ArgumentException("Secret Message Required!", "messageToEncrypt");
+            }
+
+            var decodedKey = Convert.FromBase64String(key);
+
+            var plainText = Encoding.UTF8.GetBytes(messageToEncrypt);
+            var cipherText = EncryptWithKey(plainText, decodedKey, nonSecretPayload);
+            return Convert.ToBase64String(cipherText);
+        }
+		*/
+        public byte[] DecryptWithKey(byte[] encryptedMessage, byte[] key, byte[] nonce)
+        {
+
+            if (encryptedMessage == null || encryptedMessage.Length == 0)
+            {
+                throw new ArgumentException("Encrypted Message Required!", "encryptedMessage");
+            }
+
+            using (MemoryStream cipherStream = new MemoryStream(encryptedMessage))
+            using (BinaryReader cipherReader = new BinaryReader(cipherStream))
+            {
+
+                GcmBlockCipher cipher = new GcmBlockCipher(new AesEngine());
+                AeadParameters parameters = new AeadParameters(new KeyParameter(key), _macSize, nonce);
+                cipher.Init(false, parameters);
+
+                //Decrypt Cipher Text
+                byte[] cipherText = cipherReader.ReadBytes(encryptedMessage.Length);
+                byte[] plainText = new byte[cipher.GetOutputSize(cipherText.Length)];
+                int outSize = cipher.GetOutputSize(cipherText.Length);
+
+                int len = cipher.ProcessBytes(cipherText, 0, cipherText.Length, plainText, 0);
+                cipher.DoFinal(plainText, len);
+
+                return plainText;
+                //return null;
+            }
+        }
+
+        /*
+		public byte[] EncryptWithKey(byte[] messageToEncrypt, byte[] key, byte[] nonce)
+		{
+
+			var cipher = new GcmBlockCipher(new AesEngine());
+			var parameters = new AeadParameters(new KeyParameter(key), _macSize, nonce);
+            cipher.Init(true, parameters);
+
+            //Generate Cipher Text With Auth Tag
+            var cipherText = new byte[cipher.GetOutputSize(messageToEncrypt.Length)];
+            var len = cipher.ProcessBytes(messageToEncrypt, 0, messageToEncrypt.Length, cipherText, 0);
+            cipher.DoFinal(cipherText, len);
+
+            //Assemble Message
+            using (var combinedStream = new MemoryStream())
+            {
+                using (var binaryWriter = new BinaryWriter(combinedStream))
+                {
+                    //Prepend Authenticated Payload
+//                    binaryWriter.Write(nonSecretPayload);
+                    //Prepend Nonce
+//                    binaryWriter.Write(nonce);
+                    //Write Cipher Text
+                    binaryWriter.Write(cipherText);
+                }
+                return combinedStream.ToArray();
+            }
+            
+           return null;
+        }
+		*/
+    }
+}

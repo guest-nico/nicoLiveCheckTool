@@ -1,0 +1,411 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectGuid>{987FB3B0-ACAA-4E44-B311-2B19812FFA67}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>alart4._._</RootNamespace>
+    <AssemblyName>ニコ生放送チェックツール（仮</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <WarningLevel>4</WarningLevel>
+    <ApplicationIcon>..\%28check3.ico</ApplicationIcon>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>alart4.5.2.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>False</DelaySign>
+    <AssemblyOriginatorKeyMode>File</AssemblyOriginatorKeyMode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <BaseAddress>4194304</BaseAddress>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <FileAlignment>4096</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>..\packages\BouncyCastle.Crypto.dll.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.IWshRuntimeLibrary">
+      <HintPath>..\namaichi\bin\Debug\Interop.IWshRuntimeLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio">
+      <HintPath>..\packages\NAudio.1.8.5\lib\net35\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\packages\protobuf-net.2.4.4.nupkg\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="SnkLib.App.CookieGetter">
+      <HintPath>..\packages\SnkLib.App.CookieGetter.2.3.1.0\lib\net45\SnkLib.App.CookieGetter.dll</HintPath>
+    </Reference>
+    <Reference Include="SnkLib.App.CookieGetter.Forms">
+      <HintPath>..\packages\SnkLib.App.CookieGetter.Forms.1.4.0.0\lib\net45\SnkLib.App.CookieGetter.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.ClientEngine">
+      <HintPath>..\packages\SuperSocket.ClientEngine.Core.0.10.0\lib\net45\SuperSocket.ClientEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.108.0\lib\net451\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WebSocket4Net">
+      <HintPath>..\packages\WebSocket4Net.0.15.2\lib\net45\WebSocket4Net.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\alart4.0\src\alart\AESGCM.cs">
+      <Link>src\alart\AESGCM.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\alart\AppPushReceiver.cs">
+      <Link>src\alart\AppPushReceiver.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\alart\CategoryCheck.cs">
+      <Link>src\alart\CategoryCheck.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\alart\Check.cs">
+      <Link>src\alart\Check.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\alart\FollowChecker.cs">
+      <Link>src\alart\FollowChecker.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\alart\LiveCheck.cs">
+      <Link>src\alart\LiveCheck.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\alart\PopupDisplay.cs">
+      <Link>src\alart\PopupDisplay.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\alart\PopupDisplay.Designer.cs">
+      <Link>src\alart\PopupDisplay.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\alart\PushCrypto.cs">
+      <Link>src\alart\PushCrypto.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\alart\PushReceiver.cs">
+      <Link>src\alart\PushReceiver.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\alart\RssCheck.cs">
+      <Link>src\alart\RssCheck.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\alart\TaskCheck.cs">
+      <Link>src\alart\TaskCheck.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\alart\ThumbnailManager.cs">
+      <Link>src\alart\ThumbnailManager.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\alart\TimeTableChecker.cs">
+      <Link>src\alart\TimeTableChecker.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\config\config.cs">
+      <Link>src\config\config.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\addForm.cs">
+      <Link>src\gui\addForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\addForm.Designer.cs">
+      <Link>src\gui\addForm.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\addTaskForm.cs">
+      <Link>src\gui\addTaskForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\addTaskForm.Designer.cs">
+      <Link>src\gui\addTaskForm.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\BulkAddFromFollowAccountForm.cs">
+      <Link>src\gui\BulkAddFromFollowAccountForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\BulkAddFromFollowAccountForm.Designer.cs">
+      <Link>src\gui\BulkAddFromFollowAccountForm.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\CustomKeywordForm.cs">
+      <Link>src\gui\CustomKeywordForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\CustomKeywordForm.Designer.cs">
+      <Link>src\gui\CustomKeywordForm.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\DotNetMessageBox.cs">
+      <Link>src\gui\DotNetMessageBox.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\DotNetMessageBox.Designer.cs">
+      <Link>src\gui\DotNetMessageBox.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\fileNameOptionForm.cs">
+      <Link>src\gui\fileNameOptionForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\fileNameOptionForm.Designer.cs">
+      <Link>src\gui\fileNameOptionForm.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\MainForm.cs">
+      <Link>src\gui\MainForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\MainForm.Designer.cs">
+      <Link>src\gui\MainForm.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\NamarokuRecordCheckSettingForm.cs">
+      <Link>src\gui\NamarokuRecordCheckSettingForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\NamarokuRecordCheckSettingForm.Designer.cs">
+      <Link>src\gui\NamarokuRecordCheckSettingForm.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\NicoSessionComboBox2.cs">
+      <Link>src\gui\NicoSessionComboBox2.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\optionForm.cs">
+      <Link>src\gui\optionForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\optionForm.Designer.cs">
+      <Link>src\gui\optionForm.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\PopupForm.cs">
+      <Link>src\gui\PopupForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\PopupForm.Designer.cs">
+      <Link>src\gui\PopupForm.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\PopupFormBase.cs">
+      <Link>src\gui\PopupFormBase.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\PopupFormBase.Designer.cs">
+      <Link>src\gui\PopupFormBase.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\SmallPopupForm.cs">
+      <Link>src\gui\SmallPopupForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\SmallPopupForm.Designer.cs">
+      <Link>src\gui\SmallPopupForm.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\sortableList.cs">
+      <Link>src\gui\sortableList.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\UpdateForm.cs">
+      <Link>src\gui\UpdateForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\UpdateForm.Designer.cs">
+      <Link>src\gui\UpdateForm.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\VersionForm.cs">
+      <Link>src\gui\VersionForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\VersionForm.Designer.cs">
+      <Link>src\gui\VersionForm.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\WriteThumbnailMemoForm.cs">
+      <Link>src\gui\WriteThumbnailMemoForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\WriteThumbnailMemoForm.Designer.cs">
+      <Link>src\gui\WriteThumbnailMemoForm.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\info\AlartInfo.cs">
+      <Link>src\info\AlartInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\info\CategoryRecent.cs">
+      <Link>src\info\CategoryRecent.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\info\CustomKeywordInfo.cs">
+      <Link>src\info\CustomKeywordInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\info\HistoryInfo.cs">
+      <Link>src\info\HistoryInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\info\LiveInfo.cs">
+      <Link>src\info\LiveInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\info\LogInfo.cs">
+      <Link>src\info\LogInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\info\RssItem.cs">
+      <Link>src\info\RssItem.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\info\TanzakuOnAir.cs">
+      <Link>src\info\TanzakuOnAir.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\info\TaskInfo.cs">
+      <Link>src\info\TaskInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\Logger\TraceListener.cs">
+      <Link>src\Logger\TraceListener.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\rec\CookieGetter.cs">
+      <Link>src\rec\CookieGetter.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\rec\FollowChannel.cs">
+      <Link>src\rec\FollowChannel.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\rec\FollowCommunity.cs">
+      <Link>src\rec\FollowCommunity.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\rec\FollowUser.cs">
+      <Link>src\rec\FollowUser.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\rec\HosoInfoGetter.cs">
+      <Link>src\rec\HosoInfoGetter.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\rec\ListFollow.cs">
+      <Link>src\rec\ListFollow.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\rec\RecordFromUrl.cs">
+      <Link>src\rec\RecordFromUrl.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\rec\RecordingManager.cs">
+      <Link>src\rec\RecordingManager.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\rec\ToolMenuChecker.cs">
+      <Link>src\rec\ToolMenuChecker.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\util\AlartListFileManager.cs">
+      <Link>src\util\AlartListFileManager.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\util\android_checkin_pbs.cs">
+      <Link>src\util\android_checkin_pbs.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\util\ArgReader.cs">
+      <Link>src\util\ArgReader.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\util\checkin_pb.cs">
+      <Link>src\util\checkin_pb.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\util\checkin_pbs.cs">
+      <Link>src\util\checkin_pbs.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\util\HistoryListFileManager.cs">
+      <Link>src\util\HistoryListFileManager.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\util\mcs_pb.cs">
+      <Link>src\util\mcs_pb.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\util\mcs_pbs.cs">
+      <Link>src\util\mcs_pbs.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\util\NotAlartListFileManager.cs">
+      <Link>src\util\NotAlartListFileManager.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\util\RegGetter.cs">
+      <Link>src\util\RegGetter.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\util\SourceInfoSerialize.cs">
+      <Link>src\util\SourceInfoSerialize.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\util\TaskListFileManager.cs">
+      <Link>src\util\TaskListFileManager.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\util\util.cs">
+      <Link>src\util\util.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\util\varint.cs">
+      <Link>src\util\varint.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\Program.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\alart4.0\src\gui\addForm.resx">
+      <Link>src\gui\addForm.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\addTaskForm.resx">
+      <Link>src\gui\addTaskForm.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\app.resx">
+      <Link>src\gui\app.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\BulkAddFromFollowAccountForm.resx">
+      <Link>src\gui\BulkAddFromFollowAccountForm.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\CustomKeywordForm.resx">
+      <Link>src\gui\CustomKeywordForm.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\DotNetMessageBox.resx">
+      <Link>src\gui\DotNetMessageBox.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\fileNameOptionForm.resx">
+      <Link>src\gui\fileNameOptionForm.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\MainForm.resx">
+      <Link>src\gui\MainForm.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\NamarokuRecordCheckSettingForm.resx">
+      <Link>src\gui\NamarokuRecordCheckSettingForm.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\optionForm.resx">
+      <Link>src\gui\optionForm.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\PopupForm.resx">
+      <Link>src\gui\PopupForm.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\PopupFormBase.resx">
+      <Link>src\gui\PopupFormBase.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\SmallPopupForm.resx">
+      <Link>src\gui\SmallPopupForm.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\VersionForm.resx">
+      <Link>src\gui\VersionForm.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\WriteThumbnailMemoForm.resx">
+      <Link>src\gui\WriteThumbnailMemoForm.resx</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

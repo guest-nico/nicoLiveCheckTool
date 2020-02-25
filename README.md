@@ -49,7 +49,3 @@ https://www.mozilla.org/en-US/MPL/
 http://toriho-dai.com/
 otosozai.com様
 http://www.otosozai.com
-
-## 開発環境
-SharpDevelop4.4.2
-（VisualStudioではビルドできませんでした。）

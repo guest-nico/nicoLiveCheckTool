@@ -35,17 +35,28 @@ namespace namaichi.alart
 			checkAndUpdate();
 		}
 		private void checkAndUpdate() {
-			if (container == null) return;
-			var followList = getFollowListFromApp();
-			
-			if (followList != null) {
-				updateAlartList(followList);
-			} else {
-				form.addLogText("フォローリストが取得できませんでした。再試行します。");	
-				followList = getFollowListFromMyPage();
+			form.addLogText("フォローリストを確認します");	
+			try {
+				if (container == null) {
+					form.addLogText("Cookieが確認できなかったためフォローリストが取得できませんでした。");	
+					return;
+				}
+				var followList = getFollowListFromApp();
+				
 				if (followList != null) {
+					form.addLogText("フォローリストの取得に成功しました " + (followList.Count == 0));
 					updateAlartList(followList);
-				} else form.addLogText("フォローリストが取得できませんでした。");
+				} else {
+					form.addLogText("フォローリストが取得できませんでした。再試行します。");	
+					followList = getFollowListFromMyPage();
+					if (followList != null) {
+						form.addLogText("フォローリストの取得に成功しました " + (followList.Count == 0));
+						updateAlartList(followList);
+					} else form.addLogText("フォローリストが取得できませんでした。");
+				}
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				form.addLogText("フォローリストの取得中に未知のエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);	
 			}
 		}
 		public List<string[]> getFollowListFromApp(bool[] types = null) {
@@ -215,7 +226,7 @@ namespace namaichi.alart
 			h.Add("X-Frontend-Id", "1");
 			h.Add("X-Frontend-Version", "5.27.0");
 			h.Add("X-Os-Version", "5.1.1");
-			h.Add("Cookie", "SP_SESSION_KEY=user_session_225832_117181c52ad018016dfa09654b1d0ed2a1f005063c3070cb83dca122635d234d");
+			h.Add("Cookie", "SP_SESSION_KEY=user_session_278215_1c52ad018016dfa09654b1d0ed2a1f005063c3070cb83dca122635d234d");
 			*/
 			var c = container.GetCookies(new Uri("https://www.nicovideo.jp"));
 			if (c == null) return null;

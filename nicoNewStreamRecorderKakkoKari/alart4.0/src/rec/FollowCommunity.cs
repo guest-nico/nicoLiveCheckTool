@@ -104,7 +104,7 @@ namespace namaichi.rec
 					    "mode=commit&title=" + System.Web.HttpUtility.UrlEncode("フォローリクエスト", enc);
 					byte[] postDataBytes = Encoding.ASCII.GetBytes(data);
 	
-					
+					util.debugWriteLine("access__ followCommunity join");
 					var req = (HttpWebRequest)WebRequest.Create(url);
 					req.Method = "POST";
 					req.Proxy = null;
@@ -223,6 +223,7 @@ namespace namaichi.rec
 					    "time=" + time + "&commit_key=" + commit_key + "&commit=" + System.Web.HttpUtility.UrlEncode("はい、フォローを解除します", enc);
 					byte[] postDataBytes = Encoding.ASCII.GetBytes(data);
 					
+					util.debugWriteLine("access__ followCommunity unjoin");
 					var req = (HttpWebRequest)WebRequest.Create(url);
 					req.Method = "POST";
 					req.Proxy = null;

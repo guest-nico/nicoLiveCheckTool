@@ -21,6 +21,7 @@ using namaichi.alart;
 using namaichi.info;
 using namaichi.rec;
 using namaichi.utility;
+using namaichi;
 
 namespace namaichi.alart
 {
@@ -762,7 +763,7 @@ namespace namaichi.alart
 					
 				}
 				*/
-				var intervalSec = bool.Parse(form.config.get("IscheckOnAir")) ? 180 : 60;
+				var intervalSec = bool.Parse(form.config.get("IscheckOnAir")) ? 180 : 180;
 				if (bool.Parse(form.config.get("IscheckRecent")) && 
 				 	   DateTime.Now - lastCheckLastRecentLiveTime > TimeSpan.FromSeconds(intervalSec)) {
 					Task.Factory.StartNew(() => {
@@ -784,7 +785,7 @@ namespace namaichi.alart
 					});
 				}
 				
-				if (DateTime.Now - lastCheckHistoryLiveTime > TimeSpan.FromMinutes(1)) {
+				if (DateTime.Now - lastCheckHistoryLiveTime > TimeSpan.FromMinutes(3)) {
 					lastCheckHistoryLiveTime = DateTime.MaxValue;
 					Task.Factory.StartNew(() => {
 					    form.checkHistoryLive();

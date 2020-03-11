@@ -15,21 +15,21 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using System.ComponentModel;
 using SunokoLibrary.Application;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+//using System;
+//using System.Collections.Generic;
+//using System.ComponentModel;
 using System.Data;
-using System.Drawing;
+//using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+//using System.Windows.Forms;
 using System.Configuration;
 using System.IO;
-using System.Text;
+//using System.Text;
 using System.Threading;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -244,8 +244,11 @@ namespace namaichi
 			setBackColor(Color.FromArgb(int.Parse(config.get("alartBackColor"))));
 			setForeColor(Color.FromArgb(int.Parse(config.get("alartForeColor"))));
 			
+			setDisplayMenuClosingEvent();
+			  
+			
 		}
-		 
+		
 		
 		/*
 		async void Selector_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -468,6 +471,7 @@ namespace namaichi
 				new NotAlartListFileManager().save(this);
 				saveMenuSetting();
 				saveFormState();
+				saveSortState();
 				
 			} catch(Exception e) {
 				util.debugWriteLine(e.Message + " " + e.StackTrace);
@@ -2439,6 +2443,7 @@ namespace namaichi
 			} else isCheck = elapsed < TimeSpan.FromHours(6);
 			if (!isCheck) return false;
 			
+			util.debugWriteLine("check alart live onair " + ai.lastLvid);
 			return isOnAirLvid(ai.lastLvid);
 		}
 		private bool isOnAirLvid(string lvid) {
@@ -3290,7 +3295,7 @@ namespace namaichi
 			util.debugWriteLine("liveListSorted");
 			if (bool.Parse(config.get("FavoriteUp")))
 				upLiveListFavorite();
-			setSortConfig("live", liveList);
+			//setSortConfig("live", liveList);
 		}
 		
 		void LiveListSearchBtnClick(object sender, EventArgs e)
@@ -3696,7 +3701,7 @@ namespace namaichi
 		
 		void ColorColumnMenuDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
-			displayMenuItem.HideDropDown();
+			//displayMenuItem.HideDropDown();
 			var item = ((ToolStripMenuItem)e.ClickedItem);
 			var index = colorColumnMenu.DropDownItems.IndexOf(e.ClickedItem);
 			item.Checked = !item.Checked;
@@ -4160,6 +4165,7 @@ namespace namaichi
 						if (hi.onAirMode == 0) continue;
 						
 						//util.debugWriteLine(i + " " + alartListDataSource[i].lastHosoDt + " " + alartList[7, i].Style.BackColor);
+						util.debugWriteLine("check history live onair " + hi.lvid);
 						var isOnAir = isOnAirLvid(hi.lvid);
 						
 						if (!isOnAir)
@@ -4180,7 +4186,7 @@ namespace namaichi
 		
 		void ColorHistoryColorColumnMenuDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
-			displayMenuItem.HideDropDown();
+			//displayMenuItem.HideDropDown();
 			var item = ((ToolStripMenuItem)e.ClickedItem);
 			var index = colorHistoryColorColumnMenu.DropDownItems.IndexOf(e.ClickedItem);
 			item.Checked = !item.Checked;
@@ -4677,27 +4683,27 @@ namespace namaichi
 		
 		void AlartListSorted(object sender, EventArgs e)
 		{
-			setSortConfig("alart", alartList);
+			//setSortConfig("alart", alartList);
 		}
 		
 		void UserAlartListSorted(object sender, EventArgs e)
 		{
-			setSortConfig("userAlart", userAlartList);
+			//setSortConfig("userAlart", userAlartList);
 		}
 		
 		void TaskListSorted(object sender, EventArgs e)
 		{
-			setSortConfig("task", taskList);
+			//setSortConfig("task", taskList);
 		}
 		
 		void HistoryListSorted(object sender, EventArgs e)
 		{
-			setSortConfig("history", historyList);
+			//setSortConfig("history", historyList);
 		}
 		
 		void NotAlartListSorted(object sender, EventArgs e)
 		{
-			setSortConfig("notAlart", notAlartList);
+			//setSortConfig("notAlart", notAlartList);
 		}
 		private void setSortConfig(string s, DataGridView l) {
 			try {
@@ -4708,6 +4714,25 @@ namespace namaichi
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
+		}
+		private void saveSortState() {
+			var s = new string[]{"live", "alart", "userAlart", "task", "history", "notAlart"};
+			var l = new DataGridView[]{liveList, alartList, userAlartList, taskList, historyList, notAlartList};
+			for (var i = 0; i < s.Length; i++) setSortConfig(s[i], l[i]);
+		}
+		private void setDisplayMenuClosingEvent() {
+			foreach (var m in displayMenuItem.DropDownItems)
+				if (m.GetType() == typeof(ToolStripMenuItem))
+					if (((ToolStripMenuItem)m).HasDropDownItems) 
+						((ToolStripMenuItem)m).DropDown.Closing += displayMenu_Closing;
+			
+		}
+		private void displayMenu_Closing(object sender, 
+				ToolStripDropDownClosingEventArgs e) {
+			//util.debugWriteLine("closing reason " + e.CloseReason);
+			if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
+				e.Cancel = true;
+			
 		}
 	}
 }

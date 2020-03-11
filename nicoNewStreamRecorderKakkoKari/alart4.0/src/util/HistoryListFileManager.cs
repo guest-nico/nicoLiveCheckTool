@@ -28,26 +28,21 @@ namespace namaichi.utility
 		{
 			var path = util.getJarPath()[0] + "\\";
 			
-			if (File.Exists(path + "historylist.ini")) {
-				try {
-					var _lineLen = File.ReadAllText(path + "historylist.ini").Length;
-					if (_lineLen > 5)
-						File.Copy(path + "historylist.ini", path + "historylist_backup.ini", true);
-				} catch (Exception e) {
-					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				}
-			}
+			
 			
 			try {
 				var json = JToken.FromObject(form.historyListDataSource).ToString(Formatting.None);
-				using (var sw = new StreamWriter(path + "historylist.ini", false, Encoding.UTF8)) {
+				var f = path + "historylist.ini_";
+				using (var sw = new StreamWriter(f, false, Encoding.UTF8)) {
 					sw.Write(json);
 					//sw.Close();
 				}
+				File.Copy(f, f.Substring(0, f.Length - 1), true);
+				File.Delete(f);
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
-			
+			util.saveBackupList(path, "historylist");
 		}
 		public void load(MainForm form)
 		{

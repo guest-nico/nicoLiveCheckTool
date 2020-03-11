@@ -43,17 +43,9 @@ namespace namaichi.utility
 			var path = util.getJarPath()[0] + "\\";
 			var mode = isUserMode ? "user" : "com";
 			
-			if (File.Exists(path + "favorite" + mode + ".ini")) {
-				try {
-					var _lineLen = File.ReadAllLines(path + "favorite" + mode + ".ini").Length;
-					if (_lineLen > 5)
-						File.Copy(path + "favorite" + mode + ".ini", path + "favorite" + mode + "_backup.ini", true);
-				} catch (Exception e) {
-					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				}
-			}
 			
-			using (var sw = new StreamWriter(path + "favorite" + mode + ".ini", false, Encoding.UTF8)) {
+			var f = path + "favorite" + mode + ".ini_";
+			using (var sw = new StreamWriter(f, false, Encoding.UTF8)) {
 				sw.WriteLine("130");
 				foreach (AlartInfo ai in dataSource) {
 					for (var i = 0; i < 36; i++) { //namaroku 29 save 32
@@ -106,6 +98,11 @@ namespace namaichi.utility
 				sw.WriteLine("EndLine");
 				//sw.Close();
 			}
+			File.Copy(f, f.Substring(0, f.Length - 1), true);
+			File.Delete(f);
+			
+			util.saveBackupList(path, "favorite" + mode);
+			
 		}
 		public void load()
 		{

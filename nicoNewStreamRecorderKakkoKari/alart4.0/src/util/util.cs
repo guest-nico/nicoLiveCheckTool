@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
@@ -29,8 +30,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.59 debug";
-	public static string versionDayStr = "2020/02/25";
+	public static string versionStr = "ver0.1.7.61";
+	public static string versionDayStr = "2020/03/05";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -1095,6 +1096,7 @@ class util {
 		return ret;		
 	}
 	public static string getUserName(string userId, out bool isFollow, CookieContainer container, bool isRequireFollow) {
+		util.debugWriteLine("access__ getUserName " + userId);
 		isFollow = false; 
 		if (userId == "official" || userId == null || userId == "") return null;
 		
@@ -1144,7 +1146,14 @@ class util {
 			*/
 			//return null;
 		}
-		var _url = "https://public.api.nicovideo.jp/v1/users/" + userId + ".json";
+		var _url = "https://api.live2.nicovideo.jp/api/v1/user/nickname?userId=" + userId;
+		var r = util.getPageSource(_url, null);
+		if (r != null && !r.StartsWith("{\"error\":\"")) {
+			var name = util.getRegGroup(r, "\"nickname\":\"(.*)\"");
+			if (name != null) return name;
+		}
+		
+		_url = "https://public.api.nicovideo.jp/v1/users/" + userId + ".json";
 		var _h = new Dictionary<string, string>();
 		_h.Add("User-Agent", "nicocas-Android/3.6.0");
 		_h.Add("X-Frontend-Id", "90");
@@ -1516,4 +1525,35 @@ class util {
 		var dt = DateTime.Now;
 		return dt.ToString("yyyyMMdd-HHmm-ssHH-ssHH-yyyyMMddyyyy");
 	}
+    public static void saveBackupList(string path, string f) {
+    	try {
+    		var p = path + "\\backup";
+    		if (File.Exists(path + f + ".ini")) {
+    			if (!Directory.Exists(p))
+    				Directory.CreateDirectory(p);
+    			if (!Directory.Exists(p)) return;
+    			
+    			var dt = DateTime.Now.ToString("yyyyMMdd");
+    			File.Copy(path + f + ".ini", p + "\\" + f + dt + "backup.ini", true);
+    		}
+    		var _fList = new List<string>(Directory.GetFiles(p, "*" + f + "*"));
+    		var fList = new List<string>();
+    		var dtL = new List<int>();
+    		foreach (var _f in _fList) {
+    			var d = util.getRegGroup(_f, f + "(\\d+)backup.ini");
+    			if (d == null) continue;
+    			fList.Add(_f);
+    			dtL.Add(int.Parse(d));
+    		}
+    		if (fList.Count <= 5) return;
+    		var vals = fList.ToArray();
+    		Array.Sort(dtL.ToArray(), vals);
+    		for (var i = 0; i < vals.Length - 5; i++)
+    			File.Delete(vals[i]);
+    		
+		} catch (Exception e) {
+			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+		}
+		
+    }
 }

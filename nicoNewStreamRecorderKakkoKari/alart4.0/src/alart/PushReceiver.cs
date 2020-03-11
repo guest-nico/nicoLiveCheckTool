@@ -84,8 +84,10 @@ namespace namaichi.alart
 				auth = Convert.FromBase64String(_auth);
 			}
 			connect();
+			
 		}
 		public bool connect() {
+			
 			lock(this) {
 				var  isPass = (TimeSpan.FromSeconds(5) > (DateTime.Now - lastWebsocketConnectTime));
 				if (isPass) 
@@ -141,9 +143,11 @@ namespace namaichi.alart
 				util.debugWriteLine("ws connect exception " + ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 				return false;
 			}
+			
 			return true;
 		}
 		private void onOpen(object sender, EventArgs e) {
+			
 			util.debugWriteLine("on open ");
 			
 			//var uaid = "ba4ca9f1cf784a1f979be6ed12d8f5da";
@@ -158,6 +162,7 @@ namespace namaichi.alart
 			
 		}
 		private void onClose(object sender, EventArgs e) {
+			
 			util.debugWriteLine("on close " + e.ToString());
 			check.form.addLogText("ブラウザプッシュ通知の受信を終了しました");
 			
@@ -172,6 +177,7 @@ namespace namaichi.alart
 					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 				}
 			}
+			
 		}
 		private void onError(object sender, SuperSocket.ClientEngine.ErrorEventArgs e) {
 			util.debugWriteLine("on error " + e.Exception.Message + e.Exception.Source + e.Exception.StackTrace + e.Exception.TargetSite);
@@ -180,6 +186,7 @@ namespace namaichi.alart
 			util.debugWriteLine("on data " + e.Data);
 		}
 		private void onMessageReceive(object sender, MessageReceivedEventArgs e) {
+			
 			util.debugWriteLine("on message " + e.Message);
 			
 			if (e.Message.IndexOf("hello") > -1 && e.Message.IndexOf("200") > -1) {
@@ -265,26 +272,38 @@ namespace namaichi.alart
 					return;
 				}
 			}
+			
 		}
 		private bool sendEndpoint(string endpoint) {
 			
-			/*POST /v1/nicopush/webpush/endpoints.json HTTP/1.1
-			Host: public.api.nicovideo.jp
-			User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:65.0) Gecko/20100101 Firefox/65.0
-			Accept: application/json
-			Accept-Language: ja,en-US;q=0.7,en;q=0.3
-			Accept-Encoding: gzip, deflate, br
-			Referer: https://account.nicovideo.jp/my/account
-			x-request-with: https://account.nicovideo.jp/my/account
-			x-frontend-id: 8
-			content-type: application/json
-			Origin: https://account.nicovideo.jp
-			Content-Length: 431
-			Connection: keep-alive
-			Cookie: nicosid=1546686738.281900968; _ga=GA1.2.1892466675.1546686717; _gac_UA-88451119-2=1.1546686741.EAIaIQobChMI0fukicHW3wIViKuWCh0HUQd6EAAYASABEgLtSPD_BwE; _gac_UA-88451119-7=1.1546686741.EAIaIQobChMI0fukicHW3wIViKuWCh0HUQd6EAAYASABEgLtSPD_BwE; nicorepo_filter=all; cto_lwid=d7a27147-b398-4e97-aa58-2617dc125a6d; nicolivehistory=%5B317686098%2C317838144%2C317856317%2C317920254%2C317985131%2C318078557%2C318079195%2C317609998%2C318170481%2C318171227%2C318298442%5D; cto_idcpy=483f3476-057e-4930-8422-0fc9b0d47bc0; nicohistory=sm34506029%3A1548009895%3A1548009895%3Ae28a0c6913345407%3A1; _td=f8e7235a-76a7-4e6f-8191-e75ca65aaff5; user_session=user_session_87167340_69b73af7f5411c83c3dea2ca28fd9dcc6a219fef57152a67b95af2d992c78cd8; user_session_secure=ODcxNjczNDA6VjNFQnRncTBDU0RXYUo0QUZGQThxTlp6SmJvcVVNelJEUUN1d3lIR0lYSg; _gid=GA1.2.1204702434.1549103793; _gali=webpush_button
-			Pragma: no-cache
-			Cache-Control: no-cache
-			*/
+			if (check.container == null) {
+				check.form.addLogText("Cookieが見つからなかったためブラウザプッシュ通知の登録ができませんでした");
+				return false;
+			}
+			var cookies = check.container.GetCookies(new Uri("https://public.api.nicovideo.jp/v1/nicopush/webpush/endpoints.json"));
+			if (cookies == null) {
+				check.form.addLogText("送信先のCookieが見つからなかったためブラウザプッシュ通知の登録ができませんでした");
+				return false;
+			} else if (cookies["user_session"] == null || string.IsNullOrEmpty(cookies["user_session"].Value)) {
+				check.form.addLogText("送信先との接続に使うCookieが見つからなかったためブラウザプッシュ通知の登録ができませんでした");
+				return false;
+			}
+			//POST /v1/nicopush/webpush/endpoints.json HTTP/1.1
+			//Host: public.api.nicovideo.jp
+			//User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:65.0) Gecko/20100101 Firefox/65.0
+			//Accept: application/json
+			//Accept-Language: ja,en-US;q=0.7,en;q=0.3
+			//Accept-Encoding: gzip, deflate, br
+			//Referer: https://account.nicovideo.jp/my/account
+			//x-request-with: https://account.nicovideo.jp/my/account
+			//x-frontend-id: 8
+			//content-type: application/json
+			//Origin: https://account.nicovideo.jp
+			//Content-Length: 431
+			//Connection: keep-alive
+			//Pragma: no-cache
+			//Cache-Control: no-cache
+			
 			
 			var sendAuth = Convert.ToBase64String(pc.generateAuth());
 			var _pub = Convert.ToBase64String(publicKey);
@@ -295,12 +314,12 @@ namespace namaichi.alart
 			try {
 				
 				
-				/*
-				var handler = new System.Net.Http.HttpClientHandler();
-				handler.UseCookies = true;
-				handler.CookieContainer = check.container;
-				handler.Proxy = null;
-				*/
+				
+				//var handler = new System.Net.Http.HttpClientHandler();
+				//handler.UseCookies = true;
+				//handler.CookieContainer = check.container;
+				//handler.Proxy = null;
+				
 				//var http = new System.Net.Http.HttpClient(handler);
 				//http.DefaultRequestHeaders.Referrer = new Uri(url);
 				
@@ -321,6 +340,7 @@ namespace namaichi.alart
 				req.ContentType = "application/json";
 				req.Headers.Add("x-request-with", "https://account.nicovideo.jp/my/account");
 				req.Headers.Add("x-frontend-id", "8");
+				//req.UserAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0";
 				//req.Headers.Add("Accept-Encoding", "gzip, deflate, br");
 				using (var stream = req.GetRequestStream()) {
 					try {
@@ -339,21 +359,28 @@ namespace namaichi.alart
 					foreach (var h in res.Headers) util.debugWriteLine("header " + h + " " + res.Headers[h.ToString()]);
 					var resStr = resStream.ReadToEnd();
 					util.debugWriteLine("nico send post res " + resStr);
+					if (resStr == null) {
+						check.form.addLogText("ブラウザプッシュ通知の登録時に正常な応答がありませんでした");
+					}
 					if (resStr.IndexOf("\"status\":200") > -1) {
 						auth = Convert.FromBase64String(sendAuth);
 						config.set("pushAuth", sendAuth);
 						return true;
+					} else {
+						check.form.addLogText("ブラウザプッシュ通知の登録が正常に行えませんでした" + resStr);
 					}
 				}
 				
 			} catch (Exception e) {
-				//form.addLogText("フォローに失敗しました。" + util.getMainSubStr(isSub, true));
+				check.form.addLogText("ブラウザプッシュ通知の登録中に問題が発生しました" + e.Message + e.StackTrace + e.Source + e.TargetSite);
 				util.debugWriteLine(e.Message+e.StackTrace);
 				
 			}
+			
 			return false;
 		}
 		public List<RssItem> getItem(string dec) {
+			
 			//com "{\"title\":\"すのーまんさんが生放送を開始\",\"body\":\"名作探訪録 で、「【GB】ポケットキョロちゃん【初見プレイ】」を放送\",\"icon\":\"https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/3122/31221850.jpg?1496114222\",\"data\":{\"on_click\":\"http://live.nicovideo.jp/watch/lv318353209?from=webpush&_topic=live_user_program_onairs\",\"created_at\":\"2019-02-06T09:00:05.738+09:00\",\"ttl\":600,\"log_params\":{\"content_type\":\"live.user.program.onairs\",\"content_ids\":\"lv318353209\"}}}";
 			//ch "{\"title\":\"KawaiianTVが生放送を開始\",\"body\":\"～夢アド可鈴の深堀り情報番組！？～ YUMEステーション #62\",\"icon\":\"https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/ch2601967.jpg?1548247262\",\"data\":{\"on_click\":\"http://live.nicovideo.jp/watch/lv318248031?from=webpush&_topic=live_channel_program_onairs\",\"created_at\":\"2019-02-06T19:30:10.941+09:00\",\"ttl\":600,\"log_params\":{\"content_type\":\"live.channel.program.onairs\",\"content_ids\":\"lv318248031\"}}}";
 			
@@ -435,6 +462,7 @@ namespace namaichi.alart
 			foreach (var _n in n) resetDict.Add(_n, "");
 			config.saveFromForm(resetDict);
 		}
+		
 	}
 	class GetItemRetryPr {
 		private string dec;
@@ -447,6 +475,7 @@ namespace namaichi.alart
 			return pr.getItem(dec);
 		}
 	}
+	
 }
 
 /*

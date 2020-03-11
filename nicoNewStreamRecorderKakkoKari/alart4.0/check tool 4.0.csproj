@@ -77,6 +77,9 @@
     <Reference Include="Interop.IWshRuntimeLibrary">
       <HintPath>bin\Debug\Interop.IWshRuntimeLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Bcl.Build.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.Tasks.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
@@ -98,10 +101,12 @@
     <Reference Include="protobuf-net">
       <HintPath>..\packages\protobuf-net.2.4.4.nupkg\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="SnkLib.App.CookieGetter">
+    <Reference Include="SnkLib.App.CookieGetter, Version=1.0.0.0, Culture=neutral, PublicKeyToken=addaba1efd073ab3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\SnkLib.App.CookieGetter.2.3.1.0\lib\net40\SnkLib.App.CookieGetter.dll</HintPath>
     </Reference>
-    <Reference Include="SnkLib.App.CookieGetter.Forms">
+    <Reference Include="SnkLib.App.CookieGetter.Forms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=996bff908ba27803, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\SnkLib.App.CookieGetter.Forms.1.4.0.0\lib\net40\SnkLib.App.CookieGetter.Forms.dll</HintPath>
     </Reference>
     <Reference Include="SuperSocket.ClientEngine">
@@ -130,7 +135,11 @@
     <Reference Include="System.Net.Http">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net40\System.Net.Http.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.Primitives">
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net40\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net40\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest">
@@ -138,9 +147,6 @@
     </Reference>
     <Reference Include="System.Runtime">
       <HintPath>..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Threading.Tasks.dll</HintPath>

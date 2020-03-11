@@ -1,16 +1,19 @@
-﻿using Org.BouncyCastle.Crypto.Engines;
-using Org.BouncyCastle.Crypto.Modes;
-using Org.BouncyCastle.Crypto.Parameters;
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Modes;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Security;
+
 namespace namaichi.alart
 {
-
+    
     public class AESGCM
     {
-
+        
         private const int DEFAULT_KEY_BIT_SIZE = 128;
         private const int DEFAULT_MAC_BIT_SIZE = 128;
         private const int DEFAULT_NONCE_BIT_SIZE = 128;
@@ -19,18 +22,18 @@ namespace namaichi.alart
         private readonly int _macSize;
         private readonly int _nonceSize;
 
-
+        
 
         public AESGCM()
-            : this(DEFAULT_KEY_BIT_SIZE, DEFAULT_MAC_BIT_SIZE, DEFAULT_NONCE_BIT_SIZE)
-        { }
+			: this(DEFAULT_KEY_BIT_SIZE, DEFAULT_MAC_BIT_SIZE, DEFAULT_NONCE_BIT_SIZE)
+		{ }
 
-        public AESGCM(int keyBitSize, int macBitSize, int nonceBitSize)
+		public AESGCM(int keyBitSize, int macBitSize, int nonceBitSize)
         {
 
-            _keySize = keyBitSize;
-            _macSize = macBitSize;
-            _nonceSize = nonceBitSize;
+			_keySize = keyBitSize;
+			_macSize = macBitSize;
+			_nonceSize = nonceBitSize;
         }
 
         public string DecryptWithKey(string encryptedMessage, string key, int nonSecretPayloadLength = 0)
@@ -40,15 +43,15 @@ namespace namaichi.alart
                 throw new ArgumentException("Encrypted Message Required!", "encryptedMessage");
             }
 
-            byte[] decodedKey = Convert.FromBase64String(key);
+            var decodedKey = Convert.FromBase64String(key);
 
-            byte[] cipherText = Convert.FromBase64String(encryptedMessage);
+            var cipherText = Convert.FromBase64String(encryptedMessage);
 
-            byte[] plaintext = DecryptWithKey(cipherText, decodedKey, new byte[16]);
+            var plaintext = DecryptWithKey(cipherText, decodedKey, new byte[16]);
 
             return Encoding.UTF8.GetString(plaintext);
         }
-        /*
+		/*
         public string EncryptWithKey(string messageToEncrypt, string key, byte[] nonSecretPayload = null)
         {
             if (string.IsNullOrEmpty(messageToEncrypt))
@@ -71,20 +74,20 @@ namespace namaichi.alart
                 throw new ArgumentException("Encrypted Message Required!", "encryptedMessage");
             }
 
-            using (MemoryStream cipherStream = new MemoryStream(encryptedMessage))
-            using (BinaryReader cipherReader = new BinaryReader(cipherStream))
+            using (var cipherStream = new MemoryStream(encryptedMessage))
+            using (var cipherReader = new BinaryReader(cipherStream))
             {
-
-                GcmBlockCipher cipher = new GcmBlockCipher(new AesEngine());
-                AeadParameters parameters = new AeadParameters(new KeyParameter(key), _macSize, nonce);
+                
+				var cipher = new GcmBlockCipher(new AesEngine());
+				var parameters = new AeadParameters(new KeyParameter(key), _macSize, nonce);
                 cipher.Init(false, parameters);
 
                 //Decrypt Cipher Text
-                byte[] cipherText = cipherReader.ReadBytes(encryptedMessage.Length);
-                byte[] plainText = new byte[cipher.GetOutputSize(cipherText.Length)];
-                int outSize = cipher.GetOutputSize(cipherText.Length);
+                var cipherText = cipherReader.ReadBytes(encryptedMessage.Length);
+                var plainText = new byte[cipher.GetOutputSize(cipherText.Length)];
+                var outSize = cipher.GetOutputSize(cipherText.Length);
 
-                int len = cipher.ProcessBytes(cipherText, 0, cipherText.Length, plainText, 0);
+                var len = cipher.ProcessBytes(cipherText, 0, cipherText.Length, plainText, 0);
                 cipher.DoFinal(plainText, len);
 
                 return plainText;
@@ -122,6 +125,6 @@ namespace namaichi.alart
             
            return null;
         }
-		*/
+		*/    
     }
 }

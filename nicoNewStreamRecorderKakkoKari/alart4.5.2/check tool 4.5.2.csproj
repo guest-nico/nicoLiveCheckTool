@@ -52,7 +52,7 @@
       <HintPath>..\packages\BouncyCastle.Crypto.dll.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="Interop.IWshRuntimeLibrary">
-      <HintPath>..\namaichi\bin\Debug\Interop.IWshRuntimeLibrary.dll</HintPath>
+      <HintPath>..\alart4.0\bin\Debug\Interop.IWshRuntimeLibrary.dll</HintPath>
     </Reference>
     <Reference Include="NAudio">
       <HintPath>..\packages\NAudio.1.8.5\lib\net35\NAudio.dll</HintPath>
@@ -149,6 +149,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\addForm.Designer.cs">
       <Link>src\gui\addForm.Designer.cs</Link>
+      <DependentUpon>addForm.cs</DependentUpon>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\addTaskForm.cs">
       <Link>src\gui\addTaskForm.cs</Link>
@@ -156,6 +157,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\addTaskForm.Designer.cs">
       <Link>src\gui\addTaskForm.Designer.cs</Link>
+      <DependentUpon>addTaskForm.cs</DependentUpon>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\BulkAddFromFollowAccountForm.cs">
       <Link>src\gui\BulkAddFromFollowAccountForm.cs</Link>
@@ -163,6 +165,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\BulkAddFromFollowAccountForm.Designer.cs">
       <Link>src\gui\BulkAddFromFollowAccountForm.Designer.cs</Link>
+      <DependentUpon>BulkAddFromFollowAccountForm.cs</DependentUpon>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\CustomKeywordForm.cs">
       <Link>src\gui\CustomKeywordForm.cs</Link>
@@ -170,6 +173,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\CustomKeywordForm.Designer.cs">
       <Link>src\gui\CustomKeywordForm.Designer.cs</Link>
+      <DependentUpon>CustomKeywordForm.cs</DependentUpon>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\DotNetMessageBox.cs">
       <Link>src\gui\DotNetMessageBox.cs</Link>
@@ -177,6 +181,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\DotNetMessageBox.Designer.cs">
       <Link>src\gui\DotNetMessageBox.Designer.cs</Link>
+      <DependentUpon>DotNetMessageBox.cs</DependentUpon>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\fileNameOptionForm.cs">
       <Link>src\gui\fileNameOptionForm.cs</Link>
@@ -184,6 +189,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\fileNameOptionForm.Designer.cs">
       <Link>src\gui\fileNameOptionForm.Designer.cs</Link>
+      <DependentUpon>fileNameOptionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\MainForm.cs">
       <Link>src\gui\MainForm.cs</Link>
@@ -191,6 +197,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\MainForm.Designer.cs">
       <Link>src\gui\MainForm.Designer.cs</Link>
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\NamarokuRecordCheckSettingForm.cs">
       <Link>src\gui\NamarokuRecordCheckSettingForm.cs</Link>
@@ -198,6 +205,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\NamarokuRecordCheckSettingForm.Designer.cs">
       <Link>src\gui\NamarokuRecordCheckSettingForm.Designer.cs</Link>
+      <DependentUpon>NamarokuRecordCheckSettingForm.cs</DependentUpon>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\NicoSessionComboBox2.cs">
       <Link>src\gui\NicoSessionComboBox2.cs</Link>
@@ -209,6 +217,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\optionForm.Designer.cs">
       <Link>src\gui\optionForm.Designer.cs</Link>
+      <DependentUpon>optionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\PopupForm.cs">
       <Link>src\gui\PopupForm.cs</Link>
@@ -216,6 +225,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\PopupForm.Designer.cs">
       <Link>src\gui\PopupForm.Designer.cs</Link>
+      <DependentUpon>PopupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\PopupFormBase.cs">
       <Link>src\gui\PopupFormBase.cs</Link>
@@ -223,6 +233,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\PopupFormBase.Designer.cs">
       <Link>src\gui\PopupFormBase.Designer.cs</Link>
+      <DependentUpon>PopupFormBase.cs</DependentUpon>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\SmallPopupForm.cs">
       <Link>src\gui\SmallPopupForm.cs</Link>
@@ -230,6 +241,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\SmallPopupForm.Designer.cs">
       <Link>src\gui\SmallPopupForm.Designer.cs</Link>
+      <DependentUpon>SmallPopupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\sortableList.cs">
       <Link>src\gui\sortableList.cs</Link>
@@ -240,6 +252,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\UpdateForm.Designer.cs">
       <Link>src\gui\UpdateForm.Designer.cs</Link>
+      <DependentUpon>UpdateForm.cs</DependentUpon>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\VersionForm.cs">
       <Link>src\gui\VersionForm.cs</Link>
@@ -247,6 +260,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\VersionForm.Designer.cs">
       <Link>src\gui\VersionForm.Designer.cs</Link>
+      <DependentUpon>VersionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\WriteThumbnailMemoForm.cs">
       <Link>src\gui\WriteThumbnailMemoForm.cs</Link>
@@ -254,6 +268,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\WriteThumbnailMemoForm.Designer.cs">
       <Link>src\gui\WriteThumbnailMemoForm.Designer.cs</Link>
+      <DependentUpon>WriteThumbnailMemoForm.cs</DependentUpon>
     </Compile>
     <Compile Include="..\alart4.0\src\info\AlartInfo.cs">
       <Link>src\info\AlartInfo.cs</Link>
@@ -358,53 +373,75 @@
     <Compile Include="src\Program.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\alart4.0\src\gui\%28check.ico">
+      <Link>src\gui\%28check.ico</Link>
+    </None>
+    <None Include="..\alart4.0\src\gui\app.config">
+      <Link>src\gui\app.config</Link>
+    </None>
     <None Include="app.config" />
+    <None Include="src\gui\namaichi.sln" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="..\alart4.0\src\gui\addForm.resx">
       <Link>src\gui\addForm.resx</Link>
+      <DependentUpon>addForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\addTaskForm.resx">
       <Link>src\gui\addTaskForm.resx</Link>
+      <DependentUpon>addTaskForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\app.resx">
       <Link>src\gui\app.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\BulkAddFromFollowAccountForm.resx">
       <Link>src\gui\BulkAddFromFollowAccountForm.resx</Link>
+      <DependentUpon>BulkAddFromFollowAccountForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\CustomKeywordForm.resx">
       <Link>src\gui\CustomKeywordForm.resx</Link>
+      <DependentUpon>CustomKeywordForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\DotNetMessageBox.resx">
       <Link>src\gui\DotNetMessageBox.resx</Link>
+      <DependentUpon>DotNetMessageBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\fileNameOptionForm.resx">
       <Link>src\gui\fileNameOptionForm.resx</Link>
+      <DependentUpon>fileNameOptionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\MainForm.resx">
       <Link>src\gui\MainForm.resx</Link>
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\NamarokuRecordCheckSettingForm.resx">
       <Link>src\gui\NamarokuRecordCheckSettingForm.resx</Link>
+      <DependentUpon>NamarokuRecordCheckSettingForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\optionForm.resx">
       <Link>src\gui\optionForm.resx</Link>
+      <DependentUpon>optionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\PopupForm.resx">
       <Link>src\gui\PopupForm.resx</Link>
+      <DependentUpon>PopupForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\PopupFormBase.resx">
       <Link>src\gui\PopupFormBase.resx</Link>
+      <DependentUpon>PopupFormBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\SmallPopupForm.resx">
       <Link>src\gui\SmallPopupForm.resx</Link>
+      <DependentUpon>SmallPopupForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\VersionForm.resx">
       <Link>src\gui\VersionForm.resx</Link>
+      <DependentUpon>VersionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\WriteThumbnailMemoForm.resx">
       <Link>src\gui\WriteThumbnailMemoForm.resx</Link>
+      <DependentUpon>WriteThumbnailMemoForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

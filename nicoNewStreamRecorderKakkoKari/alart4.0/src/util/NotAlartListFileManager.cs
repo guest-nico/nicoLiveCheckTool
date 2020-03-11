@@ -28,26 +28,21 @@ namespace namaichi.utility
 		{
 			var path = util.getJarPath()[0] + "\\";
 			
-			if (File.Exists(path + "notAlartList.ini")) {
-				try {
-					var _len = File.ReadAllText(path + "notAlartlist.ini").Length;
-					if (_len > 5)
-						File.Copy(path + "notAlartList.ini", path + "notAlartList_backup.ini", true);
-				} catch (Exception e) {
-					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				}
-			}
+			
 			
 			try {
 				var json = JToken.FromObject(form.notAlartListDataSource).ToString(Formatting.None);
-				using (var sw = new StreamWriter(path + "notAlartList.ini", false, Encoding.UTF8)) {
+				var f = path + "notAlartList.ini_";
+				using (var sw = new StreamWriter(f, false, Encoding.UTF8)) {
 					sw.Write(json);
 					//sw.Close();
 				}
+				File.Copy(f, f.Substring(0, f.Length - 1), true);
+				File.Delete(f);
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
-			
+			util.saveBackupList(path, "notAlartList");
 		}
 		public void load(MainForm form)
 		{

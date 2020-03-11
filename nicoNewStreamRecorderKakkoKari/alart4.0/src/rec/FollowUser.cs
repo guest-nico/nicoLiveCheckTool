@@ -118,6 +118,7 @@ namespace namaichi.rec
 					util.debugWriteLine(data);
 					byte[] postDataBytes = Encoding.ASCII.GetBytes(data);
 	
+					util.debugWriteLine("access__ followUser join");
 					var req = (HttpWebRequest)WebRequest.Create(url);
 					req.Method = "POST";
 					req.Proxy = null;
@@ -245,6 +246,7 @@ namespace namaichi.rec
 					    "id_list[1][]=" + comId + "&token=" + token;
 					byte[] postDataBytes = Encoding.ASCII.GetBytes(data);
 					
+					util.debugWriteLine("access__ followUser unjoin");
 					var req = (HttpWebRequest)WebRequest.Create(url);
 					req.Method = "POST";
 					req.Proxy = null;

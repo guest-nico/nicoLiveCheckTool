@@ -80,7 +80,7 @@ namespace namaichi.alart
 			return isExists;
 		}
 		public static Image getImageId(string id, MainForm form = null) {
-			util.debugWriteLine("getimageid id " + id);
+			
 			
 			
 			string url = null;
@@ -119,7 +119,7 @@ namespace namaichi.alart
 		}
 		public static Image getImage(string url) {
 			try {
-				
+				util.debugWriteLine("access__ getimageid id " + url);
 				var req = (HttpWebRequest)WebRequest.Create(url);
 				
 				req.Proxy = null;

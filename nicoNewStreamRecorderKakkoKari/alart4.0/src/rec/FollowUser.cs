@@ -83,7 +83,7 @@ namespace namaichi.rec
 					
 					if (!isJidouShounin) return false;
 					*/
-				} catch (Exception e) {
+				} catch (Exception) {
 					return false;
 				}
 				

@@ -546,44 +546,11 @@ namespace namaichi
 			
 			setSort();
 			return;
-			
-			Task.Factory.StartNew(() => {
-			         	
-			         	Thread.Sleep(10000);
-			         	while (true) {
-			         		
-			         		lock(liveListLock) {
-			         		//bool taken = false;
-			         		try {
-			         			util.debugWriteLine("ddddd 3");
-			         			//Monitor.TryEnter(liveListLock, 10000, ref taken);
-			         			//if (!taken) liveListLock = new object();
-			         			//util.debugWriteLine("ddddd 0 " + taken);
-		         				//Task.Factory.StartNew(() => {
-		         				
-         				         formAction(() => removeLiveListItem(liveListDataSource[0]));
-		         				//}).Wait(10000);
-		         				util.debugWriteLine("ddddd 1");
-			         		} finally {
-			         			//if (taken) Monitor.Exit(liveListLock);
-			         			//util.debugWriteLine("ddddd 2 " + taken);
-			         		}
-			         		}
-			         		Thread.Sleep(10000);
-			         	}
-			         });
-			Task.Factory.StartNew(() => {
-			         	while (true) {
-			         		Thread.Sleep(2000);
-			         		//liveListLock = new object();
-			         	}
-			         });
-			
 		}
 		void xpTest() {
 			try {
-				_xpText();
-			} catch (Exception e) {
+				_xpText().Wait();
+			} catch (Exception) {
 				addLogText("正常に非同期処理が行えませんでした。Microsoft .NET Framework 4 KB2468871 https://www.microsoft.com/en-us/download/details.aspx?id=3556を導入してみると動作するかもしれません。");
 				MessageBox.Show("正常に非同期処理が行えませんでした。Microsoft .NET Framework 4 KB2468871 https://www.microsoft.com/en-us/download/details.aspx?id=3556を導入してみると動作するかもしれません。");
 				util.debugWriteLine("正常に非同期処理が行えませんでした。Microsoft .NET Framework 4 KB2468871 https://www.microsoft.com/en-us/download/details.aspx?id=3556を導入してみると動作するかもしれません。");
@@ -646,7 +613,6 @@ namespace namaichi
 				util.debugWriteLine("dragdrop");
 				
 				var t = e.Data.GetData(DataFormats.Text).ToString();
-				string id = null;
 				var lv = util.getRegGroup(t, "(lv\\d+)");
 				if (lv == null) return;
 				
@@ -792,8 +758,6 @@ namespace namaichi
    		       	}
 			});
 	       	return ret;
-			util.debugWriteLine("alart exception? 0");
-			return 0;
 		}
 		public int getTaskListCount() {
 			var ret = 0;
@@ -806,8 +770,6 @@ namespace namaichi
 	       		
 			});
 			return ret;
-			util.debugWriteLine("alart exception? 0");
-			return 0;
 		}
 		void AlartListCellClick(object sender, DataGridViewCellEventArgs e)
 		{
@@ -822,15 +784,15 @@ namespace namaichi
 				var val = list[e.ColumnIndex, e.RowIndex].Value;
 				if (val.GetType() == typeof(string) &&
 						string.IsNullOrEmpty((string)list[e.ColumnIndex, e.RowIndex].Value)) return;
-			} catch (Exception ee) {
-				var a = list.Rows.Count;
+			} catch (Exception) {
+				
 			}
-			if (e.ColumnIndex == 6 && 
-			    	list[0, e.RowIndex].Value != "") {
+			if (e.ColumnIndex == 6 && list[0, e.RowIndex].Value is string &&
+			    	(string)list[0, e.RowIndex].Value != "") {
 				comChannelFollowCellClick(dataSource[e.RowIndex]);
 			}
-			if (e.ColumnIndex == 7 && 
-			    	list[1, e.RowIndex].Value != "") {
+			if (e.ColumnIndex == 7 && list[1, e.RowIndex].Value is string &&
+			    	(string)list[1, e.RowIndex].Value != "") {
 				userFollowCellClick(dataSource[e.RowIndex], dataSource, list);
 			}
 			
@@ -839,11 +801,12 @@ namespace namaichi
 			try {
 				var rowIndex = alartListDataSource.IndexOf(ai);
 				if (rowIndex == -1) return false;
+				if (alartList[6, rowIndex].Value is string && (string)alartList[6, rowIndex].Value == "") return false;
 				
 				var comId = ai.communityId;
 				var isChannel = comId.StartsWith("ch");
 				if (string.IsNullOrEmpty(alartList[6, rowIndex].Value.ToString())) return false;
-				var isFollow = alartList[6, rowIndex].Value == "フォローする";
+				var isFollow = (string)alartList[6, rowIndex].Value == "フォローする";
 				var isOk = false;
 				
 				if (bool.Parse(config.get("IsConfirmFollow"))) {
@@ -856,7 +819,7 @@ namespace namaichi
 					if (isFollow) {
 						isOk = new FollowChannel(false).followChannel(comId, check.container, this, config);
 						if (isOk) alartList[6, rowIndex].Value = "フォロー解除する";
-					} else if (alartList[6, rowIndex].Value == "フォロー解除する") {
+					} else {
 						isOk = new FollowChannel(false).unFollowChannel(comId, check.container, this, config);
 						if (isOk) alartList[6, rowIndex].Value = "フォローする";
 					}
@@ -864,7 +827,7 @@ namespace namaichi
 					if (isFollow) {
 						isOk = new FollowCommunity(false).followCommunity(comId, check.container, this, config);
 						if (isOk) alartList[6, rowIndex].Value = "フォロー解除する";
-					} else if (alartList[6, rowIndex].Value == "フォロー解除する") {
+					} else {
 						isOk = new FollowCommunity(false).unFollowCommunity(comId, check.container, this, config);
 						if (isOk) alartList[6, rowIndex].Value = "フォローする";
 					}
@@ -889,25 +852,42 @@ namespace namaichi
 		}
 		public bool userFollowCellClick(AlartInfo ai, SortableBindingList<AlartInfo> dataSource, DataGridView list, bool isLog = true) {
 			//var userId = alartList[1, rowIndex].Value.ToString();
-			var rowIndex = dataSource.IndexOf(ai);
-			if (rowIndex == -1) return false;
-			bool isOk = false;
-			if (list[7, rowIndex].Value == "フォローする") {
-				isOk = new FollowUser().followUser(ai.hostId, check.container, this, config);
-				if (isOk) list[7, rowIndex].Value = "フォロー解除する";
-				if (isLog) addLogText("ユーザーID " + ai.hostId + ((isOk) ? "のフォローに成功しました" : "のフォローに失敗しました。"));
-			} else if (list[7, rowIndex].Value == "フォロー解除する") {
-				isOk = new FollowUser().unFollowUser(ai.hostId, check.container, this, config);
-				if (isOk) list[7, rowIndex].Value = "フォローする";
-				if (isLog) addLogText("ユーザーID " + ai.hostId + ((isOk) ? "フォロー解除に成功しました" : "フォロー解除に失敗しました。"));
+			try {
+				
+					
+				var rowIndex = dataSource.IndexOf(ai);
+				if (rowIndex == -1) return false;
+				if ((string)alartList[7, rowIndex].Value == "") return false;
+				
+				bool isOk = false;
+				
+				var isFollow = (string)alartList[7, rowIndex].Value == "フォローする";
+				if (bool.Parse(config.get("IsConfirmFollow"))) {
+					var msg = "ユーザーID " + ai.hostId + "を";
+					var r = MessageBox.Show(msg + "フォロー" + (isFollow ? "" : "解除") + "しますか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button2);
+					if (r == DialogResult.No) return false;
+				}
+				
+				if (isFollow) {
+					isOk = new FollowUser().followUser(ai.hostId, check.container, this, config);
+					if (isOk) list[7, rowIndex].Value = "フォロー解除する";
+					if (isLog) addLogText("ユーザーID " + ai.hostId + ((isOk) ? "のフォローに成功しました" : "のフォローに失敗しました。"));
+				} else {
+					isOk = new FollowUser().unFollowUser(ai.hostId, check.container, this, config);
+					if (isOk) list[7, rowIndex].Value = "フォローする";
+					if (isLog) addLogText("ユーザーID " + ai.hostId + ((isOk) ? "フォロー解除に成功しました" : "フォロー解除に失敗しました。"));
+				}
+				
+				if (!isOk) {
+					//bool isFollow;
+					util.getUserName(ai.hostId, out isFollow, check.container, true);
+					list[7, rowIndex].Value = (isFollow) ? "フォロー解除する" : "フォローする";
+				}
+				return isOk;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return false;
 			}
-			
-			if (!isOk) {
-				bool isFollow;
-				util.getUserName(ai.hostId, out isFollow, check.container, true);
-				list[7, rowIndex].Value = (isFollow) ? "フォロー解除する" : "フォローする";
-			}
-			return isOk;
 		}
 
 		void AlartListCellParsing(object sender, System.Windows.Forms.DataGridViewCellParsingEventArgs e)
@@ -1213,7 +1193,6 @@ namespace namaichi
 			}
 		}
 		public void setHosoLogStatusBar(RssItem item) {
-			var ret = 0;
 			formAction(() => {
 			
    		       	try {
@@ -3759,7 +3738,7 @@ namespace namaichi
 		void AlartListCellValidating(object sender, DataGridViewCellValidatingEventArgs e)
 		{
 			if (e.ColumnIndex == 4 && alartListDataSource[e.RowIndex].isCustomKeyword &&
-			    e.FormattedValue != alartListDataSource[e.RowIndex].Keyword)
+			    (string)e.FormattedValue != alartListDataSource[e.RowIndex].Keyword)
 				MessageBox.Show("カスタム設定はテーブル上から編集できません");
 		}
 		void resetRecentColor() {
@@ -3961,7 +3940,8 @@ namespace namaichi
 		{
 			var hi = historyListDataSource[e.RowIndex];
 			var style = historyList[e.ColumnIndex, e.RowIndex].Style;
-			if (false && e.ColumnIndex == 1) {
+			//if (false && e.ColumnIndex == 1) {
+			if (e.ColumnIndex == 1) {
 //				e.CellStyle.BackColor = hi.backColor;
 //				e.CellStyle.ForeColor = hi.textColor;
 			} else if (e.ColumnIndex == 5 && 
@@ -4410,11 +4390,11 @@ namespace namaichi
 			} else if (e.ColumnIndex == 6 || e.ColumnIndex == 7) {
 				var b = (DataGridViewButtonCell)list[e.ColumnIndex, e.RowIndex];
 				Color c;
-				if (e.Value == "") c = Color.White;
+				if ((string)e.Value == "") c = Color.White;
 				else if (b.ReadOnly) {
 					c = Color.FromArgb(200,200,200);
 				} else {
-					c = e.Value == "フォローする" ? Color.FromArgb(224,244,224) : Color.FromArgb(224,224,224);
+					c = (string)e.Value == "フォローする" ? Color.FromArgb(224,244,224) : Color.FromArgb(224,224,224);
 				}
 				b.Style.BackColor = c;
 			} else if (alartListColorColumns[e.ColumnIndex]) {

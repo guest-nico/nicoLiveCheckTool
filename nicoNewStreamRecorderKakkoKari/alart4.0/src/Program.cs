@@ -79,8 +79,9 @@ namespace namaichi
 			System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e) {
 			var frameCount = 0;
 			try {
+				//エラーのログを書き込むときにエラーが出た場合はそれ以上ログを書き込まないように
 				frameCount = new System.Diagnostics.StackTrace().FrameCount;
-			} catch (StackOverflowException ee) {
+			} catch (StackOverflowException) {
 				return;
 			}
 			#if DEBUG

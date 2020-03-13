@@ -146,7 +146,6 @@ namespace namaichi.utility
 			
 			for (var i = 1; i < lines.Length - 2; i += itemLineNum) {
 				try {
-					var isFollow = false;
 					var comFollow = "";
 					var userFollow = "";
 					Color textColor = Color.Black, backColor = Color.FromArgb(255,224,255);
@@ -155,7 +154,7 @@ namespace namaichi.utility
 							textColor = ColorTranslator.FromHtml(lines[i + 10]);
 							backColor = ColorTranslator.FromHtml(lines[i + 11]);
 						} catch (Exception e) {
-	//						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+							util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 						}
 					}
 					int defaultSound = 0;
@@ -279,7 +278,7 @@ namespace namaichi.utility
 					if (isUserMode && string.IsNullOrEmpty(ai.hostId)) continue;
 					if (isUserMode) ai.communityId = ai.communityName = "";
 					readAiList.Add(ai);
-				} catch (Exception e) {
+				} catch (Exception) {
 					form.addLogText(i + "行目から始まるお気に入りが読み込めませんでした");
 				}
 			}

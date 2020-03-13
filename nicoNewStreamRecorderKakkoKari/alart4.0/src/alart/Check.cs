@@ -30,9 +30,7 @@ namespace namaichi.alart
 	/// </summary>
 	public class Check
 	{
-		//private config.config config;
 		public MainForm form;
-		private string lastLv = null;
 		
 		private SortableBindingList<AlartInfo> alartListDataSource;
 		

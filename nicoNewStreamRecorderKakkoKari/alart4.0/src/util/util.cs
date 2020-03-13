@@ -30,8 +30,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.61";
-	public static string versionDayStr = "2020/03/05";
+	public static string versionStr = "ver0.1.7.62";
+	public static string versionDayStr = "2020/03/13";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -1413,8 +1413,8 @@ class util {
 			IntPtr icon, IntPtr hwnd) {
 		NOTIFYICONDATA data = new NOTIFYICONDATA();
         var NIIF_USER = 4;
-        var NIIF_NONE = 0;
-        var NIIF_LARGE_ICON = 0x20;
+        //var NIIF_NONE = 0;
+        //var NIIF_LARGE_ICON = 0x20;
         var dwInfoFlags = NIIF_USER;// | NIIF_LARGE_ICON;
         //dwInfoFlags = NIIF_NONE;
 

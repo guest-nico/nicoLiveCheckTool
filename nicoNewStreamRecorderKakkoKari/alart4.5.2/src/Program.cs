@@ -80,7 +80,7 @@ namespace namaichi
 			var frameCount = 0;
 			try {
 				frameCount = new System.Diagnostics.StackTrace().FrameCount;
-			} catch (StackOverflowException ee) {
+			} catch (StackOverflowException) {
 				return;
 			}
 			#if DEBUG

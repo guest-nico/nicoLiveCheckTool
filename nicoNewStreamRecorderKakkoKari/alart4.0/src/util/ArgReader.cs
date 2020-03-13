@@ -219,7 +219,7 @@ namespace namaichi.utility
 				var a = new List<int>{0,1,2,3,4,5};
 				foreach (var _l in l) a.Remove(_l);
 				return a.Count == 0;
-			} catch (Exception e) {
+			} catch (Exception) {
 				return false;
 			}
 		}

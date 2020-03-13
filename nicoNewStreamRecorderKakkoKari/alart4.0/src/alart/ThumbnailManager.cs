@@ -37,6 +37,7 @@ namespace namaichi.alart
 					try {
 						return Image.FromFile(util.getJarPath()[0] + "/ImageCommunity/no thumb com.jpg");
 					} catch (Exception e) {
+						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 						return null;
 					}
 				}

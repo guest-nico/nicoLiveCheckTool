@@ -136,7 +136,6 @@ namespace namaichi.rec
 					userId = util.getRegGroup(res, "<a href=\"https*://www.nicovideo.jp/user/(\\d+)\" target=\"_blank\">");
 				else {
 					userName = util.getRegGroup(res, "（提供:<strong><span itemprop=\"name\">(.+?)</span></strong>）");
-					var i = 0;
 				}
 				communityId = util.getRegGroup(res, "<a href=\"http.+?/channel/(ch\\d+)\" target=\"_blank\">");
 				if (communityId == null) communityId = util.getRegGroup(res, "<a href=\"http.+?/community/(co\\d+)\" target=\"_blank\">");

@@ -291,24 +291,24 @@ namespace namaichi.alart
 	}
 	
 	class timelineTop {
-		public timelineSemi timeline;
+		public timelineSemi timeline = null;
 	}
 	class timelineSemi {
-		public string date;
+		public string date = null;
 		public TimeLineInfo[] stream_list = new TimeLineInfo[0];
 	}
 	class TimeLineInfo {
-		public string id;
-		public string title;
-		public string description;
-		public string provider_type;
-		public string thumbnail_url;
-		public string start_date;
-		public string end_date;
-		public string start_time;
-		public string end_time;
-		public string total_time;
-		public string status;
+		public string id = null;
+		public string title = null;
+		public string description = null;
+		public string provider_type = null;
+		public string thumbnail_url = null;
+		public string start_date = null;
+		public string end_date = null;
+		public string start_time = null;
+		public string end_time = null;
+		public string total_time = null;
+		public string status = null;
 		
 		public DateTime startTime = DateTime.MinValue;
 	}

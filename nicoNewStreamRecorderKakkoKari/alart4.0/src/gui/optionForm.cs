@@ -533,7 +533,7 @@ namespace namaichi
 			try {
 				var s = new System.Net.Mail.MailAddress(mailFromText.Text);
 				s = new System.Net.Mail.MailAddress(mailToText.Text);
-			} catch (Exception ee) {
+			} catch (Exception) {
 				MessageBox.Show("メール送信失敗：指定された文字列は、電子メールアドレスに必要な形式ではありません。");
 				return;
 			}

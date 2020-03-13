@@ -79,7 +79,7 @@ namespace namaichi.rec
 						form.addLogText(msg);
 						return false;
 					}
-				} catch (Exception e) {
+				} catch (Exception) {
 					return false;
 				}
 				

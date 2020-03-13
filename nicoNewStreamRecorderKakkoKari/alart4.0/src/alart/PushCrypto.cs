@@ -308,8 +308,8 @@ namespace namaichi.alart
 		private byte[] decodeChunks(List<byte[]> chunkArray, byte[] nonce, byte[] key) {
 			//(slice, index, nonce, key, last)  last index >= chunks.length - 1)
 			var aes = new AESGCM();
-			for (var i = 0; i < chunkArray.Count; i++) {
-				var iv = generateNonce(nonce, i);
+			//for (var i = 0; i < chunkArray.Count; i++) {
+				var iv = generateNonce(nonce, 0);
 				
 				var dec = aes.DecryptWithKey(chunkArray[0], key, iv);
 				//var base64 = Convert.ToBase64String(chunkArray);
@@ -318,7 +318,7 @@ namespace namaichi.alart
 				//var j = 0;
 				//var enc = Encryption.AESGCM.SimpleEncrypt("aaa", key);
 				return dec;
-			}
+			//}
 			/*
 			let params = {
 				name: "AES-GCM",
@@ -327,7 +327,7 @@ namespace namaichi.alart
 			let decoded = await crypto.subtle.decrypt(params, key, slice);
 			return this.unpadChunk(new Uint8Array(decoded), last);
 			*/
-			return null;
+			//return null;
 		}
 		private byte[] generateNonce(byte[] _base, int index) {
 			if (index >= System.Math.Pow(2, 48)) {

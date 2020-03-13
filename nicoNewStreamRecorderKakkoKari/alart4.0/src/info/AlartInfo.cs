@@ -215,7 +215,6 @@ namespace namaichi.info
             get { return lastHostDate; }
             set { this.lastHostDate = value; 
             	DateTime.TryParse(lastHostDate, out lastHosoDt);
-            	var i = 0;
             }
         }
         public string AddDate

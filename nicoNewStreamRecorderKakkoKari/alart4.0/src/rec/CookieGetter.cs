@@ -39,8 +39,8 @@ namespace namaichi.rec
 		
 		
 		
-		private bool isSub;
-		private bool isRtmp;
+		//private bool isSub;
+		//private bool isRtmp;
 		private MainForm form;
 		
 		public CookieGetter(config.config cfg, MainForm form)
@@ -49,8 +49,6 @@ namespace namaichi.rec
 			this.form = form;
 		}
 		async public Task<CookieContainer[]> getHtml5RecordCookie(string url, bool isSub) {
-			this.isSub = isSub;
-			
 			CookieContainer cc;
 			if (!isSub) {
 				cc = await getCookieContainer(cfg.get("BrowserNum"),
@@ -249,7 +247,7 @@ namespace namaichi.rec
 		private bool isHtml5Login(CookieContainer cc, string url) {
 			
 			var c = cc.GetCookieHeader(new Uri(url));
-			for (var i = 0; i < 1; i++) {
+			//for (var i = 0; i < 1; i++) {
 				/*
 				var headers = new WebHeaderCollection();
 				try {
@@ -279,7 +277,7 @@ namespace namaichi.rec
 				//test(cc, url);
 				
 				var isLogin = false;
-				var isFollow = false;
+				//var isFollow = false;
 				string uid = null;
 				try {
 					
@@ -346,7 +344,7 @@ namespace namaichi.rec
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 				
-				util.debugWriteLine("islogin " + isLogin + util.getMainSubStr(isSub));
+				util.debugWriteLine("islogin " + isLogin);
 				log += (isLogin) ? "ログインに成功しました。" : "ログインに失敗しました";
 	//			if (!isLogin) log += pageSource;
 				if (isLogin) {
@@ -359,8 +357,8 @@ namespace namaichi.rec
 					util.debugWriteLine("not login " + uid);
 				}
 				return isLogin;
-			}
-			return false;
+			//}
+			//return false;
 		}
 		async public Task<CookieContainer> getAccountCookie(string mail, string pass) {
 			
@@ -389,7 +387,7 @@ namespace namaichi.rec
 				
 //				return cc;
 			} catch (Exception e) {
-				util.debugWriteLine(e.Message+e.StackTrace + util.getMainSubStr(isSub));
+				util.debugWriteLine(e.Message+e.StackTrace);
 				return null;
 			}
 			
@@ -412,6 +410,7 @@ namespace namaichi.rec
 			return cc;
 				
 		}
+		/*
 		async public Task<CookieContainer> getAppAccountCookie(string mail, string pass) {
 			util.debugWriteLine("access__ getAppAccount");
 			
@@ -499,12 +498,13 @@ namespace namaichi.rec
 				}
 				
 			} catch (Exception e) {
-				util.debugWriteLine(e.Message+e.StackTrace + util.getMainSubStr(isSub));
+				util.debugWriteLine(e.Message+e.StackTrace);
 				return null;
 			}
 			
 				
 		}
+		*/
 		private CookieContainer copyUserSession(CookieContainer cc, 
 				Cookie c, Cookie secureC, Cookie age_auth = null) {
 			if (c != null && c.Value != "") {

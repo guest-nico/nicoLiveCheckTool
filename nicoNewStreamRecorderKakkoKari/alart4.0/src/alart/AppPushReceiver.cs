@@ -599,10 +599,11 @@ namespace namaichi.alart
 				return false;
 			}
 		}
-		
+		/*
 		public List<RssItem> getItem(string lvid, McsProto.DataMessageStanza msg) {
+			//ニコニコアプリ
 			try {
-				string title, thumbnail, comName, hostName, description;
+				string title, comName, hostName;//thumbnail, description;
 				DateTime dt = util.getUnixToDatetime(msg.Sent / 1000);
 				if (dt < startTime) return null;
 				hostName = "";
@@ -616,22 +617,22 @@ namespace namaichi.alart
 					util.debugWriteLine("app push page error !r " + lvid);
 					return null;
 					
-					hg.description = hg.userId = hg.communityId = hg.thumbnail = "";
-					hg.tags = new String[]{};
-					var reg = new Regex("\\[生放送開始\\](.+?)さんが「(.+?)」を開始しました。");
-					var m = reg.Match(msg.AppDatas.ToString());
-					if (m.Length != 0) {
-						hostName = m.Groups[1].Value;
-						isCom = true;
-						comName = "";
-					} else {
-						reg = new Regex("\\[生放送開始\\](.+?)「(.+?)」を開始しました。");
-						m = reg.Match(msg.AppDatas.ToString());
-						comName = m.Groups[1].Value;
-						isCom = false;
-						hostName = "";
-					}
-					title = m.Groups[2].Value;
+					//hg.description = hg.userId = hg.communityId = hg.thumbnail = "";
+					//hg.tags = new String[]{};
+					//var reg = new Regex("\\[生放送開始\\](.+?)さんが「(.+?)」を開始しました。");
+					//var m = reg.Match(msg.AppDatas.ToString());
+					//if (m.Length != 0) {
+					//	hostName = m.Groups[1].Value;
+					//	isCom = true;
+					//	comName = "";
+					//} else {
+					//	reg = new Regex("\\[生放送開始\\](.+?)「(.+?)」を開始しました。");
+					//	m = reg.Match(msg.AppDatas.ToString());
+					//	comName = m.Groups[1].Value;
+					//	isCom = false;
+					//	hostName = "";
+					//}
+					//title = m.Groups[2].Value;
 				} else {
 					if (hg.type == "community" || hg.type == "user") {
 						var reg = new Regex("\\[生放送開始\\](.+?)さんが「(.+?)」を開始しました。");
@@ -686,9 +687,11 @@ namespace namaichi.alart
 				return null;
 			}
 		}
+		*/
 		public List<RssItem> getNicoCasItem(string lvid, McsProto.DataMessageStanza msg) {
+			//ニコニコ生放送アプリ用
 			try {
-				string title, thumbnail, comName, hostName, description;
+				string title, comName, hostName;//, thumbnail, description;
 				DateTime dt = util.getUnixToDatetime(msg.Sent / 1000);
 				if (dt < startTime || dt < DateTime.Now - TimeSpan.FromMinutes(10)) return null;
 				hostName = "";
@@ -704,7 +707,7 @@ namespace namaichi.alart
 					check.form.addLogText("スマホプッシュ通知から取得した放送のページが取得できませんでした " + lvid);
 					util.debugWriteLine("app push page error !r " + lvid);
 					return null;
-					
+					/*
 					hg.description = hg.userId = hg.communityId = hg.thumbnail = "";
 					hg.tags = new String[]{};
 					
@@ -721,6 +724,7 @@ namespace namaichi.alart
 						hostName = "";
 					}
 					title = util.getRegGroup(appData, "program_title\\\\\":\\\\\"(.+?)\\\\\"");
+					*/
 				} else {
 					if (hg.type == "community" || hg.type == "user") {
 						//var reg = new Regex("\\[生放送開始\\](.+?)さんが「(.+?)」を開始しました。");

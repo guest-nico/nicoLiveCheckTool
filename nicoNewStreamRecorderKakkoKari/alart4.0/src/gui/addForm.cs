@@ -25,8 +25,8 @@ namespace namaichi
 //		public int addType = -1; //-1-no 0-user 1-community or channel 2-official
 		public AlartInfo ret = null;
 		private MainForm form;
-		private string lastGetThumbUser = null;
-		private string lastGetThumbCom = null;
+		//private string lastGetThumbUser = null;
+		//private string lastGetThumbCom = null;
 		private AlartInfo editAi = null;
 		private List<CustomKeywordInfo> customKw = null;
 		private bool isUserMode = false;

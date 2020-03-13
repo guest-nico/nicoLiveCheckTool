@@ -387,7 +387,7 @@ namespace namaichi.alart
 			try {
 				var isCom = dec.IndexOf("\"content_type\":\"live.user.program.onairs\"") > -1;
 				var isJikken = dec.IndexOf("\"content_type\":\"live.user.program.cas.onairs\"") > -1;
-				string title, lvid, thumbnail, dt, comName, hostName, description;
+				string title, lvid, thumbnail, dt, comName, hostName;//
 				hostName = null;
 				
 				lvid = util.getRegGroup(dec, "\"content_ids\":\"(lv\\d+)\"");

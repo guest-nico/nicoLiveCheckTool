@@ -5036,8 +5036,8 @@ namespace namaichi
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator23;
 		private System.Windows.Forms.ToolStripMenuItem logListCopyMessageMenu;
 		private System.Windows.Forms.ContextMenuStrip logListMenu;
-		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn14;
-		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn13;
+		//private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn14;
+		//private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn13;
 		public System.Windows.Forms.DataGridView historyList;
 		private System.Windows.Forms.TabPage tabPage4;
 		private System.Windows.Forms.ToolStripMenuItem disableFollowMenu;

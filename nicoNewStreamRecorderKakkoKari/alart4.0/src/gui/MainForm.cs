@@ -4637,8 +4637,8 @@ namespace namaichi
 					userAlartList, taskList, historyList, notAlartList};
 			for (var i = 0; i < s.Length; i++) {
 				var _columna = config.get(s[i] + "ListSortColumn");
-				var acolumn = l[i].Columns[int.Parse(_columna)];
 				try {
+					var acolumn = l[i].Columns[int.Parse(_columna)];
 					var _order = config.get(s[i] + "ListSortOrder");
 					if (_order == "no") continue;
 					var direction = _order == "asc" ? ListSortDirection.Ascending : ListSortDirection.Descending;

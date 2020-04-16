@@ -2448,7 +2448,7 @@ namespace namaichi
 			this.isAppPushChkBox.Name = "isAppPushChkBox";
 			this.isAppPushChkBox.Size = new System.Drawing.Size(400, 43);
 			this.isAppPushChkBox.TabIndex = 7;
-			this.isAppPushChkBox.Text = "スマホプッシュ通知から取得する\r\n（フォローしているコミュニティ、チャンネルの放送のみ取得できますがほぼ遅延なく届きます）";
+			this.isAppPushChkBox.Text = "スマホプッシュ通知から取得する\r\n（フォローしているユーザー、チャンネルの放送のみ取得できますがほぼ遅延なく届きます）";
 			this.isAppPushChkBox.UseVisualStyleBackColor = true;
 			// 
 			// isPushChkBox

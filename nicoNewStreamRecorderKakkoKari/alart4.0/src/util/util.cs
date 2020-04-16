@@ -30,8 +30,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.62";
-	public static string versionDayStr = "2020/03/13";
+	public static string versionStr = "ver0.1.7.63";
+	public static string versionDayStr = "2020/04/16";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -505,6 +505,7 @@ class util {
 		}
 		return null;
 	}
+	/*
 	public static string getPageSource(string _url, ref WebHeaderCollection getheaders, CookieContainer container = null, string referer = null, bool isFirstLog = true, int timeoutMs = 5000) {
 		util.debugWriteLine("access__ getpage Source 0" + _url);
 		timeoutMs = 5000;
@@ -516,7 +517,7 @@ class util {
 			util.debugWriteLine("getpage get cookie header error " + _url + e.Message+e.StackTrace);
 			return null;
 		}
-		*/
+		*
 //		if (isFirstLog)
 //			util.debugWriteLine("getpagesource " + _url + " ");
 			
@@ -533,7 +534,8 @@ class util {
 					if (container != null) req.CookieContainer = container;
 					req.UserAgent = "NicoLiveCheckTool " + versionStr + " guestnicon@gmail.com";
 					//req.UserAgent = "NicoaLiveCheckTool " + versionStr + " guest@niconmail.com";
-					
+					req.Headers.Add("Accept-Encoding", "gzip,deflate");
+					req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 					
 	
 					req.Timeout = timeoutMs;
@@ -565,6 +567,7 @@ class util {
 			
 		return null;
 	}
+	*/
 	public static string getPageSource(string _url, CookieContainer container = null, string referer = null, bool isFirstLog = true, int timeoutMs = 5000) {
 		util.debugWriteLine("access__ getpage Source 1" + _url);
 		timeoutMs = 5000;
@@ -595,6 +598,8 @@ class util {
 					if (container != null) req.CookieContainer = container;
 	//				util.debugWriteLine("getpage 05");
 					req.UserAgent = "NicoLiveCheckTool " + versionStr + " guestnicon@gmail.com";
+					req.Headers.Add("Accept-Encoding", "gzip,deflate");
+					req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 	
 					req.Timeout = timeoutMs;
 	//				util.debugWriteLine("getpage 0");
@@ -762,6 +767,8 @@ class util {
 			var req = (HttpWebRequest)WebRequest.Create(url);
 			req.Method = method;
 			req.Proxy = null;
+			req.Headers.Add("Accept-Encoding", "gzip,deflate");
+			req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 			
 			foreach (var h in headers) {
 				if (h.Key.ToLower().Replace("-", "") == "contenttype")

@@ -44,7 +44,7 @@ namespace namaichi.alart
 				var followList = getFollowListFromApp();
 				
 				if (followList != null) {
-					form.addLogText("フォローリストの取得に成功しました " + (followList.Count == 0));
+					form.addLogText("フォローリストの取得に成功しました");
 					updateAlartList(followList);
 				} else {
 					form.addLogText("フォローリストが取得できませんでした。再試行します。");	

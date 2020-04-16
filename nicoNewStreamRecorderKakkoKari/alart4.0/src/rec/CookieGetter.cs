@@ -299,6 +299,8 @@ namespace namaichi.rec
 						var _req = (HttpWebRequest)WebRequest.Create("https://www.nicovideo.jp/my/channel");
 						_req.Proxy = null;
 						_req.CookieContainer = cc;
+						_req.Headers.Add("Accept-Encoding", "gzip,deflate");
+						_req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 						//_req.CookieContainer = new CookieContainer();
 						try {
 							using (var r = (HttpWebResponse)_req.GetResponse())
@@ -320,6 +322,9 @@ namespace namaichi.rec
 						_req = (HttpWebRequest)WebRequest.Create("https://www.nicovideo.jp/my/top");
 						_req.Proxy = null;
 						_req.CookieContainer = cc;
+						_req.Headers.Add("Accept-Encoding", "gzip,deflate");
+						_req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+						
 						//_req.CookieContainer = new CookieContainer();
 						try {
 							using (var r = (HttpWebResponse)_req.GetResponse())
@@ -623,6 +628,8 @@ namespace namaichi.rec
 						
 						if (cookie != null) req.Headers["Cookie"] = cookie;
 						//req.UserAgent = "NicoLiveCheckTool " + versionStr + " guestnicon@gmail.com";
+						req.Headers.Add("Accept-Encoding", "gzip,deflate");
+						req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 		
 						req.Timeout = timeoutMs;
 						var res = (HttpWebResponse)req.GetResponse();

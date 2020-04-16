@@ -340,6 +340,8 @@ namespace namaichi.alart
 				req.ContentType = "application/json";
 				req.Headers.Add("x-request-with", "https://account.nicovideo.jp/my/account");
 				req.Headers.Add("x-frontend-id", "8");
+				req.Headers.Add("Accept-Encoding", "gzip,deflate");
+				req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 				//req.UserAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0";
 				//req.Headers.Add("Accept-Encoding", "gzip, deflate, br");
 				using (var stream = req.GetRequestStream()) {

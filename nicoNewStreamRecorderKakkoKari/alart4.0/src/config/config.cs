@@ -252,8 +252,8 @@ public class config
 			{"ShowAppH","false"},
 			{"ShowAppI","false"},
 			{"ShowAppJ","false"},
-			{"ShowSoundType","true"},
-			{"ShowMemo","false"},
+			{"ShowSoundType","false"},
+			{"ShowMemo","true"},
 				
 			{"ShowTaskStartDt","true"},
 			{"ShowTaskLvid","true"},

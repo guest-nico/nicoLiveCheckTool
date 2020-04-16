@@ -65,7 +65,8 @@ namespace namaichi.rec
 //					var _cc = cgret.Result[(isSub) ? 1 : 0];
 //					util.debugWriteLine(cg.pageSource);
 					*/
-					var res = util.getPageSource(url, ref headers, ccc, url);
+					//var res = util.getPageSource(url, ref headers, ccc, url);
+					var res = util.getPageSource(url, ccc, url);
 					if (res == null) return false;
 					var isJidouShounin = res.IndexOf("自動承認されます") > -1; 
 	//				var _compage = util.getPageSource(url, ref headers, cc);
@@ -112,6 +113,9 @@ namespace namaichi.rec
 					req.Referer = url;
 					req.ContentLength = postDataBytes.Length;
 					req.ContentType = "application/x-www-form-urlencoded";
+					req.Headers.Add("Accept-Encoding", "gzip,deflate");
+					req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+					
 	//				req.Headers.Add("Referer", url);
 					using (var stream = req.GetRequestStream()) {
 						try {
@@ -232,6 +236,8 @@ namespace namaichi.rec
 					req.ContentLength = postDataBytes.Length;
 					req.ContentType = "application/x-www-form-urlencoded";
 	//				req.Headers.Add("Referer", url);
+					req.Headers.Add("Accept-Encoding", "gzip,deflate");
+					req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 					using (var stream = req.GetRequestStream()) {
 						try {
 							stream.Write(postDataBytes, 0, postDataBytes.Length);

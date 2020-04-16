@@ -127,6 +127,8 @@ namespace namaichi.rec
 					req.ContentLength = postDataBytes.Length;
 					req.ContentType = "application/x-www-form-urlencoded";
 					req.Headers.Add("X-Requested-With", "XMLHttpRequest");
+					req.Headers.Add("Accept-Encoding", "gzip,deflate");
+					req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 					using (var stream = req.GetRequestStream()) {
 						try {
 							stream.Write(postDataBytes, 0, postDataBytes.Length);
@@ -255,6 +257,8 @@ namespace namaichi.rec
 					req.ContentLength = postDataBytes.Length;
 					req.ContentType = "application/x-www-form-urlencoded";
 					req.Headers.Add("X-Requested-With", "XMLHttpRequest");
+					req.Headers.Add("Accept-Encoding", "gzip,deflate");
+					req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 					using (var stream = req.GetRequestStream()) {
 						try {
 							stream.Write(postDataBytes, 0, postDataBytes.Length);

@@ -4637,6 +4637,7 @@ namespace namaichi
 					userAlartList, taskList, historyList, notAlartList};
 			for (var i = 0; i < s.Length; i++) {
 				var _columna = config.get(s[i] + "ListSortColumn");
+				if (_columna == "-1") continue;
 				try {
 					var acolumn = l[i].Columns[int.Parse(_columna)];
 					var _order = config.get(s[i] + "ListSortOrder");

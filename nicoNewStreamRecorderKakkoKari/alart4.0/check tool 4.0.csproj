@@ -49,7 +49,7 @@
     <Optimize>True</Optimize>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
-    <SignAssembly>True</SignAssembly>
+    <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile>kari.snk</AssemblyOriginatorKeyFile>
     <DelaySign>False</DelaySign>
   </PropertyGroup>
@@ -72,10 +72,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto">
-      <HintPath>..\packages\BouncyCastle.Crypto.dll.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
+      <HintPath>..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="Interop.IWshRuntimeLibrary">
-      <HintPath>bin\Debug\Interop.IWshRuntimeLibrary.dll</HintPath>
+      <HintPath>..\packages\Interop.IWshRuntimeLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.Build.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.Tasks.dll</HintPath>
@@ -101,13 +101,11 @@
     <Reference Include="protobuf-net">
       <HintPath>..\packages\protobuf-net.2.4.4.nupkg\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="SnkLib.App.CookieGetter, Version=1.0.0.0, Culture=neutral, PublicKeyToken=addaba1efd073ab3, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SnkLib.App.CookieGetter.2.3.1.0\lib\net40\SnkLib.App.CookieGetter.dll</HintPath>
+    <Reference Include="SnkLib.App.CookieGetter">
+      <HintPath>..\packages\SnkLib.App.CookieGetter.2.4.0.0\lib\net40\SnkLib.App.CookieGetter.dll</HintPath>
     </Reference>
-    <Reference Include="SnkLib.App.CookieGetter.Forms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=996bff908ba27803, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SnkLib.App.CookieGetter.Forms.1.4.0.0\lib\net40\SnkLib.App.CookieGetter.Forms.dll</HintPath>
+    <Reference Include="SnkLib.App.CookieGetter.Forms">
+      <HintPath>..\packages\SnkLib.App.CookieGetter.Forms.1.4.1.0\lib\net40\SnkLib.App.CookieGetter.Forms.dll</HintPath>
     </Reference>
     <Reference Include="SuperSocket.ClientEngine">
       <HintPath>..\packages\SuperSocket.ClientEngine.Core.0.10.0\lib\net40-client\SuperSocket.ClientEngine.dll</HintPath>
@@ -380,4 +378,5 @@
     <Error Condition="!Exists('..\packages\SnkLib.App.CookieGetter.2.3.1.0\build\net45\SnkLib.App.CookieGetter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SnkLib.App.CookieGetter.2.3.1.0\build\net45\SnkLib.App.CookieGetter.targets'))" />
   </Target>
   <Import Project="..\packages\SnkLib.App.CookieGetter.2.3.1.0\build\net45\SnkLib.App.CookieGetter.targets" Condition="Exists('..\packages\SnkLib.App.CookieGetter.2.3.1.0\build\net45\SnkLib.App.CookieGetter.targets')" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
 </Project>

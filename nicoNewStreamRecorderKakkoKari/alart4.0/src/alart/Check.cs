@@ -283,9 +283,10 @@ namespace namaichi.alart
 			if (dpi.isLog && form.config.get("log") == "true")
 				writeFavoriteLog(item);
 			
-			if (targetAi.Count > 0)
+			if (targetAi.Count > 0) {
 				addLogList(item, targetAi);
-			else if (nearAlartAi != null)
+				form.setNotifyMenuHistory(new List<RssItem>(){item});
+			} else if (nearAlartAi != null)
 				addNearAlartList(item, nearAlartAi);
 				
 		}
@@ -668,9 +669,8 @@ namespace namaichi.alart
 			util.openUrlBrowser(url, form.config);
 		}
 		public void foundLive(List<RssItem> items) {
-			if (items.Count > 0) {
+			if (items.Count > 0) 
 				form.setHosoLogStatusBar(items[0]);
-			}
 			
 			lock(foundLiveLock) {
 				var isChanged = gotStreamProcess(items);

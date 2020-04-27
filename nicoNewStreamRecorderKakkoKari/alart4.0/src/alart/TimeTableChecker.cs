@@ -8,11 +8,13 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.ComponentModel.Design;
 using System.Threading;
 using System.Net;
 using System.Xml.Linq;
 using Newtonsoft.Json;
-
+using System.Text.RegularExpressions;
 using namaichi.info;
 using namaichi.rec;
 
@@ -87,7 +89,16 @@ namespace namaichi.alart
 				var url = "https://live.nicovideo.jp/api/getZeroTimeline?date=";//2019-09-15";
 				addLiveListDay(url + DateTime.Now.ToString("yyyy-MM-dd"), openTimeList);
 				addLiveListDay(url + DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"), openTimeList);
+				
+				addLiveListDay(url + DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd"), openTimeList);
+				addLiveListDay(url + DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd"), openTimeList);
+				addLiveListDay(url + DateTime.Now.AddDays(-3).ToString("yyyy-MM-dd"), openTimeList);
+				addLiveListDay(url + DateTime.Now.AddDays(-4).ToString("yyyy-MM-dd"), openTimeList);
+				addLiveListDay(url + DateTime.Now.AddDays(-5).ToString("yyyy-MM-dd"), openTimeList);
+				
 				timeTableList.Sort((RssItem x,RssItem y) => string.Compare(x.pubDate, y.pubDate));
+				
+				var onairCount = timeTableList.Count((a) => a.pubDateDt < DateTime.Now);
 				
 				if (!isAllCheck) {
 					var delList = new List<RssItem>();
@@ -102,15 +113,36 @@ namespace namaichi.alart
 		}
 		private void addLiveListDay(string url, List<TanzakuItem> openTimeList) {
 			try {
-				var res = util.getPageSource(url);
-				if (res == null) return;
+				TimeLineInfo[] list = null;
+				string res = null;
+				var isNew = false;
+				if (isNew) {
+					url = "https://live.nicovideo.jp/timetable?date=" + url.Substring(url.IndexOf("=") + 1).Replace("-", "");
+					res = util.getPageSource(url);
+					if (res == null) {
+						util.debugWriteLine("timetable zerotimeline res null");
+						check.form.addLogText("公式番組表からデータが取得できませんでした2 " + url);
+						return;
+					}
+					list = getNewTimeLineList(res);
+				} else {
+					res = util.getPageSource(url);
+					if (res == null) {
+						util.debugWriteLine("timetable zerotimeline res null");
+						check.form.addLogText("公式番組表からデータが取得できませんでした " + url);
+						return;
+					}
+					
+					list = JsonConvert.DeserializeObject<timelineTop>(res).timeline.stream_list;
+				}
 				
-				var list = JsonConvert.DeserializeObject<timelineTop>(res);
-				foreach (var l in list.timeline.stream_list) {
+				foreach (var l in list) {
 					if (l.provider_type != "official") continue;
 					
 					l.startTime = DateTime.Parse(l.start_date + " " + l.start_time);
-					if ((l.status == "onair" || l.startTime > DateTime.Now.AddHours(-2))) {
+					if ((l.status != "onair" && l.startTime < DateTime.Now.AddHours(-2))) continue;
+					
+					//if ((l.status == "onair" || l.startTime > DateTime.Now.AddHours(-2))) {
 						 var listRi = timeTableList.Find(n => n.lvId == "lv" + l.id);
 						//if (((isAllCheck && l.status == "onair") || l.startTime > DateTime.Now.AddHours(-2)) && liveList.Find(n => n.lvId == l.id) == null) {
 						
@@ -187,7 +219,7 @@ namespace namaichi.alart
 							listRi.pubDateDt = ri.pubDateDt;
 						}
 						
-					}
+					//}
 				}
 				                                         
 			} catch (Exception e) {
@@ -288,6 +320,64 @@ namespace namaichi.alart
 			util.debugWriteLine("load cas opentimelist item " + ret.Count);
 			return ret;
 		}
+		private TimeLineInfo[] getNewTimeLineList(string res) {
+			var m = new Regex("(<tr[\\s\\S]+?</tr>)").Matches(res);
+			var ret = new List<TimeLineInfo>();
+			foreach (Match _m in m) {
+				try {
+					var mValue = _m.Value.Replace("\n", "").Replace("\r", "");
+					
+					var lv = util.getRegGroup(mValue, "id=\"stream_lv(\\d+)");
+					//var title = util.getRegGroup(mValue, "<h2 class=\"item_title\">[\\s\\S]+?<a[\\s\\S]+?>([\\s\\S]*?<span id=\"play_arrow[\\s\\S]*?</span>)([\\s\\S]*?)</a>", 2);
+					var title = getInnerText(util.getRegGroup(mValue, "<h2 class=\"item_title\">([\\s\\S]+?)</h2>"));
+					var description = getInnerText(util.getRegGroup(mValue, "<p class=\"item_description\">([\\s\\S]+?)</p"));
+					var isChannel = mValue.IndexOf("<li class=\"timetablePage-ProgramList_TitleIcon-channel\">") > -1;
+					var isOfficial = mValue.IndexOf("<li class=\"timetablePage-ProgramList_TitleIcon-official\">") > -1;
+					var provider_type = isOfficial ? "official" : (isChannel ? "channel" : "community");
+					var thumbnail_url = util.getRegGroup(mValue, "<div class=\"item_thumb\">[\\s\\S]*?src=\"(.+?)\"");
+					
+					var start_date = getInnerText(util.getRegGroup(mValue, "(<span class=\"start_date\"[\\s\\S]*?</span>)"));
+					var end_date = getInnerText(util.getRegGroup(mValue, "(<span id=\"end_date[\\s\\S]*?</span>)"));
+					var start_time = util.getRegGroup(mValue, "<span class=\"start_time\">(.+?)</span>");
+					var end_time = util.getRegGroup(mValue, "<span id=\"end_date[\\s\\S]*?(\\d+:\\d+)</span>");
+					var total_time = (DateTime.Parse(end_date + " " + end_time) - DateTime.Parse(start_date + " " + start_time)).ToString();
+					var isTsEnd = mValue.IndexOf("class=\"item ts_end\">") > -1;
+					var isTs = mValue.IndexOf("class=\"item play\">") > -1;
+					var isOnAir = mValue.IndexOf(" play onair\">") > -1;
+					var status = isOnAir ? "onair" : (isTs ? "timeshift" : "tsend");
+					if (lv == null || title == null || description == null || provider_type == null ||
+							thumbnail_url == null || start_date == null || start_time == null ||
+							end_date == null || end_time == null || total_time == null ||
+							status == null) {
+						util.debugWriteLine("timetable timelinePage null " + lv + " " + title + " " + description + " " +
+								provider_type + " " + thumbnail_url + " " + start_date +
+								" " + start_time + " " + end_date + " " + end_time + " " + 
+								total_time + " " + status);
+						#if DEBUG
+							check.form.addLogText(lv + " " + title + " " + description + " " +
+								provider_type + " " + thumbnail_url + " " + start_date +
+								" " + start_time + " " + end_date + " " + end_time + " " + 
+								total_time + " " + status);
+						#endif
+						continue;
+					}
+					ret.Add(new TimeLineInfo(lv, title, description, provider_type, thumbnail_url, start_date, end_date, start_time, end_time, total_time, status));
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					#if DEBUG
+						check.form.addLogText("timetable timelinePage ParseEror " + _m.Value);
+					#endif
+					return null;
+				}
+			}
+			return ret.ToArray();
+		}
+		private string getInnerText(string t) {
+			if (t == null) return null;
+			var r = new Regex("<.+?>").Replace(t, "");
+			if (r == null) return null;
+			return r.Trim();
+		}
 	}
 	
 	class timelineTop {
@@ -297,7 +387,23 @@ namespace namaichi.alart
 		public string date = null;
 		public TimeLineInfo[] stream_list = new TimeLineInfo[0];
 	}
-	class TimeLineInfo {
+	public class TimeLineInfo {
+		public TimeLineInfo(string id, string title, string description,
+				string provider_type, string thumbnail_url, string start_date,
+				string end_date, string start_time, string end_time,
+				string total_time, string status) {
+			this.id = id;
+			this.title = title;
+			this.description = description; 
+			this.provider_type = provider_type;
+			this.thumbnail_url = thumbnail_url;
+			this.start_date = start_date;
+			this.end_date = end_date;
+			this.start_time = start_time;
+			this.end_time = end_time;
+			this.total_time = total_time;
+			this.status = status;
+		}
 		public string id = null;
 		public string title = null;
 		public string description = null;

@@ -527,6 +527,7 @@ namespace namaichi
 			this.logListCopyMessageMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator23 = new System.Windows.Forms.ToolStripSeparator();
 			this.logListDeleteRowMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.notifyIconRecentSeparator = new System.Windows.Forms.ToolStripSeparator();
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.alartList)).BeginInit();
@@ -2711,28 +2712,29 @@ namespace namaichi
 			// notifyIconMenuStrip
 			// 
 			this.notifyIconMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.notifyIconRecentSeparator,
 									this.openNotifyIconMenu,
 									this.toolStripSeparator4,
 									this.closeNotifyIconMenu});
 			this.notifyIconMenuStrip.Name = "notifyIconMenuStrip";
-			this.notifyIconMenuStrip.Size = new System.Drawing.Size(101, 54);
+			this.notifyIconMenuStrip.Size = new System.Drawing.Size(153, 82);
 			// 
 			// openNotifyIconMenu
 			// 
 			this.openNotifyIconMenu.Name = "openNotifyIconMenu";
-			this.openNotifyIconMenu.Size = new System.Drawing.Size(100, 22);
+			this.openNotifyIconMenu.Size = new System.Drawing.Size(152, 22);
 			this.openNotifyIconMenu.Text = "開く";
 			this.openNotifyIconMenu.Click += new System.EventHandler(this.OpenNotifyIconMenuClick);
 			// 
 			// toolStripSeparator4
 			// 
 			this.toolStripSeparator4.Name = "toolStripSeparator4";
-			this.toolStripSeparator4.Size = new System.Drawing.Size(97, 6);
+			this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
 			// 
 			// closeNotifyIconMenu
 			// 
 			this.closeNotifyIconMenu.Name = "closeNotifyIconMenu";
-			this.closeNotifyIconMenu.Size = new System.Drawing.Size(100, 22);
+			this.closeNotifyIconMenu.Size = new System.Drawing.Size(152, 22);
 			this.closeNotifyIconMenu.Text = "終了";
 			this.closeNotifyIconMenu.Click += new System.EventHandler(this.CloseNotifyIconMenuClick);
 			// 
@@ -4813,6 +4815,12 @@ namespace namaichi
 			this.logListDeleteRowMenu.Text = "この行を削除する";
 			this.logListDeleteRowMenu.Click += new System.EventHandler(this.LogListDeleteRowMenuClick);
 			// 
+			// notifyIconRecentSeparator
+			// 
+			this.notifyIconRecentSeparator.Name = "notifyIconRecentSeparator";
+			this.notifyIconRecentSeparator.Size = new System.Drawing.Size(149, 6);
+			this.notifyIconRecentSeparator.Visible = false;
+			// 
 			// MainForm
 			// 
 			this.AllowDrop = true;
@@ -4875,6 +4883,7 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripSeparator notifyIconRecentSeparator;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator33;
 		private System.Windows.Forms.ToolStripMenuItem characterColorMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem formColorMenuItem;

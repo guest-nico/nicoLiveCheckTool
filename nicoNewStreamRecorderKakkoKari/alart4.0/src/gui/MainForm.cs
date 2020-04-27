@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Drawing;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
@@ -15,21 +16,15 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using System.ComponentModel;
 using SunokoLibrary.Application;
-//using System;
-//using System.Collections.Generic;
-//using System.ComponentModel;
 using System.Data;
-//using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-//using System.Windows.Forms;
 using System.Configuration;
 using System.IO;
-//using System.Text;
 using System.Threading;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -38,6 +33,30 @@ using namaichi.config;
 using namaichi.utility;
 using namaichi.rec;
 using namaichi.info;
+
+//using System;
+//using System.Collections.Generic;
+//using System.ComponentModel;
+
+//using System.Drawing;
+
+
+
+
+
+
+//using System.Windows.Forms;
+
+
+//using System.Text;
+
+
+
+
+
+
+
+
 
 //using namaichi.play;
 
@@ -4714,6 +4733,53 @@ namespace namaichi
 			if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
 				e.Cancel = true;
 			
+		}
+		public void setNotifyMenuHistory(List<RssItem> items) {
+			
+			formAction(() => setNotifyMenuHistoryCore(items));
+		}
+		public void setNotifyMenuHistoryCore(List<RssItem> items) {
+			try {
+				var history = new List<KeyValuePair<DateTime, ToolStripMenuItem>>();
+				for (var i = 0; i < notifyIconMenuStrip.Items.Count - 4; i++) {
+					history.Add(new KeyValuePair<DateTime, ToolStripMenuItem>(((RssItem)notifyIconMenuStrip.Items[i].Tag).pubDateDt, (ToolStripMenuItem)notifyIconMenuStrip.Items[i]));
+				}
+				foreach (var item in history) {
+					try {
+						if (notifyIconMenuStrip.Items.IndexOf(item.Value) > -1)
+							notifyIconMenuStrip.Items.Remove(item.Value);
+					} catch (Exception e) {
+						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					}
+				}
+				
+				var recentItems = items.OrderByDescending((a) => a.pubDateDt).Take(5)
+						.Select((RssItem a) => getRssItemToNotifyHistory(a));
+				history.AddRange(recentItems);
+				
+				var addList = history.OrderByDescending(a => a.Key).Take(5);
+				
+				foreach (var item in addList) {
+					notifyIconMenuStrip.Items.Insert(0, item.Value);
+					var rssItem = items.Find(a => a == item.Value.Tag);
+					if (rssItem != null) {
+						item.Value.Image = ThumbnailManager.getThumbnailRssUrl(rssItem.thumbnailUrl, false, true);
+					}
+				}
+				notifyIconRecentSeparator.Visible = true;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+		}
+		private KeyValuePair<DateTime, ToolStripMenuItem> getRssItemToNotifyHistory(RssItem a) {
+			var text = a.pubDateDt.ToString("dd日HH:mm") + " " + 
+					(a.title.Length > 20 ? a.title.Substring(0, 20) + ".." : a.title) + 
+					"(" + (a.comName.Length > 20 ? a.comName.Substring(0, 20) + ".." : a.comName) + ")";
+			var menu = new ToolStripMenuItem(text, null, (o, e) => 
+					util.openUrlBrowser("https://live2.nicovideo.jp/watch/" + a.lvId, config));
+			menu.Tag = a;
+			var ret = new KeyValuePair<DateTime, ToolStripMenuItem>(a.pubDateDt, menu);
+			return ret;
 		}
 	}
 }

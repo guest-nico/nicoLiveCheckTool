@@ -4735,7 +4735,6 @@ namespace namaichi
 			
 		}
 		public void setNotifyMenuHistory(List<RssItem> items) {
-			
 			formAction(() => setNotifyMenuHistoryCore(items));
 		}
 		public void setNotifyMenuHistoryCore(List<RssItem> items) {
@@ -4746,15 +4745,16 @@ namespace namaichi
 				}
 				foreach (var item in history) {
 					try {
-						if (notifyIconMenuStrip.Items.IndexOf(item.Value) > -1)
+						if (notifyIconMenuStrip.Items.IndexOf(item.Value) > -1) {
 							notifyIconMenuStrip.Items.Remove(item.Value);
+						}
 					} catch (Exception e) {
 						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 					}
 				}
 				
-				var recentItems = items.OrderByDescending((a) => a.pubDateDt).Take(5)
-						.Select((RssItem a) => getRssItemToNotifyHistory(a));
+				var recentItems = items.OrderByDescending((a) => a.pubDateDt)
+					.Take(5).Select((RssItem a) => getRssItemToNotifyHistory(a));
 				history.AddRange(recentItems);
 				
 				var addList = history.OrderByDescending(a => a.Key).Take(5);

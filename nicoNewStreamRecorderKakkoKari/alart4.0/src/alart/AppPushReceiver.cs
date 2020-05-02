@@ -691,6 +691,7 @@ namespace namaichi.alart
 		public List<RssItem> getNicoCasItem(string lvid, McsProto.DataMessageStanza msg) {
 			//ニコニコ生放送アプリ用
 			try {
+				util.debugWriteLine("getNicoCasItem appPush " + msg.ToString());
 				string title, comName, hostName;//, thumbnail, description;
 				DateTime dt = util.getUnixToDatetime(msg.Sent / 1000);
 				if (dt < startTime || dt < DateTime.Now - TimeSpan.FromMinutes(10)) return null;
@@ -769,6 +770,7 @@ namespace namaichi.alart
 				i.setTag(hg.tags);
 				i.category = hg.category;
 				i.type = hg.type;
+				i.pubDateDt = dt;
 				var ret = new List<RssItem>();
 				ret.Add(i);
 				return ret;

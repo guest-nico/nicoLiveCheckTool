@@ -441,6 +441,7 @@ namespace namaichi.alart
 				i.setTag(hg.tags);
 				i.category = hg.category;
 				i.type = hg.type;
+				i.pubDateDt = DateTime.Parse(dt);
 				var ret = new List<RssItem>();
 				ret.Add(i);
 				return ret;

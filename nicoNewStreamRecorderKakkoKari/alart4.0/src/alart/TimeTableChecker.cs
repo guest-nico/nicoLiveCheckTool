@@ -129,7 +129,7 @@ namespace namaichi.alart
 					res = util.getPageSource(url);
 					if (res == null) {
 						util.debugWriteLine("timetable zerotimeline res null");
-						check.form.addLogText("公式番組表からデータが取得できませんでした " + url);
+						//check.form.addLogText("公式番組表からデータが取得できませんでした " + url);
 						return;
 					}
 					

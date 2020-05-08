@@ -2700,7 +2700,7 @@ namespace namaichi
 			// 
 			// notifyIcon
 			// 
-			this.notifyIcon.BalloonTipText = "https://www.youtube.com/watch?v=kzEDjatOkM0";
+			this.notifyIcon.BalloonTipText = "";
 			this.notifyIcon.BalloonTipTitle = "title";
 			this.notifyIcon.ContextMenuStrip = this.notifyIconMenuStrip;
 			this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));

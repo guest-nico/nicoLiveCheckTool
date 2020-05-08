@@ -95,20 +95,19 @@ namespace namaichi.rec
 					return;
 				}
 				
-				var url = "https://ext.nicovideo.jp/thumb_" + 
-						(id.StartsWith("c") ? (id.StartsWith("co") ? "community" : "channel") : "user") + "/" + id;
-				var res = util.getPageSource(url);
-				if (res == null) {
+				bool isError, isExist;
+				string name = null;
+				getExistsInfo(id, out isError, out isExist, out name);
+				
+				if (isError) {
 					error++;
 					form.alartListExistColorChange(id, isUser, 2);
 				} else {
-					var isExist = (id.StartsWith("ch") && res.IndexOf("<h1 id=\"chSymbol\"><a href=\"https://ch.nicovideo.jp/channel/\" target=\"_blank\">") == -1) ||
-							(id.StartsWith("co") && res.IndexOf("<p class=\"TXT12\">お探しのコミュニティは存在しないか") == -1) ||
-							(!id.StartsWith("c") && res.IndexOf("<p class=\"TXT10\">ユーザーID：<strong>") > -1);
 					if (isExist) {
 						exist++;
 						form.alartListExistColorChange(id, isUser, 0);
-						setName(id, isUser, form, res);
+						if (name != null)
+							setName(id, isUser, form, name);
 					}
 					else {
 						delete++;
@@ -125,36 +124,67 @@ namespace namaichi.rec
 			//コミュニティ存在チェック終了
 			//存在：128　　削除：0　エラー：159
 		}
+		private void getExistsInfo(string id, out bool isError, out bool isExist, out string name) {
+			isError = isExist = false;
+			name = null;
+			var isThumb = form.check.container == null && id.StartsWith("co");
+			if (isThumb) {
+				var url = "https://ext.nicovideo.jp/thumb_" + 
+					(id.StartsWith("c") ? (id.StartsWith("co") ? "community" : "channel") : "user") + "/" + id;
+				var res = util.getPageSource(url);
+				if (res == null) isError = true;
+				else {
+					isExist = (id.StartsWith("ch") && res.IndexOf("<h1 id=\"chSymbol\"><a href=\"https://ch.nicovideo.jp/channel/\" target=\"_blank\">") == -1) ||
+						(id.StartsWith("co") && res.IndexOf("<p class=\"TXT12\">お探しのコミュニティは存在しないか") == -1) ||
+						(!id.StartsWith("c") && res.IndexOf("<p class=\"TXT10\">ユーザーID：<strong>") > -1);
+					if (isExist) name = util.getRegGroup(res, "name=\"(.+?)\"");
+				}
+			} else {
+				if (id.StartsWith("c")) {
+					var url = id.StartsWith("co") ? ("https://com.nicovideo.jp/api/v1/communities/" + id.Substring(2) + "/authority.json") :
+				 			("https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/" + id + ".jpg");
+					var h = new Dictionary<string, string>();
+					var r = util.sendRequest(url, h, null, "GET", false);
+					if (r == null) isError = true;
+					else isExist = true;
+				} else {
+					var isFollow = false;
+					name = util.getUserName(id, out isFollow, form.check.container, false, form.config);
+					if (name != null) isExist = true;
+					else isError = true;
+				}
+			}
+			util.debugWriteLine("aa");
+		}
 		private void setExistsCheckLock(bool isUser, ToolMenuLock val) {
 			if (isUser) userExistsCheckLock = val;
 			else coChExistsCheckLock = val;
 		}
-		private void setName(string id, bool isUser, MainForm form, string res) {
+		private void setName(string id, bool isUser, MainForm form, string name) {
+			
 			while (true) {
 				try {
 					foreach (var ai in form.alartListDataSource) {
 						if (isUser && ai.hostId == id 
 						    	&& string.IsNullOrEmpty(ai.hostName)) {
-							string name = util.getRegGroup(res, "name=\"(.+?)\"");
+							//string name = util.getRegGroup(res, "name=\"(.+?)\"");
 							form.alartListSetName(ai, isUser, name);
 						} else if (!isUser && ai.communityId == id 
 						    	&& string.IsNullOrEmpty(ai.communityName)) {
-							string name;
-							if (id.StartsWith("ch")) name = util.getRegGroup(res, "name=\"(.+?)\"");
-							else name = util.getRegGroup(res, "name=\"(.+?)\"");
+							//if (id.StartsWith("ch")) name = util.getRegGroup(res, "name=\"(.+?)\"");
+							//else name = util.getRegGroup(res, "name=\"(.+?)\"");
 							form.alartListSetName(ai, isUser, name);
 						}
 					}
 					foreach (var ai in form.userAlartListDataSource) {
 						if (isUser && ai.hostId == id 
 						    	&& string.IsNullOrEmpty(ai.hostName)) {
-							string name = util.getRegGroup(res, "name=\"(.+?)\"");
+							//string name = util.getRegGroup(res, "name=\"(.+?)\"");
 							form.alartListSetName(ai, isUser, name);
 						} else if (!isUser && ai.communityId == id 
 						    	&& string.IsNullOrEmpty(ai.communityName)) {
-							string name;
-							if (id.StartsWith("ch")) name = util.getRegGroup(res, "name=\"(.+?)\"");
-							else name = util.getRegGroup(res, "name=\"(.+?)\"");
+							//if (id.StartsWith("ch")) name = util.getRegGroup(res, "name=\"(.+?)\"");
+							//else name = util.getRegGroup(res, "name=\"(.+?)\"");
 							form.alartListSetName(ai, isUser, name);
 						}
 					}
@@ -235,7 +265,7 @@ namespace namaichi.rec
 					continue;
 				}
 				var isFollow = false;
-				var name = util.getUserName(hig.userId, out isFollow, form.check.container, true);
+				var name = util.getUserName(hig.userId, out isFollow, form.check.container, true, form.config);
 				if (string.IsNullOrEmpty(name)) {
 					error++;
 					_lock.end = i;
@@ -381,6 +411,7 @@ namespace namaichi.rec
 		private void bulkAddFromFollowCom(ToolMenuLock _lock, List<string[]> addList, int allNum, bool[] followMode) {
 			var mainFollowList = new FollowChecker(form, form.check.container)
 					.getFollowListFromApp(followMode);
+			if (mainFollowList == null) return;
 			var behaviors = form.config.get("defaultBehavior").Split(',').Select<string, bool>(x => x == "1").ToArray();
 			var textColor = ColorTranslator.FromHtml(form.config.get("defaultTextColor"));
 			var backColor = ColorTranslator.FromHtml(form.config.get("defaultBackColor"));

@@ -245,7 +245,7 @@ namespace namaichi.alart
 							util.debugWriteLine("official");
 						if (isSetLastHosoDate(isNosetComId, isNosetHostName , isNosetKeyword,
 								isComOk, isUserOk, isKeywordOk))
-							form.updateLastHosoDate(alartItem, DateTime.Parse(item.pubDate).ToString("yyyy/MM/dd HH:mm:ss"), item.lvId, item.isMemberOnly);
+							form.updateLastHosoDate(alartItem, DateTime.Parse(item.pubDate).ToString("yyyy/MM/dd HH:mm:ss"), item.lvId, item.isMemberOnly, item.type);
 						else {
 							//debug
 							//form.addLogText("[最近の放送日時　非更新debug]" + DateTime.Now + item.lvId);
@@ -377,7 +377,7 @@ namespace namaichi.alart
 							}
 							*/
 						} else {
-							var userName = util.getUserName(id, out isFollow, form.check.container, true);
+							var userName = util.getUserName(id, out isFollow, form.check.container, true, form.config);
 							if (userName == null) {
 								//Thread.Sleep(3000);
 								continue;
@@ -783,7 +783,7 @@ namespace namaichi.alart
 					});
 				}
 				
-				if (DateTime.Now - lastCheckHistoryLiveTime > TimeSpan.FromMinutes(3)) {
+				if (DateTime.Now - lastCheckHistoryLiveTime > TimeSpan.FromMinutes(5)) {
 					lastCheckHistoryLiveTime = DateTime.MaxValue;
 					Task.Factory.StartNew(() => {
 					    form.checkHistoryLive();

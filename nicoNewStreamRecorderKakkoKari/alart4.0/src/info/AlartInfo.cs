@@ -43,6 +43,7 @@ namespace namaichi.info
 		public bool appliJ = false;
 		public string memo = "";
 		public string lastLvid = "";
+		public string lastLvType = "";
 		public string keyword = "";
 		
 		public DateTime lastHosoDt = DateTime.MinValue;

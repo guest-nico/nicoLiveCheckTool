@@ -30,8 +30,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.65";
-	public static string versionDayStr = "2020/04/30";
+	public static string versionStr = "ver0.1.7.66";
+	public static string versionDayStr = "2020/05/09";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -761,7 +761,7 @@ class util {
 			return null;
 		}
 	}
-	public static HttpWebResponse sendRequest(string url, Dictionary<string, string> headers, byte[] content, string method) {
+	public static HttpWebResponse sendRequest(string url, Dictionary<string, string> headers, byte[] content, string method, bool isGetErrorMessage = false) {
 		util.debugWriteLine("access__ sendRequest" + url);
 		try {
 			var req = (HttpWebRequest)WebRequest.Create(url);
@@ -796,10 +796,19 @@ class util {
 			return (HttpWebResponse)req.GetResponse();
 		} catch (Exception ee) {
 			debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			if (isGetErrorMessage) {
+				try {
+					if (ee is WebException) {
+						return (HttpWebResponse)((WebException)ee).Response;
+					}
+				} catch (Exception eee) {
+					util.debugWriteLine(eee.Message + eee.Source + eee.StackTrace + eee.TargetSite);
+				}
+			}
 			return null;
 		}
 	}
-	
+	/*
 	public static bool isEndedProgram(string lvid, CookieContainer container, bool isSub) {
 		var url = "https://live2.nicovideo.jp/watch/" + lvid;
 		
@@ -813,6 +822,7 @@ class util {
 		util.debugWriteLine("is ended program " + isEnd + util.getMainSubStr(isSub, true));
 		return isEnd; 
 	}
+	*/
 	public static string existFile(string[] files, string reg, string startWith) {
 //		var files = Directory.GetFiles(dirPath);
 		foreach (var f in files) {
@@ -1102,7 +1112,7 @@ class util {
 		if (isKakko) ret = "(" + ret + ")";
 		return ret;		
 	}
-	public static string getUserName(string userId, out bool isFollow, CookieContainer container, bool isRequireFollow) {
+	public static string getUserName(string userId, out bool isFollow, CookieContainer container, bool isRequireFollow, config cfg) {
 		util.debugWriteLine("access__ getUserName " + userId);
 		isFollow = false; 
 		if (userId == "official" || userId == null || userId == "") return null;
@@ -1112,10 +1122,10 @@ class util {
 		if (isRequireFollow) {
 			var url = "https://public.api.nicovideo.jp/v1/user/followees/niconico-users/" + userId + ".json";
 			var h = new Dictionary<string, string>();
-			h.Add("User-Agent", "nicocas-Android/3.6.0");
+			h.Add("User-Agent", "nicocas-Android/" + cfg.get("nicoCasAppVer"));
 			h.Add("X-Frontend-Id", "90");
-			h.Add("X-Frontend-Version", "3.6.0");
-			h.Add("X-Os-Version", "22");
+			h.Add("X-Frontend-Version", cfg.get("nicoCasAppVer"));
+			h.Add("X-Os-Version", "25");
 			//var _res = util.sendRequest(url, h, null, "GET");
 			var res = util.getPageSource(url, container);
 			/*
@@ -1162,10 +1172,10 @@ class util {
 		
 		_url = "https://public.api.nicovideo.jp/v1/users/" + userId + ".json";
 		var _h = new Dictionary<string, string>();
-		_h.Add("User-Agent", "nicocas-Android/3.6.0");
+		_h.Add("User-Agent", "nicocas-Android/" + cfg.get("nicoCasAppVer"));
 		_h.Add("X-Frontend-Id", "90");
-		_h.Add("X-Frontend-Version", "3.6.0");
-		_h.Add("X-Os-Version", "22");
+		_h.Add("X-Frontend-Version", cfg.get("nicoCasAppVer"));
+		_h.Add("X-Os-Version", "25");
 		var _res = util.getPageSource(_url, container);
 		if (_res != null) {
 			var name = util.getRegGroup(_res, "\"nickname\":\"(.+?)\"");
@@ -1561,6 +1571,21 @@ class util {
 		} catch (Exception e) {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 		}
-		
+    }
+    public static void updateAppVersion(string appName, config config) {
+    	string url = null;
+   		string cfgName = null;
+    	if (appName == "niconico") {
+    		url = "https://play.google.com/store/apps/details?id=jp.nicovideo.android";
+    		cfgName = "niconicoAppVer";
+    	} else if (appName == "nicocas") {
+    		url = "https://play.google.com/store/apps/details?id=jp.co.dwango.nicocas";
+    		cfgName = "nicoCasAppVer";
+    	}
+    	var res = util.getPageSource(url);
+    	if (res == null) return; 
+		var ver = util.getRegGroup(res, ">Current Version<.+?>([\\d\\.]+?)<");
+		if (ver == null) return;
+		config.set(cfgName, ver);
     }
 }

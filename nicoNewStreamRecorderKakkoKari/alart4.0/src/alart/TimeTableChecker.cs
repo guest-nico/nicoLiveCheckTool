@@ -115,7 +115,7 @@ namespace namaichi.alart
 			try {
 				TimeLineInfo[] list = null;
 				string res = null;
-				var isNew = false;
+				var isNew = true;
 				if (isNew) {
 					url = "https://live.nicovideo.jp/timetable?date=" + url.Substring(url.IndexOf("=") + 1).Replace("-", "");
 					res = util.getPageSource(url);

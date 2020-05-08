@@ -698,12 +698,13 @@ namespace namaichi
         		util.debugWriteLine(ee.Message + " " + ee.StackTrace);
 	        }
 		}
-		public void updateLastHosoDate(AlartInfo ai, string hosoDate, string lvid, bool isMemberOnly) {
+		public void updateLastHosoDate(AlartInfo ai, string hosoDate, string lvid, bool isMemberOnly, string type) {
 			formAction(() => {
 		         try {
 					ai.LastHostDate = hosoDate;//now.Substring(0, now.Length - 0);
 					ai.lastLvid = lvid;
 					ai.recentColorMode = (isMemberOnly) ? 2 : 1;
+					ai.lastLvType = type;
 					
 					var i = alartListDataSource.IndexOf(ai);
 					if (i > -1)
@@ -899,7 +900,7 @@ namespace namaichi
 				
 				if (!isOk) {
 					//bool isFollow;
-					util.getUserName(ai.hostId, out isFollow, check.container, true);
+					util.getUserName(ai.hostId, out isFollow, check.container, true, config);
 					list[7, rowIndex].Value = (isFollow) ? "フォロー解除する" : "フォローする";
 				}
 				return isOk;
@@ -2355,7 +2356,7 @@ namespace namaichi
 				var n = ((ToolStripMenuItem)sender).Name.Substring(9, 1);
 				var path = config.get("appli" + n + "Path");
 				var args = config.get("appli" + n + "Args");
-				var url = "https://live2.nicovideo.jp/watch/" + ai.lastLvid;
+				var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lastLvid, "(\\d+)");
 				
 				util.appliProcess(path, url + " " + args);
 			} catch (Exception ee) {
@@ -2435,6 +2436,7 @@ namespace namaichi
 			
 			var elapsed = DateTime.Now - ai.lastHosoDt;
 			var isCheck = false;
+			if (ai.lastLvid.EndsWith("e")) return false;
 			if (ai.communityId == null ||
 			    	ai.communityId.StartsWith("ch")) {
 				isCheck = elapsed < TimeSpan.FromHours(100);
@@ -2442,13 +2444,26 @@ namespace namaichi
 			if (!isCheck) return false;
 			
 			util.debugWriteLine("check alart live onair " + ai.lastLvid);
-			return isOnAirLvid(ai.lastLvid);
+			var isOnAir = isOnAirLvid(ai.lastLvid, ai.lastLvType);
+			if (!isOnAir) ai.lastLvid += "e";
+			return isOnAir;
 		}
-		private bool isOnAirLvid(string lvid) {
-			var url = "https://live.nicovideo.jp/embed/" + lvid;
-			var res = util.getPageSource(url, null);
-			if (res == null) return false;
-			return res.IndexOf("status-onair\">") > -1;
+		private bool isOnAirLvid(string lvid, string type) {
+			var isProgramInfo = (check.container != null && 
+			    	(type == "user" || type == "community" ||
+			     		type == "channel"));
+			if (isProgramInfo) {
+				var url = "https://live2.nicovideo.jp/watch/" + lvid + "/programinfo";
+				var res = util.getPageSource(url, check.container);
+				if (res == null) return false; 
+				var ret = res.IndexOf("\"status\":\"end\"") == -1;
+				return ret;
+			} else {
+				var url = "https://live.nicovideo.jp/embed/" + lvid;
+				var res = util.getPageSource(url, null);
+				if (res == null) return false;
+				return res.IndexOf("status-onair\">") > -1;
+			}
 		}
 		private void changeIcon(int recentNum) {
 			var n = recentNum;
@@ -2472,7 +2487,7 @@ namespace namaichi
 				if (action == "なにもしない") return;
 				else if (action.StartsWith("最近行われた放送のURLを")) {
 					if (ai.lastLvid != null && ai.lastLvid != "") {
-						var url = "https://live2.nicovideo.jp/watch/" + ai.lastLvid;
+						var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lastLvid, "(\\d+)");
 						if (action.EndsWith("開く"))
 							util.openUrlBrowser(url, config);
 						else Clipboard.SetText(url);
@@ -4165,7 +4180,7 @@ namespace namaichi
 						
 						//util.debugWriteLine(i + " " + alartListDataSource[i].lastHosoDt + " " + alartList[7, i].Style.BackColor);
 						util.debugWriteLine("check history live onair " + hi.lvid);
-						var isOnAir = isOnAirLvid(hi.lvid);
+						var isOnAir = isOnAirLvid(hi.lvid, hi.type);
 						
 						if (!isOnAir)
 							historyListDataSource[i].onAirMode = 0;
@@ -4284,7 +4299,7 @@ namespace namaichi
 				return;
 			}
 			bool isFollow = false;
-			var name = util.getUserName(id, out isFollow, check.container, true);
+			var name = util.getUserName(id, out isFollow, check.container, true, config);
 			if (name == null) {
 				MessageBox.Show("読み込めませんでした", "");
 				return;
@@ -4754,6 +4769,7 @@ namespace namaichi
 				}
 				
 				var recentItems = items.OrderByDescending((a) => a.pubDateDt)
+					.Where((a) => history.Find((b) => ((RssItem)b.Value.Tag).lvId == a.lvId).Equals(default(KeyValuePair<DateTime, ToolStripMenuItem>)))
 					.Take(5).Select((RssItem a) => getRssItemToNotifyHistory(a));
 				history.AddRange(recentItems);
 				

@@ -36,6 +36,7 @@ namespace namaichi.info
 		//public RssItem ri;
 		public string keyword = null;
 		public int onAirMode = 1;//0-no 1-onAir 2-followerOnly
+		public string type = "";
 		/*
 		public HistoryInfo(DateTime dt, string lvid,
 				string title, string userName, 
@@ -66,6 +67,7 @@ namespace namaichi.info
 			this.userId = ri.userId;
 			this.communityId = ri.comId;
 			this.description = util.removeTag(ri.description);
+			this.type = ri.type;
 			//this.ri = ri;
 			onAirMode = ri.isMemberOnly ? 2 : 1;
 			

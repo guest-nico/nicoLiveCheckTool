@@ -270,7 +270,7 @@ namespace namaichi
 			if (num == null) return;
 			userIdText.Text = num;
 			var isFollow = false;
-			var userName = util.getUserName(num, out isFollow, form.check.container, true);
+			var userName = util.getUserName(num, out isFollow, form.check.container, true, form.config);
 			if (userName == null) return;
 			userFollowChkBox.Checked = isFollow;
 			userNameText.Text = userName;

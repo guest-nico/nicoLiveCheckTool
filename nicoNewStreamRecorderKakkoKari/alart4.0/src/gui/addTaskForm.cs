@@ -103,7 +103,7 @@ namespace namaichi
 					if (comName != null) t += (t == "" ? "" : " ") + comName;
 				}
 				if (hig.userId != null) {
-					var userName = util.getUserName(hig.userId, out isFollow, form.check.container, false);
+					var userName = util.getUserName(hig.userId, out isFollow, form.check.container, false, form.config);
 					if (userName != null) t += (t == "" ? "" : " ") + userName;
 				}
 				if (hig.dt != DateTime.MinValue) {

@@ -255,21 +255,19 @@ namespace namaichi.alart
 				//ok
 				var headers = new Dictionary<string, string>() {
 					{"Content-Type", "application/x-www-form-urlencoded; charset=utf-8"},
-					{"User-Agent", "Niconico/1.0 (Linux; U; Android 5.1.1; ja-jp; nicoandroid SM-G9550) Version/5.16.0"},
+					{"User-Agent", "Niconico/1.0 (Linux; U; Android 7.1.2; ja-jp; nicoandroid SM-G9550) Version/" + config.get("niconicoAppVer")},
 					{"Cookie", "SP_SESSION_KEY=" + userSession},
 					//{"Cookie2", "$Version=1"},
 					{"Accept-Language", "ja-jp"},
 					{"X-Nicovideo-Connection-Type", "wifi"},
 					{"X-Frontend-Id", "1"},
-					{"X-Frontend-Version", "5.16.0"},
-					{"X-Os-Version", "5.1.1"},
+					{"X-Frontend-Version", config.get("niconicoAppVer")},
+					{"X-Os-Version", "7.1.2"},
 					{"X-Request-With", "nicoandroid"},
 					{"X-Model-Name", "dreamqltecmcc"},
 					{"Connection", "Keep-Alive"},
 					{"Accept-Encoding", "gzip"},
 				};
-				
-				
 				
 				var param = "token=" + userSession;
 				param += "&registerId=" + pushToken;
@@ -298,11 +296,11 @@ namespace namaichi.alart
 				var userSession = util.getRegGroup(urlCookie, "user_session=(.+?);");
 				var headers = new Dictionary<string, string>() {
 					{"Content-Type", "application/json; charset=UTF-8"},
-					{"User-Agent", "nicocas-Android/3.3.0"},
+					{"User-Agent", "nicocas-Android/" + config.get("nicoCasAppVer")},
 					{"Cookie", "user_session=" + userSession},
 					{"X-Frontend-Id", "90"},
-					{"X-Frontend-Version", "3.3.0"},
-					{"X-Os-Version", "22"},
+					{"X-Frontend-Version", config.get("nicoCasAppVer")},
+					{"X-Os-Version", "25"},
 					{"X-Model-Name", "dream2qltechn"},
 					{"X-Connection-Environment", "wifi"},
 					{"Connection", "Keep-Alive"},
@@ -313,8 +311,8 @@ namespace namaichi.alart
 					{"User-Agent", "okhttp/3.10.0"},
 					{"Cookie", "user_session=" + userSession},
 					{"X-Frontend-Id", "90"},
-					{"X-Frontend-Version", "3.3.0"},
-					//{"X-Os-Version", "22"},
+					{"X-Frontend-Version", config.get("nicoCasAppVer")},
+					//{"X-Os-Version", "25"},
 					{"X-Request-With", "dream2qltechn"},
 					//{"X-Connection-Environment", "wifi"},
 					{"Connection", "Keep-Alive"},
@@ -330,14 +328,24 @@ namespace namaichi.alart
 				var param = "{\"token\": \"" + pushToken + "\"}";
 				byte[] postDataBytes = Encoding.ASCII.GetBytes(param);
 				var res = util.postResStr(url, headers, postDataBytes);
-				if (res == null) check.form.addLogText("スマホ通知のトークンの送信に失敗しました");
 				util.debugWriteLine("app push send token " + res);
+				if (res == null) {
+					util.updateAppVersion("nicocas", config);
+					headers["User-Agent"] = "nicocas-Android/" + config.get("nicoCasAppVer");
+					headers["X-Frontend-Version"] = config.get("nicoCasAppVer");
+					res = util.postResStr(url, headers, postDataBytes);
+					util.debugWriteLine("app push send token2 " + res);
+					if (res == null) {
+						check.form.addLogText("スマホ通知のトークンの送信に失敗しました");
+						return false;
+					}
+				}
 				
 				url = "https://api.cas.nicovideo.jp/v1/services/ex/app/nicocas_android/notification/blocks";
 				param = "{\"all\": [\"nicocas\"],\"channel\": [],\"user\": []}";
 				postDataBytes = Encoding.ASCII.GetBytes(param);
 				var _res = util.sendRequest(url, headers, postDataBytes, "DELETE");
-				if (res == null) check.form.addLogText("スマホ通知のブロック設定の送信に失敗しました");
+				//if (res == null) check.form.addLogText("スマホ通知のブロック設定の送信に失敗しました");
 				if (res != null) {
 					using (var getResStream = _res.GetResponseStream())
 					using (var resStream = new System.IO.StreamReader(getResStream)) {
@@ -352,7 +360,7 @@ namespace namaichi.alart
 				param = "{\"status\": \"disabled\",\"time\": {\"end\": \"0:00\", \"start\": \"7:00\"}}";
 				postDataBytes = Encoding.ASCII.GetBytes(param);
 				_res = util.sendRequest(url, headers, postDataBytes, "PUT");
-				if (res == null) check.form.addLogText("スマホ通知の時間設定の送信に失敗しました");
+				//if (res == null) check.form.addLogText("スマホ通知の時間設定の送信に失敗しました");
 				if (res != null) {
 					using (var getResStream = _res.GetResponseStream())
 					using (var resStream = new System.IO.StreamReader(getResStream)) {
@@ -363,7 +371,7 @@ namespace namaichi.alart
 					}
 				} else util.debugWriteLine("app push time put null");
 				
-				return res != null;
+				return true;
 			} catch (Exception e) {
 				util.debugWriteLine("gettoken error " + e.Message + e.Source + e.StackTrace + e.TargetSite);
 				check.form.addLogText("スマホ通知のトークンの送信中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);

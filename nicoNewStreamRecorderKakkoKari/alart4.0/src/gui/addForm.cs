@@ -761,6 +761,10 @@ namespace namaichi
 			var selectI = memberOnlyCheckList.SelectedIndex;
 			if (selectI != e.Index) return;
 			try {
+				if (e.Index == 3 && e.NewValue == CheckState.Unchecked ||
+					e.Index == 0 && memberOnlyCheckList.GetItemChecked(0) == true) {
+					DialogResult result = MessageBox.Show("無料部分（チラ見せ）のある有料放送も通知されなくなります");
+				}
 				if (e.Index == 0) {
 					for (var i = 1; i < memberOnlyCheckList.Items.Count; i++) {
 						memberOnlyCheckList.SetItemChecked(i, e.NewValue == CheckState.Checked);

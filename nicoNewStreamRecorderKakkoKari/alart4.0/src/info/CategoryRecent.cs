@@ -41,7 +41,7 @@ namespace namaichi.info
 		public statistics statistics;
 		public timeshift timeshift;
 		public nicoad nicoad;
-		public string isPayProgram;
+		public bool isPayProgram;
 		public string getThumb() {
 			if (!string.IsNullOrEmpty(socialGroup.thumbnailUrl)) 
 				return socialGroup.thumbnailUrl;
@@ -57,7 +57,7 @@ namespace namaichi.info
 				var pubDt = util.getUnixToDatetime(beginAt / 1000);
 				var item = new RssItem(title, id,
 						pubDt.ToString(), "", socialGroup.name, socialGroup.id,
-						programProvider.name, thumb, isFollowerOnly, ""
+						programProvider.name, thumb, isFollowerOnly, "", isPayProgram
 						);
 				item.setUserId(programProvider.id);
 				item.category = getCategoryName(categoryName);

@@ -180,6 +180,7 @@ namespace namaichi
 			this.toolStripMenuItem16 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem17 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem18 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem31 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem19 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripMenuItem();
 			this.displayNotAlartListMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -191,6 +192,7 @@ namespace namaichi
 			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem34 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem9 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator20 = new System.Windows.Forms.ToolStripSeparator();
@@ -314,6 +316,7 @@ namespace namaichi
 			this.openAppliJMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.notifyIconMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.notifyIconRecentSeparator = new System.Windows.Forms.ToolStripSeparator();
 			this.openNotifyIconMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.closeNotifyIconMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -495,16 +498,6 @@ namespace namaichi
 			this.historyListDeleteRowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.label3 = new System.Windows.Forms.Label();
 			this.notAlartList = new System.Windows.Forms.DataGridView();
-			this.dataGridViewTextBoxColumn16 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn17 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn18 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn19 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn20 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn21 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn22 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.キーワード = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn23 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn24 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.notAlartListMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.notAlartListOpenUrlMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.notAlartListOpenCommunityUrlMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -527,7 +520,17 @@ namespace namaichi
 			this.logListCopyMessageMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator23 = new System.Windows.Forms.ToolStripSeparator();
 			this.logListDeleteRowMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.notifyIconRecentSeparator = new System.Windows.Forms.ToolStripSeparator();
+			this.dataGridViewTextBoxColumn16 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn17 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn18 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn19 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn20 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn21 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn22 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.キーワード = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.notAlartListMemberOnlyColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn23 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn24 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.alartList)).BeginInit();
@@ -1587,6 +1590,7 @@ namespace namaichi
 									this.toolStripMenuItem16,
 									this.toolStripMenuItem17,
 									this.toolStripMenuItem18,
+									this.toolStripMenuItem31,
 									this.toolStripMenuItem19,
 									this.toolStripMenuItem20});
 			this.displayHistoryListMenu.Name = "displayHistoryListMenu";
@@ -1643,6 +1647,13 @@ namespace namaichi
 			this.toolStripMenuItem18.Text = "キーワード";
 			this.toolStripMenuItem18.Visible = false;
 			// 
+			// toolStripMenuItem31
+			// 
+			this.toolStripMenuItem31.Name = "toolStripMenuItem31";
+			this.toolStripMenuItem31.Size = new System.Drawing.Size(162, 22);
+			this.toolStripMenuItem31.Text = "限定";
+			this.toolStripMenuItem31.Visible = false;
+			// 
 			// toolStripMenuItem19
 			// 
 			this.toolStripMenuItem19.Name = "toolStripMenuItem19";
@@ -1666,6 +1677,7 @@ namespace namaichi
 									this.toolStripMenuItem6,
 									this.toolStripMenuItem7,
 									this.toolStripMenuItem1,
+									this.toolStripMenuItem34,
 									this.toolStripMenuItem8,
 									this.toolStripMenuItem9});
 			this.displayNotAlartListMenu.Name = "displayNotAlartListMenu";
@@ -1720,6 +1732,12 @@ namespace namaichi
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(162, 22);
 			this.toolStripMenuItem1.Text = "キーワード";
+			// 
+			// toolStripMenuItem34
+			// 
+			this.toolStripMenuItem34.Name = "toolStripMenuItem34";
+			this.toolStripMenuItem34.Size = new System.Drawing.Size(162, 22);
+			this.toolStripMenuItem34.Text = "限定";
 			// 
 			// toolStripMenuItem8
 			// 
@@ -2700,7 +2718,6 @@ namespace namaichi
 			// 
 			// notifyIcon
 			// 
-			this.notifyIcon.BalloonTipText = "";
 			this.notifyIcon.BalloonTipTitle = "title";
 			this.notifyIcon.ContextMenuStrip = this.notifyIconMenuStrip;
 			this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
@@ -2717,24 +2734,30 @@ namespace namaichi
 									this.toolStripSeparator4,
 									this.closeNotifyIconMenu});
 			this.notifyIconMenuStrip.Name = "notifyIconMenuStrip";
-			this.notifyIconMenuStrip.Size = new System.Drawing.Size(153, 82);
+			this.notifyIconMenuStrip.Size = new System.Drawing.Size(101, 60);
+			// 
+			// notifyIconRecentSeparator
+			// 
+			this.notifyIconRecentSeparator.Name = "notifyIconRecentSeparator";
+			this.notifyIconRecentSeparator.Size = new System.Drawing.Size(97, 6);
+			this.notifyIconRecentSeparator.Visible = false;
 			// 
 			// openNotifyIconMenu
 			// 
 			this.openNotifyIconMenu.Name = "openNotifyIconMenu";
-			this.openNotifyIconMenu.Size = new System.Drawing.Size(152, 22);
+			this.openNotifyIconMenu.Size = new System.Drawing.Size(100, 22);
 			this.openNotifyIconMenu.Text = "開く";
 			this.openNotifyIconMenu.Click += new System.EventHandler(this.OpenNotifyIconMenuClick);
 			// 
 			// toolStripSeparator4
 			// 
 			this.toolStripSeparator4.Name = "toolStripSeparator4";
-			this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
+			this.toolStripSeparator4.Size = new System.Drawing.Size(97, 6);
 			// 
 			// closeNotifyIconMenu
 			// 
 			this.closeNotifyIconMenu.Name = "closeNotifyIconMenu";
-			this.closeNotifyIconMenu.Size = new System.Drawing.Size(152, 22);
+			this.closeNotifyIconMenu.Size = new System.Drawing.Size(100, 22);
 			this.closeNotifyIconMenu.Text = "終了";
 			this.closeNotifyIconMenu.Click += new System.EventHandler(this.CloseNotifyIconMenuClick);
 			// 
@@ -4521,6 +4544,7 @@ namespace namaichi
 									this.dataGridViewTextBoxColumn21,
 									this.dataGridViewTextBoxColumn22,
 									this.キーワード,
+									this.notAlartListMemberOnlyColumn,
 									this.dataGridViewTextBoxColumn23,
 									this.dataGridViewTextBoxColumn24});
 			this.notAlartList.ContextMenuStrip = this.notAlartListMenu;
@@ -4537,79 +4561,6 @@ namespace namaichi
 			this.notAlartList.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.NotAlartListCellMouseDown);
 			this.notAlartList.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.NotAlartListRowsAdded);
 			this.notAlartList.Sorted += new System.EventHandler(this.NotAlartListSorted);
-			// 
-			// dataGridViewTextBoxColumn16
-			// 
-			this.dataGridViewTextBoxColumn16.DataPropertyName = "dt";
-			this.dataGridViewTextBoxColumn16.HeaderText = "放送開始日時";
-			this.dataGridViewTextBoxColumn16.Name = "dataGridViewTextBoxColumn16";
-			this.dataGridViewTextBoxColumn16.ReadOnly = true;
-			this.dataGridViewTextBoxColumn16.Width = 115;
-			// 
-			// dataGridViewTextBoxColumn17
-			// 
-			this.dataGridViewTextBoxColumn17.DataPropertyName = "title";
-			this.dataGridViewTextBoxColumn17.HeaderText = "放送タイトル";
-			this.dataGridViewTextBoxColumn17.Name = "dataGridViewTextBoxColumn17";
-			this.dataGridViewTextBoxColumn17.ReadOnly = true;
-			// 
-			// dataGridViewTextBoxColumn18
-			// 
-			this.dataGridViewTextBoxColumn18.DataPropertyName = "userName";
-			this.dataGridViewTextBoxColumn18.HeaderText = "放送者";
-			this.dataGridViewTextBoxColumn18.Name = "dataGridViewTextBoxColumn18";
-			this.dataGridViewTextBoxColumn18.ReadOnly = true;
-			// 
-			// dataGridViewTextBoxColumn19
-			// 
-			this.dataGridViewTextBoxColumn19.DataPropertyName = "communityName";
-			this.dataGridViewTextBoxColumn19.HeaderText = "コミュニティ名";
-			this.dataGridViewTextBoxColumn19.Name = "dataGridViewTextBoxColumn19";
-			this.dataGridViewTextBoxColumn19.ReadOnly = true;
-			// 
-			// dataGridViewTextBoxColumn20
-			// 
-			this.dataGridViewTextBoxColumn20.DataPropertyName = "lvid";
-			this.dataGridViewTextBoxColumn20.HeaderText = "放送ID";
-			this.dataGridViewTextBoxColumn20.Name = "dataGridViewTextBoxColumn20";
-			this.dataGridViewTextBoxColumn20.ReadOnly = true;
-			// 
-			// dataGridViewTextBoxColumn21
-			// 
-			this.dataGridViewTextBoxColumn21.DataPropertyName = "userId";
-			this.dataGridViewTextBoxColumn21.HeaderText = "ユーザーID";
-			this.dataGridViewTextBoxColumn21.Name = "dataGridViewTextBoxColumn21";
-			this.dataGridViewTextBoxColumn21.ReadOnly = true;
-			// 
-			// dataGridViewTextBoxColumn22
-			// 
-			this.dataGridViewTextBoxColumn22.DataPropertyName = "communityId";
-			this.dataGridViewTextBoxColumn22.HeaderText = "コミュニティID";
-			this.dataGridViewTextBoxColumn22.Name = "dataGridViewTextBoxColumn22";
-			this.dataGridViewTextBoxColumn22.ReadOnly = true;
-			// 
-			// キーワード
-			// 
-			this.キーワード.DataPropertyName = "keyword";
-			this.キーワード.HeaderText = "キーワード";
-			this.キーワード.Name = "キーワード";
-			this.キーワード.ReadOnly = true;
-			// 
-			// dataGridViewTextBoxColumn23
-			// 
-			this.dataGridViewTextBoxColumn23.DataPropertyName = "favorite";
-			this.dataGridViewTextBoxColumn23.HeaderText = "お気に入り";
-			this.dataGridViewTextBoxColumn23.Name = "dataGridViewTextBoxColumn23";
-			this.dataGridViewTextBoxColumn23.ReadOnly = true;
-			// 
-			// dataGridViewTextBoxColumn24
-			// 
-			this.dataGridViewTextBoxColumn24.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.dataGridViewTextBoxColumn24.DataPropertyName = "description";
-			this.dataGridViewTextBoxColumn24.HeaderText = "説明";
-			this.dataGridViewTextBoxColumn24.MinimumWidth = 30;
-			this.dataGridViewTextBoxColumn24.Name = "dataGridViewTextBoxColumn24";
-			this.dataGridViewTextBoxColumn24.ReadOnly = true;
 			// 
 			// notAlartListMenu
 			// 
@@ -4815,11 +4766,87 @@ namespace namaichi
 			this.logListDeleteRowMenu.Text = "この行を削除する";
 			this.logListDeleteRowMenu.Click += new System.EventHandler(this.LogListDeleteRowMenuClick);
 			// 
-			// notifyIconRecentSeparator
+			// dataGridViewTextBoxColumn16
 			// 
-			this.notifyIconRecentSeparator.Name = "notifyIconRecentSeparator";
-			this.notifyIconRecentSeparator.Size = new System.Drawing.Size(149, 6);
-			this.notifyIconRecentSeparator.Visible = false;
+			this.dataGridViewTextBoxColumn16.DataPropertyName = "dt";
+			this.dataGridViewTextBoxColumn16.HeaderText = "放送開始日時";
+			this.dataGridViewTextBoxColumn16.Name = "dataGridViewTextBoxColumn16";
+			this.dataGridViewTextBoxColumn16.ReadOnly = true;
+			this.dataGridViewTextBoxColumn16.Width = 115;
+			// 
+			// dataGridViewTextBoxColumn17
+			// 
+			this.dataGridViewTextBoxColumn17.DataPropertyName = "title";
+			this.dataGridViewTextBoxColumn17.HeaderText = "放送タイトル";
+			this.dataGridViewTextBoxColumn17.Name = "dataGridViewTextBoxColumn17";
+			this.dataGridViewTextBoxColumn17.ReadOnly = true;
+			// 
+			// dataGridViewTextBoxColumn18
+			// 
+			this.dataGridViewTextBoxColumn18.DataPropertyName = "userName";
+			this.dataGridViewTextBoxColumn18.HeaderText = "放送者";
+			this.dataGridViewTextBoxColumn18.Name = "dataGridViewTextBoxColumn18";
+			this.dataGridViewTextBoxColumn18.ReadOnly = true;
+			// 
+			// dataGridViewTextBoxColumn19
+			// 
+			this.dataGridViewTextBoxColumn19.DataPropertyName = "communityName";
+			this.dataGridViewTextBoxColumn19.HeaderText = "コミュニティ名";
+			this.dataGridViewTextBoxColumn19.Name = "dataGridViewTextBoxColumn19";
+			this.dataGridViewTextBoxColumn19.ReadOnly = true;
+			// 
+			// dataGridViewTextBoxColumn20
+			// 
+			this.dataGridViewTextBoxColumn20.DataPropertyName = "lvid";
+			this.dataGridViewTextBoxColumn20.HeaderText = "放送ID";
+			this.dataGridViewTextBoxColumn20.Name = "dataGridViewTextBoxColumn20";
+			this.dataGridViewTextBoxColumn20.ReadOnly = true;
+			// 
+			// dataGridViewTextBoxColumn21
+			// 
+			this.dataGridViewTextBoxColumn21.DataPropertyName = "userId";
+			this.dataGridViewTextBoxColumn21.HeaderText = "ユーザーID";
+			this.dataGridViewTextBoxColumn21.Name = "dataGridViewTextBoxColumn21";
+			this.dataGridViewTextBoxColumn21.ReadOnly = true;
+			// 
+			// dataGridViewTextBoxColumn22
+			// 
+			this.dataGridViewTextBoxColumn22.DataPropertyName = "communityId";
+			this.dataGridViewTextBoxColumn22.HeaderText = "コミュニティID";
+			this.dataGridViewTextBoxColumn22.Name = "dataGridViewTextBoxColumn22";
+			this.dataGridViewTextBoxColumn22.ReadOnly = true;
+			// 
+			// キーワード
+			// 
+			this.キーワード.DataPropertyName = "keyword";
+			this.キーワード.HeaderText = "キーワード";
+			this.キーワード.Name = "キーワード";
+			this.キーワード.ReadOnly = true;
+			// 
+			// notAlartListMemberOnlyColumn
+			// 
+			this.notAlartListMemberOnlyColumn.DataPropertyName = "isMemberOnly";
+			this.notAlartListMemberOnlyColumn.FillWeight = 60F;
+			this.notAlartListMemberOnlyColumn.HeaderText = "限定";
+			this.notAlartListMemberOnlyColumn.Name = "notAlartListMemberOnlyColumn";
+			this.notAlartListMemberOnlyColumn.ReadOnly = true;
+			this.notAlartListMemberOnlyColumn.Width = 35;
+			// 
+			// dataGridViewTextBoxColumn23
+			// 
+			this.dataGridViewTextBoxColumn23.DataPropertyName = "favorite";
+			this.dataGridViewTextBoxColumn23.HeaderText = "お気に入り";
+			this.dataGridViewTextBoxColumn23.Name = "dataGridViewTextBoxColumn23";
+			this.dataGridViewTextBoxColumn23.ReadOnly = true;
+			// 
+			// dataGridViewTextBoxColumn24
+			// 
+			this.dataGridViewTextBoxColumn24.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.dataGridViewTextBoxColumn24.DataPropertyName = "description";
+			this.dataGridViewTextBoxColumn24.HeaderText = "説明";
+			this.dataGridViewTextBoxColumn24.MinimumWidth = 30;
+			this.dataGridViewTextBoxColumn24.Name = "dataGridViewTextBoxColumn24";
+			this.dataGridViewTextBoxColumn24.ReadOnly = true;
 			// 
 			// MainForm
 			// 
@@ -4883,6 +4910,9 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem34;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem31;
+		private System.Windows.Forms.DataGridViewTextBoxColumn notAlartListMemberOnlyColumn;
 		private System.Windows.Forms.ToolStripSeparator notifyIconRecentSeparator;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator33;
 		private System.Windows.Forms.ToolStripMenuItem characterColorMenuItem;

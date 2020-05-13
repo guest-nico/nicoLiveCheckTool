@@ -91,7 +91,7 @@ namespace namaichi.alart
 			var thumbnailUrl = util.getJarPath()[0] + "/ImageCommunity/no thumb com.jpg";
 			var ri = new namaichi.info.RssItem("タイトル", "lv1000000",
 					DateTime.Now.ToString(), "放送説明", "コミュニティ名",
-					"コミュニティID", "放送者名", thumbnailUrl, "true", "");
+					"コミュニティID", "放送者名", thumbnailUrl, "true", "", false);
 			
 			popupSize = new Size[]{new PopupForm(ri, form.config, this, 0, null).Size,
 					new SmallPopupForm(ri, form.config, this, 0, null).Size};

@@ -26,6 +26,7 @@ namespace namaichi.info
 		public string title;
 		public string thumbnailUrl;
 		public bool isMemberOnly;
+		public bool isPayment;
 		public string[] tags = null;
 		public string itemRes;
 		public string userId = null;
@@ -41,7 +42,7 @@ namespace namaichi.info
 				string pubDate, string description,
 		        string comName, string comId,
 		        string hostName, string thumbnailUrl,
-		        string memberOnly, string itemRes) {
+		        string memberOnly, string itemRes, bool isPayment) {
 			this.lvId = lvId;
 			this.hostName = WebUtility.HtmlDecode(hostName);
 			this.comId = comId;
@@ -57,6 +58,7 @@ namespace namaichi.info
 				
 			}
 			this.itemRes = itemRes;
+			this.isPayment = isPayment;
 		}
 		public bool isContainKeyword(string keyword) {
 			return util.getRegGroup(lvId, "(" + keyword + ")") != null ||

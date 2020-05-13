@@ -155,7 +155,7 @@ namespace namaichi.alart
 									opentimeItem.contentOwner.name, 
 									opentimeItem.socialGroupId,
 									"", 
-									opentimeItem.thumbnailUrl, opentimeItem.isMemberOnly.ToString(), "");
+									opentimeItem.thumbnailUrl, opentimeItem.isMemberOnly.ToString(), "", l.isPayment);
 							ri.type = "official";
 							ri.tags = new string[]{""};
 							ri.pubDateDt = opentimeItem.onAirTime.beginAt;
@@ -181,7 +181,7 @@ namespace namaichi.alart
 									util.getCommunityName(hig.communityId, out _isFollow, null), 
 									hig.communityId,
 									"", 
-									hig.thumbnail, "false", "");
+									hig.thumbnail, "false", "", hig.isPayment);
 							ri.type = hig.type;
 							ri.tags = hig.tags;
 							ri.pubDateDt = hig.openDt;
@@ -253,7 +253,7 @@ namespace namaichi.alart
 						util.getCommunityName(hig.communityId, out _isFollow, null), 
 						hig.communityId,
 						"", 
-						hig.thumbnail, "false", "");
+						hig.thumbnail, "false", "", hig.isPayment);
 				ri.type = hig.type;
 				ri.tags = hig.tags;
 				ri.pubDateDt = hig.openDt;
@@ -361,7 +361,8 @@ namespace namaichi.alart
 						#endif
 						continue;
 					}
-					ret.Add(new TimeLineInfo(lv, title, description, provider_type, thumbnail_url, start_date, end_date, start_time, end_time, total_time, status));
+					var isPayment = mValue.IndexOf("\"timetablePage-ProgramList_TitleIcon-pay\">") > -1;
+					ret.Add(new TimeLineInfo(lv, title, description, provider_type, thumbnail_url, start_date, end_date, start_time, end_time, total_time, status, isPayment));
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 					#if DEBUG
@@ -391,7 +392,7 @@ namespace namaichi.alart
 		public TimeLineInfo(string id, string title, string description,
 				string provider_type, string thumbnail_url, string start_date,
 				string end_date, string start_time, string end_time,
-				string total_time, string status) {
+				string total_time, string status, bool isPayment) {
 			this.id = id;
 			this.title = title;
 			this.description = description; 
@@ -403,6 +404,7 @@ namespace namaichi.alart
 			this.end_time = end_time;
 			this.total_time = total_time;
 			this.status = status;
+			this.isPayment = isPayment;
 		}
 		public string id = null;
 		public string title = null;
@@ -415,6 +417,7 @@ namespace namaichi.alart
 		public string end_time = null;
 		public string total_time = null;
 		public string status = null;
+		public bool isPayment = false;
 		
 		public DateTime startTime = DateTime.MinValue;
 	}

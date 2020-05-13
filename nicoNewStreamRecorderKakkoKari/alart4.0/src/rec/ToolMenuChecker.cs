@@ -441,7 +441,7 @@ namespace namaichi.rec
 						false, false, false, false, false, 
 						false, false, false, false, false, 
 						false, false, false, "", 
-						comFollow, userFollow, "", "");
+						comFollow, userFollow, "", "", "True,True,True");
 				ai.setBehavior(behaviors);
 				ai.textColor = textColor;
 				ai.backColor = backColor;

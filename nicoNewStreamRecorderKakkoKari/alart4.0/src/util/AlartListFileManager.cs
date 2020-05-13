@@ -92,6 +92,7 @@ namespace namaichi.utility
 	                    	}
 	                    	sw.WriteLine(ckiStr);
 	                    }
+	                    else if (i == 35) sw.WriteLine(ai.memberOnlyMode.ToString());
 						else sw.WriteLine("");
 					}
 				}
@@ -222,6 +223,8 @@ namespace namaichi.utility
 					//if (lines[i + 1] == "" && lines[i + 2] == "" && lines[i + 3] == "") continue;
 					AlartInfo ai;
 					var comName = string.IsNullOrEmpty(lines[i + 4]) ? lines[i + 4] : WebUtility.HtmlDecode(lines[i + 4]);
+					var memberOnlyMode = getMemberOnly(lines[i + 35]);
+					
 					if (itemLineNum == 29) {
 			            ai = new AlartInfo(lines[i + 1], 
 								lines[i + 2], comName, lines[i + 5], 
@@ -245,7 +248,7 @@ namespace namaichi.utility
 								comFollow, userFollow, lines[i + 13], 
 								lines[i + 3], textColor, 
 								backColor, defaultSound, isDefaultSoundId, 
-								false, false, false, null, false);
+								false, false, false, null, false, "True,True,True");
 						if (lines[i + 23] == "true") setNamarokuRead(ai, namarokuRecRead);
 					} else {
 						ai = new AlartInfo(lines[i + 1], 
@@ -271,7 +274,7 @@ namespace namaichi.utility
 								lines[i + 3], textColor,
 								backColor, defaultSound, isDefaultSoundId,
 								isMustCom, isMustUser, isMustKeyword, cki,
-								isCustomKeyword);
+								isCustomKeyword, memberOnlyMode);
 					}
 					//if ((ai.communityId == null || ai.communityId == "") &&
 					//    (ai.hostId == null || ai.hostId == "")) continue;
@@ -439,6 +442,17 @@ namespace namaichi.utility
 			else if (namarokuRecRead == "appliH") ai.appliH = true;
 			else if (namarokuRecRead == "appliI") ai.appliI = true;
 			else if (namarokuRecRead == "appliJ") ai.appliJ = true;
+		}
+		private string getMemberOnly(string c) {
+			if (string.IsNullOrEmpty(c)) return "True,True,True";
+			
+			if (c.IndexOf(",") == -1) {
+				if (c == "0") return "True,True,True";
+				else if (c == "1") return "True,False,False";
+				else if (c == "2") return "False,True,True";
+				else return "True,True,True";
+			}
+			return c;
 		}
 	}
 }

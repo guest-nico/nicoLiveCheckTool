@@ -9,6 +9,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using System.Collections.Generic;
 using System.IO;
 using namaichi.info;
@@ -42,12 +43,20 @@ namespace namaichi
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
+			
+			setMemberOnlyListCloseEventHandler(this);
+			
 			if (editAi != null) {
 				setEditModeDisplay(editAi);
 				
 				if (isUserMode) setUserModeForm();
 				return;
 			}
+			
+			for (var i = 0; i < memberOnlyCheckList.Items.Count; i++) {
+				memberOnlyCheckList.SetItemChecked(i, true);
+			}
+			closeMemberOnlyList();
 			
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
@@ -73,6 +82,24 @@ namespace namaichi
 				//keywordText.Text = "";
 				setUserModeForm();
 			}
+			
+			
+			
+		}
+		private void setMemberOnlyListCloseEventHandler(Control parent) {
+			foreach (Control c in parent.Controls) {
+				if (c.Name != "memberOnlyList" &&
+				    (c.Name != "memberOnlyCheckList")) {
+				    c.Click += (o, e) => {
+				    	memberOnlyList.DroppedDown = false;
+				    	closeMemberOnlyList();
+					};
+					setMemberOnlyListCloseEventHandler(c);
+				}
+			}
+			parent.Click += (o, e) => {
+		    	memberOnlyList.DroppedDown = memberOnlyCheckList.Visible = false;
+			};
 		}
 		
 		void Button4Click(object sender, EventArgs e)
@@ -124,6 +151,12 @@ namespace namaichi
 					(userFollowChkBox.Checked) ? "フォロー解除する" : "フォローする";
 			if (communityNameText.Text == "" || comId == "official") comFollow = "";
 			if (userNameText.Text == "") userFollow = "";
+			
+			var memberOnly = getMemberOnly();
+			if (memberOnly == null) {
+				MessageBox.Show("通常放送、限定放送、有料放送のいずれかにチェックが必要です");
+				return;
+			}
 			var _ret = new AlartInfo(comId, userId, 
 					communityNameText.Text, userNameText.Text, 
 					"", addDate, isPopupChkBox.Checked, 
@@ -140,7 +173,7 @@ namespace namaichi
 					defaultSoundList.SelectedIndex, 
 					isDefaultSoundIdChkBox.Checked, isMustComChkBox.Checked,
 					isMustUserChkBox.Checked, isMustKeywordChkBox.Checked,
-					customKw, isCustomKeywordRadioBtn.Checked);
+					customKw, isCustomKeywordRadioBtn.Checked, memberOnly);
 			if (!duplicationCheckOk(_ret)) return;
 			ret = _ret;
 			util.debugWriteLine("addform add okbtn " + _ret.hostId + " " + _ret.communityId + " " + _ret.keyword);
@@ -153,10 +186,10 @@ namespace namaichi
 			userNameText.Text = "";
 			if (comId != null) GetCommunityInfoBtnClickProcess(true);
 			if (userId != null) GetUserInfoBtnClickProcess(true);
-			var comFollow = string.IsNullOrEmpty(comId) ? "" :
+			var comFollow = string.IsNullOrEmpty(comId) || form.check.container == null ? "" :
 					(communityFollowChkBox.Checked) ? "フォロー解除する" : "フォローする";
 			if (communityNameText.Text == "" || comId == "official") comFollow = "";
-			var userFollow = string.IsNullOrEmpty(userId) ? "":
+			var userFollow = string.IsNullOrEmpty(userId) || form.check.container == null ? "":
 					(userFollowChkBox.Checked) ? "フォロー解除する" : "フォローする";
 			
 			var isNoKeyword = (isSimpleKeywordRadioBtn.Checked && keywordText.Text == "") ||
@@ -175,6 +208,12 @@ namespace namaichi
 					MessageBox.Show("「含まない」以外の行が必要です");
 					return;
 				}
+			}
+			
+			var memberOnly = getMemberOnly();
+			if (memberOnly == null) {
+				MessageBox.Show("通常放送、限定放送、有料放送のいずれかにチェックが必要です");
+				return;
 			}
 			
 			editAi.communityId = comId;
@@ -209,6 +248,7 @@ namespace namaichi
 			editAi.isMustKeyword = isMustKeywordChkBox.Checked;
 			editAi.cki = customKw;
 			editAi.isCustomKeyword = isCustomKeywordRadioBtn.Checked;
+			editAi.memberOnlyMode = memberOnly;
 			/*
 			var _ret = new AlartInfo(comId, userId, 
 					communityNameText.Text, userNameText.Text, 
@@ -451,7 +491,7 @@ namespace namaichi
 				else comThumbBox.Image = new Bitmap(img, comThumbBox.Size);
 			
 				var res = DialogResult.No;
-				if (!isOkBtn) {
+				if (!isOkBtn && num != "co00") {
 					res = MessageBox.Show(type + "画像を取得し直しますか？", 
 							type + "画像が既に存在します", MessageBoxButtons.YesNo,
 							MessageBoxIcon.Warning);
@@ -509,6 +549,8 @@ namespace namaichi
 				editAi.backColor;
 			defaultSoundList.SelectedIndex = editAi.soundType;
 			isDefaultSoundIdChkBox.Checked = editAi.isSoundId;
+			setMemberOnlyListInit(editAi);
+			//memberOnlyList.SelectedIndex = editAi.memberOnlyMode;
 			
 			Image comThumb = null, userThumb = null;
 			if (!string.IsNullOrEmpty(editAi.communityId) && editAi.communityId != "official")
@@ -538,8 +580,26 @@ namespace namaichi
 			backColorBtn.BackColor = sampleColorText.BackColor = ColorTranslator.FromHtml(form.config.get("defaultBackColor"));
 			defaultSoundList.SelectedIndex = int.Parse(form.config.get("defaultSound"));
 			isDefaultSoundIdChkBox.Checked = bool.Parse(form.config.get("IsDefaultSoundId"));
+			//memberOnlyList.SelectedIndex = 0;
 		}
-		
+		private void setMemberOnlyListInit(AlartInfo editAi) {
+			var c = editAi.memberOnlyMode;
+			
+			if (editAi.memberOnlyMode == null) editAi.memberOnlyMode = "True,True,True";
+			if (c.IndexOf(",") == -1) {
+				if (c == "0") editAi.memberOnlyMode = "True,True,True";
+				else if (c == "1") editAi.memberOnlyMode = "True,False,False";
+				else if (c == "2") editAi.memberOnlyMode = "False,True,True";
+			}
+			
+			var types = editAi.memberOnlyMode.Split(',');
+			memberOnlyCheckList.SetItemChecked(1, bool.Parse(types[0]));
+			memberOnlyCheckList.SetItemChecked(2, bool.Parse(types[1]));
+			memberOnlyCheckList.SetItemChecked(3, bool.Parse(types[2]));
+			if (memberOnlyCheckList.CheckedIndices.Count == 3)
+				memberOnlyCheckList.SetItemChecked(0, true);
+			closeMemberOnlyList();
+		}
 		void TextColorBtnClick(object sender, EventArgs e)
 		{
 			var c = new ColorDialog();
@@ -613,5 +673,133 @@ namespace namaichi
 			communityId.Text = "official";
 			getCommunityInfoBtn.PerformClick();
 		}
+		
+		void MemberOnlyListDropDown(object sender, EventArgs e)
+		{
+			//memberOnlyCheckList.Visible = true;
+		}
+		
+		void MemberOnlyCheckListLeave(object sender, EventArgs e)
+		{
+			util.debugWriteLine("MemberOnlyCheckListLeave " + memberOnlyList.Focused);
+			if (!memberOnlyList.Focused) {
+				closeMemberOnlyList();
+			}
+		}
+		void MemberOnlyListLeave(object sender, EventArgs e)
+		{
+			util.debugWriteLine("MemberOnlyListLeave " + memberOnlyCheckList.Focused);
+			if (!memberOnlyCheckList.Focused) {
+				closeMemberOnlyList();
+			}
+		}
+		
+		void MemberOnlyListMouseDown(object sender, MouseEventArgs e)
+		{
+			util.debugWriteLine("MemberOnlyListMouseDown");
+			util.debugWriteLine("MemberOnlyListMouseDown " + " " + memberOnlyCheckList.Visible);
+			if (memberOnlyCheckList.Visible) {
+				closeMemberOnlyList();
+				memberOnlyList.DroppedDown = false;
+			} else {
+				memberOnlyCheckList.Visible = true;
+				memberOnlyCheckList.Focus();
+			}
+		}
+		
+		void MemberOnlyCheckListClick(object sender, EventArgs e)
+		{
+			
+		}
+		
+		void MemberOnlyListDropDownClosed(object sender, EventArgs e)
+		{
+			util.debugWriteLine("close");
+			if (memberOnlyCheckList.Focused) {
+				//memberOnlyList.DroppedDown = true;
+			} else {
+				var l = memberOnlyCheckList.Location;
+				//var rec = RectangleToScreen(new Rectangle(l.X, l.Y, 0,0));
+				var lefttop = memberOnlyCheckList.PointToScreen(new Point(0,0));
+				var rightbottom = memberOnlyCheckList.PointToScreen(new Point(Width,Height));
+				
+				var x = MousePosition.X;
+				var y = MousePosition.Y;
+				if (x < lefttop.X || 
+					     y < lefttop.Y ||
+					     x > rightbottom.X || 
+					     y > rightbottom.Y) {
+					closeMemberOnlyList();
+				}
+				else memberOnlyList.DroppedDown = true;
+			}
+		}
+		void closeMemberOnlyList() {
+			memberOnlyCheckList.Visible = false;
+			var t = "";
+			var indices = memberOnlyCheckList.CheckedIndices;
+			if (indices.IndexOf(0) > -1) t = "条件を設定しない";
+			else {
+				foreach (int i in indices) {
+					if (t != "") t += "・";
+					t += ((string)memberOnlyCheckList.Items[i]).Substring(0, 2);
+				}
+				t = t == "" ? "何も通知しない" : (t + "放送を通知する");
+			}
+			memberOnlyList.Items.Add(t);
+			//var a = memberOnlyList.Items;
+			memberOnlyList.SelectedIndex = -1;
+			memberOnlyList.SelectedItem = null;
+			
+			memberOnlyList.Text = t;
+			//memberOnlyList.SelectedText = t;
+		}
+		
+		void MemberOnlyCheckListItemCheck(object sender, ItemCheckEventArgs e)
+		{
+			util.debugWriteLine(e.Index + " " + (e.NewValue == CheckState.Checked));
+			var selectI = memberOnlyCheckList.SelectedIndex;
+			if (selectI != e.Index) return;
+			try {
+				if (e.Index == 0) {
+					for (var i = 1; i < memberOnlyCheckList.Items.Count; i++) {
+						memberOnlyCheckList.SetItemChecked(i, e.NewValue == CheckState.Checked);
+					}
+				} else {
+					var isAllCheck = true;
+					for (var i = 1; i < memberOnlyCheckList.Items.Count; i++) {
+						var c = e.Index == i ? e.NewValue == CheckState.Checked : memberOnlyCheckList.GetItemChecked(i); 
+						if (!c) isAllCheck = false;
+					}
+					if (isAllCheck) memberOnlyCheckList.SetItemChecked(0, true);
+					else memberOnlyCheckList.SetItemChecked(0, false);
+				}
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
+		}
+		private string getMemberOnly() {
+			var ret = "";
+			for (var i = 1; i < memberOnlyCheckList.Items.Count; i++) {
+				if (i != 1) ret += ",";
+				ret += memberOnlyCheckList.CheckedIndices.IndexOf(i) > -1;
+			}
+			return Array.IndexOf(ret.Split(','), "True") == -1 ? null : ret;
+		}
+		
+		void IsOfficialChkBtnCheckedChanged(object sender, EventArgs e)
+		{
+			if (isOfficialChkBtn.Checked) {
+				communityId.Text = "official";
+				communityId.Enabled = false;
+				getCommunityInfoBtn.PerformClick();
+			} else {
+				communityId.Text = "";
+				communityNameText.Text = "";
+				communityId.Enabled = true;
+				getCommunityInfoBtn.PerformClick();
+			}
+		}
 	}
+
 }

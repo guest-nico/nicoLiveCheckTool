@@ -30,6 +30,7 @@ namespace namaichi.rec
 		public string group = null;
 		public List<string> category = null;
 		public bool isMemberOnly = false;
+		public bool isPayment = false;
 		public DateTime openDt = DateTime.MinValue;
 		public string userName = null;
 		public HosoInfoGetter()
@@ -79,6 +80,8 @@ namespace namaichi.rec
 			isMemberOnly = res.IndexOf("isFollowerOnly&quot;:true,&quot;") > -1
 				|| res.IndexOf("\"program_icon onlym\">フォロワー限定") > -1
 				|| res.IndexOf("\"program-status-icon community-only\">フォロワー限定") > -1;
+			isPayment = res.IndexOf("&quot;payment&quot;") > -1;
+			
 			return ret;
 		}
 		private bool setJikkenInfo(string res) {

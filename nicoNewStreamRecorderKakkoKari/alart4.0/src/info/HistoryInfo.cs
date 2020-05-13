@@ -30,6 +30,7 @@ namespace namaichi.info
 		public bool isInListUser = true;
 		public bool isInListCom = true;
 		public bool isInListKeyword = true;
+		public bool isInListMemberOnly = true;
 		public string favorite = "";
 		public Color textColor = Color.Black;
 		public Color backColor = Color.White;
@@ -37,6 +38,8 @@ namespace namaichi.info
 		public string keyword = null;
 		public int onAirMode = 1;//0-no 1-onAir 2-followerOnly
 		public string type = "";
+		public bool isMemberOnly = false;
+		public bool isPayment = false;
 		/*
 		public HistoryInfo(DateTime dt, string lvid,
 				string title, string userName, 
@@ -70,7 +73,8 @@ namespace namaichi.info
 			this.type = ri.type;
 			//this.ri = ri;
 			onAirMode = ri.isMemberOnly ? 2 : 1;
-			
+			this.isMemberOnly = ri.isMemberOnly;
+			this.isPayment = ri.isPayment;
 			
 			setFavoriteFromAiList(targetAi, ri, this);
 			
@@ -205,6 +209,18 @@ namespace namaichi.info
 			get { return keyword; }
             set { this.keyword = value; }
         }
+		public string IsMemberOnly
+        {
+			get {
+				var t = isMemberOnly ? "限定" : "";
+				if (isPayment) t += (t == "" ? "" : ",") + "有料";
+				return t; 
+			}
+			set { 
+				this.isMemberOnly = value.IndexOf("限定") > -1;
+				this.isPayment = value.IndexOf("有料") > -1;
+			}
+        }
 		public string Favorite
         {
 			get { return favorite; }
@@ -215,6 +231,5 @@ namespace namaichi.info
 			get { return description; }
             set { this.description = value; }
         }
-		
 	}
 }

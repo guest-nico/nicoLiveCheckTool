@@ -1959,13 +1959,18 @@ namespace namaichi
 			}
 			
 			var showHistoryListColumns = config.get("ShowHistoryColumns");
+			if (showHistoryListColumns.Length == 10) 
+				showHistoryListColumns = showHistoryListColumns.Insert(8, "0");
 			for(var i = 0; i < historyList.Columns.Count; i++) {
+				//util.debugWriteLine("test " + historyList.Columns[i].Name);
 				historyList.Columns[i].Visible = showHistoryListColumns[i] == '1';
 				var menu = (ToolStripMenuItem)displayHistoryListMenu.DropDownItems[i];
 				menu.Checked = historyList.Columns[i].Visible;
 			}
 			
 			var showNotAlartListColumns = config.get("ShowNotAlartColumns");
+			if (showNotAlartListColumns.Length == 10) 
+				showNotAlartListColumns = showNotAlartListColumns.Insert(8, "1");
 			for(var i = 0; i < notAlartList.Columns.Count; i++) {
 				notAlartList.Columns[i].Visible = showNotAlartListColumns[i] == '1';
 				var menu = (ToolStripMenuItem)displayNotAlartListMenu.DropDownItems[i];
@@ -4020,6 +4025,9 @@ namespace namaichi
 			} else if (e.ColumnIndex == 7) {
 				e.CellStyle.BackColor = (hi.isInListKeyword || string.IsNullOrEmpty(hi.keyword)) ?
 					Color.White : Color.FromArgb(255,255,150);
+			} else if (e.ColumnIndex == 8) {
+				e.CellStyle.BackColor = hi.isInListMemberOnly ?
+					Color.White : Color.FromArgb(255,255,150);
 			}
 		}
 		
@@ -4323,8 +4331,8 @@ namespace namaichi
 							"", name, "", now, false, false, 
 							false, false, false, false, false, 
 							false, false, false, false, false, 
-							false, false, false, "", 
-							"フォローする", followStr, "", "");
+							false, false, false, "",
+							"フォローする", followStr, "", "", "True,True,True");
 					_ai.setBehavior(behaviors);
 					_ai.textColor = textColor;
 					_ai.backColor = backColor;

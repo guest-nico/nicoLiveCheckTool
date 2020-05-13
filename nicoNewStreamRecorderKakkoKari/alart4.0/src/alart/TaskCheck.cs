@@ -48,7 +48,7 @@ namespace namaichi.alart
 		}
 		private void process(TaskInfo ti) {
 			var item = new RssItem(ti.lvId, ti.lvId, "", ti.args, "", "",
-			                     "", "", "", "");
+			                     "", "", "", "", false);
 					               
 			if (ti.appliA && !form.notifyOffList[7]) {
 				var appliAPath = form.config.get("appliAPath");

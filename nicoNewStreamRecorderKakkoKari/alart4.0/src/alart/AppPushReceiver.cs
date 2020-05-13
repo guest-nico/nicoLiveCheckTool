@@ -773,7 +773,7 @@ namespace namaichi.alart
 					
 				}
 				
-				var i = new RssItem(title, lvid, dt.ToString(), hg.description, comName, hg.communityId, hostName, hg.thumbnail, hg.isMemberOnly.ToString(), "");
+				var i = new RssItem(title, lvid, dt.ToString(), hg.description, comName, hg.communityId, hostName, hg.thumbnail, hg.isMemberOnly.ToString(), "", hg.isPayment);
 				i.setUserId(hg.userId);
 				i.setTag(hg.tags);
 				i.category = hg.category;

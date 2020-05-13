@@ -63,7 +63,9 @@ namespace namaichi.info
 		public List<CustomKeywordInfo> cki = null;
 		public bool isCustomKeyword = false;
 		//public bool isSimpleKeywordOr = true;
-		
+		public string memberOnlyMode = "True,True,True"; //0-両方 1-限定放送はアラートしない 2-限定放送のみアラート
+										//bool 通常放送,限定放送,有料放送
+
 		public AlartInfo(string communityId, string hostId, 
 				string communityName, string hostName, 
 				string lastHostDate, string addDate,
@@ -80,7 +82,7 @@ namespace namaichi.info
 				bool isDefaultSoundId, bool isMustCom,
 				bool isMustUser, bool isMustKeyword,
 				List<CustomKeywordInfo> customKeyword,
-				bool isCustomKeyword) {
+				bool isCustomKeyword, string memberOnlyMode) {
 			this.communityId = communityId;
 			this.hostId = hostId;
 			this.communityName = communityName;
@@ -118,7 +120,8 @@ namespace namaichi.info
 			this.isMustKeyword = isMustKeyword;
 			this.cki = customKeyword;
 			this.isCustomKeyword = isCustomKeyword;
-			//this.isSimpleKeywordOr = isSimpleKeywordOr; 
+			//this.isSimpleKeywordOr = isSimpleKeywordOr;
+			this.memberOnlyMode = memberOnlyMode;
 		}
 		public AlartInfo(string communityId, string hostId, 
 				string communityName, string hostName, 
@@ -131,7 +134,7 @@ namespace namaichi.info
 				bool appliJ,
 				string memo, string communityFollow, 
 				string hostFollow, string lastLvid, 
-				string keyword) {
+				string keyword, string memberOnlyMode) {
 			this.communityId = communityId;
 			this.hostId = hostId;
 			this.communityName = communityName;
@@ -159,10 +162,11 @@ namespace namaichi.info
 			this.hostFollow = hostFollow;
 			this.lastLvid = lastLvid;
 			this.keyword = keyword;
+			this.memberOnlyMode = memberOnlyMode;
 		}
 		public string CommunityId
         {
-            get { return communityId; }
+            get { return communityId;}
             set { this.communityId = value; }
         }
         public string HostId

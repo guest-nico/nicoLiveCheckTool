@@ -89,7 +89,7 @@ namespace namaichi.info
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			}
-			var ri = new RssItem(title, lvId, "", description, comName, comId, hostName, thumbnailUrl, memberOnly, "");
+			var ri = new RssItem(title, lvId, "", description, comName, comId, hostName, thumbnailUrl, memberOnly, "", true);
 			favorite = getFavorite(alartData, ri, favorite);
 			favorite = getFavorite(userAlartData, ri, favorite);
 			

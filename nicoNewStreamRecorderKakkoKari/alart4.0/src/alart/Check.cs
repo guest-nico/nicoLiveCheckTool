@@ -172,12 +172,10 @@ namespace namaichi.alart
 							alartItem.hostName = "";
 						
 						
-						var isNosetComId = alartItem.communityId == "" ||
-								alartItem.communityId == null;
-						var isNosetHostName = alartItem.hostName == "" ||
-								alartItem.hostName == null;
+						var isNosetComId = string.IsNullOrEmpty(alartItem.communityId);
+						var isNosetHostName = string.IsNullOrEmpty(alartItem.hostName);
 						var isNosetKeyword = (alartItem.isCustomKeyword && alartItem.cki == null) ||
-							(!alartItem.isCustomKeyword && alartItem.keyword == "" || alartItem.keyword == null);
+							(!alartItem.isCustomKeyword && string.IsNullOrEmpty(alartItem.keyword));
 						if (isNosetComId && isNosetHostName && isNosetKeyword) continue;
 						
 						var isComOk = alartItem.communityId == item.comId || (alartItem.communityId == "official" && item.type == "official");
@@ -197,7 +195,7 @@ namespace namaichi.alart
 						
 						if (!isAlartMatch(alartItem, isComOk, 
 								isUserOk, isKeywordOk, isNosetComId, 
-								isNosetHostName, isNosetKeyword)) {
+								isNosetHostName, isNosetKeyword, item)) {
 							if ((!isNosetComId && isComOk) ||
 								    (!isNosetHostName && isUserOk)) {
 								nearAlartAi = alartItem;
@@ -292,7 +290,7 @@ namespace namaichi.alart
 		}
 		private bool isAlartMatch(AlartInfo alartItem, bool isComOk, 
 				bool isUserOk, bool isKeywordOk, bool isNosetComId, 
-				bool isNosetHostName, bool isNosetKeyword) {
+				bool isNosetHostName, bool isNosetKeyword, RssItem ri) {
 			if (!isComOk && !isUserOk && !isKeywordOk) return false;
 			if (alartItem.isMustCom && !isNosetComId && !isComOk) 
 				return false;
@@ -316,6 +314,7 @@ namespace namaichi.alart
 				    !(!isNosetKeyword && isKeywordOk)) {
 				return false;
 			}
+			if (!isMemberOnlyOk(alartItem, ri)) return false;
 			
 			return true;
 		}
@@ -856,10 +855,12 @@ namespace namaichi.alart
 			var isComOk = nearAlartAi.communityId == item.comId;
 			var isUserOk = nearAlartAi.hostName == item.hostName;
 			var isKeywordOk = item.isMatchKeyword(nearAlartAi);
-					
+			var isMemberOnlyOk = this.isMemberOnlyOk(nearAlartAi, item);
+			
 			hi.isInListCom = (!isNosetComId && isComOk);
 			hi.isInListUser = (!isNosetHostName && isUserOk);
 			hi.isInListKeyword = (!isNosetKeyword && isKeywordOk);
+			hi.isInListMemberOnly = isMemberOnlyOk; 
 			hi.backColor = nearAlartAi.backColor;
 			hi.textColor = nearAlartAi.textColor;
 			//hi.userId = nearAlartAi.hostId;
@@ -929,6 +930,20 @@ namespace namaichi.alart
 				form.sortLiveList();
 			if (bool.Parse(form.config.get("FavoriteUp")))
 				form.upLiveListFavorite();
+		}
+		private bool isMemberOnlyOk(AlartInfo alartItem, RssItem ri) {
+			var c = alartItem.memberOnlyMode;
+			if (c.IndexOf(",") == -1) {
+				if (c == "0") alartItem.memberOnlyMode = "True,True,True";
+				else if (c == "1") alartItem.memberOnlyMode = "True,False,False";
+				else if (c == "2") alartItem.memberOnlyMode = "False,True,True";
+			}
+			
+			var types = alartItem.memberOnlyMode.Split(',');
+			if (!bool.Parse(types[0]) && !ri.isMemberOnly && !ri.isPayment) return false;
+			else if (!bool.Parse(types[1]) && ri.isMemberOnly) return false;
+			else if (!bool.Parse(types[2]) && ri.isPayment) return false;
+			return true;
 		}
 	}
 	class DoProcessInfo {

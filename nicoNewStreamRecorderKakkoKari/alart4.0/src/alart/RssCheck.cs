@@ -97,7 +97,7 @@ namespace namaichi.alart
 						_m.Groups[4].Value, _m.Groups[7].Value,
 						_m.Groups[8].Value, _m.Groups[11].Value,
 						_m.Groups[6].Value, _m.Groups[9].Value,
-						_m.Groups[0].Value);
+						_m.Groups[0].Value, false);
 				var cate = new List<string>();
 				cate.AddRange(_m.Groups[5].Value.Split(','));
 				item.category = cate;

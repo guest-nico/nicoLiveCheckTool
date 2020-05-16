@@ -145,9 +145,9 @@ namespace namaichi
 			
 			var now = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
 			var addDate = now;//now.Substring(0, now.Length - 3);
-			var comFollow = string.IsNullOrEmpty(comId) ? "" :
+			var comFollow = string.IsNullOrEmpty(comId) || form.check.container == null ? "" :
 					((communityFollowChkBox.Checked) ? "フォロー解除する" : "フォローする");
-			var userFollow = string.IsNullOrEmpty(userId) ? "" :
+			var userFollow = string.IsNullOrEmpty(userId) || form.check.container == null ? "" :
 					(userFollowChkBox.Checked) ? "フォロー解除する" : "フォローする";
 			if (communityNameText.Text == "" || comId == "official") comFollow = "";
 			if (userNameText.Text == "") userFollow = "";
@@ -631,7 +631,7 @@ namespace namaichi
 			f.ShowDialog();
 			if (f.ret == null) {
 				if (f.DialogResult == DialogResult.OK) {
-					customKeywordBtn.Text = "カスタム設定(未設定)";
+					customKeywordBtn.Text = "カスタム設定";
 					customKw = null;
 				}
 				return;

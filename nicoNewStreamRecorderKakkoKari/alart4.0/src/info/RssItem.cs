@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Net;
@@ -79,9 +80,6 @@ namespace namaichi.info
 		}
 		private bool isMatchSimpleKeyword(string keyword) {
 			var keys = getStringToWordsList(keyword);
-			//var keys = keyword.Split(new char[]{' ', '　'});
-			//if (description.IndexOf("ロク") > -1)
-			//	util.debugWriteLine(keyword);
 			
 			//not
 			foreach (var k in keys) {
@@ -100,6 +98,7 @@ namespace namaichi.info
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			}
+			if (keys.Find(a => !a.StartsWith("-") && !a.StartsWith("ー")) == null) return true;
 			/*
 			//and
 			foreach (var k in keys) {
@@ -185,6 +184,8 @@ namespace namaichi.info
 		}
 		private bool isMatchCustomKeyword(List<CustomKeywordInfo> ckis) {
 			if (!isNotOk(ckis)) return false;
+			if (ckis.Find(a => a.matchType != "含まない") == null) return true;
+			
 			if (!isAndOk(ckis)) return false;
 			if (!isOrOk(ckis)) return false;
 			return true;

@@ -100,8 +100,6 @@ namespace namaichi
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.memberOnlyCheckList = new System.Windows.Forms.CheckedListBox();
-			this.label15 = new System.Windows.Forms.Label();
-			this.label14 = new System.Windows.Forms.Label();
 			this.label16 = new System.Windows.Forms.Label();
 			this.officialBtn = new System.Windows.Forms.Button();
 			this.label13 = new System.Windows.Forms.Label();
@@ -652,7 +650,7 @@ namespace namaichi
 			this.customKeywordBtn.Name = "customKeywordBtn";
 			this.customKeywordBtn.Size = new System.Drawing.Size(143, 23);
 			this.customKeywordBtn.TabIndex = 27;
-			this.customKeywordBtn.Text = "カスタム設定(未設定)";
+			this.customKeywordBtn.Text = "カスタム設定";
 			this.customKeywordBtn.UseVisualStyleBackColor = true;
 			this.customKeywordBtn.Click += new System.EventHandler(this.CustomKeywordBtnClick);
 			// 
@@ -701,8 +699,6 @@ namespace namaichi
 			// panel1
 			// 
 			this.panel1.Controls.Add(this.memberOnlyCheckList);
-			this.panel1.Controls.Add(this.label15);
-			this.panel1.Controls.Add(this.label14);
 			this.panel1.Controls.Add(this.label1);
 			this.panel1.Controls.Add(this.groupBox1);
 			this.panel1.Controls.Add(this.linkLabel1);
@@ -757,22 +753,6 @@ namespace namaichi
 			this.memberOnlyCheckList.TabIndex = 34;
 			this.memberOnlyCheckList.Visible = false;
 			this.memberOnlyCheckList.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.MemberOnlyCheckListItemCheck);
-			// 
-			// label15
-			// 
-			this.label15.Location = new System.Drawing.Point(338, 109);
-			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(68, 15);
-			this.label15.TabIndex = 4;
-			this.label15.Text = "コミュニティID";
-			// 
-			// label14
-			// 
-			this.label14.Location = new System.Drawing.Point(338, 127);
-			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(68, 15);
-			this.label14.TabIndex = 4;
-			this.label14.Text = "コミュニティID";
 			// 
 			// label16
 			// 
@@ -868,8 +848,6 @@ namespace namaichi
 		}
 		private System.Windows.Forms.Label label16;
 		private System.Windows.Forms.CheckBox isOfficialChkBtn;
-		private System.Windows.Forms.Label label14;
-		private System.Windows.Forms.Label label15;
 		private System.Windows.Forms.CheckedListBox memberOnlyCheckList;
 		private System.Windows.Forms.Label label13;
 		private System.Windows.Forms.ComboBox memberOnlyList;

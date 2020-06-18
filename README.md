@@ -34,7 +34,7 @@ NAudio
 <https://github.com/naudio/NAudio/>  
 Copyright (C) 2011 Mark Heath  
 Microsoft Public License  
-<https://github.com/naudio/NAudio/blob/master/license.txt  >  
+<https://github.com/naudio/NAudio/blob/master/license.txt>  
   
 Bouncy Castle  
 <http://www.bouncycastle.org/>  

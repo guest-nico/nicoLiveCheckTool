@@ -30,12 +30,6 @@ Copyright (c) 2012 Kerry Jiang様
 licensed under the Apache License 2.0  
 <https://github.com/kerryjiang/SuperSocket/blob/master/LICENSE>  
   
-NAudio  
-<https://github.com/naudio/NAudio/>  
-Copyright (C) 2011 Mark Heath  
-Microsoft Public License  
-<https://github.com/naudio/NAudio/blob/master/license.txt>  
-  
 Bouncy Castle  
 <http://www.bouncycastle.org/>  
 Copyright (c) 2000 - 2020 The Legion of the Bouncy Castle Inc.  

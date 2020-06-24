@@ -144,7 +144,7 @@ namespace namaichi.alart
 					form.check.soundPlayer = new SoundPlayer("Sound/se_soc01.wav");
 				form.check.soundPlayer.Play();
 				*/
-				util.playSound(form.config, null);
+				util.playSound(form.config, null, form);
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}

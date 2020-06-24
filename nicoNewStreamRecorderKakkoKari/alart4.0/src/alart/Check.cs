@@ -478,7 +478,6 @@ namespace namaichi.alart
 				} else {
 					form.addLogText("Cookieの取得に成功しました", true);
 					container = res[0];
-					
 				}
 			} catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);}
 			
@@ -652,7 +651,7 @@ namespace namaichi.alart
 			}
 		}
 		private void sound(RssItem ri, AlartInfo ai) {
-			util.playSound(form.config, ai);
+			util.playSound(form.config, ai, form);
 			/*
 			try {
 				if (soundPlayer == null) 

@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using namaichi.config;
 using System.IO;
-using NAudio.Midi;
+//using NAudio.Midi;
 using SunokoLibrary.Application;
 using SunokoLibrary.Windows.ViewModels;
 
@@ -641,7 +641,7 @@ namespace namaichi
 				MessageBox.Show("ファイルが見つかりませんでした");
 				return;
 			}
-			util.playSoundCore(volume / 100, path);
+			util.playSoundCore(volume / 100, path, form);
 		}
 		void RecentColorBtnClick(object sender, EventArgs e)
 		{

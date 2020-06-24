@@ -123,11 +123,18 @@ namespace namaichi.utility
 				if (!File.Exists(fileName)) return;
 				using (var sr = new StreamReader(fileName, Encoding.UTF8)) {
 					lines = sr.ReadToEnd().Replace("\r", "").Split('\n');
-					//sr.Close();
 				}
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
-				return;
+				try {
+					using (var sr = new StreamReader(fileName)) {
+						lines = sr.ReadToEnd().Replace("\r", "").Split('\n');
+					}
+				} catch (Exception e) {
+					form.addLogText("お気に入りリストが正常に読み込めませんでした");
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					return;
+				}
 			}
 			var itemLineNum = (lines[0] == "120") ? 29 : 36;
 			if ((lines.Length - 3) % itemLineNum != 0) {

@@ -235,9 +235,7 @@ namespace namaichi
 			setDoubleBuffered(notAlartList);
 			setDoubleBuffered(userAlartList);
 			
-			applyMenuSetting();
 			
-			setAppliNameAndContextMenu();
 			
 			setCategoryBorderPaint();
 			//categoryRightBtn.Text += Convert.ToChar(9654);//右
@@ -558,12 +556,14 @@ namespace namaichi
 			
 			//dll
 			var task = Task.Factory.StartNew(() => {
-				
 				util.dllCheck(this, dotNetVersion);
 				xpTest();
 			});
 			
 			setSort();
+			
+			applyMenuSetting();
+			setAppliNameAndContextMenu();
 			return;
 		}
 		void xpTest() {
@@ -2667,13 +2667,14 @@ namespace namaichi
 				}
 			} else {
 				try {
-					BeginInvoke((MethodInvoker)delegate() {
+					var r = BeginInvoke((MethodInvoker)delegate() {
 					//Invoke((MethodInvoker)delegate() {
 						try {    
 				       		a.Invoke();
 				       	} catch (Exception e) {
 							util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 						}
+					
 					}).AsyncWaitHandle.WaitOne(timeout);
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
@@ -3933,7 +3934,10 @@ namespace namaichi
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
 		}
-		public void addHistoryList(HistoryInfo hi) {
+		public void addHistoryList(HistoryInfo hi, int historyListMax = -1) {
+			if (historyListMax == -1) {
+				historyListMax = int.Parse(config.get("maxHistoryDisplay"));
+			}
 			try {
 				foreach (var _hi in historyListDataSource)
 	       			if (_hi.lvid == hi.lvid) return;
@@ -3943,19 +3947,26 @@ namespace namaichi
 			
        		formAction(() => {
 				try {
-				    var scrollIndex = historyList.FirstDisplayedScrollingRowIndex;
+			        var scrollIndex = historyList.FirstDisplayedScrollingRowIndex;
 				    
+			        if (historyListDataSource.Count >= historyListMax) {
+				        var min = historyListDataSource.OrderBy((a) => a.dt).First();
+				        historyListDataSource.Remove(min);
+			        }
+			        
 	       	    	historyListDataSource.Insert(0, hi);
-	       	    	if (scrollIndex != -1)
+	       	    	if (scrollIndex != -1 && scrollIndex < historyListDataSource.Count - 1)
 	       	    		historyList.FirstDisplayedScrollingRowIndex = scrollIndex;
 	       	    	
 	           	} catch (Exception e) {
 	           		util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-	           		util.debugWriteLine("historyListDataSource.Insert? " + historyListDataSource.Count);
+	           		util.debugWriteLine("historyListDataSource.Insert? " + historyListDataSource.Count + " " + historyList.FirstDisplayedScrollingRowIndex);
 	           	}
        	    });
 		}
-		public void addNotAlartList(HistoryInfo hi) {
+		public void addNotAlartList(HistoryInfo hi, int notHistoryListMax = -1) {
+			if (notHistoryListMax == -1) 
+				notHistoryListMax = int.Parse(config.get("maxNotAlartDisplay"));
 			try {
 				foreach (var _hi in notAlartListDataSource) 
 					if (_hi.lvid == hi.lvid) return;
@@ -3966,6 +3977,12 @@ namespace namaichi
        		formAction(() => {
 				try {
 				    var scrollIndex = notAlartList.FirstDisplayedScrollingRowIndex;
+				    
+				    if (notAlartListDataSource.Count >= notHistoryListMax) {
+				        var min = notAlartListDataSource.OrderBy((a) => a.dt).First();
+				        notAlartListDataSource.Remove(min);
+			        }
+				    
 	       	    	notAlartListDataSource.Insert(0, hi);
 	       	    	if (scrollIndex != -1)
 	       	    		notAlartList.FirstDisplayedScrollingRowIndex = scrollIndex;
@@ -4572,6 +4589,7 @@ namespace namaichi
 			sortHistoryList(notAlartList, notAlartListDataSource, max);
 		}
 		void sortHistoryList(DataGridView list, SortableBindingList<HistoryInfo> data, string maxNum) {
+			util.debugWriteLine("sortHistoryList " + maxNum);
 			var max = int.Parse(maxNum);
 			formAction(() => {
 			    var scrollI = list.FirstDisplayedScrollingRowIndex;
@@ -4583,7 +4601,7 @@ namespace namaichi
 								if (data[j].dt == _min) data.RemoveAt(j);
 						}
 					} catch (Exception e) {
-						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+						util.debugWriteLine("sortHistory " + e.Message + e.Source + e.StackTrace + e.TargetSite);
 					}
 	   	    	}
 				
@@ -4594,7 +4612,11 @@ namespace namaichi
    		       	} catch (Exception e) {
    		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
    		       	}
-				list.FirstDisplayedScrollingRowIndex = scrollI;
+				try {
+					list.FirstDisplayedScrollingRowIndex = scrollI;
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				}
 			});
 		}
 		

@@ -52,7 +52,6 @@ namespace namaichi.utility
 		public void ReadNamarokuList(MainForm form, SortableBindingList<info.HistoryInfo> alartListDataSource, string fileName)
 		{
 			string data;
-			
 			try {
 				if (!File.Exists(fileName)) return;
 				using (var sr = new StreamReader(fileName, Encoding.UTF8)) {
@@ -66,8 +65,9 @@ namespace namaichi.utility
 			
 			try {
 				var listData = JsonConvert.DeserializeObject<SortableBindingList<info.HistoryInfo>>(data);
+				var max = int.Parse(form.config.get("maxHistoryDisplay"));
 				foreach (var hi in listData)
-					form.addHistoryList(hi);
+					form.addHistoryList(hi, max);
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 				form.showMessageBox("アラート履歴リストを読み込めませんでした", "");

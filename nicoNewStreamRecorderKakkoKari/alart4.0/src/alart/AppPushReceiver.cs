@@ -565,7 +565,7 @@ namespace namaichi.alart
 								//var lvid = util.getRegGroup(d, "program_id\\\\\":\\\\\"(lv\\d+)"); google protobuf
 								var lvid = util.getRegGroup(d, "program_id\":\"(lv\\d+)"); //google protobuf 
 								if (lvid != null) {
-									util.debugWriteLine("appData lvid " + lvid);
+									util.debugWriteLine("app push appData lvid " + lvid);
 									var items = getNicoCasItem(lvid, lresp);
 									if (items != null) {
 										check.foundLive(items);

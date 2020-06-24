@@ -314,7 +314,7 @@ public class config
 	        {"appPushId", ""},
 	        {"appPushToken", ""},
 	        {"nicoCasAppVer", "3.9.0"},
-	        {"niconicoAppVer", "5.35.0"},
+	        {"niconicoAppVer", "5.38.0"},
 			
 	        {"thresholdpage", "10"},
 	        {"brodouble", "0"},

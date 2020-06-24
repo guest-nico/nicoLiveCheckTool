@@ -600,7 +600,8 @@ class util {
 					req.UserAgent = "NicoLiveCheckTool " + versionStr + " guestnicon@gmail.com";
 					req.Headers.Add("Accept-Encoding", "gzip,deflate");
 					req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-	
+					//ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)0x00000C00 | (SecurityProtocolType)0x00000300;
+
 					req.Timeout = timeoutMs;
 	//				util.debugWriteLine("getpage 0");
 					var res = (HttpWebResponse)req.GetResponse();
@@ -1272,7 +1273,7 @@ class util {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 		}
 	}
-	public static void playSound(config cfg, AlartInfo ai) {
+	public static void playSound(config cfg, AlartInfo ai, MainForm form) {
 		try {
 			string path = null;
 			float volume = 0;
@@ -1310,7 +1311,7 @@ class util {
 				volume = float.Parse(cfg.get("soundVolume")) / 100;
 			}
 			
-			playSoundCore(volume, path);
+			playSoundCore(volume, path, form);
 			
 			/*
 			var path = (bool.Parse(cfg.get("IsSoundDefault"))) ? 
@@ -1324,24 +1325,83 @@ class util {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 		}
 	}
-	public static void playSoundCore(float volume, string path) {
+	public static void playSoundCore(float volume, string path, MainForm form) {
 		try {
 			util.debugWriteLine("sound path " + path);
-			
-			var reader = new NAudio.Wave.AudioFileReader(path);
-			var waveOut = new NAudio.Wave.WaveOut(NAudio.Wave.WaveCallbackInfo.FunctionCallback());
-			waveOut.Init(reader);
 			if (volume < 0) volume = (float)0;
 			if (volume > 1) volume = (float)1;
-			waveOut.Volume = volume;
-			util.debugWriteLine("volume " + waveOut.Volume);
-			waveOut.Play();
-			while (waveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing) Thread.Sleep(100);
-			//waveOut.Dispose();
-			reader.Close();
+			
+			var isMCI = true;
+			if (isMCI) {
+				playSoundMCI(path, (int)(volume * 1000), true, form);
+			} else {
+				//naudio
+				/*
+				var reader = new NAudio.Wave.AudioFileReader(path);
+				var waveOut = new NAudio.Wave.WaveOut(NAudio.Wave.WaveCallbackInfo.FunctionCallback());
+				waveOut.Init(reader);
+				
+				waveOut.Volume = volume;
+				util.debugWriteLine("volume " + waveOut.Volume);
+				waveOut.Play();
+				while (waveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing) Thread.Sleep(100);
+				//waveOut.Dispose();
+				reader.Close();
+				*/
+			}
+			
 		} catch (Exception e) {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 		}
+		
+	}
+	[System.Runtime.InteropServices.DllImport("winmm.dll",
+    		CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
+	private static extern int mciSendString(string command,
+				[MarshalAs(UnmanagedType.LPTStr), Out] StringBuilder buffer, int bufferSize, IntPtr hwndCallback);
+	[System.Runtime.InteropServices.DllImport("winmm.dll",
+    		CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
+    public static extern bool mciGetErrorString(int dwError, 
+			[MarshalAs(UnmanagedType.LPTStr), Out] StringBuilder lpstrBuffer, int uLength);
+    
+	public static void playSoundMCI(string path, int volume, bool isAsync, MainForm form) {
+		debugWriteLine("playsound mci " + path + " volume " + volume + " " + isAsync);
+		
+		var name = Guid.NewGuid();
+	    var cmd = "open \"" + path + "\" type mpegvideo alias " + name;
+	    debugWriteLine(cmd);
+	    var ret = mciSendStringForm(cmd, null, 0, IntPtr.Zero, form);
+	    
+	    if (ret != 0) {
+	    	debugWriteLine("playsound mci open error " + ret + " " + cmd);
+	    	StringBuilder errMsg = new StringBuilder(1000);
+			mciGetErrorString(ret, errMsg, 1000);
+			debugWriteLine("mci err " + errMsg);
+			form.addLogText("サウンドの再生中に問題が発生しました。ERROR:" + ret + ", メッセージ:" + errMsg + " パス:" + path + ", volume:" + volume);
+	        return;
+	    }
+	    ret = mciSendStringForm("setaudio " + name + " volume to " + volume.ToString(), null, 0, IntPtr.Zero, form);
+	    
+	    mciSendStringForm("play " + name, null, 0, IntPtr.Zero, form);
+	    
+	    if (!isAsync) {
+	    	StringBuilder status = new StringBuilder();
+		    while(true) {
+	    		Thread.Sleep(1000);
+		    	status = new StringBuilder();
+		    	ret = mciSendStringForm("status " + name + " mode", status, 256, IntPtr.Zero, form);
+		    	
+		    	debugWriteLine("rc " + ret + " " + status);
+		    	if (status.ToString() != "playing") break;
+		    }
+	    }
+	}
+	private static int mciSendStringForm(string command,
+			StringBuilder buffer, int bufferSize, IntPtr hwndCallback, MainForm form) {
+		var ret = 0;
+		form.formAction(() => 
+				ret = mciSendString(command, buffer, bufferSize, hwndCallback), -1);
+		return ret;
 	}
 	public static bool sendMail(string from, string to, 
 			string subject, string body, string _smtp, 
@@ -1500,7 +1560,8 @@ class util {
     }
     public static void dllCheck(namaichi.MainForm form, string dotNetVersion) {
 		var path = getJarPath()[0];
-		var dlls = new string[]{"websocket4net.dll", "NAudio.dll",
+		var dlls = new string[]{"websocket4net.dll", 
+				//"NAudio.dll",
 				"Interop.IWshRuntimeLibrary.dll", "SnkLib.App.CookieGetter.Forms.dll",
 				"SnkLib.App.CookieGetter.dll", "SuperSocket.ClientEngine.dll",
 				//"Microsoft.Web.XmlTransform.dll", 
@@ -1588,4 +1649,54 @@ class util {
 		if (ver == null) return;
 		config.set(cfgName, ver);
     }
+    public static bool loginCheck(CookieContainer cc, string url, string log = null) {
+		try {
+			var us = cc.GetCookies(new Uri(url))["user_session"];
+			if (us == null) {
+				if (log != null)
+					log += "Cookie内にユーザーセッションが見つかりませんでした。";
+				return false;
+			}
+			var uid = util.getRegGroup(us.Value, "user_session_(.+?)_");
+			if (uid == null) {
+				if (log != null)
+					log += "ユーザーセッション内にIDが見つかりませんでした。";
+				return false;
+			}
+			var _url = "https://public.api.nicovideo.jp/v1/user/followees/niconico-users/" + uid + ".json";
+			var res = util.getPageSource(_url, cc);
+			if (log != null)
+				log += res != null ? "ログインを確認できました。" : "ログインを確認できませんでした";
+			return res != null;
+		} catch (Exception e) {
+			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			return false;
+		}
+	}
+    public static string getMyName(CookieContainer cc, string us) {
+		try {
+			var url = "https://nvapi.nicovideo.jp/v1/users/me";
+			//var us = cc.GetCookies(new Uri(url))["user_session"];
+			//if (us == null) return null;
+			var _h = new Dictionary<string, string>() {
+				{"User-Agent", "Niconico/1.0 (Linux; U; Android 7.1.2; ja-jp; nicoandroid LGM-V300K) Version/5.38.0"},
+				{"Cookie", "user_session=" + us},
+					{"X-Frontend-Id", "1"},
+					{"X-Frontend-Version", "5.38.0"},
+					{"Connection", "keep-alive"},
+					{"Upgrade-Insecure-Requests", "1"},
+				};
+			var r = sendRequest(url, _h, null, "GET");
+			if (r == null) return null;
+			using (var st = r.GetResponseStream())
+			using (var sr = new StreamReader(st)) {
+				var res = sr.ReadToEnd();
+				var n = util.getRegGroup(res, "\"nickname\":\"(.+?)\"");
+				return n;
+			}
+		} catch (Exception e) {
+			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+		}
+		return null;
+	}
 }

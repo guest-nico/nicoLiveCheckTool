@@ -329,8 +329,8 @@ namespace namaichi.alart
 					
 					var lv = util.getRegGroup(mValue, "id=\"stream_lv(\\d+)");
 					//var title = util.getRegGroup(mValue, "<h2 class=\"item_title\">[\\s\\S]+?<a[\\s\\S]+?>([\\s\\S]*?<span id=\"play_arrow[\\s\\S]*?</span>)([\\s\\S]*?)</a>", 2);
-					var title = getInnerText(util.getRegGroup(mValue, "<h2 class=\"item_title\">([\\s\\S]+?)</h2>"));
-					var description = getInnerText(util.getRegGroup(mValue, "<p class=\"item_description\">([\\s\\S]+?)</p"));
+					var title = getInnerText(util.getRegGroup(mValue, "<h2 class=\"item_title\">([\\s\\S]*?)</h2>"));
+					var description = getInnerText(util.getRegGroup(mValue, "<p class=\"item_description\">([\\s\\S]*?)</p"));
 					var isChannel = mValue.IndexOf("<li class=\"timetablePage-ProgramList_TitleIcon-channel\">") > -1;
 					var isOfficial = mValue.IndexOf("<li class=\"timetablePage-ProgramList_TitleIcon-official\">") > -1;
 					var provider_type = isOfficial ? "official" : (isChannel ? "channel" : "community");
@@ -338,8 +338,13 @@ namespace namaichi.alart
 					
 					var start_date = getInnerText(util.getRegGroup(mValue, "(<span class=\"start_date\"[\\s\\S]*?</span>)"));
 					var end_date = getInnerText(util.getRegGroup(mValue, "(<span id=\"end_date[\\s\\S]*?</span>)"));
-					var start_time = util.getRegGroup(mValue, "<span class=\"start_time\">(.+?)</span>");
+					var start_time = util.getRegGroup(mValue, "<span class=\"start_time\">(.*?)</span>");
 					var end_time = util.getRegGroup(mValue, "<span id=\"end_date[\\s\\S]*?(\\d+:\\d+)</span>");
+					if (string.IsNullOrEmpty(start_date)) {
+						util.debugWriteLine("start time no " + lv);
+						check.form.addLogText("start time no lv" + lv);
+						continue;
+					}
 					var total_time = (DateTime.Parse(end_date + " " + end_time) - DateTime.Parse(start_date + " " + start_time)).ToString();
 					var isTsEnd = mValue.IndexOf("class=\"item ts_end\">") > -1;
 					var isTs = mValue.IndexOf("class=\"item play\">") > -1;
@@ -354,10 +359,10 @@ namespace namaichi.alart
 								" " + start_time + " " + end_date + " " + end_time + " " + 
 								total_time + " " + status);
 						#if DEBUG
-							check.form.addLogText(lv + " " + title + " " + description + " " +
-								provider_type + " " + thumbnail_url + " " + start_date +
-								" " + start_time + " " + end_date + " " + end_time + " " + 
-								total_time + " " + status);
+							check.form.addLogText(lv + " title " + title + " desc " + description + " type " +
+								provider_type + " thumb " + thumbnail_url + " startdt " + start_date +
+								" starttime " + start_time + " end dt " + end_date + " endtime " + end_time + " totaltime " + 
+								total_time + " status " + status);
 						#endif
 						continue;
 					}
@@ -365,10 +370,10 @@ namespace namaichi.alart
 					ret.Add(new TimeLineInfo(lv, title, description, provider_type, thumbnail_url, start_date, end_date, start_time, end_time, total_time, status, isPayment));
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					util.debugWriteLine(_m.Value);
 					#if DEBUG
 						check.form.addLogText("timetable timelinePage ParseEror " + _m.Value);
 					#endif
-					return null;
 				}
 			}
 			return ret.ToArray();

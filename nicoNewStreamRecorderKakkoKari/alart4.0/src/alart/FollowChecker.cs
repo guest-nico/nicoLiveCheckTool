@@ -141,7 +141,7 @@ namespace namaichi.alart
 						//var _url = url + "?offset=" + i + "&limit=25";
 						
 						
-						var webRes = util.sendRequest(url + "?page=" + i + "&pageSize=50", h, null, "GET");
+						var webRes = util.sendRequest(url + "?page=" + i + "&pageSize=50", h, null, "GET", true);
 						if (webRes == null) {
 							if (j == 0) {
 								util.updateAppVersion("niconico", form.config);

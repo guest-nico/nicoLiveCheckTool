@@ -66,8 +66,9 @@ namespace namaichi.utility
 			
 			try {
 				var listData = JsonConvert.DeserializeObject<SortableBindingList<info.HistoryInfo>>(data);
+				var max = int.Parse(form.config.get("maxNotAlartDisplay"));
 				foreach (var hi in listData)
-					form.addNotAlartList(hi);
+					form.addNotAlartList(hi, max);
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 				form.showMessageBox("アラート履歴リストを読み込めませんでした", "");

@@ -92,8 +92,12 @@ namespace namaichi
 			
 			if (item.isMemberOnly) {
 				ShowIcon = true;
-				var icon = new Icon(util.getJarPath()[0] + "/Icon/lock.ico");
-				Icon = icon;
+				try {
+					var icon = new Icon(util.getJarPath()[0] + "/Icon/lock.ico");
+					Icon = icon;
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				}
 			}
 		}
 		private bool isOkStrWidth(string s) {

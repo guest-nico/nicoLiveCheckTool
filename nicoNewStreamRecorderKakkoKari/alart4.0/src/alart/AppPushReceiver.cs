@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 using System.Reflection.Emit;
@@ -17,13 +18,17 @@ using System.Net.Sockets;
 using System.Net.Security;
 using System.Threading;
 using System.Threading.Tasks;
-
-//using Google.Protobuf;
-
 using namaichi.info;
 using McsProto;
 using CheckinProto;
 using ProtoBuf;
+
+//using Google.Protobuf;
+
+
+
+
+
  
 namespace namaichi.alart
 {
@@ -388,71 +393,33 @@ namespace namaichi.alart
 		}
 		public bool connectMcs(string androidId, string securityToken) {
 			util.debugWriteLine("connectMcs " + androidId + " " + securityToken);
+			const int kMCSVersion = 41;
 			try {
-				var lr = new LoginRequest();
-				lr.AdaptiveHeartbeat = false;
-				lr.auth_service = LoginRequest.AuthService.AndroidId;
-				lr.AuthToken = securityToken;
-				lr.Id = "android-11";
-				lr.Domain = "mcs.android.com";
-				lr.DeviceId = "android-" + long.Parse(androidId).ToString("x");
-				lr.NetworkType = 1;
-				lr.Resource = androidId;
-				lr.User = androidId;
-				lr.UseRmq2 = true;
-				lr.AccountId = long.Parse(androidId);
-				lr.ReceivedPersistentIds.Add("");  //# possible source of error
-				var setting = new Setting();
-				setting.Name = "new_vc";
-				setting.Value = "1";
-				lr.Settings.Add(setting);
-				//var x = lr.ToByteArray();
-				
-				byte[] x;
-				using (var ms = new MemoryStream()) {
-				    Serializer.Serialize(ms, lr);
-				    x = ms.ToArray();
-				}
-				
+				var lr = BuildLoginRequest(androidId, securityToken);
 				
 				using (var client = new TcpClient("mtalk.google.com", 5228))
 				using (sslStream = new SslStream(client.GetStream(), false, delegate { return true; })) {
 				    sslStream.AuthenticateAsClient("mtalk.google.com");
-				    //var _buf = VarintBitConverter.GetVarintBytes((int)x.Length);
-				    var _buf = VarintBitConverter.GetVarintBytes((uint)x.Length);
-				    /*
-				    var num = x.Length;
-				    var _buf = new List<byte>();
-					while (true) {
-						var towrite = num & 0x7f;
-						num >>= 7;
-						if (num == 1) 
-							_buf.Add((byte)(towrite | 0x80));
-						else {
-							_buf.Add((byte)towrite);
-							break;
-						}
-					}
-					*/
-				    //util.debugWriteLine(_buf.ToArray() + " x len " + x.Length);
-					util.debugWriteLine(_buf + " x len " + x.Length);
-				    sslStream.Write(new byte[]{41, 2});
-				    sslStream.Write(_buf);
-				    sslStream.Write(x);
-				    sslStream.Flush();
+				    sslStream.ReadTimeout = 100 * 60 * 1000;
+					
+					sslStream.Write(new byte[]{kMCSVersion, (byte)MCSProtoTag.kLoginRequestTag});
+					
+					sendMessage(lr);
 				    
 				    var version = sslStream.ReadByte();
-				    util.debugWriteLine(version);
+				    util.debugWriteLine("mcs version " + version);
 				    
 				    Task.Factory.StartNew(() => {
 		             	while (isRetry) {
 							//Thread.Sleep(15000);
 							
-							Thread.Sleep(60 * 60 * 1000);
+							Thread.Sleep(1 * 60 * 1000);
 							util.debugWriteLine(DateTime.Now.ToString() + " ping " + sslStream.GetHashCode());
 							try {
-								sslStream.Write(new byte[]{0x07, 0x0e, 0x10, 0x01, 0x1a, 0x00, 0x3a, 0x04, 0x08, 0x0d, 0x12, 0x00, 0x50, 0x03, 0x60, 0x00});
-								//s.send(b'\x00\x04\x10\x08\x18\x00')
+								var ping = new HeartbeatPing();
+								
+								sendMessage(ping);
+								
 							} catch (Exception e) {
 								util.debugWriteLine("ping error " + e.Message + e.Source + e.StackTrace + e.TargetSite);
 								break;
@@ -462,149 +429,86 @@ namespace namaichi.alart
 					});
 				    
 				    while (isRetry) {
-				    	var responseTag = sslStream.ReadByte();
-						    
-				    	util.debugWriteLine(DateTime.Now + " resp tag " + responseTag + " " + (char)responseTag);
-						
-						var msg = new List<byte>();
-						if (responseTag == 0x03 || responseTag == 0x07
-						    	|| responseTag == 0x08) {
-							//var length = varIntDecodeStream(sslStream);
-							var length = 0;
-							var _lenBuf = new List<byte>();
-							for (var i = 0; i < 10; i++) {
-								var _slb = sslStream.ReadByte();
-								_lenBuf.Add((byte)_slb);
-								if (_lenBuf[_lenBuf.Count - 1] > 128) _lenBuf.Add((byte)sslStream.ReadByte());
-								try {
-									length = VarintBitConverter.ToInt32(_lenBuf.ToArray()) * 1;
-									var length2 = VarintBitConverter.ToInt16(_lenBuf.ToArray()) * 1;
-									var length3 = VarintBitConverter.ToInt64(_lenBuf.ToArray()) * 1;
-									var length4 = VarintBitConverter.ToUInt16(_lenBuf.ToArray()) * 1;
-									var length5 = VarintBitConverter.ToUInt32(_lenBuf.ToArray()) * 1;
-									length = (int)length5;
-									break;
-								} catch (Exception e) {
-									util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-								}
-							}
-							if (length == 0) return false;
-							util.debugWriteLine("calc len " + length);
-							
-							
-							while (msg.Count < length) {
-								if (msg.Count != 0) util.debugWriteLine("recv msg 2shuume");
-								
-								byte[] readbuf = new byte[1000];
-								var i = sslStream.Read(readbuf, 0, length - msg.Count);
-								for (var j = 0; j < i; j++) msg.Add(readbuf[j]);
-								
-								util.debugWriteLine("recv  allLen " + length + " msg len " + msg.Count + " " + msg);
-							}
-							util.debugWriteLine("calc len " + length + " msg len " + msg.Count + " msg " + msg);
-							//foreach (var bb in msg) Debug.Write((char)bb);
-							//util.debugWriteLine("");
-							//foreach (var bb in msg) Debug.Write(bb.ToString("x") + " ");
-							util.debugWriteLine("");
+				    	util.debugWriteLine("apppush before tag");
+				    	var responseTag = getTag(sslStream);
+				    	if (responseTag == -1) {
+				    		util.debugWriteLine("getTag error ");
+				    		break;
+				    	}
+				    	
+				    	util.debugWriteLine("apppush after tag");
+						var _tag = (MCSProtoTag)Enum.ToObject(typeof(MCSProtoTag), responseTag);
+				    	util.debugWriteLine(DateTime.Now + " resp tag " + responseTag + " ");
+				    	
+				    	//
+				    	
+				    	if (_tag == MCSProtoTag.kHeartbeatPingTag || _tag == MCSProtoTag.kCloseTag)
+				    		break;
+				    	else if (_tag != MCSProtoTag.kLoginResponseTag && _tag != MCSProtoTag.kIqStanzaTag
+							    && _tag != MCSProtoTag.kDataMessageStanzaTag && _tag != MCSProtoTag.kHeartbeatPingTag) {
+							//continue;
 						}
-						
-						if (responseTag == 0x03) {
-							var lresp = new LoginResponse();
-							using (var ms = new MemoryStream(msg.ToArray())) {
-								lresp = Serializer.Deserialize<LoginResponse>(ms);
-							}
-							/*
-							using (var ms = new MemoryStream(msg.ToArray()))
-							using (var cs = new  CodedInputStream(ms)) {
-								lresp.MergeFrom(cs);
-								
-							}
-							*/ 
-							util.debugWriteLine("RECV LOGIN RESP " + lresp);
-						} else if (responseTag == 0x07) {
-							//var lresp = LoginResponse.Parser.ParseFrom(msg.ToArray());
-							var lresp = new IqStanza();
+				    	
+				    	util.debugWriteLine("apppush before proto");
+				    	var proto = BuildProtobufFromTag(_tag, sslStream);
+				    	util.debugWriteLine("apppush after proto");
+				    	
+						if (_tag == MCSProtoTag.kLoginResponseTag) {
 							
-							using (var ms = new MemoryStream(msg.ToArray())) {
-								lresp = Serializer.Deserialize<IqStanza>(ms);
-							}
-							/*
-							using (var ms = new MemoryStream(msg.ToArray()))
-							using (var cs = new CodedInputStream(ms)) {
-								//lresp.MergeFrom(cs);
-								try {
-									var iqstanza = IqStanza.Parser.ParseFrom(msg.ToArray());
-								} catch (Exception e) {
-									util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-								}
-	
-								//util.debugWriteLine(iqstanza);
-								//LoginResponse.Descriptor.
-							} 
-							*/
-							//iqs = mcs_pb2.IqStanza();
-							//iqs.ParseFromString(msg);
-							util.debugWriteLine("RECV IQ  id " + lresp);// + lresp.Id + " time " + lresp.ServerTimestamp + " streamid " + lresp.StreamId + " ");
+						} else if (_tag == MCSProtoTag.kIqStanzaTag) {
 							
-						} else if (responseTag == 0x08) {
-							try {
-								DataMessageStanza lresp;
-								using (var ms = new MemoryStream(msg.ToArray())) {
-									lresp = Serializer.Deserialize<DataMessageStanza>(ms);
-								}
-								
-								//var lresp = DataMessageStanza.Parser.ParseFrom(msg.ToArray());
-								
-								//dms = mcs_pb2.DataMessageStanza();
-								//dms.ParseFromString(msg);
-								util.debugWriteLine("RECV DATA MESSAGE " + lresp);//lresp.Id + " time " + lresp.ServerTimestamp + " streamid " + lresp.StreamId + " ");
-								//var lvid = util.getRegGroup(lresp.AppData.ToString(), "\"lvid\"[\\s\\S]+(lv\\d+)");
-								//var lvid = util.getRegGroup(lresp.AppData.ToString(), "\"program_id\":\"(lv\\d+)");
-								var d = "";
-								foreach (var a in lresp.AppDatas) d += a.Value;
-								//var lvid = util.getRegGroup(d, "program_id\\\\\":\\\\\"(lv\\d+)"); google protobuf
-								var lvid = util.getRegGroup(d, "program_id\":\"(lv\\d+)"); //google protobuf 
-								if (lvid != null) {
-									util.debugWriteLine("app push appData lvid " + lvid);
-									var items = getNicoCasItem(lvid, lresp);
-									if (items != null) {
-										check.foundLive(items);
-									} else {
-										var gir = new GetItemRetryApr(lvid, lresp, this);
-										Task.Factory.StartNew(() => {
-											for (var i = 0; i < 10; i++) {
-								         		Thread.Sleep(5000);
-								         		items = gir.getItem();
-								         		if (items == null) continue;
-								         		check.foundLive(items);
-								         		break;
-											}
-										});
-									}
-								}
-									
-								
-								
-							} catch (Exception ee) {
-								util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
-							}
 							
-						} else if (responseTag == 0x04) {
-							break;
+						} else if (_tag == MCSProtoTag.kDataMessageStanzaTag) {
+				    		onReceiveData((DataMessageStanza)proto);
+				    		
 						} else {
-							if (responseTag == 0x00)
-								break;
-							util.debugWriteLine("unknown response: " + responseTag.ToString());
+							util.debugWriteLine("unknown response: " + _tag.ToString());
 						}
-						
-							
 				    }
 				}
-				util.debugWriteLine("closed");
+				util.debugWriteLine("apppush closed");
 				return true;
 			} catch (Exception e) {
 				util.debugWriteLine("mcs connect error " + e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return false;
+			}
+		}
+		private void onReceiveData(DataMessageStanza proto) {
+			try {
+				//var lresp = DataMessageStanza.Parser.ParseFrom(msg.ToArray());
+				
+				//dms = mcs_pb2.DataMessageStanza();
+				//dms.ParseFromString(msg);
+				util.debugWriteLine("RECV DATA MESSAGE " + proto);//lresp.Id + " time " + lresp.ServerTimestamp + " streamid " + lresp.StreamId + " ");
+				//var lvid = util.getRegGroup(lresp.AppData.ToString(), "\"lvid\"[\\s\\S]+(lv\\d+)");
+				//var lvid = util.getRegGroup(lresp.AppData.ToString(), "\"program_id\":\"(lv\\d+)");
+				var d = "";
+				foreach (var a in proto.AppDatas) d += a.Value;
+				//var lvid = util.getRegGroup(d, "program_id\\\\\":\\\\\"(lv\\d+)"); google protobuf
+				var lvid = util.getRegGroup(d, "program_id\":\"(lv\\d+)"); //google protobuf 
+				if (lvid != null) {
+					util.debugWriteLine("app push appData lvid " + lvid);
+					var items = getNicoCasItem(lvid, proto);
+					if (items != null) {
+						check.foundLive(items);
+					} else {
+						var gir = new GetItemRetryApr(lvid, proto, this);
+						Task.Factory.StartNew(() => {
+							for (var i = 0; i < 10; i++) {
+				         		Thread.Sleep(5000);
+				         		items = gir.getItem();
+				         		if (items == null) continue;
+				         		check.foundLive(items);
+				         		break;
+							}
+						});
+					}
+				}
+					
+				
+				
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
 		}
 		/*
@@ -699,10 +603,11 @@ namespace namaichi.alart
 		public List<RssItem> getNicoCasItem(string lvid, McsProto.DataMessageStanza msg) {
 			//ニコニコ生放送アプリ用
 			try {
-				util.debugWriteLine("getNicoCasItem appPush " + msg.ToString());
+				util.debugWriteLine("getNicoCasItem appPush " + msg.ToString() + " " + lvid);
 				string title, comName, hostName;//, thumbnail, description;
 				DateTime dt = util.getUnixToDatetime(msg.Sent / 1000);
-				if (dt < startTime || dt < DateTime.Now - TimeSpan.FromMinutes(10)) return null;
+				if (dt < startTime || dt < DateTime.Now - TimeSpan.FromMinutes(10)) 
+					return new List<RssItem>();
 				hostName = "";
 				
 				var hg = new namaichi.rec.HosoInfoGetter();
@@ -792,6 +697,180 @@ namespace namaichi.alart
 			config.set("appPushId", "");
 			config.set("appPushToken", "");
 		}
+		enum MCSProtoTag {
+			kHeartbeatPingTag = 0,
+			kHeartbeatAckTag,
+			kLoginRequestTag,
+			kLoginResponseTag,
+			kCloseTag,
+			kMessageStanzaTag,
+			kPresenceStanzaTag,
+			kIqStanzaTag,
+			kDataMessageStanzaTag,
+			kBatchPresenceStanzaTag,
+			kStreamErrorStanzaTag,
+			kHttpRequestTag,
+			kHttpResponseTag,
+			kBindAccountRequestTag,
+			kBindAccountResponseTag,
+			kTalkMetadataTag,
+			kNumProtoTypes,
+		};
+		private IExtensible BuildProtobufFromTag(MCSProtoTag _tag, SslStream sslStream) {
+			var msg = new List<byte>();
+			
+			var length = 0;
+			var _lenBuf = new List<byte>();
+			for (var i = 0; i < 10; i++) {
+				var _slb = sslStream.ReadByte();
+				_lenBuf.Add((byte)_slb);
+				if (_lenBuf[_lenBuf.Count - 1] > 128) _lenBuf.Add((byte)sslStream.ReadByte());
+				try {
+					length = VarintBitConverter.ToInt32(_lenBuf.ToArray()) * 1;
+					var length2 = VarintBitConverter.ToInt16(_lenBuf.ToArray()) * 1;
+					var length3 = VarintBitConverter.ToInt64(_lenBuf.ToArray()) * 1;
+					var length4 = VarintBitConverter.ToUInt16(_lenBuf.ToArray()) * 1;
+					var length5 = VarintBitConverter.ToUInt32(_lenBuf.ToArray()) * 1;
+					length = (int)length5;
+					break;
+					
+				} catch (Exception e) {
+					util.debugWriteLine("app push varint len " + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				}
+			}
+			if (length == 0) return null;
+			util.debugWriteLine("calc len " + length);
+			
+			
+			while (msg.Count < length) {
+				if (msg.Count != 0) util.debugWriteLine("recv msg 2shuume");
+				
+				byte[] readbuf = new byte[1000];
+				var i = sslStream.Read(readbuf, 0, length - msg.Count);
+				for (var j = 0; j < i; j++) msg.Add(readbuf[j]);
+				
+				util.debugWriteLine("recv  allLen " + length + " msg len " + msg.Count + " " + msg);
+			}
+			util.debugWriteLine("calc len " + length + " msg len " + msg.Count + " msg " + msg);
+			//foreach (var bb in msg) Debug.Write((char)bb);
+			//util.debugWriteLine("");
+			//foreach (var bb in msg) Debug.Write(bb.ToString("x") + " ");
+			util.debugWriteLine("");
+							
+			switch (_tag) {
+				case MCSProtoTag.kLoginResponseTag:
+					var loginResp = new LoginResponse();
+					using (var ms = new MemoryStream(msg.ToArray())) {
+						loginResp = Serializer.Deserialize<LoginResponse>(ms);
+					}
+					/*
+					using (var ms = new MemoryStream(msg.ToArray()))
+					using (var cs = new  CodedInputStream(ms)) {
+						lresp.MergeFrom(cs);
+						
+					}
+					*/ 
+					util.debugWriteLine("RECV LOGIN RESP " + loginResp);
+					return loginResp;
+				case MCSProtoTag.kIqStanzaTag:
+					//var lresp = LoginResponse.Parser.ParseFrom(msg.ToArray());
+					var iqStanza = new IqStanza();
+					
+					using (var ms = new MemoryStream(msg.ToArray())) {
+						iqStanza = Serializer.Deserialize<IqStanza>(ms);
+					}
+					/*
+					using (var ms = new MemoryStream(msg.ToArray()))
+					using (var cs = new CodedInputStream(ms)) {
+						//lresp.MergeFrom(cs);
+						try {
+							var iqstanza = IqStanza.Parser.ParseFrom(msg.ToArray());
+						} catch (Exception e) {
+							util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+						}
+
+						//util.debugWriteLine(iqstanza);
+						//LoginResponse.Descriptor.
+					} 
+					*/
+					//iqs = mcs_pb2.IqStanza();
+					//iqs.ParseFromString(msg);
+					util.debugWriteLine("RECV IQ  id " + iqStanza);// + lresp.Id + " time " + lresp.ServerTimestamp + " streamid " + lresp.StreamId + " ");
+					return iqStanza;
+				case MCSProtoTag.kDataMessageStanzaTag:
+					DataMessageStanza lresp;
+					using (var ms = new MemoryStream(msg.ToArray())) {
+						lresp = Serializer.Deserialize<DataMessageStanza>(ms);
+					}
+					return lresp;
+				case MCSProtoTag.kHeartbeatPingTag:
+					HeartbeatPing p;
+					using (var ms = new MemoryStream(msg.ToArray())) {
+						p = Serializer.Deserialize<HeartbeatPing>(ms);
+					}
+					return p;
+				case MCSProtoTag.kHeartbeatAckTag:
+					HeartbeatAck ack;
+					using (var ms = new MemoryStream(msg.ToArray())) {
+						ack = Serializer.Deserialize<HeartbeatAck>(ms);
+					}
+					return ack;
+				default:
+					return null;
+			}
+			
+		}
+		private int getTag(SslStream sslStream) {
+			while (isRetry) {
+				try {
+					var responseTag = sslStream.ReadByte();
+					
+					return responseTag;
+				} catch (IOException e) {
+					if (e.Message.IndexOf("一定の時間を過ぎても") > -1) continue;
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					return -1;
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					return -1;
+				}
+			}
+			return -1;
+		}
+		private LoginRequest BuildLoginRequest(string androidId, string securityToken) {
+			var lr = new LoginRequest();
+			lr.AdaptiveHeartbeat = false;
+			lr.auth_service = LoginRequest.AuthService.AndroidId;
+			lr.AuthToken = securityToken;
+			lr.Id = "android-11";
+			lr.Domain = "mcs.android.com";
+			lr.DeviceId = "android-" + long.Parse(androidId).ToString("x");
+			lr.NetworkType = 1;
+			lr.Resource = androidId;
+			lr.User = androidId;
+			lr.UseRmq2 = true;
+			lr.AccountId = long.Parse(androidId);
+			lr.ReceivedPersistentIds.Add("");  //# possible source of error
+			var setting = new Setting();
+			setting.Name = "new_vc";
+			setting.Value = "1";
+			lr.Settings.Add(setting);
+			//var x = lr.ToByteArray();
+			return lr;
+		}
+		private void sendMessage(IExtensible proto) {
+			byte[] x;
+			using (var ms = new MemoryStream()) {
+			    Serializer.Serialize(ms, proto);
+			    x = ms.ToArray();
+			}
+			var _buf = VarintBitConverter.GetVarintBytes((uint)x.Length);
+			util.debugWriteLine("sendmessage mcs " + _buf + " x len " + x.Length + " " + proto);
+			
+		    sslStream.Write(_buf);
+		    sslStream.Write(x);
+		    sslStream.Flush();
+		}
 	}
 	class GetItemRetryApr {
 		private string lvid;
@@ -803,6 +882,7 @@ namespace namaichi.alart
 			this.pr = pr;
 		}
 		public List<RssItem> getItem() {
+			util.debugWriteLine("retry getItem " + lvid);
 			return pr.getNicoCasItem(lvid, lresp);
 		}
 	}

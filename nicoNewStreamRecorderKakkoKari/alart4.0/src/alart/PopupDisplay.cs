@@ -92,16 +92,19 @@ namespace namaichi.alart
 			var ri = new namaichi.info.RssItem("タイトル", "lv1000000",
 					DateTime.Now.ToString(), "放送説明", "コミュニティ名",
 					"コミュニティID", "放送者名", thumbnailUrl, "true", "", false);
-			
-			popupSize = new Size[]{new PopupForm(ri, form.config, this, 0, null).Size,
-					new SmallPopupForm(ri, form.config, this, 0, null).Size};
-			
-			var posI = 0;
-			var pos = getPos(isSmall, out posI, poploc,
-					true);
-			form.DisplayPopup(ri, pos, isSmall, this, posI, null, true,
-					poploc, poptime, isClickClose, 
-					isTopMost, isColor, opacity);
+			try {
+				popupSize = new Size[]{new PopupForm(ri, form.config, this, 0, null).Size,
+						new SmallPopupForm(ri, form.config, this, 0, null).Size};
+				
+				var posI = 0;
+				var pos = getPos(isSmall, out posI, poploc,
+						true);
+				form.DisplayPopup(ri, pos, isSmall, this, posI, null, true,
+						poploc, poptime, isClickClose, 
+						isTopMost, isColor, opacity);
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
 		}
 	}
 }

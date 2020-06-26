@@ -54,10 +54,6 @@ Copyright 2015 The Chromium Authors.
 BSD 3-Clause "New" or "Revised" License  
 <https://github.com/chromium/chromium/blob/master/LICENSE>  
   
-gcmreverse  
-Copyright 2017 nborrmann  
-<https://github.com/nborrmann/gcmreverse>  
-  
 mozilla/gecko  
 <https://github.com/mozilla/gecko-dev>  
 Copyright Mozilla Project  

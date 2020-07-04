@@ -30,8 +30,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.69";
-	public static string versionDayStr = "2020/05/15";
+	public static string versionStr = "ver0.1.7.70";
+	public static string versionDayStr = "2020/07/04";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -770,6 +770,7 @@ class util {
 			req.Proxy = null;
 			req.Headers.Add("Accept-Encoding", "gzip,deflate");
 			req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+			req.Timeout = 5000;
 			
 			foreach (var h in headers) {
 				if (h.Key.ToLower().Replace("-", "") == "contenttype")
@@ -979,7 +980,7 @@ class util {
 		#if DEBUG
 			if (isMessageBox && isLogFile) {
 				if (frameCount > 150) {
-					System.Windows.Forms.MessageBox.Show("framecount stack", frameCount.ToString() + " " + namaichi.Program.arg + " " + DateTime.Now.ToString());
+					System.Windows.Forms.MessageBox.Show("framecount stack", frameCount.ToString() + " " + namaichi.Program.arg + " " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
 					return;
 				}
 			}

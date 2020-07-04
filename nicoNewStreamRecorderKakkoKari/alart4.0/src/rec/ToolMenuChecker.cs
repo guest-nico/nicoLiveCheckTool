@@ -143,8 +143,7 @@ namespace namaichi.rec
 				if (id.StartsWith("c")) {
 					var url = id.StartsWith("co") ? ("https://com.nicovideo.jp/api/v1/communities/" + id.Substring(2) + "/authority.json") :
 				 			("https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/" + id + ".jpg");
-					var h = new Dictionary<string, string>();
-					var r = util.sendRequest(url, h, null, "GET", false);
+					var r = util.getPageSource(url);
 					if (r == null) isError = true;
 					else isExist = true;
 				} else {
@@ -233,7 +232,7 @@ namespace namaichi.rec
 				try {
 					foreach (var ai in form.alartListDataSource) {
 						if (!string.IsNullOrEmpty(ai.communityId) &&
-								ai.communityId.StartsWith("co") &&						    
+								ai.communityId.StartsWith("co") &&
 							    (string.IsNullOrEmpty(ai.hostId) || 
 							     string.IsNullOrEmpty(ai.hostName)))
 							if (getAiList.IndexOf(ai) == -1)
@@ -320,6 +319,8 @@ namespace namaichi.rec
 								
 						var cc = getUserSession(f.mail, f.pass);
 						if (cc == null) return;
+						
+						/*
 						var res = util.getPageSource("https://www.nicovideo.jp/my/", cc);
 						if (res == null) {
 							form.showMessageBox("マイページが取得できませんでした", "");
@@ -331,8 +332,20 @@ namespace namaichi.rec
 							form.showMessageBox("マイページからの取得に失敗しました", "");
 							return;
 						}
+						*/
+						var us = cc.GetCookies(new Uri("https://www.nicovideo.jp"))["user_session"];
+						if (us == null) {
+							form.addLogText("Cookie内にセッション情報が見つかりませんでした");
+							return;
+						}
+						var id = util.getRegGroup(us.ToString(), "(\\d+)");
+						var name = util.getMyName(cc, util.getRegGroup(us.ToString(), "=(.+)"));
+						
 						var followList = new FollowChecker(form, cc).getFollowListFromApp(f.follow);
-						if (followList == null) return;
+						if (followList == null) {
+							form.addLogText("フォローリストが見つかりませんでした");
+							return;
+						}
 						var addFollowList = getAddFollowList(followList);
 						if (addFollowList == null) return;
 						var isStartRet = -1;

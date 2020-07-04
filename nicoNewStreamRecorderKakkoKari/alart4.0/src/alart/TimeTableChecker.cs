@@ -150,7 +150,7 @@ namespace namaichi.alart
 						var opentimeItem = openTimeList.Find(x => x.id == "lv" + l.id);
 						if (opentimeItem != null) {
 							
-							ri = new RssItem(l.title, "lv" + l.id, opentimeItem.showTime.beginAt.ToString(),
+							ri = new RssItem(l.title, "lv" + l.id, opentimeItem.showTime.beginAt.ToString("yyyy/MM/dd HH:mm:ss"),
 									opentimeItem.description, 
 									opentimeItem.contentOwner.name, 
 									opentimeItem.socialGroupId,
@@ -176,7 +176,7 @@ namespace namaichi.alart
 								Thread.Sleep(2000);
 							}
 							var _isFollow = false; 
-							ri = new RssItem(l.title, "lv" + l.id, hig.dt.ToString(),
+							ri = new RssItem(l.title, "lv" + l.id, hig.dt.ToString("yyyy/MM/dd HH:mm:ss"),
 									hig.description, 
 									util.getCommunityName(hig.communityId, out _isFollow, null), 
 									hig.communityId,
@@ -248,7 +248,7 @@ namespace namaichi.alart
 				
 				var _isFollow = false;
 				var lvid = item.lvId.StartsWith("lv") ? item.lvId : ("lv" + item.lvId);
-				var ri = new RssItem(hig.title, lvid, hig.dt.ToString(),
+				var ri = new RssItem(hig.title, lvid, hig.dt.ToString("yyyy/MM/dd HH:mm:ss"),
 						hig.description, 
 						util.getCommunityName(hig.communityId, out _isFollow, null), 
 						hig.communityId,

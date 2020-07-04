@@ -371,29 +371,11 @@ namespace namaichi
         }
         */
         public void addLogText(string t, bool isInvoke = true) {
-       		/*
-       		formAction(() => {
-       	    	logListDataSource.Insert(0, new LogInfo(t));
-       	    	
-       	    	var max = int.Parse(config.get("maxLogDisplay"));
-	       		if (logListDataSource.Count > max) {
-	   	    		for (var i = 0; i < logListDataSource.Count - max; i++)
-	   	    			logListDataSource.RemoveAt(logListDataSource.Count - 1);
-	   	    	}
-       	    });
-       		
-       		var max = int.Parse(config.get("maxLogDisplay"));
-       		if (logListDataSource.Count > max) {
-   	    		for (var i = 0; i < logListDataSource.Count - max; i++)
-   	    			formAction (() =>logListDataSource.RemoveAt(logListDataSource.Count - 1));
-   	    	}
-   	    	*/
-       		
        		formAction(() => {
        	    	try {
 	        	    string _t = "";
 			    	if (logText.Text.Length != 0) _t += "\r\n";
-			    	_t += DateTime.Now.ToString() + " " + t;
+			    	_t += DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + " " + t;
 			    	
 		    		logText.AppendText(_t);
 					if (logText.Text.Length > 200000) 
@@ -541,6 +523,7 @@ namespace namaichi
 			categoryBtnDisplayUpdate();
 			
 			//.net
+			util.debugWriteLine(".net version check");
 			var ver = util.Get45PlusFromRegistry();  
 			util.debugWriteLine(".net ver " + ver);
 			if (ver < 4 && ver != -1) {
@@ -703,7 +686,7 @@ namespace namaichi
 		         try {
 					ai.LastHostDate = hosoDate;//now.Substring(0, now.Length - 0);
 					ai.lastLvid = lvid;
-					ai.recentColorMode = (isMemberOnly) ? 2 : 1;
+					ai.recentColorMode = bool.Parse(config.get("IscheckRecent")) ? ((isMemberOnly) ? 2 : 1) : 0;
 					ai.lastLvType = type;
 					
 					var i = alartListDataSource.IndexOf(ai);
@@ -2404,16 +2387,20 @@ namespace namaichi
 					var c = getAlartListCount(isUserMode);
 					for (var i = c - 1; i > -1; i--) {
 						//util.debugWriteLine(i + " " + alartListDataSource[i].lastHosoDt + " " + alartList[7, i].Style.BackColor);
+						if (dataSource[i].recentColorMode == 0) continue;
+						
 						var isRecentProcess = false;
 						if (checkMode == 0) {
 							isRecentProcess = isOnAir(dataSource[i]);
-							
 						} else if (checkMode == 1) {
 							isRecentProcess = DateTime.Now - dataSource[i].lastHosoDt < TimeSpan.FromMinutes(30);
+						} else if (checkMode == -1) {
+							isRecentProcess = false;
 						}
-						//var is30min = isCheck30min && DateTime.Now - alartListDataSource[i].lastHosoDt < TimeSpan.FromMinutes(30);
+						
 						if (!isRecentProcess)
 							dataSource[i].recentColorMode = 0;
+						
 						//util.debugWriteLine("test recent live check i " + i);
 						if (isRecentProcess) recentNum++;
 						
@@ -2459,9 +2446,13 @@ namespace namaichi
 			     		type == "channel"));
 			if (isProgramInfo) {
 				var url = "https://live2.nicovideo.jp/watch/" + lvid + "/programinfo";
+				
 				var res = util.getPageSource(url, check.container);
-				if (res == null) return false; 
-				var ret = res.IndexOf("\"status\":\"end\"") == -1;
+				if (res == null) 
+					return false;
+				//util.debugWriteLine("isonair history " + lvid + " " + util.getRegGroup(res, "(\"status\".\"(.+?)\")"));
+				var ret = res.IndexOf("\"status\":\"end\"") == -1 &&
+						res.IndexOf("errorCode\":\"NOT_FOUND\"") == -1;
 				return ret;
 			} else {
 				var url = "https://live.nicovideo.jp/embed/" + lvid;

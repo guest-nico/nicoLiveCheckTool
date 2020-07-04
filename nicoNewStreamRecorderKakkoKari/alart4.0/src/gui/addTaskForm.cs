@@ -107,7 +107,7 @@ namespace namaichi
 					if (userName != null) t += (t == "" ? "" : " ") + userName;
 				}
 				if (hig.dt != DateTime.MinValue) {
-					t += (t == "" ? "" : " ") + hig.dt.ToString();
+					t += (t == "" ? "" : " ") + hig.dt.ToString("yyyy/MM/dd HH:mm:ss");
 					yearList.Text = hig.dt.Year.ToString(); monthList.Text = hig.dt.Month.ToString();
 					dayList.Text = hig.dt.Day.ToString(); hourList.Text = hig.dt.Hour.ToString();
 					minuteList.Text = hig.dt.Minute.ToString(); secondList.Text = hig.dt.Second.ToString();

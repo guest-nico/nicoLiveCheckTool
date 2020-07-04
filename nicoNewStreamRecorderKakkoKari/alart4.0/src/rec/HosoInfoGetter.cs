@@ -33,6 +33,7 @@ namespace namaichi.rec
 		public bool isPayment = false;
 		public DateTime openDt = DateTime.MinValue;
 		public string userName = null;
+		public bool isClosed = false;
 		public HosoInfoGetter()
 		{
 		}
@@ -81,7 +82,7 @@ namespace namaichi.rec
 				|| res.IndexOf("\"program_icon onlym\">フォロワー限定") > -1
 				|| res.IndexOf("\"program-status-icon community-only\">フォロワー限定") > -1;
 			isPayment = res.IndexOf("&quot;payment&quot;") > -1;
-			
+			isClosed = res.IndexOf("\"content_status\":\"closed\"") > -1;
 			return ret;
 		}
 		private bool setJikkenInfo(string res) {

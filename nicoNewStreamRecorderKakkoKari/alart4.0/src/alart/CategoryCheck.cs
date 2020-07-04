@@ -55,56 +55,16 @@ namespace namaichi.alart
 				
 				try {
 					var items = new List<RssItem>();
-					for (var j = 0; j < urls.Length; j++) {
-						var url = urls[j];
-						
-						var end = 1000 ;
-						for (var i = 0; i < 1000 && i < end; i++) {
-							util.debugWriteLine("category page i " + i + " " + url);
-						
-							string res = null;
-							for (var k = 0; k < 10; k++) {
-								res = util.getPageSource(url.Replace("#", i.ToString()), null);
-								if (res == null) {
-									Thread.Sleep(5000);
-									//break;
-									
-									continue;
-								}
-								break;
-							}
-							if (res == null) {
-								var t = int.Parse(config.get("rssUpdateInterval"));
-								if (t < 15) t = 15;
-								Thread.Sleep(t * 1000);
-								check.form.addLogText("カテゴリページの取得に失敗しました " + url.Replace("#", i.ToString()));
-								break;
-							}
-							
-							var isEndFile = false;
-							var isContainAddedLv = getRssItems(res, ref items, ref isEndFile, categoryNames[j]);
-							if (isContainAddedLv) {
-								var isContainLv = items.FindIndex(x => check.checkedLvIdList.IndexOf(x.lvId) > -1) != -1;
-								if (end == 1000 && 
-									    (!isStartTimeAllCheck || (isContainLv)) && 
-									    !isStartTimeAllCheck) end = i + 1;
-		//						break;
-							}
-							if (isEndFile) 
-								break;
-							if (isFirst && !isStartTimeAllCheck) 
-								break;
-						}
-						//if (items.Count > 0)
-						//	lastLv = items[0].lvId;
-						
-						util.debugWriteLine("checked lv list count " + check.checkedLvIdList.Count);
-						util.debugWriteLine("get category items " + items.Count);
-						if (items.Count > -1) {
-							foreach (RssItem it in items) util.debugWriteLine(it.lvId + " " + it.comId + " " + it.hostName + " " + it.title + " " + it.pubDate);
-						}
+					items = getFoundLvList(isFirst, items, isStartTimeAllCheck);
+					if (isStartTimeAllCheck) {
+						Task.Factory.StartNew(() => {
+							Thread.Sleep(100000);
+							items = getFoundLvList(true, items, true);
+							check.foundLive(items);
+						});
 						
 					}
+					
 					check.foundLive(items);
 					setDescription(items);
 					if (isOnlyStartTimeCheck) return;
@@ -124,6 +84,72 @@ namespace namaichi.alart
 				}
 			}
 			check.form.addLogText("カテゴリページからの取得を終了します");
+		}
+		private List<RssItem> getFoundLvList(bool isFirst, List<RssItem> items, bool _isStartTimeAllCheck) {
+			//var items = new List<RssItem>();
+			for (var j = 0; j < urls.Length; j++) {
+				var url = urls[j];
+				
+				var end = 1000 ;
+				string lastRes = null;
+				for (var i = 0; i < 1000 && i < end; i++) {
+					util.debugWriteLine("category page i " + i + " " + url);
+				
+					string res = null;
+					for (var k = 0; k < 10; k++) {
+						res = util.getPageSource(url.Replace("#", i.ToString()), null);
+						if (res == null) {
+							Thread.Sleep(5000);
+							//break;
+							
+							continue;
+						}
+						break;
+					}
+					
+					if (res == null) {
+						var t = int.Parse(config.get("rssUpdateInterval"));
+						if (t < 15) t = 15;
+						Thread.Sleep(t * 1000);
+						check.form.addLogText("カテゴリページの取得に失敗しました " + url.Replace("#", i.ToString()));
+						break;
+					}
+					
+					if (lastRes == res) 
+						break;
+					var isEndFile = false;
+					var isContainAddedLv = getRssItems(res, ref items, ref isEndFile, categoryNames[j]);
+					if (isContainAddedLv) {
+						var isContainLv = items.FindIndex(x => check.checkedLvIdList.IndexOf(x.lvId) > -1) != -1;
+						if (end == 1000 && 
+							    (!_isStartTimeAllCheck || (isContainLv)) && 
+							    !_isStartTimeAllCheck) end = i + 1;
+//						break;
+					}
+					lastRes = res;
+					if (isEndFile) 
+						break;
+					if (isFirst && !_isStartTimeAllCheck) 
+						break;
+					
+					if (_isStartTimeAllCheck) {
+						check.foundLive(items);
+						items = new List<RssItem>();
+					}
+				}
+				//if (items.Count > 0)
+				//	lastLv = items[0].lvId;
+				
+				util.debugWriteLine("checked lv list count " + check.checkedLvIdList.Count);
+				util.debugWriteLine("get category items " + items.Count);
+				if (items.Count > -1) {
+					foreach (RssItem it in items) {
+						util.debugWriteLine(it.lvId + " " + it.comId + " " + it.hostName + " " + it.title + " " + it.pubDate);
+					}
+				}
+			}
+			util.debugWriteLine("category check lv list count " + items.Count);
+			return items;
 		}
 		public bool getRssItems(string res, ref List<RssItem> items, ref bool isEndFile, string categoryName) {
 			var isContainAddedLv = false;
@@ -147,6 +173,7 @@ namespace namaichi.alart
 					}
 				}
 				if (categoryObj.data.Count == 0) isEndFile = true;
+				
 				return isContainAddedLv;
 			
 			} catch (Exception e) {

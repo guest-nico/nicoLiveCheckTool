@@ -414,7 +414,7 @@ namespace namaichi.alart
 							//Thread.Sleep(15000);
 							
 							Thread.Sleep(1 * 60 * 1000);
-							util.debugWriteLine(DateTime.Now.ToString() + " ping " + sslStream.GetHashCode());
+							util.debugWriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + " ping " + sslStream.GetHashCode());
 							try {
 								var ping = new HeartbeatPing();
 								
@@ -606,7 +606,7 @@ namespace namaichi.alart
 				util.debugWriteLine("getNicoCasItem appPush " + msg.ToString() + " " + lvid);
 				string title, comName, hostName;//, thumbnail, description;
 				DateTime dt = util.getUnixToDatetime(msg.Sent / 1000);
-				if (dt < startTime || dt < DateTime.Now - TimeSpan.FromMinutes(10)) 
+				if (dt < startTime - TimeSpan.FromMinutes(10) && !bool.Parse(config.get("IsStartTimeAllCheck")))
 					return new List<RssItem>();
 				hostName = "";
 				
@@ -640,6 +640,8 @@ namespace namaichi.alart
 					title = util.getRegGroup(appData, "program_title\\\\\":\\\\\"(.+?)\\\\\"");
 					*/
 				} else {
+					if (hg.isClosed) 
+						return new List<RssItem>();
 					if (hg.type == "community" || hg.type == "user") {
 						//var reg = new Regex("\\[生放送開始\\](.+?)さんが「(.+?)」を開始しました。");
 						//var m = reg.Match(msg.AppData.ToString());
@@ -678,7 +680,7 @@ namespace namaichi.alart
 					
 				}
 				
-				var i = new RssItem(title, lvid, dt.ToString(), hg.description, comName, hg.communityId, hostName, hg.thumbnail, hg.isMemberOnly.ToString(), "", hg.isPayment);
+				var i = new RssItem(title, lvid, dt.ToString("yyyy/MM/dd HH:mm:ss"), hg.description, comName, hg.communityId, hostName, hg.thumbnail, hg.isMemberOnly.ToString(), "", hg.isPayment);
 				i.setUserId(hg.userId);
 				i.setTag(hg.tags);
 				i.category = hg.category;

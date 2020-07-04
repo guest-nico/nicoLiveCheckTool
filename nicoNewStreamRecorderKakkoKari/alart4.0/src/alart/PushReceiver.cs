@@ -395,8 +395,8 @@ namespace namaichi.alart
 				lvid = util.getRegGroup(dec, "\"content_ids\":\"(lv\\d+)\"");
 				thumbnail = util.getRegGroup(dec, "\"icon\":\"(.+?)\"");
 				dt = util.getRegGroup(dec, "\"created_at\":\"(.+?)\"");
-				if (dt != null && DateTime.Parse(dt) < startTime) 
-					return null;
+				if (dt != null && DateTime.Parse(dt) < startTime && !bool.Parse(config.get("IsStartTimeAllCheck")))
+					return new List<RssItem>();
 				if (isCom || isJikken) {
 					title = util.getRegGroup(dec, "\"body\":\".+? で、*「(.+?)」を放送\"");
 					comName = util.getRegGroup(dec, "\"body\":\"(.+?) で、*「");
@@ -418,6 +418,9 @@ namespace namaichi.alart
 					util.debugWriteLine("push page error !r " + lvid);
 					return null;
 				}
+				if (hg.isClosed) 
+					return new List<RssItem>();
+				
 				util.debugWriteLine("description " + hg.description);
 				util.debugWriteLine("userId " + hg.userId);
 				util.debugWriteLine("userName " + hostName);

@@ -760,8 +760,7 @@ namespace namaichi.alart
 				}
 				*/
 				var intervalSec = bool.Parse(form.config.get("IscheckOnAir")) ? 180 : 180;
-				if (bool.Parse(form.config.get("IscheckRecent")) && 
-				 	   DateTime.Now - lastCheckLastRecentLiveTime > TimeSpan.FromSeconds(intervalSec)) {
+				if (DateTime.Now - lastCheckLastRecentLiveTime > TimeSpan.FromSeconds(intervalSec)) {
 					Task.Factory.StartNew(() => {
 					    lastCheckLastRecentLiveTime = DateTime.MaxValue;
 					    form.recentLiveCheck();
@@ -797,7 +796,7 @@ namespace namaichi.alart
 				util.debugWriteLine("pubdate mail " + item.pubDate);
 				string dt = DateTime.Parse(item.pubDate).ToString("yyyy/MM/dd(ddd) HH:mm");
 				string title, body;
-				body = DateTime.Now.ToString() + "\n";
+				body = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + "\n";
 				if (item.hostName != "" && item.hostName != null) {
 					title = "[ニコ生]" + item.hostName + "の放送開始";
 					body += item.hostName + " が " + item.comName + " で " + item.title + " - " + dt + "開始 を開始しました。\n";

@@ -9,6 +9,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Text;
+using System.Text;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Net;
@@ -17,9 +18,12 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using namaichi.config;
 using System.IO;
-//using NAudio.Midi;
 using SunokoLibrary.Application;
 using SunokoLibrary.Windows.ViewModels;
+
+//using NAudio.Midi;
+
+
 
 namespace namaichi
 {
@@ -57,7 +61,7 @@ namespace namaichi
 			var formData = getFormData();
 			cfg.saveFromForm(formData);
 			
-			setStartUpMenu(!bool.Parse(cfg.get("IsStartUp")));
+			setStartUpMenu2(!bool.Parse(cfg.get("IsStartUp")));
 				
 			//main cookie
 			var importer = nicoSessionComboBox1.Selector.SelectedImporter;
@@ -549,7 +553,7 @@ namespace namaichi
 			
 			
 			var title = "[ニコ生]ユーザー名の放送開始";
-			var msg = DateTime.Now.ToString() + "\nユーザー名 が コミュニティ名 で 放送タイトル を開始しました。\nhttps://live.nicovideo.jp/watch/lv********\nhttps://com.nicovideo.jp/community/co*******";
+			var msg = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + "\nユーザー名 が コミュニティ名 で 放送タイトル を開始しました。\nhttps://live.nicovideo.jp/watch/lv********\nhttps://com.nicovideo.jp/community/co*******";
 			
 			Task.Factory.StartNew(() => {
 				string eMsg;
@@ -696,6 +700,7 @@ namespace namaichi
 			    shortcut2.TargetPath = exe;
 			    shortcut2.WorkingDirectory = util.getJarPath()[0];
 			    shortcut2.WindowStyle = 1;
+			    shortcut2.Arguments = "-shortcut";
 			    //shortcut.IconLocation = Application.ExecutablePath + ",0";
 			    shortcut2.Save();
 			 
@@ -708,7 +713,38 @@ namespace namaichi
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
-		
+		void setStartUpMenu2(bool isDelete) {
+			try {
+				var exe = Application.ExecutablePath;
+				//var exeName = Path.GetFileNameWithoutExtension(exe);
+				var exeName = "放送チェックツール（仮";
+				
+				var dir = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+				util.debugWriteLine(dir);
+				
+				var files = Directory.GetFiles(dir);
+				foreach (var f in files) {
+					util.debugWriteLine("f " + f);
+					var fName = Path.GetFileNameWithoutExtension(f);
+					if (!f.EndsWith(".lnk") && !f.EndsWith(".bat")) continue;
+					
+					var n = exeName;
+					if (fName != exeName) continue;
+					
+					if (File.Exists(f))
+						File.Delete(f);
+				}
+				util.debugWriteLine(files.Length);
+				if (isDelete) return;
+				
+				using (var sw = new StreamWriter(dir + "/" + exeName + ".bat", false, Encoding.GetEncoding("shift_jis"))) {
+					sw.WriteLine("start \"\" \"" + exe + "\"");
+				}
+				
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+		}
 		
 		void CheckBoxShowAllCheckedChanged(object sender, EventArgs e)
 		{

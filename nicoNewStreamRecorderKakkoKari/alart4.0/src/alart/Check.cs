@@ -896,8 +896,6 @@ namespace namaichi.alart
 				if (alartAddLive == "2" && !item.isAlarted) continue;
 				
 				var li = new LiveInfo(item, form.alartListDataSource, form.config, form.userAlartListDataSource);
-				//li.category = item.category;
-				//li.type = item.type;
 				
 				var isContain = false;
 				foreach (var a in form.liveListDataSource)

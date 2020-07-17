@@ -343,3 +343,6 @@ ASALocalRun/
 !nicoNewStreamRecorderKakkoKari/packages/NAudio.1.8.5/
 !nicoNewStreamRecorderKakkoKari/packages/Interop.IWshRuntimeLibrary.dll
 !nicoNewStreamRecorderKakkoKari/packages/SnkLib.App.CookieGetter.2.4.0.0/**/x86
+!nicoNewStreamRecorderKakkoKari/packages/bass.dll
+!nicoNewStreamRecorderKakkoKari/packages/BASS.ASIO.1.3.1.2/
+!nicoNewStreamRecorderKakkoKari/packages/BASS.Native.2.4.12.2/

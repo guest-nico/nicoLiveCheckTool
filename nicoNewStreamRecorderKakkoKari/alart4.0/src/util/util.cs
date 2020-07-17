@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Net.Mail;
 using System.Runtime.InteropServices;
+using Un4seen.Bass;
 using namaichi.config;
 using namaichi.info;
 using namaichi;
@@ -30,8 +31,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.70";
-	public static string versionDayStr = "2020/07/04";
+	public static string versionStr = "ver0.1.7.71";
+	public static string versionDayStr = "2020/07/18";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -1332,10 +1333,11 @@ class util {
 			if (volume < 0) volume = (float)0;
 			if (volume > 1) volume = (float)1;
 			
-			var isMCI = true;
-			if (isMCI) {
+			var mode = 2;
+			
+			if (mode == 0) {
 				playSoundMCI(path, (int)(volume * 1000), true, form);
-			} else {
+			} else if (mode == 1) {
 				//naudio
 				/*
 				var reader = new NAudio.Wave.AudioFileReader(path);
@@ -1349,6 +1351,14 @@ class util {
 				//waveOut.Dispose();
 				reader.Close();
 				*/
+			} else if (mode == 2) {
+				var init = Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero);
+				util.debugWriteLine("bass init " + init);
+				
+				int handle = Bass.BASS_StreamCreateFile(path, 0, 0, BASSFlag.BASS_DEFAULT);
+				util.debugWriteLine("bass handle " + handle);
+				Bass.BASS_SetConfig(BASSConfig.BASS_CONFIG_GVOL_STREAM, (int)(volume * 10000));
+				Bass.BASS_ChannelPlay(handle, false);
 			}
 			
 		} catch (Exception e) {
@@ -1368,7 +1378,7 @@ class util {
 	public static void playSoundMCI(string path, int volume, bool isAsync, MainForm form) {
 		debugWriteLine("playsound mci " + path + " volume " + volume + " " + isAsync);
 		
-		var name = Guid.NewGuid();
+		var name = Guid.NewGuid().ToString();
 	    var cmd = "open \"" + path + "\" type mpegvideo alias " + name;
 	    debugWriteLine(cmd);
 	    var ret = mciSendStringForm(cmd, null, 0, IntPtr.Zero, form);
@@ -1383,7 +1393,25 @@ class util {
 	    }
 	    ret = mciSendStringForm("setaudio " + name + " volume to " + volume.ToString(), null, 0, IntPtr.Zero, form);
 	    
-	    mciSendStringForm("play " + name, null, 0, IntPtr.Zero, form);
+	    if (ret != 0) {
+	    	debugWriteLine("playsound mci setaudio error " + ret + " " + cmd);
+	    	StringBuilder errMsg = new StringBuilder(1000);
+			mciGetErrorString(ret, errMsg, 1000);
+			debugWriteLine("mci err " + errMsg);
+			form.addLogText("サウンドの再生中に問題が発生しました。ERROR:" + ret + ", メッセージ:" + errMsg + " パス:" + path + ", volume:" + volume);
+	        return;
+	    }
+	    
+	    ret = mciSendStringForm("play " + name, null, 0, IntPtr.Zero, form);
+	    
+	    if (ret != 0) {
+	    	debugWriteLine("playsound mci play error " + ret + " " + cmd);
+	    	StringBuilder errMsg = new StringBuilder(1000);
+			mciGetErrorString(ret, errMsg, 1000);
+			debugWriteLine("mci err " + errMsg);
+			form.addLogText("サウンドの再生中に問題が発生しました。ERROR:" + ret + ", メッセージ:" + errMsg + " パス:" + path + ", volume:" + volume);
+	        return;
+	    }
 	    
 	    if (!isAsync) {
 	    	StringBuilder status = new StringBuilder();
@@ -1401,7 +1429,9 @@ class util {
 			StringBuilder buffer, int bufferSize, IntPtr hwndCallback, MainForm form) {
 		var ret = 0;
 		form.formAction(() => 
-				ret = mciSendString(command, buffer, bufferSize, hwndCallback), -1);
+		                	ret = mciSendString(command, buffer, bufferSize, hwndCallback)
+		                	, -1);
+				//ret = mciSendString(command, buffer, bufferSize, hwndCallback));
 		return ret;
 	}
 	public static bool sendMail(string from, string to, 

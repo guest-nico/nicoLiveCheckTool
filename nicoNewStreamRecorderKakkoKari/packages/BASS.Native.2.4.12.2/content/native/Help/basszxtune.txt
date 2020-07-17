@@ -1,0 +1,195 @@
+BASSZXTUNE v2.4.5
+
+
+
+*** DESCRIPTION ***
+
+BASSZXTUNE - BASS audio library add-on based on ZXTune library.
+
+This add-on adds a support for chiptune tracker formats to BASS audio library. BASSZXTUNE is merely a wrapper around the upstream project ZXTune (http://zxtune.bitbucket.org/). All the hard work (decoding functionality) was done by the author of ZXTune.
+
+Supported extensions: $b, $m, ahx, as0, asc, ay, ayc, bin, cc3, chi, cop, d, dmm, dsq, dst, esv, fdi, ftc, gam, gamplus, gbs, gtr, gym, hes, hrm, hrp, lzs, m, msp, mtc, nsf, nsfe, p, pcd, psc, psg, psm, pt1, pt2, pt3, s, sap, scl, sid, spc, sqd, sqt, st1, st3, stc, stp, str, szx, td0, tf0, tfc, tfd, tfe, tlz, tlzp, trd, trs, ts, vgm, vtx, ym.
+
+Also, it's possible to open modules inside archives with common formats: zip, tar, rar, gzip, lzma.
+
+Note: the following extensions are supported but will not be listed in BASS_PLUGININFO: txt, rar, zip.
+
+Limitations:
+    - "Supported extensions" doesn't mean "supported formats". Some files with the above mentioned extensions may not be supported by BASSZXTUNE. For a full list of supported formats look here: http://zxtune.bitbucket.org/info/features/
+    - Buffered streams (STREAMFILE_BUFFER, STREAMFILE_BUFFERPUSH, etc) are not supported.
+    - Streaming in blocks (BASS_STREAM_BLOCK) is not supported.
+    - Internet streams (BASS_StreamCreateURL) are not supported.
+    - Only mono and stereo output, no access to separate module channels.
+
+Supported platforms:
+    - MS Windows i686 & x86_64 (tested on MS Windows 10 64-bit)
+    - Linux i686 & x86_64 (tested on Kubuntu 16.10 Yakkety Yak 64/32-bit)
+    - OSX x86_64 (tested on OSX 10.12 Sierra)
+    - Android arm_v7a 4.0.3 and later (tested on Nexus 7 [2012] with Android 5.1.1 Lollipop & LG G2 with Android 4.4.4 KitKat)
+    - Android i686 4.0.3 and later (tested on emulator)
+
+To download the latest BASSZXTUNE version, visit:
+https://sourceforge.net/projects/basszxtune/files/basszxtune/
+
+
+
+*** BUILD INSTRUCTIONS ***
+
+https://bitbucket.org/z80maniac/zxtune/src/master/apps/plugins/BUILD.TXT
+
+
+
+*** USAGE ***
+
+There are two ways you can use the add-on.
+1) Use BASS_PluginLoad (recommended).
+2) Load BASSZXTUNE library by yourself. You may use basszxtune.h and/or basszxtune.lib from the archive if needed. The following library functions are available:
+    HSTREAM BASS_ZXTUNE_StreamCreateFile(BOOL mem, const void *file, QWORD offset, QWORD length, DWORD flags);
+    HSTREAM BASS_ZXTUNE_StreamCreateFileUser(DWORD system, DWORD flags, const BASS_FILEPROCS *procs, void *user);
+See the documentation regarding BASS_StreamCreate and BASS_StreamCreateFileUser. The same documentation may be applied to their BASS_ZXTUNE_* counterparts. Mind the limitations mentioned above, though.
+
+To retreive tags in OGG format use BASS_ChannelGetTags(<handle>, BASS_TAG_OGG). Available tags: TYPE, TITLE, ARTIST, PROGRAM, COMPUTER, DATE, DESCRIPTION, VERSION, POSITIONS, LOOPPOSITION, PATTERNS, FRAMES, LOOPFRAME, CHANNELS, INITIALTEMPO, STRINGS. Not all tags may be present. The content of tags depends on a tune format.
+
+
+
+*** CONFIGURATION OPTIONS ***
+
+BASSZXTUNE supports one config option: BASS_CONFIG_ZXTUNE_MAXFILESIZE. This option specifies the maximum filesize that can be opened by the plugin. The specified constant can be found in consts.h.
+Example usage: BASS_SetConfig(BASS_CONFIG_ZXTUNE_MAXFILESIZE, 1024*32) - only allow BASSZXTUNE to open files that are no bigger than 32KiB.
+The default maximum file size is 2 MiB.
+
+
+
+*** ARCHIVED FORMATS AND SUBTUNES ***
+
+BASSZXTUNE supports archived and packed formats. Files with such formats may hold more than one logical module inside. These modules will be treated as parts of one continuous stream. The add-on will decode them one after another without gaps. The total length of the file is the sum of the lengths of all underlying modules. Everytime a stream jumps to a different logical module the BASS_SYNC_OGG_CHANGE is triggered.
+
+There is a number of constants (which can be found in consts.h) that allow to retrieve the information about subtunes:
+BASS_ChannelGetLength(<handle>, BASS_POS_ZXTUNE_SUB_COUNT) - the number of subtunes
+BASS_ChannelGetLength(<handle>, BASS_POS_OGG) - the same as above
+BASS_ChannelGetLength(<handle>, BASS_POS_ZXTUNE_SUB_LENGTH + <subtuneIndex>)) - the length of a particular subtune
+BASS_ChannelGetTags(<handle>, BASS_TAG_ZXTUNE_SUB_OGG + <subtuneIndex>)) - get the tags of a particular subtune
+
+If subtuneIndex (which is zero-based) is out of range then the function will fail with BASS_ERROR_POSITION. Info can be retrieved only for the first 65536 subtunes.
+
+
+
+*** ZXTUNE CHANGELOG ***
+
+This project's repository:
+    commits: https://bitbucket.org/z80maniac/zxtune/commits/all
+    changelog: https://bitbucket.org/z80maniac/zxtune/src/master/apps/changelog.txt
+
+Upstream (ZXTune):
+    commits: https://bitbucket.org/zxtune/zxtune/commits/all
+    changelog: https://bitbucket.org/zxtune/zxtune/src/master/apps/changelog.txt
+
+
+
+*** BASSZXTUNE CHANGELOG ***
+
+v2.4.5
+
+- based on ZXTune revision r3590; compatible with BASS 2.4
+- changed: values and usage of all constants (see const.h and README again)
+- added: new tags POSITIONS, LOOPPOSITION, PATTERNS, FRAMES, LOOPFRAME, CHANNELS, INITIALTEMPO, STRINGS
+- added: ability to set maximum file size (see CONFIGURATION OPTIONS in README)
+- notable cumulative changes within ZXTune project:
+    Fixes in 7zip decoding
+    Support additional module strings retrieval (e.g. samples/instruments names)
+    Fixed playback of arpeggio effect in tf0/tfe formats playback
+    Fixed playback of some HES files
+
+
+v2.4.4
+
+- based on ZXTune revision r3500; compatible with BASS 2.4
+- fixed: very slow seek speed
+- fixed: sound can be rendered even after the track end
+- fixed: seeking may fail when jumping between subtunes
+- added: support for the following extensions: sap, ahx, hes, gbs, gym, vgm, nsf, nsfe
+- added: Android i686 build
+- notable cumulative changes within ZXTune project:
+    Added NSF, NSFE, GBS, SAP, HES, VGM and GYM formats support
+    Fixed .ay files playback seeking
+    Added Abyss' Highest Experience format support (AHX)
+    Fixed playback of some .ay files
+    Fixed SPC track author
+    Slight fixes in COP playback
+
+
+v2.4.3
+
+- based on ZXTune revision r3270; compatible with BASS 2.4
+- added: support for mtc extension
+- added: ability to retrieve the number of subtunes as well as their respective info
+- notable cumulative changes within ZXTune project:
+    Added DSK images support
+    Added MultiTrackContainer (MTC) format support
+    Fixes in PT3 playback
+    Fixes in Vortex TXT parsing
+    Fixes in DMM processing for samples with invalid loop
+    Reduced volume of TFM tracks
+    Fixed parsing of some AY modules
+    Fixed crash on SID playback finish
+    Fixed playback of TS tracks with different duration
+
+
+v2.4.2
+
+- based on ZXTune revision r3215; compatible with BASS 2.4
+- added: support for archived and packed files (hrp, rar, scl, szx, trd, cc3, dsq, esv, fdi, gam, gamplus, $b, $m, hrm, bin, p, lzs, msp, pcd, td0, tlz, tlzp, trs)
+- added: tags can be acquired via BASS_ChannelGetTags(handle, BASS_TAG_OGG)
+- added: support for ayc, d, spc extensions
+- removed: txt extension is still suported but will no longer be listed in BASS_PLUGININFO
+- removed: BASS_ZXTUNE_StreamCreateURL
+- notable cumulative changes within ZXTune project:
+    Support SID format version 3
+    Support unpacked YM files
+    Support PCD6.1i packer modification
+    Proper size detection of PCD blocks
+    Improved quality of beeper emulation
+    Fixed SQD playback
+    Added ExtremeTracker v1.xx support
+    Fix crash on invalid MMD3 modules
+    Fixed PT3 playback with default sample
+    Added Amstrad AYC support
+    Fixed processing of non-ascii symbols in modules
+    Fixed STP/PT2 playback with default sample
+    Fixed filter emulation for SID playback
+    Added SNES SPC support
+    Fixed processing of some multitrack AY files
+    Fixed TurboLZ packers support
+
+
+v2.4.1
+
+- initial release (based on ZXTune revision r3005; compatible with BASS 2.4)
+
+
+
+*** CREDITS, LICENSES, CONTACTS ***
+
+BASSZXTUNE - BASS audio library add-on based on ZXTune library.
+    (c) Alkatraz Studio, 2014
+    Licence: GPLv3
+    Project homepage: https://sourceforge.net/projects/basszxtune/
+    Developer: Alexey Parfenov
+    Developer homepage: https://alkatrazstudio.net/
+    Contact email: zxed@alkatrazstudio.net
+
+ZXTune - crossplatform chiptune player.
+    (c) Vitamin/CAIG, 2008-2016
+    License: GPLv3
+    Project homepage: http://zxtune.bitbucket.org/
+    Developer: Vitamin/CAIG
+    Developer homepage: http://zxdocs.fatal.ru/
+    Contact email: vitamin.caig@gmail.com
+
+BASS - an audio library for use in software on several platforms.
+    Copyright (c) 1999-2016 Un4seen Developments Ltd. All rights reserved.
+    License: Freeware/Shareware/Other (see http://www.un4seen.com/bass.html for details)
+    Project homepage: http://www.un4seen.com/bass.html
+    Developer: Un4seen Developments
+    Developer homepage: http://www.un4seen.com/
+    Contact email: il@un4seen.com

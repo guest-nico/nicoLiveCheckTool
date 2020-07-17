@@ -72,6 +72,12 @@ Copyright Microsoft
 MS-.NET-Library License  
 <https://dotnet.microsoft.com/ja/dotnet_library_license.htm>  
   
+Bass  
+Bass.NetWrapper  
+<http://www.un4seen.com/>  
+(c) 2005-2016 by radio42, Hamburg, Germany  
+<http://www.un4seen.com/bass.html#license>  
+  
 フリー素材「取り放題.com」様  
 http://toriho-dai.com/  
 otosozai.com様  

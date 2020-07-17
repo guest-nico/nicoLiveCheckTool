@@ -2672,6 +2672,12 @@ namespace namaichi
 				} 
 			}
 		}
+		private void formActionAsync(Action a) {
+			_formActionAsync(a).Wait();
+		}
+		async private Task _formActionAsync(Action a) {
+			await Task.Factory.StartNew(a);
+		}
 		public void removeLiveListItem(LiveInfo li) {
 			if (Thread.CurrentThread == madeThread)
 					util.debugWriteLine("lock form thread removeLiveListItem");

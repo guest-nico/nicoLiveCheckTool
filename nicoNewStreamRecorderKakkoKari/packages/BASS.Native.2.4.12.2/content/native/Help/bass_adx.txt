@@ -1,0 +1,37 @@
+What's the point?
+=================
+BASS_ADX is an extension to the BASS audio library, enabling the playing of
+ADX encoded files.
+
+
+Requirements
+============
+BASS 2.4 is required.
+
+
+Using BASS_ADX
+============
+The plugin system (see BASS_PluginLoad) can be used to add ADX support to
+the standard BASS stream.
+
+Win32 version
+-------------
+To use BASS_ADX with Borland C++ Builder, you'll first have to create a
+Borland C++ Builder import library for it. This is done by using the
+IMPLIB tool that comes with Borland C++ Builder. Simply execute this:
+
+	IMPLIB BASSADXBCB.LIB BASS_ADX.DLL
+
+... and then use BASSADXBCB.LIB in your projects to import BASSADX.
+
+Licence
+=======
+BASS_ADX is free to use with BASS.
+
+Contact e-mail _ff_alex_ff_@mail.ru
+Contact ICQ    460619880
+
+Update
+------
+6.02.2009 - Fixed bug with supporting unstandart frequency, now min frequency in mono = 64 hz, in stereo = 72 hz, max freqency depend from bass system
+6.02.2009 - Fixed bug with detection of end of stream

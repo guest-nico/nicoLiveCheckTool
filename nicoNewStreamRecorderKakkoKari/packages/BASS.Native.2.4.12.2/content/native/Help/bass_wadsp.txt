@@ -1,0 +1,277 @@
+BASS_WADSP - Help
+-----------------
+Written by Bernd Niedergesaess
+Version: 2.4.1.0
+Copyright: 2005-2009, radio42, Bernd Niedergesaess
+All Rights reserved.
+
+General Usage:
+a) Call "BASS_WADSP_Init" - at the start of your application e.g. after you have called BASS_Init
+b) Call "BASS_WADSP_Load" - to load a Winamp DSP plugin file
+c) Call "BASS_WADSP_Start" - to start the Winamp DSP plugin
+d) Create a Bass stream...
+e) Call "BASS_WADSP_ChannelSetDSP" - to set the Winamp DSP to this channel
+f) Play the channel... and at the end call "BASS_WADSP_ChannelRemoveDSP" (only needed if BASS_STREAM_AUTOFREE was NOT specified at stream creation)
+g) ...repeat with d)
+h) Call "BASS_WADSP_Stop" - to stop the Winamp DSP plugin
+i) Call "BASS_WADSP_FreeDSP" - to unload a Winamp DSP plugin (also stops it and removes the DSP)
+j) Call "BASS_WADSP_Free" at the end of your application - to free all resources
+
+Note: 
+You should disable floating-point exceptions in your app (needed e.g. for C/C++ or Delphi).
+This is because some Winamp DSPs might change the FloatingPointUnit state and raise a stupid exception.
+
+FUNCTION OVERVIEW:
+------------------
+
+// Returns the version of BASS_WADSP.
+int BASS_WADSP_GetVersion();
+
+// Initializes BASS_WADSP, call this right after you have called BASS_Init.
+// hwndMain: The main window handle of your application - or NULL for console applications.
+// Errors:
+// BASS_ERROR_ALREADY : BASS_WADSP_Init has already been called and can not be called again.
+Bool BASS_WADSP_Init(Int32 hwndMain);
+
+// Frees all resources of BASS_WADSP - call this method at the and of your application.
+// Errors:
+// BASS_ERROR_INIT : BASS_WADSP_Init has not been called before.
+Bool BASS_WADSP_Free();
+
+// Frees and unloads a Winamp DSP library from memory which has been loaded with BASS_WADSP_Load before.
+// plugin: The plugin handle to unload (returned by BASS_WADSP_Load).
+// Errors:
+// BASS_ERROR_HANDLE : The plugin is not a valid plugin handle.
+Bool BASS_WADSP_FreeDSP(Int32 plugin);
+
+// Gets the window handle of the fake Winamp window which has been created internally when a Winamp DSP was loaded with BASS_WADSP_Load.
+// plugin: The plugin handle (returned by BASS_WADSP_Load).
+// Returns: A pointer representing the window handle of the fake Winamp window or NULL if an error occured.
+// Errors:
+// BASS_ERROR_HANDLE : The plugin is not a valid plugin handle.
+// BASS_ERROR_UNKNOWN : Some other problem (the internal fake Winamp window could not be created).
+Int32 BASS_WADSP_GetFakeWinampWnd(Int32 plugin);
+
+// Set a global song title for BASS_WADSP.
+// plugin: The plugin handle to unload (returned by BASS_WADSP_Load).
+// thetitle: The song title to set.
+// Note:
+// Some Winamp DSPs require or simply display a current song title. Use this method to set this song title. It will then be used in the internal Window message handler for all fake Winamp windows.
+// In most cases it is not required to set any song title at all.
+// For streaming DSPs (e.g. SHOUTcast Source DSP) use this function to set the title metadata
+// Errors:
+// BASS_ERROR_HANDLE : The plugin is not a valid plugin handle.
+Bool BASS_WADSP_SetSongTitle(Int32 plugin, String thetitle);
+
+// Set a global file name for BASS_WADSP.
+// plugin: The plugin handle to unload (returned by BASS_WADSP_Load).
+// thefile: The file name to set.
+// Note:
+// Some Winamp DSPs require or simply display a current playing file name. Use this method to set this file name. It will then be used in the internal Window message handler for all fake Winamp windows.
+// In most cases it is not required to set any file name at all.
+// Errors:
+// BASS_ERROR_HANDLE : The plugin is not a valid plugin handle.
+Bool BASS_WADSP_SetFileName(Int32 plugin, String thefile);
+
+// User defined Window Message Process Handler (to be used with BASS_WADSP_Load).
+// Normally this is not needed, since BASS_WADSP implements a default handler which emulates most functions needed by Winamp DSPs.
+// However, some very special Winamp DSPs might require something special. So you might implement your own windows message handler here.
+// hwnd: The Window handle we are dealing with - which is the hidden fake window which BASS_WADSP has created during BASS_WADSP_Load and which emulates a Winamp 1.x class.
+// msg: The window message send. You typically might only react on WM_USER messages.
+// wParam: The wParam message parameter see the Winamp SDK for further details.
+// lParam: The lParam message parameter see the Winamp SDK for further details.
+// The BASS_WADSP_IPC_xxx constants define most lParam values you should typically handle. See the Winamp SDK for further details.
+Int32 CALLBACK WINAMPWINPROC(Int32 hwnd, UInt16 msg, Int16 wParam, Int32 lParam);
+
+// Loads a Winamp DSP library.
+// <param name="dspfile">The fully qualified path and name of the Winamp DSP library you want to load (e.g. "C:\\Program Files\\Winamp\\Plugins\\dsp_ss.dll").
+// Both Unicode as well as Ansi filenames are supported, whereas Unicode is tried first.</param>
+// x: The X-coordinate of the fake Winamp window to create.
+// y: The Y-coordinate of the fake Winamp window to create.
+// width: The width of the fake Winamp window to create.
+// height: The height of the fake Winamp window to create.
+// <param name="proc">An optional WINAMPWINPROC which should be used instead of the internal window process message handler. Or NULL, if you want BASS_WADSP to handle it by default.</param>
+// Returns: The handle of the loaded plugin, which is needed in all further method calls.
+// Note:
+// Most Winamp DSP plugins do save their location and visibility state in an own .ini file. So the parameters specifying the location and size are in most cases only uses for the first time a plugin is used. So don't worry, if they do not take effect.
+// In most cases the internal Windows message process handler should be fine and sufficient - however, if you encounter problems you might implement your own.
+// Make sure to call BASS_WADSP_FreeDSP when the Winamp DSP is not needed anymore and should be unloaded and removed from memory.
+// Winamp DSPs are designed to run only for one stream. So if you have multiple streams or multiple players in your application and you want to use the same Winamp DSP you need to create temporary copies of the library files (e.g. copy "dsp_ss.dll" to "dsp_ss2.dll", "dsp_ss3.dll" etc.).
+// Then you should load each individual library copy with this function. This will enable you to load multiple instances of the same Winamp DSP. Each loaded instance can then be used for individual streams.
+// NOTE: Do not use this method while you have already loaded the same Winamp plugin, as this might result in any unexpected behavior, since some Winamp plugins might crash when they are loaded twice.
+// Errors:
+// BASS_ERROR_FILEOPEN : The dspfile can not be found or loaded.
+// BASS_ERROR_FILEFORM : The dspfile doesn't seem to be a Winamp DSP library file.
+// BASS_ERROR_UNKNOWN : Some other problem (the internal fake Winamp window could not be created).
+Int32 BASS_WADSP_Load(String dspfile, Int16 x, Int16 y, Int16 width, Int16 height, WINAMPWINPROC proc);
+
+// Invokes the config dialog of a loaded Winamp DSP.
+// plugin: The plugin handle (returned by BASS_WADSP_Load)
+// module: The module number to use.
+// Note:
+// The Winamp DSP must have been started via BASS_WADSP_Start prior to calling this method.
+// Errors:
+// BASS_ERROR_HANDLE : The plugin is not a valid plugin handle.
+// BASS_ERROR_START : BASS_WADSP_Start has not been called before.
+Bool BASS_WADSP_Config(Int32 plugin);
+
+// Starts a Winamp DSP.
+// plugin: The plugin handle (returned by BASS_WADSP_Load).
+// module: The module number to start (the first module is 0).
+// handle: The Bass channel handle (HSTREAM, HMUSIC, or HRECORD) for which to start the Winamp DSP. Or 0 if not applicable.
+// Note:
+// Winamp DSPs might provide multiple independent modules. You might get the number of available modules with BASS_WADSP_GetModule.
+// The stream channel is only needed here because some Winamp DSPs might already request some information, which can be provided in this case. However, if you don't have created a stream so far, just leave the value to 0 and all is fine.
+// Errors:
+// BASS_ERROR_HANDLE : The plugin or the handle is not a valid handle.
+// BASS_ERROR_ILLPARAM : The module is not a valid plugin handle.
+// BASS_ERROR_ALREADY : The plugin/module was already started (you need to call BASS_WADSP_Stop before starting it again).
+// BASS_ERROR_UNKNOWN : Some other plugin problem (the plugin could not be initialized).
+Bool BASS_WADSP_Start(Int32 plugin, Int32 module, Int32 handle);
+
+// Stops a Winamp DSP.
+// plugin: The plugin handle (returned by BASS_WADSP_Load).
+// Note:
+// If the Winamp DSP was already assigned to a channel using BASS_WADSP_ChannelSetDSP the DSP will be removed automatically from the channel when it is stopped.
+// Errors:
+// BASS_ERROR_HANDLE : The plugin is not a valid plugin handle.
+// BASS_ERROR_START : BASS_WADSP_Start has not been called before.
+Bool BASS_WADSP_Stop(Int32 plugin);
+
+// Assigns a channel to a Winamp DSP.
+// You only need this method, if you do NOT use the default BASS_WADSP_ChannelSetDSP method, but use your own DSP callback (see DSPPROC).
+// plugin: The plugin handle (returned by BASS_WADSP_Load).
+// handle: The Bass channel handle (HSTREAM, HMUSIC, or HRECORD) which to assign to the Winamp DSP.
+// Note:
+// You must call this method when implementing your own DSPPROC callback before starting to play the channel.
+// Errors:
+// BASS_ERROR_HANDLE : The plugin or the handle is not a valid handle.
+Bool BASS_WADSP_SetChannel(Int32 plugin, Int32 handle);
+
+// Returns the currently selected plugin module of a Winamp DSP.
+// plugin: The plugin handle (returned by BASS_WADSP_Load).
+// Returns: The selected module number (first starts with 0). Or -1, if an error occured.
+// Errors:
+// BASS_ERROR_HANDLE : The plugin is not a valid plugin handle.
+// BASS_ERROR_START : BASS_WADSP_Start has not been called before.
+Int32 BASS_WADSP_GetModule(Int32 plugin);
+
+// Assigns a loaded Winamp DSP to a standard Bass channel DSP.
+// This method is pretty close to the BASS_ChannelSetDSP method (which is in fact internally used) but instead of setting up a user DSP method the Winamp DSP will be set up.
+// plugin: The plugin handle (returned by BASS_WADSP_Load).</param>
+// handle: The Bass channel handle (HSTREAM, HMUSIC, or HRECORD) which to assign to the Winamp DSP.
+// priority: The priority of the new DSP, which determines it's position in the Bass DSP chain - DSPs with higher priority are called before those with lower.
+// Returns: If succesful, then the new DSP's handle (HDSP) is returned, else 0 is returned.
+// Note:
+// This method can and should only be used with those Winamp DSPs which return exactly as much samples as provided - meaning not modifying the samplerate, tempo, pitch etc.!
+// The Winamp DSP and this method can be used with 8-bit, 16-bit or float channels. Since all Winamp DSPs will internally only work with 16-bit channels an automatic internal automatic conversion from 8-bit resp. float to 16-bit will take place.
+// Errors:
+// BASS_ERROR_HANDLE : The plugin or the handle is not a valid handle.
+Int32 BASS_WADSP_ChannelSetDSP(Int32 plugin, Int32 handle, Int16 priority);
+
+// Removes a Winamp DSP from the Bass DSP chain which had been set up with BASS_WADSP_ChannelSetDSP before.
+// plugin: The plugin handle (returned by BASS_WADSP_Load).
+// Returns: TRUE, if successfully removed, else FALSE.
+// Errors:
+// BASS_ERROR_HANDLE : The plugin is not a valid plugin handle.
+Bool BASS_WADSP_ChannelRemoveDSP(Int32 plugin);
+
+// Invokes the internal 'ModifySamples' method of the Winamp DSP directly (which is only needed for user defined DSPPROC callbacks or in a user defined STREAMPROC).
+// plugin: The plugin handle (returned by BASS_WADSP_Load).
+// buffer: The pointer to the memory block containing the sample data to modify.
+// length: The number of bytes contained in the buffer.
+// Returns: The number of bytes modified, which might be different from the number of bytes given. 
+// A Winamp DSP might return at max. twice the number of bytes but not less than half the number of bytes.
+// Note:
+// This method can be used to support Winamp DSPs which modify the samplerate, pitch etc. - meaning modifying the number of bytes given.
+// However, this is not a simple task to do so, since Bass does not expect this. In order to handle a modified number of bytes you might need to implement a complex intermediate 'ring-buffer' in between Bass and the Winamp DSP.
+// Some Winamp DSPs work with a fixed number of 1152 samples only (meaning 1152 * chans * 2 bytes!) - this might also bring in some additional complexity.
+// Implementing and correctly handling this intermediate 'buffer' is up to you and not handled by BASS_WADSP - however, this method is the right method to use for such a case, since it returns exactly what the Winamp DSP returned.
+// So make sure, that the buffer is at least twice as big as the samples it contains when you call this method, so that the Winamp DSP might have enough space to store it's returned samples into it!
+// This method can be used with 8-bit, 16-bit or float channels. Since all Winamp DSPs will internally only work with 16-bit channels an automatic internal conversion from 8-bit resp. float to 16-bit and back will take place.
+Int32 BASS_WADSP_ModifySamplesSTREAM(Int32 plugin, Pointer buffer, Int32 length);
+
+// Invokes the internal 'ModifySamples' method of the Winamp DSP directly (which is only needed for user defined DSPPROC callbacks).
+// plugin: The plugin handle (returned by BASS_WADSP_Load).
+// buffer: The pointer to the memory block containing the sample data to modify.
+// <param name="length">The number of bytes contained in the buffer.
+// Returns: The number of bytes modified, which should always be the number of bytes specified when calling this method. Or 0, if an error occured.
+// Note:
+// This method can and should only be used with those Winamp DSPs which return exactly as much samples as provided - meaning not modifying the samplerate, tempo, pitch etc.!
+// This method can be used with 8-bit, 16-bit or float channels. Since all Winamp DSPs will internally only work with 16-bit channels an automatic internal conversion from 8-bit resp. float to 16-bit and back will take place.
+Int32 BASS_WADSP_ModifySamplesDSP(Int32 plugin, Pointer buffer, Int32 length);
+
+// Returns the name of the loaded Winamp DSP plugin (as an ANSI string).
+// plugin: The plugin handle (returned by BASS_WADSP_Load).
+// Returns: The name of the plugin on success or NULL on error.
+// Errors:
+// BASS_ERROR_HANDLE : The plugin is not a valid plugin handle.
+String BASS_WADSP_GetName(Int32 plugin);
+
+// Returns the number of modules contained in the loaded Winamp DSP.
+// plugin: The plugin handle (returned by BASS_WADSP_Load).
+// Returns: The number of available modules or -1 if an error occured.
+// Note:
+// Winamp DSPs might implement multiple different modules within the same DSP plugin.
+// Errors:
+// BASS_ERROR_HANDLE : The plugin is not a valid plugin handle.
+UInt16 BASS_WADSP_GetModuleCount(Int32 plugin);
+
+// Returns the name of a certain module of a loaded Winamp DSP (as an ANSI string).
+// plugin: The plugin handle (returned by BASS_WADSP_Load).
+// module: The module number to start (the first module is 0).
+// Returns: The name of the module on success or NULL on error (or if no module with that number exists).
+// Note:
+// Winamp DSPs might provide multiple independent modules. You might get the number of available modules with BASS_WADSP_GetModuleCount.
+// However, you can only start one module at a time for a certain Winamp DSP.
+// You can use this method in a setup dialog to list all the available modules of a Winamp DSP.
+// Errors:
+// BASS_ERROR_HANDLE : The plugin is not a valid plugin handle.
+// BASS_ERROR_ILLPARAM : The module number is invalid.
+String BASS_WADSP_GetModuleName(Int32 plugin, Int32 module);
+
+
+// Free the temporary plugin info resources.
+// Should and must be called after BASS_WADSP_PluginInfoLoad when the plugin info is not needed.
+// Errors:
+// BASS_ERROR_INIT : BASS_WADSP_PluginInfoLoad has not been called.
+Bool BASS_WADSP_PluginInfoFree();
+
+// Loads a Winamp DSP library into the temporary plugin info workspace.
+// dspfile: The fully qualified path and name of the Winamp DSP library you want to load (e.g. "C:\\Program Files\\Winamp\\Plugins\\dsp_ss.dll").
+// Both Unicode as well as Ansi filenames are supported, whereas Unicode is tried first.
+// Returns: TRUE on success, else FALSE.
+// Note:
+// The temporary plugin info workspace can be used to retrieve general information about a Winamp DSP without starting it.
+// This method will be used in the same way BASS_WADSP_Load is used.
+// NOTE: Do not use this method while you have already loaded the same Winamp plugin (e.g. via BASS_WADSP_Load) as this might result in any unexpected behavior, since some Winamp plugins might crash when they are loaded twice.
+// Errors:
+// BASS_ERROR_FILEOPEN : The dspfile can not be found or loaded.
+// BASS_ERROR_FILEFORM : The dspfile doesn't seem to be a Winamp DSP library file.
+Bool BASS_WADSP_PluginInfoLoad(String dspfile);
+
+// Returns the name of the Winamp DSP plugin which has been loaded into the temporary plugin info workspace (as an ANSI string).
+// Returns: The name of the plugin on success or NULL on error.
+// Errors:
+// BASS_ERROR_INIT : BASS_WADSP_PluginInfoLoad has not been called.
+String BASS_WADSP_PluginInfoGetName();
+
+// Returns the number of modules contained in the Winamp DSP which has been loaded into the temporary plugin info workspace.
+// Returns: he number of available modules or -1 if an error occured.
+// Note:
+// Winamp DSPs might implement multiple different modules within the same DSP plugin.
+// Errors:
+// BASS_ERROR_INIT : BASS_WADSP_PluginInfoLoad has not been called.
+UInt16 BASS_WADSP_PluginInfoGetModuleCount();
+
+// Returns the name of a certain module of a Winamp DSP which has been loaded into the temporary plugin info workspace (as an ANSI string).
+// module: The module number to get the name from (the first module is 0).
+// Returns: The name of the module on success or NULL on error (or if no module with that number exists).
+// Note:
+// Winamp DSPs might provide multiple independent modules. You might get the number of available modules with BASS_WADSP_PluginInfoGetModuleCount.
+// You can use this method in a setup dialog to list all the available modules of a Winamp DSP.
+// Errors:
+// BASS_ERROR_INIT : BASS_WADSP_PluginInfoLoad has not been called.
+// BASS_ERROR_ILLPARAM : The module number is invalid.
+String BASS_WADSP_PluginInfoGetModuleName(Int32 module);
+

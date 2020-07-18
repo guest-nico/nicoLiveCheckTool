@@ -66,18 +66,14 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="bass">
-      <HintPath>..\packages\BASS.Native.2.4.12.2\build\native\x86\bass.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
     <Reference Include="Bass.Net, Version=2.4.12.3, Culture=neutral, PublicKeyToken=b7566c273e6ef480, processorArchitecture=MSIL">
       <HintPath>..\packages\Bass.NetWrapper.2.4.12.5\lib\net40\Bass.Net.dll</HintPath>
     </Reference>
-    <Reference Include="BouncyCastle.Crypto">
-      <HintPath>..\packages\BouncyCastle.Crypto.dll.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="Interop.IWshRuntimeLibrary">
-      <HintPath>bin\Debug\Interop.IWshRuntimeLibrary.dll</HintPath>
+      <HintPath>..\packages\Interop.IWshRuntimeLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
@@ -371,9 +367,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.108.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.108.0\build\net451\System.Data.SQLite.Core.targets'))" />
-    <Error Condition="!Exists('..\packages\SnkLib.App.CookieGetter.2.3.1.0\build\net45\SnkLib.App.CookieGetter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SnkLib.App.CookieGetter.2.3.1.0\build\net45\SnkLib.App.CookieGetter.targets'))" />
     <Error Condition="!Exists('..\packages\BASS.Native.2.4.12.2\build\BASS.Native.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\BASS.Native.2.4.12.2\build\BASS.Native.targets'))" />
-    <Error Condition="!Exists('..\packages\BASS.ASIO.1.3.1.2\build\BASS.ASIO.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\BASS.ASIO.1.3.1.2\build\BASS.ASIO.targets'))" />
   </Target>
   <Import Project="..\packages\SnkLib.App.CookieGetter.2.3.1.0\build\net45\SnkLib.App.CookieGetter.targets" Condition="Exists('..\packages\SnkLib.App.CookieGetter.2.3.1.0\build\net45\SnkLib.App.CookieGetter.targets')" />
   <Import Project="..\packages\BASS.Native.2.4.12.2\build\BASS.Native.targets" Condition="Exists('..\packages\BASS.Native.2.4.12.2\build\BASS.Native.targets')" />

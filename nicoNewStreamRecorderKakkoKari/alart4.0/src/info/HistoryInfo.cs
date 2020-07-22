@@ -99,10 +99,10 @@ namespace namaichi.info
 							} else hi.isInListCom = false; 
 						}
 						if (!string.IsNullOrEmpty(ai.hostId)) {
-							if (ai.hostName == hi.userName) {
-								if (hi.favorite.IndexOf("ﾕｰｻﾞｰ名?") == -1) {
+							if (ai.hostId == hi.userId) {
+								if (hi.favorite.IndexOf("ﾕｰｻﾞｰID") == -1) {
 									if (hi.favorite != "") hi.favorite += ",";
-									hi.favorite += "ﾕｰｻﾞｰ名?";
+									hi.favorite += "ﾕｰｻﾞｰID";
 								}
 	//							if (memo != "") memo += ",";
 	//							memo += ai.memo;
@@ -145,7 +145,7 @@ namespace namaichi.info
 						}
 						if (userName != null && userName == ai.hostName) {
 							if (favorite != "") favorite += ",";
-							favorite += "ﾕｰｻﾞｰ名?";
+							favorite += "ﾕｰｻﾞｰID";
 //							if (memo != "") memo += ",";
 //							memo += ai.memo;
 							textColor = ai.textColor;

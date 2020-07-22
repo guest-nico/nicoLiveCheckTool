@@ -625,27 +625,31 @@ namespace namaichi
 		}
 		void SoundTestBtnClick(object sender, EventArgs e)
 		{
-			var name = ((System.Windows.Forms.Button)sender).Name;
-			string path = null;
-			float volume = -1;
-			if (name == "soundTestBtn") {
-				path = util.getJarPath()[0] + "/Sound/se_soc01.wav";
-				volume = (float)volumeBar.Value;
-			} else if (name == "soundATestBtn") {
-				path = soundPathAText.Text;
-				volume = (float)volumeABar.Value;
-			} else if (name == "soundBTestBtn") {
-				path = soundPathBText.Text;
-				volume = (float)volumeBBar.Value;
-			} else if (name == "soundCTestBtn") {
-				path = soundPathCText.Text;
-				volume = (float)volumeCBar.Value;
+			try {
+				var name = ((System.Windows.Forms.Button)sender).Name;
+				string path = null;
+				float volume = -1;
+				if (name == "soundTestBtn") {
+					path = util.getJarPath()[0] + "/Sound/se_soc01.wav";
+					volume = (float)volumeBar.Value;
+				} else if (name == "soundATestBtn") {
+					path = soundPathAText.Text;
+					volume = (float)volumeABar.Value;
+				} else if (name == "soundBTestBtn") {
+					path = soundPathBText.Text;
+					volume = (float)volumeBBar.Value;
+				} else if (name == "soundCTestBtn") {
+					path = soundPathCText.Text;
+					volume = (float)volumeCBar.Value;
+				}
+				if (!File.Exists(path)) {
+					MessageBox.Show("ファイルが見つかりませんでした");
+					return;
+				}
+				util.playSoundCore(volume / 100, path, form);
+			} catch (Exception ee ) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
-			if (!File.Exists(path)) {
-				MessageBox.Show("ファイルが見つかりませんでした");
-				return;
-			}
-			util.playSoundCore(volume / 100, path, form);
 		}
 		void RecentColorBtnClick(object sender, EventArgs e)
 		{

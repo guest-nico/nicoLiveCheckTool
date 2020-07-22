@@ -172,11 +172,13 @@ namespace namaichi.info
 						textColor = ai.textColor;
 						backColor = ai.backColor;
 					}
-					if (!string.IsNullOrEmpty(hostName) && hostName == ai.hostName) {
+					if ((!string.IsNullOrEmpty(ri.userId) && ri.userId == ai.hostId) ||
+					    	(string.IsNullOrEmpty(ri.userId) && 
+					     	!string.IsNullOrEmpty(hostName) && hostName == ai.hostName)) {
 						
-						if (_favorite.IndexOf("ユーザー名?") == -1) {
+						if (_favorite.IndexOf("ﾕｰｻﾞｰ") == -1) {
 							if (_favorite != "") _favorite += ",";
-							_favorite += "ユーザー名?";
+							_favorite += "ﾕｰｻﾞｰ";
 						}
 						if (memo != "") memo += ",";
 						memo += ai.memo;

@@ -64,10 +64,10 @@ namespace namaichi.info
 		public bool isContainKeyword(string keyword) {
 			return util.getRegGroup(lvId, "(" + keyword + ")") != null ||
 				util.getRegGroup(hostName == null ? "" : hostName, "(" + keyword + ")") != null ||
-			    util.getRegGroup(comId, "(" + keyword + ")") != null ||
-			    util.getRegGroup(comName, "(" + keyword + ")") != null ||
-			    util.getRegGroup(description, "(" + keyword + ")") != null ||
-			    util.getRegGroup(title, "(" + keyword + ")") != null;
+				util.getRegGroup(comId == null ? "" : comId, "(" + keyword + ")") != null ||
+				util.getRegGroup(comName == null ? "" : comName, "(" + keyword + ")") != null ||
+				util.getRegGroup(description == null ? "" : description, "(" + keyword + ")") != null ||
+				util.getRegGroup(title == null ? "" : title, "(" + keyword + ")") != null;
 
 		}
 		public bool isMatchKeyword(AlartInfo ai) {
@@ -124,10 +124,10 @@ namespace namaichi.info
 					if (isNot) continue;
 					if (!isNot && (util.getRegGroup(lvId, "(" + k + ")") != null || 
 							util.getRegGroup(hostName == null ? "" : hostName, "(" + k + ")") != null ||
-						    util.getRegGroup(comId, "(" + k + ")") != null ||
-						    util.getRegGroup(comName, "(" + k + ")") != null ||
-						    util.getRegGroup(description, "(" + k + ")") != null ||
-						    util.getRegGroup(title, "(" + k + ")") != null))
+							util.getRegGroup(comId == null ? "" : comId, "(" + k + ")") != null ||
+							util.getRegGroup(comName == null ? "" : comName, "(" + k + ")") != null ||
+							util.getRegGroup(description == null ? "" : description, "(" + k + ")") != null ||
+							util.getRegGroup(title == null ? "" : title, "(" + k + ")") != null))
 						return true;
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);

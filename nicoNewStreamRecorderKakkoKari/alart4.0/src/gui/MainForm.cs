@@ -104,8 +104,9 @@ namespace namaichi
 		private bool isAddFormDisplaying = false;
 		
 		public Thread madeThread;
-		public object liveListLock = new object();
-		public Semaphore liveListSemaphore = new Semaphore(0, 1);
+		//public object liveListLock = new object();
+		//public SemaphoreSlim liveListLockS = new SemaphoreSlim(1, 1);
+		public bool isLiveListLocking = false;
 		private bool isLiveListTimeProcessing = false;
 		
 		private ToolMenuProcess toolMenuProcess;
@@ -179,6 +180,7 @@ namespace namaichi
 				//}
             }
 
+			util.debugWriteLine(util.versionStr + " " + util.versionDayStr);
 			util.debugWriteLine("arg len " + args.Length);
 			util.debugWriteLine("arg join " + string.Join(" ", args));
 			
@@ -664,8 +666,12 @@ namespace namaichi
 	        		foreach (DataGridViewCell c in list.Rows[i].Cells)
 	        			list.UpdateCellValue(c.ColumnIndex, c.RowIndex);
 	        	}
-	        	changedListContent();
-	        	//alartList[alartListDataSource.Count - 1]
+	        	
+	        	Task.Factory.StartNew(() => {
+					new AlartListFileManager(false, this).save();
+					new AlartListFileManager(true, this).save();
+				});
+	        	//changedListContent();
 	        } catch (Exception ee) {
         		util.debugWriteLine(ee.Message + " " + ee.StackTrace);
 	        }
@@ -675,8 +681,11 @@ namespace namaichi
 	        	var o = new addTaskForm(this, id); o.ShowDialog();
 	        	if (o.ret == null) return;
 	        	taskListDataSource.Add(o.ret);
-	        	changedListContent();
-	        	//alartList[alartListDataSource.Count - 1]
+	        	
+	        	Task.Factory.StartNew(() => {
+					new TaskListFileManager().save(this);
+				});
+	        	//changedListContent();
 	        } catch (Exception ee) {
         		util.debugWriteLine(ee.Message + " " + ee.StackTrace);
 	        }
@@ -899,15 +908,23 @@ namespace namaichi
 		}
 		void AlartListCellParsingCommon(SortableBindingList<AlartInfo> dataSource, System.Windows.Forms.DataGridViewCellParsingEventArgs e) {
 			util.debugWriteLine(e.ColumnIndex);
-			var target = ((AlartInfo)dataSource[e.RowIndex]);
-			if (e.ColumnIndex == 0) target.communityId = (string)e.Value;
-			if (e.ColumnIndex == 1) target.hostId = (string)e.Value;
-			if (e.ColumnIndex == 2) target.communityName = (string)e.Value;
-			if (e.ColumnIndex == 3) target.hostName = (string)e.Value;
-			if (e.ColumnIndex == 4) target.keyword = (string)e.Value;
-			if (e.ColumnIndex == 26) target.memo = (string)e.Value;
-			util.debugWriteLine("cell parcing");
-			changedListContent();
+			try {
+				var target = ((AlartInfo)dataSource[e.RowIndex]);
+				if (e.ColumnIndex == 0) target.communityId = (string)e.Value;
+				if (e.ColumnIndex == 1) target.hostId = (string)e.Value;
+				if (e.ColumnIndex == 2) target.communityName = (string)e.Value;
+				if (e.ColumnIndex == 3) target.hostName = (string)e.Value;
+				if (e.ColumnIndex == 4) target.keyword = (string)e.Value;
+				if (e.ColumnIndex == 26) target.memo = (string)e.Value;
+				util.debugWriteLine("cell parcing");
+				//changedListContent();
+				Task.Factory.StartNew(() => {
+					new AlartListFileManager(false, this).save();
+					new AlartListFileManager(true, this).save();
+				});
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
 		}
 		
 
@@ -964,6 +981,10 @@ namespace namaichi
 						if (cc.ColumnIndex == 25) target.SoundType = (alartList[cc.ColumnIndex, cc.RowIndex].Value.ToString());
 					}
 				}
+				Task.Factory.StartNew(() => {
+					new AlartListFileManager(false, this).save();
+					new AlartListFileManager(true, this).save();
+				});
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
@@ -1516,7 +1537,7 @@ namespace namaichi
 					try {
 	       		        if (isUserMode) userAlartListDataSource.Add(ai);
 						else alartListDataSource.Add(ai);
-						//alartListDataSource.Add(ai);
+						
        		       	} catch (Exception e) {
        		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
        		       	}
@@ -1659,29 +1680,35 @@ namespace namaichi
 		
 		void TaskListCurrentCellDirtyStateChanged(object sender, System.EventArgs e)
 		{
-			var cc = taskList.CurrentCell;
-			if (cc is DataGridViewCheckBoxCell) {      
-		        if (cc.ColumnIndex >= 5 && cc.ColumnIndex <= 20) {
-					taskList.CommitEdit(DataGridViewDataErrorContexts.Commit);
-					var target = ((TaskInfo)taskListDataSource[cc.RowIndex]);
-					if (cc.ColumnIndex == 5) target.popup = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
-					if (cc.ColumnIndex == 6) target.baloon = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
-					if (cc.ColumnIndex == 7) target.browser = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
-					if (cc.ColumnIndex == 8) target.mail = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
-					if (cc.ColumnIndex == 9) target.sound = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
-					if (cc.ColumnIndex == 10) target.appliA = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
-					if (cc.ColumnIndex == 11) target.appliB = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
-					if (cc.ColumnIndex == 12) target.appliC = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
-					if (cc.ColumnIndex == 13) target.appliD = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
-					if (cc.ColumnIndex == 14) target.appliE = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
-					if (cc.ColumnIndex == 15) target.appliF = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
-					if (cc.ColumnIndex == 16) target.appliG = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
-					if (cc.ColumnIndex == 17) target.appliH = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
-					if (cc.ColumnIndex == 18) target.appliI = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
-					if (cc.ColumnIndex == 19) target.appliJ = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
-					if (cc.ColumnIndex == 20) target.isDelete = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
-//					util.debugWriteLine(target.appliA);
+			try {
+				var cc = taskList.CurrentCell;
+				if (cc is DataGridViewCheckBoxCell) {      
+			        if (cc.ColumnIndex >= 5 && cc.ColumnIndex <= 20) {
+						taskList.CommitEdit(DataGridViewDataErrorContexts.Commit);
+						var target = ((TaskInfo)taskListDataSource[cc.RowIndex]);
+						if (cc.ColumnIndex == 5) target.popup = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
+						if (cc.ColumnIndex == 6) target.baloon = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
+						if (cc.ColumnIndex == 7) target.browser = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
+						if (cc.ColumnIndex == 8) target.mail = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
+						if (cc.ColumnIndex == 9) target.sound = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
+						if (cc.ColumnIndex == 10) target.appliA = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
+						if (cc.ColumnIndex == 11) target.appliB = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
+						if (cc.ColumnIndex == 12) target.appliC = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
+						if (cc.ColumnIndex == 13) target.appliD = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
+						if (cc.ColumnIndex == 14) target.appliE = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
+						if (cc.ColumnIndex == 15) target.appliF = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
+						if (cc.ColumnIndex == 16) target.appliG = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
+						if (cc.ColumnIndex == 17) target.appliH = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
+						if (cc.ColumnIndex == 18) target.appliI = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
+						if (cc.ColumnIndex == 19) target.appliJ = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
+						if (cc.ColumnIndex == 20) target.isDelete = (bool)(taskList[cc.ColumnIndex, cc.RowIndex].Value);
+	//					util.debugWriteLine(target.appliA);
+					}
 				}
+				Task.Factory.StartNew(() =>
+						new TaskListFileManager().save(this));
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
 		}
 		void TaskListCellParsing(object sender, DataGridViewCellParsingEventArgs e)
@@ -1690,7 +1717,9 @@ namespace namaichi
 			var target = ((TaskInfo)taskListDataSource[e.RowIndex]);
 			if (e.ColumnIndex == 21) target.memo = (string)e.Value;
 			util.debugWriteLine("cell parcing");
-			changedListContent();
+			//changedListContent();
+			Task.Factory.StartNew(() =>
+					new TaskListFileManager().save(this));
 		}
 		void TaskListOpenUrlMenuClick(object sender, EventArgs e)
 		{
@@ -2681,13 +2710,8 @@ namespace namaichi
 		public void removeLiveListItem(LiveInfo li) {
 			if (Thread.CurrentThread == madeThread)
 					util.debugWriteLine("lock form thread removeLiveListItem");
-			lock(liveListLock) {
-				try {
-					_removeLiveListItem(li);
-				} catch (Exception e) {
-					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				}
-			}
+			liveListLockAction(() => 
+					_removeLiveListItem(li));
 		}
 		public void _removeLiveListItem(LiveInfo li) {
 			try {
@@ -2737,7 +2761,6 @@ namespace namaichi
 			});
 			
 			if (!isLiveListTimeProcessing) {
-			//lock(liveListLock) {
 				isLiveListTimeProcessing = true;
 				Task.Factory.StartNew(() => liveListTimeProcess());
 			}
@@ -2757,13 +2780,6 @@ namespace namaichi
 				liveListDataReserve.Add(li);
 				return false;
 			}
-			/*
-			if (!isLiveListTimeProcessing) {
-			//lock(liveListLock) {
-				isLiveListTimeProcessing = true;
-				Task.Factory.StartNew(() => liveListTimeProcess());
-			}
-			*/
 		}
 		private void liveListTimeProcess() {
 			while (liveList.Rows.Count > 0) {
@@ -2786,14 +2802,9 @@ namespace namaichi
 			
 			if (Thread.CurrentThread == madeThread)
 					util.debugWriteLine("lock form thread deleteLiveListTime");
-			lock(liveListLock) {
-				try {
-					_deleteLiveListTime(delMin, now);
-				} catch (Exception e) {
-					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				}
-				
-			}
+			liveListLockAction(() => 
+					_deleteLiveListTime(delMin, now));
+			
 			util.debugWriteLine("deletelivelistTime end");
 		}
 		private void _deleteLiveListTime(double delMin, DateTime now) {
@@ -2948,12 +2959,10 @@ namespace namaichi
 
 			    if (Thread.CurrentThread == madeThread)
 					util.debugWriteLine("lock form thread livelistDeleteRowMenuClick");
-				lock(liveListLock) {
-					formAction(() => liveListDataSource.Remove(li));
-				}
+			    liveListLockAction(() => 
+						formAction(() => liveListDataSource.Remove(li)));
 				
 				setLiveListNum();
-
 		}
 		
 		void LiveListCopyMenuDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -3029,13 +3038,9 @@ namespace namaichi
 			
 			if (Thread.CurrentThread == madeThread)
 					util.debugWriteLine("lock form thread resetLiveList");
-			lock(liveListLock) {
-				try {
-					_resetLiveList();
-				} catch (Exception e) {
-					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				}
-			}
+			
+			liveListLockAction(() => 
+					_resetLiveList());
 		}
 		private void _resetLiveList() {
 			var mainCategories = new string[]{"一般", "やってみた",
@@ -4352,6 +4357,10 @@ namespace namaichi
 					_ai.backColor = backColor;
 			
 					userAlartListDataSource.Add(_ai);
+					
+					Task.Factory.StartNew(() => {
+						new AlartListFileManager(true, this).save();
+					});
 					return;
 				} catch (Exception ee) {
 					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
@@ -4549,6 +4558,7 @@ namespace namaichi
 			         });
 			*/
 		}
+		/*
 		public void cancelLockTask(CancellationTokenSource cts) {
 			Task.Factory.StartNew(() => {
 				try {
@@ -4574,7 +4584,7 @@ namespace namaichi
 				cts.Dispose();
 			}
 		}
-		
+		*/
 		void HistoryListRowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
 		{
 			var max = config.get("maxHistoryDisplay");
@@ -4823,6 +4833,24 @@ namespace namaichi
 			menu.Tag = a;
 			var ret = new KeyValuePair<DateTime, ToolStripMenuItem>(a.pubDateDt, menu);
 			return ret;
+		}
+		public void liveListLockAction(Action a) {
+			try {
+				for (var i = 0; i < 300; i++) {
+					if (!isLiveListLocking) {
+						isLiveListLocking = true;
+						util.debugWriteLine("live list lock action " + i);
+						break;
+					}
+					if (i == 99) util.debugWriteLine("live list lock action no get");
+					Thread.Sleep(100);
+				}
+				a.Invoke();
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			} finally {
+				isLiveListLocking = false;
+			}
 		}
 	}
 }

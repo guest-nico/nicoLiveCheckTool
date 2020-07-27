@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ namespace namaichi.rec
 			}
 			
 			for (var i = 0; i < 1; i++) {
-				var isJoinedTask = join(comId, cc, form, cfg);
+				var isJoinedTask = join2(comId, cc, form, cfg);
 				if (isJoinedTask) {
 					util.debugWriteLine("user follow ok i " + i);
 					return isJoinedTask;
@@ -185,13 +186,39 @@ namespace namaichi.rec
 			util.debugWriteLine("フォロー失敗");
 			return false;
 		}
+		private bool join2(string comId, CookieContainer cc, MainForm form, config.config cfg) {
+			util.debugWriteLine("follow user2 " + comId);
+			try {
+				var url = "https://public.api.nicovideo.jp/v1/user/followees/niconico-users/" + comId + ".json";
+				var headers = new Dictionary<string, string>{
+					
+					{"Content-Type", "application/json"},
+					{"X-Frontend-Id", "6"},
+					{"X-Frontend-Version", "0"},
+					{"X-Request-With", "https://www.nicovideo.jp/user/" + comId},
+					{"Cookie", cc.GetCookieHeader(new Uri(url))},
+				};
+				
+				var res = util.postResStr(url, headers, null);
+				util.debugWriteLine("user follow2 res " + res);
+				if (res == null) {
+					util.debugWriteLine("user join2 null ");
+					return false;
+				}
+				return res.IndexOf("\"status\":200") > -1;
+				
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return false;
+			}
+		}
 		public bool unFollowUser(string comId, CookieContainer cc, MainForm form, config.config cfg) {
 			if (comId == null) {
 				form.addLogText("このユーザーはフォロー解除できませんでした。");
 				return false;
 			}
 			
-			var isUnJoinedTask = unJoin(comId, cc, form, cfg);
+			var isUnJoinedTask = unJoin2(comId, cc, form, cfg);
 //			isJoinedTask.Wait();
 			return isUnJoinedTask;
 //			return false;
@@ -291,6 +318,30 @@ namespace namaichi.rec
 			//form.addLogText("フォロー解除に失敗しました。");
 			util.debugWriteLine("フォロー解除失敗 " + comId);
 			return false;
+		}
+		private bool unJoin2(string comId, CookieContainer cc, MainForm form, config.config cfg) {
+			util.debugWriteLine("follow user2 " + comId);
+			try {
+				var url = "https://public.api.nicovideo.jp/v1/user/followees/niconico-users/" + comId + ".json";
+				var headers = new Dictionary<string, string>{
+					{"Content-Type", "application/json"},
+					{"X-Frontend-Id", "6"},
+					{"X-Frontend-Version", "0"},
+					{"X-Request-With", "https://www.nicovideo.jp/user/" + comId},
+					{"Cookie", cc.GetCookieHeader(new Uri(url))},
+				};
+				var res = util.sendRequest(url, headers, null, "DELETE", false);
+				using (var r = res.GetResponseStream())
+				using (var sr = new StreamReader(r)) {
+					var rr = sr.ReadToEnd();
+					util.debugWriteLine("unjoin2 res " + rr);
+					return rr.IndexOf("\"status\":200") > -1;
+				}
+				
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return false;
+			}
 		}
 	}
 }

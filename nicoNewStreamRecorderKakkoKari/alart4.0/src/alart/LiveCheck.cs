@@ -44,19 +44,15 @@ namespace namaichi.alart
 			
 			if (Thread.CurrentThread == form.madeThread)
 					util.debugWriteLine("lock form thread load");
-			lock(form.liveListLock) {
-				try {
-					_load(newItems, delMin, now);
-				} catch (Exception e) {
-					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				}
-			}
+			form.liveListLockAction(() =>
+					_load(newItems, delMin, now));
 			
 			form.setLiveListNum();
 			
 			isLoading = false;
 		}
 		private void _load(List<LiveInfo> newItems, double delMin, DateTime now) {
+			util.debugWriteLine("live list _load " + newItems.Count + " " + delMin + " " + now);
 			var scrollI = form.liveList.FirstDisplayedScrollingRowIndex;
 			var curCellLv = (form.liveList.CurrentCell == null) ? null : form.liveListDataSource[form.liveList.CurrentCell.RowIndex].lvId;
 			var curCellCellI = (form.liveList.CurrentCell == null) ? -1 : form.liveList.CurrentCell.ColumnIndex;
@@ -152,6 +148,7 @@ namespace namaichi.alart
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
+			util.debugWriteLine("live check _load after reserve");
 			
 			try {
 				if (scrollI != -1)
@@ -161,6 +158,7 @@ namespace namaichi.alart
 				util.debugWriteLine("scrollI exception " + scrollI);
 			}
 		}
+		/*
 		private List<LiveInfo> getLiveItems() {
 			var loadTime = DateTime.Now;
 			var tab = getTabName();
@@ -199,6 +197,7 @@ namespace namaichi.alart
 			util.debugWriteLine("load rss item " + buf.Count);
 			return buf;
 		}
+		*/
 		private List<LiveInfo> getCategoryLiveItems() {
 			var loadTime = DateTime.Now;
 			var tab = getTabName();

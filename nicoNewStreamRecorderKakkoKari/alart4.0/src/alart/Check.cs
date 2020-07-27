@@ -669,7 +669,7 @@ namespace namaichi.alart
 		public void foundLive(List<RssItem> items) {
 			if (items.Count > 0) 
 				form.setHosoLogStatusBar(items[0]);
-			
+
 			lock(foundLiveLock) {
 				var isChanged = gotStreamProcess(items);
 				if (isChanged) {
@@ -875,16 +875,12 @@ namespace namaichi.alart
 
 				if (Thread.CurrentThread == form.madeThread)
 					util.debugWriteLine("lock form thread addLiveList");
-				lock(form.liveListLock) {
-					try {
- 
-						_addLiveList(items, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly, cateChar);
-
-					} catch (Exception e) {
-						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-					}
-				}
-					
+				
+				
+				form.liveListLockAction(() => {
+					_addLiveList(items, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly, cateChar);
+				});
+				
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
@@ -941,6 +937,7 @@ namespace namaichi.alart
 			else if (!bool.Parse(types[2]) && ri.isPayment) return false;
 			return true;
 		}
+
 	}
 	class DoProcessInfo {
 		public bool isAppliA;

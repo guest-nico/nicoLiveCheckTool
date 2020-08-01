@@ -17,7 +17,7 @@ namespace namaichi
 	/// </summary>
 	public partial class DotNetMessageBox : Form
 	{
-		public DotNetMessageBox(double ver)
+		public DotNetMessageBox(double ver, config.config config)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
@@ -27,6 +27,7 @@ namespace namaichi
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
+			util.setFontSize(int.Parse(config.get("fontSize")), this, false);
 		}
 		
 		void Button3Click(object sender, EventArgs e)

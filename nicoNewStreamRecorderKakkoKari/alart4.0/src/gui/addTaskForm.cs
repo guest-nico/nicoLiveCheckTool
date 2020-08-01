@@ -46,6 +46,8 @@ namespace namaichi
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 			lvidText.Text = id;
+			
+			util.setFontSize(int.Parse(form.config.get("fontSize")), this, false);
 		}
 		
 		void Button4Click(object sender, EventArgs e)

@@ -54,6 +54,8 @@ namespace namaichi
 			//setFormFromConfig();
 			setBackColor(Color.FromArgb(int.Parse(cfg.get("alartBackColor"))));
 			setForeColor(Color.FromArgb(int.Parse(cfg.get("alartForeColor"))));
+			
+			util.setFontSize(int.Parse(cfg.get("fontSize")), this, false);
 		}
 		
 		void optionOk_Click(object sender, EventArgs e)
@@ -188,6 +190,8 @@ namespace namaichi
 				{"liveListUpdateMinutes",liveListUpdateMinutesList.Value.ToString()},
 				{"liveListCacheIcon",liveListCacheIconChkBox.Checked.ToString().ToLower()},
 				{"liveListGetIcon",liveListGetIconChkBox.Checked.ToString().ToLower()},
+				
+				{"fontSize",fontList.Value.ToString()},
 				
 				{"cookieFile",cookieFileText.Text},
 				{"iscookie",isCookieFileSiteiChkBox.Checked.ToString().ToLower()},
@@ -382,6 +386,8 @@ namespace namaichi
         	cookieFileText.Text = cfg.get("cookieFile");
         	checkBoxShowAll.Checked = bool.Parse(cfg.get("IsBrowserShowAll"));
 	
+        	fontList.Value = decimal.Parse(cfg.get("fontSize"));
+        	
         	var si = SourceInfoSerialize.load(false);
         	nicoSessionComboBox1.Selector.SetInfoAsync(si);
         }
@@ -847,6 +853,11 @@ namespace namaichi
 			}
 			util.debugWriteLine(c.Name + " " + ret.Count);
 			return ret;
+		}
+		
+		void ApplyBtnClick(object sender, EventArgs e)
+		{
+			util.setFontSize((int)fontList.Value, this, false);
 		}
 	}
 }

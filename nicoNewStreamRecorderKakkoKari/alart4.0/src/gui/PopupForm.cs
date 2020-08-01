@@ -99,6 +99,7 @@ namespace namaichi
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			}
+			util.setFontSize(int.Parse(config.get("fontSize")), this, false);
 		}
 		private bool isOkStrWidth(string s) {
 			var w = TextRenderer.MeasureText(s, titleLabel.Font).Width;

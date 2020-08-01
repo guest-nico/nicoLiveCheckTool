@@ -45,6 +45,7 @@ namespace namaichi
 			InitializeComponent();
 			
 			setMemberOnlyListCloseEventHandler(this);
+			util.setFontSize(int.Parse(form.config.get("fontSize")), this, false);
 			
 			if (editAi != null) {
 				setEditModeDisplay(editAi);
@@ -62,6 +63,7 @@ namespace namaichi
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
 			setDefaultBehavior();
+			
 			
 			if (id == null) {
 				if (isUserMode) setUserModeForm();
@@ -82,8 +84,6 @@ namespace namaichi
 				//keywordText.Text = "";
 				setUserModeForm();
 			}
-			
-			
 			
 		}
 		private void setMemberOnlyListCloseEventHandler(Control parent) {
@@ -627,7 +627,7 @@ namespace namaichi
 		}
 		void CustomKeywordBtnClick(object sender, EventArgs e)
 		{
-			var f = new CustomKeywordForm(true, customKw);
+			var f = new CustomKeywordForm(form.config, true, customKw);
 			f.ShowDialog();
 			if (f.ret == null) {
 				if (f.DialogResult == DialogResult.OK) {

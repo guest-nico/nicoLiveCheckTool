@@ -144,6 +144,7 @@ namespace namaichi.alart
 							if (form.liveListDataSource[i].lvId == curCellLv)
 								form.liveList.CurrentCell = form.liveList[curCellCellI, i];
 					}
+					form.removeDuplicateLiveList();
 				});
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);

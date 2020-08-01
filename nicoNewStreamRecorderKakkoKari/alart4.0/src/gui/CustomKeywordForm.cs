@@ -23,7 +23,8 @@ namespace namaichi
 	{
 		public List<CustomKeywordInfo> ret = null;
 		public SortableBindingList<CustomKeywordInfo> customKwListDataSource = new SortableBindingList<CustomKeywordInfo>();
-		public CustomKeywordForm(bool isFirst = false, List<CustomKeywordInfo> ckis = null)
+		private config.config config = null;
+		public CustomKeywordForm(config.config config, bool isFirst = false, List<CustomKeywordInfo> ckis = null)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
@@ -46,6 +47,9 @@ namespace namaichi
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
+			this.config = config;
+			util.setFontSize(int.Parse(config.get("fontSize")), this, false);
+			
 		}
 		
 		void Button4Click(object sender, EventArgs e)
@@ -91,7 +95,7 @@ namespace namaichi
 		{
 			if (e.ColumnIndex != 3) return;
 			if (customKwListDataSource[e.RowIndex].type != "条件の入れ子") return;
-			var f = new CustomKeywordForm(false, customKwListDataSource[e.RowIndex].cki);
+			var f = new CustomKeywordForm(config, false, customKwListDataSource[e.RowIndex].cki);
 			f.ShowDialog();
 			if (f.ret == null) return;
 			customKwListDataSource[e.RowIndex].cki = f.ret;

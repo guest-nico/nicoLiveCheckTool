@@ -66,7 +66,7 @@ namespace namaichi.alart
 					}
 					
 					check.foundLive(items);
-					setDescription(items);
+					//setDescription(items);
 					if (isOnlyStartTimeCheck) return;
 					
 					isStartTimeAllCheck = false;
@@ -189,8 +189,9 @@ namespace namaichi.alart
 				var oldestDt = DateTime.MaxValue;
 				foreach (var item in items) 
 					if (oldestDt > item.pubDateDt) oldestDt = item.pubDateDt;
-				for (var i = 10; i < 100; i += 10) {
+				for (var i = -20; i < 71; i += 30) {
 					var url = "https://api.cas.nicovideo.jp/v2/tanzakus/topic/live/content-groups/onair/items?cursor=" + i + "/cursorEnd/cursorEnd/cursorEnd/" + (i - 10);
+					
 					var res = util.getPageSource(url);
 					if (res == null) return;
 					
@@ -199,10 +200,11 @@ namespace namaichi.alart
 					
 					foreach (var o in tanzakuObj.data.items) {
 						var ri = items.Find(x => x.lvId == o.id);
-						if (ri == null) continue;
-						if (o.description.Length > 100) 
-							o.description = o.description.Substring(0, 100);
-						ri.description = o.description;
+						if (ri != null) {
+							if (o.description.Length > 100) 
+								o.description = o.description.Substring(0, 100);
+							ri.description = o.description;
+						}
 						
 						var li = check.form.liveListDataSource.FirstOrDefault(x => x.lvId == o.id);
 						if (li != null) {

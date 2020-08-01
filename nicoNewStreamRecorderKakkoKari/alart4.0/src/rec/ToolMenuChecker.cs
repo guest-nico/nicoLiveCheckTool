@@ -305,7 +305,7 @@ namespace namaichi.rec
 			} else {
 				Task.Factory.StartNew(() => {
 					try {
-						var f = new BulkAddFromFollowAccountForm();
+						var f = new BulkAddFromFollowAccountForm(form.config);
 						Task.Factory.StartNew(() => {
 							form.formAction(() => f.ShowDialog(form));
 						}).Wait();

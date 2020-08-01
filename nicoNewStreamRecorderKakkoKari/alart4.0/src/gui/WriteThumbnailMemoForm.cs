@@ -20,7 +20,7 @@ namespace namaichi
 		private Image img;
 		public Image resultImage;
 		
-		public WriteThumbnailMemoForm(Image img)
+		public WriteThumbnailMemoForm(Image img, int fontSize)
 		{
 			this.img = img;
 			
@@ -33,6 +33,8 @@ namespace namaichi
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
 			thumbBox.Image = resetImage();
+			
+			util.setFontSize(fontSize, this, false);
 		}
 		void CancelBtnClick(object sender, EventArgs e)
 		{

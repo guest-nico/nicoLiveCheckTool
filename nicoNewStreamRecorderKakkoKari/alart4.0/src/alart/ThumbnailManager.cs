@@ -176,9 +176,9 @@ namespace namaichi.alart
 				Directory.CreateDirectory(dir);
 			img.Save(dir + "/" + id + ".jpg");
 		}
-		public static Image writeMemo(Image img)
+		public static Image writeMemo(Image img, int fontSize)
 		{
-			var f = new WriteThumbnailMemoForm(img);
+			var f = new WriteThumbnailMemoForm(img, fontSize);
 			var ret = f.ShowDialog();
 			if (ret != DialogResult.OK) return null;
 			return f.resultImage;

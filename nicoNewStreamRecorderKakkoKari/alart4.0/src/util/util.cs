@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Net.Mail;
 using System.Runtime.InteropServices;
+using System.Drawing;
 using Un4seen.Bass;
 using namaichi.config;
 using namaichi.info;
@@ -31,8 +32,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.73";
-	public static string versionDayStr = "2020/07/28";
+	public static string versionStr = "ver0.1.7.74";
+	public static string versionDayStr = "2020/08/01";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -1430,7 +1431,7 @@ class util {
 		var ret = 0;
 		form.formAction(() => 
 		                	ret = mciSendString(command, buffer, bufferSize, hwndCallback)
-		                	, -1);
+		                	, false, -1);
 				//ret = mciSendString(command, buffer, bufferSize, hwndCallback));
 		return ret;
 	}
@@ -1729,5 +1730,57 @@ class util {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 		}
 		return null;
+	}
+    public static List<Control> getChildControls(Control c) {
+		//util.debugWriteLine("cname " + c.Name);
+		var ret = new List<Control>();
+		foreach (Control _c in c.Controls) {
+			var children = getChildControls(_c);
+			ret.Add(_c);
+			ret.AddRange(children);
+			//util.debugWriteLine(c.Name + " " + children.Count);
+		}
+		//util.debugWriteLine(c.Name + " " + ret.Count);
+		return ret;
+	}
+    public static void setFontSize(float size, Form form, bool isKeepSize) {
+    	try {
+			var _formsize = form.Size;
+			var _bStyle = form.FormBorderStyle;
+			if (isKeepSize)
+				form.Size = new Size(200, 200);
+			//form.FormBorderStyle = BorderStyle.
+			form.Font = new Font(form.Font.FontFamily, size);
+			if (isKeepSize)
+				form.Size = _formsize;
+			//form.bor
+			
+			var controls = util.getChildControls(form);
+			foreach (Control c in controls) {
+				if (c.ContextMenuStrip != null)
+					c.ContextMenuStrip.Font = new Font(c.Font.FontFamily, size);
+				/*
+				if (c is MenuStrip) {
+					foreach (ToolStripMenuItem s in ((MenuStrip)c).Items)
+						s.Font = new Font(Font.FontFamily, size);
+				}
+				*/
+				if (c is DataGridView) {
+					((DataGridView)c).ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+					((DataGridView)c).ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.False;
+					
+					//((DataGridView)c).RowTemplate.Height = (int)size;
+					//((DataGridView)c).AutoSizeRowsMode = true;
+				}
+				if (c is StatusStrip) {
+					foreach (ToolStripLabel s in ((StatusStrip)c).Items)
+						s.Font = new Font(c.Font.FontFamily, size);
+				}
+				c.Font = new Font(c.Font.FontFamily, size);
+			}
+			//menuStrip1.Font = new Font(form.Font.FontFamily, size);
+    	} catch (Exception e) {
+    		util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+    	}
 	}
 }

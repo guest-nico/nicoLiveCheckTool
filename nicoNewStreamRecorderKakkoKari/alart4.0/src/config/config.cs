@@ -337,6 +337,7 @@ public class config
 			{"Width","830"},
 			{"X",""},
 			{"Y",""},
+			{"fontSize","9"},
 			{"LiveListColumnWidth",""},
 			{"AlartListColumnWidth",""},
 			{"UserAlartListColumnWidth",""},

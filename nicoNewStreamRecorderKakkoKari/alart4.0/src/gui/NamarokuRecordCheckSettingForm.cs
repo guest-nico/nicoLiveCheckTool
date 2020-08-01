@@ -18,7 +18,7 @@ namespace namaichi
 	public partial class NamarokuRecordCheckSettingForm : Form
 	{
 		public string recordCheck = null;
-		public NamarokuRecordCheckSettingForm()
+		public NamarokuRecordCheckSettingForm(int fontSize)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
@@ -28,6 +28,7 @@ namespace namaichi
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
+			util.setFontSize(fontSize, this, false);
 		}
 		
 		void CancelBtnClick(object sender, EventArgs e)

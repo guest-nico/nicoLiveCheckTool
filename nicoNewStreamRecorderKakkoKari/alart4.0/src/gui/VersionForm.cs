@@ -31,6 +31,8 @@ namespace namaichi
 			//
 			versionLabel.Text = util.versionStr + " (" + util.versionDayStr + ")";
 			//communityLinkLabel.Links.Add(0, communityLinkLabel.Text.Length, "https://com.nicovideo.jp/community/co2414037");
+			
+			util.setFontSize(int.Parse(config.get("fontSize")), this, false);
 		}
 		
 		void okBtnClick(object sender, EventArgs e)

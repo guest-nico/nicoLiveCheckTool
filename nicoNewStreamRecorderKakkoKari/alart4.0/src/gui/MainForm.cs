@@ -33,7 +33,6 @@ using namaichi.config;
 using namaichi.utility;
 using namaichi.rec;
 using namaichi.info;
-using SuperSocket.ClientEngine;
 
 //using System;
 //using System.Collections.Generic;
@@ -105,10 +104,9 @@ namespace namaichi
 		private bool isAddFormDisplaying = false;
 		
 		public Thread madeThread;
-		//public object liveListLock = new object();
-		public SemaphoreSlim liveListLockS = new SemaphoreSlim(1, 1);
+		public object liveListLock = new object();
+		//public SemaphoreSlim liveListLockS = new SemaphoreSlim(1, 1);
 		public bool isLiveListLocking = false;
-		private Thread liveListLockThread = null;
 		private bool isLiveListTimeProcessing = false;
 		
 		private ToolMenuProcess toolMenuProcess;
@@ -152,7 +150,7 @@ namespace namaichi
 			
 			this.args = args;
 			
-			
+			//saveControlLayout();
 			//rec = new rec.RecordingManager(this, config);
 			
 			
@@ -190,6 +188,10 @@ namespace namaichi
             //nicoSessionComboBox1.Selector.PropertyChanged += Selector_PropertyChanged;
 //            checkBoxShowAll.Checked = bool.Parse(config.get("isAllBrowserMode"));
 			//if (isInitRun) initRec();
+			var fontSize = config.get("fontSize");  
+			if (fontSize != "9")
+				util.setFontSize(int.Parse(fontSize), this, true, 480);
+			
 			try {
 				Width = int.Parse(config.get("Width"));
 				Height = int.Parse(config.get("Height"));
@@ -213,24 +215,29 @@ namespace namaichi
 				StartPosition = FormStartPosition.WindowsDefaultLocation;
 			}
 			
-			alartList.DataSource = alartListDataSource;
+			liveListDataSource.cfg = config;
+			defaultNotifyIcon = notifyIcon.Icon;
+			
 			check = new Check(alartListDataSource, this);
-			taskList.DataSource = taskListDataSource;
 			taskCheck = new TaskCheck(taskListDataSource, this);
+			
+			//formInitSetting();
+			
+			recentColor = bool.Parse(config.get("IsAlartListRecentColor")) ?
+					Color.Empty : ColorTranslator.FromHtml(config.get("recentColor"));
+			followerOnlyColor = bool.Parse(config.get("IsFollowerOnlyOtherColor")) ?
+				ColorTranslator.FromHtml(config.get("followerOnlyColor")) : Color.Empty;
+			
+		}
+		private void formInitSetting() {
+			alartList.DataSource = alartListDataSource;
+			taskList.DataSource = taskListDataSource;
 			liveList.DataSource = liveListDataSource;
 			logList.DataSource = logListDataSource;
 			historyList.DataSource = historyListDataSource;
 			notAlartList.DataSource = notAlartListDataSource;
 			userAlartList.DataSource = userAlartListDataSource;
 			
-			liveListDataSource.cfg = config;
-			
-			//notifyIcon.Icon = Icon;
-			defaultNotifyIcon = notifyIcon.Icon;
-			
-//			new PopupForm(null).Show();
-//			new SmallPopupForm(null).Show();
-			//[2019/01/01 00:00:00] 放送ID：lv10000 コミュニティID：co100001　ユーザーID：100000
 			setDoubleBuffered(alartList);
 			setDoubleBuffered(taskList);
 			setDoubleBuffered(liveList);
@@ -239,14 +246,11 @@ namespace namaichi
 			setDoubleBuffered(notAlartList);
 			setDoubleBuffered(userAlartList);
 			
-			
-			
 			setCategoryBorderPaint();
 			//categoryRightBtn.Text += Convert.ToChar(9654);//右
 			//categoryLeftBtn.Text += Convert.ToChar(9664);//左
-			
-			//categoryLeftBtn.Paint += new PaintEventHandler(categoryMoveBorderPaint);
-			//categoryRightBtn.Paint += new PaintEventHandler(categoryMoveBorderPaint);
+			categoryLeftBtn.Paint += new PaintEventHandler(categoryMoveBorderPaint);
+			categoryRightBtn.Paint += new PaintEventHandler(categoryMoveBorderPaint);
 			
 			
 			foreach (var c in categoryBtnPanel.Controls) {
@@ -256,19 +260,30 @@ namespace namaichi
 						new EventHandler(CategoryBtnCheckedChanged);
 			}
 			
-			
-			
-			recentColor = bool.Parse(config.get("IsAlartListRecentColor")) ?
-					Color.Empty : ColorTranslator.FromHtml(config.get("recentColor"));
-			followerOnlyColor = bool.Parse(config.get("IsFollowerOnlyOtherColor")) ?
-				ColorTranslator.FromHtml(config.get("followerOnlyColor")) : Color.Empty;
-			
 			setBackColor(Color.FromArgb(int.Parse(config.get("alartBackColor"))));
 			setForeColor(Color.FromArgb(int.Parse(config.get("alartForeColor"))));
 			
 			setDisplayMenuClosingEvent();
 			
-			util.setFontSize(int.Parse(config.get("fontSize")), this, true);
+			
+			setFormState();
+			
+//			if (!util.isShowWindow) return;
+			foreach (DataGridViewColumn c in alartList.Columns)
+				c.SortMode = DataGridViewColumnSortMode.Automatic;
+			foreach (DataGridViewColumn c in taskList.Columns)
+				c.SortMode = DataGridViewColumnSortMode.Automatic;
+			foreach (DataGridViewColumn c in liveList.Columns)
+				c.SortMode = DataGridViewColumnSortMode.Automatic;
+			
+			liveList.RowTemplate.Height = liveList.Columns[1].Width;
+			
+			categoryBtnDisplayUpdate();
+			
+			setSort();
+			
+			applyMenuSetting();
+			setAppliNameAndContextMenu();
 		}
 		
 		
@@ -348,8 +363,15 @@ namespace namaichi
 	        	var r = o.ShowDialog();
 	        	if (r == DialogResult.OK) {
 	        		var newSize = config.get("fontSize");
-	        		if (size != newSize)
-	        			util.setFontSize(int.Parse(newSize), this, true);
+	        		if (size != newSize) {
+	        			var formSize = Size;
+	        			var loc = Location;
+	        			loadControlLayout();
+	        			util.setFontSize(int.Parse(newSize), this, true, 480);
+	        			Size = formSize;
+	        			Location = loc;
+	        			check.popup.setPopupSize();
+	        		}
 	        		Task.Factory.StartNew(() => {
 	        		    resetRecentColor();
 	        		    
@@ -491,20 +513,12 @@ namespace namaichi
 		void mainForm_Load(object sender, EventArgs e)
 		{
 			
+			formInitSetting();
+			
 			if (config.brokenCopyFile != null)
 				System.Windows.Forms.MessageBox.Show("設定ファイルを読み込めませんでした。設定ファイルをバックアップしました。" + config.brokenCopyFile);
 			
-			setFormState();
 			
-//			if (!util.isShowWindow) return;
-			foreach (DataGridViewColumn c in alartList.Columns)
-				c.SortMode = DataGridViewColumnSortMode.Automatic;
-			foreach (DataGridViewColumn c in taskList.Columns)
-				c.SortMode = DataGridViewColumnSortMode.Automatic;
-			foreach (DataGridViewColumn c in liveList.Columns)
-				c.SortMode = DataGridViewColumnSortMode.Automatic;
-			
-			liveList.RowTemplate.Height = liveList.Columns[1].Width;
 			
 			Task.Factory.StartNew(() => {
 				new AlartListFileManager(false, this).load();
@@ -527,7 +541,7 @@ namespace namaichi
 			    	formAction(() => updateAutoUpdateStartMenu.PerformClick());
 			    
 			});
-			categoryBtnDisplayUpdate();
+			
 			
 			//.net
 			util.debugWriteLine(".net version check");
@@ -550,10 +564,7 @@ namespace namaichi
 				xpTest();
 			});
 			
-			setSort();
 			
-			applyMenuSetting();
-			setAppliNameAndContextMenu();
 			return;
 		}
 		void xpTest() {
@@ -665,6 +676,7 @@ namespace namaichi
 	        	
 	        	if (editAi == null) {
 	        		dataSource.Add(o.ret);
+	        		util.debugWriteLine("add datasource " + dataSource.GetHashCode());
 	        	} else {
 	        		var i = dataSource.IndexOf(editAi);
 	        		if (i == -1) return;
@@ -772,9 +784,8 @@ namespace namaichi
        		        else ret = alartListDataSource.Count;
    		       	} catch (Exception e) {
    		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
-   		       		ret = 11;
    		       	}
-			}, false, 30000);
+			});
 	       	return ret;
 		}
 		public int getTaskListCount() {
@@ -1010,7 +1021,7 @@ namespace namaichi
 			//Task.Factory.StartNew(() => new AlartListFileManager().ReadNamarokuList(this, alartListDataSource, dialog.FileName, true));
 			Task.Factory.StartNew(() => {
 				new AlartListFileManager(false, this).ReadNamarokuList(this, alartListDataSource, dialog.FileName, false, true);
-				changedListContent();
+				new AlartListFileManager(false, this).save();
 			});
 		}
 		
@@ -1651,7 +1662,7 @@ namespace namaichi
    		       	} catch (Exception e) {
    		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
    		       	}
-			}, false, -1);
+			}, -1);
 			return ret;
 			/*
 			try {
@@ -2124,6 +2135,10 @@ namespace namaichi
 			alartList.Columns[i].Visible = !alartList.Columns[i].Visible;
 			((ToolStripMenuItem)displayFavoriteTabMenu.DropDownItems[i]).Checked = alartList.Columns[i].Visible;
 			
+			userAlartList.Columns[i].Visible = 
+				(i == 0 || i == 2 || i == 6 || i == 4) ? false :
+					alartList.Columns[i].Visible;
+			
 			var columns = new string[] {"ShowComId",
 					"ShowUserId","ShowComName","ShowUserName",
 					"ShowKeyword","ShowIsAnd","ShowComFollow","ShowUserFollow",
@@ -2141,7 +2156,6 @@ namespace namaichi
 			var n = (char)((int)'A' + i - 15);
 			var item = (ToolStripMenuItem)contextMenuStrip1.Items.Find("openAppli" + n + "Menu", true)[0];
 			item.Visible = alartList.Columns[i].Visible;
-         	
 		}
 		
 		void IsTaskListDisplayTabMenuClick(object sender, EventArgs e)
@@ -2404,7 +2418,7 @@ namespace namaichi
 			
 			var recentNum = recentLiveCheckCore(true);
 			recentNum += recentLiveCheckCore(false);
-			setNotifyIcon();
+			
 			
 		}
 		public int recentLiveCheckCore(bool isUserMode) {
@@ -2657,14 +2671,13 @@ namespace namaichi
 			categoryBtnDisplayUpdate();
 		}
 		void categoryBtnDisplayUpdate() {
-			/*
+			//var freeWidth = liveListSearchText.Location.X - categoryBtnPanel.Location.X - 3;
 			var btnsWidth = 8 * 3;
 			foreach (Control b in categoryBtnPanel.Controls) btnsWidth += b.Width;
 			
 			var freeWidth = Size.Width - categoryBtnPanel.Location.X - 175;
-			
+			//var isDisplayBtn = categoryBtnPanel.PreferredSize.Width > freeWidth;
 			var isDisplayBtn = btnsWidth > freeWidth;
-			
 			if (isDisplayBtn != categoryLeftBtn.Visible) {
 				categoryLeftBtn.Visible = categoryRightBtn.Visible = isDisplayBtn;
 				categoryBtnPanel.Width = (isDisplayBtn) ? (freeWidth - 35) : freeWidth;
@@ -2682,12 +2695,8 @@ namespace namaichi
 			    	categoryBtnPanel.Controls[headCateIndex - 1].Width + 5) {
 				categoryBtnPanel.Controls[headCateIndex - 1].Visible = true;
 			}
-			*/
 		}
-		public void formAction(Action a) {
-			formAction(a, true);
-		}
-		public void formAction(Action a, bool isAsync = true, int timeout = 30000) {
+		public void formAction(Action a, int timeout = 30000) {
 			if (IsDisposed || !util.isShowWindow) return;
 			
 			if (Thread.CurrentThread == madeThread) {
@@ -2699,18 +2708,24 @@ namespace namaichi
 			} else {
 				try {
 					var r = BeginInvoke((MethodInvoker)delegate() {
+					//Invoke((MethodInvoker)delegate() {
 						try {    
 				       		a.Invoke();
 				       	} catch (Exception e) {
 							util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 						}
 					
-					});
-					if (!isAsync) r.AsyncWaitHandle.WaitOne(timeout);
+					}).AsyncWaitHandle.WaitOne(timeout);
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				} 
 			}
+		}
+		private void formActionAsync(Action a) {
+			_formActionAsync(a).Wait();
+		}
+		async private Task _formActionAsync(Action a) {
+			await Task.Factory.StartNew(a);
 		}
 		public void removeLiveListItem(LiveInfo li) {
 			if (Thread.CurrentThread == madeThread)
@@ -4531,7 +4546,7 @@ namespace namaichi
 			//Task.Factory.StartNew(() => new AlartListFileManager().ReadNamarokuList(this, alartListDataSource, dialog.FileName, true));
 			Task.Factory.StartNew(() => {
 				new AlartListFileManager(true, this).ReadNamarokuList(this, alartListDataSource, dialog.FileName, false, true);
-				changedListContent();
+				new AlartListFileManager(true, this).save();
 			});
 		}
 		
@@ -4603,7 +4618,7 @@ namespace namaichi
 		void sortHistoryList(DataGridView list, SortableBindingList<HistoryInfo> data, string maxNum) {
 			util.debugWriteLine("sortHistoryList " + maxNum);
 			var max = int.Parse(maxNum);
-			//formAction(() => {
+			formAction(() => {
 			    var scrollI = list.FirstDisplayedScrollingRowIndex;
 	   	    	if (data.Count > max) {
 					try {
@@ -4630,7 +4645,7 @@ namespace namaichi
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
-			//});
+			});
 		}
 		
 		
@@ -4653,7 +4668,7 @@ namespace namaichi
 		}
 		void UpdateMenuClick(object sender, EventArgs e)
 		{
-			var v = new UpdateForm(config);
+			var v = new UpdateForm(int.Parse(config.get("fontSize")));
 			v.ShowDialog();
 		}
 		void FormColorMenuItemClick(object sender, EventArgs e)
@@ -4668,7 +4683,7 @@ namespace namaichi
 		}
 		private void setBackColor(Color color) {
 			BackColor = color;
-			var c = util.getChildControls(this);
+			var c = getChildControls(this);
 			foreach (var _c in c)
 				if (_c.GetType() == typeof(GroupBox) ||
 				    _c.GetType() == typeof(System.Windows.Forms.Panel) || 
@@ -4689,13 +4704,24 @@ namespace namaichi
 			}
 		}
 		private void setForeColor(Color color) {
-			var c = util.getChildControls(this);
+			var c = getChildControls(this);
 			foreach (var _c in c)
 				if (_c.GetType() == typeof(GroupBox) ||
 				    _c.GetType() == typeof(System.Windows.Forms.Label) || 
 				    _c.GetType() == typeof(System.Windows.Forms.CheckBox)) _c.ForeColor = color;
 		}
-		
+		private List<Control> getChildControls(Control c) {
+			//util.debugWriteLine("cname " + c.Name);
+			var ret = new List<Control>();
+			foreach (Control _c in c.Controls) {
+				var children = getChildControls(_c);
+				ret.Add(_c);
+				ret.AddRange(children);
+				//util.debugWriteLine(c.Name + " " + children.Count);
+			}
+			//util.debugWriteLine(c.Name + " " + ret.Count);
+			return ret;
+		}
 		private void setSort() {
 			var s = new string[]{"live", "alart", "userAlart", "task",
 					"history", "notAlart"};
@@ -4829,46 +4855,23 @@ namespace namaichi
 			var ret = new KeyValuePair<DateTime, ToolStripMenuItem>(a.pubDateDt, menu);
 			return ret;
 		}
+		/*
 		public void liveListLockAction(Action a) {
 			try {
-				if (Thread.CurrentThread != liveListLockThread) {
-					for (var i = 0; i < 500; i++) {
-						if (!isLiveListLocking) {
-							isLiveListLocking = true;
-							liveListLockThread = Thread.CurrentThread;
-							util.debugWriteLine("live list lock action " + i);
-							break;
-						}
-						if (i == 4999) util.debugWriteLine("live list lock action no get");
-						Thread.Sleep(10);
+				for (var i = 0; i < 300; i++) {
+					if (!isLiveListLocking) {
+						isLiveListLocking = true;
+						util.debugWriteLine("live list lock action " + i);
+						break;
 					}
-				} else {
-					util.debugWriteLine("live list lock same thread");
+					if (i == 99) util.debugWriteLine("live list lock action no get");
+					Thread.Sleep(100);
 				}
 				a.Invoke();
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			} finally {
 				isLiveListLocking = false;
-				liveListLockThread = null;
-			}
-		}
-		/*
-		public void liveListLockAction(Action a) {
-			try {
-				if (!liveListLockS.Wait(30000)) {
-					util.debugWriteLine("livelist lock wait false");
-				}
-				a.Invoke();
-				
-			} catch (Exception e) {
-				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-			} finally {
-				try {
-					liveListLockS.Release();
-				} catch (Exception e) {
-					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				}
 			}
 		}
 		*/
@@ -4889,27 +4892,69 @@ namespace namaichi
 						util.debugWriteLine("in datareserve duplicate " + dup[0] + " " + dup1);
 				}
 				
-				foreach (var d in dup) {
-					LiveInfo i = null;
-					try {
-						i = liveListDataSource.First(x => x.lvId == d);
-						if (i != null) {
-							liveListDataSource.Remove(i);
-							continue;
-						}
-					} catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);}
-					
-					try {
-						i = liveListDataReserve.First(x => x.lvId == d);
-						if (i != null) {
-							liveListDataReserve.Remove(i);
-						}
-					} catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);}
-				}
+				formAction(() => {
+					foreach (var d in dup) {
+						LiveInfo i = null;
+						try {
+							i = liveListDataSource.First(x => x.lvId == d);
+							if (i != null) {
+								liveListDataSource.Remove(i);
+								continue;
+							}
+						} catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);}
+						
+						try {
+							i = liveListDataReserve.First(x => x.lvId == d);
+							if (i != null) {
+								liveListDataReserve.Remove(i);
+							}
+						} catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);}
+					}
+				});
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
-		
+		public void liveListLockAction(Action a) {
+			Monitor.Enter(liveListLock);
+			try {
+				a.BeginInvoke(null, null).AsyncWaitHandle.WaitOne(10000, false);
+			} finally {
+				Monitor.Exit(liveListLock);
+			}
+			
+		}
+		private void loadControlLayout() {
+			try {
+				saveMenuSetting();
+				saveSortState();
+				saveFormState();
+				liveList.DataSource = null;
+				alartList.DataSource = null;
+				userAlartList.DataSource = null;
+				taskList.DataSource = null;
+				historyList.DataSource = null;
+				notAlartList.DataSource = null;
+				logList.DataSource = null;
+				
+				util.debugWriteLine("delete alartlist " + alartList.GetHashCode());
+				
+				Font = new Font(Font.FontFamily, 9);
+				Controls.Clear();
+				
+				InitializeComponent();
+				formInitSetting();
+				
+				Update();
+				
+				util.debugWriteLine("delete alartlist2 " + alartList.GetHashCode());
+				util.debugWriteLine("load datasource " + alartListDataSource.GetHashCode());
+				util.debugWriteLine("load form  datasource " + alartList.DataSource.GetHashCode());
+				
+				return;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+		}
 	}
 }

@@ -64,7 +64,6 @@ namespace namaichi
 			//
 			setDefaultBehavior();
 			
-			
 			if (id == null) {
 				if (isUserMode) setUserModeForm();
 				return;
@@ -84,6 +83,8 @@ namespace namaichi
 				//keywordText.Text = "";
 				setUserModeForm();
 			}
+			
+			
 			
 		}
 		private void setMemberOnlyListCloseEventHandler(Control parent) {
@@ -627,7 +628,7 @@ namespace namaichi
 		}
 		void CustomKeywordBtnClick(object sender, EventArgs e)
 		{
-			var f = new CustomKeywordForm(form.config, true, customKw);
+			var f = new CustomKeywordForm(int.Parse(form.config.get("fontSize")), true, customKw);
 			f.ShowDialog();
 			if (f.ret == null) {
 				if (f.DialogResult == DialogResult.OK) {

@@ -364,6 +364,8 @@ namespace namaichi
 			this.liveListDeleteRowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.liveListSearchBtn = new System.Windows.Forms.Button();
 			this.liveListSearchText = new System.Windows.Forms.TextBox();
+			this.categoryRightBtn = new System.Windows.Forms.Button();
+			this.categoryLeftBtn = new System.Windows.Forms.Button();
 			this.categoryBtnPanel = new System.Windows.Forms.FlowLayoutPanel();
 			this.allCategoryBtn = new System.Windows.Forms.RadioButton();
 			this.commonCategoryBtn = new System.Windows.Forms.RadioButton();
@@ -2220,7 +2222,6 @@ namespace namaichi
 			// lastHosoStatusBar
 			// 
 			this.lastHosoStatusBar.BackColor = System.Drawing.SystemColors.Control;
-			this.lastHosoStatusBar.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.lastHosoStatusBar.Name = "lastHosoStatusBar";
 			this.lastHosoStatusBar.Size = new System.Drawing.Size(0, 17);
 			// 
@@ -2261,7 +2262,6 @@ namespace namaichi
 			this.alartList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 									| System.Windows.Forms.AnchorStyles.Left) 
 									| System.Windows.Forms.AnchorStyles.Right)));
-			this.alartList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
 			this.alartList.ColumnHeadersHeight = 25;
 			this.alartList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.alartList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -2782,6 +2782,8 @@ namespace namaichi
 			this.tabPage3.Controls.Add(this.liveList);
 			this.tabPage3.Controls.Add(this.liveListSearchBtn);
 			this.tabPage3.Controls.Add(this.liveListSearchText);
+			this.tabPage3.Controls.Add(this.categoryRightBtn);
+			this.tabPage3.Controls.Add(this.categoryLeftBtn);
 			this.tabPage3.Controls.Add(this.categoryBtnPanel);
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Margin = new System.Windows.Forms.Padding(0);
@@ -2799,7 +2801,6 @@ namespace namaichi
 			this.liveList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 									| System.Windows.Forms.AnchorStyles.Left) 
 									| System.Windows.Forms.AnchorStyles.Right)));
-			this.liveList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
 			this.liveList.ColumnHeadersHeight = 25;
 			this.liveList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.liveList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -3162,6 +3163,36 @@ namespace namaichi
 			this.liveListSearchText.Size = new System.Drawing.Size(95, 19);
 			this.liveListSearchText.TabIndex = 11;
 			// 
+			// categoryRightBtn
+			// 
+			this.categoryRightBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.categoryRightBtn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("categoryRightBtn.BackgroundImage")));
+			this.categoryRightBtn.FlatAppearance.BorderSize = 0;
+			this.categoryRightBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.categoryRightBtn.Location = new System.Drawing.Point(723, 7);
+			this.categoryRightBtn.Margin = new System.Windows.Forms.Padding(0);
+			this.categoryRightBtn.Name = "categoryRightBtn";
+			this.categoryRightBtn.Size = new System.Drawing.Size(16, 16);
+			this.categoryRightBtn.TabIndex = 10;
+			this.categoryRightBtn.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.categoryRightBtn.UseVisualStyleBackColor = true;
+			this.categoryRightBtn.Click += new System.EventHandler(this.CategoryRightBtnClick);
+			// 
+			// categoryLeftBtn
+			// 
+			this.categoryLeftBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.categoryLeftBtn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("categoryLeftBtn.BackgroundImage")));
+			this.categoryLeftBtn.FlatAppearance.BorderSize = 0;
+			this.categoryLeftBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.categoryLeftBtn.Location = new System.Drawing.Point(707, 7);
+			this.categoryLeftBtn.Margin = new System.Windows.Forms.Padding(0);
+			this.categoryLeftBtn.Name = "categoryLeftBtn";
+			this.categoryLeftBtn.Size = new System.Drawing.Size(16, 16);
+			this.categoryLeftBtn.TabIndex = 9;
+			this.categoryLeftBtn.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.categoryLeftBtn.UseVisualStyleBackColor = true;
+			this.categoryLeftBtn.Click += new System.EventHandler(this.CategoryLeftBtnClick);
+			// 
 			// categoryBtnPanel
 			// 
 			this.categoryBtnPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -3454,7 +3485,6 @@ namespace namaichi
 			this.userAlartList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 									| System.Windows.Forms.AnchorStyles.Left) 
 									| System.Windows.Forms.AnchorStyles.Right)));
-			this.userAlartList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
 			this.userAlartList.ColumnHeadersHeight = 25;
 			this.userAlartList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.userAlartList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -3964,7 +3994,6 @@ namespace namaichi
 			this.taskList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 									| System.Windows.Forms.AnchorStyles.Left) 
 									| System.Windows.Forms.AnchorStyles.Right)));
-			this.taskList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
 			this.taskList.ColumnHeadersHeight = 25;
 			this.taskList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.taskList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -4295,7 +4324,6 @@ namespace namaichi
 			this.historyList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 									| System.Windows.Forms.AnchorStyles.Left) 
 									| System.Windows.Forms.AnchorStyles.Right)));
-			this.historyList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
 			this.historyList.ColumnHeadersHeight = 25;
 			this.historyList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.historyList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -4505,7 +4533,6 @@ namespace namaichi
 			this.notAlartList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 									| System.Windows.Forms.AnchorStyles.Left) 
 									| System.Windows.Forms.AnchorStyles.Right)));
-			this.notAlartList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
 			this.notAlartList.ColumnHeadersHeight = 25;
 			this.notAlartList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.notAlartList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -5187,6 +5214,8 @@ namespace namaichi
 		public System.Windows.Forms.DataGridView liveList;
 		private System.Windows.Forms.Button liveListSearchBtn;
 		private System.Windows.Forms.TextBox liveListSearchText;
+		private System.Windows.Forms.Button categoryRightBtn;
+		private System.Windows.Forms.Button categoryLeftBtn;
 		private System.Windows.Forms.RadioButton reqCategoryBtn;
 		private System.Windows.Forms.RadioButton liveCategoryBtn;
 		private System.Windows.Forms.RadioButton commonCategoryBtn;

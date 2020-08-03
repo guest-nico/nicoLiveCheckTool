@@ -854,7 +854,6 @@ namespace namaichi
 			util.debugWriteLine(c.Name + " " + ret.Count);
 			return ret;
 		}
-		
 		void ApplyBtnClick(object sender, EventArgs e)
 		{
 			util.setFontSize((int)fontList.Value, this, false);

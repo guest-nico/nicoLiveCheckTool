@@ -185,6 +185,7 @@ namespace namaichi
 			// 
 			// カスタム
 			// 
+			this.カスタム.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
 			this.カスタム.DataPropertyName = "customBtn";
 			this.カスタム.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.カスタム.HeaderText = "入れ子設定";

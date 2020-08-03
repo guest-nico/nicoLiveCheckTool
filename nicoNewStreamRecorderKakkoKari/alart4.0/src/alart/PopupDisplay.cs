@@ -39,8 +39,7 @@ namespace namaichi.alart
 		}
 		public void show(RssItem ri, AlartInfo ai) {
 			if (popupSize == null) {
-				popupSize = new Size[]{new PopupForm(ri, form.config, this, 0, ai).Size,
-					new SmallPopupForm(ri, form.config, this, 0, ai).Size};
+				setPopupSize();
 			}
 			
 			var isSmall = bool.Parse(form.config.get("Issmallpopup"));
@@ -105,6 +104,14 @@ namespace namaichi.alart
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
+		}
+		public void setPopupSize() {
+			var thumbnailUrl = util.getJarPath()[0] + "/ImageCommunity/no thumb com.jpg";
+			var ri = new namaichi.info.RssItem("タイトル", "lv1000000",
+					DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), "放送説明", "コミュニティ名",
+					"コミュニティID", "放送者名", thumbnailUrl, "true", "", false);
+			popupSize = new Size[]{new PopupForm(ri, form.config, this, 0, null).Size,
+						new SmallPopupForm(ri, form.config, this, 0, null).Size};
 		}
 	}
 }

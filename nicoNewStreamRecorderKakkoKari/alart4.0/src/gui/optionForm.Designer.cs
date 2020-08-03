@@ -151,10 +151,6 @@ namespace namaichi
 			this.label49 = new System.Windows.Forms.Label();
 			this.label48 = new System.Windows.Forms.Label();
 			this.common2Tab = new System.Windows.Forms.TabPage();
-			this.displayGroup = new System.Windows.Forms.GroupBox();
-			this.fontList = new System.Windows.Forms.NumericUpDown();
-			this.label64 = new System.Windows.Forms.Label();
-			this.applyBtn = new System.Windows.Forms.Button();
 			this.defaultBehaviorGroupBox = new System.Windows.Forms.GroupBox();
 			this.isPopupChkBox = new System.Windows.Forms.CheckBox();
 			this.isBaloonChkBox = new System.Windows.Forms.CheckBox();
@@ -276,6 +272,10 @@ namespace namaichi
 			this.cookieFileSanshouBtn = new System.Windows.Forms.Button();
 			this.btnReload = new System.Windows.Forms.Button();
 			this.useSecondLoginChkBox = new System.Windows.Forms.CheckBox();
+			this.displayGroup = new System.Windows.Forms.GroupBox();
+			this.fontList = new System.Windows.Forms.NumericUpDown();
+			this.label64 = new System.Windows.Forms.Label();
+			this.applyBtn = new System.Windows.Forms.Button();
 			this.appliTab.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -286,8 +286,6 @@ namespace namaichi
 			((System.ComponentModel.ISupportInitialize)(this.liveListUpdateMinutesList)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.thresholdpageList)).BeginInit();
 			this.common2Tab.SuspendLayout();
-			this.displayGroup.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.fontList)).BeginInit();
 			this.defaultBehaviorGroupBox.SuspendLayout();
 			this.groupBox12.SuspendLayout();
 			this.groupBox1.SuspendLayout();
@@ -312,6 +310,8 @@ namespace namaichi
 			((System.ComponentModel.ISupportInitialize)(this.rssUpdateIntervalList)).BeginInit();
 			this.accountTab.SuspendLayout();
 			this.groupBox3.SuspendLayout();
+			this.displayGroup.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.fontList)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// button3
@@ -1447,59 +1447,6 @@ namespace namaichi
 			this.common2Tab.TabIndex = 6;
 			this.common2Tab.Text = "一般2";
 			this.common2Tab.UseVisualStyleBackColor = true;
-			// 
-			// displayGroup
-			// 
-			this.displayGroup.Controls.Add(this.fontList);
-			this.displayGroup.Controls.Add(this.label64);
-			this.displayGroup.Controls.Add(this.applyBtn);
-			this.displayGroup.Location = new System.Drawing.Point(5, 406);
-			this.displayGroup.Name = "displayGroup";
-			this.displayGroup.Size = new System.Drawing.Size(420, 46);
-			this.displayGroup.TabIndex = 7;
-			this.displayGroup.TabStop = false;
-			this.displayGroup.Text = "表示設定";
-			// 
-			// fontList
-			// 
-			this.fontList.Location = new System.Drawing.Point(101, 17);
-			this.fontList.Maximum = new decimal(new int[] {
-									72,
-									0,
-									0,
-									0});
-			this.fontList.Minimum = new decimal(new int[] {
-									1,
-									0,
-									0,
-									0});
-			this.fontList.Name = "fontList";
-			this.fontList.Size = new System.Drawing.Size(51, 19);
-			this.fontList.TabIndex = 14;
-			this.fontList.Value = new decimal(new int[] {
-									9,
-									0,
-									0,
-									0});
-			// 
-			// label64
-			// 
-			this.label64.Location = new System.Drawing.Point(6, 18);
-			this.label64.Name = "label64";
-			this.label64.Size = new System.Drawing.Size(92, 18);
-			this.label64.TabIndex = 13;
-			this.label64.Text = "フォントサイズ：";
-			this.label64.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// applyBtn
-			// 
-			this.applyBtn.Location = new System.Drawing.Point(174, 14);
-			this.applyBtn.Name = "applyBtn";
-			this.applyBtn.Size = new System.Drawing.Size(51, 23);
-			this.applyBtn.TabIndex = 34;
-			this.applyBtn.Text = "テスト";
-			this.applyBtn.UseVisualStyleBackColor = true;
-			this.applyBtn.Click += new System.EventHandler(this.ApplyBtnClick);
 			// 
 			// defaultBehaviorGroupBox
 			// 
@@ -2798,6 +2745,59 @@ namespace namaichi
 			this.useSecondLoginChkBox.Text = "ブラウザからクッキーが取得できなかった場合、次のアカウントでログインする";
 			this.useSecondLoginChkBox.UseVisualStyleBackColor = true;
 			// 
+			// displayGroup
+			// 
+			this.displayGroup.Controls.Add(this.fontList);
+			this.displayGroup.Controls.Add(this.label64);
+			this.displayGroup.Controls.Add(this.applyBtn);
+			this.displayGroup.Location = new System.Drawing.Point(5, 408);
+			this.displayGroup.Name = "displayGroup";
+			this.displayGroup.Size = new System.Drawing.Size(420, 46);
+			this.displayGroup.TabIndex = 8;
+			this.displayGroup.TabStop = false;
+			this.displayGroup.Text = "表示設定";
+			// 
+			// fontList
+			// 
+			this.fontList.Location = new System.Drawing.Point(101, 17);
+			this.fontList.Maximum = new decimal(new int[] {
+									72,
+									0,
+									0,
+									0});
+			this.fontList.Minimum = new decimal(new int[] {
+									1,
+									0,
+									0,
+									0});
+			this.fontList.Name = "fontList";
+			this.fontList.Size = new System.Drawing.Size(51, 19);
+			this.fontList.TabIndex = 14;
+			this.fontList.Value = new decimal(new int[] {
+									9,
+									0,
+									0,
+									0});
+			// 
+			// label64
+			// 
+			this.label64.Location = new System.Drawing.Point(6, 18);
+			this.label64.Name = "label64";
+			this.label64.Size = new System.Drawing.Size(92, 18);
+			this.label64.TabIndex = 13;
+			this.label64.Text = "フォントサイズ：";
+			this.label64.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// applyBtn
+			// 
+			this.applyBtn.Location = new System.Drawing.Point(174, 14);
+			this.applyBtn.Name = "applyBtn";
+			this.applyBtn.Size = new System.Drawing.Size(51, 23);
+			this.applyBtn.TabIndex = 34;
+			this.applyBtn.Text = "テスト";
+			this.applyBtn.UseVisualStyleBackColor = true;
+			this.applyBtn.Click += new System.EventHandler(this.ApplyBtnClick);
+			// 
 			// optionForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -2825,8 +2825,6 @@ namespace namaichi
 			((System.ComponentModel.ISupportInitialize)(this.liveListUpdateMinutesList)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.thresholdpageList)).EndInit();
 			this.common2Tab.ResumeLayout(false);
-			this.displayGroup.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.fontList)).EndInit();
 			this.defaultBehaviorGroupBox.ResumeLayout(false);
 			this.defaultBehaviorGroupBox.PerformLayout();
 			this.groupBox12.ResumeLayout(false);
@@ -2855,6 +2853,8 @@ namespace namaichi
 			this.accountTab.ResumeLayout(false);
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox3.PerformLayout();
+			this.displayGroup.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.fontList)).EndInit();
 			this.ResumeLayout(false);
 		}
 		private System.Windows.Forms.Button applyBtn;

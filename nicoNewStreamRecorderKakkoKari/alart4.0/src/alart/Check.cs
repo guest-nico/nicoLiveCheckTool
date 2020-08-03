@@ -916,9 +916,9 @@ namespace namaichi.alart
 				addItems.Add(li);
 			}
 			
+			
 			form.addLiveListItem(addItems, cateChar, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly);
-			//form.formAction(() => form.liveListLockAction(() => form.removeDuplicateLiveList()));
-			form.liveListLockAction(() => form.formAction(() => form.removeDuplicateLiveList()));
+			//form.removeDuplicateLiveList();
 			
 			if (bool.Parse(form.config.get("AutoSort")))
 				form.sortLiveList();

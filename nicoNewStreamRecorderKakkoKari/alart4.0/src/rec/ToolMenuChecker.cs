@@ -305,7 +305,7 @@ namespace namaichi.rec
 			} else {
 				Task.Factory.StartNew(() => {
 					try {
-						var f = new BulkAddFromFollowAccountForm(form.config);
+						var f = new BulkAddFromFollowAccountForm(int.Parse(form.config.get("fontSize")));
 						Task.Factory.StartNew(() => {
 							form.formAction(() => f.ShowDialog(form));
 						}).Wait();
@@ -357,7 +357,7 @@ namespace namaichi.rec
 						var l = new ToolMenuLock("参加コミュ一括登録中", addFollowList.Count);
 						bulkAddFromFollowComLock = l;
 						setToolMenuStatusBar();
-						Task.Factory.StartNew(() => bulkAddFromFollowCom(l, addFollowList, followList.Count, f.follow));
+						Task.Factory.StartNew(() => bulkAddFromFollowCom(l, addFollowList, followList.Count, f.follow, cc));
 						
 					} catch (Exception e) {
 						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
@@ -421,8 +421,8 @@ namespace namaichi.rec
 				return null;
 			}
 		}
-		private void bulkAddFromFollowCom(ToolMenuLock _lock, List<string[]> addList, int allNum, bool[] followMode) {
-			var mainFollowList = new FollowChecker(form, form.check.container)
+		private void bulkAddFromFollowCom(ToolMenuLock _lock, List<string[]> addList, int allNum, bool[] followMode, CookieContainer cc) {
+			var mainFollowList = new FollowChecker(form, cc)
 					.getFollowListFromApp(followMode);
 			if (mainFollowList == null) return;
 			var behaviors = form.config.get("defaultBehavior").Split(',').Select<string, bool>(x => x == "1").ToArray();
@@ -469,7 +469,8 @@ namespace namaichi.rec
 			util.showModelessMessageBox("新規登録：" + got + "　登録済み：" + (allNum - got) + "　エラー：" + error, "参加コミュ登録完了", form);
 			bulkAddFromFollowComLock = null;
 			setToolMenuStatusBar();
-			form.changedListContent();
+			//form.changedListContent();
+			new utility.AlartListFileManager(false, form).save();
 		}
 		public void getThumbBulk(bool isUser) {
 			if ((isUser && userThumbLock != null) ||

@@ -221,10 +221,8 @@ namespace namaichi.alart
 			}
 		}
 		private void updateAlartList(List<string[]> followList) {
-			form.formAction(() => {
-				form.followUpdate(followList, false);
-				form.followUpdate(followList, true);
-			                });
+			form.followUpdate(followList, false);
+			form.followUpdate(followList, true);
 			
 		}
 		private Dictionary<string, string> getHeader() {

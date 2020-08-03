@@ -17,7 +17,7 @@ namespace namaichi
 	/// </summary>
 	public partial class UpdateForm : Form
 	{
-		public UpdateForm(config.config config)
+		public UpdateForm(int fontSize)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
@@ -27,7 +27,7 @@ namespace namaichi
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
-			util.setFontSize(int.Parse(config.get("fontSize")), this, false);
+			util.setFontSize(fontSize, this, false);
 		}
 		void okBtnClick(object sender, EventArgs e)
 		{

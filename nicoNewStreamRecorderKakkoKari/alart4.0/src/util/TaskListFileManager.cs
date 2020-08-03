@@ -27,8 +27,9 @@ namespace namaichi.utility
 		{
 			var path = util.getJarPath()[0] + "\\";
 			
+			
+			var f = path + "tasklist.ini_";
 			try {
-				var f = path + "tasklist.ini_";
 				using (var sw = new StreamWriter(f, false, Encoding.UTF8)) {
 					sw.WriteLine("200");
 					foreach (var ti in form.taskListDataSource) {
@@ -61,15 +62,12 @@ namespace namaichi.utility
 					sw.WriteLine("EndLine");
 					//sw.Close();
 				}
-				
 				File.Copy(f, f.Substring(0, f.Length - 1), true);
 				File.Delete(f);
 				util.saveBackupList(path, "tasklist");
-			
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
-			
 		}
 		public void load(MainForm form)
 		{

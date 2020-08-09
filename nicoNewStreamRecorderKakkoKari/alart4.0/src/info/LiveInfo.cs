@@ -56,7 +56,7 @@ namespace namaichi.info
 		//byte[] deflateThumb = null;
 		//Image testImg = null;
 		
-		public LiveInfo(List<KeyValuePair<string, string>> item, SortableBindingList<AlartInfo> alartData, config.config config, SortableBindingList<AlartInfo> userAlartData)
+		public LiveInfo(List<KeyValuePair<string, string>> item, AlartInfo[] alartData, config.config config, AlartInfo[] userAlartData)
 		{
 			foreach (var l in item) {
 				try {
@@ -106,9 +106,10 @@ namespace namaichi.info
 			//testImg = new Bitmap(thumbnail);
 		}
 		public LiveInfo(RssItem item, 
-				SortableBindingList<AlartInfo> alartData, 
+				//SortableBindingList<AlartInfo> alartData,
+				AlartInfo[] alartData,
 				config.config config, 
-				SortableBindingList<AlartInfo> userAlartData) {
+				AlartInfo[] userAlartData) {
 			var ri = item;
 			title = ri.title;
 			lvId = ri.lvId;
@@ -155,7 +156,7 @@ namespace namaichi.info
 			//return null;
 		}
 
-		private string getFavorite(SortableBindingList<AlartInfo> aiList, RssItem ri, string _favorite) {
+		private string getFavorite(AlartInfo[] aiList, RssItem ri, string _favorite) {
 			try {
 				foreach (var ai in aiList) {
 					if (!getTargetOk(ai, ri, type)) continue;

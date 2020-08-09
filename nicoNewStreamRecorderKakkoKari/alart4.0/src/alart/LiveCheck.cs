@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Linq;
 using System.Web.UI.WebControls;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -38,91 +39,89 @@ namespace namaichi.alart
 			isLoading = true;
 			
 			var newItems = getCategoryLiveItems();
-			if (newItems == null) return;
+			if (newItems == null) {
+				isLoading = false;
+				return;
+			}
 			var delMin = double.Parse(form.config.get("liveListDelMinutes"));
 			var now = DateTime.Now;
 			
+			var _livelistDataSource = form.liveListDataSource.ToArray();
+			var _livelistDataReserve = form.liveListDataReserve.ToArray();
+				
 			if (Thread.CurrentThread == form.madeThread)
 					util.debugWriteLine("lock form thread load");
+			
+			deleteEndedLive(newItems, _livelistDataSource, _livelistDataReserve, now);
+			
 			form.liveListLockAction(() =>
-					_load(newItems, delMin, now));
+					_load(newItems, delMin, now, _livelistDataSource, _livelistDataReserve), "load0");
+			
+			var sI = form.liveList.FirstDisplayedScrollingRowIndex;
+			if (bool.Parse(form.config.get("AutoSort")))
+				form.sortLiveList();
+			form.setScrollIndex(form.liveList, sI);
+			
+			form.liveListLockAction(() => {
+				if (bool.Parse(form.config.get("FavoriteUp")))
+					form.upLiveListFavorite();
+			}, "load1");
 			
 			form.setLiveListNum();
 			
 			isLoading = false;
 		}
-		private void _load(List<LiveInfo> newItems, double delMin, DateTime now) {
+		private void _load(List<LiveInfo> newItems, double delMin, DateTime now, LiveInfo[] _livelistDataSource, LiveInfo[] _livelistDataReserve) {
 			util.debugWriteLine("live list _load " + newItems.Count + " " + delMin + " " + now);
-			var scrollI = form.liveList.FirstDisplayedScrollingRowIndex;
-			var curCellLv = (form.liveList.CurrentCell == null) ? null : form.liveListDataSource[form.liveList.CurrentCell.RowIndex].lvId;
-			var curCellCellI = (form.liveList.CurrentCell == null) ? -1 : form.liveList.CurrentCell.ColumnIndex;
-			
-			var delList = new List<LiveInfo>();
-			foreach (var l in form.liveListDataSource) {
-				/*
-				if (newItems.Find((x) => x.lvId == l.lvId) == null)
-					delList.Add(l);
-				*/
-				if (newItems.Find((x) => x.lvId == l.lvId) == null) {
-					if (now - l.lastExistTime > TimeSpan.FromMinutes(5))
-						delList.Add(l);
-				} else l.lastExistTime = now;
-			}
-			foreach (var l in form.liveListDataReserve) {
-				if (newItems.Find((x) => x.lvId == l.lvId) == null) {
-					if (now - l.lastExistTime > TimeSpan.FromMinutes(5))
-						delList.Add(l);
-				} else l.lastExistTime = now;
-			}
-			
-			util.debugWriteLine("l");
-			form.getVisiRow(true);
-			
-			foreach (var d in delList) 
-				form.removeLiveListItem(d);
-			
-			util.debugWriteLine("k");
-			form.getVisiRow();
-			
-			var isBlindA = bool.Parse(form.config.get("BlindOnlyA"));
-			var isBlindB = bool.Parse(form.config.get("BlindOnlyB"));
-			var isBlindQuestion = bool.Parse(form.config.get("BlindQuestion"));
-			var isFavoriteOnly = bool.Parse(form.config.get("FavoriteOnly"));
-			var cateChar = form.getCategoryChar();
-			foreach (var i in newItems) {
-				if (delMin != 0 && ((TimeSpan)(now - i.pubDateDt)).TotalMinutes > delMin)
-					continue;
-					
-				var isContain = false;
-				foreach (var a in form.liveListDataSource)
-					if (a.lvId == i.lvId) 
-						isContain = true;
-//					for (var j = 0; j < form.liveListDataSource.Count; j++)
-//						if (form.liveListDataSource[j].lvId == i.lvId)
-//							util.debugWriteLine("conta " + j + " " + i.lvId + " " + form.liveListDataSource.Count);
-				if (form.liveListDataReserve.Find((LiveInfo li) => li.lvId == i.lvId) != null) isContain = true;
-				if (isContain) 
-					continue;
-
-				var _i = new List<LiveInfo>(){i};
-				form.addLiveListItem(_i, cateChar, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly);
-			}
-			
-			var ccc = form.liveListDataSource.Count + form.liveListDataReserve.Count;
-			util.debugWriteLine("j");
-			form.getVisiRow();
-			
-			
-			if (bool.Parse(form.config.get("AutoSort")))
-				form.sortLiveList();
-			if (bool.Parse(form.config.get("FavoriteUp")))
-				form.upLiveListFavorite();
+			if (newItems.Count == 0) return;
 			
 			try {
+				util.debugWriteLine("live list _load new item 0 " + newItems[0]);
+				var curCellLv = (form.liveList.CurrentCell == null) ? null : form.liveListDataSource[form.liveList.CurrentCell.RowIndex].lvId;
+				var curCellCellI = (form.liveList.CurrentCell == null) ? -1 : form.liveList.CurrentCell.ColumnIndex;
+			
+				
+				
+				
+				
+				//form.setScrollIndex(form.liveList, scrollI);
+				
+				var isBlindA = bool.Parse(form.config.get("BlindOnlyA"));
+				var isBlindB = bool.Parse(form.config.get("BlindOnlyB"));
+				var isBlindQuestion = bool.Parse(form.config.get("BlindQuestion"));
+				var isFavoriteOnly = bool.Parse(form.config.get("FavoriteOnly"));
+				var cateChar = form.getCategoryChar();
+				
+				//scrollI = form.liveList.FirstDisplayedScrollingRowIndex;
+				foreach (var i in newItems) {
+					if (delMin != 0 && ((TimeSpan)(now - i.pubDateDt)).TotalMinutes > delMin)
+						continue;
+						
+					var isContain = false;
+					foreach (var a in _livelistDataSource)
+						if (a.lvId == i.lvId) 
+							isContain = true;
+					if (form.liveListDataReserve.Find((LiveInfo li) => li.lvId == i.lvId) != null) isContain = true;
+					if (isContain) 
+						continue;
+	
+					var _i = new List<LiveInfo>(){i};
+					form.addLiveListItem(_i, cateChar, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly);
+				}
+				//form.setScrollIndex(form.liveList, scrollI);
+				
+				//var ccc = form.liveListDataSource.Count + form.liveListDataReserve.Count;
+				
+				//scrollI = form.liveList.FirstDisplayedScrollingRowIndex;
+				
+				//form.setScrollIndex(form.liveList, scrollI);
+			
+			
+			
 				var c = form.liveList.Rows.Count;
 				form.formAction(() => {
-				                	
-					foreach (var r in form.liveListDataSource) {
+				    
+					foreach (var r in _livelistDataSource) {
 						//var isDisp = (r.MainCategory[0] == cateChar || 
 						//            cateChar == '全');
 						var isDisp = r.isDisplay(cateChar);
@@ -139,23 +138,50 @@ namespace namaichi.alart
 						}
 						
 					}
+				    
+				    /*
 				    if (curCellLv != null) {
 						for (var i = 0; i < form.liveListDataSource.Count; i++)
 							if (form.liveListDataSource[i].lvId == curCellLv)
 								form.liveList.CurrentCell = form.liveList[curCellCellI, i];
 					}
+					*/
 				});
+				
+				form.removeDuplicateLiveList();
+				
+				
+				
+				
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 			util.debugWriteLine("live check _load after reserve");
+		}
+		private void deleteEndedLive(List<LiveInfo> newItems, LiveInfo[] _livelistDataSource, LiveInfo[] _livelistDataReserve, DateTime now) {
+			var delList = new List<LiveInfo>();
+			foreach (var l in _livelistDataSource) {
+				
+				if (newItems.Find((x) => x.lvId == l.lvId) == null) {
+					//util.debugWriteLine("dellist found " + l.lvId + " " + l.title + " " + l.lastExistTime);
+					if (((TimeSpan)(now - l.lastExistTime)).Minutes > 5)
+						delList.Add(l);
+				} else {
+					//util.debugWriteLine("dellist not found " + l.lvId + " " + l.title + " " + l.lastExistTime);
+					l.lastExistTime = now;
+				}
+			}
+			foreach (var l in _livelistDataReserve) {
+				if (newItems.Find((x) => x.lvId == l.lvId) == null) {
+					if (((TimeSpan)(now - l.lastExistTime)).Minutes > 5)
+						delList.Add(l);
+				} else l.lastExistTime = now;
+			}
 			
-			try {
-				if (scrollI != -1)
-					form.formAction(() => form.liveList.FirstDisplayedScrollingRowIndex = scrollI);
-			} catch (Exception e) {
-				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				util.debugWriteLine("scrollI exception " + scrollI);
+			
+			foreach (var d in delList) {
+				util.debugWriteLine("delList remove " + d.lvId + " " + d.title);
+				form.removeLiveListItem(d);
 			}
 		}
 		/*
@@ -228,7 +254,7 @@ namespace namaichi.alart
 								if (item == null) continue;
 								if (buf.Find(x => x.lvId == item.lvId) != null)	continue;
 							
-								var li = new LiveInfo(item, form.alartListDataSource, form.config, form.userAlartListDataSource);
+								var li = new LiveInfo(item, form.alartListDataSource.ToArray(), form.config, form.userAlartListDataSource.ToArray());
 								buf.Add(li);
 								itemCount++;
 							} catch (Exception e) {
@@ -240,6 +266,7 @@ namespace namaichi.alart
 					} catch (Exception e) {
 						util.debugWriteLine("getliveitems xml " + e.Message + e.Source + e.StackTrace + e.TargetSite);
 						Thread.Sleep(180000);
+						return buf;
 					}
 				}
 			}
@@ -250,12 +277,15 @@ namespace namaichi.alart
 			autoUpdateO = new object();
 			var t = autoUpdateO;
 			Task.Factory.StartNew(() => {
+				util.debugWriteLine("livelist autoupdate start");
 				while (autoUpdateO == t) {
 					load();
 					Thread.Sleep((int)(double.Parse(form.config.get("liveListUpdateMinutes")) * 60000));
 					//Thread.Sleep(10000);
 				}
+				util.debugWriteLine("livelist autoupdate end");
 			});
+			
 		}
 		public void stopAutoUpdate() {
 			autoUpdateO = null;
@@ -272,5 +302,6 @@ namespace namaichi.alart
 			//else if (c == "7") return "r18";
 			else return "";
 		}
+		
 	}
 }

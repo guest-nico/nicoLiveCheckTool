@@ -28,6 +28,8 @@ using System.IO;
 using System.Threading;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using namaichi.alart;
 using namaichi.config;
 using namaichi.utility;
@@ -41,30 +43,6 @@ using namaichi.info;
 //using System.Drawing;
 
 
-
-
-
-
-//using System.Windows.Forms;
-
-
-//using System.Text;
-
-
-
-
-
-
-
-
-
-//using namaichi.play;
-
-
-
-//using SuperSocket.ClientEngine;
-
-//using System.Diagnostics.Process;
 
 namespace namaichi
 {
@@ -118,6 +96,7 @@ namespace namaichi
 		private int historyContainerDistance = 0;
 		
 		private bool isDisplayIconBalloon = false;
+		private int liveListScrollIndex = -1;
 		
 		public MainForm(string[] args, Mutex mutex, string dotNetVersion)
 		{
@@ -1266,14 +1245,21 @@ namespace namaichi
 			
 			if (liveList.SortOrder == SortOrder.None) return;
 			var direction = (liveList.SortOrder == SortOrder.Ascending) ? ListSortDirection.Ascending : ListSortDirection.Descending;
-			formAction(() => {
-   		       	try {
-					var scrollI = liveList.FirstDisplayedScrollingRowIndex;
-					liveList.Sort(liveList.SortedColumn, direction);
-					liveList.FirstDisplayedScrollingRowIndex = scrollI;
-   		       	} catch (Exception e) {
-   		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
-   		       	}
+			liveListLockAction(() => {
+			    
+				formAction(() => {
+	   		       	try {
+			            var sI = liveList.FirstDisplayedScrollingRowIndex;
+						var dt = DateTime.Now;
+					    //resultLiveListSort();
+					    
+						liveList.Sort(liveList.SortedColumn, direction);
+						setScrollIndex(liveList, sI);
+						util.debugWriteLine("sortlivelist time " + (DateTime.Now - dt) + " scroll " + liveListScrollIndex);
+	   		       	} catch (Exception e) {
+	   		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
+	   		       	}
+				});
 			});
 		}
 		public void DisplayPopup(RssItem item, Point point, bool isSmall, 
@@ -2754,6 +2740,7 @@ namespace namaichi
 		public void addLiveListItem(List<LiveInfo> liList, char cateChar, bool blindOnlyA, bool blindOnlyB, bool blindQuestion, bool isFavoriteOnly) {
 			//var isDisp = (cateChar == '全' || li.MainCategory[0] == cateChar);
 			formAction(() => {
+				var sI = liveList.FirstDisplayedScrollingRowIndex;
 				foreach (var li in liList) {
 					var isDisp = li.isDisplay(cateChar);
 					var isMemberOnly = !string.IsNullOrEmpty(li.memberOnly); 
@@ -2769,15 +2756,10 @@ namespace namaichi
 			        	isDisp = false;
 					
 			        if (isDisp)	{
-			        	
-						var scrollI = liveList.FirstDisplayedScrollingRowIndex;
 						liveListDataSource.Add(li);
-						
-						if (scrollI != -1)
-							liveList.FirstDisplayedScrollingRowIndex = scrollI;
-						
 			        } else liveListDataReserve.Add(li);
 				}
+			    setScrollIndex(liveList, sI);
 			});
 			
 			if (!isLiveListTimeProcessing) {
@@ -2785,15 +2767,15 @@ namespace namaichi
 				Task.Factory.StartNew(() => liveListTimeProcess());
 			}
 		}
+		/*
 		public bool insertLiveListItem(LiveInfo li, int index, char cateChar) {
 			//if (cateChar == '全' || li.MainCategory[0] == cateChar) {
 			if (li.isDisplay(cateChar)) {
 				
 				formAction(() => {
-					var scrollIndex = liveList.FirstDisplayedScrollingRowIndex;
+					var sI = liveList.FirstDisplayedScrollingRowIndex;
 					liveListDataSource.Insert(index, li);
-					try {if (scrollIndex != -1) liveList.FirstDisplayedScrollingRowIndex = scrollIndex;}
-					catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);}
+					setScrollIndex(liveList);
 				});
 				return true;
 			} else {
@@ -2801,6 +2783,7 @@ namespace namaichi
 				return false;
 			}
 		}
+		*/
 		private void liveListTimeProcess() {
 			while (liveList.Rows.Count > 0) {
 				Thread.Sleep(10000);
@@ -2822,10 +2805,15 @@ namespace namaichi
 			
 			if (Thread.CurrentThread == madeThread)
 					util.debugWriteLine("lock form thread deleteLiveListTime");
-			liveListLockAction(() => 
-					_deleteLiveListTime(delMin, now));
 			
-			util.debugWriteLine("deletelivelistTime end");
+			liveListLockAction(() => {
+				var sI = liveList.FirstDisplayedScrollingRowIndex;
+				_deleteLiveListTime(delMin, now);
+				setScrollIndex(liveList, sI);
+			});
+			
+			
+			util.debugWriteLine("deletelivelistTime end " + (DateTime.Now - now));
 		}
 		private void _deleteLiveListTime(double delMin, DateTime now) {
 			util.debugWriteLine("deletelivelistTime 0");
@@ -2979,10 +2967,11 @@ namespace namaichi
 
 			    if (Thread.CurrentThread == madeThread)
 					util.debugWriteLine("lock form thread livelistDeleteRowMenuClick");
-			    liveListLockAction(() => 
-						formAction(() => liveListDataSource.Remove(li)));
-				
-				setLiveListNum();
+			    Task.Factory.StartNew(() => {
+				    liveListLockAction(() => 
+							formAction(() => liveListDataSource.Remove(li)));
+				    setLiveListNum();
+				});
 		}
 		
 		void LiveListCopyMenuDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -3013,44 +3002,46 @@ namespace namaichi
 		
 		public void setLiveListNum() {
 			util.debugWriteLine("setLiveListNum");
-			var l = new List<LiveInfo>(liveListDataSource);
-			var allC = liveListDataSource.Count + liveListDataReserve.Count;
-			
-			var mainCategories = new string[]{"一般", "やってみた",
-					"ゲーム", "動画紹介"};
-			
-			var btns = new System.Windows.Forms.RadioButton[]{commonCategoryBtn, tryCategoryBtn,
-					liveCategoryBtn, reqCategoryBtn};
-			
-			var btnsText = new List<string>();
-			for (var i = 0; i < btns.Length; i++) {
-				var n = l.Count(x => x.isDisplay(btns[i].Text[0]));
-				var reserveN = liveListDataReserve.Count(x => x.isDisplay(btns[i].Text[0]));
-				//var t = (mainCategories[i].StartsWith("一般")) ? "一般" : mainCategories[i];
-				var t = mainCategories[i];
-				btnsText.Add(string.Format(t + "({0}/{1})", n + reserveN, allC));
+			try {
+				var dt = DateTime.Now;
+				var l = new List<LiveInfo>(liveListDataSource);
+				var l2 = new List<LiveInfo>(liveListDataReserve);
+				var allC = l.Count + l2.Count;
 				
-				//test
-				foreach (var r in liveListDataReserve) {
-					if (r.MainCategory == mainCategories[i]) {
-//						util.debugWriteLine(r.hostName + " " + r.MainCategory + " " + r.memberOnly);
-						
+				var mainCategories = new string[]{"一般", "やってみた",
+						"ゲーム", "動画紹介"};
+				
+				var btns = new System.Windows.Forms.RadioButton[]{commonCategoryBtn, tryCategoryBtn,
+						liveCategoryBtn, reqCategoryBtn};
+				
+				var btnsText = new List<string>();
+				for (var i = 0; i < btns.Length; i++) {
+					var n = l.Count(x => x.isDisplay(btns[i].Text[0]));
+					var reserveN = l2.Count(x => x.isDisplay(btns[i].Text[0]));
+					//var t = (mainCategories[i].StartsWith("一般")) ? "一般" : mainCategories[i];
+					var t = mainCategories[i];
+					btnsText.Add(string.Format(t + "({0}/{1})", n + reserveN, allC));
+					
+					
+				}
+				formAction(() => {
+					allCategoryBtn.Text = string.Format("全て({0}/{1})", allC, allC);
+					for (var i = 0; i < mainCategories.Length; i++) {
+						btns[i].Text = btnsText[i];
+						//util.debugWriteLine("btnsText[i] " + btnsText[i]);
 					}
-				}
+				});
+				util.debugWriteLine("setLiveListNum time " + (DateTime.Now - dt));
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
-			formAction(() => {
-				allCategoryBtn.Text = string.Format("全て({0}/{1})", allC, allC);
-				for (var i = 0; i < mainCategories.Length; i++) {
-					btns[i].Text = btnsText[i];
-					//util.debugWriteLine("btnsText[i] " + btnsText[i]);
-				}
-			});
-			
 		}
 		
 		void CategoryBtnCheckedChanged(object sender, EventArgs e)
 		{
-			if (!((System.Windows.Forms.RadioButton)sender).Checked) return;
+			var btn = (System.Windows.Forms.RadioButton)sender;
+			util.debugWriteLine("CategoryBtnCheckedChanged " + btn.Name + " " + btn.Checked);
+			if (!btn.Checked) return;
 			Task.Factory.StartNew(() => resetLiveList());
 		}
 		void resetLiveList() {
@@ -3060,9 +3051,16 @@ namespace namaichi
 					util.debugWriteLine("lock form thread resetLiveList");
 			
 			liveListLockAction(() => 
-					_resetLiveList());
+					_resetLiveList(), "resetLiveList0");
+			sortLiveList();
+			
+			liveListLockAction(() => {
+				if (bool.Parse(config.get("FavoriteUp")))
+					upLiveListFavorite();
+			}, "resetLiveList1");
 		}
 		private void _resetLiveList() {
+			util.debugWriteLine("_restLiveList");
 			var mainCategories = new string[]{"一般", "やってみた",
 					"ゲーム", "動画紹介"};
 			var btns = new System.Windows.Forms.RadioButton[]{commonCategoryBtn, tryCategoryBtn,
@@ -3110,14 +3108,9 @@ namespace namaichi
 				    }
 				});
 				
-				//for (var i = 0; i < liveListDataSource.Count; i++)
-				//	liveList.Rows[i].Visible =
-				//		(isAll || liveListDataSource[i].MainCategory == cateName);
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
-			
-			getVisiRow();
 			
 			try {
 				formAction(() => {
@@ -3138,10 +3131,10 @@ namespace namaichi
 				        	isDisplay = false;
 				        
 				        if (isDisplay) {
-				        	var scrollI = liveList.FirstDisplayedScrollingRowIndex;
+				        	//var sI = liveList.FirstDisplayedScrollingRowIndex;
 							liveListDataSource.Add(liveListDataReserve[i]);
-							if (scrollI != -1)
-								liveList.FirstDisplayedScrollingRowIndex = scrollI;
+							//setScrollIndex(liveList);
+							
 							liveListDataReserve.RemoveAt(i);
 						}
 				    }
@@ -3150,23 +3143,6 @@ namespace namaichi
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
-			
-			//util.debugWriteLine("b");
-			getVisiRow();
-			
-			sortLiveList();
-			
-			//util.debugWriteLine("d");
-			getVisiRow();
-			
-			if (bool.Parse(config.get("FavoriteUp")))
-				upLiveListFavorite();
-			
-			//util.debugWriteLine("a");
-			getVisiRow();
-			
-			//util.debugWriteLine("c ");
-			getVisiRow();
 			
 			formAction(() => {
 				for (var i = liveListDataSource.Count - 1; i > -1; i--) {
@@ -3179,6 +3155,11 @@ namespace namaichi
 					}
 				}
 			});
+			
+			
+			
+			
+			
 		}
 		public void getVisiRow(bool isAll = false) {
 			var visiItems = new List<LiveInfo>();
@@ -3195,6 +3176,7 @@ namespace namaichi
 		}
 		void UpdateLiveListMenuClick(object sender, EventArgs e)
 		{
+			util.debugWriteLine("UpdateLiveListMenuClick");
 			Task.Factory.StartNew(() => liveCheck.load());
 		}
 		void UpdateAutoDeleteMenuDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -3286,11 +3268,7 @@ namespace namaichi
 				//var favorites = liveListDataSource.Select(li => !string.IsNullOrEmpty(li.Favorite));
 				//liveListDataSource.
 				formAction(() => {
-				    
 					var cateChar = getCategoryChar();
-					
-					//util.debugWriteLine("e");
-					getVisiRow();
 					
 					var favoriteList = new List<LiveInfo>();
 					foreach (var f in liveListDataSource) 
@@ -3298,31 +3276,19 @@ namespace namaichi
 						    	f.isDisplay(cateChar))
 							favoriteList.Add(f);
 					
-					//util.debugWriteLine("g");
-					getVisiRow();
-					
-					foreach (var f in favoriteList) liveListDataSource.Remove(f);
-					
-					//util.debugWriteLine("h");
-					getVisiRow();
-					
 					favoriteList.Reverse();
 					
-					//util.debugWriteLine("f");
-					getVisiRow();
+					var sI = liveList.FirstDisplayedScrollingRowIndex;
+					foreach (var f in favoriteList) liveListDataSource.Remove(f);
 					
-					var scrollIndex = liveList.FirstDisplayedScrollingRowIndex;
 					foreach (var f in favoriteList) {
 						liveListDataSource.Insert(0, f);
 					}
-					try {if (scrollIndex != -1) liveList.FirstDisplayedScrollingRowIndex = scrollIndex;}
-					catch (Exception e) {util.debugWriteLine("livelist scroll exception " + scrollIndex + " " + e.Message + e.Source + e.StackTrace + e.TargetSite);}
+					setScrollIndex(liveList, sI);
 					
-					//util.debugWriteLine("g");
-					getVisiRow();
 					
-					if (scrollIndex > liveList.Rows.Count -1 && scrollIndex > 0) 
-						scrollIndex = liveList.Rows.Count -1;
+					//if (scrollIndex > liveList.Rows.Count -1 && scrollIndex > 0) 
+					//	scrollIndex = liveList.Rows.Count -1;
 //					
 					
 				});
@@ -3334,9 +3300,11 @@ namespace namaichi
 		void LiveListSorted(object sender, EventArgs e)
 		{
 			util.debugWriteLine("liveListSorted");
-			if (bool.Parse(config.get("FavoriteUp")))
-				upLiveListFavorite();
-			//setSortConfig("live", liveList);
+			Task.Factory.StartNew(() => {
+				if (bool.Parse(config.get("FavoriteUp"))) {
+					liveListLockAction(() => upLiveListFavorite());
+				}
+			});
 		}
 		
 		void LiveListSearchBtnClick(object sender, EventArgs e)
@@ -4877,17 +4845,19 @@ namespace namaichi
 		*/
 		public void removeDuplicateLiveList() {
 			try {
-				var lv = liveListDataSource.Select((x) => x.lvId).ToList();
-				lv.AddRange(liveListDataReserve.Select((x) => x.lvId).ToList());
+				var _liveListDataSource = liveListDataSource.ToList();
+				var _liveListDataReserve = liveListDataReserve.ToList();
+				var lv = _liveListDataSource.Select((x) => x.lvId).ToList();
+				lv.AddRange(_liveListDataReserve.Select((x) => x.lvId).ToList());
 				
 				var dup = lv.Where(x => lv.Where(y => y == x).Count() > 1).Distinct().ToArray();
 				
 				if (dup.Length > 0) {
 					util.debugWriteLine("duplicate live list " + dup.Length + " " + dup[0]);
-					var dup0 = liveListDataSource.Where((x) => x.lvId == dup[0]).Count();
+					var dup0 = _liveListDataSource.Where((x) => x.lvId == dup[0]).Count();
 					if (dup0 > 0)
 						util.debugWriteLine("in datasource duplicate " + dup[0] + " " + dup0);
-					var dup1 = liveListDataReserve.Where((x) => x.lvId == dup[0]).Count();
+					var dup1 = _liveListDataReserve.Where((x) => x.lvId == dup[0]).Count();
 					if (dup1 > 0)
 						util.debugWriteLine("in datareserve duplicate " + dup[0] + " " + dup1);
 				}
@@ -4896,17 +4866,21 @@ namespace namaichi
 					foreach (var d in dup) {
 						LiveInfo i = null;
 						try {
-							i = liveListDataSource.First(x => x.lvId == d);
-							if (i != null) {
-								liveListDataSource.Remove(i);
-								continue;
+							if (_liveListDataSource.Any(x => x.lvId == d)) {
+								i = _liveListDataSource.First(x => x.lvId == d);
+								if (i != null) {
+									liveListDataSource.Remove(i);
+									continue;
+								}
 							}
 						} catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);}
 						
 						try {
-							i = liveListDataReserve.First(x => x.lvId == d);
-							if (i != null) {
-								liveListDataReserve.Remove(i);
+							if (_liveListDataReserve.Any(x => x.lvId == d)) {
+								i = _liveListDataReserve.First(x => x.lvId == d);
+								if (i != null) {
+									liveListDataReserve.Remove(i);
+								}
 							}
 						} catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);}
 					}
@@ -4915,14 +4889,31 @@ namespace namaichi
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
-		public void liveListLockAction(Action a) {
-			Monitor.Enter(liveListLock);
-			try {
-				a.BeginInvoke(null, null).AsyncWaitHandle.WaitOne(10000, false);
-			} finally {
-				Monitor.Exit(liveListLock);
-			}
+		
+		public void liveListLockAction(Action a, [CallerMemberName] string memberName = "") {
+			int scrollI = 0;
+			bool flg = false;
+			Monitor.Enter(liveListLock, ref flg);
+			var dt = DateTime.Now;
+			if (isLiveListLocking) {
+				util.debugWriteLine("live list locking");
+			} else isLiveListLocking = true;
 			
+			util.debugWriteLine("liveListLockAction 0 " + memberName);
+			try {
+				scrollI = liveList.FirstDisplayedScrollingRowIndex;
+				a.BeginInvoke(null, null).AsyncWaitHandle.WaitOne(15000, false);
+			} finally {
+				setScrollIndex(liveList, scrollI);
+				try {
+					isLiveListLocking = false;
+					if (flg) Monitor.Exit(liveListLock);
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				}
+				util.debugWriteLine("live list action " + memberName + " " + scrollI + " now " + liveList.FirstDisplayedScrollingRowIndex + " " + (DateTime.Now - dt));
+				
+			}
 		}
 		private void loadControlLayout() {
 			try {
@@ -4955,6 +4946,104 @@ namespace namaichi
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
+		}
+		
+		private void resultLiveListSort() {
+			util.debugWriteLine("resultLiveListSort");
+			for (var j = 0; j < 5; j++) {
+				try {
+					var column = liveList.SortedColumn;
+					if (liveList.SortOrder == SortOrder.None) {
+						return;
+					}
+					var isAsc = liveList.SortOrder == SortOrder.Ascending;
+					var type = typeof(LiveInfo).GetProperty(column.DataPropertyName);
+					var columnName = column.HeaderText;
+					
+					var keys = liveListDataSource.Select((l) => {
+						return getLiveInfoToSortKey(l, type, columnName);
+						//if (columnName == "放送時間") 
+						//	return l.pubDateDt.ToString();
+						//else return type.GetValue(l, null).ToString();
+					}).ToList();
+					
+					List<string> sortedKey = isAsc ? 
+							keys.OrderBy((k) => k).ToList() : 
+							keys.OrderByDescending((k) => k).ToList();
+					
+					//List<string> sortedKey = keys.OrderByDescending((k) => k).ToList();
+					/*
+					= keys.OrderBy((k) => {
+	                 	if (columnName == "放送時間")
+	                 		return DateTime.Parse(k);
+	                 	else if (columnName == "放送ID" || 
+	                 	         columnName == "コミュニティID")
+	                 		return int.Parse(k)
+								columnName == "コミュニティID" ||
+					                           });
+					*/
+					formAction(() => {
+						for (var i = 0; i < liveListDataSource.Count(); i++) {
+							var _key = getLiveInfoToSortKey(liveListDataSource[i], type, columnName);
+							if (_key != sortedKey[i]) {
+								var moveLi = liveListDataSource.Where((l) => {
+								    return getLiveInfoToSortKey(l, type, columnName) == sortedKey[i];
+									//return type.GetValue(l, null).ToString() == sortedKey[i];
+								}).ToList();
+		
+								foreach (var m in moveLi) {
+									if (moveLi.Count > 1) util.debugWriteLine("moveli multi " + m.lvId + " " + m.title + " " + i);
+									liveListDataSource.Remove(m);
+									liveListDataSource.Insert(i, m);
+								}
+							}
+						}
+					});
+					var isChange = false;
+					for (var i = 0; i < liveListDataSource.Count(); i++) {
+						if (getLiveInfoToSortKey(liveListDataSource[i], type, columnName) != sortedKey[i]) {
+							isChange = true;
+						}
+					}
+					if (isChange) {
+						util.debugWriteLine("live list sort confirm false");
+						continue;
+					}
+					return;
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					Thread.Sleep(100);
+				}
+			}
+		}
+		private string getLiveInfoToSortKey(LiveInfo li, 
+					PropertyInfo pi, string columnName) {
+			if (columnName == "放送時間")
+					return li.pubDateDt.ToString();
+			else {
+				var s = pi.GetValue(li, null).ToString();
+				if ((columnName == "放送ID" || columnName == "コミュニティID") && !string.IsNullOrEmpty(s)) {
+					return s.Substring(2).PadLeft(12);
+				} else return pi.GetValue(li, null).ToString(); 
+			}
+		}
+		public void setScrollIndex(DataGridView list, int scrollI,
+				[CallerMemberName] string memberName = "") {
+			util.debugWriteLine("set scrollindex " + scrollI + " now " + list.FirstDisplayedScrollingRowIndex + " " + memberName + " " + list.Rows.Count);
+			try {
+				if (scrollI != -1 && scrollI < list.Rows.Count)
+					formAction(() => list.FirstDisplayedScrollingRowIndex = scrollI);
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				util.debugWriteLine("scrollI exception " + liveListScrollIndex);
+			} finally {
+				//liveListScrollIndex = -1;
+			}
+		}
+		public void saveLiveListScrollIndex() {
+			if (liveListScrollIndex == -1)
+				liveListScrollIndex = liveList.FirstDisplayedScrollingRowIndex;
+			else util.debugWriteLine("saveLiveListScrollIndex already set mem " + liveListScrollIndex + " now " + liveList.FirstDisplayedScrollingRowIndex);
 		}
 	}
 }

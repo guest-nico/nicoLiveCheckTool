@@ -2850,7 +2850,7 @@ namespace namaichi
 			// 
 			// dataGridViewTextBoxColumn5
 			// 
-			this.dataGridViewTextBoxColumn5.DataPropertyName = "thumbnailUrl";
+			this.dataGridViewTextBoxColumn5.DataPropertyName = "ThumbnailUrl";
 			this.dataGridViewTextBoxColumn5.HeaderText = "ｻﾑﾈ";
 			this.dataGridViewTextBoxColumn5.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
 			this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
@@ -2861,28 +2861,28 @@ namespace namaichi
 			// 
 			// dataGridViewTextBoxColumn6
 			// 
-			this.dataGridViewTextBoxColumn6.DataPropertyName = "title";
+			this.dataGridViewTextBoxColumn6.DataPropertyName = "Title";
 			this.dataGridViewTextBoxColumn6.HeaderText = "放送タイトル";
 			this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
 			this.dataGridViewTextBoxColumn6.ReadOnly = true;
 			// 
 			// dataGridViewTextBoxColumn7
 			// 
-			this.dataGridViewTextBoxColumn7.DataPropertyName = "hostName";
+			this.dataGridViewTextBoxColumn7.DataPropertyName = "HostName";
 			this.dataGridViewTextBoxColumn7.HeaderText = "放送者";
 			this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
 			this.dataGridViewTextBoxColumn7.ReadOnly = true;
 			// 
 			// dataGridViewTextBoxColumn9
 			// 
-			this.dataGridViewTextBoxColumn9.DataPropertyName = "comName";
+			this.dataGridViewTextBoxColumn9.DataPropertyName = "ComName";
 			this.dataGridViewTextBoxColumn9.HeaderText = "コミュニティ名";
 			this.dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
 			this.dataGridViewTextBoxColumn9.ReadOnly = true;
 			// 
 			// dataGridViewButtonColumn1
 			// 
-			this.dataGridViewButtonColumn1.DataPropertyName = "description";
+			this.dataGridViewButtonColumn1.DataPropertyName = "Description";
 			this.dataGridViewButtonColumn1.HeaderText = "説明";
 			this.dataGridViewButtonColumn1.Name = "dataGridViewButtonColumn1";
 			this.dataGridViewButtonColumn1.ReadOnly = true;
@@ -2891,7 +2891,7 @@ namespace namaichi
 			// 
 			// dataGridViewButtonColumn2
 			// 
-			this.dataGridViewButtonColumn2.DataPropertyName = "lvId";
+			this.dataGridViewButtonColumn2.DataPropertyName = "LvId";
 			this.dataGridViewButtonColumn2.HeaderText = "放送ID";
 			this.dataGridViewButtonColumn2.Name = "dataGridViewButtonColumn2";
 			this.dataGridViewButtonColumn2.ReadOnly = true;
@@ -2901,7 +2901,7 @@ namespace namaichi
 			// 
 			// dataGridViewTextBoxColumn10
 			// 
-			this.dataGridViewTextBoxColumn10.DataPropertyName = "comId";
+			this.dataGridViewTextBoxColumn10.DataPropertyName = "ComId";
 			this.dataGridViewTextBoxColumn10.HeaderText = "コミュニティID";
 			this.dataGridViewTextBoxColumn10.Name = "dataGridViewTextBoxColumn10";
 			this.dataGridViewTextBoxColumn10.ReadOnly = true;
@@ -2917,7 +2917,7 @@ namespace namaichi
 			// 
 			// dataGridViewCheckBoxColumn11
 			// 
-			this.dataGridViewCheckBoxColumn11.DataPropertyName = "mainCategory";
+			this.dataGridViewCheckBoxColumn11.DataPropertyName = "MainCategory";
 			this.dataGridViewCheckBoxColumn11.HeaderText = "カテゴリー";
 			this.dataGridViewCheckBoxColumn11.Name = "dataGridViewCheckBoxColumn11";
 			this.dataGridViewCheckBoxColumn11.ReadOnly = true;
@@ -2926,7 +2926,7 @@ namespace namaichi
 			// 
 			// dataGridViewCheckBoxColumn12
 			// 
-			this.dataGridViewCheckBoxColumn12.DataPropertyName = "face";
+			this.dataGridViewCheckBoxColumn12.DataPropertyName = "Face";
 			this.dataGridViewCheckBoxColumn12.HeaderText = "顔";
 			this.dataGridViewCheckBoxColumn12.Name = "dataGridViewCheckBoxColumn12";
 			this.dataGridViewCheckBoxColumn12.ReadOnly = true;
@@ -2935,7 +2935,7 @@ namespace namaichi
 			// 
 			// dataGridViewCheckBoxColumn13
 			// 
-			this.dataGridViewCheckBoxColumn13.DataPropertyName = "rush";
+			this.dataGridViewCheckBoxColumn13.DataPropertyName = "Rush";
 			this.dataGridViewCheckBoxColumn13.HeaderText = "凸";
 			this.dataGridViewCheckBoxColumn13.Name = "dataGridViewCheckBoxColumn13";
 			this.dataGridViewCheckBoxColumn13.ReadOnly = true;
@@ -2945,7 +2945,7 @@ namespace namaichi
 			// 
 			// dataGridViewCheckBoxColumn14
 			// 
-			this.dataGridViewCheckBoxColumn14.DataPropertyName = "cruise";
+			this.dataGridViewCheckBoxColumn14.DataPropertyName = "Cruise";
 			this.dataGridViewCheckBoxColumn14.HeaderText = "ｸﾙｰｽﾞ";
 			this.dataGridViewCheckBoxColumn14.Name = "dataGridViewCheckBoxColumn14";
 			this.dataGridViewCheckBoxColumn14.ReadOnly = true;
@@ -2954,7 +2954,7 @@ namespace namaichi
 			// 
 			// Column3
 			// 
-			this.Column3.DataPropertyName = "cas";
+			this.Column3.DataPropertyName = "Cas";
 			this.Column3.HeaderText = "実験";
 			this.Column3.Name = "Column3";
 			this.Column3.ReadOnly = true;
@@ -2962,7 +2962,7 @@ namespace namaichi
 			// 
 			// dataGridViewCheckBoxColumn15
 			// 
-			this.dataGridViewCheckBoxColumn15.DataPropertyName = "memberOnly";
+			this.dataGridViewCheckBoxColumn15.DataPropertyName = "MemberOnly";
 			this.dataGridViewCheckBoxColumn15.HeaderText = "限定";
 			this.dataGridViewCheckBoxColumn15.Name = "dataGridViewCheckBoxColumn15";
 			this.dataGridViewCheckBoxColumn15.ReadOnly = true;
@@ -2971,7 +2971,7 @@ namespace namaichi
 			// 
 			// dataGridViewCheckBoxColumn16
 			// 
-			this.dataGridViewCheckBoxColumn16.DataPropertyName = "type";
+			this.dataGridViewCheckBoxColumn16.DataPropertyName = "Type";
 			this.dataGridViewCheckBoxColumn16.HeaderText = "種類";
 			this.dataGridViewCheckBoxColumn16.Name = "dataGridViewCheckBoxColumn16";
 			this.dataGridViewCheckBoxColumn16.ReadOnly = true;
@@ -2980,7 +2980,7 @@ namespace namaichi
 			// 
 			// Column1
 			// 
-			this.Column1.DataPropertyName = "favorite";
+			this.Column1.DataPropertyName = "Favorite";
 			this.Column1.HeaderText = "お気に入り";
 			this.Column1.Name = "Column1";
 			this.Column1.ReadOnly = true;
@@ -2988,7 +2988,7 @@ namespace namaichi
 			// Column2
 			// 
 			this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.Column2.DataPropertyName = "memo";
+			this.Column2.DataPropertyName = "Memo";
 			this.Column2.HeaderText = "メモ";
 			this.Column2.MinimumWidth = 30;
 			this.Column2.Name = "Column2";

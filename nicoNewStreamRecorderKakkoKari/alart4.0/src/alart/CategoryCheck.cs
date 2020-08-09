@@ -64,7 +64,7 @@ namespace namaichi.alart
 						});
 						
 					}
-					
+
 					check.foundLive(items);
 					setDescription(items);
 					if (isOnlyStartTimeCheck) return;

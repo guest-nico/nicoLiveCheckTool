@@ -667,9 +667,9 @@ namespace namaichi.alart
 			util.openUrlBrowser(url, form.config);
 		}
 		public void foundLive(List<RssItem> items) {
-			if (items.Count > 0) 
-				form.setHosoLogStatusBar(items[0]);
-
+			if (items.Count == 0) return;
+			
+			form.setHosoLogStatusBar(items[0]);
 			lock(foundLiveLock) {
 				var isChanged = gotStreamProcess(items);
 				if (isChanged) {
@@ -683,7 +683,7 @@ namespace namaichi.alart
 			
 			var addLiveMode = form.config.get("alartAddLive");
 			if (addLiveMode != "0")
-				addLiveList(items);
+				Task.Factory.StartNew(() => addLiveList(items));
 		}
 		public void resetCheck() {
 			if (pr != null) {
@@ -877,9 +877,13 @@ namespace namaichi.alart
 					util.debugWriteLine("lock form thread addLiveList");
 				
 				
-				form.liveListLockAction(() => {
-					_addLiveList(items, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly, cateChar);
-				});
+				
+				//var sI = form.liveList.FirstDisplayedScrollingRowIndex;
+				_addLiveList(items, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly, cateChar);
+				//form.setScrollIndex(form.liveList, sI);
+				
+				form.setLiveListNum();
+				
 				
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
@@ -888,26 +892,29 @@ namespace namaichi.alart
 		private void _addLiveList(List<RssItem> items, bool isBlindA, bool isBlindB, bool isBlindQuestion, bool isFavoriteOnly, char cateChar) {
 			var alartAddLive = form.config.get("alartAddLive");
 			var addItems = new List<LiveInfo>();
+			var _alartListDataSource = form.alartListDataSource.ToArray();
+			var _liveListDataSource = form.liveListDataSource.ToArray();
+			var _liveListDataReserve = form.liveListDataReserve.ToArray();
 			foreach (var item in items) {
 				if (alartAddLive == "2" && !item.isAlarted) continue;
 				
-				var li = new LiveInfo(item, form.alartListDataSource, form.config, form.userAlartListDataSource);
+				var li = new LiveInfo(item, _alartListDataSource, form.config, form.userAlartListDataSource.ToArray());
 				
 				var isContain = false;
-				foreach (var a in form.liveListDataSource)
+				foreach (var a in _liveListDataSource)
 					if (a.lvId == item.lvId) 
 						isContain = true;
-				foreach (var a in form.liveListDataReserve)
+				foreach (var a in _liveListDataReserve)
 					if (a.lvId == item.lvId) 
 						isContain = true;
 				if (isContain) 
 					continue;
 				
 				var sameCommunityLive = new List<LiveInfo>();
-				foreach (var l in form.liveListDataSource)
+				foreach (var l in _liveListDataSource)
 					if (!string.IsNullOrEmpty(l.comId) && l.comId.StartsWith("co") && l.comId == item.comId)
 						sameCommunityLive.Add(l);
-				foreach (var l in form.liveListDataReserve)
+				foreach (var l in _liveListDataReserve)
 					if (!string.IsNullOrEmpty(l.comId) && l.comId.StartsWith("co") && l.comId == item.comId)
 						sameCommunityLive.Add(l);
 				foreach (var l in sameCommunityLive)
@@ -916,14 +923,18 @@ namespace namaichi.alart
 				addItems.Add(li);
 			}
 			
-			
-			form.addLiveListItem(addItems, cateChar, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly);
-			//form.removeDuplicateLiveList();
-			
+			var isFavoriteTop = bool.Parse(form.config.get("FavoriteUp"));
+			form.liveListLockAction(() => {
+				form.addLiveListItem(addItems, cateChar, isBlindA, isBlindB, isBlindQuestion, isFavoriteOnly);
+				form.removeDuplicateLiveList();
+			});
+				
 			if (bool.Parse(form.config.get("AutoSort")))
 				form.sortLiveList();
-			if (bool.Parse(form.config.get("FavoriteUp")))
-				form.upLiveListFavorite();
+			form.liveListLockAction(() => {
+				if (isFavoriteTop)
+					form.upLiveListFavorite();
+			});
 		}
 		private bool isMemberOnlyOk(AlartInfo alartItem, RssItem ri) {
 			var c = alartItem.memberOnlyMode;

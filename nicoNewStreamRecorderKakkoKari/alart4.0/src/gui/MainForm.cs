@@ -561,7 +561,7 @@ namespace namaichi
 		
 		void versionMenu_Click(object sender, EventArgs e)
 		{
-			var v = new VersionForm(config);
+			var v = new VersionForm(config, this);
 			v.ShowDialog();
 		}
 		void startStdRead() {

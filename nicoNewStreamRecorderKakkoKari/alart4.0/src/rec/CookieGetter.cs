@@ -105,7 +105,7 @@ namespace namaichi.rec
 			
 			var userSessionCC = getUserSessionCC(userSession, userSessionSecure);
 			log += (userSessionCC == null) ? "前回のユーザーセッションが見つかりませんでした。" : "前回のユーザーセッションが見つかりました。";
-			if (userSessionCC != null && true) {
+			if (userSessionCC != null && false) {
 //				util.debugWriteLine(userSessionCC.GetCookieHeader(TargetUrl));
 				util.debugWriteLine("usersessioncc ishtml5login" + util.getMainSubStr(isSub));
 				if (isHtml5Login(userSessionCC, url)) {

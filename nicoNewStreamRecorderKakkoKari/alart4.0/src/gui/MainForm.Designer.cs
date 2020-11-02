@@ -4520,9 +4520,9 @@ namespace namaichi
 			// 
 			this.label3.Location = new System.Drawing.Point(0, 3);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(595, 14);
+			this.label3.Size = new System.Drawing.Size(795, 14);
 			this.label3.TabIndex = 28;
-			this.label3.Text = "通知しなかった履歴(コミュニティまたはユーザーの条件に適合していたが、その他の条件が外れていたため通知しなかった放送)";
+			this.label3.Text = "通知しなかった履歴(コミュニティまたはユーザーの条件に適合していたが、その他の条件が外れていたため通知しなかった放送。条件から外れていた項目は黄色の背景。)";
 			// 
 			// notAlartList
 			// 

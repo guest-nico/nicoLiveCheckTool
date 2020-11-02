@@ -2465,7 +2465,8 @@ namespace namaichi
 			var isCheck = false;
 			if (ai.lastLvid.EndsWith("e")) return false;
 			if (ai.communityId == null ||
-			    	ai.communityId.StartsWith("ch")) {
+			    	ai.communityId.StartsWith("ch") ||
+			    	ai.communityId == "official") {
 				isCheck = elapsed < TimeSpan.FromHours(100);
 			} else isCheck = elapsed < TimeSpan.FromHours(6);
 			if (!isCheck) return false;
@@ -2476,25 +2477,43 @@ namespace namaichi
 			return isOnAir;
 		}
 		private bool isOnAirLvid(string lvid, string type) {
-			var isProgramInfo = (check.container != null && 
+			util.debugWriteLine("isOnairLyid " + lvid + " " + type);
+			var isProgramInfo = (check.container != null &&
 			    	(type == "user" || type == "community" ||
 			     		type == "channel"));
 			if (isProgramInfo) {
 				var url = "https://live2.nicovideo.jp/watch/" + lvid + "/programinfo";
 				
+				var h = new Dictionary<string, string>(){{"user_session", check.container.GetCookies(new Uri(url))["user_session"].Value}};
+				
 				var res = util.getPageSource(url, check.container);
-				if (res == null) 
-					return false;
-				//util.debugWriteLine("isonair history " + lvid + " " + util.getRegGroup(res, "(\"status\".\"(.+?)\")"));
-				var ret = res.IndexOf("\"status\":\"end\"") == -1 &&
-						res.IndexOf("errorCode\":\"NOT_FOUND\"") == -1;
-				return ret;
-			} else {
-				var url = "https://live.nicovideo.jp/embed/" + lvid;
-				var res = util.getPageSource(url, null);
-				if (res == null) return false;
-				return res.IndexOf("status-onair\">") > -1;
+				if (res == null) {
+					var r = util.sendRequest(url, h, null, "GET", true);
+					using (var rr = r.GetResponseStream())
+					using (var sr = new StreamReader(rr)) {
+						res = sr.ReadToEnd();
+						if (res.IndexOf("status\":401,\"errorCode\":\"UNAUTHORIZED\"") > -1) {
+							check.container = null;
+							check.setCookie();
+							if (check.container != null)
+								res = util.getPageSource(url, check.container);
+						}
+					}
+					if (res != null && res.IndexOf("\"status\":200,\"errorCode\":\"OK\"") == -1)
+						return false;
+				}
+				if (res != null) {
+					var ret = res.IndexOf("\"status\":\"end\"") == -1 &&
+							res.IndexOf("errorCode\":\"NOT_FOUND\"") == -1;
+					return ret;
+				}
 			}
+			
+			var _url = "https://live.nicovideo.jp/embed/" + lvid;
+			var _res = util.getPageSource(_url, null);
+			if (_res == null) return false;
+			return _res.IndexOf("status-onair\">") > -1;
+			
 		}
 		private void changeIcon(int recentNum) {
 			var n = recentNum;

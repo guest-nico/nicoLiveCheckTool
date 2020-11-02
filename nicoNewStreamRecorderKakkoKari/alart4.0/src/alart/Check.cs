@@ -466,7 +466,7 @@ namespace namaichi.alart
 				sound(item, targetAi[0]);
 			}
 		}
-		public void setCookie() {
+		public void setCookie(bool isDisplayLog = true, bool isFollowCheck = true) {
 			try {
 				var url = "https://www.nicovideo.jp/my/top";
 				url = "https://live.nicovideo.jp/my";
@@ -474,14 +474,16 @@ namespace namaichi.alart
 				var cg = new CookieGetter(form.config, form);
 				var res = cg.getHtml5RecordCookie(url, false).Result;
 				if (res == null || res[0] == null) {
-					form.addLogText("Cookieの取得を確認できませんでした", true);
+					if (isDisplayLog)
+						form.addLogText("Cookieの取得を確認できませんでした", true);
 				} else {
-					form.addLogText("Cookieの取得に成功しました", true);
+					if (isDisplayLog)
+						form.addLogText("Cookieの取得に成功しました", true);
 					container = res[0];
 				}
 			} catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);}
 			
-			if (alartListDataSource.Count > 0 || form.userAlartListDataSource.Count > 0) {
+			if ((alartListDataSource.Count > 0 || form.userAlartListDataSource.Count > 0) && isFollowCheck) {
 				Task.Factory.StartNew(() => new FollowChecker(form, container).check());
 			}
 		}
@@ -742,6 +744,7 @@ namespace namaichi.alart
 			var lastCheckLastRecentLiveTime = DateTime.Now;
 			var lastSaveListTime = DateTime.Now;
 			var lastCheckHistoryLiveTime = DateTime.Now;
+			var lastGetCookieTime = DateTime.Now;
 			while (true) {
 				/*
 				var ut = userNameUpdateInterval;
@@ -785,6 +788,14 @@ namespace namaichi.alart
 					Task.Factory.StartNew(() => {
 					    form.checkHistoryLive();
 						lastCheckHistoryLiveTime = DateTime.Now;
+					});
+				}
+				
+				if (DateTime.Now - lastGetCookieTime> TimeSpan.FromHours(1)) {
+					lastGetCookieTime= DateTime.MaxValue;
+					Task.Factory.StartNew(() => {
+						setCookie(false, false);
+						lastGetCookieTime = DateTime.Now;
 					});
 				}
 				Thread.Sleep(10000);

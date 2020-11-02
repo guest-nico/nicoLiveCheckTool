@@ -231,6 +231,7 @@ namespace namaichi.alart
 			
 			var readNum = int.Parse(form.config.get("thresholdpage"));
 			var buf = new List<LiveInfo>();
+			var liveListLv = form.liveListDataSource.Select(x => x.lvId).ToList();
 			foreach (var name in categoryNames) {
 				if (name != tab && tab != "") continue;
 				var url = "https://live.nicovideo.jp/front/api/pages/recent/v1/programs?tab=" + name + "&offset=#&sortOrder=recentDesc";
@@ -253,7 +254,8 @@ namespace namaichi.alart
 								var item = d.getRssItem(name);
 								if (item == null) continue;
 								if (buf.Find(x => x.lvId == item.lvId) != null)	continue;
-							
+								if (liveListLv.IndexOf(item.lvId) > -1) continue;
+								
 								var li = new LiveInfo(item, form.alartListDataSource.ToArray(), form.config, form.userAlartListDataSource.ToArray());
 								buf.Add(li);
 								itemCount++;

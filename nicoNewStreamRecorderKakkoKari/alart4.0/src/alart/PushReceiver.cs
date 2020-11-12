@@ -102,7 +102,7 @@ namespace namaichi.alart
 				headers.Add(new KeyValuePair<string, string>("Ssc-WebSocket-Version", "13"));
 				
 				util.debugWriteLine("push connect  ");
-				ws = new WebSocket(url, "", null, headers, "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36", "", WebSocketVersion.Rfc6455, null, SslProtocols.None);
+				ws = new WebSocket(url, "", null, headers, util.userAgent, "", WebSocketVersion.Rfc6455, null, SslProtocols.None);
 				ws.Opened += onOpen;
 				ws.Closed += onClose;
 				ws.DataReceived += onDataReceive;
@@ -342,7 +342,7 @@ namespace namaichi.alart
 				req.Headers.Add("x-frontend-id", "8");
 				req.Headers.Add("Accept-Encoding", "gzip,deflate");
 				req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-				//req.UserAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0";
+				//req.UserAgent = util.userAgent;
 				//req.Headers.Add("Accept-Encoding", "gzip, deflate, br");
 				using (var stream = req.GetRequestStream()) {
 					try {

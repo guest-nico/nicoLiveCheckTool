@@ -47,7 +47,7 @@ namespace namaichi.rec
 				var url = "https://ch.nicovideo.jp/api/addbookmark?";
 				var headers = new WebHeaderCollection();
 				headers.Add("X-Requested-With", "XMLHttpRequest");
-				headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36");
+				headers.Add("User-Agent", util.userAgent);
 				
 				try {
 					var pageRes = util.getPageSource(comUrl, cc);
@@ -88,7 +88,7 @@ namespace namaichi.rec
 				var url = "https://ch.nicovideo.jp/api/deletebookmark?";
 				var headers = new WebHeaderCollection();
 				headers.Add("X-Requested-With", "XMLHttpRequest");
-				headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36");
+				headers.Add("User-Agent", util.userAgent);
 				
 				try {
 					var pageRes = util.getPageSource(comUrl, cc);

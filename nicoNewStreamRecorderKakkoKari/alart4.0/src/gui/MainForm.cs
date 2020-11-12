@@ -5064,5 +5064,32 @@ namespace namaichi
 				liveListScrollIndex = liveList.FirstDisplayedScrollingRowIndex;
 			else util.debugWriteLine("saveLiveListScrollIndex already set mem " + liveListScrollIndex + " now " + liveList.FirstDisplayedScrollingRowIndex);
 		}
+		
+		void OpenSettingFolderMenuClick(object sender, EventArgs e)
+		{
+			string[] jarpath = util.getJarPath();
+			string dirPath = jarpath[0];
+			try {
+				if (!Directory.Exists(dirPath)) Directory.CreateDirectory(dirPath);
+				System.Diagnostics.Process.Start(dirPath);
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + " " + ee.StackTrace);
+			}
+		}
+		
+		void OpenReadmeMenuClick(object sender, EventArgs e)
+		{
+			string[] jarpath = util.getJarPath();
+			string path = jarpath[0] + "/readme.html";
+			try {
+				if (!File.Exists(path)) {
+					MessageBox.Show("readme.htmlが見つかりませんでした");
+					return;
+				}
+				System.Diagnostics.Process.Start(path);
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + " " + ee.StackTrace);
+			}
+		}
 	}
 }

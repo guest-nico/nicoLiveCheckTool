@@ -368,7 +368,7 @@ namespace namaichi.rec
 				var http = new System.Net.Http.HttpClient(handler);
 				var content = new System.Net.Http.FormUrlEncodedContent(param);
 				
-				http.DefaultRequestHeaders.Add( "User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36");
+				http.DefaultRequestHeaders.Add( "User-Agent", util.userAgent);
 				var _res = await http.PostAsync(loginUrl, content).ConfigureAwait(false);
 				var res = await _res.Content.ReadAsStringAsync().ConfigureAwait(false);
 	//			var a = _res.Headers;

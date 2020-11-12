@@ -32,8 +32,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.78";
-	public static string versionDayStr = "2020/11/03";
+	public static string versionStr = "ver0.1.7.79";
+	public static string versionDayStr = "2020/11/12";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -570,6 +570,7 @@ class util {
 		return null;
 	}
 	*/
+	public static string userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36";
 	public static string getPageSource(string _url, CookieContainer container = null, string referer = null, bool isFirstLog = true, int timeoutMs = 5000) {
 		util.debugWriteLine("access__ getpage Source 1" + _url);
 		timeoutMs = 5000;

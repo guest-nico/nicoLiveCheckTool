@@ -54,7 +54,7 @@ namespace namaichi.rec
 				var url = "https://www.nicovideo.jp/api/watchitem/add";
 				var headers = new WebHeaderCollection();
 //				headers.Add("Upgrade-Insecure-Requests", "1");
-				headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36");
+				headers.Add("User-Agent", util.userAgent);
 				try {
 					/*
 					var cg = new CookieGetter(cfg);
@@ -230,7 +230,7 @@ namespace namaichi.rec
 				var url = "https://www.nicovideo.jp/api/watchitem/delete";
 				var headers = new WebHeaderCollection();
 //				headers.Add("Upgrade-Insecure-Requests", "1");
-				headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36");
+				headers.Add("User-Agent", util.userAgent);
 				/*
 				try {
 					var cg = new CookieGetter(cfg);

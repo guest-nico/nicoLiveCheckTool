@@ -44,6 +44,8 @@ namespace namaichi
 			this.groupLabel = new System.Windows.Forms.Label();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.openSettingFolderMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator34 = new System.Windows.Forms.ToolStripSeparator();
 			this.readNamarokuListMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.readNamarokuUserListMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.bulkAddFromFollowComMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -531,6 +533,7 @@ namespace namaichi
 			this.logListCopyMessageMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator23 = new System.Windows.Forms.ToolStripSeparator();
 			this.logListDeleteRowMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openReadmeMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.alartList)).BeginInit();
@@ -592,6 +595,8 @@ namespace namaichi
 			// fileMenuItem
 			// 
 			this.fileMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.openSettingFolderMenu,
+									this.toolStripSeparator34,
 									this.readNamarokuListMenu,
 									this.readNamarokuUserListMenu,
 									this.bulkAddFromFollowComMenu,
@@ -601,6 +606,18 @@ namespace namaichi
 			this.fileMenuItem.ShowShortcutKeys = false;
 			this.fileMenuItem.Size = new System.Drawing.Size(85, 22);
 			this.fileMenuItem.Text = "ファイル(&F)";
+			// 
+			// openSettingFolderMenu
+			// 
+			this.openSettingFolderMenu.Name = "openSettingFolderMenu";
+			this.openSettingFolderMenu.Size = new System.Drawing.Size(382, 22);
+			this.openSettingFolderMenu.Text = "設定ファイルフォルダーを開く(&F)";
+			this.openSettingFolderMenu.Click += new System.EventHandler(this.OpenSettingFolderMenuClick);
+			// 
+			// toolStripSeparator34
+			// 
+			this.toolStripSeparator34.Name = "toolStripSeparator34";
+			this.toolStripSeparator34.Size = new System.Drawing.Size(379, 6);
 			// 
 			// readNamarokuListMenu
 			// 
@@ -2185,8 +2202,9 @@ namespace namaichi
 			// helpMenuItem
 			// 
 			this.helpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.バージョン情報VToolStripMenuItem,
-									this.updateMenu});
+									this.openReadmeMenu,
+									this.updateMenu,
+									this.バージョン情報VToolStripMenuItem});
 			this.helpMenuItem.Name = "helpMenuItem";
 			this.helpMenuItem.ShowShortcutKeys = false;
 			this.helpMenuItem.Size = new System.Drawing.Size(75, 22);
@@ -2195,14 +2213,14 @@ namespace namaichi
 			// バージョン情報VToolStripMenuItem
 			// 
 			this.バージョン情報VToolStripMenuItem.Name = "バージョン情報VToolStripMenuItem";
-			this.バージョン情報VToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+			this.バージョン情報VToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
 			this.バージョン情報VToolStripMenuItem.Text = "バージョン情報(&A)";
 			this.バージョン情報VToolStripMenuItem.Click += new System.EventHandler(this.versionMenu_Click);
 			// 
 			// updateMenu
 			// 
 			this.updateMenu.Name = "updateMenu";
-			this.updateMenu.Size = new System.Drawing.Size(178, 22);
+			this.updateMenu.Size = new System.Drawing.Size(206, 22);
 			this.updateMenu.Text = "更新方法(&U)";
 			this.updateMenu.Click += new System.EventHandler(this.UpdateMenuClick);
 			// 
@@ -4848,6 +4866,13 @@ namespace namaichi
 			this.logListDeleteRowMenu.Text = "この行を削除する";
 			this.logListDeleteRowMenu.Click += new System.EventHandler(this.LogListDeleteRowMenuClick);
 			// 
+			// openReadmeMenu
+			// 
+			this.openReadmeMenu.Name = "openReadmeMenu";
+			this.openReadmeMenu.Size = new System.Drawing.Size(206, 22);
+			this.openReadmeMenu.Text = "readme.htmlを開く(&V)";
+			this.openReadmeMenu.Click += new System.EventHandler(this.OpenReadmeMenuClick);
+			// 
 			// MainForm
 			// 
 			this.AllowDrop = true;
@@ -4910,6 +4935,9 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripMenuItem openReadmeMenu;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator34;
+		private System.Windows.Forms.ToolStripMenuItem openSettingFolderMenu;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem34;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem31;
 		private System.Windows.Forms.DataGridViewTextBoxColumn notAlartListMemberOnlyColumn;

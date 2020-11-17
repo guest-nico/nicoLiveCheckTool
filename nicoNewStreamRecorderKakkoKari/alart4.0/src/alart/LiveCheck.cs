@@ -79,10 +79,6 @@ namespace namaichi.alart
 				util.debugWriteLine("live list _load new item 0 " + newItems[0]);
 				var curCellLv = (form.liveList.CurrentCell == null) ? null : form.liveListDataSource[form.liveList.CurrentCell.RowIndex].lvId;
 				var curCellCellI = (form.liveList.CurrentCell == null) ? -1 : form.liveList.CurrentCell.ColumnIndex;
-			
-				
-				
-				
 				
 				//form.setScrollIndex(form.liveList, scrollI);
 				
@@ -177,7 +173,7 @@ namespace namaichi.alart
 						delList.Add(l);
 				} else l.lastExistTime = now;
 			}
-			
+			util.debugWriteLine("deleteEndedLive delList " + delList.Count() + " new " + newItems.Count() + " dataSource " + _livelistDataSource.Count());
 			
 			foreach (var d in delList) {
 				util.debugWriteLine("delList remove " + d.lvId + " " + d.title);
@@ -254,7 +250,7 @@ namespace namaichi.alart
 								var item = d.getRssItem(name);
 								if (item == null) continue;
 								if (buf.Find(x => x.lvId == item.lvId) != null)	continue;
-								if (liveListLv.IndexOf(item.lvId) > -1) continue;
+								//if (liveListLv.IndexOf(item.lvId) > -1) continue;
 								
 								var li = new LiveInfo(item, form.alartListDataSource.ToArray(), form.config, form.userAlartListDataSource.ToArray());
 								buf.Add(li);
@@ -263,7 +259,7 @@ namespace namaichi.alart
 								util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 							}
 						}
-						if (itemCount == 0) break;
+						//if (itemCount == 0) break;
 						
 					} catch (Exception e) {
 						util.debugWriteLine("getliveitems xml " + e.Message + e.Source + e.StackTrace + e.TargetSite);

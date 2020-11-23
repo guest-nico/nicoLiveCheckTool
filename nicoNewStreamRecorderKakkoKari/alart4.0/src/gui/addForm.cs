@@ -32,6 +32,8 @@ namespace namaichi
 		private List<CustomKeywordInfo> customKw = null;
 		private bool isUserMode = false;
 		private SortableBindingList<AlartInfo> dataSource = null;
+		public RssItem inputLvidItem = null;
+		public bool isInputLvidItemClosed = false;
 		public addForm(MainForm form, string id, AlartInfo editAi = null, bool isUserMode = false)
 		{
 			this.form = form;
@@ -175,6 +177,14 @@ namespace namaichi
 					isDefaultSoundIdChkBox.Checked, isMustComChkBox.Checked,
 					isMustUserChkBox.Checked, isMustKeywordChkBox.Checked,
 					customKw, isCustomKeywordRadioBtn.Checked, memberOnly);
+			if (inputLvidItem != null) {
+				_ret.lastHosoDt = inputLvidItem.pubDateDt;
+				_ret.lastHostDate = inputLvidItem.pubDateDt.ToString("yyyy/MM/dd HH:mm:ss");
+				_ret.lastLvid = inputLvidItem.lvId;
+				_ret.lastLvType = inputLvidItem.type;
+				if (!isInputLvidItemClosed)
+					_ret.recentColorMode = bool.Parse(form.config.get("IscheckRecent")) ? ((inputLvidItem.isMemberOnly) ? 2 : 1) : 0;				
+			}
 			if (!duplicationCheckOk(_ret)) return;
 			ret = _ret;
 			util.debugWriteLine("addform add okbtn " + _ret.hostId + " " + _ret.communityId + " " + _ret.keyword);
@@ -320,6 +330,7 @@ namespace namaichi
 		}
 		void GetInfoFromHosoIdBtnClick(object sender, EventArgs e)
 		{
+			util.debugWriteLine("getInfoFromHosoIdBtnClick " + hosoIdText.Text);
 			if (hosoIdText.Text == "") return;
 			
 			var t = hosoIdText.Text;
@@ -351,9 +362,20 @@ namespace namaichi
 			GetCommunityInfoBtnClick(null, null);
 			GetUserInfoBtnClick(null, null);
 			
-			if (hig.communityId == null && hig.userId == null)
-				MessageBox.Show(hig.type == "official" ? "公式放送でした" : "しっぱい");
+			try {
+				if (hig.communityId == null && hig.userId == null)
+					MessageBox.Show(hig.type == "official" ? "公式放送でした" : "しっぱい");
 				
+				inputLvidItem = new RssItem(hig.title, id, hig.openDt.ToString(), hig.description, hig.group, hig.communityId, hig.userName, hig.thumbnail, hig.isMemberOnly.ToString(), "", hig.isPayment);
+				inputLvidItem.setUserId(hig.userId);
+				inputLvidItem.setTag(hig.tags);
+				inputLvidItem.category = hig.category;
+				inputLvidItem.type = hig.type;
+				inputLvidItem.pubDateDt = hig.openDt;
+				isInputLvidItemClosed = hig.isClosed;
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
 			/*
 			if (id.StartsWith("c")) {
 				if (hig.communityId != null) {

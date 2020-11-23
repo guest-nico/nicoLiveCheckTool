@@ -35,7 +35,7 @@ namespace namaichi.alart
 		private SortableBindingList<AlartInfo> alartListDataSource;
 		
 		public CookieContainer container;
-		public List<string> checkedLvIdList = new List<string>();
+		public List<RssItem> checkedLvIdList = new List<RssItem>();
 		public List<string> processedLvidList = new List<string>();
 		
 		private Regex categoryReg = new Regex("<category>(.*?)</category>");
@@ -102,53 +102,60 @@ namespace namaichi.alart
 			util.debugWriteLine("gotStreamProcess itemCount");
 			var isChanged = false;
 			items.Reverse();
-			foreach (var _item in items) {
+			while (true) {
 				try {
-					var item = _item;
-					var dpi = new DoProcessInfo();
-					//bool isAppliA, isAppliB, isAppliC, isAppliD, isAppliE, isAppliF, isAppliG, isAppliH, isAppliI, isAppliJ, isPopup, isBaloon, isBrowser, isMail, isSound, isLog;
-					//isAppliA = isAppliB = isAppliC = isAppliD = isAppliE = isAppliF = isAppliG = isAppliH = isAppliI = isAppliJ = isPopup = isBaloon = isBrowser = isMail = isSound = isLog = false;
-					//var alartListCount = form.getAlartListCount();
-				
-					var targetAi = new List<AlartInfo>();
-					AlartInfo nearAlartAi = null;
-					
-					bool isSuccessAccess = getAlartProcess(dpi,
-							ref isChanged, 
-							ref targetAi, ref nearAlartAi, ref item,
-							alartListDataSource);
-					bool isSuccessAccess2 = getAlartProcess(dpi,
-					        ref isChanged,
-							ref targetAi, ref nearAlartAi, ref item,
-							form.userAlartListDataSource);
-					
-					//if (items[0].comName.IndexOf("ウェザー") > -1)
-					//	util.debugWriteLine("ch");
-					if (isSuccessAccess && isSuccessAccess2) {
-						doProcess(item, targetAi, 
-					        dpi, nearAlartAi);
-					} else {
-						Task.Factory.StartNew(() => {
-							for (var i = 0; i < 200; i++) {
-								isSuccessAccess = getAlartProcess(dpi, ref isChanged, 
+					foreach (var _item in items) {
+						try {
+							var item = _item;
+							var dpi = new DoProcessInfo();
+							//bool isAppliA, isAppliB, isAppliC, isAppliD, isAppliE, isAppliF, isAppliG, isAppliH, isAppliI, isAppliJ, isPopup, isBaloon, isBrowser, isMail, isSound, isLog;
+							//isAppliA = isAppliB = isAppliC = isAppliD = isAppliE = isAppliF = isAppliG = isAppliH = isAppliI = isAppliJ = isPopup = isBaloon = isBrowser = isMail = isSound = isLog = false;
+							//var alartListCount = form.getAlartListCount();
+						
+							var targetAi = new List<AlartInfo>();
+							AlartInfo nearAlartAi = null;
+							
+							bool isSuccessAccess = getAlartProcess(dpi,
+									ref isChanged, 
 									ref targetAi, ref nearAlartAi, ref item,
-								alartListDataSource);
-						        isSuccessAccess2 = getAlartProcess(dpi, ref isChanged, 
+									alartListDataSource);
+							bool isSuccessAccess2 = getAlartProcess(dpi,
+							        ref isChanged,
 									ref targetAi, ref nearAlartAi, ref item,
-								form.userAlartListDataSource);
-								if (isSuccessAccess && isSuccessAccess2) break;
-								Thread.Sleep(3000);
+									form.userAlartListDataSource);
+							
+							//if (items[0].comName.IndexOf("ウェザー") > -1)
+							//	util.debugWriteLine("ch");
+							if (isSuccessAccess && isSuccessAccess2) {
+								doProcess(item, targetAi, 
+							        dpi, nearAlartAi);
+							} else {
+								Task.Factory.StartNew(() => {
+									for (var i = 0; i < 200; i++) {
+										isSuccessAccess = getAlartProcess(dpi, ref isChanged, 
+											ref targetAi, ref nearAlartAi, ref item,
+										alartListDataSource);
+								        isSuccessAccess2 = getAlartProcess(dpi, ref isChanged, 
+											ref targetAi, ref nearAlartAi, ref item,
+										form.userAlartListDataSource);
+										if (isSuccessAccess && isSuccessAccess2) break;
+										Thread.Sleep(3000);
+									}
+								    doProcess(item, targetAi, 
+								        dpi, nearAlartAi);
+								});
 							}
-						    doProcess(item, targetAi, 
-						        dpi, nearAlartAi);
-						});
+							
+						} catch (Exception e) {
+							util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+						}
 					}
-					
-				} catch (Exception e) {
-					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					break;
+				} catch (Exception ee) {
+					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					Thread.Sleep(1000);
 				}
 			}
-			
 			return isChanged;
 		}
 		private bool getAlartProcess(DoProcessInfo dpi, ref bool isChanged, 
@@ -241,9 +248,19 @@ namespace namaichi.alart
 						
 						if (alartItem.communityId == "official")
 							util.debugWriteLine("official");
+						
+						var pubDateDt = DateTime.Parse(item.pubDate);
 						if (isSetLastHosoDate(isNosetComId, isNosetHostName , isNosetKeyword,
-								isComOk, isUserOk, isKeywordOk))
-							form.updateLastHosoDate(alartItem, DateTime.Parse(item.pubDate).ToString("yyyy/MM/dd HH:mm:ss"), item.lvId, item.isMemberOnly, item.type);
+								isComOk, isUserOk, isKeywordOk, item.lvId)) {
+							if (pubDateDt > alartItem.lastHosoDt)
+								form.updateLastHosoDate(alartItem, pubDateDt.ToString("yyyy/MM/dd HH:mm:ss"), item.lvId, item.isMemberOnly, item.type);
+							else {
+								if (pubDateDt < alartItem.lastHosoDt)
+									//form.addLogText("pub<item dt " + alartItem.lastHosoDt + " " + pubDateDt);
+									util.debugWriteLine("pub<item dt " + alartItem.lastHosoDt + " " + pubDateDt);
+							}
+						}
+							
 						else {
 							//debug
 							//form.addLogText("[最近の放送日時　非更新debug]" + DateTime.Now + item.lvId);
@@ -836,12 +853,14 @@ namespace namaichi.alart
 		}
 		private bool isSetLastHosoDate(bool isNosetComId, 
 				bool isNosetHostName, bool isNosetKeyword,
-				bool isComOk, bool isUserOk, bool isKeywordOk) {
+				bool isComOk, bool isUserOk, bool isKeywordOk, string lvid) {
+			util.debugWriteLine("isSetLastHosoDate " + lvid + " isNosetComId " + isNosetComId + " isNosetHostName " + isNosetHostName + " isnosetKey " + isNosetKeyword + " iscomok " + isComOk + " isuserok " + isUserOk + " iskeyok " + isKeywordOk);
 			if (!bool.Parse(form.config.get("IsNotAllMatchNotifyNoRecent")))
 				return true;
 			if (!isNosetComId && !isComOk) return false;
 			if (!isNosetHostName && !isUserOk) return false;
 			if (!isNosetKeyword && !isKeywordOk) return false;
+			
 			return true;
 		}
 		private void addLogList(RssItem item, List<AlartInfo> targetAi) {

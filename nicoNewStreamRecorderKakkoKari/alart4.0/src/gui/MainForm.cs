@@ -69,7 +69,7 @@ namespace namaichi
 		public TaskCheck taskCheck = null;
 		public LiveCheck liveCheck = null;
 		
-		public Mutex mutex;
+		public Mutex mutex = null;
 		//private Thread madeThread;
 		private string dotNetVersion = null;
 		
@@ -98,10 +98,11 @@ namespace namaichi
 		private bool isDisplayIconBalloon = false;
 		private int liveListScrollIndex = -1;
 		
-		public MainForm(string[] args, Mutex mutex, string dotNetVersion)
+		public MainForm(string[] args, string dotNetVersion)
 		{
+			
+			
 			madeThread = Thread.CurrentThread;
-			this.mutex = mutex;
 			this.dotNetVersion = dotNetVersion;
 			toolMenuProcess = new ToolMenuProcess(this);
 			
@@ -359,6 +360,13 @@ namespace namaichi
     		         	setAppliNameAndContextMenu();
     		         	recentLiveCheck();
     		         });
+	        		
+	        		if (bool.Parse(config.get("IsAllowMultiProcess"))) {
+						if (mutex != null) util.releaseMutex(mutex);
+						mutex = null;
+					} else if (mutex == null) {
+        				mutex = util.doubleRunCheck();
+        			}
 	        	}
 	        } catch (Exception ee) {
         		util.debugWriteLine(ee.Message + " " + ee.StackTrace);
@@ -442,14 +450,7 @@ namespace namaichi
 				return;
 			}
 			if (!kakuninClose()) e.Cancel = true;
-			try {
-				if (mutex != null) {
-					mutex.ReleaseMutex();
-					mutex.Close();
-				}
-			} catch (Exception ee) {
-				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
-			}
+			util.releaseMutex(mutex);
 		}
 		bool kakuninClose() {
 			/*
@@ -668,6 +669,8 @@ namespace namaichi
 					new AlartListFileManager(true, this).save();
 				});
 	        	//changedListContent();
+	        	if (o.inputLvidItem != null) check.checkedLvIdList.Add(o.inputLvidItem);
+	        	check.foundLive(check.checkedLvIdList);
 	        } catch (Exception ee) {
         		util.debugWriteLine(ee.Message + " " + ee.StackTrace);
 	        }
@@ -687,6 +690,7 @@ namespace namaichi
 	        }
 		}
 		public void updateLastHosoDate(AlartInfo ai, string hosoDate, string lvid, bool isMemberOnly, string type) {
+			util.debugWriteLine("updateLastHosoDate " + ai.lastLvid + " " + ai.communityId + " " + ai.hostId + " " + lvid + " " + hosoDate);
 			formAction(() => {
 		         try {
 					ai.LastHostDate = hosoDate;//now.Substring(0, now.Length - 0);

@@ -188,6 +188,7 @@ public class config
 			{"maxNotAlartDisplay","100"},
 			{"maxLogDisplay","100"},
 			{"IsStartUp","false"},
+			{"IsAllowMultiProcess","false"},
 			
 			{"poploc","右下"},
 			{"poptime","10"},

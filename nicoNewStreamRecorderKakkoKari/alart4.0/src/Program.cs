@@ -26,12 +26,6 @@ namespace namaichi
 		[STAThread]
 		private static void Main(string[] args)
 		{
-			Mutex mutex = null;
-			#if !DEBUG
-				mutex = doubleRunCheck();
-				if (mutex == null) return;
-			#endif
-			
 			if (args.Length > 0) arg = util.getRegGroup(args[0], "(lv.+)");
 			
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandleExceptionHandler);
@@ -46,13 +40,23 @@ namespace namaichi
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			
-//			args = new string[]{"-nowindo", "lv316266831", "-stdIO"};
-//			args = new String[]{"lv316036760", "-ts-start=5m0s", "-ts-end=5m10s", "-afterConvertMode=4"};
+			var form = new MainForm(args, dotNetVersion);
+			
+			//#if !DEBUG
+				if (!bool.Parse(form.config.get("IsAllowMultiProcess"))) {
+					form.mutex = util.doubleRunCheck();
+					if (form.mutex == null) {
+						Application.Exit();
+						return;
+					}
+				}
+			//#endif
+			
 			if (Array.IndexOf(args, "-nowindow") == -1) 
-				Application.Run(new MainForm(args, mutex, dotNetVersion));
+				Application.Run(form);
 			else {
 				util.isShowWindow = false;
-				var a = new MainForm(args, mutex, dotNetVersion);
+				var a = form;
 				//while(a.rec.isRecording) System.Threading.Thread.Sleep(1000);
 			}
 			
@@ -102,31 +106,6 @@ namespace namaichi
 			util.debugWriteLine("firstchance exception");
 			var eo = (Exception)e.Exception;
 			util.showException(eo, false);
-		
-		}
-		static Mutex doubleRunCheck() {
-			string appName = "ニコ生放送チェックツール";
-			var mutex = new System.Threading.Mutex(false, appName);
-			bool hasHandle = false;
-			try {
-				try {
-		            hasHandle = mutex.WaitOne(0, false);
-		        }
-				catch (System.Threading.AbandonedMutexException) {
-		            hasHandle = true;
-		        }
-				if (hasHandle == false) {
-		            MessageBox.Show("すでに起動しています。2つ同時に起動できません。システムトレイを確認してください。", "ニコ生放送チェックツール（仮の多重起動禁止");
-		            Application.Exit();
-		            return null;
-		        }
-				return mutex;
-			} catch (Exception e) {
-				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-			}
-
-		    return null;
 		}
 	}
-	
 }

@@ -105,14 +105,14 @@ namespace namaichi.alart
 //				util.debugWriteLine("m check mae " + item.lvId + " " + item.title + " " + item.comId);
 //				if (item.lvId == lastLv) return false;
 //				if (checkedLvIdList.IndexOf(item.lvId) > -1) return false;
-				if (items.IndexOf(item) == -1 && check.checkedLvIdList.IndexOf(item.lvId) == -1) {
+				if (items.IndexOf(item) == -1 && check.checkedLvIdList.FindIndex(x => x.lvId == item.lvId) == -1) {
 					var pubDate = DateTime.Parse(item.pubDate); 
 					if (pubDate > now) {
 						item.pubDate = now.ToString("yyyy/MM/dd HH:mm:ss");
 						util.debugWriteLine("rss future pubdate " + item.lvId + " " + item.pubDate + " " + pubDate);
 					}
 					items.Add(item);
-					check.checkedLvIdList.Add(item.lvId);
+					check.checkedLvIdList.Add(item);
 					
 				} else {
 					

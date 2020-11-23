@@ -74,7 +74,9 @@ namespace namaichi
 					SourceInfoSerialize.save(si.GenerateCopy(si.BrowserName, si.ProfileName, cookieFileText.Text), false);
 				else SourceInfoSerialize.save(si, false);
 			}
-
+			
+			
+			
 			DialogResult = DialogResult.OK;
 			Close();
 		}
@@ -150,6 +152,7 @@ namespace namaichi
 				{"maxNotAlartDisplay",maxNotAlartDisplayList.Text},
 				{"maxLogDisplay",maxLogDisplayList.Text},
 				{"IsStartUp",isStartUpChkBox.Checked.ToString().ToLower()},
+				{"IsAllowMultiProcess",isAllowMultiProcessChkBox.Checked.ToString().ToLower()},
 				{"poploc",poplocList.Text},
 				{"poptime",poptimeList.Text},
 				{"Isclosepopup",IsclosepopupChkBox.Checked.ToString().ToLower()},
@@ -338,7 +341,8 @@ namespace namaichi
 			maxNotAlartDisplayList.Text = cfg.get("maxNotAlartDisplay");
 			maxLogDisplayList.Text = cfg.get("maxLogDisplay");
 			isStartUpChkBox.Checked = bool.Parse(cfg.get("IsStartUp"));
-//			setConvertList(int.Parse(cfg.get("afterConvertMode")));
+			isAllowMultiProcessChkBox.Checked = bool.Parse(cfg.get("IsAllowMultiProcess"));
+			
 			poplocList.Text = cfg.get("poploc");
 			poptimeList.Text = cfg.get("poptime");
 			IsclosepopupChkBox.Checked = bool.Parse(cfg.get("Isclosepopup"));

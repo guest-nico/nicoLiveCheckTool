@@ -120,9 +120,9 @@ namespace namaichi.alart
 					var isEndFile = false;
 					var isContainAddedLv = getRssItems(res, ref items, ref isEndFile, categoryNames[j]);
 					if (isContainAddedLv) {
-						var isContainLv = items.FindIndex(x => check.checkedLvIdList.IndexOf(x.lvId) > -1) != -1;
+						var isContainLv = items.FindIndex(x => check.checkedLvIdList.FindIndex(y => y.lvId == x.lvId) > -1) > -1;
 						if (end == 1000 && 
-							    (!_isStartTimeAllCheck || (isContainLv)) && 
+							    (!_isStartTimeAllCheck || isContainLv) && 
 							    !_isStartTimeAllCheck) end = i + 1;
 //						break;
 					}
@@ -161,9 +161,9 @@ namespace namaichi.alart
 					try {
 						var item = d.getRssItem(categoryName);
 						if (item == null) continue;
-						if (items.IndexOf(item) == -1 && check.checkedLvIdList.IndexOf(item.lvId) == -1) {
+						if (items.IndexOf(item) == -1 && check.checkedLvIdList.FindIndex(x => x.lvId == item.lvId) == -1) {
 							items.Add(item);
-							check.checkedLvIdList.Add(item.lvId);
+							check.checkedLvIdList.Add(item);
 						} else {
 							isContainAddedLv = true;
 							//util.debugWriteLine("tuika nasi " + item.lvId + " " + item.title + " " + item.comId);

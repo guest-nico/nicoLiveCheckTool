@@ -32,8 +32,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.80";
-	public static string versionDayStr = "2020/11/18";
+	public static string versionStr = "ver0.1.7.81";
+	public static string versionDayStr = "2020/11/24";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -784,6 +784,8 @@ class util {
 					req.KeepAlive = h.Value.ToLower().Replace("-", "") == "keepalive";
 				else if (h.Key.ToLower() == "accept")
 					req.Accept = h.Value;
+				else if (h.Key.ToLower().Replace("-", "") == "referer")
+						req.Referer = h.Value;
 				else req.Headers.Add(h.Key, h.Value);
 			}
 			
@@ -1790,4 +1792,35 @@ class util {
     		util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
     	}
 	}
+    public static void releaseMutex(Mutex mutex) {
+    	try {
+			if (mutex != null) {
+				mutex.ReleaseMutex();
+				mutex.Close();
+			}
+		} catch (Exception ee) {
+			util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+		}
+    }
+    public static Mutex doubleRunCheck() {
+		string appName = "ニコ生放送チェックツール";
+		var mutex = new System.Threading.Mutex(false, appName);
+		bool hasHandle = false;
+		try {
+			try {
+	            hasHandle = mutex.WaitOne(0, false);
+	        }
+			catch (System.Threading.AbandonedMutexException) {
+	            hasHandle = true;
+	        }
+			if (!hasHandle) {
+	            System.Windows.Forms.MessageBox.Show("すでに起動しています。2つ同時に起動できません。システムトレイを確認してください。", "ニコ生放送チェックツール（仮の多重起動禁止");
+	            return null;
+	        }
+			return mutex;
+		} catch (Exception e) {
+			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+		}
+	    return null;
+    }
 }

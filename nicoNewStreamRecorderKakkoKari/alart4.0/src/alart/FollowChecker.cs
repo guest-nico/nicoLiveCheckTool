@@ -153,6 +153,10 @@ namespace namaichi.alart
 						using (var r = webRes.GetResponseStream())
 						using (var sr = new StreamReader(r)) {
 							res = sr.ReadToEnd();
+							if (res.IndexOf("\"code\":\"UPDATE_REQUIRED\"") > -1) {
+								util.updateAppVersion("niconico", form.config);
+								continue;
+							}
 							if (res != null) break;
 						}
 						//res = util.getPageSource(url + "?page=" + i + "&pageSize=50", ref h, cc);

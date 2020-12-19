@@ -151,7 +151,6 @@ namespace namaichi
 			this.label49 = new System.Windows.Forms.Label();
 			this.label48 = new System.Windows.Forms.Label();
 			this.common2Tab = new System.Windows.Forms.TabPage();
-			this.isAllowMultiProcessChkBox = new System.Windows.Forms.CheckBox();
 			this.displayGroup = new System.Windows.Forms.GroupBox();
 			this.fontList = new System.Windows.Forms.NumericUpDown();
 			this.label64 = new System.Windows.Forms.Label();
@@ -182,6 +181,7 @@ namespace namaichi
 			this.defaultSoundList = new System.Windows.Forms.ComboBox();
 			this.label57 = new System.Windows.Forms.Label();
 			this.groupBox12 = new System.Windows.Forms.GroupBox();
+			this.isAllowMultiProcessChkBox = new System.Windows.Forms.CheckBox();
 			this.isTasktrayStartChkBox = new System.Windows.Forms.CheckBox();
 			this.isStartUpChkBox = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -277,6 +277,7 @@ namespace namaichi
 			this.cookieFileSanshouBtn = new System.Windows.Forms.Button();
 			this.btnReload = new System.Windows.Forms.Button();
 			this.useSecondLoginChkBox = new System.Windows.Forms.CheckBox();
+			this.alartCacheIconChkBox = new System.Windows.Forms.CheckBox();
 			this.appliTab.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -1067,6 +1068,7 @@ namespace namaichi
 			// 
 			this.groupBox2.Controls.Add(this.IsConfirmFollowChkBox);
 			this.groupBox2.Controls.Add(this.delThumbChkBox);
+			this.groupBox2.Controls.Add(this.alartCacheIconChkBox);
 			this.groupBox2.Controls.Add(this.followerOnlySampleColorText);
 			this.groupBox2.Controls.Add(this.followerOnlyColorBtn);
 			this.groupBox2.Controls.Add(this.defaultFollowerOnlyColorBtn);
@@ -1086,7 +1088,7 @@ namespace namaichi
 			this.groupBox2.Controls.Add(this.isStartTimeAllCheckChkBox);
 			this.groupBox2.Location = new System.Drawing.Point(5, 10);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(420, 317);
+			this.groupBox2.Size = new System.Drawing.Size(420, 339);
 			this.groupBox2.TabIndex = 1;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "お気に入りのコミュニティタブの設定";
@@ -1294,7 +1296,7 @@ namespace namaichi
 			this.groupBox11.Controls.Add(this.thresholdpageList);
 			this.groupBox11.Controls.Add(this.label49);
 			this.groupBox11.Controls.Add(this.label48);
-			this.groupBox11.Location = new System.Drawing.Point(5, 333);
+			this.groupBox11.Location = new System.Drawing.Point(5, 355);
 			this.groupBox11.Name = "groupBox11";
 			this.groupBox11.Size = new System.Drawing.Size(420, 165);
 			this.groupBox11.TabIndex = 1;
@@ -1448,15 +1450,6 @@ namespace namaichi
 			this.common2Tab.TabIndex = 6;
 			this.common2Tab.Text = "一般2";
 			this.common2Tab.UseVisualStyleBackColor = true;
-			// 
-			// isAllowMultiProcessChkBox
-			// 
-			this.isAllowMultiProcessChkBox.Location = new System.Drawing.Point(19, 62);
-			this.isAllowMultiProcessChkBox.Name = "isAllowMultiProcessChkBox";
-			this.isAllowMultiProcessChkBox.Size = new System.Drawing.Size(350, 19);
-			this.isAllowMultiProcessChkBox.TabIndex = 9;
-			this.isAllowMultiProcessChkBox.Text = "多重起動を許可する";
-			this.isAllowMultiProcessChkBox.UseVisualStyleBackColor = true;
 			// 
 			// displayGroup
 			// 
@@ -1777,6 +1770,15 @@ namespace namaichi
 			this.groupBox12.TabIndex = 2;
 			this.groupBox12.TabStop = false;
 			this.groupBox12.Text = "起動設定";
+			// 
+			// isAllowMultiProcessChkBox
+			// 
+			this.isAllowMultiProcessChkBox.Location = new System.Drawing.Point(19, 62);
+			this.isAllowMultiProcessChkBox.Name = "isAllowMultiProcessChkBox";
+			this.isAllowMultiProcessChkBox.Size = new System.Drawing.Size(350, 19);
+			this.isAllowMultiProcessChkBox.TabIndex = 9;
+			this.isAllowMultiProcessChkBox.Text = "多重起動を許可する";
+			this.isAllowMultiProcessChkBox.UseVisualStyleBackColor = true;
 			// 
 			// isTasktrayStartChkBox
 			// 
@@ -2809,6 +2811,15 @@ namespace namaichi
 			this.useSecondLoginChkBox.Text = "ブラウザからクッキーが取得できなかった場合、次のアカウントでログインする";
 			this.useSecondLoginChkBox.UseVisualStyleBackColor = true;
 			// 
+			// alartCacheIconChkBox
+			// 
+			this.alartCacheIconChkBox.Location = new System.Drawing.Point(19, 312);
+			this.alartCacheIconChkBox.Name = "alartCacheIconChkBox";
+			this.alartCacheIconChkBox.Size = new System.Drawing.Size(350, 19);
+			this.alartCacheIconChkBox.TabIndex = 11;
+			this.alartCacheIconChkBox.Text = "登録時や通知時に取得したサムネイル画像をキャッシュする";
+			this.alartCacheIconChkBox.UseVisualStyleBackColor = true;
+			// 
 			// optionForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -2868,6 +2879,7 @@ namespace namaichi
 			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.CheckBox alartCacheIconChkBox;
 		private System.Windows.Forms.CheckBox isAllowMultiProcessChkBox;
 		private System.Windows.Forms.Button applyBtn;
 		private System.Windows.Forms.Label label64;

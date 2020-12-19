@@ -252,7 +252,7 @@ namespace namaichi.alart
 						var pubDateDt = DateTime.Parse(item.pubDate);
 						if (isSetLastHosoDate(isNosetComId, isNosetHostName , isNosetKeyword,
 								isComOk, isUserOk, isKeywordOk, item.lvId)) {
-							if (pubDateDt > alartItem.lastHosoDt)
+							if (pubDateDt >= alartItem.lastHosoDt)
 								form.updateLastHosoDate(alartItem, pubDateDt.ToString("yyyy/MM/dd HH:mm:ss"), item.lvId, item.isMemberOnly, item.type);
 							else {
 								if (pubDateDt < alartItem.lastHosoDt)

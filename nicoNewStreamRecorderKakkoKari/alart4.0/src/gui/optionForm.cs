@@ -142,6 +142,7 @@ namespace namaichi
 				{"IsNotAllMatchNotifyNoRecent",isNotAllMatchNotifyNoRecentChkBox.Checked.ToString().ToLower()},
 				{"delThumb",delThumbChkBox.Checked.ToString().ToLower()},
 				{"IsConfirmFollow",IsConfirmFollowChkBox.Checked.ToString().ToLower()},
+				{"alartCacheIcon",alartCacheIconChkBox.Checked.ToString().ToLower()},
 				
 				{"rssUpdateInterval",rssUpdateIntervalList.Text},
 				{"userNameUpdateInterval",userNameUpdateIntervalList.Text},
@@ -331,6 +332,7 @@ namespace namaichi
 			isNotAllMatchNotifyNoRecentChkBox.Checked = bool.Parse(cfg.get("IsNotAllMatchNotifyNoRecent"));
 			delThumbChkBox.Checked = bool.Parse(cfg.get("delThumb"));
 			IsConfirmFollowChkBox.Checked = bool.Parse(cfg.get("IsConfirmFollow"));
+			alartCacheIconChkBox.Checked = bool.Parse(cfg.get("alartCacheIcon"));
 			
 			rssUpdateIntervalList.Text = cfg.get("rssUpdateInterval");
 			userNameUpdateIntervalList.Text = cfg.get("userNameUpdateInterval");

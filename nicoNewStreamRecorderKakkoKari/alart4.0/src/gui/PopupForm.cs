@@ -117,9 +117,10 @@ namespace namaichi
 				util.debugWriteLine("is not exist thumbnail time " + (DateTime.Now - dt0) + " " + ri.comName);
 				
 				img = ThumbnailManager.getImageId(ri.comId);
-				if (img != null) ThumbnailManager.saveImage(img, ri.comId);
+				var isSaveCache = bool.Parse(config.get("alartCacheIcon"));
+				if (img != null && isSaveCache) ThumbnailManager.saveImage(img, ri.comId);
 				if (img == null && !string.IsNullOrEmpty(url)) 
-					img = ThumbnailManager.getThumbnailRssUrl(url, true, true);
+					img = ThumbnailManager.getThumbnailRssUrl(url, isSaveCache, true);
 			} else {
 				util.debugWriteLine("is exist thumbnail time " + (DateTime.Now - dt0) + " " + ri.comName);
 			}

@@ -670,7 +670,7 @@ namespace namaichi
 				});
 	        	//changedListContent();
 	        	if (o.inputLvidItem != null) check.checkedLvIdList.Add(o.inputLvidItem);
-	        	check.foundLive(check.checkedLvIdList);
+	        	Task.Factory.StartNew(() => check.foundLive(check.checkedLvIdList));
 	        } catch (Exception ee) {
         		util.debugWriteLine(ee.Message + " " + ee.StackTrace);
 	        }
@@ -3385,6 +3385,7 @@ namespace namaichi
 			li.thumbnail = new Bitmap(img, 50, 50);
 			if (bool.Parse(config.get("liveListCacheIcon")))
 				ThumbnailManager.saveImage(img, li.comId);
+			else ThumbnailManager.deleteImageId(li.comId);
 			
 			try {
 				var rowI = liveListDataSource.IndexOf(li);
@@ -4801,7 +4802,7 @@ namespace namaichi
 		public void setNotifyMenuHistory(List<RssItem> items) {
 			formAction(() => setNotifyMenuHistoryCore(items));
 		}
-		public void setNotifyMenuHistoryCore(List<RssItem> items) {
+		private void setNotifyMenuHistoryCore(List<RssItem> items) {
 			try {
 				var history = new List<KeyValuePair<DateTime, ToolStripMenuItem>>();
 				for (var i = 0; i < notifyIconMenuStrip.Items.Count - 4; i++) {

@@ -532,7 +532,8 @@ namespace namaichi
 			if (newImg == null) {
 				return;
 			}
-			ThumbnailManager.saveImage(newImg, num);
+			if (bool.Parse(form.config.get("alartCacheIcon")))
+				ThumbnailManager.saveImage(newImg, num);
 			if (isUser) {
 				userThumbBox.Image = new Bitmap(newImg, userThumbBox.Size);
 			} else {

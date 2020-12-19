@@ -53,6 +53,7 @@ namespace namaichi.alart
 				return getImage(url);
 			}
 		}
+		/*
 		public static Image getThumbnailId(string id) {
 			
 			//var id = util.getRegGroup(url, "(c[oh]\\d+)");
@@ -64,6 +65,7 @@ namespace namaichi.alart
 			saveImage(img, id, dir);
 			return img;
 		}
+		*/
 		public static bool isExist(string id, out Image img, string dir = null) {
 			img = null;
 			var isUser = !id.StartsWith("c");

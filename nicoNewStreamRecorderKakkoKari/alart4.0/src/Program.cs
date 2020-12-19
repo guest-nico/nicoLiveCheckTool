@@ -42,7 +42,7 @@ namespace namaichi
 			
 			var form = new MainForm(args, dotNetVersion);
 			
-			//#if !DEBUG
+			#if !DEBUG
 				if (!bool.Parse(form.config.get("IsAllowMultiProcess"))) {
 					form.mutex = util.doubleRunCheck();
 					if (form.mutex == null) {
@@ -50,7 +50,7 @@ namespace namaichi
 						return;
 					}
 				}
-			//#endif
+			#endif
 			
 			if (Array.IndexOf(args, "-nowindow") == -1) 
 				Application.Run(form);

@@ -181,6 +181,7 @@ public class config
 			{"IsNotAllMatchNotifyNoRecent","false"},
 			{"delThumb","false"},
 			{"IsConfirmFollow","false"},
+			{"alartCacheIcon","true"},
 			
 			{"IsbroadLog","false"},
 			{"IsLogFile","false"},
@@ -315,7 +316,7 @@ public class config
 	        {"appPushId", ""},
 	        {"appPushToken", ""},
 	        {"nicoCasAppVer", "3.9.0"},
-	        {"niconicoAppVer", "5.38.0"},
+	        {"niconicoAppVer", "6.14.1"},
 			
 	        {"thresholdpage", "10"},
 	        {"brodouble", "0"},

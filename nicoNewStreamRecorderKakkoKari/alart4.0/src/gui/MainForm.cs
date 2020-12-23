@@ -658,7 +658,7 @@ namespace namaichi
 	        		dataSource.Add(o.ret);
 	        		util.debugWriteLine("add datasource " + dataSource.GetHashCode());
 	        	} else {
-	        		var i = dataSource.IndexOf(editAi);
+	        		var i = dataSource.IndexOf(o.ret);
 	        		if (i == -1) return;
 	        		foreach (DataGridViewCell c in list.Rows[i].Cells)
 	        			list.UpdateCellValue(c.ColumnIndex, c.RowIndex);
@@ -668,12 +668,42 @@ namespace namaichi
 					new AlartListFileManager(false, this).save();
 					new AlartListFileManager(true, this).save();
 				});
-	        	//changedListContent();
 	        	if (o.inputLvidItem != null) check.checkedLvIdList.Add(o.inputLvidItem);
-	        	Task.Factory.StartNew(() => check.foundLive(check.checkedLvIdList));
+	        	var addLive = getOnAirLastLiveList(check.checkedLvIdList, o.ret);
+	        	if (addLive != null)
+	        		Task.Factory.StartNew(() => check.foundLive(addLive));
 	        } catch (Exception ee) {
         		util.debugWriteLine(ee.Message + " " + ee.StackTrace);
 	        }
+		}
+		List<RssItem> getOnAirLastLiveList(List<RssItem> _liveList, AlartInfo ai) {
+			var liveList = _liveList.ToList().OrderByDescending(x => x.pubDateDt).ToArray();
+			var isChanged = false;
+			var ret = new List<RssItem>();
+			var bindingList = new SortableBindingList<AlartInfo>(new List<AlartInfo>(){ai});
+			try {
+				var listAi = alartListDataSource.ToList();
+				listAi.AddRange(userAlartListDataSource.ToList());
+				for (var i = 0; i < liveList.Count(); i++) {
+					var targetAi = new List<AlartInfo>();
+					AlartInfo nearAlartAi = null;
+					var dpi = new DoProcessInfo();
+					bool isSuccessAccess = check.getAlartProcess(dpi,
+							ref isChanged, 
+							ref targetAi, ref nearAlartAi, ref liveList[i],
+							bindingList);
+					
+					if (targetAi.Count > 0) {
+						if (isOnAirLvid(liveList[i].lvId, liveList[i].type))
+							ret.Add(liveList[i]);
+						return ret;
+					}
+				}
+				return ret;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return null;
+			}
 		}
 		void openAddYoyakuForm(string id = null) {
 			try {

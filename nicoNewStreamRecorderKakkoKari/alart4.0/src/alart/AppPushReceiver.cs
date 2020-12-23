@@ -688,6 +688,7 @@ namespace namaichi.alart
 				i.pubDateDt = dt;
 				var ret = new List<RssItem>();
 				ret.Add(i);
+				check.checkedLvIdList.Add(i);
 				return ret;
 				
 			} catch (Exception e) {

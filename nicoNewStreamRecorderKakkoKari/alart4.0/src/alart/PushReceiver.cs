@@ -447,6 +447,7 @@ namespace namaichi.alart
 				i.pubDateDt = DateTime.Parse(dt);
 				var ret = new List<RssItem>();
 				ret.Add(i);
+				check.checkedLvIdList.Add(i);
 				return ret;
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);

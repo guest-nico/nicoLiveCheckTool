@@ -158,7 +158,7 @@ namespace namaichi.alart
 			}
 			return isChanged;
 		}
-		private bool getAlartProcess(DoProcessInfo dpi, ref bool isChanged, 
+		public bool getAlartProcess(DoProcessInfo dpi, ref bool isChanged, 
 				ref List<AlartInfo> targetAi,
 				ref AlartInfo nearAlartAi, ref RssItem item, 
 				SortableBindingList<AlartInfo> dataSource) {
@@ -982,7 +982,7 @@ namespace namaichi.alart
 		}
 
 	}
-	class DoProcessInfo {
+	public class DoProcessInfo {
 		public bool isAppliA;
 		public bool isAppliB;
 		public bool isAppliC;

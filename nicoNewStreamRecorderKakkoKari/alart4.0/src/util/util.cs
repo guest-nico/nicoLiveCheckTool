@@ -32,8 +32,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.84";
-	public static string versionDayStr = "2020/12/23";
+	public static string versionStr = "ver0.1.7.85";
+	public static string versionDayStr = "2021/02/02";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -1474,7 +1474,7 @@ class util {
 		//return 0-error 1-IDOK 2-IDCANCEL 3-IDABORT 6-IDYES 7-IDNO
 		int res = 0;
 		form.formAction(() =>
-		                res = MessageBox(new IntPtr(0), text, caption, (uint)style)
+			res = MessageBox(new IntPtr(0), text, caption, (uint)style)
 		);
 		return res;
 	}
@@ -1714,10 +1714,10 @@ class util {
 			//var us = cc.GetCookies(new Uri(url))["user_session"];
 			//if (us == null) return null;
 			var _h = new Dictionary<string, string>() {
-				{"User-Agent", "Niconico/1.0 (Linux; U; Android 7.1.2; ja-jp; nicoandroid LGM-V300K) Version/5.38.0"},
+				{"User-Agent", "Niconico/1.0 (Linux; U; Android 7.1.2; ja-jp; nicoandroid LGM-V300K) Version/6.14.1"},
 				{"Cookie", "user_session=" + us},
 					{"X-Frontend-Id", "1"},
-					{"X-Frontend-Version", "5.38.0"},
+					{"X-Frontend-Version", "6.14.1"},
 					{"Connection", "keep-alive"},
 					{"Upgrade-Insecure-Requests", "1"},
 				};

@@ -654,9 +654,9 @@ namespace namaichi
 	        	var dataSource = isUserMode ? userAlartListDataSource : alartListDataSource;
 	        	var list = isUserMode ? userAlartList : alartList;
 	        	
+	        	util.debugWriteLine("add datasource " + dataSource.GetHashCode() + " comid " + o.ret.communityId + " comname " + o.ret.communityName + " hostid " + o.ret.hostId + " hostname " + o.ret.hostName + " keyword " + o.ret.keyword);
 	        	if (editAi == null) {
 	        		dataSource.Add(o.ret);
-	        		util.debugWriteLine("add datasource " + dataSource.GetHashCode());
 	        	} else {
 	        		var i = dataSource.IndexOf(o.ret);
 	        		if (i == -1) return;
@@ -671,7 +671,11 @@ namespace namaichi
 	        	if (o.inputLvidItem != null) check.checkedLvIdList.Add(o.inputLvidItem);
 	        	var addLive = getOnAirLastLiveList(check.checkedLvIdList, o.ret);
 	        	if (addLive != null)
-	        		Task.Factory.StartNew(() => check.foundLive(addLive));
+	        		Task.Factory.StartNew(() => {
+	        		                      	//check.foundLive(addLive, false);
+	        		                      	util.debugWriteLine("addform addlive after foundlive");
+	        		                      });
+	        		                      
 	        } catch (Exception ee) {
         		util.debugWriteLine(ee.Message + " " + ee.StackTrace);
 	        }
@@ -5124,6 +5128,63 @@ namespace namaichi
 				System.Diagnostics.Process.Start(path);
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + " " + ee.StackTrace);
+			}
+		}
+		
+		void AlartListDataError(object sender, DataGridViewDataErrorEventArgs e)
+		{
+			#if DEBUG
+				addLogText("alartlist dataerror " + e.RowIndex + e.Exception);
+			#endif
+		}
+		
+		void LaunchAppMenuItemDropDownOpening(object sender, EventArgs e)
+		{
+			try {
+				launchAppMenuItem.DropDownItems.Clear();
+				for (var i = 0; i < 10; i++) {
+					var c = ((char)((char)('A') + i)).ToString();
+					//util.debugWriteLine("ccc " + c);
+					
+					var path = config.get("appli" + c + "Path");
+					if (!string.IsNullOrEmpty(path)) {
+						 
+							
+						var _n = config.get("appli" + c + "Name");
+						var n = "アプリケーション" + c + 
+							(string.IsNullOrEmpty(_n) ? "" : ("(" + _n + ")"));
+						var item = new ToolStripMenuItem(n);
+						item.Tag = c;
+						if (!File.Exists(path)) {
+							item.Text = c + " ファイルが見つかりませんでした";
+							item.Enabled = false;
+						}
+						launchAppMenuItem.DropDownItems.Add(item);
+					}
+				}
+				if (launchAppMenuItem.DropDownItems.Count == 0) {
+					var t = new ToolStripMenuItem("アプリケーションが設定されていませんでした");
+					t.Enabled = false;
+					launchAppMenuItem.DropDownItems.Add(t);
+				}
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
+		}
+		
+		void LaunchAppMenuItemDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+		{
+			try {
+				var c = e.ClickedItem.Tag.ToString();
+				var path = config.get("appli" + c + "Path");
+				if (string.IsNullOrEmpty(path)) {
+					util.showModelessMessageBox("アプリケーションが選択されてません", "", this, 0);
+				} else if (!File.Exists(path)) {
+					util.showModelessMessageBox("ファイルが見つかりませんでした", "", this, 0);
+				} else Process.Start(path);
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+				util.showModelessMessageBox("アプリケーションエラーで起動できませんでした", "", this, 0);
 			}
 		}
 	}

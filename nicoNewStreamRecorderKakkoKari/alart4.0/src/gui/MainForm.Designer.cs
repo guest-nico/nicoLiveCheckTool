@@ -243,6 +243,9 @@ namespace namaichi
 			this.formColorMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.characterColorMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.launchAppMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.アプリケーションが設定されていませんでしたToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator35 = new System.Windows.Forms.ToolStripSeparator();
 			this.checkExistsComMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.checkExistsUserMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator18 = new System.Windows.Forms.ToolStripSeparator();
@@ -258,8 +261,9 @@ namespace namaichi
 			this.toolStripSeparator29 = new System.Windows.Forms.ToolStripSeparator();
 			this.optionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.バージョン情報VToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.openReadmeMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.updateMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.バージョン情報VToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.lastHosoStatusBar = new System.Windows.Forms.ToolStripStatusLabel();
 			this.existCheckStatusBar = new System.Windows.Forms.ToolStripStatusLabel();
@@ -533,7 +537,6 @@ namespace namaichi
 			this.logListCopyMessageMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator23 = new System.Windows.Forms.ToolStripSeparator();
 			this.logListDeleteRowMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.openReadmeMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.alartList)).BeginInit();
@@ -2089,6 +2092,8 @@ namespace namaichi
 			// toolMenuItem
 			// 
 			this.toolMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.launchAppMenuItem,
+									this.toolStripSeparator35,
 									this.checkExistsComMenu,
 									this.checkExistsUserMenu,
 									this.toolStripSeparator18,
@@ -2107,6 +2112,28 @@ namespace namaichi
 			this.toolMenuItem.ShowShortcutKeys = false;
 			this.toolMenuItem.Size = new System.Drawing.Size(74, 22);
 			this.toolMenuItem.Text = "ツール(&T)";
+			// 
+			// launchAppMenuItem
+			// 
+			this.launchAppMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.アプリケーションが設定されていませんでしたToolStripMenuItem});
+			this.launchAppMenuItem.Name = "launchAppMenuItem";
+			this.launchAppMenuItem.Size = new System.Drawing.Size(358, 22);
+			this.launchAppMenuItem.Text = "アプリケーションを起動(&L)";
+			this.launchAppMenuItem.DropDownOpening += new System.EventHandler(this.LaunchAppMenuItemDropDownOpening);
+			this.launchAppMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.LaunchAppMenuItemDropDownItemClicked);
+			// 
+			// アプリケーションが設定されていませんでしたToolStripMenuItem
+			// 
+			this.アプリケーションが設定されていませんでしたToolStripMenuItem.Enabled = false;
+			this.アプリケーションが設定されていませんでしたToolStripMenuItem.Name = "アプリケーションが設定されていませんでしたToolStripMenuItem";
+			this.アプリケーションが設定されていませんでしたToolStripMenuItem.Size = new System.Drawing.Size(328, 22);
+			this.アプリケーションが設定されていませんでしたToolStripMenuItem.Text = "アプリケーションが設定されていませんでした";
+			// 
+			// toolStripSeparator35
+			// 
+			this.toolStripSeparator35.Name = "toolStripSeparator35";
+			this.toolStripSeparator35.Size = new System.Drawing.Size(355, 6);
 			// 
 			// checkExistsComMenu
 			// 
@@ -2210,12 +2237,12 @@ namespace namaichi
 			this.helpMenuItem.Size = new System.Drawing.Size(75, 22);
 			this.helpMenuItem.Text = "ヘルプ(&H)";
 			// 
-			// バージョン情報VToolStripMenuItem
+			// openReadmeMenu
 			// 
-			this.バージョン情報VToolStripMenuItem.Name = "バージョン情報VToolStripMenuItem";
-			this.バージョン情報VToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-			this.バージョン情報VToolStripMenuItem.Text = "バージョン情報(&A)";
-			this.バージョン情報VToolStripMenuItem.Click += new System.EventHandler(this.versionMenu_Click);
+			this.openReadmeMenu.Name = "openReadmeMenu";
+			this.openReadmeMenu.Size = new System.Drawing.Size(206, 22);
+			this.openReadmeMenu.Text = "readme.htmlを開く(&V)";
+			this.openReadmeMenu.Click += new System.EventHandler(this.OpenReadmeMenuClick);
 			// 
 			// updateMenu
 			// 
@@ -2223,6 +2250,13 @@ namespace namaichi
 			this.updateMenu.Size = new System.Drawing.Size(206, 22);
 			this.updateMenu.Text = "更新方法(&U)";
 			this.updateMenu.Click += new System.EventHandler(this.UpdateMenuClick);
+			// 
+			// バージョン情報VToolStripMenuItem
+			// 
+			this.バージョン情報VToolStripMenuItem.Name = "バージョン情報VToolStripMenuItem";
+			this.バージョン情報VToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+			this.バージョン情報VToolStripMenuItem.Text = "バージョン情報(&A)";
+			this.バージョン情報VToolStripMenuItem.Click += new System.EventHandler(this.versionMenu_Click);
 			// 
 			// statusStrip1
 			// 
@@ -2325,6 +2359,7 @@ namespace namaichi
 			this.alartList.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.AlartListCellValidating);
 			this.alartList.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.AlartListColumnHeaderMouseClick);
 			this.alartList.CurrentCellDirtyStateChanged += new System.EventHandler(this.AlartListCurrentCellDirtyStateChanged);
+			this.alartList.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.AlartListDataError);
 			this.alartList.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.AlartListRowEnter);
 			this.alartList.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.AlartListRowsAdded);
 			this.alartList.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.AlartListRowsRemoved);
@@ -4866,13 +4901,6 @@ namespace namaichi
 			this.logListDeleteRowMenu.Text = "この行を削除する";
 			this.logListDeleteRowMenu.Click += new System.EventHandler(this.LogListDeleteRowMenuClick);
 			// 
-			// openReadmeMenu
-			// 
-			this.openReadmeMenu.Name = "openReadmeMenu";
-			this.openReadmeMenu.Size = new System.Drawing.Size(206, 22);
-			this.openReadmeMenu.Text = "readme.htmlを開く(&V)";
-			this.openReadmeMenu.Click += new System.EventHandler(this.OpenReadmeMenuClick);
-			// 
 			// MainForm
 			// 
 			this.AllowDrop = true;
@@ -4935,6 +4963,9 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripMenuItem アプリケーションが設定されていませんでしたToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator35;
+		private System.Windows.Forms.ToolStripMenuItem launchAppMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem openReadmeMenu;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator34;
 		private System.Windows.Forms.ToolStripMenuItem openSettingFolderMenu;

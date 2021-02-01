@@ -685,7 +685,7 @@ namespace namaichi.alart
 			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(item.lvId, "(\\d+)");
 			util.openUrlBrowser(url, form.config);
 		}
-		public void foundLive(List<RssItem> items) {
+		public void foundLive(List<RssItem> items, bool isAddLive = true) {
 			if (items.Count == 0) return;
 			
 			form.setHosoLogStatusBar(items[0]);
@@ -701,7 +701,7 @@ namespace namaichi.alart
 				Task.Factory.StartNew(() => writeBroadLog(items));
 			
 			var addLiveMode = form.config.get("alartAddLive");
-			if (addLiveMode != "0")
+			if (addLiveMode != "0" && isAddLive)
 				Task.Factory.StartNew(() => addLiveList(items));
 		}
 		public void resetCheck() {

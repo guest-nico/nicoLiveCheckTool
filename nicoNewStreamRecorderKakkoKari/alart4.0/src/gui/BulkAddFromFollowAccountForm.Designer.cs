@@ -45,6 +45,9 @@ namespace namaichi
 			this.channelChkBox = new System.Windows.Forms.CheckBox();
 			this.comChkBox = new System.Windows.Forms.CheckBox();
 			this.userChkBox = new System.Windows.Forms.CheckBox();
+			this.comRadioBtn = new System.Windows.Forms.RadioButton();
+			this.userRadioBtn = new System.Windows.Forms.RadioButton();
+			this.label3 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -103,7 +106,7 @@ namespace namaichi
 			// 
 			this.channelChkBox.Checked = true;
 			this.channelChkBox.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.channelChkBox.Location = new System.Drawing.Point(181, 88);
+			this.channelChkBox.Location = new System.Drawing.Point(181, 83);
 			this.channelChkBox.Name = "channelChkBox";
 			this.channelChkBox.Size = new System.Drawing.Size(72, 19);
 			this.channelChkBox.TabIndex = 4;
@@ -114,7 +117,7 @@ namespace namaichi
 			// 
 			this.comChkBox.Checked = true;
 			this.comChkBox.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.comChkBox.Location = new System.Drawing.Point(103, 88);
+			this.comChkBox.Location = new System.Drawing.Point(103, 83);
 			this.comChkBox.Name = "comChkBox";
 			this.comChkBox.Size = new System.Drawing.Size(72, 19);
 			this.comChkBox.TabIndex = 3;
@@ -125,18 +128,50 @@ namespace namaichi
 			// 
 			this.userChkBox.Checked = true;
 			this.userChkBox.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.userChkBox.Location = new System.Drawing.Point(25, 88);
+			this.userChkBox.Location = new System.Drawing.Point(25, 83);
 			this.userChkBox.Name = "userChkBox";
 			this.userChkBox.Size = new System.Drawing.Size(72, 19);
 			this.userChkBox.TabIndex = 2;
 			this.userChkBox.Text = "ユーザー";
 			this.userChkBox.UseVisualStyleBackColor = true;
 			// 
+			// comRadioBtn
+			// 
+			this.comRadioBtn.Checked = true;
+			this.comRadioBtn.Location = new System.Drawing.Point(103, 103);
+			this.comRadioBtn.Name = "comRadioBtn";
+			this.comRadioBtn.Size = new System.Drawing.Size(72, 24);
+			this.comRadioBtn.TabIndex = 7;
+			this.comRadioBtn.TabStop = true;
+			this.comRadioBtn.Text = "ｺﾐｭﾆﾃｨID";
+			this.comRadioBtn.UseVisualStyleBackColor = true;
+			// 
+			// userRadioBtn
+			// 
+			this.userRadioBtn.Location = new System.Drawing.Point(181, 103);
+			this.userRadioBtn.Name = "userRadioBtn";
+			this.userRadioBtn.Size = new System.Drawing.Size(77, 24);
+			this.userRadioBtn.TabIndex = 7;
+			this.userRadioBtn.Text = "ﾕｰｻﾞｰID";
+			this.userRadioBtn.UseVisualStyleBackColor = true;
+			this.userRadioBtn.CheckedChanged += new System.EventHandler(this.UserRadioBtnCheckedChanged);
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(25, 109);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(72, 23);
+			this.label3.TabIndex = 8;
+			this.label3.Text = "登録先リスト：";
+			// 
 			// BulkAddFromFollowAccountForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(440, 129);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.userRadioBtn);
+			this.Controls.Add(this.comRadioBtn);
 			this.Controls.Add(this.userChkBox);
 			this.Controls.Add(this.comChkBox);
 			this.Controls.Add(this.channelChkBox);
@@ -154,6 +189,9 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.RadioButton userRadioBtn;
+		private System.Windows.Forms.RadioButton comRadioBtn;
 		private System.Windows.Forms.CheckBox userChkBox;
 		private System.Windows.Forms.CheckBox comChkBox;
 		private System.Windows.Forms.CheckBox channelChkBox;

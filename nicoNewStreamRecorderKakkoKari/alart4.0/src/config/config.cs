@@ -182,6 +182,8 @@ public class config
 			{"delThumb","false"},
 			{"IsConfirmFollow","false"},
 			{"alartCacheIcon","true"},
+			{"IsAddAlartedComUser","false"},
+			{"IsAddAlartedUserToUserList","false"},
 			
 			{"IsbroadLog","false"},
 			{"IsLogFile","false"},
@@ -218,6 +220,7 @@ public class config
 			{"soundAVolume","50"},
 			{"soundBVolume","50"},
 			{"soundCVolume","50"},
+			{"onlyIconColor","#000000"},
 			
 			{"defaultBehavior","0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"},
 			{"defaultTextColor","#000000"},
@@ -285,6 +288,7 @@ public class config
 			{"ShowNotAlartColumns","1111111111"},
 			{"ColorAlartListColumns","000000000100000000000000000"},
 			{"ColorHistoryListRecentColumns","1000000000"},
+			{"ColorLiveListColumns","001000000000000000"},
 			
 			{"disableFollowColumns", "false"},
 			
@@ -340,6 +344,7 @@ public class config
 			{"X",""},
 			{"Y",""},
 			{"fontSize","9"},
+			{"evenRowsColor","#f5f5f5"},
 			{"LiveListColumnWidth",""},
 			{"AlartListColumnWidth",""},
 			{"UserAlartListColumnWidth",""},

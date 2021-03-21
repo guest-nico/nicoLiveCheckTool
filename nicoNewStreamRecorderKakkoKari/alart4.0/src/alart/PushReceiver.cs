@@ -253,8 +253,10 @@ namespace namaichi.alart
 					   	dec == null) return;
 					
 					var items = getItem(dec);
-					if (items != null) check.foundLive(items);
-					else {
+					if (items != null) {
+						if (items.Count == 0) return;
+						check.foundLive(items);
+					} else {
 						var gir = new GetItemRetryPr(dec, this);
 						Task.Factory.StartNew(() => {
 							for (var i = 0; i < 10; i++) {
@@ -385,7 +387,7 @@ namespace namaichi.alart
 			
 			//com "{\"title\":\"すのーまんさんが生放送を開始\",\"body\":\"名作探訪録 で、「【GB】ポケットキョロちゃん【初見プレイ】」を放送\",\"icon\":\"https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/3122/31221850.jpg?1496114222\",\"data\":{\"on_click\":\"http://live.nicovideo.jp/watch/lv318353209?from=webpush&_topic=live_user_program_onairs\",\"created_at\":\"2019-02-06T09:00:05.738+09:00\",\"ttl\":600,\"log_params\":{\"content_type\":\"live.user.program.onairs\",\"content_ids\":\"lv318353209\"}}}";
 			//ch "{\"title\":\"KawaiianTVが生放送を開始\",\"body\":\"～夢アド可鈴の深堀り情報番組！？～ YUMEステーション #62\",\"icon\":\"https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/ch2601967.jpg?1548247262\",\"data\":{\"on_click\":\"http://live.nicovideo.jp/watch/lv318248031?from=webpush&_topic=live_channel_program_onairs\",\"created_at\":\"2019-02-06T19:30:10.941+09:00\",\"ttl\":600,\"log_params\":{\"content_type\":\"live.channel.program.onairs\",\"content_ids\":\"lv318248031\"}}}";
-			
+			var ret = new List<RssItem>();
 			try {
 				var isCom = dec.IndexOf("\"content_type\":\"live.user.program.onairs\"") > -1;
 				var isJikken = dec.IndexOf("\"content_type\":\"live.user.program.cas.onairs\"") > -1;
@@ -393,6 +395,8 @@ namespace namaichi.alart
 				hostName = null;
 				
 				lvid = util.getRegGroup(dec, "\"content_ids\":\"(lv\\d+)\"");
+				if (check.checkedLvIdList.Find(x => x.lvId == lvid) != null)
+					return ret;
 				thumbnail = util.getRegGroup(dec, "\"icon\":\"(.+?)\"");
 				dt = util.getRegGroup(dec, "\"created_at\":\"(.+?)\"");
 				if (dt != null && DateTime.Parse(dt) < startTime && !bool.Parse(config.get("IsStartTimeAllCheck")))
@@ -445,7 +449,6 @@ namespace namaichi.alart
 				i.category = hg.category;
 				i.type = hg.type;
 				i.pubDateDt = DateTime.Parse(dt);
-				var ret = new List<RssItem>();
 				ret.Add(i);
 				check.checkedLvIdList.Add(i);
 				return ret;

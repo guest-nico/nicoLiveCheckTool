@@ -20,6 +20,7 @@ namespace namaichi.info
 	public class HistoryInfo
 	{
 		public DateTime dt = DateTime.Now;
+		private string dtStr = null;
 		public string lvid = null;
 		public string title = null;
 		public string userName = null;
@@ -60,9 +61,10 @@ namespace namaichi.info
 			description = null;
 		}
 		//public HistoryInfo(RssItem ri, SortableBindingList<AlartInfo> alartData, List<AlartInfo> targetAi)
-		public HistoryInfo(RssItem ri, List<AlartInfo> targetAi)
+		public HistoryInfo(RssItem ri, List<AlartInfo> targetAi = null)
 		{
 			this.dt = DateTime.Parse(ri.pubDate);
+			this.dtStr = dt.ToString("yyyy/MM/dd HH:mm:ss");
 			this.lvid = ri.lvId;
 			this.title = util.removeTag(ri.title);
 			this.userName = ri.hostName == null ? "" : util.removeTag(ri.hostName);
@@ -76,7 +78,9 @@ namespace namaichi.info
 			this.isMemberOnly = ri.isMemberOnly;
 			this.isPayment = ri.isPayment;
 			
-			setFavoriteFromAiList(targetAi, ri, this);
+			if (targetAi != null)
+				setFavoriteFromAiList(targetAi, ri, this);
+			else favorite = "Twitter";
 			
 			
 		}
@@ -171,7 +175,7 @@ namespace namaichi.info
 		*/
 		public string Dt
         {
-			get { return dt.ToString("yyyy/MM/dd HH:mm:ss"); }
+			get { return dtStr == null ? dt.ToString("yyyy/MM/dd HH:mm:ss") : dtStr; }
             set {  }
         }
 		public string Title

@@ -86,7 +86,7 @@ namespace namaichi.alart
 		}
 		public void showTest(string poploc, int poptime,
 					bool isClickClose, bool isSmall,
-					bool isTopMost, bool isColor, double opacity) {
+					bool isTopMost, Color[] isColor, double opacity) {
 			var thumbnailUrl = util.getJarPath()[0] + "/ImageCommunity/no thumb com.jpg";
 			var ri = new namaichi.info.RssItem("タイトル", "lv1000000",
 					DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), "放送説明", "コミュニティ名",
@@ -98,7 +98,7 @@ namespace namaichi.alart
 				var posI = 0;
 				var pos = getPos(isSmall, out posI, poploc,
 						true);
-				form.DisplayPopup(ri, pos, isSmall, this, posI, null, true,
+				form.DisplayPopup(ri, pos, isSmall, this, posI, null, true, 
 						poploc, poptime, isClickClose, 
 						isTopMost, isColor, opacity);
 			} catch (Exception e) {

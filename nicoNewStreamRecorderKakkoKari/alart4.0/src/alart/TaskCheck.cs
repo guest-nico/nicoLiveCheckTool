@@ -101,25 +101,25 @@ namespace namaichi.alart
 				appliProcess(appliJPath, ti.lvId, args);
 			}
 			if (ti.popup && !form.notifyOffList[2]) {
-				displayPopup(item);
+				displayPopup(item, form);
 			}
 			if (ti.baloon && !form.notifyOffList[3]) {
-				displayBaloon(item);
+				displayBaloon(item, form);
 			}
 			if (ti.browser && !form.notifyOffList[4]) {
-				openBrowser(item);
+				openBrowser(item, form);
 			}
 			if (ti.mail && !form.notifyOffList[5]) {
 				form.check.mail(item);
 			}
 			if (ti.sound && !form.notifyOffList[6]) {
-				sound(item, ti);
+				sound(form);
 			}
 			
 			form.taskListUpdateState(ti);
 			if (ti.isDelete) form.taskListRemoveLine(ti);
 		}
-		private void appliProcess(string appliPath, string lvid, string args) {
+		public static void appliProcess(string appliPath, string lvid, string args) {
 			if (appliPath == null || appliPath == "") return;
 			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
 
@@ -131,13 +131,13 @@ namespace namaichi.alart
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
-		private void displayPopup(RssItem item) {
+		public static void displayPopup(RssItem item, MainForm form) {
 			form.check.popup.show(item, null);
 		}
-		private void displayBaloon(RssItem item) {
+		public static void displayBaloon(RssItem item, MainForm form) {
 			form.DisplayBalloon(item, null);
 		}
-		private void sound(RssItem ri, TaskInfo ti) {
+		public static void sound(MainForm form) {
 			try {
 				/*
 				if (form.check.soundPlayer == null) 
@@ -149,7 +149,7 @@ namespace namaichi.alart
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
-		private void openBrowser(RssItem item) {
+		public static void openBrowser(RssItem item, MainForm form) {
 			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(item.lvId, "(\\d+)");
 			util.openUrlBrowser(url, form.config);
 		}

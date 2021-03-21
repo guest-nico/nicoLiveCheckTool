@@ -226,6 +226,7 @@ namespace namaichi
 			this.colorAppliJMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.colorSountTypeMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.colorMemoMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.liveListColorColumnMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.colorHistoryColorColumnMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem21 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem22 = new System.Windows.Forms.ToolStripMenuItem();
@@ -326,7 +327,7 @@ namespace namaichi
 			this.openNotifyIconMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.closeNotifyIconMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.TabPages = new System.Windows.Forms.TabControl();
+			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.liveList = new System.Windows.Forms.DataGridView();
 			this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -476,6 +477,31 @@ namespace namaichi
 			this.taskListCopyArgsMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
 			this.taskListRemoveLineMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.tabPage5 = new System.Windows.Forms.TabPage();
+			this.addTwitterBtn = new System.Windows.Forms.Button();
+			this.twitterList = new System.Windows.Forms.DataGridView();
+			this.dataGridViewTextBoxColumn13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn34 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewCheckBoxColumn32 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn33 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn34 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn35 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn36 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn37 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn38 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn39 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn40 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn41 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn42 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn43 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn44 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn45 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn46 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewTextBoxColumn36 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.contextMenuStrip5 = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.openTwitterAccountUrlMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator36 = new System.Windows.Forms.ToolStripSeparator();
+			this.twitterListDeleteRowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.historySplitContainer = new System.Windows.Forms.SplitContainer();
 			this.label1 = new System.Windows.Forms.Label();
@@ -542,7 +568,7 @@ namespace namaichi
 			((System.ComponentModel.ISupportInitialize)(this.alartList)).BeginInit();
 			this.contextMenuStrip1.SuspendLayout();
 			this.notifyIconMenuStrip.SuspendLayout();
-			this.TabPages.SuspendLayout();
+			this.tabControl1.SuspendLayout();
 			this.tabPage3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.liveList)).BeginInit();
 			this.contextMenuStrip3.SuspendLayout();
@@ -558,6 +584,9 @@ namespace namaichi
 			this.tabPage2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.taskList)).BeginInit();
 			this.contextMenuStrip2.SuspendLayout();
+			this.tabPage5.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.twitterList)).BeginInit();
+			this.contextMenuStrip5.SuspendLayout();
 			this.tabPage4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.historySplitContainer)).BeginInit();
 			this.historySplitContainer.Panel1.SuspendLayout();
@@ -1055,6 +1084,7 @@ namespace namaichi
 									this.displayNotAlartListMenu,
 									this.toolStripSeparator20,
 									this.colorColumnMenu,
+									this.liveListColorColumnMenu,
 									this.colorHistoryColorColumnMenu,
 									this.toolStripSeparator21,
 									this.disableFollowMenu,
@@ -1978,6 +2008,14 @@ namespace namaichi
 			this.colorMemoMenu.Size = new System.Drawing.Size(196, 22);
 			this.colorMemoMenu.Text = "メモ";
 			// 
+			// liveListColorColumnMenu
+			// 
+			this.liveListColorColumnMenu.Name = "liveListColorColumnMenu";
+			this.liveListColorColumnMenu.Size = new System.Drawing.Size(220, 22);
+			this.liveListColorColumnMenu.Text = "放送中リストの色列";
+			this.liveListColorColumnMenu.DropDownOpening += new System.EventHandler(this.LiveListColorColumnMenuDropDownOpening);
+			this.liveListColorColumnMenu.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.LiveListColorColumnMenuDropDownItemClicked);
+			// 
 			// colorHistoryColorColumnMenu
 			// 
 			this.colorHistoryColorColumnMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -2366,6 +2404,7 @@ namespace namaichi
 			this.alartList.Sorted += new System.EventHandler(this.AlartListSorted);
 			this.alartList.DragDrop += new System.Windows.Forms.DragEventHandler(this.AlartListDragDrop);
 			this.alartList.DragEnter += new System.Windows.Forms.DragEventHandler(this.listDragEnter);
+			this.alartList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AlartListKeyDown);
 			// 
 			// ｺﾐｭﾆﾃｨID
 			// 
@@ -2814,20 +2853,21 @@ namespace namaichi
 			this.closeNotifyIconMenu.Text = "終了";
 			this.closeNotifyIconMenu.Click += new System.EventHandler(this.CloseNotifyIconMenuClick);
 			// 
-			// TabPages
+			// tabControl1
 			// 
-			this.TabPages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 									| System.Windows.Forms.AnchorStyles.Left) 
 									| System.Windows.Forms.AnchorStyles.Right)));
-			this.TabPages.Controls.Add(this.tabPage3);
-			this.TabPages.Controls.Add(this.tabPage1);
-			this.TabPages.Controls.Add(this.tabPage2);
-			this.TabPages.Controls.Add(this.tabPage4);
-			this.TabPages.Location = new System.Drawing.Point(12, 29);
-			this.TabPages.Name = "TabPages";
-			this.TabPages.SelectedIndex = 0;
-			this.TabPages.Size = new System.Drawing.Size(886, 388);
-			this.TabPages.TabIndex = 24;
+			this.tabControl1.Controls.Add(this.tabPage3);
+			this.tabControl1.Controls.Add(this.tabPage1);
+			this.tabControl1.Controls.Add(this.tabPage2);
+			this.tabControl1.Controls.Add(this.tabPage5);
+			this.tabControl1.Controls.Add(this.tabPage4);
+			this.tabControl1.Location = new System.Drawing.Point(12, 29);
+			this.tabControl1.Name = "tabControl1";
+			this.tabControl1.SelectedIndex = 0;
+			this.tabControl1.Size = new System.Drawing.Size(886, 388);
+			this.tabControl1.TabIndex = 24;
 			// 
 			// tabPage3
 			// 
@@ -2877,7 +2917,6 @@ namespace namaichi
 									this.Column2});
 			this.liveList.ContextMenuStrip = this.contextMenuStrip3;
 			this.liveList.Location = new System.Drawing.Point(6, 24);
-			this.liveList.MultiSelect = false;
 			this.liveList.Name = "liveList";
 			this.liveList.RowHeadersVisible = false;
 			this.liveList.RowTemplate.Height = 21;
@@ -2889,6 +2928,7 @@ namespace namaichi
 			this.liveList.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.LiveListColumnWidthChanged);
 			this.liveList.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.LiveListRowsAdded);
 			this.liveList.Sorted += new System.EventHandler(this.LiveListSorted);
+			this.liveList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.LiveListKeyDown);
 			// 
 			// dataGridViewTextBoxColumn4
 			// 
@@ -4074,7 +4114,6 @@ namespace namaichi
 									this.dataGridViewTextBoxColumn8});
 			this.taskList.ContextMenuStrip = this.contextMenuStrip2;
 			this.taskList.Location = new System.Drawing.Point(6, 60);
-			this.taskList.MultiSelect = false;
 			this.taskList.Name = "taskList";
 			this.taskList.RowHeadersVisible = false;
 			this.taskList.RowTemplate.Height = 21;
@@ -4088,6 +4127,7 @@ namespace namaichi
 			this.taskList.Sorted += new System.EventHandler(this.TaskListSorted);
 			this.taskList.DragDrop += new System.Windows.Forms.DragEventHandler(this.TaskListDragDrop);
 			this.taskList.DragEnter += new System.Windows.Forms.DragEventHandler(this.listDragEnter);
+			this.taskList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TaskListKeyDown);
 			// 
 			// dataGridViewTextBoxColumn1
 			// 
@@ -4326,6 +4366,257 @@ namespace namaichi
 			this.taskListRemoveLineMenu.Text = "この行を削除";
 			this.taskListRemoveLineMenu.Click += new System.EventHandler(this.TaskListRemoveLineMenuClick);
 			// 
+			// tabPage5
+			// 
+			this.tabPage5.BackColor = System.Drawing.SystemColors.Control;
+			this.tabPage5.Controls.Add(this.addTwitterBtn);
+			this.tabPage5.Controls.Add(this.twitterList);
+			this.tabPage5.Location = new System.Drawing.Point(4, 22);
+			this.tabPage5.Name = "tabPage5";
+			this.tabPage5.Size = new System.Drawing.Size(878, 362);
+			this.tabPage5.TabIndex = 4;
+			this.tabPage5.Text = "Twitter";
+			// 
+			// addTwitterBtn
+			// 
+			this.addTwitterBtn.Location = new System.Drawing.Point(6, 18);
+			this.addTwitterBtn.Name = "addTwitterBtn";
+			this.addTwitterBtn.Size = new System.Drawing.Size(75, 23);
+			this.addTwitterBtn.TabIndex = 27;
+			this.addTwitterBtn.Text = "新規登録";
+			this.addTwitterBtn.UseVisualStyleBackColor = true;
+			this.addTwitterBtn.Click += new System.EventHandler(this.AddTwitterBtnClick);
+			// 
+			// twitterList
+			// 
+			this.twitterList.AllowDrop = true;
+			this.twitterList.AllowUserToAddRows = false;
+			this.twitterList.AllowUserToDeleteRows = false;
+			this.twitterList.AllowUserToResizeRows = false;
+			this.twitterList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+									| System.Windows.Forms.AnchorStyles.Left) 
+									| System.Windows.Forms.AnchorStyles.Right)));
+			this.twitterList.ColumnHeadersHeight = 25;
+			this.twitterList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+			this.twitterList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+									this.dataGridViewTextBoxColumn13,
+									this.dataGridViewTextBoxColumn34,
+									this.dataGridViewCheckBoxColumn32,
+									this.dataGridViewCheckBoxColumn33,
+									this.dataGridViewCheckBoxColumn34,
+									this.dataGridViewCheckBoxColumn35,
+									this.dataGridViewCheckBoxColumn36,
+									this.dataGridViewCheckBoxColumn37,
+									this.dataGridViewCheckBoxColumn38,
+									this.dataGridViewCheckBoxColumn39,
+									this.dataGridViewCheckBoxColumn40,
+									this.dataGridViewCheckBoxColumn41,
+									this.dataGridViewCheckBoxColumn42,
+									this.dataGridViewCheckBoxColumn43,
+									this.dataGridViewCheckBoxColumn44,
+									this.dataGridViewCheckBoxColumn45,
+									this.dataGridViewCheckBoxColumn46,
+									this.dataGridViewTextBoxColumn36});
+			this.twitterList.ContextMenuStrip = this.contextMenuStrip5;
+			this.twitterList.Location = new System.Drawing.Point(6, 60);
+			this.twitterList.Name = "twitterList";
+			this.twitterList.RowHeadersVisible = false;
+			this.twitterList.RowTemplate.Height = 21;
+			this.twitterList.Size = new System.Drawing.Size(864, 296);
+			this.twitterList.TabIndex = 26;
+			this.twitterList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.TwitterListCellFormatting);
+			this.twitterList.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.TwitterListCellMouseDown);
+			this.twitterList.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.TwitterListCellParsing);
+			this.twitterList.CurrentCellDirtyStateChanged += new System.EventHandler(this.TwitterListCurrentCellDirtyStateChanged);
+			this.twitterList.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.TwitterListDataError);
+			this.twitterList.DragDrop += new System.Windows.Forms.DragEventHandler(this.TwitterListDragDrop);
+			this.twitterList.DragEnter += new System.Windows.Forms.DragEventHandler(this.listDragEnter);
+			this.twitterList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TwitterListKeyDown);
+			// 
+			// dataGridViewTextBoxColumn13
+			// 
+			this.dataGridViewTextBoxColumn13.DataPropertyName = "accountId";
+			this.dataGridViewTextBoxColumn13.FillWeight = 2F;
+			this.dataGridViewTextBoxColumn13.HeaderText = "アカウント";
+			this.dataGridViewTextBoxColumn13.MinimumWidth = 2;
+			this.dataGridViewTextBoxColumn13.Name = "dataGridViewTextBoxColumn13";
+			this.dataGridViewTextBoxColumn13.ReadOnly = true;
+			this.dataGridViewTextBoxColumn13.Width = 112;
+			// 
+			// dataGridViewTextBoxColumn34
+			// 
+			this.dataGridViewTextBoxColumn34.DataPropertyName = "addDate";
+			this.dataGridViewTextBoxColumn34.HeaderText = "登録日時";
+			this.dataGridViewTextBoxColumn34.Name = "dataGridViewTextBoxColumn34";
+			this.dataGridViewTextBoxColumn34.ReadOnly = true;
+			this.dataGridViewTextBoxColumn34.Width = 112;
+			// 
+			// dataGridViewCheckBoxColumn32
+			// 
+			this.dataGridViewCheckBoxColumn32.DataPropertyName = "popup";
+			this.dataGridViewCheckBoxColumn32.HeaderText = "ﾎﾟｯﾌﾟｱｯﾌﾟ";
+			this.dataGridViewCheckBoxColumn32.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn32.Name = "dataGridViewCheckBoxColumn32";
+			this.dataGridViewCheckBoxColumn32.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridViewCheckBoxColumn32.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn32.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn33
+			// 
+			this.dataGridViewCheckBoxColumn33.DataPropertyName = "baloon";
+			this.dataGridViewCheckBoxColumn33.HeaderText = "ﾊﾞﾙｰﾝ";
+			this.dataGridViewCheckBoxColumn33.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn33.Name = "dataGridViewCheckBoxColumn33";
+			this.dataGridViewCheckBoxColumn33.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridViewCheckBoxColumn33.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn33.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn34
+			// 
+			this.dataGridViewCheckBoxColumn34.DataPropertyName = "browser";
+			this.dataGridViewCheckBoxColumn34.HeaderText = "Web";
+			this.dataGridViewCheckBoxColumn34.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn34.Name = "dataGridViewCheckBoxColumn34";
+			this.dataGridViewCheckBoxColumn34.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn35
+			// 
+			this.dataGridViewCheckBoxColumn35.DataPropertyName = "mail";
+			this.dataGridViewCheckBoxColumn35.HeaderText = "ﾒｰﾙ";
+			this.dataGridViewCheckBoxColumn35.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn35.Name = "dataGridViewCheckBoxColumn35";
+			this.dataGridViewCheckBoxColumn35.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn35.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn36
+			// 
+			this.dataGridViewCheckBoxColumn36.DataPropertyName = "sound";
+			this.dataGridViewCheckBoxColumn36.HeaderText = "音";
+			this.dataGridViewCheckBoxColumn36.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn36.Name = "dataGridViewCheckBoxColumn36";
+			this.dataGridViewCheckBoxColumn36.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn37
+			// 
+			this.dataGridViewCheckBoxColumn37.DataPropertyName = "appliA";
+			this.dataGridViewCheckBoxColumn37.HeaderText = "ｱﾌﾟﾘA";
+			this.dataGridViewCheckBoxColumn37.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn37.Name = "dataGridViewCheckBoxColumn37";
+			this.dataGridViewCheckBoxColumn37.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridViewCheckBoxColumn37.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn37.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn38
+			// 
+			this.dataGridViewCheckBoxColumn38.DataPropertyName = "appliB";
+			this.dataGridViewCheckBoxColumn38.HeaderText = "ｱﾌﾟﾘB";
+			this.dataGridViewCheckBoxColumn38.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn38.Name = "dataGridViewCheckBoxColumn38";
+			this.dataGridViewCheckBoxColumn38.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridViewCheckBoxColumn38.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn38.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn39
+			// 
+			this.dataGridViewCheckBoxColumn39.DataPropertyName = "appliC";
+			this.dataGridViewCheckBoxColumn39.HeaderText = "ｱﾌﾟﾘC";
+			this.dataGridViewCheckBoxColumn39.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn39.Name = "dataGridViewCheckBoxColumn39";
+			this.dataGridViewCheckBoxColumn39.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridViewCheckBoxColumn39.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn39.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn40
+			// 
+			this.dataGridViewCheckBoxColumn40.DataPropertyName = "appliD";
+			this.dataGridViewCheckBoxColumn40.HeaderText = "ｱﾌﾟﾘD";
+			this.dataGridViewCheckBoxColumn40.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn40.Name = "dataGridViewCheckBoxColumn40";
+			this.dataGridViewCheckBoxColumn40.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn41
+			// 
+			this.dataGridViewCheckBoxColumn41.DataPropertyName = "appliE";
+			this.dataGridViewCheckBoxColumn41.HeaderText = "ｱﾌﾟﾘE";
+			this.dataGridViewCheckBoxColumn41.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn41.Name = "dataGridViewCheckBoxColumn41";
+			this.dataGridViewCheckBoxColumn41.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn42
+			// 
+			this.dataGridViewCheckBoxColumn42.DataPropertyName = "appliF";
+			this.dataGridViewCheckBoxColumn42.HeaderText = "ｱﾌﾟﾘF";
+			this.dataGridViewCheckBoxColumn42.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn42.Name = "dataGridViewCheckBoxColumn42";
+			this.dataGridViewCheckBoxColumn42.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn43
+			// 
+			this.dataGridViewCheckBoxColumn43.DataPropertyName = "appliG";
+			this.dataGridViewCheckBoxColumn43.HeaderText = "ｱﾌﾟﾘG";
+			this.dataGridViewCheckBoxColumn43.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn43.Name = "dataGridViewCheckBoxColumn43";
+			this.dataGridViewCheckBoxColumn43.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn44
+			// 
+			this.dataGridViewCheckBoxColumn44.DataPropertyName = "appliH";
+			this.dataGridViewCheckBoxColumn44.HeaderText = "ｱﾌﾟﾘH";
+			this.dataGridViewCheckBoxColumn44.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn44.Name = "dataGridViewCheckBoxColumn44";
+			this.dataGridViewCheckBoxColumn44.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn45
+			// 
+			this.dataGridViewCheckBoxColumn45.DataPropertyName = "appliI";
+			this.dataGridViewCheckBoxColumn45.HeaderText = "ｱﾌﾟﾘI";
+			this.dataGridViewCheckBoxColumn45.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn45.Name = "dataGridViewCheckBoxColumn45";
+			this.dataGridViewCheckBoxColumn45.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn46
+			// 
+			this.dataGridViewCheckBoxColumn46.DataPropertyName = "appliJ";
+			this.dataGridViewCheckBoxColumn46.HeaderText = "ｱﾌﾟﾘJ";
+			this.dataGridViewCheckBoxColumn46.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn46.Name = "dataGridViewCheckBoxColumn46";
+			this.dataGridViewCheckBoxColumn46.Width = 45;
+			// 
+			// dataGridViewTextBoxColumn36
+			// 
+			this.dataGridViewTextBoxColumn36.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.dataGridViewTextBoxColumn36.DataPropertyName = "memo";
+			this.dataGridViewTextBoxColumn36.HeaderText = "ﾒﾓ";
+			this.dataGridViewTextBoxColumn36.Name = "dataGridViewTextBoxColumn36";
+			// 
+			// contextMenuStrip5
+			// 
+			this.contextMenuStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.openTwitterAccountUrlMenu,
+									this.toolStripSeparator36,
+									this.twitterListDeleteRowMenu});
+			this.contextMenuStrip5.Name = "contextMenuStrip1";
+			this.contextMenuStrip5.Size = new System.Drawing.Size(197, 54);
+			// 
+			// openTwitterAccountUrlMenu
+			// 
+			this.openTwitterAccountUrlMenu.Name = "openTwitterAccountUrlMenu";
+			this.openTwitterAccountUrlMenu.Size = new System.Drawing.Size(196, 22);
+			this.openTwitterAccountUrlMenu.Text = "アカウントURLを開く";
+			this.openTwitterAccountUrlMenu.Click += new System.EventHandler(this.OpenTwitterAccountUrlMenuClick);
+			// 
+			// toolStripSeparator36
+			// 
+			this.toolStripSeparator36.Name = "toolStripSeparator36";
+			this.toolStripSeparator36.Size = new System.Drawing.Size(193, 6);
+			// 
+			// twitterListDeleteRowMenu
+			// 
+			this.twitterListDeleteRowMenu.Name = "twitterListDeleteRowMenu";
+			this.twitterListDeleteRowMenu.Size = new System.Drawing.Size(196, 22);
+			this.twitterListDeleteRowMenu.Text = "この行を削除";
+			this.twitterListDeleteRowMenu.Click += new System.EventHandler(this.TwitterListDeleteRowMenuClick);
+			// 
 			// tabPage4
 			// 
 			this.tabPage4.BackColor = System.Drawing.SystemColors.Control;
@@ -4392,7 +4683,6 @@ namespace namaichi
 									this.説明});
 			this.historyList.ContextMenuStrip = this.historyListMenu;
 			this.historyList.Location = new System.Drawing.Point(0, 20);
-			this.historyList.MultiSelect = false;
 			this.historyList.Name = "historyList";
 			this.historyList.ReadOnly = true;
 			this.historyList.RowHeadersVisible = false;
@@ -4404,6 +4694,7 @@ namespace namaichi
 			this.historyList.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.HistoryListCellMouseDown);
 			this.historyList.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.HistoryListRowsAdded);
 			this.historyList.Sorted += new System.EventHandler(this.HistoryListSorted);
+			this.historyList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HistoryListKeyDown);
 			// 
 			// 放送開始日時
 			// 
@@ -4602,7 +4893,6 @@ namespace namaichi
 									this.dataGridViewTextBoxColumn24});
 			this.notAlartList.ContextMenuStrip = this.notAlartListMenu;
 			this.notAlartList.Location = new System.Drawing.Point(0, 20);
-			this.notAlartList.MultiSelect = false;
 			this.notAlartList.Name = "notAlartList";
 			this.notAlartList.ReadOnly = true;
 			this.notAlartList.RowHeadersVisible = false;
@@ -4614,6 +4904,7 @@ namespace namaichi
 			this.notAlartList.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.NotAlartListCellMouseDown);
 			this.notAlartList.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.NotAlartListRowsAdded);
 			this.notAlartList.Sorted += new System.EventHandler(this.NotAlartListSorted);
+			this.notAlartList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.NotAlartListKeyDown);
 			// 
 			// dataGridViewTextBoxColumn16
 			// 
@@ -4912,7 +5203,7 @@ namespace namaichi
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.logList);
-			this.Controls.Add(this.TabPages);
+			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.menuStrip1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -4929,7 +5220,7 @@ namespace namaichi
 			((System.ComponentModel.ISupportInitialize)(this.alartList)).EndInit();
 			this.contextMenuStrip1.ResumeLayout(false);
 			this.notifyIconMenuStrip.ResumeLayout(false);
-			this.TabPages.ResumeLayout(false);
+			this.tabControl1.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
 			this.tabPage3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.liveList)).EndInit();
@@ -4949,6 +5240,9 @@ namespace namaichi
 			this.tabPage2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.taskList)).EndInit();
 			this.contextMenuStrip2.ResumeLayout(false);
+			this.tabPage5.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.twitterList)).EndInit();
+			this.contextMenuStrip5.ResumeLayout(false);
 			this.tabPage4.ResumeLayout(false);
 			this.historySplitContainer.Panel1.ResumeLayout(false);
 			this.historySplitContainer.Panel2.ResumeLayout(false);
@@ -4963,6 +5257,32 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripMenuItem liveListColorColumnMenu;
+		private System.Windows.Forms.ToolStripMenuItem twitterListDeleteRowMenu;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator36;
+		private System.Windows.Forms.ToolStripMenuItem openTwitterAccountUrlMenu;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip5;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn36;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn46;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn45;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn44;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn43;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn42;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn41;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn40;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn39;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn38;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn37;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn36;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn35;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn34;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn33;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn32;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn34;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn13;
+		public System.Windows.Forms.DataGridView twitterList;
+		private System.Windows.Forms.Button addTwitterBtn;
+		private System.Windows.Forms.TabPage tabPage5;
 		private System.Windows.Forms.ToolStripMenuItem アプリケーションが設定されていませんでしたToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator35;
 		private System.Windows.Forms.ToolStripMenuItem launchAppMenuItem;
@@ -5412,7 +5732,7 @@ namespace namaichi
 		private System.Windows.Forms.Button addYoyakuBtn;
 		private System.Windows.Forms.TabPage tabPage2;
 		private System.Windows.Forms.TabPage tabPage1;
-		private System.Windows.Forms.TabControl TabPages;
+		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.DataGridViewCheckBoxColumn ｱﾌﾟﾘF;
 		private System.Windows.Forms.DataGridViewCheckBoxColumn ｱﾌﾟﾘE;
 		private System.Windows.Forms.DataGridViewCheckBoxColumn ｱﾌﾟﾘC;

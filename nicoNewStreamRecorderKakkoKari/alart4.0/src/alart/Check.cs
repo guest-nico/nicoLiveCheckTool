@@ -17,6 +17,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing;
 using namaichi.alart;
 using namaichi.info;
 using namaichi.rec;
@@ -283,7 +284,7 @@ namespace namaichi.alart
 		        List<AlartInfo> targetAi, 
 		        DoProcessInfo dpi, AlartInfo nearAlartAi) {
 			if (processedLvidList.IndexOf(item.lvId) > -1) {
-				util.debugWriteLine("process lvid found " + item.lvId + " " + item.comName + " " + item.hostName);
+				util.debugWriteLine("processed lvid found " + item.lvId + " " + item.comName + " " + item.hostName);
 				return;
 			}
 			
@@ -301,6 +302,8 @@ namespace namaichi.alart
 			if (targetAi.Count > 0) {
 				addLogList(item, targetAi);
 				form.setNotifyMenuHistory(new List<RssItem>(){item});
+				if (bool.Parse(form.config.get("IsAddAlartedComUser")))
+					addAlartedComUser(item);
 			} else if (nearAlartAi != null)
 				addNearAlartList(item, nearAlartAi);
 				
@@ -796,7 +799,7 @@ namespace namaichi.alart
 						new TaskListFileManager().save(form);
 						new HistoryListFileManager().save(form);
 						new NotAlartListFileManager().save(form);
-						
+						new TwitterListFileManager().save(form);
 					});
 				}
 				
@@ -979,6 +982,72 @@ namespace namaichi.alart
 			else if (!bool.Parse(types[1]) && ri.isMemberOnly) return false;
 			else if (!bool.Parse(types[2]) && ri.isPayment) return false;
 			return true;
+		}
+		private void addAlartedComUser(RssItem ri) {
+			try {
+				var _alartListDataSource = form.alartListDataSource.ToList();
+				var _userAlartListDataSource = form.userAlartListDataSource.ToList();
+				bool isContainCom = string.IsNullOrEmpty(ri.comId), isContainUser = string.IsNullOrEmpty(ri.userId);
+				foreach (var ai in _alartListDataSource) {
+					if (!string.IsNullOrEmpty(ai.communityId) && 
+					    	ai.communityId != "official" && ai.communityId == ri.comId) 
+						isContainCom = true;
+					if (!string.IsNullOrEmpty(ai.hostId) && 
+					    	ai.hostId == ri.userId) 
+						isContainUser = true;
+				}
+				foreach (var ai in _userAlartListDataSource) {
+					if (!string.IsNullOrEmpty(ai.hostId) && 
+					    	ai.hostId == ri.userId) 
+						isContainUser = true;
+				}
+				//form.addLogText("放送ID:" + ri.lvId + " コミュID:" + ri.comId + " ユーザーID:" + ri.userId + " お気に入りリスト内に放送を開始したコミュニティが見つかり" + (isContainCom ? "ました" : "ませんでした") + " お気に入りリスト内に放送を開始したユーザーが見つかり" + (isContainUser ? "ました" : "ませんでした"));
+				
+				var textColor = ColorTranslator.FromHtml(form.config.get("defaultTextColor"));
+				var backColor = ColorTranslator.FromHtml(form.config.get("defaultBackColor"));
+				var behaviors = form.config.get("defaultBehavior").Split(',').Select<string, bool>(x => x == "1").ToArray();
+				var now = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+				if (!isContainCom && !string.IsNullOrEmpty(ri.comId)) {
+					var isFollow = false;
+					var comName = util.getCommunityName(ri.comId, out isFollow, container);
+					var comFollow = (comName == null || container == null) ? "" : (isFollow ? "フォロー解除する" : "フォローする");
+					
+					var ai = new AlartInfo(ri.comId, ri.userId, 
+							ri.comName, ri.hostName, "", now, false, false, 
+							false, false, false, false, false, 
+							false, false, false, false, false, 
+							false, false, false, "", 
+							comFollow, "", "", "", "True,True,True");
+					ai.setBehavior(behaviors);
+					ai.textColor = textColor;
+					ai.backColor = backColor;
+					alartListDataSource.Add(ai);
+				}
+				if (!isContainUser && !string.IsNullOrEmpty(ri.userId)) {
+					var isFollow = false;
+					var userName = util.getUserName(ri.userId, out isFollow, container, true, form.config);
+					var userFollow = (userName == null || container == null) ? "" : (isFollow ? "フォロー解除する" : "フォローする");
+					
+					var ai = new AlartInfo(ri.comId, ri.userId, 
+							ri.comName, ri.hostName, "", now, false, false, 
+							false, false, false, false, false, 
+							false, false, false, false, false, 
+							false, false, false, "", 
+							"", userFollow, "", "", "True,True,True");
+					ai.setBehavior(behaviors);
+					ai.textColor = textColor;
+					ai.backColor = backColor;
+					if (!bool.Parse(form.config.get("IsAddAlartedUserToUserList")))
+						alartListDataSource.Add(ai);
+					else {
+						ai.communityId = null;
+						ai.communityName = null;
+						form.userAlartListDataSource.Add(ai);
+					}
+				}
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
 		}
 
 	}

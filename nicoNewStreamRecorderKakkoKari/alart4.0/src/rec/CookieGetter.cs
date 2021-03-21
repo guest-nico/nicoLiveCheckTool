@@ -200,15 +200,18 @@ namespace namaichi.rec
 		}
 		async private Task<CookieContainer> getBrowserCookie(bool isSub) {
 			var si = SourceInfoSerialize.load(isSub);
+			if (si == null) return null;
 			
 //			var importer = await SunokoLibrary.Application.CookieGetters.Default.GetInstanceAsync(si, false);
 			ICookieImporter importer = await SunokoLibrary.Application.CookieGetters.Default.GetInstanceAsync(si, false).ConfigureAwait(false);
+			
 //			var importers = new SunokoLibrary.Application.CookieGetters(true, null);
 //			var importera = (await SunokoLibrary.Application.CookieGetters.Browsers.IEProtected.GetCookiesAsync(TargetUrl));
 //			foreach (var rr in importer.Cookies)
 //				util.debugWriteLine(rr);
 			//importer = await importers.GetInstanceAsync(si, true);
 			if (importer == null) return null;
+			
 
 			CookieImportResult result = await importer.GetCookiesAsync(TargetUrl).ConfigureAwait(false);
 			if (result.Status != CookieImportState.Success) return null;

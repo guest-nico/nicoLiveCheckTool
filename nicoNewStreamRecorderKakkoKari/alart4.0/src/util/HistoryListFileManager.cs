@@ -46,10 +46,10 @@ namespace namaichi.utility
 		}
 		public void load(MainForm form)
 		{
-			ReadNamarokuList(form, form.historyListDataSource, util.getJarPath()[0] + "\\historylist.ini");
+			ReadNamarokuList(form, util.getJarPath()[0] + "\\historylist.ini");
 			
 		}
-		public void ReadNamarokuList(MainForm form, SortableBindingList<info.HistoryInfo> alartListDataSource, string fileName)
+		public void ReadNamarokuList(MainForm form, string fileName)
 		{
 			string data;
 			try {

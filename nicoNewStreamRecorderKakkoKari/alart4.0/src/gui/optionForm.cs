@@ -143,6 +143,8 @@ namespace namaichi
 				{"delThumb",delThumbChkBox.Checked.ToString().ToLower()},
 				{"IsConfirmFollow",IsConfirmFollowChkBox.Checked.ToString().ToLower()},
 				{"alartCacheIcon",alartCacheIconChkBox.Checked.ToString().ToLower()},
+				{"IsAddAlartedComUser",IsAddAlartedComUserChkBox.Checked.ToString().ToLower()},
+				{"IsAddAlartedUserToUserList",isAddAlartedUserToUserListChkBox.Checked.ToString().ToLower()},
 				
 				{"rssUpdateInterval",rssUpdateIntervalList.Text},
 				{"userNameUpdateInterval",userNameUpdateIntervalList.Text},
@@ -177,6 +179,7 @@ namespace namaichi
 				{"soundAVolume",volumeABar.Value.ToString()},
 				{"soundBVolume",volumeBBar.Value.ToString()},
 				{"soundCVolume",volumeCBar.Value.ToString()},
+				{"onlyIconColor", ColorTranslator.ToHtml(onlyIconColorBtn.BackColor)},
 				{"defaultBehavior", getDefaultBehavior()},
 				{"defaultTextColor", ColorTranslator.ToHtml(textColorBtn.BackColor)},
 				{"defaultBackColor", ColorTranslator.ToHtml(backColorBtn.BackColor)},
@@ -195,6 +198,7 @@ namespace namaichi
 				{"liveListCacheIcon",liveListCacheIconChkBox.Checked.ToString().ToLower()},
 				{"liveListGetIcon",liveListGetIconChkBox.Checked.ToString().ToLower()},
 				
+				{"evenRowsColor", ColorTranslator.ToHtml(evenRowsColorBtn.BackColor)},
 				{"fontSize",fontList.Value.ToString()},
 				
 				{"cookieFile",cookieFileText.Text},
@@ -246,7 +250,7 @@ namespace namaichi
                     break;
             }
         }
-		
+		/*
 		void btnReload_Click(object sender, EventArgs e)
         { 
 			//var si = nicoSessionComboBox1.Selector.SelectedImporter.SourceInfo;
@@ -260,9 +264,9 @@ namespace namaichi
 //			}
 				
 //			a.GetCookieImporter(new CookieSourceInfo("
-			var tsk = nicoSessionComboBox1.Selector.UpdateAsync(); 
+			//var tsk = nicoSessionComboBox1.Selector.UpdateAsync(); 
 		}
-		
+		*/
         void btnOpenCookieFileDialog_Click(object sender, EventArgs e)
         { var tsk = nicoSessionComboBox1.ShowCookieDialogAsync(); }
         void checkBoxShowAll_CheckedChanged(object sender, EventArgs e)
@@ -333,6 +337,9 @@ namespace namaichi
 			delThumbChkBox.Checked = bool.Parse(cfg.get("delThumb"));
 			IsConfirmFollowChkBox.Checked = bool.Parse(cfg.get("IsConfirmFollow"));
 			alartCacheIconChkBox.Checked = bool.Parse(cfg.get("alartCacheIcon"));
+			IsAddAlartedComUserChkBox.Checked = bool.Parse(cfg.get("IsAddAlartedComUser"));
+			isAddAlartedUserToUserListChkBox.Checked = bool.Parse(cfg.get("IsAddAlartedUserToUserList"));
+			
 			
 			rssUpdateIntervalList.Text = cfg.get("rssUpdateInterval");
 			userNameUpdateIntervalList.Text = cfg.get("userNameUpdateInterval");
@@ -368,6 +375,8 @@ namespace namaichi
 			volumeABar.Value = int.Parse(cfg.get("soundAVolume"));
 			volumeBBar.Value = int.Parse(cfg.get("soundBVolume"));
 			volumeCBar.Value = int.Parse(cfg.get("soundCVolume"));
+			onlyIconColorBtn.BackColor = ColorTranslator.FromHtml(cfg.get("onlyIconColor"));
+			setOnlyIconColor(onlyIconColorBtn.BackColor);
 			setDefaultBehavior(cfg.get("defaultBehavior"));
 			textColorBtn.BackColor = sampleColorText.ForeColor = ColorTranslator.FromHtml(cfg.get("defaultTextColor"));
 			backColorBtn.BackColor = sampleColorText.BackColor = ColorTranslator.FromHtml(cfg.get("defaultBackColor"));
@@ -392,10 +401,12 @@ namespace namaichi
         	cookieFileText.Text = cfg.get("cookieFile");
         	checkBoxShowAll.Checked = bool.Parse(cfg.get("IsBrowserShowAll"));
 	
+        	evenRowsColorBtn.BackColor = ColorTranslator.FromHtml(cfg.get("evenRowsColor"));
         	fontList.Value = decimal.Parse(cfg.get("fontSize"));
         	
         	var si = SourceInfoSerialize.load(false);
-        	nicoSessionComboBox1.Selector.SetInfoAsync(si);
+        	if (si != null)
+        		nicoSessionComboBox1.Selector.SetInfoAsync(si);
         }
         
 		void optionCancel_Click(object sender, EventArgs e)
@@ -629,10 +640,11 @@ namespace namaichi
 		}
 		void TestPopupBtnClick(object sender, EventArgs e)
 		{
+			var color = isColorPopupChkBox.Checked ? new Color[]{backColorBtn.BackColor, textColorBtn.BackColor} : null;
 			var pm = new namaichi.alart.PopupDisplay(form);
 			pm.showTest(poplocList.Text, int.Parse(poptimeList.Text),
 					IsclosepopupChkBox.Checked, IssmallpopupChkBox.Checked,
-					isTopMostPopupChkBox.Checked, isColorPopupChkBox.Checked, 
+					isTopMostPopupChkBox.Checked, color,
 					double.Parse(popupOpacityList.Text));
 		}
 		void SoundTestBtnClick(object sender, EventArgs e)
@@ -824,6 +836,7 @@ namespace namaichi
 		void OptionFormLoad(object sender, EventArgs e)
 		{
 			setFormFromConfig();
+			this.BtnReloadClick(null, null);
 		}
 		private void setBackColor(Color color) {
 			BackColor = color;
@@ -863,6 +876,33 @@ namespace namaichi
 		void ApplyBtnClick(object sender, EventArgs e)
 		{
 			util.setFontSize((int)fontList.Value, this, false);
+		}
+		void IsAddAlartedComUserChkBoxCheckedChanged(object sender, EventArgs e)
+		{
+			isAddAlartedUserToUserListChkBox.Enabled = IsAddAlartedComUserChkBox.Checked;
+		}
+		private void setOnlyIconColor(Color c) {
+			var icon = new Icon(util.getJarPath()[0] + "/Icon/lock.ico");
+			icon = util.changeIconColor(icon, c);
+			onlyIconSampleBox.Image = icon.ToBitmap();
+		}
+		void OnlyIconColorBtnClick(object sender, EventArgs e)
+		{
+			var c = new ColorDialog();
+			c.FullOpen = true;
+			c.Color = onlyIconColorBtn.BackColor;
+			if (c.ShowDialog() != DialogResult.OK) return;
+			onlyIconColorBtn.BackColor = c.Color;
+			setOnlyIconColor(c.Color);
+		}
+		
+		void EvenRowsColorBtnClick(object sender, EventArgs e)
+		{
+			var c = new ColorDialog();
+			c.FullOpen = true;
+			c.Color = evenRowsColorBtn.BackColor;
+			if (c.ShowDialog() != DialogResult.OK) return;
+			evenRowsColorBtn.BackColor = c.Color;
 		}
 	}
 }

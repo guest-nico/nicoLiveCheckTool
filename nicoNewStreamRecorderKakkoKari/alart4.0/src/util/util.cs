@@ -32,8 +32,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.85";
-	public static string versionDayStr = "2021/02/02";
+	public static string versionStr = "ver0.1.7.86";
+	public static string versionDayStr = "2021/03/21";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -806,7 +806,8 @@ class util {
 			if (isGetErrorMessage) {
 				try {
 					if (ee is WebException) {
-						return (HttpWebResponse)((WebException)ee).Response;
+						var r = (HttpWebResponse)((WebException)ee).Response;
+						return r;
 					}
 				} catch (Exception eee) {
 					util.debugWriteLine(eee.Message + eee.Source + eee.StackTrace + eee.TargetSite);
@@ -876,7 +877,7 @@ class util {
 			//         res.IndexOf("に終了いたしました") > -1) return 2;
 			//else if (util.getRegGroup(res, "(コミュニティフォロワー限定番組です。<br>)") != null) return 4;
 			else if (res.IndexOf("isFollowerOnly&quot;:true") > -1 && res.IndexOf("isFollowed&quot;:false") > -1) return 4;
-			else if (data.IndexOf("webSocketUrl&quot;:&quot;ws") == -1 && 
+			else if (data != null && data.IndexOf("webSocketUrl&quot;:&quot;ws") == -1 && 
 			         status == "ENDED") return 2;
 			
 			else if (status == "ENDED" && res.IndexOf(" onclick=\"Nicolive.WatchingReservation") > -1) return 9;
@@ -1822,5 +1823,21 @@ class util {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 		}
 	    return null;
+    }
+    public static Icon changeIconColor(Icon icon, Color c) {
+    	try {
+	    	var b = icon.ToBitmap();
+			for (var i = 0; i < b.Width; i++) {
+				for (var j = 0; j < b.Height; j++) {
+					//util.debugWriteLine(i + " " + j + " " + b.GetPixel(i, j));
+					if (b.GetPixel(i, j).A == 255)
+						b.SetPixel(i, j, c);
+				}
+			}
+			return Icon.FromHandle(b.GetHicon());
+    	} catch (Exception e) {
+    		util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+    		return icon;
+    	}
     }
 }

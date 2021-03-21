@@ -8,6 +8,8 @@
  */
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Threading;
@@ -30,7 +32,7 @@ namespace namaichi
 				PopupDisplay pd, int showIndex, AlartInfo ai,
 				bool isTest = false, string poploc = null, int poptime = 0,
 				bool isClickClose = true,  
-				bool isTopMost = true, bool isColor = true, double opacity = 0.9)
+				bool isTopMost = true, Color[] isColor = null, double opacity = 0.9)
 		{
 			this.config = config;
 			this.ri = item;
@@ -66,12 +68,14 @@ namespace namaichi
 				ForeColor = ai.textColor;
 			}
 			//Text = Text;
-			if (isTest && isColor) {
-				BackColor = Color.FromArgb(255,224,255);
-				ForeColor = Color.Black;
+			if (isTest && isColor != null) {
+				BackColor = isColor[0];//Color.FromArgb(255,224,255);
+				ForeColor = isColor[1];//Color.Black;
+				titleLabel.LinkColor = ForeColor;
 			} else if (ai != null && bool.Parse(config.get("IsColorPopup"))) {
 				BackColor = ai.backColor;
 				ForeColor = ai.textColor;
+				titleLabel.LinkColor = ForeColor;
 			}
 			
 			var url = "https://live2.nicovideo.jp/watch/" + item.lvId;
@@ -94,7 +98,7 @@ namespace namaichi
 				ShowIcon = true;
 				try {
 					var icon = new Icon(util.getJarPath()[0] + "/Icon/lock.ico");
-					Icon = icon;
+					Icon = util.changeIconColor(icon, ColorTranslator.FromHtml(config.get("onlyIconColor")));
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}

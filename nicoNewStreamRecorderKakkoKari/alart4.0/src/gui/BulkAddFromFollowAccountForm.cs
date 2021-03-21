@@ -20,6 +20,7 @@ namespace namaichi
 		public string mail = null;
 		public string pass = null;
 		public bool[] follow = new bool[3];
+		public bool isAddToCom = true;
 		public BulkAddFromFollowAccountForm(int fontSize)
 		{
 			//
@@ -41,10 +42,15 @@ namespace namaichi
 		{
 			mail = mailText.Text;
 			pass = passText.Text;
+			isAddToCom = comRadioBtn.Checked;
 			follow[0] = userChkBox.Checked;
-			follow[2] = comChkBox.Checked;
-			follow[1] = channelChkBox.Checked;
+			follow[2] = comChkBox.Checked && isAddToCom;
+			follow[1] = channelChkBox.Checked && isAddToCom;
 			Close();
+		}
+		void UserRadioBtnCheckedChanged(object sender, EventArgs e)
+		{
+			comChkBox.Enabled = channelChkBox.Enabled = comRadioBtn.Checked;
 		}
 	}
 }

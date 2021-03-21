@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.ComponentModel.Design;
 using System.Threading;
 using System.Net;
@@ -56,11 +57,13 @@ namespace namaichi.alart
 						var l = _l;
 						if (DateTime.Now.AddSeconds(10) > l.pubDateDt) {
 							util.debugWriteLine("timeline alart " + l.lvId + " " + l.title);
-							if (string.IsNullOrEmpty(l.description)) {
-								l = setHosoInfo(l);
-								if (l == null) continue;
+							if (check.checkedLvIdList.Find(x => x.lvId == l.lvId) == null) {
+								if (string.IsNullOrEmpty(l.description)) {
+									l = setHosoInfo(l);
+									if (l == null) continue;
+								}
+								check.foundLive(new List<RssItem>{l});
 							}
-							check.foundLive(new List<RssItem>{l});
 							alartedItem.Add(l);
 							alartedItem2.Add(_l);
 						}

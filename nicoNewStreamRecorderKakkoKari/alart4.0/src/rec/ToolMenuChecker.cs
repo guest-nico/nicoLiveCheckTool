@@ -350,14 +350,14 @@ namespace namaichi.rec
 						if (addFollowList == null) return;
 						var isStartRet = -1;
 						Task.Factory.StartNew(() =>
-							isStartRet = util.showModelessMessageBox(name + "(" + id + ") の参加コミュは\r\n未登録：" + addFollowList.Count + "件　登録済み：" + (followList.Count - addFollowList.Count) + "　です。\r\n未登録の参加コミュニティを登録しますか？", "確認", form, 1 | 0x100 | 0x20)
+								isStartRet = util.showModelessMessageBox(name + "(" + id + ") の" + (f.isAddToCom ? "参加コミュ" : "フォローユーザーID") + "は\r\n未登録：" + addFollowList.Count + "件　登録済み：" + (followList.Count - addFollowList.Count) + "　です。\r\n未登録の" + (f.isAddToCom ? "参加コミュニティ" : "フォローユーザーID") + "を登録しますか？", "確認", form, 1 | 0x100 | 0x20)
 						).Wait();
 						if (isStartRet != 1) return;
 						
-						var l = new ToolMenuLock("参加コミュ一括登録中", addFollowList.Count);
+						var l = new ToolMenuLock((f.isAddToCom ? "参加コミュ" : "フォローユーザー") + "一括登録中", addFollowList.Count);
 						bulkAddFromFollowComLock = l;
 						setToolMenuStatusBar();
-						Task.Factory.StartNew(() => bulkAddFromFollowCom(l, addFollowList, followList.Count, f.follow, cc));
+						Task.Factory.StartNew(() => bulkAddFromFollowCom(l, addFollowList, followList.Count, f.follow, cc, f.isAddToCom));
 						
 					} catch (Exception e) {
 						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
@@ -421,7 +421,7 @@ namespace namaichi.rec
 				return null;
 			}
 		}
-		private void bulkAddFromFollowCom(ToolMenuLock _lock, List<string[]> addList, int allNum, bool[] followMode, CookieContainer cc) {
+		private void bulkAddFromFollowCom(ToolMenuLock _lock, List<string[]> addList, int allNum, bool[] followMode, CookieContainer cc, bool isAddToCom) {
 			var mainFollowList = new FollowChecker(form, cc)
 					.getFollowListFromApp(followMode);
 			if (mainFollowList == null) return;
@@ -458,9 +458,12 @@ namespace namaichi.rec
 				ai.setBehavior(behaviors);
 				ai.textColor = textColor;
 				ai.backColor = backColor;
-				form.formAction(() =>
-					form.alartListDataSource.Add(ai)
-				);
+				
+				form.formAction(() => {
+					var ds = isAddToCom ? form.alartListDataSource : 
+							form.userAlartListDataSource;
+					ds.Add(ai);
+				});
 				got++;
 				_lock.end = i;
 				setToolMenuStatusBar();

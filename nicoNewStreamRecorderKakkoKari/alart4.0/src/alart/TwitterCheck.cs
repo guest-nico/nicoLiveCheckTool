@@ -97,7 +97,7 @@ namespace namaichi.alart
 		public static string isUserExist(string name) {
         	try {
 	        	var url =  "https://api.twitter.com/2/users/by?usernames=" + name + "&user.fields=description,created_at";
-	        	var bearer = "";//Twitter bearer token
+	        	var bearer = "";
 	        	
 	        	//var curl = globalInit();
 	        	var easy = easyInit();
@@ -118,7 +118,8 @@ namespace namaichi.alart
         private string getTimeline(string id) {
         	try {
 	        	var url =  "https://api.twitter.com/2/users/" + id + "/tweets?tweet.fields=created_at";
-	        	var bearer = "";//Twitter bearer token
+
+	        	var bearer = "";
 	        	
 	        	//var curl = globalInit();
 	        	var easy = easyInit();
@@ -132,17 +133,6 @@ namespace namaichi.alart
 	        	util.debugWriteLine(r);
 	        	if (r == null) return null;
 	        	
-	        	/*
-	        	var ret = new List<string>();
-	        	//var reg = new Regex("\"id\"\\:\"(\\d+)\",\"text\":\"(.+?)\"}");
-	        	var reg = new Regex("\"id\"\\:\"(\\d+)\",\"text\":\"(.+?)\"}");
-	        	var m = reg.Matches(r.ToString());
-	        	foreach (Match _m in m) {
-	        		var t = _m.Groups[2].Value;
-	        		Debug.WriteLine(t);
-	        		ret.Add(t);
-	        	}
-	        	*/
 	        	return r.ToString();
 	        	
         	} catch (Exception ee) {

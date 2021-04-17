@@ -185,11 +185,13 @@ namespace namaichi
 				{"defaultBackColor", ColorTranslator.ToHtml(backColorBtn.BackColor)},
 				{"defaultSound",defaultSoundList.SelectedIndex.ToString()},
 				{"IsDefaultSoundId",isDefaultSoundIdChkBox.Checked.ToString().ToLower()},
+				{"IsDefaultAutoReserve",isDefaultAutoReserveChkBox.Checked.ToString().ToLower()},
 				
 				{"IsRss",isRssChkBox.Checked.ToString().ToLower()},
 				{"IsPush",isPushChkBox.Checked.ToString().ToLower()},
 				{"IsAppPush",isAppPushChkBox.Checked.ToString().ToLower()},
 				{"IsTimeTable",isTimeTableChkBox.Checked.ToString().ToLower()},
+				{"IsAutoReserve",isAutoReserveChkBox.Checked.ToString().ToLower()},
 				
 				{"thresholdpage",thresholdpageList.Value.ToString()},
 				{"brodouble",brodoubleList.SelectedIndex.ToString()},
@@ -382,11 +384,13 @@ namespace namaichi
 			backColorBtn.BackColor = sampleColorText.BackColor = ColorTranslator.FromHtml(cfg.get("defaultBackColor"));
 			defaultSoundList.SelectedIndex = int.Parse(cfg.get("defaultSound"));
 			isDefaultSoundIdChkBox.Checked = bool.Parse(cfg.get("IsDefaultSoundId"));
+			isDefaultAutoReserveChkBox.Checked = bool.Parse(cfg.get("IsDefaultAutoReserve"));
 			
 			isRssChkBox.Checked = bool.Parse(cfg.get("IsRss"));
 			isPushChkBox.Checked = bool.Parse(cfg.get("IsPush"));
 			isAppPushChkBox.Checked = bool.Parse(cfg.get("IsAppPush"));
 			isTimeTableChkBox.Checked = bool.Parse(cfg.get("IsTimeTable"));
+			isAutoReserveChkBox.Checked = bool.Parse(cfg.get("IsAutoReserve"));
 			
 			thresholdpageList.Value = int.Parse(cfg.get("thresholdpage"));
 			brodoubleList.SelectedIndex = int.Parse(cfg.get("brodouble"));

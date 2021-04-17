@@ -428,6 +428,7 @@ namespace namaichi.rec
 			var behaviors = form.config.get("defaultBehavior").Split(',').Select<string, bool>(x => x == "1").ToArray();
 			var textColor = ColorTranslator.FromHtml(form.config.get("defaultTextColor"));
 			var backColor = ColorTranslator.FromHtml(form.config.get("defaultBackColor"));
+			var isAutoReserve = bool.Parse(form.config.get("IsDefaultAutoReserve"));
 			int got = 0, error = 0;
 			for (var i = 0; i < addList.Count; i++) {
 				var id = addList[i];
@@ -454,7 +455,8 @@ namespace namaichi.rec
 						false, false, false, false, false, 
 						false, false, false, false, false, 
 						false, false, false, "", 
-						comFollow, userFollow, "", "", "True,True,True");
+						comFollow, userFollow, "", "", "True,True,True", 
+						isAutoReserve, 0);
 				ai.setBehavior(behaviors);
 				ai.textColor = textColor;
 				ai.backColor = backColor;

@@ -705,6 +705,8 @@ namespace namaichi
 			this.updateMenuItem.Name = "updateMenuItem";
 			this.updateMenuItem.Size = new System.Drawing.Size(62, 22);
 			this.updateMenuItem.Text = "更新(&R)";
+			this.updateMenuItem.DropDownOpened += new System.EventHandler(this.UpdateMenuItemDropDownOpened);
+			this.updateMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.UpdateMenuItemDropDownItemClicked);
 			// 
 			// updateLiveListMenu
 			// 
@@ -1094,6 +1096,8 @@ namespace namaichi
 			this.displayMenuItem.Name = "displayMenuItem";
 			this.displayMenuItem.Size = new System.Drawing.Size(62, 22);
 			this.displayMenuItem.Text = "表示(&V)";
+			this.displayMenuItem.DropDownOpened += new System.EventHandler(this.DisplayMenuItemDropDownOpened);
+			this.displayMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.DisplayMenuItemDropDownItemClicked);
 			// 
 			// displayFavoriteTabMenu
 			// 
@@ -2666,6 +2670,7 @@ namespace namaichi
 									this.openAppliJMenu});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			this.contextMenuStrip1.Size = new System.Drawing.Size(302, 418);
+			this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStrip1Opening);
 			// 
 			// openLastHosoMenu
 			// 

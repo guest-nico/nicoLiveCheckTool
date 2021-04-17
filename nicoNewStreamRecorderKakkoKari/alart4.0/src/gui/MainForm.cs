@@ -103,6 +103,8 @@ namespace namaichi
 		private bool isDisplayIconBalloon = false;
 		private int liveListScrollIndex = -1;
 		
+		private ToolStripItem lastClickMenu = null;
+		
 		public MainForm(string[] args, string dotNetVersion)
 		{
 			
@@ -205,7 +207,7 @@ namespace namaichi
 			
 			check = new Check(alartListDataSource, this);
 			taskCheck = new TaskCheck(taskListDataSource, this);
-			twitterCheck = new TwitterCheck(twitterListDataSource, this);
+			//twitterCheck = new TwitterCheck(twitterListDataSource, this);
 			
 			//formInitSetting();
 			
@@ -251,7 +253,7 @@ namespace namaichi
 			setBackColor(Color.FromArgb(int.Parse(config.get("alartBackColor"))));
 			setForeColor(Color.FromArgb(int.Parse(config.get("alartForeColor"))));
 			
-			setDisplayMenuClosingEvent();
+			setCheckableMenuClosingEvent();
 			
 			
 			setFormState();
@@ -503,7 +505,7 @@ namespace namaichi
 		
 		void mainForm_Load(object sender, EventArgs e)
 		{
-			//tabControl1.TabPages.Remove(tabPage5);
+			tabControl1.TabPages.Remove(tabPage5);
 			
 			
 			formInitSetting();
@@ -532,10 +534,12 @@ namespace namaichi
 				new TaskListFileManager().load(this);
 				taskCheck.start();
 			});
+			/*
 			Task.Factory.StartNew(() => {
 				new TwitterListFileManager().load(this);
 				twitterCheck.start();
 			});
+			*/
 			Task.Factory.StartNew(() => {
 			                      	/*
 				new HistoryListFileManager().load(this);
@@ -1076,7 +1080,7 @@ namespace namaichi
 		
 		void AlartListColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
-			util.debugWriteLine("header " + e.ColumnIndex + " " + e.RowIndex);
+			util.debugWriteLine("header " + e.ColumnIndex + " " + e.RowIndex + " " + e.Button);
 			
 			
 			/*
@@ -1316,9 +1320,30 @@ namespace namaichi
 		
 		void AlartListCellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
 		{
-			var isUserMode = ((DataGridView)sender).Name == "userAlartList";
-			var list = isUserMode ? userAlartList : alartList;
-			setMouseDownSelect(list, e);
+			if (e.RowIndex == -1 && e.ColumnIndex != -1) {
+				util.debugWriteLine("header click? " + alartList.SortOrder + " a " + alartList.SortedColumn + " ");
+				if (e.Button == MouseButtons.Right) {
+					var i = alartList.FirstDisplayedScrollingRowIndex;
+
+					var bs = new BindingSource();
+					bs.DataSource = alartListDataSource;
+					bs.Sort = "";
+		            alartList.DataSource = bs;
+					            
+		            try {
+		            	if (i != -1)
+		            		alartList.FirstDisplayedScrollingRowIndex = i;
+		            	alartList.ClearSelection();
+		            	//alartList.CurrentCell = null;
+		            } catch (Exception ee) {
+		            	util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+		            }
+				}
+			} else {
+				var isUserMode = ((DataGridView)sender).Name == "userAlartList";
+				var list = isUserMode ? userAlartList : alartList;
+				setMouseDownSelect(list, e);
+			}
 		}
 		void taskListCellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
 		{
@@ -2244,6 +2269,7 @@ namespace namaichi
 					var item = new ToolStripMenuItem(_c.HeaderText);
 					if (_check) item.Checked = true;
 					if (!_c.Visible) item.Visible = false;
+					
 					liveListColorColumnMenu.DropDownItems.Add(item);
 				}
 			} catch (Exception e) {
@@ -2459,6 +2485,7 @@ namespace namaichi
 				for (var j = 2; j < items.Count; j++) {
 					notifyOffList[j] = notifyOffList[0];
 				}
+				
 			} else {
 				var isAllChecked = true;
 				for(var j = 2; j < items.Count; j++) {
@@ -2467,6 +2494,10 @@ namespace namaichi
 				notifyOffList[0] = isAllChecked;
 			}
 			
+			for (var j = 0; j < notifyOffList.Length; j++) {
+				if (j == 1) continue;
+				((ToolStripMenuItem)notifyOffMenuItem.DropDownItems[j]).Checked = notifyOffList[j];
+			}
 		}
 		
 		void NotifyOffMenuItemDropDownOpening(object sender, EventArgs e)
@@ -2635,14 +2666,16 @@ namespace namaichi
 						var isRecentProcess = false;
 						if (checkMode == 0) {
 							isRecentProcess = isOnAir(dataSource[i]);
+							
 						} else if (checkMode == 1) {
 							isRecentProcess = DateTime.Now - dataSource[i].lastHosoDt < TimeSpan.FromMinutes(30);
 						} else if (checkMode == -1) {
 							isRecentProcess = false;
 						}
 						
-						if (!isRecentProcess)
+						if (!isRecentProcess) {
 							dataSource[i].recentColorMode = 0;
+						}
 						
 						//util.debugWriteLine("test recent live check i " + i);
 						if (isRecentProcess) recentNum++;
@@ -2671,25 +2704,31 @@ namespace namaichi
 			
 			var elapsed = DateTime.Now - ai.lastHosoDt;
 			var isCheck = false;
-			if (ai.lastLvid.EndsWith("e")) return false;
+			if (ai.lastLvid.EndsWith("e")) {
+				return false;
+			}
 			if (ai.communityId == null ||
 			    	ai.communityId.StartsWith("ch") ||
 			    	ai.communityId == "official") {
 				isCheck = elapsed < TimeSpan.FromHours(100);
 			} else isCheck = elapsed < TimeSpan.FromHours(6);
-			if (!isCheck) return false;
+			if (!isCheck) {
+				return false;
+			}
 			
 			util.debugWriteLine("check alart live onair " + ai.lastLvid);
-			var isOnAir = isOnAirLvid(ai.lastLvid, ai.lastLvType);
-			if (!isOnAir) ai.lastLvid += "e";
+			var isOnAir = isOnAirLvid(ai.lastLvid, ai.lastLvType, true);
+			if (!isOnAir) {
+				ai.lastLvid += "e";
+			}
 			return isOnAir;
 		}
-		private bool isOnAirLvid(string lvid, string type) {
+		private bool isOnAirLvid(string lvid, string type, bool debugWriteLog = false) {
 			util.debugWriteLine("isOnairLyid " + lvid + " " + type);
 			var isProgramInfo = (check.container != null &&
 			    	(type == "user" || type == "community" ||
 			     		type == "channel"));
-			if (isProgramInfo) {
+			if (false && isProgramInfo) {
 				var url = "https://live2.nicovideo.jp/watch/" + lvid + "/programinfo";
 				
 				var h = new Dictionary<string, string>(){{"user_session", check.container.GetCookies(new Uri(url))["user_session"].Value}};
@@ -2707,21 +2746,27 @@ namespace namaichi
 								res = util.getPageSource(url, check.container);
 						}
 					}
-					if (res != null && res.IndexOf("\"status\":200,\"errorCode\":\"OK\"") == -1)
+					if (res != null && res.IndexOf("\"status\":200,\"errorCode\":\"OK\"") == -1) {
 						return false;
+					}
 				}
 				if (res != null) {
 					var ret = res.IndexOf("\"status\":\"end\"") == -1 &&
 							res.IndexOf("errorCode\":\"NOT_FOUND\"") == -1;
+					if (!ret) {
+					}
+					
 					return ret;
 				}
 			}
 			
 			var _url = "https://live.nicovideo.jp/embed/" + lvid;
 			var _res = util.getPageSource(_url, null);
-			if (_res == null) return false;
-			return _res.IndexOf("status-onair\">") > -1;
+			if (_res == null) {
+				return true;
+			}
 			
+			return _res.IndexOf("status-onair\">") > -1;
 		}
 		private void changeIcon(int recentNum) {
 			var n = recentNum;
@@ -3433,7 +3478,7 @@ namespace namaichi
 		}
 		void UpdateAutoDeleteMenuDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
-			((ToolStripMenuItem)updateMenuItem).HideDropDown();
+			//((ToolStripMenuItem)updateMenuItem).HideDropDown();
 			for (var i = 0; i < updateAutoDeleteMenu.DropDownItems.Count; i++) {
 				((ToolStripMenuItem)updateAutoDeleteMenu.DropDownItems[i]).Checked =
 					(e.ClickedItem == updateAutoDeleteMenu.DropDownItems[i]);
@@ -3469,7 +3514,7 @@ namespace namaichi
 		}
 		void UpdateCateCategoryMenuDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
-			((ToolStripMenuItem)updateMenuItem).HideDropDown();
+			//((ToolStripMenuItem)updateMenuItem).HideDropDown();
 			for (var i = 0; i < updateCateCategoryMenu.DropDownItems.Count; i++) {
 				((ToolStripMenuItem)updateCateCategoryMenu.DropDownItems[i]).Checked =
 					(e.ClickedItem == updateCateCategoryMenu.DropDownItems[i]);
@@ -4587,48 +4632,53 @@ namespace namaichi
 		}
 		int DuplicateCheckMenuClickCore(SortableBindingList<AlartInfo> dataSource, DataGridView list)
 		{
-			var dupliUserAiList = new List<AlartInfo>();
-			var dupliComAiList = new List<AlartInfo>();
-			var dupliNum = 0;
-			foreach (var ai in dataSource) {
-				bool isDupliUser = false, isDupliCom = false;
-				foreach (var _ai in dataSource) {
-					if (ai == _ai) continue;
-					if (!string.IsNullOrEmpty(ai.hostId) && _ai.hostId == ai.hostId) {
-						isDupliUser = true;
-						if (dupliUserAiList.IndexOf(ai) == -1 && dupliComAiList.IndexOf(ai) == -1) 
-							dupliUserAiList.Add(ai);
-						if (dupliUserAiList.IndexOf(_ai) == -1 && dupliComAiList.IndexOf(_ai) == -1) 
-							dupliUserAiList.Add(_ai);
+			try {
+				var dupliUserAiList = new List<AlartInfo>();
+				var dupliComAiList = new List<AlartInfo>();
+				var dupliNum = 0;
+				foreach (var ai in dataSource) {
+					bool isDupliUser = false, isDupliCom = false;
+					foreach (var _ai in dataSource) {
+						if (ai == _ai) continue;
+						if (!string.IsNullOrEmpty(ai.hostId) && _ai.hostId == ai.hostId) {
+							isDupliUser = true;
+							if (dupliUserAiList.IndexOf(ai) == -1 && dupliComAiList.IndexOf(ai) == -1) 
+								dupliUserAiList.Add(ai);
+							if (dupliUserAiList.IndexOf(_ai) == -1 && dupliComAiList.IndexOf(_ai) == -1) 
+								dupliUserAiList.Add(_ai);
+						}
+						if (!string.IsNullOrEmpty(ai.communityId) && _ai.communityId == ai.communityId) {
+							isDupliCom = true;
+							if (dupliUserAiList.IndexOf(ai) == -1 && dupliComAiList.IndexOf(ai) == -1) 
+								dupliComAiList.Add(ai);
+							if (dupliUserAiList.IndexOf(_ai) == -1 && dupliComAiList.IndexOf(_ai) == -1) 
+								dupliComAiList.Add(_ai);
+						}
 					}
-					if (!string.IsNullOrEmpty(ai.communityId) && _ai.communityId == ai.communityId) {
-						isDupliCom = true;
-						if (dupliUserAiList.IndexOf(ai) == -1 && dupliComAiList.IndexOf(ai) == -1) 
-							dupliComAiList.Add(ai);
-						if (dupliUserAiList.IndexOf(_ai) == -1 && dupliComAiList.IndexOf(_ai) == -1) 
-							dupliComAiList.Add(_ai);
-					}
+					ai.userIdColorType = isDupliUser ? 2 : 0;
+					ai.comIdColorType = isDupliCom ? 2 : 0;
+					if (isDupliUser || isDupliCom) dupliNum++;
+					
+					if (isDupliUser)
+						list.UpdateCellValue(1, dataSource.IndexOf(ai));
+					if (isDupliCom)
+						list.UpdateCellValue(0, dataSource.IndexOf(ai));
 				}
-				ai.userIdColorType = isDupliUser ? 2 : 0;
-				ai.comIdColorType = isDupliCom ? 2 : 0;
-				if (isDupliUser || isDupliCom) dupliNum++;
-				
-				if (isDupliUser)
-					list.UpdateCellValue(1, dataSource.IndexOf(ai));
-				if (isDupliCom)
-					list.UpdateCellValue(0, dataSource.IndexOf(ai));
+				dupliUserAiList.Reverse();
+				dupliComAiList.Reverse();
+				foreach (var ai in dupliComAiList) {
+					dataSource.Remove(ai);
+					dataSource.Insert(0, ai);
+				}
+				foreach (var ai in dupliUserAiList) {
+					dataSource.Remove(ai);
+					dataSource.Insert(0, ai);
+				}
+				return dupliNum;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return -1;
 			}
-			dupliUserAiList.Reverse();
-			dupliComAiList.Reverse();
-			foreach (var ai in dupliComAiList) {
-				dataSource.Remove(ai);
-				dataSource.Insert(0, ai);
-			}
-			foreach (var ai in dupliUserAiList) {
-				dataSource.Remove(ai);
-				dataSource.Insert(0, ai);
-			}
-			return dupliNum;
 		}
 		void HistorySplitContainerLayout(object sender, LayoutEventArgs e)
 		{
@@ -4690,6 +4740,7 @@ namespace namaichi
 					var behaviors = config.get("defaultBehavior").Split(',').Select<string, bool>(x => x == "1").ToArray();
 					var textColor = ColorTranslator.FromHtml(config.get("defaultTextColor"));
 					var backColor = ColorTranslator.FromHtml(config.get("defaultBackColor"));
+					var isAutoReserve = bool.Parse(config.get("IsDefaultAutoReserve"));
 					var now = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
 					var followStr = isFollow ? "フォロー解除する" : "フォローする";
 					var _ai = new AlartInfo("", id, 
@@ -4697,7 +4748,8 @@ namespace namaichi
 							false, false, false, false, false, 
 							false, false, false, false, false, 
 							false, false, false, "",
-							"フォローする", followStr, "", "", "True,True,True");
+							"フォローする", followStr, "", "", "True,True,True", 
+							isAutoReserve, 0);
 					_ai.setBehavior(behaviors);
 					_ai.textColor = textColor;
 					_ai.backColor = backColor;
@@ -5123,19 +5175,46 @@ namespace namaichi
 			var l = new DataGridView[]{liveList, alartList, userAlartList, taskList, historyList, notAlartList};
 			for (var i = 0; i < s.Length; i++) setSortConfig(s[i], l[i]);
 		}
-		private void setDisplayMenuClosingEvent() {
+		private void setCheckableMenuClosingEvent() {
 			foreach (var m in displayMenuItem.DropDownItems)
 				if (m.GetType() == typeof(ToolStripMenuItem))
-					if (((ToolStripMenuItem)m).HasDropDownItems) 
-						((ToolStripMenuItem)m).DropDown.Closing += displayMenu_Closing;
+					if (((ToolStripMenuItem)m).HasDropDownItems ||
+					   		m == liveListColorColumnMenu)
+						((ToolStripMenuItem)m).DropDown.Closing += cancelCloseMenuOnClick_Closing;
+			displayMenuItem.DropDown.Closing += cancelMenu_Closing;
 			
+			foreach (var m in updateMenuItem.DropDownItems) {
+				if (m.GetType() != typeof(ToolStripMenuItem)) continue;
+				var _m = (ToolStripMenuItem)m;
+				if (_m.HasDropDownItems)
+					_m.DropDown.Closing += cancelCloseMenuOnClick_Closing;
+			}
+			updateMenuItem.DropDown.Closing += cancelMenu_Closing;
+			
+			foreach (var m in notifyMenuItem.DropDownItems) {
+				if (m.GetType() != typeof(ToolStripMenuItem)) continue;
+				var _m = (ToolStripMenuItem)m;
+				if (_m.HasDropDownItems)
+					_m.DropDown.Closing += cancelCloseMenuOnClick_Closing;
+			}
 		}
-		private void displayMenu_Closing(object sender, 
+		private void cancelCloseMenuOnClick_Closing(object sender, 
 				ToolStripDropDownClosingEventArgs e) {
 			//util.debugWriteLine("closing reason " + e.CloseReason);
 			if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
 				e.Cancel = true;
-			
+		}
+		private void cancelMenu_Closing(object sender, 
+				ToolStripDropDownClosingEventArgs e) {
+			if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked &&
+    				(lastClickMenu == updateTopFavoriteMenu ||
+    				lastClickMenu == updateOnlyFavoriteMenu ||
+    				lastClickMenu == updateAutoSortMenu ||
+					lastClickMenu == updateHideMemberOnlyWithoutFavoriteMenu ||
+				    lastClickMenu == updateHideMemberOnlyWithFavoriteMenu ||
+				    lastClickMenu == updateHideQuestionCategoryMenu ||
+				    lastClickMenu == disableFollowMenu))
+				e.Cancel = true;
 		}
 		public void setNotifyMenuHistory(List<RssItem> items) {
 			formAction(() => setNotifyMenuHistoryCore(items));
@@ -5657,6 +5736,7 @@ namespace namaichi
 
 			while (true) {
 				try {
+					if (liveList.FirstDisplayedScrollingRowIndex == -1) break;
 					for (var i = liveList.FirstDisplayedScrollingRowIndex; i < liveListDataSource.Count; i++) {
 						if (!liveList.Rows[i].Displayed) break;
 						if (i != -1) liveList.UpdateCellValue(index, i);
@@ -5701,6 +5781,27 @@ namespace namaichi
 			if (e.KeyData == Keys.Delete) {
 				NotAlartListDeleteRowMenuClick(null, null);
 			}
+		}
+		void ContextMenuStrip1Opening(object sender, CancelEventArgs e)
+		{
+			if (alartList.SelectedCells.Count == 0 || alartList.Rows.Count == 0)
+				e.Cancel = true;
+		}
+		void UpdateMenuItemDropDownOpened(object sender, EventArgs e)
+		{
+			lastClickMenu = null;
+		}
+		void UpdateMenuItemDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+		{
+			lastClickMenu = e.ClickedItem;
+		}
+		void DisplayMenuItemDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+		{
+			lastClickMenu = e.ClickedItem;
+		}
+		void DisplayMenuItemDropDownOpened(object sender, EventArgs e)
+		{
+			lastClickMenu = null;
 		}
 	}
 }

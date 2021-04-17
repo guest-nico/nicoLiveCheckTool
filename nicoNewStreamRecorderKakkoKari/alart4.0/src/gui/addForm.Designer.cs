@@ -49,6 +49,7 @@ namespace namaichi
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.behaviorGroupBox = new System.Windows.Forms.GroupBox();
+			this.isAutoReserveChkBox = new System.Windows.Forms.CheckBox();
 			this.isPopupChkBox = new System.Windows.Forms.CheckBox();
 			this.isBaloonChkBox = new System.Windows.Forms.CheckBox();
 			this.isWebChkBox = new System.Windows.Forms.CheckBox();
@@ -217,6 +218,7 @@ namespace namaichi
 			// 
 			// behaviorGroupBox
 			// 
+			this.behaviorGroupBox.Controls.Add(this.isAutoReserveChkBox);
 			this.behaviorGroupBox.Controls.Add(this.isPopupChkBox);
 			this.behaviorGroupBox.Controls.Add(this.isBaloonChkBox);
 			this.behaviorGroupBox.Controls.Add(this.isWebChkBox);
@@ -248,6 +250,15 @@ namespace namaichi
 			this.behaviorGroupBox.TabIndex = 13;
 			this.behaviorGroupBox.TabStop = false;
 			this.behaviorGroupBox.Text = "動作";
+			// 
+			// isAutoReserveChkBox
+			// 
+			this.isAutoReserveChkBox.Location = new System.Drawing.Point(225, 136);
+			this.isAutoReserveChkBox.Name = "isAutoReserveChkBox";
+			this.isAutoReserveChkBox.Size = new System.Drawing.Size(120, 24);
+			this.isAutoReserveChkBox.TabIndex = 30;
+			this.isAutoReserveChkBox.Text = "フォロー時自動予約";
+			this.isAutoReserveChkBox.UseVisualStyleBackColor = true;
 			// 
 			// isPopupChkBox
 			// 
@@ -845,6 +856,7 @@ namespace namaichi
 			this.panel2.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.CheckBox isAutoReserveChkBox;
 		private System.Windows.Forms.Label label16;
 		private System.Windows.Forms.CheckBox isOfficialChkBtn;
 		private System.Windows.Forms.CheckedListBox memberOnlyCheckList;

@@ -153,6 +153,7 @@
   <ItemGroup>
     <Compile Include="src\alart\AESGCM.cs" />
     <Compile Include="src\alart\AppPushReceiver.cs" />
+    <Compile Include="src\alart\AutoReserveChecker.cs" />
     <Compile Include="src\alart\CategoryCheck.cs" />
     <Compile Include="src\alart\Check.cs" />
     <Compile Include="src\alart\FollowChecker.cs" />
@@ -268,6 +269,7 @@
     <Compile Include="src\gui\WriteThumbnailMemoForm.Designer.cs">
       <DependentUpon>WriteThumbnailMemoForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\info\ActivityTimeline.cs" />
     <Compile Include="src\info\CategoryRecent.cs" />
     <Compile Include="src\info\HistoryInfo.cs" />
     <Compile Include="src\info\CustomKeywordInfo.cs" />
@@ -285,6 +287,7 @@
     <Compile Include="Properties\Settings.Designer.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="src\rec\CookieGetter.cs" />
+    <Compile Include="src\rec\Reservation.cs" />
     <Compile Include="src\rec\ToolMenuChecker.cs" />
     <Compile Include="src\rec\FollowChannel.cs" />
     <Compile Include="src\rec\FollowCommunity.cs" />

@@ -116,6 +116,8 @@ namespace namaichi.alart
 		}
 		private void addLiveListDay(string url, List<TanzakuItem> openTimeList) {
 			try {
+				var isAutoReserve = bool.Parse(check.form.config.get("IsAutoReserve"));
+				var aiList = check.form.alartListDataSource.ToList();
 				TimeLineInfo[] list = null;
 				string res = null;
 				var isNew = true;
@@ -222,6 +224,23 @@ namespace namaichi.alart
 							listRi.pubDateDt = ri.pubDateDt;
 						}
 						
+						if (isAutoReserve) {
+							foreach (var ai in aiList) {
+								if (ai.isAutoReserve && ri.pubDateDt > DateTime.Now) {
+									var isSuccessAccess = true;
+									var isAlart = check.isAlartItem(ri, ai, out isSuccessAccess);
+									if (isAlart || !isSuccessAccess) {
+										var ret = new Reservation(check.container, ri.lvId).live2Reserve();
+										if (ret == "ok") {
+											check.form.addLogText(ri.lvId + " " + ri.comName + (string.IsNullOrEmpty(ri.comName) ? (ri.title) : (ri.comName + "(" + ri.title + ")")) + "のタイムシフトを予約しました");
+										} else {
+											if (ret != "既に予約済みです。")
+												check.form.addLogText(ri.lvId + "(" + ri.comName + ")のタイムシフトの予約に失敗しました " + ret);
+										}
+									}
+								}
+							}
+						}
 					//}
 				}
 				                                         

@@ -15,7 +15,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Xml;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using namaichi.info;
 using namaichi.alart;
@@ -94,6 +94,13 @@ namespace namaichi.utility
 		                    	sw.WriteLine(ckiStr);
 		                    }
 		                    else if (i == 35) sw.WriteLine(ai.memberOnlyMode.ToString());
+		                    else if (i == 0) {
+		                    	var etc = new AiEtcInfo();
+		                    	etc.isAutoReserve = ai.isAutoReserve;
+		                    	etc.recentColorMode = ai.recentColorMode;
+		                    	var json = JToken.FromObject(etc).ToString(Formatting.None);
+		                    	sw.WriteLine(json);
+		                    }
 							else sw.WriteLine("");
 						}
 					}
@@ -231,6 +238,14 @@ namespace namaichi.utility
 						} else lines[i + 5] = "";
 						*/
 					}
+					var isAutoReserve = false;
+					var recentColorMode = 0;
+					if (itemLineNum != 29 && !string.IsNullOrEmpty(lines[i + 0])) {
+						var etc = JsonConvert.DeserializeObject<AiEtcInfo>(lines[i + 0]);
+						isAutoReserve = etc.isAutoReserve;
+						recentColorMode = etc.recentColorMode;
+						
+					}
 					//if (lines[i + 1] == "" && lines[i + 2] == "" && lines[i + 3] == "") continue;
 					AlartInfo ai;
 					var comName = string.IsNullOrEmpty(lines[i + 4]) ? lines[i + 4] : WebUtility.HtmlDecode(lines[i + 4]);
@@ -259,7 +274,8 @@ namespace namaichi.utility
 								comFollow, userFollow, lines[i + 13], 
 								lines[i + 3], textColor, 
 								backColor, defaultSound, isDefaultSoundId, 
-								false, false, false, null, false, "True,True,True");
+								false, false, false, null, false, "True,True,True",
+								false, 0);
 						if (lines[i + 23] == "true") setNamarokuRead(ai, namarokuRecRead);
 					} else {
 						ai = new AlartInfo(lines[i + 1], 
@@ -285,7 +301,8 @@ namespace namaichi.utility
 								lines[i + 3], textColor,
 								backColor, defaultSound, isDefaultSoundId,
 								isMustCom, isMustUser, isMustKeyword, cki,
-								isCustomKeyword, memberOnlyMode);
+								isCustomKeyword, memberOnlyMode, isAutoReserve, 
+								recentColorMode);
 					}
 					//if ((ai.communityId == null || ai.communityId == "") &&
 					//    (ai.hostId == null || ai.hostId == "")) continue;
@@ -464,6 +481,10 @@ namespace namaichi.utility
 				else return "True,True,True";
 			}
 			return c;
+		}
+		private class AiEtcInfo {
+			public bool isAutoReserve = false;
+			public int recentColorMode = 0;
 		}
 	}
 }

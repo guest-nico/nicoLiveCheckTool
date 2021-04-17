@@ -49,6 +49,7 @@ namespace namaichi.alart
 		private PushReceiver pr = null;
 		private AppPushReceiver apr = null;
 		private TimeTableChecker ttc = null;
+		private AutoReserveChecker arc = null;
 		
 		public Check(SortableBindingList<AlartInfo> alartListDataSource, MainForm form)
 		{
@@ -94,6 +95,12 @@ namespace namaichi.alart
 				Task.Factory.StartNew(() => {
 					ttc = new TimeTableChecker(this, form.config);
 					ttc.start();
+				});
+			}
+			if (bool.Parse(form.config.get("IsAutoReserve"))) {
+				Task.Factory.StartNew(() => {
+					arc = new AutoReserveChecker(this, form.config);
+					arc.start();
 				});
 			}
 			Task.Factory.StartNew(() => regularlyProcess());
@@ -167,56 +174,15 @@ namespace namaichi.alart
 			while (true) {
 				try {
 					foreach (var alartItem in dataSource) {
-						//var alartItem = (info.AlartInfo)alartListDataSource[i];
-						//var i = alartListDataSource.IndexOf(alartItem);
-						//if (item.comId.IndexOf("939") > -1 &&
-						//   		alartItem.communityId.IndexOf("939") > -1)
-						//	util.debugWriteLine("test");
-						//if (
+						var isSuccessAccess = false;
+						bool isNosetComId, isNosetHostName, isNosetKeyword,
+								isComOk, isUserOk, isKeywordOk;
+						var isAlart = isAlartItem(item, alartItem, out isSuccessAccess,
+								out isNosetComId, out isNosetHostName, out isNosetKeyword,
+								out isComOk, out isUserOk, out isKeywordOk, ref nearAlartAi);
 						
-						if (string.IsNullOrEmpty(alartItem.communityId))
-							alartItem.communityName = "";
-						if (string.IsNullOrEmpty(alartItem.hostId))
-							alartItem.hostName = "";
-						
-						
-						var isNosetComId = string.IsNullOrEmpty(alartItem.communityId);
-						var isNosetHostName = string.IsNullOrEmpty(alartItem.hostName);
-						var isNosetKeyword = (alartItem.isCustomKeyword && alartItem.cki == null) ||
-							(!alartItem.isCustomKeyword && string.IsNullOrEmpty(alartItem.keyword));
-						if (isNosetComId && isNosetHostName && isNosetKeyword) continue;
-						
-						var isComOk = alartItem.communityId == item.comId || (alartItem.communityId == "official" && item.type == "official");
-						var isUserOk = alartItem.hostName == item.hostName || alartItem.hostId == item.userId;
-						var isKeywordOk = item.isMatchKeyword(alartItem);
-						
-						if ((string.IsNullOrEmpty(alartItem.communityId) !=
-						     	string.IsNullOrEmpty(alartItem.communityName)) ||
-						     (string.IsNullOrEmpty(alartItem.hostId) !=
-						     	 string.IsNullOrEmpty(alartItem.hostName))) continue;
-						
-						var isSuccessAccess = true;
-						if (isUserOk && !isNosetHostName && !isUserIdFromLvidOk(item, alartItem.hostId, out isSuccessAccess))
-							isUserOk = false;
 						if (!isSuccessAccess) return false;
-						
-						
-						if (!isAlartMatch(alartItem, isComOk, 
-								isUserOk, isKeywordOk, isNosetComId, 
-								isNosetHostName, isNosetKeyword, item)) {
-							if ((!isNosetComId && isComOk) ||
-								    (!isNosetHostName && isUserOk)) {
-								nearAlartAi = alartItem;
-								isSuccessAccess = setUserId(item);
-								if (!isSuccessAccess) return false;
-								//isUserIdFromLvidOk(item, alartItem.hostId);
-							}
-							continue;
-						}
-						
-						util.debugWriteLine("ok alart item " + item.lvId + " " + isComOk + " " + isUserOk + " " + isKeywordOk + " noset " + isNosetComId + " " + isNosetHostName + " " + isNosetKeyword + " ai.hostId " + alartItem.hostId + " rss.hostId " + item.userId);
-						isSuccessAccess = setUserId(item);
-						if (!isSuccessAccess) return false;
+						if (!isAlart) continue;
 						
 						/*
 						if (isUserOk && !isUserIdFromLvidOk(item, alartItem.hostId)) {
@@ -278,6 +244,68 @@ namespace namaichi.alart
 					Thread.Sleep(3000);
 				}
 			}
+			return true;
+		}
+		public bool isAlartItem(RssItem item, AlartInfo alartItem, 
+				out bool isSuccessAccess) {
+			bool isNosetComId, isNosetHostName, isNosetKeyword,
+					isComOk, isUserOk, isKeywordOk;
+			AlartInfo nearAlartAi = null;
+			return isAlartItem(item, alartItem, out isSuccessAccess,
+					out isNosetComId, out isNosetHostName, out isNosetKeyword,
+					out isComOk, out isUserOk, out isKeywordOk, ref nearAlartAi);
+		}
+		private bool isAlartItem(RssItem item, AlartInfo alartItem, 
+				out bool isSuccessAccess, out bool isNosetComId, 
+				out bool isNosetHostName, out bool isNosetKeyword,
+				out bool isComOk, out bool isUserOk, out bool isKeywordOk, 
+				ref AlartInfo nearAlartAi) {
+			isComOk = isUserOk = isKeywordOk = false;
+			isSuccessAccess = true;
+			if (string.IsNullOrEmpty(alartItem.communityId))
+				alartItem.communityName = "";
+			if (string.IsNullOrEmpty(alartItem.hostId))
+				alartItem.hostName = "";
+			
+			
+			isNosetComId = string.IsNullOrEmpty(alartItem.communityId);
+			isNosetHostName = string.IsNullOrEmpty(alartItem.hostName);
+			isNosetKeyword = (alartItem.isCustomKeyword && alartItem.cki == null) ||
+				(!alartItem.isCustomKeyword && string.IsNullOrEmpty(alartItem.keyword));
+			if (isNosetComId && isNosetHostName && isNosetKeyword) return false;
+			
+			isComOk = alartItem.communityId == item.comId || (alartItem.communityId == "official" && item.type == "official");
+			isUserOk = alartItem.hostName == item.hostName || alartItem.hostId == item.userId;
+			isKeywordOk = item.isMatchKeyword(alartItem);
+			
+			if ((string.IsNullOrEmpty(alartItem.communityId) !=
+			     	string.IsNullOrEmpty(alartItem.communityName)) ||
+			     (string.IsNullOrEmpty(alartItem.hostId) !=
+			     	 string.IsNullOrEmpty(alartItem.hostName))) return false;
+			
+			if (isUserOk && !isNosetHostName && !isUserIdFromLvidOk(item, alartItem.hostId, out isSuccessAccess))
+				isUserOk = false;
+			if (!isSuccessAccess) {
+				return false;
+			}
+			
+			
+			if (!isAlartMatch(alartItem, isComOk, 
+					isUserOk, isKeywordOk, isNosetComId, 
+					isNosetHostName, isNosetKeyword, item)) {
+				if ((!isNosetComId && isComOk) ||
+					    (!isNosetHostName && isUserOk)) {
+					nearAlartAi = alartItem;
+					isSuccessAccess = setUserId(item);
+					if (!isSuccessAccess) return false;
+					//isUserIdFromLvidOk(item, alartItem.hostId);
+				}
+				return false;
+			}
+			
+			util.debugWriteLine("ok alart item " + item.lvId + " " + isComOk + " " + isUserOk + " " + isKeywordOk + " noset " + isNosetComId + " " + isNosetHostName + " " + isNosetKeyword + " ai.hostId " + alartItem.hostId + " rss.hostId " + item.userId);
+			isSuccessAccess = setUserId(item);
+			if (!isSuccessAccess) return false;
 			return true;
 		}
 		private void doProcess(RssItem item, 
@@ -528,7 +556,7 @@ namespace namaichi.alart
 			if (rssItem.userId == null) return true;
 			return rssItem.userId == alartUserId;
 		}
-		public string getUserIdFromLvid(string lvid, out bool isFailureAccess) {
+		public string getUserIdFromLvid(string lvid, out bool isFailureAccess, CookieContainer container) {
 			var url = "https://live2.nicovideo.jp/watch/" + lvid;
 			var res = util.getPageSource(url, container);
 			isFailureAccess = res == null;
@@ -565,7 +593,7 @@ namespace namaichi.alart
 		private bool setUserId(RssItem rssItem) {
 			//return isSuccess
 			var isFailureAccess = false;
-			var uid = (rssItem.userId != null) ? rssItem.userId : getUserIdFromLvid(rssItem.lvId, out isFailureAccess);
+			var uid = (rssItem.userId != null) ? rssItem.userId : getUserIdFromLvid(rssItem.lvId, out isFailureAccess, container);
 			if (isFailureAccess) return false;  
 			if (!rssItem.comId.StartsWith("co")) uid = "";
 			if (rssItem.userId == null && uid != null) rssItem.userId = uid;
@@ -757,6 +785,19 @@ namespace namaichi.alart
 					ttc = null;
 				}
 			}
+			if (bool.Parse(form.config.get("IsAutoReserve"))) {
+				if (arc == null) {
+					Task.Factory.StartNew(() => {
+						arc = new AutoReserveChecker(this, form.config);
+						arc.start();
+					});
+				}
+			} else {
+				if (arc != null) {
+					arc.stop();
+					arc = null;
+				}
+			}
 			userNameUpdateInterval = int.Parse(form.config.get("userNameUpdateInterval"));
 		}
 		public void regularlyProcess() {
@@ -799,7 +840,7 @@ namespace namaichi.alart
 						new TaskListFileManager().save(form);
 						new HistoryListFileManager().save(form);
 						new NotAlartListFileManager().save(form);
-						new TwitterListFileManager().save(form);
+						//new TwitterListFileManager().save(form);
 					});
 				}
 				
@@ -1006,6 +1047,7 @@ namespace namaichi.alart
 				var textColor = ColorTranslator.FromHtml(form.config.get("defaultTextColor"));
 				var backColor = ColorTranslator.FromHtml(form.config.get("defaultBackColor"));
 				var behaviors = form.config.get("defaultBehavior").Split(',').Select<string, bool>(x => x == "1").ToArray();
+				var isAutoReserve = bool.Parse(form.config.get("IsDefaultAutoReserve"));
 				var now = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
 				if (!isContainCom && !string.IsNullOrEmpty(ri.comId)) {
 					var isFollow = false;
@@ -1017,7 +1059,7 @@ namespace namaichi.alart
 							false, false, false, false, false, 
 							false, false, false, false, false, 
 							false, false, false, "", 
-							comFollow, "", "", "", "True,True,True");
+							comFollow, "", "", "", "True,True,True", isAutoReserve, 0);
 					ai.setBehavior(behaviors);
 					ai.textColor = textColor;
 					ai.backColor = backColor;
@@ -1033,7 +1075,7 @@ namespace namaichi.alart
 							false, false, false, false, false, 
 							false, false, false, false, false, 
 							false, false, false, "", 
-							"", userFollow, "", "", "True,True,True");
+							"", userFollow, "", "", "True,True,True", isAutoReserve, 0);
 					ai.setBehavior(behaviors);
 					ai.textColor = textColor;
 					ai.backColor = backColor;

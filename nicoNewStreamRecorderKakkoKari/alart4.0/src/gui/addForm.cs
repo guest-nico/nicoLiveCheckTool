@@ -176,7 +176,8 @@ namespace namaichi
 					defaultSoundList.SelectedIndex, 
 					isDefaultSoundIdChkBox.Checked, isMustComChkBox.Checked,
 					isMustUserChkBox.Checked, isMustKeywordChkBox.Checked,
-					customKw, isCustomKeywordRadioBtn.Checked, memberOnly);
+					customKw, isCustomKeywordRadioBtn.Checked, memberOnly,
+					isAutoReserveChkBox.Checked, 0);
 			if (inputLvidItem != null) {
 				_ret.lastHosoDt = inputLvidItem.pubDateDt;
 				_ret.lastHostDate = inputLvidItem.pubDateDt.ToString("yyyy/MM/dd HH:mm:ss");
@@ -260,6 +261,7 @@ namespace namaichi
 			editAi.cki = customKw;
 			editAi.isCustomKeyword = isCustomKeywordRadioBtn.Checked;
 			editAi.memberOnlyMode = memberOnly;
+			editAi.isAutoReserve = isAutoReserveChkBox.Checked;
 			/*
 			var _ret = new AlartInfo(comId, userId, 
 					communityNameText.Text, userNameText.Text, 
@@ -589,6 +591,7 @@ namespace namaichi
 			customKw = editAi.cki;
 			if (customKw != null) customKeywordBtn.Text = "カスタム設定(" + customKw[0].name + ")";
 			if (editAi.isCustomKeyword) isCustomKeywordRadioBtn.Checked = true;
+			isAutoReserveChkBox.Checked = editAi.isAutoReserve;
 		}
 		private void setDefaultBehavior() {
 			var conf = form.config.get("defaultBehavior");
@@ -605,6 +608,7 @@ namespace namaichi
 			defaultSoundList.SelectedIndex = int.Parse(form.config.get("defaultSound"));
 			isDefaultSoundIdChkBox.Checked = bool.Parse(form.config.get("IsDefaultSoundId"));
 			//memberOnlyList.SelectedIndex = 0;
+			isAutoReserveChkBox.Checked = bool.Parse(form.config.get("IsDefaultAutoReserve"));
 		}
 		private void setMemberOnlyListInit(AlartInfo editAi) {
 			var c = editAi.memberOnlyMode;

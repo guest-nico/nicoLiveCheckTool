@@ -227,6 +227,7 @@ public class config
 			{"defaultBackColor","#ffe0ff"},
 			{"defaultSound","0"},
 			{"IsDefaultSoundId","true"},
+			{"IsDefaultAutoReserve","false"},
 			
 			{"cookieFile",""},
 			{"iscookie","false"},
@@ -312,6 +313,7 @@ public class config
 	        {"IsPush", "true"},
 	        {"IsAppPush", "true"},
 	        {"IsTimeTable", "true"},
+	        {"IsAutoReserve", "false"},
 	        {"pushPri", ""},
 	        {"pushPub", ""},
 	        {"pushAuth", ""},

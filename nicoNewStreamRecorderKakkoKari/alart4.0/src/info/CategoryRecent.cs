@@ -22,6 +22,9 @@ namespace namaichi.info
 	public class meta {
 		public string status;
 		public string errorCode;
+		public bool hasNext;
+		public string maxId;
+		public string minId;
 	}
 	public class _data {
 		public string id;

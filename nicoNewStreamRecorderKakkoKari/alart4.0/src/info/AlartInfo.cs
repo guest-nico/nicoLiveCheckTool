@@ -65,6 +65,7 @@ namespace namaichi.info
 		//public bool isSimpleKeywordOr = true;
 		public string memberOnlyMode = "True,True,True"; //0-両方 1-限定放送はアラートしない 2-限定放送のみアラート
 										//bool 通常放送,限定放送,有料放送
+		public bool isAutoReserve = false;
 
 		public AlartInfo(string communityId, string hostId, 
 				string communityName, string hostName, 
@@ -82,7 +83,8 @@ namespace namaichi.info
 				bool isDefaultSoundId, bool isMustCom,
 				bool isMustUser, bool isMustKeyword,
 				List<CustomKeywordInfo> customKeyword,
-				bool isCustomKeyword, string memberOnlyMode) {
+				bool isCustomKeyword, string memberOnlyMode,
+				bool isAutoReserve, int recentColorMode) {
 			this.communityId = communityId;
 			this.hostId = hostId;
 			this.communityName = communityName;
@@ -122,6 +124,8 @@ namespace namaichi.info
 			this.isCustomKeyword = isCustomKeyword;
 			//this.isSimpleKeywordOr = isSimpleKeywordOr;
 			this.memberOnlyMode = memberOnlyMode;
+			this.isAutoReserve = isAutoReserve;
+			this.recentColorMode = recentColorMode;
 		}
 		public AlartInfo(string communityId, string hostId, 
 				string communityName, string hostName, 
@@ -134,7 +138,8 @@ namespace namaichi.info
 				bool appliJ,
 				string memo, string communityFollow, 
 				string hostFollow, string lastLvid, 
-				string keyword, string memberOnlyMode) {
+				string keyword, string memberOnlyMode,
+				bool isAutoReserve, int recentColorMode) {
 			this.communityId = communityId;
 			this.hostId = hostId;
 			this.communityName = communityName;
@@ -163,6 +168,8 @@ namespace namaichi.info
 			this.lastLvid = lastLvid;
 			this.keyword = keyword;
 			this.memberOnlyMode = memberOnlyMode;
+			this.isAutoReserve = isAutoReserve;
+			this.recentColorMode = recentColorMode;
 		}
 		public string CommunityId
         {

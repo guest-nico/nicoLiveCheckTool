@@ -32,8 +32,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.86";
-	public static string versionDayStr = "2021/03/21";
+	public static string versionStr = "ver0.1.7.87";
+	public static string versionDayStr = "2021/04/17";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -1217,33 +1217,38 @@ class util {
 				("https://ch.nicovideo.jp/" + communityNum) :
 				("https://com.nicovideo.jp/motion/" + communityNum);
 			res = util.getPageSource(url, cc);
-			if (res == null) return null;
-			isFollow = res.IndexOf("<h2 class=\"pageHeader_title\">コミュニティにフォローリクエストを送る</h2>") == -1 &&
-					util.getRegGroup(res, "<p class=\"error_description\">[\\s\\S]*?(コミュニティフォロワー)ではありません。") == null &&
-					res.IndexOf("<h2 class=\"pageHeader_title\">コミュニティをフォローする</h2>") == -1;
+			if (res != null) {
+				isFollow = res.IndexOf("<h2 class=\"pageHeader_title\">コミュニティにフォローリクエストを送る</h2>") == -1 &&
+						util.getRegGroup(res, "<p class=\"error_description\">[\\s\\S]*?(コミュニティフォロワー)ではありません。") == null &&
+						res.IndexOf("<h2 class=\"pageHeader_title\">コミュニティをフォローする</h2>") == -1;
+			}
 		} else {
 			isFollow = (isChannel) ? 
 				(res.IndexOf("class=\"bookmark following btn_follow\"") > -1):
 				(res.IndexOf("followButton follow\">フォロー") == -1);
 		}
-		if (res == null) return null;
-		var title = (isChannel) ? 
-//			util.getRegGroup(res, "<meta property=\"og\\:title\" content=\"(.+?) - ニコニコチャンネル") :
-			util.getRegGroup(res, "<meta property=\"og:site_name\" content=\"(.+?)\"") :
-			util.getRegGroup(res, "<meta property=\"og\\:title\" content=\"(.+?)-ニコニコミュニティ\"");
-		if (title == null) title = util.getRegGroup(res, "<meta property=\"og:title\" content=\"(.+?)さんのコミュニティ-ニコニコミュニティ\">");
-		
+		string title = null;
+		if (res != null) {
+			title = (isChannel) ? 
+	//			util.getRegGroup(res, "<meta property=\"og\\:title\" content=\"(.+?) - ニコニコチャンネル") :
+				util.getRegGroup(res, "<meta property=\"og:site_name\" content=\"(.+?)\"") :
+				util.getRegGroup(res, "<meta property=\"og\\:title\" content=\"(.+?)-ニコニコミュニティ\"");
+			if (title == null) title = util.getRegGroup(res, "<meta property=\"og:title\" content=\"(.+?)さんのコミュニティ-ニコニコミュニティ\">");
+			
+		}
 		//not login
 		if (title == null) {
 			url = "https://ext.nicovideo.jp/thumb_" + ((isChannel) ? "channel" : "community") + "/" + communityNum;
 			res = getPageSource(url, cc, null, false, 3);
-			title = getRegGroup(res, "<p class=\"chcm_tit\">(.+?)</p>");
+			//title = getRegGroup(res, "<p class=\"chcm_tit\">(.+?)</p>");
+			title = getRegGroup(res, "<title>(.+?)‐(ニコニコミュニティ|ニコニコチャンネル)</title>");
 		} else {
 			title = WebUtility.HtmlDecode(title);
 		}
 		if (title == null) isFollow = false;
 		
 		return title;
+		
 	}
 	public static void openUrlBrowser(string url, config config) {
 		try {

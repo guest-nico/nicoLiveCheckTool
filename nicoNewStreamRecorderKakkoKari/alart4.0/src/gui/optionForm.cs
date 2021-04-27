@@ -603,18 +603,26 @@ namespace namaichi
 				if (typeof(CheckBox) != defaultBehaviorGroupBox.Controls[i].GetType()) 
 					continue;
 				CheckBox chkbox = (CheckBox)defaultBehaviorGroupBox.Controls[i];
-				l.Add(chkbox.Checked ? "1" : "0");
-				if (l.Count == 15) break;
+				l.Add(chkbox.Name + ":" + chkbox.Checked.ToString());
+				//l.Add(chkbox.Checked ? "1" : "0");
+				//if (l.Count == 15) break;
 			}
 			return string.Join(",", l);
 		}
 		private void setDefaultBehavior(string conf) {
 			var l = conf.Split(',');
 			for (var i = 0; i < l.Length; i++) {
-				if (typeof(CheckBox) != defaultBehaviorGroupBox.Controls[i].GetType()) 
-					continue;
-				CheckBox chkbox = (CheckBox)defaultBehaviorGroupBox.Controls[i];
-				chkbox.Checked = l[i] == "1";
+				var d = l[i].Split(':');
+				if (d.Length == 1) {
+					if (typeof(CheckBox) != defaultBehaviorGroupBox.Controls[i].GetType()) 
+						continue;
+					CheckBox chkbox = (CheckBox)defaultBehaviorGroupBox.Controls[i];
+					chkbox.Checked = l[i] == "1";
+				} else {
+					var c = defaultBehaviorGroupBox.Controls[d[0]];
+					if (c is CheckBox)
+						((CheckBox)c).Checked = bool.Parse(d[1]);
+				}
 			}
 		}
 		void TextColorBtnClick(object sender, EventArgs e)

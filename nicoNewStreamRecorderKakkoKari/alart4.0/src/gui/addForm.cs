@@ -597,10 +597,17 @@ namespace namaichi
 			var conf = form.config.get("defaultBehavior");
 			var l = conf.Split(',');
 			for (var i = 0; i < l.Length; i++) {
-				if (typeof(CheckBox) != behaviorGroupBox.Controls[i].GetType()) 
-					continue;
-				CheckBox chkbox = (CheckBox)behaviorGroupBox.Controls[i];
-				chkbox.Checked = l[i] == "1";
+				var d = l[i].Split(':');
+				if (d.Length == 1) {
+					if (typeof(CheckBox) != behaviorGroupBox.Controls[i].GetType()) 
+						continue;
+					CheckBox chkbox = (CheckBox)behaviorGroupBox.Controls[i];
+					chkbox.Checked = l[i] == "1";
+				} else {
+					var c = behaviorGroupBox.Controls[d[0]];
+					if (c is CheckBox)
+						((CheckBox)c).Checked = bool.Parse(d[1]);
+				}
 			}
 			
 			textColorBtn.BackColor = sampleColorText.ForeColor = ColorTranslator.FromHtml(form.config.get("defaultTextColor"));

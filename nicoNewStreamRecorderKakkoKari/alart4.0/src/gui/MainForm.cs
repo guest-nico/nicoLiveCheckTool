@@ -2666,7 +2666,6 @@ namespace namaichi
 						var isRecentProcess = false;
 						if (checkMode == 0) {
 							isRecentProcess = isOnAir(dataSource[i]);
-							
 						} else if (checkMode == 1) {
 							isRecentProcess = DateTime.Now - dataSource[i].lastHosoDt < TimeSpan.FromMinutes(30);
 						} else if (checkMode == -1) {
@@ -2675,6 +2674,7 @@ namespace namaichi
 						
 						if (!isRecentProcess) {
 							dataSource[i].recentColorMode = 0;
+							util.debugWriteLine("recentLiveCheckCore no live " + dataSource[i].lastLvid);
 						}
 						
 						//util.debugWriteLine("test recent live check i " + i);
@@ -2754,6 +2754,7 @@ namespace namaichi
 					var ret = res.IndexOf("\"status\":\"end\"") == -1 &&
 							res.IndexOf("errorCode\":\"NOT_FOUND\"") == -1;
 					if (!ret) {
+						util.debugWriteLine("終了判定 res " + res);
 					}
 					
 					return ret;
@@ -2763,9 +2764,14 @@ namespace namaichi
 			var _url = "https://live.nicovideo.jp/embed/" + lvid;
 			var _res = util.getPageSource(_url, null);
 			if (_res == null) {
+				util.debugWriteLine("放送の確認に失敗しました " + lvid);
 				return true;
 			}
 			
+			if (_res.IndexOf("status-onair\">") == -1 && 
+					_res.IndexOf("status-comingsoon\">") == -1) {
+				util.debugWriteLine("終了判定 embed " + lvid + " " + _res);
+			}
 			return _res.IndexOf("status-onair\">") > -1;
 		}
 		private void changeIcon(int recentNum) {

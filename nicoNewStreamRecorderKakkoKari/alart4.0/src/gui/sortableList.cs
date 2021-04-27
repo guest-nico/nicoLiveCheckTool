@@ -85,7 +85,7 @@ namespace namaichi
             _sortProperty = null;
             _isSorted = false; //thanks Luca
         }
- 
+
         /// <summary>
         /// Sorts the items if overridden in a derived class
         /// </summary>

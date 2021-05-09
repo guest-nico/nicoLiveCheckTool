@@ -131,6 +131,7 @@ namespace namaichi
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.IsConfirmFollowChkBox = new System.Windows.Forms.CheckBox();
 			this.delThumbChkBox = new System.Windows.Forms.CheckBox();
+			this.IsExistInHistoryListNotAlartChkBox = new System.Windows.Forms.CheckBox();
 			this.isAddAlartedUserToUserListChkBox = new System.Windows.Forms.CheckBox();
 			this.IsAddAlartedComUserChkBox = new System.Windows.Forms.CheckBox();
 			this.alartCacheIconChkBox = new System.Windows.Forms.CheckBox();
@@ -189,6 +190,7 @@ namespace namaichi
 			this.appliGChkBox = new System.Windows.Forms.CheckBox();
 			this.appliHChkBox = new System.Windows.Forms.CheckBox();
 			this.appliIChkBox = new System.Windows.Forms.CheckBox();
+			this.isDefaultAutoReserveChkBox = new System.Windows.Forms.CheckBox();
 			this.appliJChkBox = new System.Windows.Forms.CheckBox();
 			this.sampleColorText = new System.Windows.Forms.TextBox();
 			this.backColorBtn = new System.Windows.Forms.Button();
@@ -287,7 +289,6 @@ namespace namaichi
 			this.cookieFileSanshouBtn = new System.Windows.Forms.Button();
 			this.btnReload = new System.Windows.Forms.Button();
 			this.useSecondLoginChkBox = new System.Windows.Forms.CheckBox();
-			this.isDefaultAutoReserveChkBox = new System.Windows.Forms.CheckBox();
 			this.appliTab.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -330,7 +331,7 @@ namespace namaichi
 			// 
 			// button3
 			// 
-			this.button3.Location = new System.Drawing.Point(249, 572);
+			this.button3.Location = new System.Drawing.Point(249, 582);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size(74, 23);
 			this.button3.TabIndex = 1;
@@ -340,7 +341,7 @@ namespace namaichi
 			// 
 			// button4
 			// 
-			this.button4.Location = new System.Drawing.Point(329, 572);
+			this.button4.Location = new System.Drawing.Point(329, 582);
 			this.button4.Name = "button4";
 			this.button4.Size = new System.Drawing.Size(74, 23);
 			this.button4.TabIndex = 1;
@@ -356,7 +357,7 @@ namespace namaichi
 			this.appliTab.Margin = new System.Windows.Forms.Padding(2);
 			this.appliTab.Name = "appliTab";
 			this.appliTab.Padding = new System.Windows.Forms.Padding(2);
-			this.appliTab.Size = new System.Drawing.Size(433, 536);
+			this.appliTab.Size = new System.Drawing.Size(433, 546);
 			this.appliTab.TabIndex = 0;
 			this.appliTab.Text = "アプリ設定";
 			this.appliTab.UseVisualStyleBackColor = true;
@@ -1060,7 +1061,7 @@ namespace namaichi
 			this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(441, 562);
+			this.tabControl1.Size = new System.Drawing.Size(441, 572);
 			this.tabControl1.TabIndex = 1;
 			// 
 			// commonTab
@@ -1070,7 +1071,7 @@ namespace namaichi
 			this.commonTab.Location = new System.Drawing.Point(4, 22);
 			this.commonTab.Name = "commonTab";
 			this.commonTab.Padding = new System.Windows.Forms.Padding(3);
-			this.commonTab.Size = new System.Drawing.Size(433, 536);
+			this.commonTab.Size = new System.Drawing.Size(433, 546);
 			this.commonTab.TabIndex = 2;
 			this.commonTab.Text = "一般";
 			this.commonTab.UseVisualStyleBackColor = true;
@@ -1086,10 +1087,10 @@ namespace namaichi
 			this.groupBox1.Controls.Add(this.label60);
 			this.groupBox1.Controls.Add(this.isBroadLogChkBox);
 			this.groupBox1.Controls.Add(this.isLogChkBtn);
-			this.groupBox1.Location = new System.Drawing.Point(5, 390);
+			this.groupBox1.Location = new System.Drawing.Point(5, 408);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(420, 142);
-			this.groupBox1.TabIndex = 3;
+			this.groupBox1.Size = new System.Drawing.Size(420, 139);
+			this.groupBox1.TabIndex = 11;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "ログ・履歴";
 			// 
@@ -1219,6 +1220,7 @@ namespace namaichi
 			// 
 			this.groupBox2.Controls.Add(this.IsConfirmFollowChkBox);
 			this.groupBox2.Controls.Add(this.delThumbChkBox);
+			this.groupBox2.Controls.Add(this.IsExistInHistoryListNotAlartChkBox);
 			this.groupBox2.Controls.Add(this.isAddAlartedUserToUserListChkBox);
 			this.groupBox2.Controls.Add(this.IsAddAlartedComUserChkBox);
 			this.groupBox2.Controls.Add(this.alartCacheIconChkBox);
@@ -1241,7 +1243,7 @@ namespace namaichi
 			this.groupBox2.Controls.Add(this.isStartTimeAllCheckChkBox);
 			this.groupBox2.Location = new System.Drawing.Point(5, 10);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(420, 376);
+			this.groupBox2.Size = new System.Drawing.Size(420, 396);
 			this.groupBox2.TabIndex = 1;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "お気に入りのコミュニティタブの設定";
@@ -1263,6 +1265,15 @@ namespace namaichi
 			this.delThumbChkBox.TabIndex = 48;
 			this.delThumbChkBox.Text = "お気に入りの削除時にサムネイル画像を削除する";
 			this.delThumbChkBox.UseVisualStyleBackColor = true;
+			// 
+			// IsExistInHistoryListNotAlartChkBox
+			// 
+			this.IsExistInHistoryListNotAlartChkBox.Location = new System.Drawing.Point(19, 377);
+			this.IsExistInHistoryListNotAlartChkBox.Name = "IsExistInHistoryListNotAlartChkBox";
+			this.IsExistInHistoryListNotAlartChkBox.Size = new System.Drawing.Size(350, 19);
+			this.IsExistInHistoryListNotAlartChkBox.TabIndex = 11;
+			this.IsExistInHistoryListNotAlartChkBox.Text = "通知履歴リストに存在する放送は通知しない";
+			this.IsExistInHistoryListNotAlartChkBox.UseVisualStyleBackColor = true;
 			// 
 			// isAddAlartedUserToUserListChkBox
 			// 
@@ -1473,7 +1484,7 @@ namespace namaichi
 			this.common2Tab.Controls.Add(this.defaultBehaviorGroupBox);
 			this.common2Tab.Location = new System.Drawing.Point(4, 22);
 			this.common2Tab.Name = "common2Tab";
-			this.common2Tab.Size = new System.Drawing.Size(433, 536);
+			this.common2Tab.Size = new System.Drawing.Size(433, 546);
 			this.common2Tab.TabIndex = 6;
 			this.common2Tab.Text = "一般2";
 			this.common2Tab.UseVisualStyleBackColor = true;
@@ -1485,7 +1496,7 @@ namespace namaichi
 			this.displayGroup.Controls.Add(this.label66);
 			this.displayGroup.Controls.Add(this.label64);
 			this.displayGroup.Controls.Add(this.applyBtn);
-			this.displayGroup.Location = new System.Drawing.Point(5, 442);
+			this.displayGroup.Location = new System.Drawing.Point(5, 440);
 			this.displayGroup.Name = "displayGroup";
 			this.displayGroup.Size = new System.Drawing.Size(420, 65);
 			this.displayGroup.TabIndex = 11;
@@ -1905,6 +1916,15 @@ namespace namaichi
 			this.appliIChkBox.Text = "アプリI";
 			this.appliIChkBox.UseVisualStyleBackColor = true;
 			// 
+			// isDefaultAutoReserveChkBox
+			// 
+			this.isDefaultAutoReserveChkBox.Location = new System.Drawing.Point(225, 114);
+			this.isDefaultAutoReserveChkBox.Name = "isDefaultAutoReserveChkBox";
+			this.isDefaultAutoReserveChkBox.Size = new System.Drawing.Size(80, 24);
+			this.isDefaultAutoReserveChkBox.TabIndex = 27;
+			this.isDefaultAutoReserveChkBox.Text = "自動予約";
+			this.isDefaultAutoReserveChkBox.UseVisualStyleBackColor = true;
+			// 
 			// appliJChkBox
 			// 
 			this.appliJChkBox.Location = new System.Drawing.Point(338, 62);
@@ -2008,7 +2028,7 @@ namespace namaichi
 			this.notifyTab.Location = new System.Drawing.Point(4, 22);
 			this.notifyTab.Name = "notifyTab";
 			this.notifyTab.Padding = new System.Windows.Forms.Padding(3);
-			this.notifyTab.Size = new System.Drawing.Size(433, 536);
+			this.notifyTab.Size = new System.Drawing.Size(433, 546);
 			this.notifyTab.TabIndex = 3;
 			this.notifyTab.Text = "通知";
 			this.notifyTab.UseVisualStyleBackColor = true;
@@ -2432,7 +2452,7 @@ namespace namaichi
 			this.notify2Tab.Controls.Add(this.groupBox10);
 			this.notify2Tab.Location = new System.Drawing.Point(4, 22);
 			this.notify2Tab.Name = "notify2Tab";
-			this.notify2Tab.Size = new System.Drawing.Size(433, 536);
+			this.notify2Tab.Size = new System.Drawing.Size(433, 546);
 			this.notify2Tab.TabIndex = 5;
 			this.notify2Tab.Text = "通知2";
 			this.notify2Tab.UseVisualStyleBackColor = true;
@@ -2582,7 +2602,7 @@ namespace namaichi
 			this.alartTab.Location = new System.Drawing.Point(4, 22);
 			this.alartTab.Name = "alartTab";
 			this.alartTab.Padding = new System.Windows.Forms.Padding(3);
-			this.alartTab.Size = new System.Drawing.Size(433, 536);
+			this.alartTab.Size = new System.Drawing.Size(433, 546);
 			this.alartTab.TabIndex = 4;
 			this.alartTab.Text = "アラート";
 			this.alartTab.UseVisualStyleBackColor = true;
@@ -2592,7 +2612,7 @@ namespace namaichi
 			this.groupBox13.Controls.Add(this.isAutoReserveChkBox);
 			this.groupBox13.Location = new System.Drawing.Point(5, 259);
 			this.groupBox13.Name = "groupBox13";
-			this.groupBox13.Size = new System.Drawing.Size(420, 46);
+			this.groupBox13.Size = new System.Drawing.Size(420, 55);
 			this.groupBox13.TabIndex = 7;
 			this.groupBox13.TabStop = false;
 			this.groupBox13.Text = "予約";
@@ -2601,9 +2621,9 @@ namespace namaichi
 			// 
 			this.isAutoReserveChkBox.Location = new System.Drawing.Point(19, 18);
 			this.isAutoReserveChkBox.Name = "isAutoReserveChkBox";
-			this.isAutoReserveChkBox.Size = new System.Drawing.Size(395, 19);
+			this.isAutoReserveChkBox.Size = new System.Drawing.Size(395, 32);
 			this.isAutoReserveChkBox.TabIndex = 16;
-			this.isAutoReserveChkBox.Text = "フォロー中のチャンネル・コミュニティ・ユーザーのタイムシフトを自動で予約する";
+			this.isAutoReserveChkBox.Text = "フォロー中のチャンネル・コミュニティ・ユーザーのタイムシフトを自動で予約する\r\n(別途お気に入りの行の自動予約の項目にチェックが必要)";
 			this.isAutoReserveChkBox.UseVisualStyleBackColor = true;
 			// 
 			// groupBox8
@@ -2757,7 +2777,7 @@ namespace namaichi
 			this.accountTab.Location = new System.Drawing.Point(4, 22);
 			this.accountTab.Name = "accountTab";
 			this.accountTab.Padding = new System.Windows.Forms.Padding(3);
-			this.accountTab.Size = new System.Drawing.Size(433, 536);
+			this.accountTab.Size = new System.Drawing.Size(433, 546);
 			this.accountTab.TabIndex = 1;
 			this.accountTab.Text = "アカウント設定";
 			this.accountTab.UseVisualStyleBackColor = true;
@@ -2924,20 +2944,11 @@ namespace namaichi
 			this.useSecondLoginChkBox.Text = "ブラウザからクッキーが取得できなかった場合、次のアカウントでログインする";
 			this.useSecondLoginChkBox.UseVisualStyleBackColor = true;
 			// 
-			// isDefaultAutoReserveChkBox
-			// 
-			this.isDefaultAutoReserveChkBox.Location = new System.Drawing.Point(225, 114);
-			this.isDefaultAutoReserveChkBox.Name = "isDefaultAutoReserveChkBox";
-			this.isDefaultAutoReserveChkBox.Size = new System.Drawing.Size(80, 24);
-			this.isDefaultAutoReserveChkBox.TabIndex = 27;
-			this.isDefaultAutoReserveChkBox.Text = "自動予約";
-			this.isDefaultAutoReserveChkBox.UseVisualStyleBackColor = true;
-			// 
 			// optionForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(453, 622);
+			this.ClientSize = new System.Drawing.Size(453, 632);
 			this.Controls.Add(this.button4);
 			this.Controls.Add(this.button3);
 			this.Controls.Add(this.tabControl1);
@@ -2994,6 +3005,7 @@ namespace namaichi
 			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.CheckBox IsExistInHistoryListNotAlartChkBox;
 		private System.Windows.Forms.CheckBox isDefaultAutoReserveChkBox;
 		private System.Windows.Forms.CheckBox isAutoReserveChkBox;
 		private System.Windows.Forms.GroupBox groupBox13;

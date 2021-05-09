@@ -32,8 +32,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.88";
-	public static string versionDayStr = "2021/04/27";
+	public static string versionStr = "ver0.1.7.89";
+	public static string versionDayStr = "2021/05/09";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -1050,7 +1050,7 @@ class util {
 		//test
 		if (bool.Parse(config.get("IsLogFile"))) {
 			//var name = (args.Length == 0) ? "lv_" : util.getRegGroup(args[0], "(lv\\d+)");
-			var name = (lv == null) ? "lv_" : lv;
+			var name = (lv == null) ? "log" : lv;
 			var logPath = util.getJarPath()[0] + "/" + name + ".txt";
 			
 			try {

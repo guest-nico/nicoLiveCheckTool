@@ -184,12 +184,14 @@ public class config
 			{"alartCacheIcon","true"},
 			{"IsAddAlartedComUser","false"},
 			{"IsAddAlartedUserToUserList","false"},
+			{"IsExistInHistoryListNotAlart","true"},
 			
 			{"IsbroadLog","false"},
 			{"IsLogFile","false"},
 			{"maxHistoryDisplay","100"},
 			{"maxNotAlartDisplay","100"},
 			{"maxLogDisplay","100"},
+			{"maxReserveHistoryDisplay","100"},
 			{"IsStartUp","false"},
 			{"IsAllowMultiProcess","false"},
 			
@@ -203,7 +205,6 @@ public class config
 			{"popupOpacity","90"},
 			{"rssUpdateInterval","15"},
 			{"userNameUpdateInterval","15"},
-			
 			
 			{"mailFrom",""},
 			{"mailTo",""},
@@ -287,6 +288,7 @@ public class config
 			{"ShowLiveColumns","11111111111111111"},
 			{"ShowHistoryColumns","1111111011"},
 			{"ShowNotAlartColumns","1111111111"},
+			{"ShowReserveHistoryColumns","11111110010"},
 			{"ColorAlartListColumns","000000000100000000000000000"},
 			{"ColorHistoryListRecentColumns","1000000000"},
 			{"ColorLiveListColumns","001000000000000000"},
@@ -354,6 +356,7 @@ public class config
 			{"LogListColumnWidth",""},
 			{"HistoryListColumnWidth",""},
 			{"NotAlartListColumnWidth",""},
+			{"ReserveHistoryListColumnWidth",""},
 			{"HistoryPanelDistance",""},
 			{"activeTab","0"},
 			{"favoriteActiveTab","0"},
@@ -373,6 +376,8 @@ public class config
 			{"historyListSortColumn","0"},
 			{"notAlartListSortOrder","no"},
 			{"notAlartListSortColumn","0"},
+			{"reserveHistoryListSortOrder","no"},
+			{"reserveHistoryListSortColumn","0"},
 		};
 
 		try {

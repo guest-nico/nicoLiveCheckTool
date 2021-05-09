@@ -87,11 +87,14 @@ namespace namaichi.alart
 							var hig = new HosoInfoGetter();
 							var higGetOk = hig.get(pageUrl, check.container); 
 							if ((higGetOk && hig.openDt > DateTime.Now) || !higGetOk) {
-								if (!isReserveAiLive(o, lvid, higGetOk ? hig : null, aiList)) continue;
+								RssItem ri = null; 
+								if (!isReserveAiLive(o, lvid, higGetOk ? hig : null, aiList, out ri)) continue;
 								
 								var ret = new Reservation(check.container, lvid).live2Reserve();
 								if (ret == "ok") {
 									check.form.addLogText(lvid + " " + o.actor.name + "(" + hig.title + ")のタイムシフトを予約しました");
+									var hi = new HistoryInfo(ri);
+									check.form.addReserveHistoryList(hi);
 								} else {
 									if (ret != "既に予約済みです。")
 										check.form.addLogText(lvid + " " + o.actor.name + "(" + hig.title + ")のタイムシフトの予約に失敗しました " + ret);
@@ -105,7 +108,7 @@ namespace namaichi.alart
 			}
 			if (recentUpdateDt > lastCheckedItemTime) lastCheckedItemTime = recentUpdateDt;
 		}
-		private bool isReserveAiLive(TimelineItem o, string lvid, HosoInfoGetter hig, List<AlartInfo> aiList) {
+		private bool isReserveAiLive(TimelineItem o, string lvid, HosoInfoGetter hig, List<AlartInfo> aiList, out RssItem ri) {
 			string desc = "", comName = "", comId = "", hostName = "", 
 				isMemberOnly = "false";
 			bool isPayment = false;
@@ -117,18 +120,18 @@ namespace namaichi.alart
 				isMemberOnly = hig.isMemberOnly.ToString();
 				isPayment = hig.isPayment;
 			}
-			var i = new RssItem(o.@object.name, lvid, DateTime.MinValue.ToString(), desc, comName, comId, hostName, "", isMemberOnly, "", isPayment);
+			ri = new RssItem(o.@object.name, lvid, hig.openDt.ToString(), desc, comName, comId, hostName, "", isMemberOnly, "", isPayment);
 			if (hig != null) {
-				i.setUserId(hig.userId);
-				i.setTag(hig.tags);
-				i.category = hig.category;
-				i.type = hig.type;
+				ri.setUserId(hig.userId);
+				ri.setTag(hig.tags);
+				ri.category = hig.category;
+				ri.type = hig.type;
 			}
 			foreach (var ai in aiList) {
 				if (!ai.isAutoReserve) continue;
 				
 				var isSuccessAccess = true;
-				var isAlart = check.isAlartItem(i, ai, out isSuccessAccess);
+				var isAlart = check.isAlartItem(ri, ai, out isSuccessAccess);
 				if (isAlart || !isSuccessAccess) return true;
 			}
 			return false;

@@ -173,6 +173,18 @@ namespace namaichi
 			this.isDisplayTypeOnAirTabMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.isDisplayFavoriteOnAirTabMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.isDisplayMemoOnAirTabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.displayReserveHistoryListMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem46 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem47 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem48 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem49 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem50 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem51 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem52 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem53 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem54 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem55 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem56 = new System.Windows.Forms.ToolStripMenuItem();
 			this.displayHistoryListMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripMenuItem();
@@ -502,6 +514,32 @@ namespace namaichi
 			this.openTwitterAccountUrlMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator36 = new System.Windows.Forms.ToolStripSeparator();
 			this.twitterListDeleteRowMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.tabPage6 = new System.Windows.Forms.TabPage();
+			this.reserveHistoryList = new System.Windows.Forms.DataGridView();
+			this.dataGridViewTextBoxColumn14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn33 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn35 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn37 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn38 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn39 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn40 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn41 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn42 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn43 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.isMemberOnly = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.historyListMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.historyListOpenUrlMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.historyListOpenCommunityUrlMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.historyListOpenUserUrlMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator24 = new System.Windows.Forms.ToolStripSeparator();
+			this.historyListCopyUrlMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.historyListCopyCommunityUrlMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.historyListCopyUserUrlMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator25 = new System.Windows.Forms.ToolStripSeparator();
+			this.historyListAddAlartListMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator27 = new System.Windows.Forms.ToolStripSeparator();
+			this.historyListDeleteRowMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.label7 = new System.Windows.Forms.Label();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.historySplitContainer = new System.Windows.Forms.SplitContainer();
 			this.label1 = new System.Windows.Forms.Label();
@@ -516,18 +554,6 @@ namespace namaichi
 			this.historyKeyword = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.お気に入り = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.説明 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.historyListMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.historyListOpenUrlMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.historyListOpenCommunityUrlMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.historyListOpenUserUrlMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator24 = new System.Windows.Forms.ToolStripSeparator();
-			this.historyListCopyUrlMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.historyListCopyCommunityUrlMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.historyListCopyUserUrlMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator25 = new System.Windows.Forms.ToolStripSeparator();
-			this.historyListAddAlartListMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator27 = new System.Windows.Forms.ToolStripSeparator();
-			this.historyListDeleteRowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.label3 = new System.Windows.Forms.Label();
 			this.notAlartList = new System.Windows.Forms.DataGridView();
 			this.dataGridViewTextBoxColumn16 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -563,6 +589,18 @@ namespace namaichi
 			this.logListCopyMessageMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator23 = new System.Windows.Forms.ToolStripSeparator();
 			this.logListDeleteRowMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.reserveHistoryListMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.toolStripMenuItem38 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem39 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem40 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator37 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem41 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem42 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem43 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator38 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem44 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator39 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem45 = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.alartList)).BeginInit();
@@ -587,17 +625,20 @@ namespace namaichi
 			this.tabPage5.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.twitterList)).BeginInit();
 			this.contextMenuStrip5.SuspendLayout();
+			this.tabPage6.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.reserveHistoryList)).BeginInit();
+			this.historyListMenu.SuspendLayout();
 			this.tabPage4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.historySplitContainer)).BeginInit();
 			this.historySplitContainer.Panel1.SuspendLayout();
 			this.historySplitContainer.Panel2.SuspendLayout();
 			this.historySplitContainer.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.historyList)).BeginInit();
-			this.historyListMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.notAlartList)).BeginInit();
 			this.notAlartListMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logList)).BeginInit();
 			this.logListMenu.SuspendLayout();
+			this.reserveHistoryListMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// groupLabel
@@ -1082,6 +1123,7 @@ namespace namaichi
 									this.displayFavoriteTabMenu,
 									this.displayTaskTabMenu,
 									this.displayOnAirTabMenu,
+									this.displayReserveHistoryListMenu,
 									this.displayHistoryListMenu,
 									this.displayNotAlartListMenu,
 									this.toolStripSeparator20,
@@ -1350,7 +1392,7 @@ namespace namaichi
 									this.isTaskListDisplayMemoTabMenu});
 			this.displayTaskTabMenu.Name = "displayTaskTabMenu";
 			this.displayTaskTabMenu.Size = new System.Drawing.Size(220, 22);
-			this.displayTaskTabMenu.Text = "予約起動タブ";
+			this.displayTaskTabMenu.Text = "時刻起動タブ";
 			// 
 			// isTaskListDisplayStartTimeTabMenu
 			// 
@@ -1632,6 +1674,94 @@ namespace namaichi
 			this.isDisplayMemoOnAirTabMenu.Name = "isDisplayMemoOnAirTabMenu";
 			this.isDisplayMemoOnAirTabMenu.Size = new System.Drawing.Size(162, 22);
 			this.isDisplayMemoOnAirTabMenu.Text = "メモ";
+			// 
+			// displayReserveHistoryListMenu
+			// 
+			this.displayReserveHistoryListMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.toolStripMenuItem46,
+									this.toolStripMenuItem47,
+									this.toolStripMenuItem48,
+									this.toolStripMenuItem49,
+									this.toolStripMenuItem50,
+									this.toolStripMenuItem51,
+									this.toolStripMenuItem52,
+									this.toolStripMenuItem53,
+									this.toolStripMenuItem54,
+									this.toolStripMenuItem55,
+									this.toolStripMenuItem56});
+			this.displayReserveHistoryListMenu.Name = "displayReserveHistoryListMenu";
+			this.displayReserveHistoryListMenu.Size = new System.Drawing.Size(220, 22);
+			this.displayReserveHistoryListMenu.Text = "予約履歴";
+			this.displayReserveHistoryListMenu.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.DisplayReserveHistoryListMenuDropDownItemClicked);
+			// 
+			// toolStripMenuItem46
+			// 
+			this.toolStripMenuItem46.Name = "toolStripMenuItem46";
+			this.toolStripMenuItem46.Size = new System.Drawing.Size(166, 22);
+			this.toolStripMenuItem46.Text = "放送開始日時";
+			// 
+			// toolStripMenuItem47
+			// 
+			this.toolStripMenuItem47.Name = "toolStripMenuItem47";
+			this.toolStripMenuItem47.Size = new System.Drawing.Size(166, 22);
+			this.toolStripMenuItem47.Text = "放送タイトル";
+			// 
+			// toolStripMenuItem48
+			// 
+			this.toolStripMenuItem48.Name = "toolStripMenuItem48";
+			this.toolStripMenuItem48.Size = new System.Drawing.Size(166, 22);
+			this.toolStripMenuItem48.Text = "放送者";
+			// 
+			// toolStripMenuItem49
+			// 
+			this.toolStripMenuItem49.Name = "toolStripMenuItem49";
+			this.toolStripMenuItem49.Size = new System.Drawing.Size(166, 22);
+			this.toolStripMenuItem49.Text = "コミュニティ名";
+			// 
+			// toolStripMenuItem50
+			// 
+			this.toolStripMenuItem50.Name = "toolStripMenuItem50";
+			this.toolStripMenuItem50.Size = new System.Drawing.Size(166, 22);
+			this.toolStripMenuItem50.Text = "放送ID";
+			// 
+			// toolStripMenuItem51
+			// 
+			this.toolStripMenuItem51.Name = "toolStripMenuItem51";
+			this.toolStripMenuItem51.Size = new System.Drawing.Size(166, 22);
+			this.toolStripMenuItem51.Text = "ユーザーID";
+			// 
+			// toolStripMenuItem52
+			// 
+			this.toolStripMenuItem52.Name = "toolStripMenuItem52";
+			this.toolStripMenuItem52.Size = new System.Drawing.Size(166, 22);
+			this.toolStripMenuItem52.Text = "コミュニティID";
+			// 
+			// toolStripMenuItem53
+			// 
+			this.toolStripMenuItem53.Name = "toolStripMenuItem53";
+			this.toolStripMenuItem53.Size = new System.Drawing.Size(166, 22);
+			this.toolStripMenuItem53.Text = "キーワード";
+			this.toolStripMenuItem53.Visible = false;
+			// 
+			// toolStripMenuItem54
+			// 
+			this.toolStripMenuItem54.Name = "toolStripMenuItem54";
+			this.toolStripMenuItem54.Size = new System.Drawing.Size(166, 22);
+			this.toolStripMenuItem54.Text = "お気に入り";
+			this.toolStripMenuItem54.Visible = false;
+			// 
+			// toolStripMenuItem55
+			// 
+			this.toolStripMenuItem55.Name = "toolStripMenuItem55";
+			this.toolStripMenuItem55.Size = new System.Drawing.Size(166, 22);
+			this.toolStripMenuItem55.Text = "説明";
+			// 
+			// toolStripMenuItem56
+			// 
+			this.toolStripMenuItem56.Name = "toolStripMenuItem56";
+			this.toolStripMenuItem56.Size = new System.Drawing.Size(166, 22);
+			this.toolStripMenuItem56.Text = "_isMemberOnly";
+			this.toolStripMenuItem56.Visible = false;
 			// 
 			// displayHistoryListMenu
 			// 
@@ -2867,6 +2997,7 @@ namespace namaichi
 			this.tabControl1.Controls.Add(this.tabPage1);
 			this.tabControl1.Controls.Add(this.tabPage2);
 			this.tabControl1.Controls.Add(this.tabPage5);
+			this.tabControl1.Controls.Add(this.tabPage6);
 			this.tabControl1.Controls.Add(this.tabPage4);
 			this.tabControl1.Location = new System.Drawing.Point(12, 29);
 			this.tabControl1.Name = "tabControl1";
@@ -4071,7 +4202,7 @@ namespace namaichi
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage2.Size = new System.Drawing.Size(878, 362);
 			this.tabPage2.TabIndex = 1;
-			this.tabPage2.Text = "予約起動";
+			this.tabPage2.Text = "時刻起動";
 			// 
 			// addYoyakuBtn
 			// 
@@ -4622,6 +4753,236 @@ namespace namaichi
 			this.twitterListDeleteRowMenu.Text = "この行を削除";
 			this.twitterListDeleteRowMenu.Click += new System.EventHandler(this.TwitterListDeleteRowMenuClick);
 			// 
+			// tabPage6
+			// 
+			this.tabPage6.BackColor = System.Drawing.SystemColors.Control;
+			this.tabPage6.Controls.Add(this.reserveHistoryList);
+			this.tabPage6.Controls.Add(this.label7);
+			this.tabPage6.Location = new System.Drawing.Point(4, 22);
+			this.tabPage6.Name = "tabPage6";
+			this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage6.Size = new System.Drawing.Size(878, 362);
+			this.tabPage6.TabIndex = 5;
+			this.tabPage6.Text = "予約履歴";
+			// 
+			// reserveHistoryList
+			// 
+			this.reserveHistoryList.AllowDrop = true;
+			this.reserveHistoryList.AllowUserToAddRows = false;
+			this.reserveHistoryList.AllowUserToDeleteRows = false;
+			this.reserveHistoryList.AllowUserToResizeRows = false;
+			this.reserveHistoryList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+									| System.Windows.Forms.AnchorStyles.Left) 
+									| System.Windows.Forms.AnchorStyles.Right)));
+			this.reserveHistoryList.ColumnHeadersHeight = 25;
+			this.reserveHistoryList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+			this.reserveHistoryList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+									this.dataGridViewTextBoxColumn14,
+									this.dataGridViewTextBoxColumn33,
+									this.dataGridViewTextBoxColumn35,
+									this.dataGridViewTextBoxColumn37,
+									this.dataGridViewTextBoxColumn38,
+									this.dataGridViewTextBoxColumn39,
+									this.dataGridViewTextBoxColumn40,
+									this.dataGridViewTextBoxColumn41,
+									this.dataGridViewTextBoxColumn42,
+									this.dataGridViewTextBoxColumn43,
+									this.isMemberOnly});
+			this.reserveHistoryList.ContextMenuStrip = this.historyListMenu;
+			this.reserveHistoryList.Location = new System.Drawing.Point(8, 22);
+			this.reserveHistoryList.Name = "reserveHistoryList";
+			this.reserveHistoryList.ReadOnly = true;
+			this.reserveHistoryList.RowHeadersVisible = false;
+			this.reserveHistoryList.RowTemplate.Height = 21;
+			this.reserveHistoryList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+			this.reserveHistoryList.Size = new System.Drawing.Size(867, 334);
+			this.reserveHistoryList.TabIndex = 28;
+			this.reserveHistoryList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.ReserveHistoryListCellFormatting);
+			this.reserveHistoryList.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ReserveHistoryListCellMouseDown);
+			this.reserveHistoryList.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.ReserveHistoryListRowsAdded);
+			this.reserveHistoryList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HistoryListKeyDown);
+			// 
+			// dataGridViewTextBoxColumn14
+			// 
+			this.dataGridViewTextBoxColumn14.DataPropertyName = "dt";
+			this.dataGridViewTextBoxColumn14.HeaderText = "放送開始日時";
+			this.dataGridViewTextBoxColumn14.Name = "dataGridViewTextBoxColumn14";
+			this.dataGridViewTextBoxColumn14.ReadOnly = true;
+			this.dataGridViewTextBoxColumn14.Width = 115;
+			// 
+			// dataGridViewTextBoxColumn33
+			// 
+			this.dataGridViewTextBoxColumn33.DataPropertyName = "title";
+			this.dataGridViewTextBoxColumn33.HeaderText = "放送タイトル";
+			this.dataGridViewTextBoxColumn33.Name = "dataGridViewTextBoxColumn33";
+			this.dataGridViewTextBoxColumn33.ReadOnly = true;
+			// 
+			// dataGridViewTextBoxColumn35
+			// 
+			this.dataGridViewTextBoxColumn35.DataPropertyName = "userName";
+			this.dataGridViewTextBoxColumn35.HeaderText = "放送者";
+			this.dataGridViewTextBoxColumn35.Name = "dataGridViewTextBoxColumn35";
+			this.dataGridViewTextBoxColumn35.ReadOnly = true;
+			// 
+			// dataGridViewTextBoxColumn37
+			// 
+			this.dataGridViewTextBoxColumn37.DataPropertyName = "communityName";
+			this.dataGridViewTextBoxColumn37.HeaderText = "コミュニティ名";
+			this.dataGridViewTextBoxColumn37.Name = "dataGridViewTextBoxColumn37";
+			this.dataGridViewTextBoxColumn37.ReadOnly = true;
+			// 
+			// dataGridViewTextBoxColumn38
+			// 
+			this.dataGridViewTextBoxColumn38.DataPropertyName = "lvid";
+			this.dataGridViewTextBoxColumn38.HeaderText = "放送ID";
+			this.dataGridViewTextBoxColumn38.Name = "dataGridViewTextBoxColumn38";
+			this.dataGridViewTextBoxColumn38.ReadOnly = true;
+			// 
+			// dataGridViewTextBoxColumn39
+			// 
+			this.dataGridViewTextBoxColumn39.DataPropertyName = "userId";
+			this.dataGridViewTextBoxColumn39.HeaderText = "ユーザーID";
+			this.dataGridViewTextBoxColumn39.Name = "dataGridViewTextBoxColumn39";
+			this.dataGridViewTextBoxColumn39.ReadOnly = true;
+			// 
+			// dataGridViewTextBoxColumn40
+			// 
+			this.dataGridViewTextBoxColumn40.DataPropertyName = "communityId";
+			this.dataGridViewTextBoxColumn40.HeaderText = "コミュニティID";
+			this.dataGridViewTextBoxColumn40.Name = "dataGridViewTextBoxColumn40";
+			this.dataGridViewTextBoxColumn40.ReadOnly = true;
+			// 
+			// dataGridViewTextBoxColumn41
+			// 
+			this.dataGridViewTextBoxColumn41.DataPropertyName = "keyword";
+			this.dataGridViewTextBoxColumn41.HeaderText = "キーワード";
+			this.dataGridViewTextBoxColumn41.Name = "dataGridViewTextBoxColumn41";
+			this.dataGridViewTextBoxColumn41.ReadOnly = true;
+			this.dataGridViewTextBoxColumn41.Visible = false;
+			// 
+			// dataGridViewTextBoxColumn42
+			// 
+			this.dataGridViewTextBoxColumn42.DataPropertyName = "favorite";
+			this.dataGridViewTextBoxColumn42.HeaderText = "お気に入り";
+			this.dataGridViewTextBoxColumn42.Name = "dataGridViewTextBoxColumn42";
+			this.dataGridViewTextBoxColumn42.ReadOnly = true;
+			this.dataGridViewTextBoxColumn42.Visible = false;
+			// 
+			// dataGridViewTextBoxColumn43
+			// 
+			this.dataGridViewTextBoxColumn43.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.dataGridViewTextBoxColumn43.DataPropertyName = "description";
+			this.dataGridViewTextBoxColumn43.HeaderText = "説明";
+			this.dataGridViewTextBoxColumn43.MinimumWidth = 30;
+			this.dataGridViewTextBoxColumn43.Name = "dataGridViewTextBoxColumn43";
+			this.dataGridViewTextBoxColumn43.ReadOnly = true;
+			// 
+			// isMemberOnly
+			// 
+			this.isMemberOnly.DataPropertyName = "IsMemberOnly";
+			this.isMemberOnly.HeaderText = "_isMemberOnly";
+			this.isMemberOnly.Name = "isMemberOnly";
+			this.isMemberOnly.ReadOnly = true;
+			this.isMemberOnly.Visible = false;
+			// 
+			// historyListMenu
+			// 
+			this.historyListMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.historyListOpenUrlMenu,
+									this.historyListOpenCommunityUrlMenu,
+									this.historyListOpenUserUrlMenu,
+									this.toolStripSeparator24,
+									this.historyListCopyUrlMenu,
+									this.historyListCopyCommunityUrlMenu,
+									this.historyListCopyUserUrlMenu,
+									this.toolStripSeparator25,
+									this.historyListAddAlartListMenu,
+									this.toolStripSeparator27,
+									this.historyListDeleteRowMenu});
+			this.historyListMenu.Name = "logListMenu";
+			this.historyListMenu.Size = new System.Drawing.Size(221, 198);
+			// 
+			// historyListOpenUrlMenu
+			// 
+			this.historyListOpenUrlMenu.Name = "historyListOpenUrlMenu";
+			this.historyListOpenUrlMenu.Size = new System.Drawing.Size(220, 22);
+			this.historyListOpenUrlMenu.Text = "放送URLを開く";
+			this.historyListOpenUrlMenu.Click += new System.EventHandler(this.HistoryListOpenUrlMenuClick);
+			// 
+			// historyListOpenCommunityUrlMenu
+			// 
+			this.historyListOpenCommunityUrlMenu.Name = "historyListOpenCommunityUrlMenu";
+			this.historyListOpenCommunityUrlMenu.Size = new System.Drawing.Size(220, 22);
+			this.historyListOpenCommunityUrlMenu.Text = "コミュニティURLを開く";
+			this.historyListOpenCommunityUrlMenu.Click += new System.EventHandler(this.HistoryListOpenCommunityUrlMenuClick);
+			// 
+			// historyListOpenUserUrlMenu
+			// 
+			this.historyListOpenUserUrlMenu.Name = "historyListOpenUserUrlMenu";
+			this.historyListOpenUserUrlMenu.Size = new System.Drawing.Size(220, 22);
+			this.historyListOpenUserUrlMenu.Text = "ユーザーURLを開く";
+			this.historyListOpenUserUrlMenu.Visible = false;
+			this.historyListOpenUserUrlMenu.Click += new System.EventHandler(this.HistoryListOpenUserUrlMenuClick);
+			// 
+			// toolStripSeparator24
+			// 
+			this.toolStripSeparator24.Name = "toolStripSeparator24";
+			this.toolStripSeparator24.Size = new System.Drawing.Size(217, 6);
+			// 
+			// historyListCopyUrlMenu
+			// 
+			this.historyListCopyUrlMenu.Name = "historyListCopyUrlMenu";
+			this.historyListCopyUrlMenu.Size = new System.Drawing.Size(220, 22);
+			this.historyListCopyUrlMenu.Text = "URLをコピー";
+			this.historyListCopyUrlMenu.Click += new System.EventHandler(this.HistoryListCopyUrlMenuClick);
+			// 
+			// historyListCopyCommunityUrlMenu
+			// 
+			this.historyListCopyCommunityUrlMenu.Name = "historyListCopyCommunityUrlMenu";
+			this.historyListCopyCommunityUrlMenu.Size = new System.Drawing.Size(220, 22);
+			this.historyListCopyCommunityUrlMenu.Text = "コミュニティURLをコピー";
+			this.historyListCopyCommunityUrlMenu.Click += new System.EventHandler(this.HistoryListCopyCommunityUrlMenuClick);
+			// 
+			// historyListCopyUserUrlMenu
+			// 
+			this.historyListCopyUserUrlMenu.Name = "historyListCopyUserUrlMenu";
+			this.historyListCopyUserUrlMenu.Size = new System.Drawing.Size(220, 22);
+			this.historyListCopyUserUrlMenu.Text = "ユーザーURLをコピー";
+			this.historyListCopyUserUrlMenu.Visible = false;
+			this.historyListCopyUserUrlMenu.Click += new System.EventHandler(this.HistoryListCopyUserUrlMenuClick);
+			// 
+			// toolStripSeparator25
+			// 
+			this.toolStripSeparator25.Name = "toolStripSeparator25";
+			this.toolStripSeparator25.Size = new System.Drawing.Size(217, 6);
+			// 
+			// historyListAddAlartListMenu
+			// 
+			this.historyListAddAlartListMenu.Name = "historyListAddAlartListMenu";
+			this.historyListAddAlartListMenu.Size = new System.Drawing.Size(220, 22);
+			this.historyListAddAlartListMenu.Text = "お気に入りに登録する";
+			this.historyListAddAlartListMenu.Click += new System.EventHandler(this.HistoryListAddAlartListMenuClick);
+			// 
+			// toolStripSeparator27
+			// 
+			this.toolStripSeparator27.Name = "toolStripSeparator27";
+			this.toolStripSeparator27.Size = new System.Drawing.Size(217, 6);
+			// 
+			// historyListDeleteRowMenu
+			// 
+			this.historyListDeleteRowMenu.Name = "historyListDeleteRowMenu";
+			this.historyListDeleteRowMenu.Size = new System.Drawing.Size(220, 22);
+			this.historyListDeleteRowMenu.Text = "この行を削除する";
+			this.historyListDeleteRowMenu.Click += new System.EventHandler(this.HistoryListDeleteRowMenuClick);
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(8, 5);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(152, 14);
+			this.label7.TabIndex = 27;
+			this.label7.Text = "予約履歴";
+			// 
 			// tabPage4
 			// 
 			this.tabPage4.BackColor = System.Drawing.SystemColors.Control;
@@ -4774,96 +5135,6 @@ namespace namaichi
 			this.説明.MinimumWidth = 30;
 			this.説明.Name = "説明";
 			this.説明.ReadOnly = true;
-			// 
-			// historyListMenu
-			// 
-			this.historyListMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.historyListOpenUrlMenu,
-									this.historyListOpenCommunityUrlMenu,
-									this.historyListOpenUserUrlMenu,
-									this.toolStripSeparator24,
-									this.historyListCopyUrlMenu,
-									this.historyListCopyCommunityUrlMenu,
-									this.historyListCopyUserUrlMenu,
-									this.toolStripSeparator25,
-									this.historyListAddAlartListMenu,
-									this.toolStripSeparator27,
-									this.historyListDeleteRowMenu});
-			this.historyListMenu.Name = "logListMenu";
-			this.historyListMenu.Size = new System.Drawing.Size(221, 198);
-			// 
-			// historyListOpenUrlMenu
-			// 
-			this.historyListOpenUrlMenu.Name = "historyListOpenUrlMenu";
-			this.historyListOpenUrlMenu.Size = new System.Drawing.Size(220, 22);
-			this.historyListOpenUrlMenu.Text = "放送URLを開く";
-			this.historyListOpenUrlMenu.Click += new System.EventHandler(this.HistoryListOpenUrlMenuClick);
-			// 
-			// historyListOpenCommunityUrlMenu
-			// 
-			this.historyListOpenCommunityUrlMenu.Name = "historyListOpenCommunityUrlMenu";
-			this.historyListOpenCommunityUrlMenu.Size = new System.Drawing.Size(220, 22);
-			this.historyListOpenCommunityUrlMenu.Text = "コミュニティURLを開く";
-			this.historyListOpenCommunityUrlMenu.Click += new System.EventHandler(this.HistoryListOpenCommunityUrlMenuClick);
-			// 
-			// historyListOpenUserUrlMenu
-			// 
-			this.historyListOpenUserUrlMenu.Name = "historyListOpenUserUrlMenu";
-			this.historyListOpenUserUrlMenu.Size = new System.Drawing.Size(220, 22);
-			this.historyListOpenUserUrlMenu.Text = "ユーザーURLを開く";
-			this.historyListOpenUserUrlMenu.Visible = false;
-			this.historyListOpenUserUrlMenu.Click += new System.EventHandler(this.HistoryListOpenUserUrlMenuClick);
-			// 
-			// toolStripSeparator24
-			// 
-			this.toolStripSeparator24.Name = "toolStripSeparator24";
-			this.toolStripSeparator24.Size = new System.Drawing.Size(217, 6);
-			// 
-			// historyListCopyUrlMenu
-			// 
-			this.historyListCopyUrlMenu.Name = "historyListCopyUrlMenu";
-			this.historyListCopyUrlMenu.Size = new System.Drawing.Size(220, 22);
-			this.historyListCopyUrlMenu.Text = "URLをコピー";
-			this.historyListCopyUrlMenu.Click += new System.EventHandler(this.HistoryListCopyUrlMenuClick);
-			// 
-			// historyListCopyCommunityUrlMenu
-			// 
-			this.historyListCopyCommunityUrlMenu.Name = "historyListCopyCommunityUrlMenu";
-			this.historyListCopyCommunityUrlMenu.Size = new System.Drawing.Size(220, 22);
-			this.historyListCopyCommunityUrlMenu.Text = "コミュニティURLをコピー";
-			this.historyListCopyCommunityUrlMenu.Click += new System.EventHandler(this.HistoryListCopyCommunityUrlMenuClick);
-			// 
-			// historyListCopyUserUrlMenu
-			// 
-			this.historyListCopyUserUrlMenu.Name = "historyListCopyUserUrlMenu";
-			this.historyListCopyUserUrlMenu.Size = new System.Drawing.Size(220, 22);
-			this.historyListCopyUserUrlMenu.Text = "ユーザーURLをコピー";
-			this.historyListCopyUserUrlMenu.Visible = false;
-			this.historyListCopyUserUrlMenu.Click += new System.EventHandler(this.HistoryListCopyUserUrlMenuClick);
-			// 
-			// toolStripSeparator25
-			// 
-			this.toolStripSeparator25.Name = "toolStripSeparator25";
-			this.toolStripSeparator25.Size = new System.Drawing.Size(217, 6);
-			// 
-			// historyListAddAlartListMenu
-			// 
-			this.historyListAddAlartListMenu.Name = "historyListAddAlartListMenu";
-			this.historyListAddAlartListMenu.Size = new System.Drawing.Size(220, 22);
-			this.historyListAddAlartListMenu.Text = "お気に入りに登録する";
-			this.historyListAddAlartListMenu.Click += new System.EventHandler(this.HistoryListAddAlartListMenuClick);
-			// 
-			// toolStripSeparator27
-			// 
-			this.toolStripSeparator27.Name = "toolStripSeparator27";
-			this.toolStripSeparator27.Size = new System.Drawing.Size(217, 6);
-			// 
-			// historyListDeleteRowMenu
-			// 
-			this.historyListDeleteRowMenu.Name = "historyListDeleteRowMenu";
-			this.historyListDeleteRowMenu.Size = new System.Drawing.Size(220, 22);
-			this.historyListDeleteRowMenu.Text = "この行を削除する";
-			this.historyListDeleteRowMenu.Click += new System.EventHandler(this.HistoryListDeleteRowMenuClick);
 			// 
 			// label3
 			// 
@@ -5197,6 +5468,97 @@ namespace namaichi
 			this.logListDeleteRowMenu.Text = "この行を削除する";
 			this.logListDeleteRowMenu.Click += new System.EventHandler(this.LogListDeleteRowMenuClick);
 			// 
+			// reserveHistoryListMenu
+			// 
+			this.reserveHistoryListMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.toolStripMenuItem38,
+									this.toolStripMenuItem39,
+									this.toolStripMenuItem40,
+									this.toolStripSeparator37,
+									this.toolStripMenuItem41,
+									this.toolStripMenuItem42,
+									this.toolStripMenuItem43,
+									this.toolStripSeparator38,
+									this.toolStripMenuItem44,
+									this.toolStripSeparator39,
+									this.toolStripMenuItem45});
+			this.reserveHistoryListMenu.Name = "logListMenu";
+			this.reserveHistoryListMenu.Size = new System.Drawing.Size(221, 198);
+			this.reserveHistoryListMenu.Click += new System.EventHandler(this.HistoryListCopyCommunityUrlMenuClick);
+			// 
+			// toolStripMenuItem38
+			// 
+			this.toolStripMenuItem38.Name = "toolStripMenuItem38";
+			this.toolStripMenuItem38.Size = new System.Drawing.Size(220, 22);
+			this.toolStripMenuItem38.Text = "放送URLを開く";
+			this.toolStripMenuItem38.Click += new System.EventHandler(this.HistoryListOpenUrlMenuClick);
+			// 
+			// toolStripMenuItem39
+			// 
+			this.toolStripMenuItem39.Name = "toolStripMenuItem39";
+			this.toolStripMenuItem39.Size = new System.Drawing.Size(220, 22);
+			this.toolStripMenuItem39.Text = "コミュニティURLを開く";
+			this.toolStripMenuItem39.Click += new System.EventHandler(this.HistoryListOpenCommunityUrlMenuClick);
+			// 
+			// toolStripMenuItem40
+			// 
+			this.toolStripMenuItem40.Name = "toolStripMenuItem40";
+			this.toolStripMenuItem40.Size = new System.Drawing.Size(220, 22);
+			this.toolStripMenuItem40.Text = "ユーザーURLを開く";
+			this.toolStripMenuItem40.Visible = false;
+			this.toolStripMenuItem40.Click += new System.EventHandler(this.HistoryListOpenUserUrlMenuClick);
+			// 
+			// toolStripSeparator37
+			// 
+			this.toolStripSeparator37.Name = "toolStripSeparator37";
+			this.toolStripSeparator37.Size = new System.Drawing.Size(217, 6);
+			// 
+			// toolStripMenuItem41
+			// 
+			this.toolStripMenuItem41.Name = "toolStripMenuItem41";
+			this.toolStripMenuItem41.Size = new System.Drawing.Size(220, 22);
+			this.toolStripMenuItem41.Text = "URLをコピー";
+			this.toolStripMenuItem41.Click += new System.EventHandler(this.HistoryListCopyUrlMenuClick);
+			// 
+			// toolStripMenuItem42
+			// 
+			this.toolStripMenuItem42.Name = "toolStripMenuItem42";
+			this.toolStripMenuItem42.Size = new System.Drawing.Size(220, 22);
+			this.toolStripMenuItem42.Text = "コミュニティURLをコピー";
+			this.toolStripMenuItem42.Click += new System.EventHandler(this.HistoryListCopyCommunityUrlMenuClick);
+			// 
+			// toolStripMenuItem43
+			// 
+			this.toolStripMenuItem43.Name = "toolStripMenuItem43";
+			this.toolStripMenuItem43.Size = new System.Drawing.Size(220, 22);
+			this.toolStripMenuItem43.Text = "ユーザーURLをコピー";
+			this.toolStripMenuItem43.Visible = false;
+			this.toolStripMenuItem43.Click += new System.EventHandler(this.HistoryListCopyUserUrlMenuClick);
+			// 
+			// toolStripSeparator38
+			// 
+			this.toolStripSeparator38.Name = "toolStripSeparator38";
+			this.toolStripSeparator38.Size = new System.Drawing.Size(217, 6);
+			// 
+			// toolStripMenuItem44
+			// 
+			this.toolStripMenuItem44.Name = "toolStripMenuItem44";
+			this.toolStripMenuItem44.Size = new System.Drawing.Size(220, 22);
+			this.toolStripMenuItem44.Text = "お気に入りに登録する";
+			this.toolStripMenuItem44.Click += new System.EventHandler(this.HistoryListAddAlartListMenuClick);
+			// 
+			// toolStripSeparator39
+			// 
+			this.toolStripSeparator39.Name = "toolStripSeparator39";
+			this.toolStripSeparator39.Size = new System.Drawing.Size(217, 6);
+			// 
+			// toolStripMenuItem45
+			// 
+			this.toolStripMenuItem45.Name = "toolStripMenuItem45";
+			this.toolStripMenuItem45.Size = new System.Drawing.Size(220, 22);
+			this.toolStripMenuItem45.Text = "この行を削除する";
+			this.toolStripMenuItem45.Click += new System.EventHandler(this.HistoryListDeleteRowMenuClick);
+			// 
 			// MainForm
 			// 
 			this.AllowDrop = true;
@@ -5248,20 +5610,61 @@ namespace namaichi
 			this.tabPage5.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.twitterList)).EndInit();
 			this.contextMenuStrip5.ResumeLayout(false);
+			this.tabPage6.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.reserveHistoryList)).EndInit();
+			this.historyListMenu.ResumeLayout(false);
 			this.tabPage4.ResumeLayout(false);
 			this.historySplitContainer.Panel1.ResumeLayout(false);
 			this.historySplitContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.historySplitContainer)).EndInit();
 			this.historySplitContainer.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.historyList)).EndInit();
-			this.historyListMenu.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.notAlartList)).EndInit();
 			this.notAlartListMenu.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.logList)).EndInit();
 			this.logListMenu.ResumeLayout(false);
+			this.reserveHistoryListMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem56;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem55;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem54;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem53;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem52;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem51;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem50;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem49;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem48;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem47;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem46;
+		private System.Windows.Forms.ToolStripMenuItem displayReserveHistoryListMenu;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem45;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator39;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem44;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator38;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem43;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem42;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem41;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator37;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem40;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem39;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem38;
+		private System.Windows.Forms.ContextMenuStrip reserveHistoryListMenu;
+		private System.Windows.Forms.DataGridViewTextBoxColumn isMemberOnly;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn43;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn42;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn41;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn40;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn39;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn38;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn37;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn35;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn33;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn14;
+		public System.Windows.Forms.DataGridView reserveHistoryList;
+		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.TabPage tabPage6;
 		private System.Windows.Forms.ToolStripMenuItem liveListColorColumnMenu;
 		private System.Windows.Forms.ToolStripMenuItem twitterListDeleteRowMenu;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator36;

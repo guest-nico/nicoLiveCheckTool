@@ -107,7 +107,7 @@ namespace namaichi.alart
 		}
 		
 		private bool gotStreamProcess(List<RssItem> items) {
-			util.debugWriteLine("gotStreamProcess itemCount");
+			util.debugWriteLine("gotStreamProcess itemCount " + (items != null ? items.Count.ToString() : "null"));
 			var isChanged = false;
 			items.Reverse();
 			while (true) {
@@ -841,6 +841,7 @@ namespace namaichi.alart
 						new HistoryListFileManager().save(form);
 						new NotAlartListFileManager().save(form);
 						//new TwitterListFileManager().save(form);
+						new ReserveHistoryListFileManager().save(form);
 					});
 				}
 				

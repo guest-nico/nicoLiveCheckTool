@@ -64,6 +64,7 @@ namespace namaichi
 		public SortableBindingList<HistoryInfo> notAlartListDataSource = new SortableBindingList<HistoryInfo>();
 		public SortableBindingList<AlartInfo> userAlartListDataSource = new SortableBindingList<AlartInfo>();
 		public SortableBindingList<TwitterInfo> twitterListDataSource = new SortableBindingList<TwitterInfo>();
+		public SortableBindingList<HistoryInfo> reserveHistoryListDataSource = new SortableBindingList<HistoryInfo>();
 		public List<LiveInfo> liveListDataReserve = new List<LiveInfo>();
 		//public BindingSource alartListDataSource = new BindingSource();
 		//public BindingSource taskListDataSource = new BindingSource();
@@ -226,6 +227,7 @@ namespace namaichi
 			notAlartList.DataSource = notAlartListDataSource;
 			userAlartList.DataSource = userAlartListDataSource;
 			twitterList.DataSource = twitterListDataSource;
+			reserveHistoryList.DataSource = reserveHistoryListDataSource;
 			
 			setDoubleBuffered(alartList);
 			setDoubleBuffered(taskList);
@@ -235,6 +237,7 @@ namespace namaichi
 			setDoubleBuffered(notAlartList);
 			setDoubleBuffered(userAlartList);
 			setDoubleBuffered(twitterList);
+			setDoubleBuffered(reserveHistoryList);
 			
 			setCategoryBorderPaint();
 			//categoryRightBtn.Text += Convert.ToChar(9654);//右
@@ -266,6 +269,8 @@ namespace namaichi
 			foreach (DataGridViewColumn c in liveList.Columns)
 				c.SortMode = DataGridViewColumnSortMode.Automatic;
 			foreach (DataGridViewColumn c in twitterList.Columns)
+				c.SortMode = DataGridViewColumnSortMode.Automatic;
+			foreach (DataGridViewColumn c in reserveHistoryList.Columns)
 				c.SortMode = DataGridViewColumnSortMode.Automatic;
 			
 			liveList.RowTemplate.Height = liveList.Columns[1].Width;
@@ -492,6 +497,7 @@ namespace namaichi
 				new HistoryListFileManager().save(this);
 				new NotAlartListFileManager().save(this);
 				new TwitterListFileManager().save(this);
+				new ReserveHistoryListFileManager().save(this);
 				saveMenuSetting();
 				saveFormState();
 				saveSortState();
@@ -513,20 +519,20 @@ namespace namaichi
 			if (config.brokenCopyFile != null)
 				System.Windows.Forms.MessageBox.Show("設定ファイルを読み込めませんでした。設定ファイルをバックアップしました。" + config.brokenCopyFile);
 			
-			
-			
 			Task.Factory.StartNew(() => {
 				new AlartListFileManager(false, this).load();
 				new AlartListFileManager(true, this).load();
 				
-				try {
-					new HistoryListFileManager().load(this);
-					var hiLvidList = historyListDataSource.Select(x => 
-							new RssItem(x.title, x.lvid, x.dt.ToString(), x.description, x.communityName, x.communityId, x.userName, "", x.isMemberOnly.ToString(), "", x.isPayment)).ToList();
-					util.debugWriteLine("sss " + hiLvidList.Count);
-					check.checkedLvIdList.AddRange(hiLvidList);
-				} catch (Exception ee) {
-					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+				new HistoryListFileManager().load(this);
+				if (bool.Parse(config.get("IsExistInHistoryListNotAlart"))) {
+					try {
+						var hiLvidList = historyListDataSource.Select(x => 
+								new RssItem(x.title, x.lvid, x.dt.ToString(), x.description, x.communityName, x.communityId, x.userName, "", x.isMemberOnly.ToString(), "", x.isPayment)).ToList();
+						util.debugWriteLine("sss " + hiLvidList.Count);
+						check.checkedLvIdList.AddRange(hiLvidList);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
 				}
 				check.start();
 			});
@@ -551,6 +557,9 @@ namespace namaichi
 			});
 			Task.Factory.StartNew(() => {
 				new NotAlartListFileManager().load(this);
+			});
+			Task.Factory.StartNew(() => {
+				new ReserveHistoryListFileManager().load(this);
 			});
 			Task.Factory.StartNew(() => {
 			    liveCheck = new LiveCheck(this);
@@ -2199,6 +2208,15 @@ namespace namaichi
 				menu.Checked = notAlartList.Columns[i].Visible;
 			}
 			
+			var showReserveHistoryListColumns = config.get("ShowReserveHistoryColumns");
+			for(var i = 0; i < reserveHistoryList.Columns.Count; i++) {
+				var menu = (ToolStripMenuItem)displayReserveHistoryListMenu.DropDownItems[i];
+				menu.Checked = showReserveHistoryListColumns[i] == '1';
+				foreach (DataGridViewColumn c in reserveHistoryList.Columns)
+					if (c.HeaderText == menu.Text)
+						c.Visible = showReserveHistoryListColumns[i] == '1';
+			}
+			
 			var notifyOffs = new string[] {
 					"OffPop","OffBalloon",
 					"OffWeb","OffMail","OffSound","OffAppA",
@@ -2326,6 +2344,14 @@ namespace namaichi
 				buf += notAlartList.Columns[i].Visible ? "1" : "0";
 			}
 			setting.Add("ShowNotAlartColumns", buf);
+			
+			buf = "";
+			for(var i = 0; i < reserveHistoryList.Columns.Count; i++) {
+				var t = displayReserveHistoryListMenu.DropDownItems[i].Text;
+				foreach (DataGridViewColumn c in reserveHistoryList.Columns)
+					if (c.HeaderText == t) buf += c.Visible ? "1" : "0";
+			}
+			setting.Add("ShowReserveHistoryColumns", buf);
 			
 			var notifyOffs = new string[] {
 					"OffPop","OffBalloon",
@@ -2590,11 +2616,13 @@ namespace namaichi
 				
 				var name = config.get("appli" + n + "Name");
 				if (name == "") name = "アプリ" + n;
-				item.Text = "最近行われた放送のURLを" + name + "で開く";
-				
-				alartList.Columns[i + 15].HeaderText = name;
-				taskList.Columns[i + 10].HeaderText = name;
-				userAlartList.Columns[i + 15].HeaderText = name;
+				formAction(() => {
+					item.Text = "最近行われた放送のURLを" + name + "で開く";
+					
+					alartList.Columns[i + 15].HeaderText = name;
+					taskList.Columns[i + 10].HeaderText = name;
+					userAlartList.Columns[i + 15].HeaderText = name;
+				});
 			}
 		}
 		void recentLiveAppliOpenMenu_Click(object sender, EventArgs e)
@@ -2768,11 +2796,12 @@ namespace namaichi
 				return true;
 			}
 			
-			if (_res.IndexOf("status-onair\">") == -1 && 
-					_res.IndexOf("status-comingsoon\">") == -1) {
+			var _ret = _res.IndexOf("status-onair\">") > -1 || 
+					_res.IndexOf("status-comingsoon\">") > -1; 
+			if (!_ret) {
 				util.debugWriteLine("終了判定 embed " + lvid + " " + _res);
 			}
-			return _res.IndexOf("status-onair\">") > -1;
+			return _ret;
 		}
 		private void changeIcon(int recentNum) {
 			var n = recentNum;
@@ -3096,32 +3125,44 @@ namespace namaichi
 		private void _deleteLiveListTime(double delMin, DateTime now) {
 			util.debugWriteLine("deletelivelistTime 0");
 			formAction(() => {
-				for (var i = liveListDataSource.Count - 1; i > -1; i--) {
-			        var li = liveListDataSource[i];
-			        var isDelete = (delMin != 0 && ((TimeSpan)(now - li.pubDateDt)).TotalMinutes > delMin) ||
-			        	(!string.IsNullOrEmpty(li.comId) && 
-			        	 	((li.comId.StartsWith("co") && now - li.pubDateDt > TimeSpan.FromHours(6)) || 
-			        	  (li.comId.StartsWith("ch") && now - li.pubDateDt > TimeSpan.FromHours(100))));
-			    	if (isDelete) {
-			           	 var th = li.thumbnail;
-						 liveListDataSource.RemoveAt(i);
-						 if (th != null) th.Dispose();
+				try {
+					for (var i = liveListDataSource.Count - 1; i > -1; i--) {
+				        var li = liveListDataSource[i];
+				        if (li == null) continue;
+				        var isDelete = (delMin != 0 && ((TimeSpan)(now - li.pubDateDt)).TotalMinutes > delMin) ||
+				        	(!string.IsNullOrEmpty(li.comId) && 
+				        	 	((li.comId.StartsWith("co") && now - li.pubDateDt > TimeSpan.FromHours(6)) || 
+				        	  (li.comId.StartsWith("ch") && now - li.pubDateDt > TimeSpan.FromHours(100))));
+				    	if (isDelete) {
+				           	 var th = li.thumbnail;
+				           	 if (th == null) continue;
+							 liveListDataSource.RemoveAt(i);
+							 if (th != null) th.Dispose();
+						}
+						else liveList.UpdateCellValue(8, i);
+						
 					}
-					else liveList.UpdateCellValue(8, i);
-					
-				}
+	           	} catch (Exception e) {
+	           		util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+	           	}
 			});
 			util.debugWriteLine("deletelivelistTime 1");
-			for (var i = liveListDataReserve.Count - 1; i > -1; i--) {
-				var li = liveListDataReserve[i];
-				var isDelete = (delMin != 0 && ((TimeSpan)(now - li.pubDateDt)).TotalMinutes > delMin) ||
-			    		(string.IsNullOrEmpty(li.comId) && li.comId.StartsWith("co") && now - li.pubDateDt > TimeSpan.FromHours(6));
-				
-				if (isDelete) {
-					var th = li.thumbnail;
-					liveListDataReserve.RemoveAt(i);
-					if (th != null) th.Dispose();
+			try {
+				for (var i = liveListDataReserve.Count - 1; i > -1; i--) {
+					var li = liveListDataReserve[i];
+					if (li == null) continue;
+					var isDelete = (delMin != 0 && ((TimeSpan)(now - li.pubDateDt)).TotalMinutes > delMin) ||
+				    		(string.IsNullOrEmpty(li.comId) && li.comId.StartsWith("co") && now - li.pubDateDt > TimeSpan.FromHours(6));
+					
+					if (isDelete) {
+						var th = li.thumbnail;
+						if (th == null) continue;
+						liveListDataReserve.RemoveAt(i);
+						if (th != null) th.Dispose();
+					}
 				}
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
 		void LiveListColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
@@ -3901,6 +3942,11 @@ namespace namaichi
 				notAlartListWidth.Add(c.Width.ToString());
 			config.set("NotAlartListColumnWidth", string.Join(",", notAlartListWidth.ToArray()));
 			
+			var reserveHistoryListWidth = new List<string>();
+			foreach (DataGridViewColumn c in reserveHistoryList.Columns)
+				reserveHistoryListWidth.Add(c.Width.ToString());
+			config.set("ReserveHistoryListColumnWidth", string.Join(",", reserveHistoryListWidth.ToArray()));
+			
 			config.set("HistoryPanelDistance", historySplitContainer.SplitterDistance.ToString());
 			
 			config.set("activeTab", tabControl1.SelectedIndex.ToString());
@@ -3991,6 +4037,19 @@ namespace namaichi
 					var w = notAlartListWidth.Split(',');
 					for (var i = 0; i < w.Length; i++) {
 						DataGridViewColumn c  = notAlartList.Columns[i];
+						c.Width = int.Parse(w[i]);
+					}
+				}
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+			
+			try {
+				var reserveHistoryListWidth = config.get("ReserveHistoryListColumnWidth");
+				if (reserveHistoryListWidth != "") {
+					var w = reserveHistoryListWidth.Split(',');
+					for (var i = 0; i < w.Length; i++) {
+						DataGridViewColumn c  = reserveHistoryList.Columns[i];
 						c.Width = int.Parse(w[i]);
 					}
 				}
@@ -4155,10 +4214,19 @@ namespace namaichi
 		
 		void HistoryListOpenUrlMenuClick(object sender, EventArgs e)
 		{
-			var cur = historyList.CurrentCell;
+			DataGridView list;
+			SortableBindingList<HistoryInfo> ds;
+			if (tabControl1.SelectedTab.Text == "通知履歴") {
+				list = historyList;;
+				ds = historyListDataSource;
+			} else {
+				list = reserveHistoryList;
+				ds = reserveHistoryListDataSource;
+			}
+			var cur = list.CurrentCell;
 			if (cur.RowIndex == -1) return;
 			
-			var li = historyListDataSource[cur.RowIndex];
+			var li = ds[cur.RowIndex];
 			if (string.IsNullOrEmpty(li.lvid)) return;
 			
 			var url = "https://live2.nicovideo.jp/watch/" + li.lvid;
@@ -4166,10 +4234,19 @@ namespace namaichi
 		}
 		void HistoryListOpenCommunityUrlMenuClick(object sender, EventArgs e)
 		{
-			var cur = historyList.CurrentCell;
+			DataGridView list;
+			SortableBindingList<HistoryInfo> ds;
+			if (tabControl1.SelectedTab.Text == "通知履歴") {
+				list = historyList;;
+				ds = historyListDataSource;
+			} else {
+				list = reserveHistoryList;
+				ds = reserveHistoryListDataSource;
+			}
+			var cur = list.CurrentCell;
 			if (cur.RowIndex == -1) return;
 			
-			var li = historyListDataSource[cur.RowIndex];
+			var li = ds[cur.RowIndex];
 			if (string.IsNullOrEmpty(li.communityId)) return;
 			
 			var isChannel = li.communityId.IndexOf("ch") > -1;
@@ -4180,10 +4257,19 @@ namespace namaichi
 		}
 		void HistoryListOpenUserUrlMenuClick(object sender, EventArgs e)
 		{
-			var cur = historyList.CurrentCell;
+			DataGridView list;
+			SortableBindingList<HistoryInfo> ds;
+			if (tabControl1.SelectedTab.Text == "通知履歴") {
+				list = historyList;;
+				ds = historyListDataSource;
+			} else {
+				list = reserveHistoryList;
+				ds = reserveHistoryListDataSource;
+			}
+			var cur = list.CurrentCell;
 			if (cur.RowIndex == -1) return;
 			
-			var li = historyListDataSource[cur.RowIndex];
+			var li = ds[cur.RowIndex];
 			if (string.IsNullOrEmpty(li.userId)) return;
 			
 			var url = "https://www.nicovideo.jp/user/" + li.userId;
@@ -4192,10 +4278,19 @@ namespace namaichi
 		
 		void HistoryListCopyUrlMenuClick(object sender, EventArgs e)
 		{
-			var cur = historyList.CurrentCell;
+			DataGridView list;
+			SortableBindingList<HistoryInfo> ds;
+			if (tabControl1.SelectedTab.Text == "通知履歴") {
+				list = historyList;;
+				ds = historyListDataSource;
+			} else {
+				list = reserveHistoryList;
+				ds = reserveHistoryListDataSource;
+			}
+			var cur = list.CurrentCell;
 			if (cur.RowIndex == -1) return;
 			
-			var li = historyListDataSource[cur.RowIndex];
+			var li = ds[cur.RowIndex];
 			if (string.IsNullOrEmpty(li.lvid)) return;
 			try {
 				var url = "https://live2.nicovideo.jp/watch/" + li.lvid;
@@ -4206,10 +4301,19 @@ namespace namaichi
 		}
 		void HistoryListCopyCommunityUrlMenuClick(object sender, EventArgs e)
 		{
-			var cur = historyList.CurrentCell;
+			DataGridView list;
+			SortableBindingList<HistoryInfo> ds;
+			if (tabControl1.SelectedTab.Text == "通知履歴") {
+				list = historyList;;
+				ds = historyListDataSource;
+			} else {
+				list = reserveHistoryList;
+				ds = reserveHistoryListDataSource;
+			}
+			var cur = list.CurrentCell;
 			if (cur.RowIndex == -1) return;
 			
-			var li = historyListDataSource[cur.RowIndex];
+			var li = ds[cur.RowIndex];
 			if (string.IsNullOrEmpty(li.communityId)) return;
 			
 			var isChannel = li.communityId.IndexOf("ch") > -1;
@@ -4225,10 +4329,19 @@ namespace namaichi
 		}
 		void HistoryListCopyUserUrlMenuClick(object sender, EventArgs e)
 		{
-			var cur = historyList.CurrentCell;
+			DataGridView list;
+			SortableBindingList<HistoryInfo> ds;
+			if (tabControl1.SelectedTab.Text == "通知履歴") {
+				list = historyList;;
+				ds = historyListDataSource;
+			} else {
+				list = reserveHistoryList;
+				ds = reserveHistoryListDataSource;
+			}
+			var cur = list.CurrentCell;
 			if (cur.RowIndex == -1) return;
 			
-			var li = historyListDataSource[cur.RowIndex];
+			var li = ds[cur.RowIndex];
 			if (string.IsNullOrEmpty(li.userId)) return;
 			
 			var url = "https://www.nicovideo.jp/user/" + li.userId;
@@ -4241,11 +4354,21 @@ namespace namaichi
 		void HistoryListDeleteRowMenuClick(object sender, EventArgs e)
 		{
 			try {
-				if (historyList.SelectedCells.Count == 0) return;
+				DataGridView list;
+				SortableBindingList<HistoryInfo> ds;
+				if (tabControl1.SelectedTab.Text == "通知履歴") {
+					list = historyList;;
+					ds = historyListDataSource;
+				} else {
+					list = reserveHistoryList;
+					ds = reserveHistoryListDataSource;
+				}
+			
+				if (list.SelectedCells.Count == 0) return;
 				var selectedList = new List<HistoryInfo>();
-				foreach (DataGridViewCell c in historyList.SelectedCells) {
+				foreach (DataGridViewCell c in list.SelectedCells) {
 					try {
-						var i = (HistoryInfo)historyListDataSource[c.RowIndex];
+						var i = (HistoryInfo)ds[c.RowIndex];
 						if (selectedList.IndexOf(i) > -1) continue;
 						else selectedList.Add(i);
 					} catch (Exception ee) {
@@ -4259,7 +4382,7 @@ namespace namaichi
 				var id = string.IsNullOrEmpty(idsStr) ? "こ" : (idsStr);
 				if (System.Windows.Forms.MessageBox.Show(id + "の行を削除していいですか？", "確認", MessageBoxButtons.OKCancel) == DialogResult.Cancel) return;
 				foreach (var i in selectedList)
-					historyListDataSource.Remove(i);
+					ds.Remove(i);
 				changedListContent();
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
@@ -4553,10 +4676,19 @@ namespace namaichi
 		
 		void HistoryListAddAlartListMenuClick(object sender, EventArgs e)
 		{
-			var cur = historyList.CurrentCell;
+			DataGridView list;
+			SortableBindingList<HistoryInfo> ds;
+			if (tabControl1.SelectedTab.Text == "通知履歴") {
+				list = historyList;;
+				ds = historyListDataSource;
+			} else {
+				list = reserveHistoryList;
+				ds = reserveHistoryListDataSource;
+			}
+			var cur = list.CurrentCell;
 			if (cur.RowIndex == -1) return;
 			formAction(() => 
-				openAddForm(historyListDataSource[cur.RowIndex].lvid)
+				openAddForm(ds[cur.RowIndex].lvid)
 			);
 		}
 		
@@ -5112,9 +5244,10 @@ namespace namaichi
 		}
 		private void setSort() {
 			var s = new string[]{"live", "alart", "userAlart", "task",
-					"history", "notAlart"};
+					"history", "notAlart", "reserveHistory"};
 			var l = new DataGridView[]{liveList, alartList, 
-					userAlartList, taskList, historyList, notAlartList};
+					userAlartList, taskList, historyList, notAlartList, 
+					reserveHistoryList};
 			for (var i = 0; i < s.Length; i++) {
 				var _columna = config.get(s[i] + "ListSortColumn");
 				if (_columna == "-1") continue;
@@ -5177,8 +5310,8 @@ namespace namaichi
 			}
 		}
 		private void saveSortState() {
-			var s = new string[]{"live", "alart", "userAlart", "task", "history", "notAlart"};
-			var l = new DataGridView[]{liveList, alartList, userAlartList, taskList, historyList, notAlartList};
+			var s = new string[]{"live", "alart", "userAlart", "task", "history", "notAlart", "reserveHistory"};
+			var l = new DataGridView[]{liveList, alartList, userAlartList, taskList, historyList, notAlartList, reserveHistoryList};
 			for (var i = 0; i < s.Length; i++) setSortConfig(s[i], l[i]);
 		}
 		private void setCheckableMenuClosingEvent() {
@@ -5373,6 +5506,7 @@ namespace namaichi
 				taskList.DataSource = null;
 				historyList.DataSource = null;
 				notAlartList.DataSource = null;
+				reserveHistoryList.DataSource = null;
 				logList.DataSource = null;
 				
 				util.debugWriteLine("delete alartlist " + alartList.GetHashCode());
@@ -5808,6 +5942,62 @@ namespace namaichi
 		void DisplayMenuItemDropDownOpened(object sender, EventArgs e)
 		{
 			lastClickMenu = null;
+		}
+		public void addReserveHistoryList(HistoryInfo hi) {
+			var historyListMax = int.Parse(config.get("maxReserveHistoryDisplay"));
+			try {
+				foreach (var _hi in reserveHistoryListDataSource)
+	       			if (_hi.lvid == hi.lvid) return;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+			
+       		formAction(() => {
+				try {
+			        var scrollIndex = reserveHistoryList.FirstDisplayedScrollingRowIndex;
+				    
+			        if (reserveHistoryListDataSource.Count >= historyListMax) {
+				        var min = reserveHistoryListDataSource.OrderBy((a) => a.dt).First();
+				        reserveHistoryListDataSource.Remove(min);
+			        }
+			        
+	       	    	reserveHistoryListDataSource.Insert(0, hi);
+	       	    	if (scrollIndex != -1 && scrollIndex < reserveHistoryListDataSource.Count - 1)
+	       	    		reserveHistoryList.FirstDisplayedScrollingRowIndex = scrollIndex;
+	       	    	
+	           	} catch (Exception e) {
+	           		util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+	           		util.debugWriteLine("reserveHistoryListDataSource.Insert? " + reserveHistoryListDataSource.Count + " " + reserveHistoryList.FirstDisplayedScrollingRowIndex);
+	           	}
+       	    });
+		} 
+		
+		void ReserveHistoryListRowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+		{
+			var max = config.get("maxReserveHistoryDisplay");
+			sortHistoryList(reserveHistoryList, reserveHistoryListDataSource, max);
+		}
+		
+		void ReserveHistoryListCellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+		{
+			var style = reserveHistoryList[e.ColumnIndex, e.RowIndex].Style;
+			var defColor = (e.RowIndex % 2 != 0) ? 
+					evenRowsColor
+					: Color.FromName("window");
+			style.BackColor = defColor;
+		}
+		void ReserveHistoryListCellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			setMouseDownSelect(reserveHistoryList, e);
+		}
+		void DisplayReserveHistoryListMenuDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+		{
+			foreach (DataGridViewColumn c in reserveHistoryList.Columns) {
+				if (c.HeaderText == e.ClickedItem.Text) {
+					var i = (ToolStripMenuItem)e.ClickedItem;  
+					c.Visible = i.Checked = !i.Checked; 
+				}
+			}
 		}
 	}
 }

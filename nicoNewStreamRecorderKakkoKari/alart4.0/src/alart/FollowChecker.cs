@@ -61,7 +61,7 @@ namespace namaichi.alart
 				form.addLogText("フォローリストの取得中に未知のエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);	
 			}
 		}
-		public List<string[]> getFollowListFromApp(bool[] types = null) {
+		public List<string[]> getFollowListFromApp(bool[] types = null, bool isLog = true) {
 			try {
 				var ret = new List<string[]>();
 				var urls = new string[] {
@@ -81,7 +81,8 @@ namespace namaichi.alart
 					
 					var l = checkFollowPage(urls[i]);
 					if (l == null) {
-						form.addLogText(urls[i].Substring(urls[i].LastIndexOf("/") + 1) + "のフォローリストの入手に失敗しました");
+						if (isLog)
+							form.addLogText(urls[i].Substring(urls[i].LastIndexOf("/") + 1) + "のフォローリストの入手に失敗しました");
 						continue;
 					}
 					isSuccess = true;
@@ -91,7 +92,8 @@ namespace namaichi.alart
 				return isSuccess ? ret : null;
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				form.addLogText("フォローリストの作成中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				if (isLog)
+					form.addLogText("フォローリストの作成中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return null;
 			}
 		}
@@ -137,6 +139,7 @@ namespace namaichi.alart
 					var res = "";
 					for (var j = 0; j < 2; j++) {
 						var h = getHeader();
+						if (h == null) return null;
 						//res = util.getPageSource(url + ((i == 1) ? "" : ("?page=" + i)), container);
 						//var _url = url + "?offset=" + i + "&limit=25";
 						
@@ -157,6 +160,7 @@ namespace namaichi.alart
 								util.updateAppVersion("niconico", form.config);
 								continue;
 							}
+							if (res.IndexOf("\"code\":\"Unauthorized\"") > -1) return null;
 							if (res != null) break;
 						}
 						//res = util.getPageSource(url + "?page=" + i + "&pageSize=50", ref h, cc);
@@ -248,6 +252,7 @@ namespace namaichi.alart
 			*/
 			var c = container.GetCookies(new Uri("https://www.nicovideo.jp"));
 			if (c == null) return null;
+			if (c["user_session"] == null) return null;
 			var _c = c["user_session"].Value;
 			var _h = new Dictionary<string, string>() {
 				{"User-Agent", "Niconico/1.0 (Linux; U; Android 7.1.2; ja-jp; nicoandroid LGM-V300K) Version/" + form.config.get("niconicoAppVer")},

@@ -90,7 +90,7 @@ namespace namaichi.alart
 								RssItem ri = null; 
 								if (!isReserveAiLive(o, lvid, higGetOk ? hig : null, aiList, out ri)) continue;
 								
-								var ret = new Reservation(check.container, lvid).live2Reserve();
+								var ret = new Reservation(check.container, lvid, config).live2Reserve(bool.Parse(config.get("IsOverwriteOldReserve")));
 								if (ret == "ok") {
 									check.form.addLogText(lvid + " " + o.actor.name + "(" + hig.title + ")のタイムシフトを予約しました");
 									var hi = new HistoryInfo(ri);

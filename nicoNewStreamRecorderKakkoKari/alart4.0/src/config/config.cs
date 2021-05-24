@@ -316,6 +316,7 @@ public class config
 	        {"IsAppPush", "true"},
 	        {"IsTimeTable", "true"},
 	        {"IsAutoReserve", "false"},
+	        {"IsOverwriteOldReserve", "false"},
 	        {"pushPri", ""},
 	        {"pushPub", ""},
 	        {"pushAuth", ""},

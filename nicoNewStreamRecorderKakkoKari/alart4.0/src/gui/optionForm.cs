@@ -7,8 +7,10 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.Drawing.Text;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -51,6 +53,7 @@ namespace namaichi
 			
 			nicoSessionComboBox1.Selector.PropertyChanged += Selector_PropertyChanged;
 //			nicoSessionComboBox2.Selector.PropertyChanged += Selector2_PropertyChanged;
+			nicoSessionComboBox1.Selector.Items.CollectionChanged += SelectorItem_CollectionChanged;
 			//setFormFromConfig();
 			setBackColor(Color.FromArgb(int.Parse(cfg.get("alartBackColor"))));
 			setForeColor(Color.FromArgb(int.Parse(cfg.get("alartForeColor"))));
@@ -193,6 +196,7 @@ namespace namaichi
 				{"IsAppPush",isAppPushChkBox.Checked.ToString().ToLower()},
 				{"IsTimeTable",isTimeTableChkBox.Checked.ToString().ToLower()},
 				{"IsAutoReserve",isAutoReserveChkBox.Checked.ToString().ToLower()},
+				{"IsOverwriteOldReserve",isOverwriteOldReserveChkBox.Checked.ToString().ToLower()},
 				
 				{"thresholdpage",thresholdpageList.Value.ToString()},
 				{"brodouble",brodoubleList.SelectedIndex.ToString()},
@@ -253,6 +257,47 @@ namespace namaichi
                     break;
             }
         }
+		void SelectorItem_CollectionChanged(object o, NotifyCollectionChangedEventArgs e) {
+			if (e.Action != NotifyCollectionChangedAction.Add || 
+			    	e.NewItems.Count == 0) return;
+        	var state = 0;
+			foreach (CookieSourceItem i in nicoSessionComboBox1.Selector.Items) {
+				if (i.BrowserName.StartsWith("IE ")) state |= 1;
+				else if ((state & 1) == 1) state |= 2;
+			}
+        	if ((state & 2) == 0) return;
+            
+			formAction(() => {
+				try {
+					var l = nicoSessionComboBox1.Selector.Items;
+					var ieL = l.Where(x => x.BrowserName.StartsWith("IE ")).ToList();
+					for (var i = 0; i < ieL.Count(); i++) l.Remove(ieL[i]);
+					foreach (var i in ieL) l.Add(i);
+				} catch (Exception ee) {
+					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+				}
+			});
+		}
+		public bool formAction(Action a, bool isAsync = true) {
+			if (IsDisposed || !util.isShowWindow) return false;
+			
+			try {
+				var r = BeginInvoke((MethodInvoker)delegate() {
+					try {    
+			       		a.Invoke();
+			       	} catch (Exception e) {
+						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					}
+				});
+				if (!isAsync) 
+					EndInvoke(r);
+				return true;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return false;
+			} 
+			
+		}
 		/*
 		void btnReload_Click(object sender, EventArgs e)
         { 
@@ -392,6 +437,7 @@ namespace namaichi
 			isAppPushChkBox.Checked = bool.Parse(cfg.get("IsAppPush"));
 			isTimeTableChkBox.Checked = bool.Parse(cfg.get("IsTimeTable"));
 			isAutoReserveChkBox.Checked = bool.Parse(cfg.get("IsAutoReserve"));
+			isOverwriteOldReserveChkBox.Checked = bool.Parse(cfg.get("IsOverwriteOldReserve"));
 			
 			thresholdpageList.Value = int.Parse(cfg.get("thresholdpage"));
 			brodoubleList.SelectedIndex = int.Parse(cfg.get("brodouble"));

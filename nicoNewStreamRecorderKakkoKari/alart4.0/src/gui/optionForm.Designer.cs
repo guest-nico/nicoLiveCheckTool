@@ -260,6 +260,7 @@ namespace namaichi
 			this.label42 = new System.Windows.Forms.Label();
 			this.alartTab = new System.Windows.Forms.TabPage();
 			this.groupBox13 = new System.Windows.Forms.GroupBox();
+			this.isOverwriteOldReserveChkBox = new System.Windows.Forms.CheckBox();
 			this.isAutoReserveChkBox = new System.Windows.Forms.CheckBox();
 			this.groupBox8 = new System.Windows.Forms.GroupBox();
 			this.isTimeTableChkBox = new System.Windows.Forms.CheckBox();
@@ -2609,13 +2610,23 @@ namespace namaichi
 			// 
 			// groupBox13
 			// 
+			this.groupBox13.Controls.Add(this.isOverwriteOldReserveChkBox);
 			this.groupBox13.Controls.Add(this.isAutoReserveChkBox);
 			this.groupBox13.Location = new System.Drawing.Point(5, 259);
 			this.groupBox13.Name = "groupBox13";
-			this.groupBox13.Size = new System.Drawing.Size(420, 55);
+			this.groupBox13.Size = new System.Drawing.Size(420, 77);
 			this.groupBox13.TabIndex = 7;
 			this.groupBox13.TabStop = false;
 			this.groupBox13.Text = "予約";
+			// 
+			// isOverwriteOldReserveChkBox
+			// 
+			this.isOverwriteOldReserveChkBox.Location = new System.Drawing.Point(35, 50);
+			this.isOverwriteOldReserveChkBox.Name = "isOverwriteOldReserveChkBox";
+			this.isOverwriteOldReserveChkBox.Size = new System.Drawing.Size(297, 19);
+			this.isOverwriteOldReserveChkBox.TabIndex = 16;
+			this.isOverwriteOldReserveChkBox.Text = "予約リストが一杯の場合、古い予約を削除して予約する";
+			this.isOverwriteOldReserveChkBox.UseVisualStyleBackColor = true;
 			// 
 			// isAutoReserveChkBox
 			// 
@@ -3005,6 +3016,7 @@ namespace namaichi
 			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.CheckBox isOverwriteOldReserveChkBox;
 		private System.Windows.Forms.CheckBox IsExistInHistoryListNotAlartChkBox;
 		private System.Windows.Forms.CheckBox isDefaultAutoReserveChkBox;
 		private System.Windows.Forms.CheckBox isAutoReserveChkBox;

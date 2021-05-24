@@ -230,7 +230,7 @@ namespace namaichi.alart
 									var isSuccessAccess = true;
 									var isAlart = check.isAlartItem(ri, ai, out isSuccessAccess);
 									if (isAlart || !isSuccessAccess) {
-										var ret = new Reservation(check.container, ri.lvId).live2Reserve();
+										var ret = new Reservation(check.container, ri.lvId, config).live2Reserve(bool.Parse(config.get("IsOverwriteOldReserve")));
 										if (ret == "ok") {
 											check.form.addLogText(ri.lvId + " " + ri.comName + (string.IsNullOrEmpty(ri.comName) ? (ri.title) : (ri.comName + "(" + ri.title + ")")) + "のタイムシフトを予約しました");
 										} else {

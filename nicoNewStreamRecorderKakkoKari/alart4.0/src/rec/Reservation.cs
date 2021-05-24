@@ -23,14 +23,16 @@ namespace namaichi.rec
 	{
 		CookieContainer cc;
 		string lv;
+		config.config cfg;
 		
 		string useUrl = "https://live.nicovideo.jp/api/timeshift.ticket.use";
 		string reservationsUrl = "https://live.nicovideo.jp/api/timeshift.reservations";
 		
-		public Reservation(CookieContainer cc, string lv)
+		public Reservation(CookieContainer cc, string lv, config.config cfg)
 		{
 			this.cc = cc;
 			this.lv = lv;
+			this.cfg = cfg;
 		}
 		public string reserve() {
 			var id = util.getRegGroup(lv, "(\\d+)");
@@ -145,54 +147,41 @@ namespace namaichi.rec
 				return null;
 			}
 		}
-		public string live2Reserve() {
+		public string live2Reserve(bool isOverwrite) {
+			var r = getLive2ReserveRes(isOverwrite);
+			if (r == "タイムシフトの予約上限に達しました。" 
+			    	&& isOverwrite) {
+				if (overwriteReserve())
+					return r;
+			}
+			return r;
+		}
+		private string getLive2ReserveRes(bool isOverwrite) {
 			var id = util.getRegGroup(lv, "(\\d+)");
 			var header = getLive2ReserveHeader(id);
-			/*
-			var useUrl = "https://live.nicovideo.jp/api/timeshift.ticket.use";
-			var useData = Encoding.ASCII.GetBytes("vid=" + id);
-			var res = util.postResStr(useUrl, header, useData);
-			if (res == null) return "チケットを予約するための接続に失敗しました";
-			var res2 = "";
 			
-			if (res.IndexOf("TICKET_NOT_FOUND") > -1) {
-			*/	
-				var reserveData = Encoding.ASCII.GetBytes("vid=" + id + "&overwrite=0");
-				var r = util.sendRequest(reservationsUrl, header, reserveData, "POST", true);
-				try {
-					using (var rs = r.GetResponseStream())
-					using (var sr = new StreamReader(rs)) {
-						var res = sr.ReadToEnd();
-						if (res.IndexOf("\"status\":200") > -1) return "ok";
-						if (res.IndexOf("Timeshift_reservation was duplicated") > -1)
-							return "既に予約済みです。";
-						else if (res.IndexOf("Timeshift_reservation was over_use") > -1)
-							return "タイムシフトの予約上限に達しました。";
-						else return "予約できませんでした" + util.getRegGroup(res, "\"description\":\"(.+?)");
-					}
-				} catch (Exception e) {
-					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-					return "予約できませんでした " + e.Message;
+			var reserveData = Encoding.ASCII.GetBytes("vid=" + id + "&overwrite=" + 
+					(isOverwrite ? "1" : "0"));
+			var r = util.sendRequest(reservationsUrl, header, reserveData, "POST", true);
+			try {
+				using (var rs = r.GetResponseStream())
+				using (var sr = new StreamReader(rs)) {
+					var res = sr.ReadToEnd();
+					if (res.IndexOf("\"status\":200") > -1) return "ok";
+					if (res.IndexOf("Timeshift_reservation was duplicated") > -1)
+						return "既に予約済みです。";
+					else if (res.IndexOf("Timeshift_reservation was over_use") > -1) {
+						return "タイムシフトの予約上限に達しました。";
+					} else if (res.IndexOf("Timeshift_reservation can overwrite") > -1) {
+						return "タイムシフトの予約上限に達しました。";
+					} else if (res.IndexOf("Timeshift_reservation was expired") > -1)
+						return "タイムシフトの申し込み期限切れです。";
+					else return "予約できませんでした" + util.getRegGroup(res, "\"description\":\"(.+?)\"");
 				}
-				/*
-				res2 = util.postResStr(reservationsUrl, header, reserveData);
-				if (res2 == null) return "チケットを取得するための接続に失敗しました" + res;
-				if (res2.IndexOf("Timeshift_reservation can overwrite") > -1)
-					return "予約リストが一杯です。";
-				if (res2.IndexOf("Timeshift_reservation was used") > -1)
-					return "すでに視聴済みです。";
-				else if (res2.IndexOf("status\":200") > -1) {
-					return "ok";
-				} else if (res2.IndexOf("Timeshift_reservation was expired") > -1) {
-					return "予約の期限切れでした。"; 
-				} else {
-					return "チケットの予約中に予期せぬ問題が発生しました" + res + "/" + res2;
-				}
-				*/
-			//}
-			//return "チケットの予約接続中に予期せぬ問題が発生しました" + res + "/" + res2;
-			//return "予約できませんでした";
-			
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return "予約できませんでした " + e.Message;
+			}
 		}
 		public bool useLive2Reserve() {
 			var id = util.getRegGroup(lv, "(\\d+)");
@@ -214,6 +203,17 @@ namespace namaichi.rec
 			header.Add("User-Agent", util.userAgent);
 			header.Add("X-Frontend-Id", "9");
 			return header;
+		}
+		private bool overwriteReserve() {
+			var res = util.getPageSource("https://live.nicovideo.jp/my_timeshift_list", cc);
+			if (res == null) return false;
+			var lastColumn = util.getRegGroup(res, ".+(<div class=\"column\">[\\d\\D]+)");
+			if (lastColumn == null) return false;
+			var vid = util.getRegGroup(lastColumn, "vid.+?(\\d+)");
+			var ulck = util.getRegGroup(res, "(ulck_\\d+)");
+			var url = "https://live.nicovideo.jp/my?delete=timeshift&vid=" + vid + "&confirm=" + ulck;
+			res = util.getPageSource(url, cc);
+			return res != null;
 		}
 	}
 }

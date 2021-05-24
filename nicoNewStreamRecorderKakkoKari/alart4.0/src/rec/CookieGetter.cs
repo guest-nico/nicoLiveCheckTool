@@ -10,6 +10,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
+using namaichi.alart;
 using SunokoLibrary.Application;
 using System.Net.Http;
 using System.Collections.Generic;
@@ -281,6 +282,8 @@ namespace namaichi.rec
 				//var isFollow = false;
 				string uid = null;
 				try {
+					var fl = new FollowChecker(form, cc).getFollowListFromApp(new bool[]{true, false, false}, false);
+					if (fl == null) return false;
 					
 					var us = cc.GetCookies(new Uri(url))["user_session"];
 					uid = us == null ? null : util.getRegGroup(us.Value, "user_session_(.+?)_");

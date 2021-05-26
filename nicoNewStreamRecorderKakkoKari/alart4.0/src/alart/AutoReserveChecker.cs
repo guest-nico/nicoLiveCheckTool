@@ -74,7 +74,7 @@ namespace namaichi.alart
 					foreach (var o in timelineObj.data) {
 						
 						if (o.updated > recentUpdateDt) recentUpdateDt = o.updated;
-						if (o.updated < lastCheckedItemTime) {
+						if (o.updated <= lastCheckedItemTime) {
 							i = 5;
 							continue;
 						}

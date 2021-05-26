@@ -52,7 +52,6 @@ namespace namaichi
 			this.form = form;
 			
 			nicoSessionComboBox1.Selector.PropertyChanged += Selector_PropertyChanged;
-//			nicoSessionComboBox2.Selector.PropertyChanged += Selector2_PropertyChanged;
 			nicoSessionComboBox1.Selector.Items.CollectionChanged += SelectorItem_CollectionChanged;
 			//setFormFromConfig();
 			setBackColor(Color.FromArgb(int.Parse(cfg.get("alartBackColor"))));
@@ -258,10 +257,14 @@ namespace namaichi
             }
         }
 		void SelectorItem_CollectionChanged(object o, NotifyCollectionChangedEventArgs e) {
+			moveToBackIE(nicoSessionComboBox1, e);
+		}
+		void moveToBackIE(NicoSessionComboBox2 ncb, NotifyCollectionChangedEventArgs e) {
 			if (e.Action != NotifyCollectionChangedAction.Add || 
 			    	e.NewItems.Count == 0) return;
+			
         	var state = 0;
-			foreach (CookieSourceItem i in nicoSessionComboBox1.Selector.Items) {
+			foreach (CookieSourceItem i in ncb.Selector.Items) {
 				if (i.BrowserName.StartsWith("IE ")) state |= 1;
 				else if ((state & 1) == 1) state |= 2;
 			}
@@ -269,10 +272,11 @@ namespace namaichi
             
 			formAction(() => {
 				try {
-					var l = nicoSessionComboBox1.Selector.Items;
+					var l = ncb.Selector.Items;
 					var ieL = l.Where(x => x.BrowserName.StartsWith("IE ")).ToList();
 					for (var i = 0; i < ieL.Count(); i++) l.Remove(ieL[i]);
 					foreach (var i in ieL) l.Add(i);
+					if (ncb.Tag == (object)"") ncb.SelectedIndex = 0;
 				} catch (Exception ee) {
 					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 				}
@@ -458,6 +462,7 @@ namespace namaichi
         	var si = SourceInfoSerialize.load(false);
         	if (si != null)
         		nicoSessionComboBox1.Selector.SetInfoAsync(si);
+        	else nicoSessionComboBox1.Tag = "";
         }
         
 		void optionCancel_Click(object sender, EventArgs e)

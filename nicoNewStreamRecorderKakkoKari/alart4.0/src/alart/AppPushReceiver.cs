@@ -351,7 +351,7 @@ namespace namaichi.alart
 				postDataBytes = Encoding.ASCII.GetBytes(param);
 				var _res = util.sendRequest(url, headers, postDataBytes, "DELETE");
 				//if (res == null) check.form.addLogText("スマホ通知のブロック設定の送信に失敗しました");
-				if (res != null) {
+				if (_res != null) {
 					using (var getResStream = _res.GetResponseStream())
 					using (var resStream = new System.IO.StreamReader(getResStream)) {
 						var _r = resStream.ReadToEnd();
@@ -361,12 +361,13 @@ namespace namaichi.alart
 					}
 				} else util.debugWriteLine("app push blocks delete null");
 				
+				/*
 				url = "https://api.cas.nicovideo.jp/v1/services/ex/app/nicocas_android/notification/time";
 				param = "{\"status\": \"disabled\",\"time\": {\"end\": \"0:00\", \"start\": \"7:00\"}}";
 				postDataBytes = Encoding.ASCII.GetBytes(param);
 				_res = util.sendRequest(url, headers, postDataBytes, "PUT");
 				//if (res == null) check.form.addLogText("スマホ通知の時間設定の送信に失敗しました");
-				if (res != null) {
+				if (_res != null) {
 					using (var getResStream = _res.GetResponseStream())
 					using (var resStream = new System.IO.StreamReader(getResStream)) {
 						var _r = resStream.ReadToEnd();
@@ -375,7 +376,7 @@ namespace namaichi.alart
 							check.form.addLogText("スマホ通知の時間設定に失敗しました" + _r);
 					}
 				} else util.debugWriteLine("app push time put null");
-				
+				*/
 				return true;
 			} catch (Exception e) {
 				util.debugWriteLine("gettoken error " + e.Message + e.Source + e.StackTrace + e.TargetSite);

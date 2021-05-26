@@ -5,6 +5,7 @@
   
   
 このツールで使用している[ニコ生のプッシュ通知の受信の手順](push.md)を記しました。  
+ツールのダウンロードは[コミュニティページ](https://com.nicovideo.jp/community/co2414037)または[こちら](https://guest-nico.github.io/pages/downloads.html)　　
   
 ## ライセンス  
 SnkLib.App.CookieGetter  

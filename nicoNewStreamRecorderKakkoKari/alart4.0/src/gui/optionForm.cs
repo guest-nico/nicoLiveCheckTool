@@ -52,8 +52,6 @@ namespace namaichi
 			this.form = form;
 			
 			nicoSessionComboBox1.Selector.PropertyChanged += Selector_PropertyChanged;
-			nicoSessionComboBox1.Selector.Items.CollectionChanged += SelectorItem_CollectionChanged;
-			//setFormFromConfig();
 			setBackColor(Color.FromArgb(int.Parse(cfg.get("alartBackColor"))));
 			setForeColor(Color.FromArgb(int.Parse(cfg.get("alartForeColor"))));
 			
@@ -256,52 +254,6 @@ namespace namaichi
                     break;
             }
         }
-		void SelectorItem_CollectionChanged(object o, NotifyCollectionChangedEventArgs e) {
-			moveToBackIE(nicoSessionComboBox1, e);
-		}
-		void moveToBackIE(NicoSessionComboBox2 ncb, NotifyCollectionChangedEventArgs e) {
-			if (e.Action != NotifyCollectionChangedAction.Add || 
-			    	e.NewItems.Count == 0) return;
-			
-        	var state = 0;
-			foreach (CookieSourceItem i in ncb.Selector.Items) {
-				if (i.BrowserName.StartsWith("IE ")) state |= 1;
-				else if ((state & 1) == 1) state |= 2;
-			}
-        	if ((state & 2) == 0) return;
-            
-			formAction(() => {
-				try {
-					var l = ncb.Selector.Items;
-					var ieL = l.Where(x => x.BrowserName.StartsWith("IE ")).ToList();
-					for (var i = 0; i < ieL.Count(); i++) l.Remove(ieL[i]);
-					foreach (var i in ieL) l.Add(i);
-					if (ncb.Tag == (object)"") ncb.SelectedIndex = 0;
-				} catch (Exception ee) {
-					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
-				}
-			});
-		}
-		public bool formAction(Action a, bool isAsync = true) {
-			if (IsDisposed || !util.isShowWindow) return false;
-			
-			try {
-				var r = BeginInvoke((MethodInvoker)delegate() {
-					try {    
-			       		a.Invoke();
-			       	} catch (Exception e) {
-						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-					}
-				});
-				if (!isAsync) 
-					EndInvoke(r);
-				return true;
-			} catch (Exception e) {
-				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				return false;
-			} 
-			
-		}
 		/*
 		void btnReload_Click(object sender, EventArgs e)
         { 
@@ -460,9 +412,7 @@ namespace namaichi
         	fontList.Value = decimal.Parse(cfg.get("fontSize"));
         	
         	var si = SourceInfoSerialize.load(false);
-        	if (si != null)
-        		nicoSessionComboBox1.Selector.SetInfoAsync(si);
-        	else nicoSessionComboBox1.Tag = "";
+        	nicoSessionComboBox1.Selector.SetInfoAsync(si);
         }
         
 		void optionCancel_Click(object sender, EventArgs e)

@@ -273,11 +273,12 @@ namespace namaichi
 		*/
         void btnOpenCookieFileDialog_Click(object sender, EventArgs e)
         { var tsk = nicoSessionComboBox1.ShowCookieDialogAsync(); }
+        /*
         void checkBoxShowAll_CheckedChanged(object sender, EventArgs e)
         { nicoSessionComboBox1.Selector.IsAllBrowserMode = checkBoxShowAll.Checked;
 //        	cfg.set("isAllBrowserMode", nicoSessionComboBox1.Selector.IsAllBrowserMode.ToString());
         }
-
+		*/
         private void setFormFromConfig() {
         	mailText.Text = cfg.get("accountId");
         	passText.Text = cfg.get("accountPass");

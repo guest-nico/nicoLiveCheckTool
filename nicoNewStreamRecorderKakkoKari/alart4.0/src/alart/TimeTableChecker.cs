@@ -180,20 +180,36 @@ namespace namaichi.alart
 								if (r) break;
 								Thread.Sleep(2000);
 							}
-							var _isFollow = false; 
-							ri = new RssItem(l.title, "lv" + l.id, hig.dt.ToString("yyyy/MM/dd HH:mm:ss"),
-									hig.description, 
-									util.getCommunityName(hig.communityId, out _isFollow, null), 
-									hig.communityId,
-									"", 
-									hig.thumbnail, "false", "", hig.isPayment);
-							ri.type = hig.type;
-							ri.tags = hig.tags;
-							ri.pubDateDt = hig.openDt;
-							if (!string.IsNullOrEmpty(hig.userName)) ri.hostName = hig.userName;
-							if (hig.openDt != hig.dt) util.debugWriteLine("hig open start tigau " + hig.openDt + " " + hig.dt + " " + ri.lvId);
-							else util.debugWriteLine("hig open start onaji " + hig.openDt + " " + hig.dt + " " + ri.lvId);
-						
+							if (hig.openDt != DateTime.MinValue) {
+								var _isFollow = false; 
+								ri = new RssItem(l.title, "lv" + l.id, hig.dt.ToString("yyyy/MM/dd HH:mm:ss"),
+										hig.description, 
+										util.getCommunityName(hig.communityId, out _isFollow, null), 
+										hig.communityId,
+										"", 
+										hig.thumbnail, "false", "", hig.isPayment);
+								ri.type = hig.type;
+								ri.tags = hig.tags;
+								ri.pubDateDt = hig.openDt;
+								if (!string.IsNullOrEmpty(hig.userName)) ri.hostName = hig.userName;
+								if (hig.openDt != hig.dt) util.debugWriteLine("hig open start tigau " + hig.openDt + " " + hig.dt + " " + ri.lvId);
+								else util.debugWriteLine("hig open start onaji " + hig.openDt + " " + hig.dt + " " + ri.lvId);
+							} else {
+								util.debugWriteLine("not found time and page");
+								var dt = DateTime.Parse(l.start_date + " " + l.start_time);
+								ri = new RssItem(l.title, "lv" + l.id, dt.ToString("yyyy/MM/dd HH:mm:ss"),
+										l.description, 
+										"", 
+										"",
+										"", 
+										l.thumbnail_url, "false", "", l.isPayment);
+								ri.type = l.provider_type;
+								ri.tags = new string[]{""};
+								ri.pubDateDt = dt;
+								//if (!string.IsNullOrEmpty(hig.userName)) ri.hostName = hig.userName;
+								//if (hig.openDt != hig.dt) util.debugWriteLine("hig open start tigau " + hig.openDt + " " + hig.dt + " " + ri.lvId);
+								//else util.debugWriteLine("hig open start onaji " + hig.openDt + " " + hig.dt + " " + ri.lvId);
+							}
 						}
 						
 						/*

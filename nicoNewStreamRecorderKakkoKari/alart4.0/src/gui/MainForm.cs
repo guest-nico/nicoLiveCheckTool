@@ -496,7 +496,7 @@ namespace namaichi
 				new TaskListFileManager().save(this);
 				new HistoryListFileManager().save(this);
 				new NotAlartListFileManager().save(this);
-				new TwitterListFileManager().save(this);
+				//new TwitterListFileManager().save(this);
 				new ReserveHistoryListFileManager().save(this);
 				saveMenuSetting();
 				saveFormState();

@@ -13,6 +13,7 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.Net;
 using namaichi;
+using SuperSocket.ClientEngine;
 
 namespace namaichi.alart
 {
@@ -27,6 +28,7 @@ namespace namaichi.alart
 		private Regex myPageFollowRegex = new Regex("<h5><a href=\".*?(\\d+)\">(.*?)</a></h5>");
 		private Regex videoUploadedRegex = new Regex("itemId\":(\\d+),\"title\":\"(.+?)\"");
 		private Regex followingAppRegex = new Regex("\"id\":.*?\"(.+?)\",\"name\":\"(.+?)\"");
+		private bool[] result = new bool[]{false,false,false};
 		public FollowChecker(MainForm form, CookieContainer container)
 		{
 			this.form = form;
@@ -42,20 +44,14 @@ namespace namaichi.alart
 					form.addLogText("Cookieが確認できなかったためフォローリストが取得できませんでした。");	
 					return;
 				}
-				//var followList = getFollowListFromApp();
-				var followList = getFollowListFromApp();
+				var followList = getFollowList();
+				foreach (var f in followList)
+					util.debugWriteLine("fff " + f[0] + " " + f[1]);
 				
-				if (followList != null) {
-					form.addLogText("フォローリストの取得に成功しました " + followList.Count + "件");
-					updateAlartList(followList);
-				} else {
-					form.addLogText("フォローリストが取得できませんでした。再試行します。");	
-					followList = getFollowListFromMyPage();
-					if (followList != null) {
-						form.addLogText("フォローリストの取得に成功しました　" + followList.Count + "件");
-						updateAlartList(followList);
-					} else form.addLogText("フォローリストが取得できませんでした。");
-				}
+				if (Array.IndexOf(result, true) > -1)
+					form.addLogText("フォローリストを取得しました " + followList.Count + "件");
+				updateAlartList(followList);
+				
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				form.addLogText("フォローリストの取得中に未知のエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);	
@@ -71,15 +67,19 @@ namespace namaichi.alart
 					//"https://api.cas.nicovideo.jp/v1/user/following/users",
 					//"https://api.cas.nicovideo.jp/v1/user/following/channels",
 					//"https://api.cas.nicovideo.jp/v1/user/following/community/owners"
-					"https://api.gadget.nicovideo.jp/notification/video_uploaded/users",
-					"https://api.gadget.nicovideo.jp/notification/video_uploaded/channels",
-					"https://api.gadget.nicovideo.jp/notification/live_started/communities",
+					//"https://api.gadget.nicovideo.jp/notification/video_uploaded/users",
+					//"https://api.gadget.nicovideo.jp/notification/video_uploaded/channels",
+					//"https://api.gadget.nicovideo.jp/notification/live_started/communities",
+					"https://public.api.nicovideo.jp/v1/nicoex/user/followees.json?limit=", //25&cursor=
+					"https://api.cas.nicovideo.jp/v1/user/following/channels?offset=", //0&limit=25"
+					"https://api.cas.nicovideo.jp/v1/user/following/community/owners?page="//0&pageSize=25
+						
 				};
 				var isSuccess = false;
 				for (var i = 0; i < urls.Length; i++) {
 					if (types != null && !types[i]) continue;
 					
-					var l = checkFollowPage(urls[i]);
+					var l = checkFollowPageApp(urls[i]);
 					if (l == null) {
 						if (isLog)
 							form.addLogText(urls[i].Substring(urls[i].LastIndexOf("/") + 1) + "のフォローリストの入手に失敗しました");
@@ -97,7 +97,34 @@ namespace namaichi.alart
 				return null;
 			}
 		}
-		
+		public List<string[]> getFollowList(bool[] types = null, bool isLog = true) {
+			try {
+				var ret = new List<string[]>();
+				
+				var userList = getUserList();
+				if (userList != null) {
+					ret.AddRange(userList);
+					result[0] = true;
+				} else form.addLogText("ユーザーフォローの取得に失敗しました");
+				var chList = getChList();
+				if (chList != null) {
+					ret.AddRange(chList);
+					result[1] = true;
+				} else form.addLogText("チャンネルフォローの取得に失敗しました");
+				var coList = getCoList();
+				if (coList != null) {
+					ret.AddRange(coList);
+					result[2] = true;
+				} else form.addLogText("コミュニティフォローの取得に失敗しました");
+				
+				return ret;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				if (isLog)
+					form.addLogText("フォローリストの作成中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return null;
+			}
+		}
 		public List<string[]> getFollowListFromMyPage(bool[] types = null) {
 			try {
 				var ret = new List<string[]>();
@@ -127,7 +154,7 @@ namespace namaichi.alart
 				return null;
 			}
 		}
-		private List<string[]> checkFollowPage(string url) {
+		private List<string[]> checkFollowPageApp(string url) {
 			//?offset=0&limit=1000  original25 cas
 			//page=0&pageSize=50
 			try {
@@ -233,16 +260,45 @@ namespace namaichi.alart
 			form.followUpdate(followList, true);
 			
 		}
-		private Dictionary<string, string> getHeader() {
+		private Dictionary<string, string> getHeader(int type = 0) {
+			var c = container.GetCookies(new Uri("https://www.nicovideo.jp"));
+			if (c == null) return null;
+			if (c["user_session"] == null) return null;
+			var _c = c["user_session"].Value;
+			
 			var h = new Dictionary<string, string>();
-			/* cas
-			h.Add("User-Agent", "nicocas-Android/3.6.0");
-			h.Add("X-Frontend-Id", "90");
-			h.Add("X-Frontend-Version", "3.6.0");
-			h.Add("X-Os-Version", "22");
-			h.Add("X-Model-Name", "GAOO747-UK");
-			h.Add("X-Connection-Environment", "wifi");
-			*/
+			if (type == 0) {
+				
+				var _h = new Dictionary<string, string>() {
+					{"User-Agent", "Niconico/1.0 (Linux; U; Android 7.1.2; ja-jp; nicoandroid LGM-V300K) Version/" + form.config.get("niconicoAppVer")},
+					//{"Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"},
+					//{"Accept-Language", "ja,en-US;q=0.7,en;q=0.3"},
+					//{"Accept-Encoding", "gzip, deflate, br"},
+					{"Cookie", "SP_SESSION_KEY=" + _c},
+						{"X-Frontend-Id", "1"},
+						{"X-Request-With", "nicoandroid"},
+						{"X-Frontend-Version", form.config.get("niconicoAppVer")},
+						{"X-Os-Version", "7.1.2"},
+						{"X-Model-Name", "GAOO747-UK"},
+						{"X-Nicovideo-Connection-Type", "wifi"},
+						{"Pragma", "no-cache"},
+						{"Connection", "keep-alive"},
+						{"Upgrade-Insecure-Requests", "1"},
+						{"Cache-Control", "no-cache"},
+					};
+				return _h;
+			} else if (type == 1) {
+				//cas
+				h.Add("User-Agent", form.config.get("nicoCasAppVer"));
+				h.Add("Cookie", "user_session=" + _c);
+				h.Add("X-Frontend-Id", "90");
+				h.Add("X-Frontend-Version", form.config.get("nicoCasAppVer"));
+				h.Add("X-Os-Version", "25");
+				h.Add("X-Model-Name", "GAOO747-UK");
+				h.Add("X-Connection-Environment", "wifi");
+				return h;
+			}
+			return null;
 			/*
 			h.Add("X-Request-With", "nicoandroid");
 			h.Add("X-Frontend-Id", "1");
@@ -250,30 +306,85 @@ namespace namaichi.alart
 			h.Add("X-Os-Version", "5.1.1");
 			h.Add("Cookie", "SP_SESSION_KEY=user_session_278215_1c52ad018016dfa09654b1d0ed2a1f005063c3070cb83dca122635d234d");
 			*/
-			var c = container.GetCookies(new Uri("https://www.nicovideo.jp"));
-			if (c == null) return null;
-			if (c["user_session"] == null) return null;
-			var _c = c["user_session"].Value;
-			var _h = new Dictionary<string, string>() {
-				{"User-Agent", "Niconico/1.0 (Linux; U; Android 7.1.2; ja-jp; nicoandroid LGM-V300K) Version/" + form.config.get("niconicoAppVer")},
-				//{"Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"},
-				//{"Accept-Language", "ja,en-US;q=0.7,en;q=0.3"},
-				//{"Accept-Encoding", "gzip, deflate, br"},
-				{"Cookie", "SP_SESSION_KEY=" + _c},
-					{"X-Frontend-Id", "1"},
-					{"X-Request-With", "nicoandroid"},
-					{"X-Frontend-Version", form.config.get("niconicoAppVer")},
-					{"X-Os-Version", "7.1.2"},
-					{"X-Model-Name", "GAOO747-UK"},
-					{"X-Nicovideo-Connection-Type", "wifi"},
-					{"Pragma", "no-cache"},
-					{"Connection", "keep-alive"},
-					{"Upgrade-Insecure-Requests", "1"},
-					{"Cache-Control", "no-cache"},
-				};
-			return _h;
+			
 
-
+		}
+		private List<string[]> getUserList() {
+			var url = "https://public.api.nicovideo.jp/v1/nicoex/user/followees.json?limit=25"; //25&cursor=
+			var cur = "";
+			try {
+				var ret = new List<string[]>();
+				for (var i = 0; i < 1000; i++) {
+					var h = getHeader(1);
+					var r = util.sendRequest(url + (i == 0 ? "" : "&cursor=" + cur), h, null, "GET");
+					if (r == null) return null;
+					using (var rr = r.GetResponseStream())
+					using (var sr = new StreamReader(rr)) {
+						var res = sr.ReadToEnd();
+						if (res == null) return null;
+						var m = new Regex("\"userId\":\"(\\d+)\",\"nickname\":\"(.+?)\"").Matches(res);
+						foreach (Match _m in m) {
+							ret.Add(new string[]{_m.Groups[1].Value, _m.Groups[2].Value});
+						}
+						cur = util.getRegGroup(res, "\"cursor\":\"(.+?)\"");
+						if (cur == "cursorEnd") break;
+					}
+				}
+				return ret;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+				return null;
+			}
+		}
+		private List<string[]> getChList() {
+			var url = "https://api.cas.nicovideo.jp/v1/user/following/channels?offset="; //0&limit=25"
+			try {
+				var ret = new List<string[]>();
+				for (var i = 0; i < 1000; i++) {
+					var h = getHeader(1);
+					var r = util.sendRequest(url + (i * 25) + "&limit=25", h, null, "GET");
+					if (r == null) return null;
+					using (var rr = r.GetResponseStream())
+					using (var sr = new StreamReader(rr)) {
+						var res = sr.ReadToEnd();
+						if (res == null) return null;
+						var m = new Regex("\"id\":\"(ch\\d+)\",\"name\":\"(.+?)\"").Matches(res);
+						if (m.Count == 0) break;
+						foreach (Match _m in m) {
+							ret.Add(new string[]{_m.Groups[1].Value, _m.Groups[2].Value});
+						}
+					}
+				}
+				return ret;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+				return null;
+			}
+		}
+		private List<string[]> getCoList() {
+			var url = "https://api.cas.nicovideo.jp/v1/user/following/community/owners?page=";//0&pageSize=25
+			try {
+				var ret = new List<string[]>();
+				for (var i = 0; i < 1000; i++) {
+					var h = getHeader(1);
+					var r = util.sendRequest(url + i + "&pageSize=25", h, null, "GET");
+					if (r == null) return null;
+					using (var rr = r.GetResponseStream())
+					using (var sr = new StreamReader(rr)) {
+						var res = sr.ReadToEnd();
+						if (res == null) return null;
+						var m = new Regex("\"id\":\"(co\\d+)\",\"name\":\"(.+?)\"").Matches(res);
+						if (m.Count == 0) break;
+						foreach (Match _m in m) {
+							ret.Add(new string[]{_m.Groups[1].Value, _m.Groups[2].Value});
+						}
+					}
+				}
+				return ret;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+				return null;
+			}
 		}
 	}
 }

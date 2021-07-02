@@ -341,7 +341,7 @@ namespace namaichi.rec
 						var id = util.getRegGroup(us.ToString(), "(\\d+)");
 						var name = util.getMyName(cc, util.getRegGroup(us.ToString(), "=(.+)"));
 						
-						var followList = new FollowChecker(form, cc).getFollowListFromApp(f.follow);
+						var followList = new FollowChecker(form, cc).getFollowList(f.follow);
 						if (followList == null) {
 							form.addLogText("フォローリストが見つかりませんでした");
 							return;
@@ -423,7 +423,7 @@ namespace namaichi.rec
 		}
 		private void bulkAddFromFollowCom(ToolMenuLock _lock, List<string[]> addList, int allNum, bool[] followMode, CookieContainer cc, bool isAddToCom) {
 			var mainFollowList = new FollowChecker(form, cc)
-					.getFollowListFromApp(followMode);
+					.getFollowList(followMode);
 			if (mainFollowList == null) return;
 			var behaviors = form.config.get("defaultBehavior").Split(',').Select<string, bool>(x => x == "1").ToArray();
 			var textColor = ColorTranslator.FromHtml(form.config.get("defaultTextColor"));

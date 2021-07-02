@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -32,8 +33,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.93";
-	public static string versionDayStr = "2021/06/21";
+	public static string versionStr = "ver0.1.7.94";
+	public static string versionDayStr = "2021/07/02";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -1071,7 +1072,11 @@ class util {
 				util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
 			}
 			util.isLogFile = true;
-			exceptionSw = new StreamWriter(util.getJarPath()[0] + "/errorLog.txt", true);
+			try {
+				exceptionSw = new StreamWriter(util.getJarPath()[0] + "/errorLog.txt", true);
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + " " + ee.StackTrace + " " + ee.Source + " " + ee.TargetSite);
+			}
 		}
 	}
 	public static bool isOkDotNet() {

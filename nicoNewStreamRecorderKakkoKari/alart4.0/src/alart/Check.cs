@@ -623,24 +623,30 @@ namespace namaichi.alart
 			//namaroku
 			//2019/01/16 19:03:17 lv317993742,co2209093,21119
 			//2019/01/16 19:03:19 lv317993753,co1640324,21001654
-			
 			try {
-				if (!Directory.Exists(util.getJarPath()[0] + "/Log")) Directory.CreateDirectory("Log");
-				while (true) {
-					try {
-						foreach(var ri in items) {
+				if (!Directory.Exists(util.getJarPath()[0] + "/Log")) Directory.CreateDirectory(util.getJarPath()[0] + "/Log");
+				
+				foreach(var ri in items) {
+					while (true) {
+						try {
 							var dt = DateTime.Parse(ri.pubDate);
-							var p = util.getJarPath()[0] + "/Log/broadLog-" + dt.ToString("yyyy-MM-dd") + ".txt";
+							var dir = util.getJarPath()[0] + "/Log/" + dt.ToString("yyyy-MM");
+							if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+							var p = dir + "/broadLog-" + dt.ToString("yyyy-MM-dd") + ".txt";
 							using (var sw = new StreamWriter(p, true)) {
 								writeLog(sw, ri);
-								//sw.Close();
 							}
+							break;
+						
+						} catch (Exception ee) {
+							util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+							Thread.Sleep(1000);
 						}
-						return;
-					} catch (Exception ee) {
-						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 					}
 				}
+				return;
+					
+				
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}

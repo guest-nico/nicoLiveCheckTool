@@ -8,6 +8,7 @@
  */
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.UI.WebControls;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -15,6 +16,7 @@ using System.Xml.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using namaichi.info;
+using namaichi.rec;
 
 namespace namaichi.alart
 {
@@ -37,39 +39,42 @@ namespace namaichi.alart
 			if (isLoading) return;
 			
 			isLoading = true;
-			
-			var newItems = getCategoryLiveItems();
-			if (newItems == null) {
-				isLoading = false;
-				return;
-			}
-			var delMin = double.Parse(form.config.get("liveListDelMinutes"));
-			var now = DateTime.Now;
-			
-			var _livelistDataSource = form.liveListDataSource.ToArray();
-			var _livelistDataReserve = form.liveListDataReserve.ToArray();
+			try {
+				var newItems = getCategoryLiveItems();
+				if (newItems == null) {
+					isLoading = false;
+					return;
+				}
+				newItems.AddRange(getOfficialLiveItems());
+				var delMin = double.Parse(form.config.get("liveListDelMinutes"));
+				var now = DateTime.Now;
 				
-			if (Thread.CurrentThread == form.madeThread)
-					util.debugWriteLine("lock form thread load");
+				var _livelistDataSource = form.liveListDataSource.ToArray();
+				var _livelistDataReserve = form.liveListDataReserve.ToArray();
+					
+				if (Thread.CurrentThread == form.madeThread)
+						util.debugWriteLine("lock form thread load");
+				
+				deleteEndedLive(newItems, _livelistDataSource, _livelistDataReserve, now);
+				
+				form.liveListLockAction(() =>
+						_load(newItems, delMin, now, _livelistDataSource, _livelistDataReserve), "load0");
+				
+				var sI = form.liveList.FirstDisplayedScrollingRowIndex;
+				if (bool.Parse(form.config.get("AutoSort")))
+					form.sortLiveList();
+				form.setScrollIndex(form.liveList, sI);
+				
+				form.liveListLockAction(() => {
+					if (bool.Parse(form.config.get("FavoriteUp")))
+						form.upLiveListFavorite();
+				}, "load1");
+				
+				form.setLiveListNum();
+			} finally {
+				isLoading = false;
+			}
 			
-			deleteEndedLive(newItems, _livelistDataSource, _livelistDataReserve, now);
-			
-			form.liveListLockAction(() =>
-					_load(newItems, delMin, now, _livelistDataSource, _livelistDataReserve), "load0");
-			
-			var sI = form.liveList.FirstDisplayedScrollingRowIndex;
-			if (bool.Parse(form.config.get("AutoSort")))
-				form.sortLiveList();
-			form.setScrollIndex(form.liveList, sI);
-			
-			form.liveListLockAction(() => {
-				if (bool.Parse(form.config.get("FavoriteUp")))
-					form.upLiveListFavorite();
-			}, "load1");
-			
-			form.setLiveListNum();
-			
-			isLoading = false;
 		}
 		private void _load(List<LiveInfo> newItems, double delMin, DateTime now, LiveInfo[] _livelistDataSource, LiveInfo[] _livelistDataReserve) {
 			util.debugWriteLine("live list _load " + newItems.Count + " " + delMin + " " + now);
@@ -156,11 +161,12 @@ namespace namaichi.alart
 		}
 		private void deleteEndedLive(List<LiveInfo> newItems, LiveInfo[] _livelistDataSource, LiveInfo[] _livelistDataReserve, DateTime now) {
 			var delList = new List<LiveInfo>();
+			var liveListUpdateMinutes = int.Parse(form.config.get("liveListUpdateMinutes"));
 			foreach (var l in _livelistDataSource) {
 				
 				if (newItems.Find((x) => x.lvId == l.lvId) == null) {
 					//util.debugWriteLine("dellist found " + l.lvId + " " + l.title + " " + l.lastExistTime);
-					if (((TimeSpan)(now - l.lastExistTime)).Minutes > 5)
+					if (((TimeSpan)(now - l.lastExistTime)).Minutes > liveListUpdateMinutes * 2.5)
 						delList.Add(l);
 				} else {
 					//util.debugWriteLine("dellist not found " + l.lvId + " " + l.title + " " + l.lastExistTime);
@@ -169,7 +175,7 @@ namespace namaichi.alart
 			}
 			foreach (var l in _livelistDataReserve) {
 				if (newItems.Find((x) => x.lvId == l.lvId) == null) {
-					if (((TimeSpan)(now - l.lastExistTime)).Minutes > 5)
+					if (((TimeSpan)(now - l.lastExistTime)).Minutes > liveListUpdateMinutes * 2.5)
 						delList.Add(l);
 				} else l.lastExistTime = now;
 			}
@@ -300,6 +306,53 @@ namespace namaichi.alart
 			//else if (c == "7") return "r18";
 			else return "";
 		}
-		
+		private List<LiveInfo> getOfficialLiveItems() {
+			try {
+				var r = util.getPageSource("https://live.nicovideo.jp/focus");
+				if (r == null) {
+					foreach (var li in form.liveListDataSource) 
+						if (li.type == "official") li.lastExistTime = DateTime.Now;
+					foreach (var li in form.liveListDataReserve) 
+						if (li.type == "official") li.lastExistTime = DateTime.Now;
+					return new List<LiveInfo>();
+				}
+				var m = new Regex("id&quot;:&quot;(lv\\d+)").Matches(r);
+				var ret = new List<LiveInfo>();
+				foreach (Match _m in m) {
+					var lvid = _m.Groups[1].Value;
+					var isAdded = false;
+					foreach (var li in form.liveListDataSource) {
+						if (li.type != "official" && li.lvId == lvid) {
+							li.lastExistTime = DateTime.Now;
+							isAdded = true;
+						}
+					}
+					foreach (var li in form.liveListDataReserve) {
+						if (li.type == "official" && li.lvId == lvid) {
+							li.lastExistTime = DateTime.Now;
+							isAdded = true;
+						}
+					}
+					if (isAdded) continue;
+					
+					var hig = new HosoInfoGetter();
+					var _r = hig.get(lvid, null);
+					if (!_r) continue;
+					if (hig.type != "official" || hig.openDt > DateTime.Now || hig.isClosed) continue;
+					
+					var ri = new RssItem(hig.title, lvid, hig.openDt.ToString(), hig.description, hig.group, hig.communityId, hig.userName, hig.thumbnail, hig.isMemberOnly.ToString(), "", hig.isPayment);
+					ri.type = "official";
+					ri.setUserId(hig.userId);
+					ri.tags = new string[]{""};
+					ri.pubDateDt = DateTime.Parse(ri.pubDate);
+					var _li = new LiveInfo(ri, form.alartListDataSource.ToArray(), form.config, form.userAlartListDataSource.ToArray());
+					ret.Add(_li);
+				}
+				return ret;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return new List<LiveInfo>();
+			}
+		}
 	}
 }

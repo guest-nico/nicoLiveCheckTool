@@ -252,6 +252,7 @@ namespace namaichi
 			this.toolStripMenuItem30 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator21 = new System.Windows.Forms.ToolStripSeparator();
 			this.disableFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.alartListUpOnAirMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator33 = new System.Windows.Forms.ToolStripSeparator();
 			this.formColorMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.characterColorMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1132,6 +1133,7 @@ namespace namaichi
 									this.colorHistoryColorColumnMenu,
 									this.toolStripSeparator21,
 									this.disableFollowMenu,
+									this.alartListUpOnAirMenu,
 									this.toolStripSeparator33,
 									this.formColorMenuItem,
 									this.characterColorMenuItem});
@@ -1172,7 +1174,7 @@ namespace namaichi
 									this.isDisplaySoundTypeTabMenu,
 									this.isDisplayMemoTabMenu});
 			this.displayFavoriteTabMenu.Name = "displayFavoriteTabMenu";
-			this.displayFavoriteTabMenu.Size = new System.Drawing.Size(220, 22);
+			this.displayFavoriteTabMenu.Size = new System.Drawing.Size(316, 22);
 			this.displayFavoriteTabMenu.Text = "お気に入りタブ";
 			// 
 			// isDisplayCommunityIdTabMenu
@@ -1391,7 +1393,7 @@ namespace namaichi
 									this.isTaskListDisplayDeleteTabMenu,
 									this.isTaskListDisplayMemoTabMenu});
 			this.displayTaskTabMenu.Name = "displayTaskTabMenu";
-			this.displayTaskTabMenu.Size = new System.Drawing.Size(220, 22);
+			this.displayTaskTabMenu.Size = new System.Drawing.Size(316, 22);
 			this.displayTaskTabMenu.Text = "時刻起動タブ";
 			// 
 			// isTaskListDisplayStartTimeTabMenu
@@ -1569,7 +1571,7 @@ namespace namaichi
 									this.isDisplayFavoriteOnAirTabMenu,
 									this.isDisplayMemoOnAirTabMenu});
 			this.displayOnAirTabMenu.Name = "displayOnAirTabMenu";
-			this.displayOnAirTabMenu.Size = new System.Drawing.Size(220, 22);
+			this.displayOnAirTabMenu.Size = new System.Drawing.Size(316, 22);
 			this.displayOnAirTabMenu.Text = "放送中タブ";
 			this.displayOnAirTabMenu.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.DisplayOnAirTabMenuDropDownItemClicked);
 			// 
@@ -1690,7 +1692,7 @@ namespace namaichi
 									this.toolStripMenuItem55,
 									this.toolStripMenuItem56});
 			this.displayReserveHistoryListMenu.Name = "displayReserveHistoryListMenu";
-			this.displayReserveHistoryListMenu.Size = new System.Drawing.Size(220, 22);
+			this.displayReserveHistoryListMenu.Size = new System.Drawing.Size(316, 22);
 			this.displayReserveHistoryListMenu.Text = "予約履歴";
 			this.displayReserveHistoryListMenu.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.DisplayReserveHistoryListMenuDropDownItemClicked);
 			// 
@@ -1778,7 +1780,7 @@ namespace namaichi
 									this.toolStripMenuItem19,
 									this.toolStripMenuItem20});
 			this.displayHistoryListMenu.Name = "displayHistoryListMenu";
-			this.displayHistoryListMenu.Size = new System.Drawing.Size(220, 22);
+			this.displayHistoryListMenu.Size = new System.Drawing.Size(316, 22);
 			this.displayHistoryListMenu.Text = "通知履歴";
 			this.displayHistoryListMenu.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.DisplayHistoryListMenuDropDownItemClicked);
 			// 
@@ -1865,7 +1867,7 @@ namespace namaichi
 									this.toolStripMenuItem8,
 									this.toolStripMenuItem9});
 			this.displayNotAlartListMenu.Name = "displayNotAlartListMenu";
-			this.displayNotAlartListMenu.Size = new System.Drawing.Size(220, 22);
+			this.displayNotAlartListMenu.Size = new System.Drawing.Size(316, 22);
 			this.displayNotAlartListMenu.Text = "通知しなかった履歴";
 			this.displayNotAlartListMenu.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.DisplayNotAlartListMenuDropDownItemClicked);
 			// 
@@ -1938,7 +1940,7 @@ namespace namaichi
 			// toolStripSeparator20
 			// 
 			this.toolStripSeparator20.Name = "toolStripSeparator20";
-			this.toolStripSeparator20.Size = new System.Drawing.Size(217, 6);
+			this.toolStripSeparator20.Size = new System.Drawing.Size(313, 6);
 			// 
 			// colorColumnMenu
 			// 
@@ -1971,7 +1973,7 @@ namespace namaichi
 									this.colorSountTypeMenu,
 									this.colorMemoMenu});
 			this.colorColumnMenu.Name = "colorColumnMenu";
-			this.colorColumnMenu.Size = new System.Drawing.Size(220, 22);
+			this.colorColumnMenu.Size = new System.Drawing.Size(316, 22);
 			this.colorColumnMenu.Text = "お気に入りリストの色列";
 			this.colorColumnMenu.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.ColorColumnMenuDropDownItemClicked);
 			// 
@@ -2145,7 +2147,7 @@ namespace namaichi
 			// liveListColorColumnMenu
 			// 
 			this.liveListColorColumnMenu.Name = "liveListColorColumnMenu";
-			this.liveListColorColumnMenu.Size = new System.Drawing.Size(220, 22);
+			this.liveListColorColumnMenu.Size = new System.Drawing.Size(316, 22);
 			this.liveListColorColumnMenu.Text = "放送中リストの色列";
 			this.liveListColorColumnMenu.DropDownOpening += new System.EventHandler(this.LiveListColorColumnMenuDropDownOpening);
 			this.liveListColorColumnMenu.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.LiveListColorColumnMenuDropDownItemClicked);
@@ -2164,7 +2166,7 @@ namespace namaichi
 									this.toolStripMenuItem29,
 									this.toolStripMenuItem30});
 			this.colorHistoryColorColumnMenu.Name = "colorHistoryColorColumnMenu";
-			this.colorHistoryColorColumnMenu.Size = new System.Drawing.Size(220, 22);
+			this.colorHistoryColorColumnMenu.Size = new System.Drawing.Size(316, 22);
 			this.colorHistoryColorColumnMenu.Text = "通知履歴の放送中の色列";
 			this.colorHistoryColorColumnMenu.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.ColorHistoryColorColumnMenuDropDownItemClicked);
 			// 
@@ -2232,32 +2234,40 @@ namespace namaichi
 			// toolStripSeparator21
 			// 
 			this.toolStripSeparator21.Name = "toolStripSeparator21";
-			this.toolStripSeparator21.Size = new System.Drawing.Size(217, 6);
+			this.toolStripSeparator21.Size = new System.Drawing.Size(313, 6);
 			// 
 			// disableFollowMenu
 			// 
 			this.disableFollowMenu.CheckOnClick = true;
 			this.disableFollowMenu.Name = "disableFollowMenu";
-			this.disableFollowMenu.Size = new System.Drawing.Size(220, 22);
+			this.disableFollowMenu.Size = new System.Drawing.Size(316, 22);
 			this.disableFollowMenu.Text = "フォローの列を無効にする";
 			this.disableFollowMenu.CheckedChanged += new System.EventHandler(this.DisableFollowMenuCheckedChanged);
+			// 
+			// alartListUpOnAirMenu
+			// 
+			this.alartListUpOnAirMenu.CheckOnClick = true;
+			this.alartListUpOnAirMenu.Name = "alartListUpOnAirMenu";
+			this.alartListUpOnAirMenu.Size = new System.Drawing.Size(316, 22);
+			this.alartListUpOnAirMenu.Text = "お気に入りリストの放送中の行を寄せて表示";
+			this.alartListUpOnAirMenu.CheckedChanged += new System.EventHandler(this.AlartListUpOnAirMenuCheckedChanged);
 			// 
 			// toolStripSeparator33
 			// 
 			this.toolStripSeparator33.Name = "toolStripSeparator33";
-			this.toolStripSeparator33.Size = new System.Drawing.Size(217, 6);
+			this.toolStripSeparator33.Size = new System.Drawing.Size(313, 6);
 			// 
 			// formColorMenuItem
 			// 
 			this.formColorMenuItem.Name = "formColorMenuItem";
-			this.formColorMenuItem.Size = new System.Drawing.Size(220, 22);
+			this.formColorMenuItem.Size = new System.Drawing.Size(316, 22);
 			this.formColorMenuItem.Text = "ウィンドウの色(&W)";
 			this.formColorMenuItem.Click += new System.EventHandler(this.FormColorMenuItemClick);
 			// 
 			// characterColorMenuItem
 			// 
 			this.characterColorMenuItem.Name = "characterColorMenuItem";
-			this.characterColorMenuItem.Size = new System.Drawing.Size(220, 22);
+			this.characterColorMenuItem.Size = new System.Drawing.Size(316, 22);
 			this.characterColorMenuItem.Text = "文字の色(&S)";
 			this.characterColorMenuItem.Click += new System.EventHandler(this.CharacterColorMenuItemClick);
 			// 
@@ -2528,6 +2538,7 @@ namespace namaichi
 			this.alartList.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.AlartListCellMouseDoubleClick);
 			this.alartList.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.AlartListCellMouseDown);
 			this.alartList.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.AlartListCellParsing);
+			this.alartList.CellToolTipTextNeeded += new System.Windows.Forms.DataGridViewCellToolTipTextNeededEventHandler(this.AlartListCellToolTipTextNeeded);
 			this.alartList.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.AlartListCellValidating);
 			this.alartList.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.AlartListColumnHeaderMouseClick);
 			this.alartList.CurrentCellDirtyStateChanged += new System.EventHandler(this.AlartListCurrentCellDirtyStateChanged);
@@ -3391,6 +3402,7 @@ namespace namaichi
 			this.liveListSearchText.Name = "liveListSearchText";
 			this.liveListSearchText.Size = new System.Drawing.Size(95, 19);
 			this.liveListSearchText.TabIndex = 11;
+			this.liveListSearchText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.LiveListSearchTextKeyDown);
 			// 
 			// categoryRightBtn
 			// 
@@ -3620,6 +3632,7 @@ namespace namaichi
 			this.searchText.Name = "searchText";
 			this.searchText.Size = new System.Drawing.Size(100, 19);
 			this.searchText.TabIndex = 26;
+			this.searchText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SearchTextKeyDown);
 			// 
 			// favoriteNumLabel
 			// 
@@ -5627,6 +5640,7 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripMenuItem alartListUpOnAirMenu;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem56;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem55;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem54;

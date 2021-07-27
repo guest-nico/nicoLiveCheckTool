@@ -98,6 +98,7 @@ namespace namaichi.utility
 		                    	var etc = new AiEtcInfo();
 		                    	etc.isAutoReserve = ai.isAutoReserve;
 		                    	etc.recentColorMode = ai.recentColorMode;
+		                    	etc.lastLvTitle = ai.lastLvTitle;
 		                    	var json = JToken.FromObject(etc).ToString(Formatting.None);
 		                    	sw.WriteLine(json);
 		                    }
@@ -240,11 +241,12 @@ namespace namaichi.utility
 					}
 					var isAutoReserve = false;
 					var recentColorMode = 0;
+					var lastLvTitle = "";
 					if (itemLineNum != 29 && !string.IsNullOrEmpty(lines[i + 0])) {
 						var etc = JsonConvert.DeserializeObject<AiEtcInfo>(lines[i + 0]);
 						isAutoReserve = etc.isAutoReserve;
 						recentColorMode = etc.recentColorMode;
-						
+						lastLvTitle = etc.lastLvTitle;
 					}
 					//if (lines[i + 1] == "" && lines[i + 2] == "" && lines[i + 3] == "") continue;
 					AlartInfo ai;
@@ -275,7 +277,7 @@ namespace namaichi.utility
 								lines[i + 3], textColor, 
 								backColor, defaultSound, isDefaultSoundId, 
 								false, false, false, null, false, "True,True,True",
-								false, 0);
+								false, 0, "");
 						if (lines[i + 23] == "true") setNamarokuRead(ai, namarokuRecRead);
 					} else {
 						ai = new AlartInfo(lines[i + 1], 
@@ -302,7 +304,7 @@ namespace namaichi.utility
 								backColor, defaultSound, isDefaultSoundId,
 								isMustCom, isMustUser, isMustKeyword, cki,
 								isCustomKeyword, memberOnlyMode, isAutoReserve, 
-								recentColorMode);
+								recentColorMode, lastLvTitle);
 					}
 					//if ((ai.communityId == null || ai.communityId == "") &&
 					//    (ai.hostId == null || ai.hostId == "")) continue;
@@ -485,6 +487,7 @@ namespace namaichi.utility
 		private class AiEtcInfo {
 			public bool isAutoReserve = false;
 			public int recentColorMode = 0;
+			public string lastLvTitle = "";
 		}
 	}
 }

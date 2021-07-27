@@ -919,5 +919,18 @@ namespace namaichi
 			if (c.ShowDialog() != DialogResult.OK) return;
 			evenRowsColorBtn.BackColor = c.Color;
 		}
+		
+		void ThresholdpageListValueChanged(object sender, EventArgs e)
+		{
+			var l = liveListUpdateMinutesList;
+			var v = Math.Ceiling(thresholdpageList.Value / 20);
+			if (l.Value < v) l.Value = v;
+		}
+		void LiveListUpdateMinutesListValueChanged(object sender, EventArgs e)
+		{
+			var l = thresholdpageList;
+			var v = Math.Ceiling(liveListUpdateMinutesList.Value * 20);
+			if (l.Value > v) l.Value = v;
+		}
 	}
 }

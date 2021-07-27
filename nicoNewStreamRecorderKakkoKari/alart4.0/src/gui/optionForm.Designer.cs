@@ -1674,6 +1674,7 @@ namespace namaichi
 									0,
 									0,
 									0});
+			this.liveListUpdateMinutesList.ValueChanged += new System.EventHandler(this.LiveListUpdateMinutesListValueChanged);
 			// 
 			// label63
 			// 
@@ -1738,6 +1739,7 @@ namespace namaichi
 									0,
 									0,
 									0});
+			this.thresholdpageList.ValueChanged += new System.EventHandler(this.ThresholdpageListValueChanged);
 			// 
 			// label49
 			// 

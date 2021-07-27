@@ -220,7 +220,7 @@ namespace namaichi.alart
 						if (isSetLastHosoDate(isNosetComId, isNosetHostName , isNosetKeyword,
 								isComOk, isUserOk, isKeywordOk, item.lvId)) {
 							if (pubDateDt >= alartItem.lastHosoDt)
-								form.updateLastHosoDate(alartItem, pubDateDt.ToString("yyyy/MM/dd HH:mm:ss"), item.lvId, item.isMemberOnly, item.type);
+								form.updateLastHosoDate(alartItem, pubDateDt.ToString("yyyy/MM/dd HH:mm:ss"), item.lvId, item.isMemberOnly, item.type, item.title);
 							else {
 								if (pubDateDt < alartItem.lastHosoDt)
 									//form.addLogText("pub<item dt " + alartItem.lastHosoDt + " " + pubDateDt);

@@ -181,6 +181,7 @@ public class config
 			{"IsNotAllMatchNotifyNoRecent","false"},
 			{"delThumb","false"},
 			{"IsConfirmFollow","false"},
+			{"alartListUpOnAirMode","0"},
 			{"alartCacheIcon","true"},
 			{"IsAddAlartedComUser","false"},
 			{"IsAddAlartedUserToUserList","false"},

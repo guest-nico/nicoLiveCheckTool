@@ -25,8 +25,9 @@ namespace namaichi
         private PropertyDescriptor _sortProperty;
         
         private string columnName = null;
+        public int upOnAir = 0;
         public config.config cfg = null; 
-        public bool isFavoriteUp = false;
+        //public bool isFavoriteUp = false;
  
         /// <summary>
         /// Initializes a new instance of the <see cref="SortableBindingList{T}"/> class.
@@ -97,12 +98,9 @@ namespace namaichi
             _sortDirection = direction;
             
             columnName = prop.Name;
- 
             List<T> list = Items as List<T>;
             if (list == null) return;
- 
-            
-                
+			
             list.Sort(Compare);
  
             _isSorted = true;
@@ -132,6 +130,15 @@ namespace namaichi
             {
                 return 1; //first has value, second doesn't
             }
+            
+           	if (upOnAir == 1) {
+				var lLi = (AlartInfo)(object)lhs;
+           		var rLi = (AlartInfo)(object)rhs;
+           		if (lLi.recentColorMode != 0 && rLi.recentColorMode == 0)
+           			return 1;
+           		else if (lLi.recentColorMode == 0 && rLi.recentColorMode != 0)
+           			return -1;
+            }
             /*
             try {
 	            if (isFavoriteUp && false) {
@@ -159,7 +166,7 @@ namespace namaichi
             	//var _r = TimeSpan.TryParse(rhsValue.ToString().Replace("日", ".").Replace("時間", ":").Replace("分", ":").Replace("秒", ""), out intR);
             	var ret = DateTime.Compare(lLi.pubDateDt, rLi.pubDateDt);
             	if (ret == 0 && lLi.lvId != rLi.lvId)
-            		ret = string.Compare(lLi.lvId, rLi.lvId);
+            		return string.Compare(lLi.lvId, rLi.lvId);
             	return DateTime.Compare(lLi.pubDateDt, rLi.pubDateDt);
             	
             	//if (_l && _r) return intL.CompareTo(intR);
@@ -170,11 +177,19 @@ namespace namaichi
             
             if (lhsValue is IComparable)
             {
-                return ((IComparable)lhsValue).CompareTo(rhsValue);
+                var ret = ((IComparable)lhsValue).CompareTo(rhsValue);
+                if (ret == 0 && lhsValue is LiveInfo) {
+                	var lLi = (LiveInfo)(object)lhs;
+           			var rLi = (LiveInfo)(object)rhs;
+           			return string.Compare(lLi.lvId, rLi.lvId);
+                }
+                return ret;
             }
             if (lhsValue.Equals(rhsValue))
             {
-                return 0; //both are the same
+            	var lLi = (LiveInfo)(object)lhs;
+           		var rLi = (LiveInfo)(object)rhs;
+                return string.Compare(lLi.lvId, rLi.lvId); //both are the same
             }
             //not comparable, compare ToString
             return lhsValue.ToString().CompareTo(rhsValue.ToString());

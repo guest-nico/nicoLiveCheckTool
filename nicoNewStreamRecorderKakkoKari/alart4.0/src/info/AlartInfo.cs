@@ -44,6 +44,7 @@ namespace namaichi.info
 		public string memo = "";
 		public string lastLvid = "";
 		public string lastLvType = "";
+		public string lastLvTitle = "";
 		public string keyword = "";
 		
 		public DateTime lastHosoDt = DateTime.MinValue;
@@ -84,7 +85,8 @@ namespace namaichi.info
 				bool isMustUser, bool isMustKeyword,
 				List<CustomKeywordInfo> customKeyword,
 				bool isCustomKeyword, string memberOnlyMode,
-				bool isAutoReserve, int recentColorMode) {
+				bool isAutoReserve, int recentColorMode,
+				string lastLvTitle) {
 			this.communityId = communityId;
 			this.hostId = hostId;
 			this.communityName = communityName;
@@ -126,6 +128,7 @@ namespace namaichi.info
 			this.memberOnlyMode = memberOnlyMode;
 			this.isAutoReserve = isAutoReserve;
 			this.recentColorMode = recentColorMode;
+			this.lastLvTitle = lastLvTitle;
 		}
 		public AlartInfo(string communityId, string hostId, 
 				string communityName, string hostName, 

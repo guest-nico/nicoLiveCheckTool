@@ -177,12 +177,13 @@ namespace namaichi
 					isDefaultSoundIdChkBox.Checked, isMustComChkBox.Checked,
 					isMustUserChkBox.Checked, isMustKeywordChkBox.Checked,
 					customKw, isCustomKeywordRadioBtn.Checked, memberOnly,
-					isAutoReserveChkBox.Checked, 0);
+					isAutoReserveChkBox.Checked, 0, "");
 			if (inputLvidItem != null) {
 				_ret.lastHosoDt = inputLvidItem.pubDateDt;
 				_ret.lastHostDate = inputLvidItem.pubDateDt.ToString("yyyy/MM/dd HH:mm:ss");
 				_ret.lastLvid = inputLvidItem.lvId;
 				_ret.lastLvType = inputLvidItem.type;
+				_ret.lastLvTitle = inputLvidItem.title;
 				if (!isInputLvidItemClosed)
 					_ret.recentColorMode = bool.Parse(form.config.get("IscheckRecent")) ? ((inputLvidItem.isMemberOnly) ? 2 : 1) : 0;				
 			}

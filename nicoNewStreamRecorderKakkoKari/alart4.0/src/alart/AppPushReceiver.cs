@@ -97,7 +97,8 @@ namespace namaichi.alart
 			util.debugWriteLine("app push checkin");
 			id = token = null;
 			try {
-				var url = "http://android.clients.google.com/checkin";
+				//var url = "http://android.clients.google.com/checkin";
+				var url = "https://android.googleapis.com/checkin";
 				
 				var cr = new CheckinRequest();
 				

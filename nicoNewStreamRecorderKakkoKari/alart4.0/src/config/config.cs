@@ -330,7 +330,7 @@ public class config
 			
 	        {"thresholdpage", "10"},
 	        {"brodouble", "0"},
-	        {"alartAddLive", "1"},
+	        {"alartAddLive", "0"},
 	        {"cateCategoryType", "0"},
 	        {"liveListDelMinutes", "30"},
 	        {"FavoriteUp", "true"},

@@ -700,7 +700,7 @@ namespace namaichi.alart
 		}
 		public void deleteOldCheckedLvIdList() {
 			try {
-				checkedLvIdList.Sort();
+				checkedLvIdList = checkedLvIdList.OrderBy(x => x.pubDate).ToList();
 				checkedLvIdList.RemoveRange(0, checkedLvIdList.Count - 18000);
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);

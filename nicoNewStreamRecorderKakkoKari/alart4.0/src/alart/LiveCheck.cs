@@ -239,6 +239,7 @@ namespace namaichi.alart
 				var url = "https://live.nicovideo.jp/front/api/pages/recent/v1/programs?tab=" + name + "&offset=#&sortOrder=recentDesc";
 				util.debugWriteLine(url);
 				
+				string lastRes = null;
 				for (var i = 0; i < readNum; i++) {
 					util.debugWriteLine("livecheck category page i " + i + " " + name);
 					try {
@@ -247,6 +248,8 @@ namespace namaichi.alart
 							Thread.Sleep(10000);
 							continue;
 						}
+						if (res == lastRes) break;
+						lastRes = res;
 						var categoryObj = (CategoryRecent)Newtonsoft.Json.JsonConvert.DeserializeObject<CategoryRecent>(res);
 						if (categoryObj.meta.errorCode != "OK") continue;
 						

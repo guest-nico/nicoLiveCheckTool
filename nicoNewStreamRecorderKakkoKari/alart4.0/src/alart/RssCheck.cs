@@ -108,7 +108,7 @@ namespace namaichi.alart
 				if (items.IndexOf(item) == -1 && check.checkedLvIdList.FindIndex(x => x.lvId == item.lvId) == -1) {
 					var pubDate = DateTime.Parse(item.pubDate); 
 					if (pubDate > now) {
-						item.pubDate = now.ToString("yyyy/MM/dd HH:mm:ss");
+						item.pubDate = now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
 						util.debugWriteLine("rss future pubdate " + item.lvId + " " + item.pubDate + " " + pubDate);
 					}
 					items.Add(item);

@@ -89,7 +89,7 @@ namespace namaichi.alart
 					bool isTopMost, Color[] isColor, double opacity) {
 			var thumbnailUrl = util.getJarPath()[0] + "/ImageCommunity/no thumb com.jpg";
 			var ri = new namaichi.info.RssItem("タイトル", "lv1000000",
-					DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), "放送説明", "コミュニティ名",
+					DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"), "放送説明", "コミュニティ名",
 					"コミュニティID", "放送者名", thumbnailUrl, "true", "", false);
 			try {
 				popupSize = new Size[]{new PopupForm(ri, form.config, this, 0, null).Size,
@@ -108,7 +108,7 @@ namespace namaichi.alart
 		public void setPopupSize() {
 			var thumbnailUrl = util.getJarPath()[0] + "/ImageCommunity/no thumb com.jpg";
 			var ri = new namaichi.info.RssItem("タイトル", "lv1000000",
-					DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), "放送説明", "コミュニティ名",
+					DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"), "放送説明", "コミュニティ名",
 					"コミュニティID", "放送者名", thumbnailUrl, "true", "", false);
 			popupSize = new Size[]{new PopupForm(ri, form.config, this, 0, null).Size,
 						new SmallPopupForm(ri, form.config, this, 0, null).Size};

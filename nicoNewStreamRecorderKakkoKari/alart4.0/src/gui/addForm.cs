@@ -65,6 +65,7 @@ namespace namaichi
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
 			setDefaultBehavior();
+			setAppliName();
 			
 			if (id == null) {
 				if (isUserMode) setUserModeForm();
@@ -85,9 +86,6 @@ namespace namaichi
 				//keywordText.Text = "";
 				setUserModeForm();
 			}
-			
-			
-			
 		}
 		private void setMemberOnlyListCloseEventHandler(Control parent) {
 			foreach (Control c in parent.Controls) {
@@ -126,13 +124,13 @@ namespace namaichi
 			var isNoKeyword = (isSimpleKeywordRadioBtn.Checked && keywordText.Text == "") ||
 					(isCustomKeywordRadioBtn.Checked && customKw == null);
 			if (communityNameText.Text == "" && userNameText.Text == "" && isNoKeyword) {
-				MessageBox.Show("有効なコミュニティIDかユーザーIDかキーワードが入力されていないです");
+				util.showMessageBoxCenterForm(this, "有効なコミュニティIDかユーザーIDかキーワードが入力されていないです");
 				return;
 			}
 			
 			if (isCustomKeywordRadioBtn.Checked) {
 				if (customKw == null) {
-					MessageBox.Show("カスタムキーワードが未設定です");
+					util.showMessageBoxCenterForm(this, "カスタムキーワードが未設定です");
 					return;
 				}
 				var isAllNot = true;
@@ -140,13 +138,13 @@ namespace namaichi
 					if (c.matchType != "含まない") isAllNot = false;
 				}
 				if (communityNameText.Text == "" && userNameText.Text == "" && isAllNot) {
-					MessageBox.Show("「含まない」以外の行が必要です");
+					util.showMessageBoxCenterForm(this, "「含まない」以外の行が必要です");
 					return;
 				}
 			}
 			
 			
-			var now = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+			var now = DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
 			var addDate = now;//now.Substring(0, now.Length - 3);
 			var comFollow = string.IsNullOrEmpty(comId) || form.check.container == null ? "" :
 					((communityFollowChkBox.Checked) ? "フォロー解除する" : "フォローする");
@@ -157,7 +155,7 @@ namespace namaichi
 			
 			var memberOnly = getMemberOnly();
 			if (memberOnly == null) {
-				MessageBox.Show("通常放送、限定放送、有料放送のいずれかにチェックが必要です");
+				util.showMessageBoxCenterForm(this, "通常放送、限定放送、有料放送のいずれかにチェックが必要です");
 				return;
 			}
 			var _ret = new AlartInfo(comId, userId, 
@@ -180,7 +178,7 @@ namespace namaichi
 					isAutoReserveChkBox.Checked, 0, "");
 			if (inputLvidItem != null) {
 				_ret.lastHosoDt = inputLvidItem.pubDateDt;
-				_ret.lastHostDate = inputLvidItem.pubDateDt.ToString("yyyy/MM/dd HH:mm:ss");
+				_ret.lastHostDate = inputLvidItem.pubDateDt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
 				_ret.lastLvid = inputLvidItem.lvId;
 				_ret.lastLvType = inputLvidItem.type;
 				_ret.lastLvTitle = inputLvidItem.title;
@@ -208,7 +206,7 @@ namespace namaichi
 			var isNoKeyword = (isSimpleKeywordRadioBtn.Checked && keywordText.Text == "") ||
 					(isCustomKeywordRadioBtn.Checked && customKw == null);
 			if (communityNameText.Text == "" && userNameText.Text == "" && isNoKeyword) {
-				MessageBox.Show("有効なコミュニティIDかユーザーIDかキーワードが入力されていないです");
+				util.showMessageBoxCenterForm(this, "有効なコミュニティIDかユーザーIDかキーワードが入力されていないです");
 				return;
 			}
 			
@@ -218,14 +216,14 @@ namespace namaichi
 					if (c.matchType != "含まない") isAllNot = false;
 				}
 				if (communityNameText.Text == "" && userNameText.Text == "" && isAllNot) {
-					MessageBox.Show("「含まない」以外の行が必要です");
+					util.showMessageBoxCenterForm(this, "「含まない」以外の行が必要です");
 					return;
 				}
 			}
 			
 			var memberOnly = getMemberOnly();
 			if (memberOnly == null) {
-				MessageBox.Show("通常放送、限定放送、有料放送のいずれかにチェックが必要です");
+				util.showMessageBoxCenterForm(this, "通常放送、限定放送、有料放送のいずれかにチェックが必要です");
 				return;
 			}
 			
@@ -350,7 +348,7 @@ namespace namaichi
 			}
 			hosoIdText.Text = id;
 			if (id == null || (!id.StartsWith("l") && !id.StartsWith("c")))
-				MessageBox.Show("しっぱい");
+				util.showMessageBoxCenterForm(this, "しっぱい");
 			
 			communityId.Text = communityNameText.Text = 
 					userIdText.Text = userNameText.Text = "";
@@ -367,7 +365,7 @@ namespace namaichi
 			
 			try {
 				if (hig.communityId == null && hig.userId == null)
-					MessageBox.Show(hig.type == "official" ? "公式放送でした" : "しっぱい");
+					util.showMessageBoxCenterForm(this, hig.type == "official" ? "公式放送でした" : "しっぱい");
 				
 				inputLvidItem = new RssItem(hig.title, id, hig.openDt.ToString(), hig.description, hig.group, hig.communityId, hig.userName, hig.thumbnail, hig.isMemberOnly.ToString(), "", hig.isPayment);
 				inputLvidItem.setUserId(hig.userId);
@@ -401,7 +399,7 @@ namespace namaichi
 				GetUserInfoBtnClick(null, null);
 				
 				if (hig.communityId == null && hig.userId == null)
-					MessageBox.Show(hig.type == "official" ? "公式放送でした" : "しっぱい");
+					util.showMessageBoxCenterForm(this, hig.type == "official" ? "公式放送でした" : "しっぱい");
 			}
 			*/
 		}
@@ -413,9 +411,9 @@ namespace namaichi
 					    	ai.communityId) {
 						var m = (ai.communityId.StartsWith("co")) ? "コミュニティ" : (ai.communityId == "official" ? "official" : "チャンネル");
 						
-					    //var res = MessageBox.Show(m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除　いいえ＝削除　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+					    //var res = util.showMessageBoxCenterForm(this, m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除　いいえ＝削除　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 					    form.setAlartListScrollIndex(i, isUserMode);
-					    var res = MessageBox.Show(m + "ID:" + ai.communityId + "は既に登録されています。\n(" + dataSource[i].toString() + ")\n\n既に存在している行を削除しますか？\nはい=削除して登録　いいえ=既に存在する行を削除せず登録　キャンセル=登録しない", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+					    var res = util.showMessageBoxCenterForm(this, m + "ID:" + ai.communityId + "は既に登録されています。\n(" + dataSource[i].toString() + ")\n\n既に存在している行を削除しますか？\nはい=削除して登録　いいえ=既に存在する行を削除せず登録　キャンセル=登録しない", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 					    
 					    if (res == DialogResult.Yes) {
 					    	form.alartListRemove(dataSource[i], isUserMode);
@@ -434,9 +432,9 @@ namespace namaichi
 					if (ai.hostId != null && ai.hostId != "" && dataSource[i].hostId ==
 						   ai.hostId) {
 						var m = "ユーザー";
-					    //var res = MessageBox.Show(m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除して登録　いいえ＝登録　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+					    //var res = util.showMessageBoxCenterForm(this, m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除して登録　いいえ＝登録　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 					    form.setAlartListScrollIndex(i, isUserMode);
-					    var res = MessageBox.Show(m + "ID:" + ai.hostId + "は既に登録されています。\n(" + dataSource[i].toString() + ")\n\n既に存在している行を削除しますか？\nはい=削除して登録　いいえ=既に存在する行を削除せず登録　キャンセル=登録しない", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+					    var res = util.showMessageBoxCenterForm(this, m + "ID:" + ai.hostId + "は既に登録されています。\n(" + dataSource[i].toString() + ")\n\n既に存在している行を削除しますか？\nはい=削除して登録　いいえ=既に存在する行を削除せず登録　キャンセル=登録しない", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 					    
 					    if (res == DialogResult.Yes) {
 					    	form.alartListRemove(dataSource[i], isUserMode);
@@ -518,7 +516,7 @@ namespace namaichi
 			
 				var res = DialogResult.No;
 				if (!isOkBtn && num != "co00") {
-					res = MessageBox.Show(type + "画像を取得し直しますか？", 
+					res = util.showMessageBoxCenterForm(this, type + "画像を取得し直しますか？", 
 							type + "画像が既に存在します", MessageBoxButtons.YesNo,
 							MessageBoxIcon.Warning);
 				}
@@ -799,7 +797,7 @@ namespace namaichi
 			try {
 				if (e.Index == 3 && e.NewValue == CheckState.Unchecked ||
 					e.Index == 0 && memberOnlyCheckList.GetItemChecked(0) == true) {
-					DialogResult result = MessageBox.Show("無料部分（チラ見せ）のある有料放送も通知されなくなります");
+					DialogResult result = util.showMessageBoxCenterForm(this, "無料部分（チラ見せ）のある有料放送も通知されなくなります");
 				}
 				if (e.Index == 0) {
 					for (var i = 1; i < memberOnlyCheckList.Items.Count; i++) {
@@ -838,6 +836,14 @@ namespace namaichi
 				communityNameText.Text = "";
 				communityId.Enabled = true;
 				getCommunityInfoBtn.PerformClick();
+			}
+		}
+		void setAppliName() {
+			for (var i = 0; i < 10; i++) {
+				var n = "appli" + (char)('A' + i);
+				var c = form.config.get(n + "Name");
+				if (string.IsNullOrEmpty(c)) continue;
+				Controls.Find(n + "ChkBox", true)[0].Text =	"ｱﾌﾟﾘ" + ((char)('A' + i)) + "(" + c + ")";
 			}
 		}
 	}

@@ -449,7 +449,7 @@ namespace namaichi.rec
 					"フォロー解除する" : "フォローする";
 				if (userId == "") userFollow = "";
 				
-				var now = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+				var now = DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
 				var ai = new AlartInfo(comId, userId, 
 						comName, userName, "", now, false, false, 
 						false, false, false, false, false, 

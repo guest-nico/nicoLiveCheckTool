@@ -583,7 +583,7 @@ namespace namaichi
 			
 			
 			var title = "[ニコ生]ユーザー名の放送開始";
-			var msg = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + "\nユーザー名 が コミュニティ名 で 放送タイトル を開始しました。\nhttps://live.nicovideo.jp/watch/lv********\nhttps://com.nicovideo.jp/community/co*******";
+			var msg = DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss") + "\nユーザー名 が コミュニティ名 で 放送タイトル を開始しました。\nhttps://live.nicovideo.jp/watch/lv********\nhttps://com.nicovideo.jp/community/co*******";
 			
 			Task.Factory.StartNew(() => {
 				string eMsg;
@@ -626,6 +626,12 @@ namespace namaichi
 					if (c is CheckBox)
 						((CheckBox)c).Checked = bool.Parse(d[1]);
 				}
+			}
+			for (var i = 0; i < 10; i++) {
+				var n = "appli" + (char)('A' + i);
+				var c = form.config.get(n + "Name");
+				if (string.IsNullOrEmpty(c)) continue;
+				Controls.Find(n + "ChkBox", true)[0].Text =	"ｱﾌﾟﾘ" + ((char)('A' + i)) + "(" + c + ")";
 			}
 		}
 		void TextColorBtnClick(object sender, EventArgs e)

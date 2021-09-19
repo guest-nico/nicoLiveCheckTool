@@ -33,8 +33,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.96";
-	public static string versionDayStr = "2021/08/15";
+	public static string versionStr = "ver0.1.7.97";
+	public static string versionDayStr = "2021/09/19";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -58,7 +58,7 @@ class util {
 		return p;
 	}
 	public static string getTime() {
-		return DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+		return DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
 		
 	}
 	public static int getUnixTime() {
@@ -987,7 +987,7 @@ class util {
 		#if DEBUG
 			if (isMessageBox && isLogFile) {
 				if (frameCount > 150) {
-					System.Windows.Forms.MessageBox.Show("framecount stack", frameCount.ToString() + " " + namaichi.Program.arg + " " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
+					util.showMessageBoxCenterForm(null, "framecount stack", frameCount.ToString() + " " + namaichi.Program.arg + " " + DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"));
 					return;
 				}
 			}
@@ -1042,7 +1042,7 @@ class util {
 		
 		#if DEBUG
 			if (isMessageBox && isLogFile)
-				System.Windows.Forms.MessageBox.Show("error " + eo.Message, "error " + namaichi.Program.arg);
+				util.showMessageBoxCenterForm(null, "error " + eo.Message, "error " + namaichi.Program.arg);
 		#else
 			
 		#endif
@@ -1625,7 +1625,7 @@ class util {
 				msg += (msg == "" ? "" : ",") + n;
 		}
 		if (msg != "") 
-			form.formAction(() => System.Windows.Forms.MessageBox.Show(path + "内に" + msg + "が見つかりませんでした"));
+			form.formAction(() => util.showMessageBoxCenterForm(form, path + "内に" + msg + "が見つかりませんでした"));
 		
 		if (dotNetVersion == "4.0") {
 			//.net4 dll
@@ -1641,7 +1641,7 @@ class util {
 					msg += (msg == "" ? "" : ",") + n;
 			}
 			if (msg != "") 
-				form.formAction(() => System.Windows.Forms.MessageBox.Show(path + "内に" + msg + "が見つかりませんでした。ver0.1.7.45以前からの更新の場合、解凍してできたファイルをこのフォルダに全てコピーすると動作するかもしれません。"));
+				form.formAction(() => util.showMessageBoxCenterForm(form, path + "内に" + msg + "が見つかりませんでした。ver0.1.7.45以前からの更新の場合、解凍してできたファイルをこのフォルダに全てコピーすると動作するかもしれません。"));
 		}
 		
 	}
@@ -1773,7 +1773,7 @@ class util {
 			
 			if (size > max) {
 				size = max;
-				System.Windows.Forms.MessageBox.Show("画面上に表示できなくなる可能性があるため、" + size + "に設定されます");
+				util.showMessageBoxCenterForm(form, "画面上に表示できなくなる可能性があるため、" + size + "に設定されます");
 			}
 			
 			form.Font = new Font(form.Font.FontFamily, size);
@@ -1825,7 +1825,7 @@ class util {
 	            hasHandle = true;
 	        }
 			if (!hasHandle) {
-	            System.Windows.Forms.MessageBox.Show("すでに起動しています。2つ同時に起動できません。システムトレイを確認してください。", "ニコ生放送チェックツール（仮の多重起動禁止");
+	            util.showMessageBoxCenterForm(null, "すでに起動しています。2つ同時に起動できません。システムトレイを確認してください。", "ニコ生放送チェックツール（仮の多重起動禁止");
 	            return null;
 	        }
 			return mutex;
@@ -1850,4 +1850,57 @@ class util {
     		return icon;
     	}
     }
+    [DllImport("user32.dll")]
+	static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
+	[DllImport("kernel32.dll")]
+	public static extern IntPtr GetCurrentThreadId();
+	public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
+	[DllImport("user32.dll")]
+	public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+	[DllImport("user32.dll")]
+	static extern bool SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int cx, int cy, uint uFlags);
+	[DllImport("user32.dll")]
+	static extern IntPtr SetWindowsHookEx(int idHook, HookProc lpfn, IntPtr hInstance, IntPtr threadId);
+	[DllImport("user32.dll")]
+	public static extern bool UnhookWindowsHookEx(IntPtr hHook);
+	[DllImport("user32.dll")]
+	public static extern IntPtr CallNextHookEx(IntPtr hHook, int nCode, IntPtr wParam, IntPtr lParam);
+	public struct RECT {
+		public int left;
+		public int top;
+		public int right;
+		public int bottom;
+	}
+	private static Form messageBoxOwnerForm = null;
+	private static IntPtr mBHook;
+	private static IntPtr CBTProc(int nCode, IntPtr wParam, IntPtr lParam) {
+		var HCBT_ACTIVATE = 5;
+		if (nCode == HCBT_ACTIVATE) {
+			RECT rectF, rectM; 
+			GetWindowRect(messageBoxOwnerForm.Handle, out rectF);
+			GetWindowRect(wParam, out rectM);
+			var x = rectF.left + ((rectF.right - rectF.left) - (rectM.right - rectM.left)) / 2;
+			var y = rectF.top + ((rectF.bottom - rectF.top) - (rectM.bottom - rectM.top)) / 2;
+			
+			uint SWP_NOSIZE = 1;
+			uint SWP_NOZORDER = 4;
+			uint SWP_NOACTIVATE = 16;
+			if (x >= 0 && y >= 0)
+				SetWindowPos(wParam, 0, x, y, 0, 0, 
+						SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+			UnhookWindowsHookEx(mBHook);
+		}
+		return CallNextHookEx(mBHook, nCode, wParam, lParam);
+	}
+	public static DialogResult showMessageBoxCenterForm(Form form, string text, string caption = "", MessageBoxButtons btn = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, MessageBoxDefaultButton defBtn = MessageBoxDefaultButton.Button1) {
+		if (form != null) {
+			var GWL_HINSTANCE = -6;
+			var hInstance = GetWindowLong(form.Handle, GWL_HINSTANCE);
+		    var threadId = GetCurrentThreadId();
+		    var whCbt = 5;
+		    messageBoxOwnerForm = form;
+		    mBHook = SetWindowsHookEx(whCbt, new HookProc(CBTProc), hInstance, threadId);
+		}
+		return System.Windows.Forms.MessageBox.Show(text, caption, btn, icon);
+	}
 }

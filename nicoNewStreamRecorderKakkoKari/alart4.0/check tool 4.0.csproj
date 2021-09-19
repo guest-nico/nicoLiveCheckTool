@@ -306,6 +306,7 @@
     <Compile Include="src\util\mcs_pbs.cs" />
     <Compile Include="src\util\NotAlartListFileManager.cs" />
     <Compile Include="src\util\RegGetter.cs" />
+    <Compile Include="src\util\ReserveHistoryListFileManager.cs.cs" />
     <Compile Include="src\util\SourceInfoSerialize.cs" />
     <Compile Include="src\util\TaskListFileManager.cs" />
     <Compile Include="src\util\TwitterListFileManager.cs" />

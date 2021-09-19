@@ -46,6 +46,7 @@ namespace namaichi
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 			lvidText.Text = id;
+			setAppliName();
 			
 			util.setFontSize(int.Parse(form.config.get("fontSize")), this, false);
 		}
@@ -62,15 +63,15 @@ namespace namaichi
 					minuteList.Text + ":" + secondList.Text;
 			DateTime _dt;
 			if (!DateTime.TryParse(startTime, out _dt)) {
-				MessageBox.Show("有効な日時ではありませんでした");
+				util.showMessageBoxCenterForm(this, "有効な日時ではありませんでした");
 				return;
 			}
-			startTime = _dt.ToString("yyyy/MM/dd HH:mm:ss");
+			startTime = _dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
 			
 			var lvid = util.getRegGroup(lvidText.Text, "(lv\\d+)");
 			if (lvid == null) lvid = "";
 			
-			var now = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+			var now = DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
 			var addDate = now;//now.Substring(0, now.Length - 3);
 			
 			var _ret = new TaskInfo(startTime, lvid, 
@@ -109,14 +110,14 @@ namespace namaichi
 					if (userName != null) t += (t == "" ? "" : " ") + userName;
 				}
 				if (hig.dt != DateTime.MinValue) {
-					t += (t == "" ? "" : " ") + hig.dt.ToString("yyyy/MM/dd HH:mm:ss");
+					t += (t == "" ? "" : " ") + hig.dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
 					yearList.Text = hig.dt.Year.ToString(); monthList.Text = hig.dt.Month.ToString();
 					dayList.Text = hig.dt.Day.ToString(); hourList.Text = hig.dt.Hour.ToString();
 					minuteList.Text = hig.dt.Minute.ToString(); secondList.Text = hig.dt.Second.ToString();
 				}
 				memoText.Text = t;
 			} else {
-				MessageBox.Show(hig.type == "official a" ? "公式放送でした" : "しっぱい");
+				util.showMessageBoxCenterForm(this, hig.type == "official a" ? "公式放送でした" : "しっぱい");
 			}
 		}
 		
@@ -126,6 +127,13 @@ namespace namaichi
 				getInfoFromHosoIdBtn.PerformClick();
 			}
 		}
-		
+		void setAppliName() {
+			for (var i = 0; i < 10; i++) {
+				var n = "appli" + (char)('A' + i);
+				var c = form.config.get(n + "Name");
+				if (string.IsNullOrEmpty(c)) continue;
+				Controls.Find(n + "ChkBox", true)[0].Text =	"ｱﾌﾟﾘ" + ((char)('A' + i)) + "(" + c + ")";
+			}
+		}
 	}
 }

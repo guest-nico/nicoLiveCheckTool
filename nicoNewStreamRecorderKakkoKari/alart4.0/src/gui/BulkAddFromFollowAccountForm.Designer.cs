@@ -185,6 +185,7 @@ namespace namaichi
 			this.MinimizeBox = false;
 			this.Name = "BulkAddFromFollowAccountForm";
 			this.ShowIcon = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "参加コミュを登録したいニコニコ動画アカウントの入力";
 			this.ResumeLayout(false);
 			this.PerformLayout();

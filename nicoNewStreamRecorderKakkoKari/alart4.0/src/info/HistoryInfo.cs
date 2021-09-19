@@ -64,7 +64,7 @@ namespace namaichi.info
 		public HistoryInfo(RssItem ri, List<AlartInfo> targetAi = null)
 		{
 			this.dt = DateTime.Parse(ri.pubDate);
-			this.dtStr = dt.ToString("yyyy/MM/dd HH:mm:ss");
+			this.dtStr = dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
 			this.lvid = ri.lvId;
 			this.title = util.removeTag(ri.title);
 			this.userName = ri.hostName == null ? "" : util.removeTag(ri.hostName);
@@ -175,7 +175,7 @@ namespace namaichi.info
 		*/
 		public string Dt
         {
-			get { return dtStr == null ? dt.ToString("yyyy/MM/dd HH:mm:ss") : dtStr; }
+			get { return dtStr == null ? dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss") : dtStr; }
             set {  }
         }
 		public string Title

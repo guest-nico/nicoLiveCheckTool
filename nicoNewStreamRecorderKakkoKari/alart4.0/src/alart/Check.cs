@@ -220,7 +220,7 @@ namespace namaichi.alart
 						if (isSetLastHosoDate(isNosetComId, isNosetHostName , isNosetKeyword,
 								isComOk, isUserOk, isKeywordOk, item.lvId)) {
 							if (pubDateDt >= alartItem.lastHosoDt)
-								form.updateLastHosoDate(alartItem, pubDateDt.ToString("yyyy/MM/dd HH:mm:ss"), item.lvId, item.isMemberOnly, item.type, item.title);
+								form.updateLastHosoDate(alartItem, pubDateDt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"), item.lvId, item.isMemberOnly, item.type, item.title);
 							else {
 								if (pubDateDt < alartItem.lastHosoDt)
 									//form.addLogText("pub<item dt " + alartItem.lastHosoDt + " " + pubDateDt);
@@ -681,7 +681,7 @@ namespace namaichi.alart
 			var tags = ri.getTag(categoryReg);
 			var isJikken = Array.IndexOf(tags, "実験放送") > -1;
 			var br = "";
-			//sw.WriteLine("[放送開始時間] " + DateTime.Parse(ri.pubDate).ToString("yyyy/MM/dd HH:mm:ss") + br);
+			//sw.WriteLine("[放送開始時間] " + DateTime.Parse(ri.pubDate).ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss") + br);
 			sw.WriteLine("[放送開始時間] " + ri.pubDate + br);
 			sw.WriteLine("[タイトル] " + ri.title + br);
 			sw.WriteLine("[限定] " + ((ri.isMemberOnly) ? "限定" : "オープン") + br);
@@ -873,9 +873,9 @@ namespace namaichi.alart
 		public void mail(RssItem item) {
 			try {
 				util.debugWriteLine("pubdate mail " + item.pubDate);
-				string dt = DateTime.Parse(item.pubDate).ToString("yyyy/MM/dd(ddd) HH:mm");
+				string dt = DateTime.Parse(item.pubDate).ToString("yyyy\"/\"MM\"/\"dd(ddd) HH:mm");
 				string title, body;
-				body = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + "\n";
+				body = DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss") + "\n";
 				if (item.hostName != "" && item.hostName != null) {
 					title = "[ニコ生]" + item.hostName + "の放送開始";
 					body += item.hostName + " が " + item.comName + " で " + item.title + " - " + dt + "開始 を開始しました。\n";
@@ -1055,7 +1055,7 @@ namespace namaichi.alart
 				var backColor = ColorTranslator.FromHtml(form.config.get("defaultBackColor"));
 				var behaviors = form.config.get("defaultBehavior").Split(',').Select<string, bool>(x => x == "1").ToArray();
 				var isAutoReserve = bool.Parse(form.config.get("IsDefaultAutoReserve"));
-				var now = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+				var now = DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
 				if (!isContainCom && !string.IsNullOrEmpty(ri.comId)) {
 					var isFollow = false;
 					var comName = util.getCommunityName(ri.comId, out isFollow, container);

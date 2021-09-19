@@ -338,20 +338,20 @@ namespace namaichi
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.isMailChkBox);
 			this.groupBox1.Controls.Add(this.appliJChkBox);
 			this.groupBox1.Controls.Add(this.appliIChkBox);
-			this.groupBox1.Controls.Add(this.appliHChkBox);
 			this.groupBox1.Controls.Add(this.appliGChkBox);
 			this.groupBox1.Controls.Add(this.appliFChkBox);
 			this.groupBox1.Controls.Add(this.appliEChkBox);
+			this.groupBox1.Controls.Add(this.appliCChkBox);
+			this.groupBox1.Controls.Add(this.appliBChkBox);
+			this.groupBox1.Controls.Add(this.isMailChkBox);
+			this.groupBox1.Controls.Add(this.appliHChkBox);
 			this.groupBox1.Controls.Add(this.isWebChkBox);
 			this.groupBox1.Controls.Add(this.isSoundChkBox);
 			this.groupBox1.Controls.Add(this.isBaloonChkBox);
 			this.groupBox1.Controls.Add(this.isPopupChkBox);
 			this.groupBox1.Controls.Add(this.appliDChkBox);
-			this.groupBox1.Controls.Add(this.appliCChkBox);
-			this.groupBox1.Controls.Add(this.appliBChkBox);
 			this.groupBox1.Controls.Add(this.appliAChkBox);
 			this.groupBox1.Location = new System.Drawing.Point(28, 128);
 			this.groupBox1.Name = "groupBox1";
@@ -371,54 +371,60 @@ namespace namaichi
 			// 
 			// appliJChkBox
 			// 
-			this.appliJChkBox.Location = new System.Drawing.Point(172, 84);
+			this.appliJChkBox.AutoSize = true;
+			this.appliJChkBox.Location = new System.Drawing.Point(172, 88);
 			this.appliJChkBox.Name = "appliJChkBox";
-			this.appliJChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliJChkBox.Size = new System.Drawing.Size(56, 16);
 			this.appliJChkBox.TabIndex = 12;
 			this.appliJChkBox.Text = "アプリJ";
 			this.appliJChkBox.UseVisualStyleBackColor = true;
 			// 
 			// appliIChkBox
 			// 
-			this.appliIChkBox.Location = new System.Drawing.Point(89, 84);
+			this.appliIChkBox.AutoSize = true;
+			this.appliIChkBox.Location = new System.Drawing.Point(89, 88);
 			this.appliIChkBox.Name = "appliIChkBox";
-			this.appliIChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliIChkBox.Size = new System.Drawing.Size(52, 16);
 			this.appliIChkBox.TabIndex = 11;
 			this.appliIChkBox.Text = "アプリI";
 			this.appliIChkBox.UseVisualStyleBackColor = true;
 			// 
 			// appliHChkBox
 			// 
-			this.appliHChkBox.Location = new System.Drawing.Point(6, 84);
+			this.appliHChkBox.AutoSize = true;
+			this.appliHChkBox.Location = new System.Drawing.Point(6, 88);
 			this.appliHChkBox.Name = "appliHChkBox";
-			this.appliHChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliHChkBox.Size = new System.Drawing.Size(57, 16);
 			this.appliHChkBox.TabIndex = 10;
 			this.appliHChkBox.Text = "アプリH";
 			this.appliHChkBox.UseVisualStyleBackColor = true;
 			// 
 			// appliGChkBox
 			// 
-			this.appliGChkBox.Location = new System.Drawing.Point(255, 62);
+			this.appliGChkBox.AutoSize = true;
+			this.appliGChkBox.Location = new System.Drawing.Point(255, 66);
 			this.appliGChkBox.Name = "appliGChkBox";
-			this.appliGChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliGChkBox.Size = new System.Drawing.Size(57, 16);
 			this.appliGChkBox.TabIndex = 9;
 			this.appliGChkBox.Text = "アプリG";
 			this.appliGChkBox.UseVisualStyleBackColor = true;
 			// 
 			// appliFChkBox
 			// 
-			this.appliFChkBox.Location = new System.Drawing.Point(172, 62);
+			this.appliFChkBox.AutoSize = true;
+			this.appliFChkBox.Location = new System.Drawing.Point(172, 66);
 			this.appliFChkBox.Name = "appliFChkBox";
-			this.appliFChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliFChkBox.Size = new System.Drawing.Size(56, 16);
 			this.appliFChkBox.TabIndex = 8;
 			this.appliFChkBox.Text = "アプリF";
 			this.appliFChkBox.UseVisualStyleBackColor = true;
 			// 
 			// appliEChkBox
 			// 
-			this.appliEChkBox.Location = new System.Drawing.Point(89, 62);
+			this.appliEChkBox.AutoSize = true;
+			this.appliEChkBox.Location = new System.Drawing.Point(89, 66);
 			this.appliEChkBox.Name = "appliEChkBox";
-			this.appliEChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliEChkBox.Size = new System.Drawing.Size(56, 16);
 			this.appliEChkBox.TabIndex = 7;
 			this.appliEChkBox.Text = "アプリE";
 			this.appliEChkBox.UseVisualStyleBackColor = true;
@@ -461,36 +467,40 @@ namespace namaichi
 			// 
 			// appliDChkBox
 			// 
-			this.appliDChkBox.Location = new System.Drawing.Point(6, 62);
+			this.appliDChkBox.AutoSize = true;
+			this.appliDChkBox.Location = new System.Drawing.Point(6, 66);
 			this.appliDChkBox.Name = "appliDChkBox";
-			this.appliDChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliDChkBox.Size = new System.Drawing.Size(57, 16);
 			this.appliDChkBox.TabIndex = 2;
 			this.appliDChkBox.Text = "アプリD";
 			this.appliDChkBox.UseVisualStyleBackColor = true;
 			// 
 			// appliCChkBox
 			// 
-			this.appliCChkBox.Location = new System.Drawing.Point(255, 40);
+			this.appliCChkBox.AutoSize = true;
+			this.appliCChkBox.Location = new System.Drawing.Point(255, 44);
 			this.appliCChkBox.Name = "appliCChkBox";
-			this.appliCChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliCChkBox.Size = new System.Drawing.Size(57, 16);
 			this.appliCChkBox.TabIndex = 2;
 			this.appliCChkBox.Text = "アプリC";
 			this.appliCChkBox.UseVisualStyleBackColor = true;
 			// 
 			// appliBChkBox
 			// 
-			this.appliBChkBox.Location = new System.Drawing.Point(172, 40);
+			this.appliBChkBox.AutoSize = true;
+			this.appliBChkBox.Location = new System.Drawing.Point(172, 44);
 			this.appliBChkBox.Name = "appliBChkBox";
-			this.appliBChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliBChkBox.Size = new System.Drawing.Size(57, 16);
 			this.appliBChkBox.TabIndex = 1;
 			this.appliBChkBox.Text = "アプリB";
 			this.appliBChkBox.UseVisualStyleBackColor = true;
 			// 
 			// appliAChkBox
 			// 
-			this.appliAChkBox.Location = new System.Drawing.Point(89, 40);
+			this.appliAChkBox.AutoSize = true;
+			this.appliAChkBox.Location = new System.Drawing.Point(89, 44);
 			this.appliAChkBox.Name = "appliAChkBox";
-			this.appliAChkBox.Size = new System.Drawing.Size(62, 24);
+			this.appliAChkBox.Size = new System.Drawing.Size(57, 16);
 			this.appliAChkBox.TabIndex = 0;
 			this.appliAChkBox.Text = "アプリA";
 			this.appliAChkBox.UseVisualStyleBackColor = true;
@@ -536,6 +546,7 @@ namespace namaichi
 			((System.ComponentModel.ISupportInitialize)(this.hourList)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.secondList)).EndInit();
 			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}

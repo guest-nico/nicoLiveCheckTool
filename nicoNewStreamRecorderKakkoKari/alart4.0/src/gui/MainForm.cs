@@ -412,7 +412,7 @@ namespace namaichi
        	    	try {
 	        	    string _t = "";
 			    	if (logText.Text.Length != 0) _t += "\r\n";
-			    	_t += DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + " " + t;
+			    	_t += DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss") + " " + t;
 			    	
 		    		logText.AppendText(_t);
 					if (logText.Text.Length > 200000) 
@@ -699,7 +699,7 @@ namespace namaichi
 		void openAddForm(string id = null, AlartInfo editAi = null, bool isUserMode = false) {
 			try {
 				isAddFormDisplaying = true;
-	        	var o = new addForm(this, id, editAi, isUserMode); o.ShowDialog();
+	        	var o = new addForm(this, id, editAi, isUserMode); o.ShowDialog(this);
 	        	isAddFormDisplaying = false;
 	        	if (o.ret == null) return;
 	        	
@@ -1396,7 +1396,7 @@ namespace namaichi
 			formAction(() => {
 			
    		       	try {
-					var buf = "[" + DateTime.Parse(item.pubDate).ToString("yyyy/MM/dd HH:mm:ss") + "] 放送ID：" + item.lvId + " コミュニティID：" + item.comId + "　ユーザー名：" + item.hostName;
+					var buf = "[" + DateTime.Parse(item.pubDate).ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss") + "] 放送ID：" + item.lvId + " コミュニティID：" + item.comId + "　ユーザー名：" + item.hostName;
 					lastHosoStatusBar.Text = buf;
    		       	} catch (Exception e) {
    		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
@@ -5002,7 +5002,7 @@ namespace namaichi
 					var textColor = ColorTranslator.FromHtml(config.get("defaultTextColor"));
 					var backColor = ColorTranslator.FromHtml(config.get("defaultBackColor"));
 					var isAutoReserve = bool.Parse(config.get("IsDefaultAutoReserve"));
-					var now = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+					var now = DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
 					var followStr = isFollow ? "フォロー解除する" : "フォローする";
 					var _ai = new AlartInfo("", id, 
 							"", name, "", now, false, false, 

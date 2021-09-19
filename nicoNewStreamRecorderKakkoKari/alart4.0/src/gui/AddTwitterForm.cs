@@ -67,7 +67,7 @@ namespace namaichi
 				return;
 			}
 			
-			var now = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+			var now = DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
 			var addDate = now;
 			
 			var _ret = new TwitterInfo(name, addDate,

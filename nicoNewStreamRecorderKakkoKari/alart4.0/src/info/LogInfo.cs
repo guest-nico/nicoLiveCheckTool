@@ -32,7 +32,7 @@ namespace namaichi.info
 			this.url = url;
 			this.userId = userId;
 			this.comId = comId;
-			dtStr = dt.ToString("yyyy/MM/dd HH:mm:ss");
+			dtStr = dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
 		}
 		public string Dt
         {

@@ -46,7 +46,7 @@ namespace namaichi
 			var dtStr = "";
 			if (item.pubDate != null && item.pubDate != "") {
 				var dt = DateTime.Parse(item.pubDate);
-				dtStr = dt.ToString("yyyy/MM/dd(ddd) HH:mm") + "開始";
+				dtStr = dt.ToString("yyyy\"/\"MM\"/\"dd(ddd) HH:mm") + "開始";
 			}
 //			util.debugWriteLine(dtStr);
 			

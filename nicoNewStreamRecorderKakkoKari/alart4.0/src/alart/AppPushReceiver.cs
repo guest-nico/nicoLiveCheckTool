@@ -416,7 +416,7 @@ namespace namaichi.alart
 							//Thread.Sleep(15000);
 							
 							Thread.Sleep(1 * 60 * 1000);
-							util.debugWriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + " ping " + sslStream.GetHashCode());
+							util.debugWriteLine(DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss") + " ping " + sslStream.GetHashCode());
 							try {
 								var ping = new HeartbeatPing();
 								
@@ -685,7 +685,7 @@ namespace namaichi.alart
 					
 				}
 				
-				var i = new RssItem(title, lvid, dt.ToString("yyyy/MM/dd HH:mm:ss"), hg.description, comName, hg.communityId, hostName, hg.thumbnail, hg.isMemberOnly.ToString(), "", hg.isPayment);
+				var i = new RssItem(title, lvid, dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"), hg.description, comName, hg.communityId, hostName, hg.thumbnail, hg.isMemberOnly.ToString(), "", hg.isPayment);
 				i.setUserId(hg.userId);
 				i.setTag(hg.tags);
 				i.category = hg.category;

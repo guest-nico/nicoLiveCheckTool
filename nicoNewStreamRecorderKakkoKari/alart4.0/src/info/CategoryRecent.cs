@@ -59,7 +59,7 @@ namespace namaichi.info
 				var thumb = getThumb();
 				var pubDt = util.getUnixToDatetime(beginAt / 1000);
 				var item = new RssItem(title, id,
-						pubDt.ToString("yyyy/MM/dd HH:mm:ss"), "", socialGroup.name, socialGroup.id,
+						pubDt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"), "", socialGroup.name, socialGroup.id,
 						programProvider.name, thumb, isFollowerOnly, "", isPayProgram
 						);
 				item.setUserId(programProvider.id);

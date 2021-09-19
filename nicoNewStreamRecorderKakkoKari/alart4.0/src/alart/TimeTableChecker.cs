@@ -155,7 +155,7 @@ namespace namaichi.alart
 						var opentimeItem = openTimeList.Find(x => x.id == "lv" + l.id);
 						if (opentimeItem != null) {
 							
-							ri = new RssItem(l.title, "lv" + l.id, opentimeItem.showTime.beginAt.ToString("yyyy/MM/dd HH:mm:ss"),
+							ri = new RssItem(l.title, "lv" + l.id, opentimeItem.showTime.beginAt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"),
 									opentimeItem.description, 
 									opentimeItem.contentOwner.name, 
 									opentimeItem.socialGroupId,
@@ -182,7 +182,7 @@ namespace namaichi.alart
 							}
 							if (hig.openDt != DateTime.MinValue) {
 								var _isFollow = false; 
-								ri = new RssItem(l.title, "lv" + l.id, hig.dt.ToString("yyyy/MM/dd HH:mm:ss"),
+								ri = new RssItem(l.title, "lv" + l.id, hig.dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"),
 										hig.description, 
 										util.getCommunityName(hig.communityId, out _isFollow, null), 
 										hig.communityId,
@@ -197,7 +197,7 @@ namespace namaichi.alart
 							} else {
 								util.debugWriteLine("not found time and page");
 								var dt = DateTime.Parse(l.start_date + " " + l.start_time);
-								ri = new RssItem(l.title, "lv" + l.id, dt.ToString("yyyy/MM/dd HH:mm:ss"),
+								ri = new RssItem(l.title, "lv" + l.id, dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"),
 										l.description, 
 										"", 
 										"",
@@ -286,7 +286,7 @@ namespace namaichi.alart
 				
 				var _isFollow = false;
 				var lvid = item.lvId.StartsWith("lv") ? item.lvId : ("lv" + item.lvId);
-				var ri = new RssItem(hig.title, lvid, hig.dt.ToString("yyyy/MM/dd HH:mm:ss"),
+				var ri = new RssItem(hig.title, lvid, hig.dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"),
 						hig.description, 
 						util.getCommunityName(hig.communityId, out _isFollow, null), 
 						hig.communityId,

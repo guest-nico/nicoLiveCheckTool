@@ -1012,7 +1012,7 @@ namespace namaichi
 									this.appliIOffMenuItem,
 									this.appliJOffMenuItem});
 			this.notifyOffMenuItem.Name = "notifyOffMenuItem";
-			this.notifyOffMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.notifyOffMenuItem.Size = new System.Drawing.Size(147, 22);
 			this.notifyOffMenuItem.Text = "一時機能OFF";
 			this.notifyOffMenuItem.DropDownOpening += new System.EventHandler(this.NotifyOffMenuItemDropDownOpening);
 			this.notifyOffMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.NotifyOffMenuItemDropDownItemClicked);

@@ -33,8 +33,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.97";
-	public static string versionDayStr = "2021/09/19";
+	public static string versionStr = "ver0.1.7.98";
+	public static string versionDayStr = "2021/10/03";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -1223,9 +1223,10 @@ class util {
 				("https://com.nicovideo.jp/motion/" + communityNum);
 			res = util.getPageSource(url, cc);
 			if (res != null) {
-				isFollow = res.IndexOf("<h2 class=\"pageHeader_title\">コミュニティにフォローリクエストを送る</h2>") == -1 &&
-						util.getRegGroup(res, "<p class=\"error_description\">[\\s\\S]*?(コミュニティフォロワー)ではありません。") == null &&
-						res.IndexOf("<h2 class=\"pageHeader_title\">コミュニティをフォローする</h2>") == -1;
+				isFollow = //res.IndexOf("<h2 class=\"pageHeader_title\">コミュニティにフォローリクエストを送る</h2>") == -1 &&
+						//util.getRegGroup(res, "<p class=\"error_description\">[\\s\\S]*?(コミュニティフォロワー)ではありません。") == null &&
+						//res.IndexOf(">コミュニティをフォローする</h2>") == -1;
+						false;
 			}
 		} else {
 			isFollow = (isChannel) ? 

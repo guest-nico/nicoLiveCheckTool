@@ -293,15 +293,15 @@
   <data name="categoryRightBtn.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vAAADrwBlbxySQAAADFJREFUKFNj+EAEGDqKjIyMoCwwwKkoJSUFysGvaNq0aRAuZSZBWWCAXREaIELR
-        hw8AjQiD9C18QfAAAAAASUVORK5CYII=
+        vAAADrwBlbxySQAAADRJREFUKFNj+EAEYCBCzYdBocjIyAjZrdjdBFSUkpICV4dP0bRp0yDqKDOJsJvQ
+        QpiowAQAjQiD9L0I1b8AAAAASUVORK5CYII=
 </value>
   </data>
   <data name="categoryLeftBtn.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vAAADrwBlbxySQAAAC5JREFUKFNj+EAEGFKKjIyMoCxcilJSUggomjZtGmFFQECUIiAgShEyIELRhw8A
-        liyD9MUXzyAAAAAASUVORK5CYII=
+        vAAADrwBlbxySQAAADRJREFUKFNj+EAEYCBCzYfBosjIyAjuXOxuSklJIaBo2rRphBUBbSFKEVAdYTeh
+        hTBRgQkAliyD9FgUqlgAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="userThumbBox.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

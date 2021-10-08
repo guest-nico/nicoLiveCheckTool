@@ -810,8 +810,9 @@ namespace namaichi.alart
 			var lastUserNameCheckTime = DateTime.Now;
 			var lastCheckLastRecentLiveTime = DateTime.Now;
 			var lastSaveListTime = DateTime.Now;
-			var lastCheckHistoryLiveTime = DateTime.Now;
+			var lastCheckHistoryLiveTime = DateTime.MinValue;
 			var lastGetCookieTime = DateTime.Now;
+			var lastCheckNotifyHistoryTime = DateTime.Now;
 			while (true) {
 				/*
 				var ut = userNameUpdateInterval;
@@ -864,6 +865,14 @@ namespace namaichi.alart
 					Task.Factory.StartNew(() => {
 						setCookie(false, false);
 						lastGetCookieTime = DateTime.Now;
+					});
+				}
+				
+				if (DateTime.Now - lastCheckNotifyHistoryTime > TimeSpan.FromMinutes(5)) {
+					lastCheckNotifyHistoryTime = DateTime.MaxValue;
+					Task.Factory.StartNew(() => {
+					    form.checkNotifyLive();
+						lastCheckNotifyHistoryTime = DateTime.Now;
 					});
 				}
 				Thread.Sleep(10000);

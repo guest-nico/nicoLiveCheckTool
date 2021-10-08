@@ -2790,6 +2790,8 @@ namespace namaichi
 			var elapsed = DateTime.Now - ai.lastHosoDt;
 			var isCheck = false;
 			if (ai.lastLvid.EndsWith("e")) {
+				util.debugWriteLine("isOnAir end e deleteNotifyIconRecentItem " + ai.lastLvid);
+				deleteNotifyIconRecentItem(ai.lastLvid);
 				return false;
 			}
 			if (ai.communityId == null ||
@@ -2798,6 +2800,8 @@ namespace namaichi
 				isCheck = elapsed < TimeSpan.FromHours(100);
 			} else isCheck = elapsed < TimeSpan.FromHours(6);
 			if (!isCheck) {
+				util.debugWriteLine("isOnAir isCheck false deleteNotifyIconRecentItem " + ai.lastLvid);
+				deleteNotifyIconRecentItem(ai.lastLvid);
 				return false;
 			}
 			
@@ -2857,8 +2861,24 @@ namespace namaichi
 					_res.IndexOf("status-comingsoon\">") > -1; 
 			if (!_ret) {
 				util.debugWriteLine("終了判定 embed " + lvid + " " + _res);
+				util.debugWriteLine("isOnAirLvid !_ret deleteNotifyIconRecentItem " + lvid);
+				deleteNotifyIconRecentItem(lvid);
 			}
 			return _ret;
+		}
+		void deleteNotifyIconRecentItem(string lvid) {
+			util.debugWriteLine("deleteNotifyIconRecentItem " + lvid);
+			try {
+				var items = notifyIconMenuStrip.Items; 
+				for (var i = 0; i < items.Count - 4; i++) {
+					if (((RssItem)items[i].Tag).lvId == lvid) {
+						util.debugWriteLine("deleteNotifyIconRecentItem delete arglvid " + lvid + " del " + items[i].Text);
+						formAction(() => items.Remove(items[i]));
+					}
+				}
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
 		}
 		private void changeIcon(int recentNum) {
 			var n = recentNum;
@@ -4541,6 +4561,8 @@ namespace namaichi
 			        if (historyListDataSource.Count >= historyListMax) {
 				        var min = historyListDataSource.OrderBy((a) => a.dt).First();
 				        historyListDataSource.Remove(min);
+				        util.debugWriteLine("addHistoryList list max deleteNotifyIconRecentItem " + min.lvid);
+				        //deleteNotifyIconRecentItem(min.lvid);
 			        }
 			        
 	       	    	historyListDataSource.Insert(0, hi);
@@ -4830,18 +4852,24 @@ namespace namaichi
 					var c = historyListDataSource.Count;
 					for (var i = 0; i < c; i++) {
 						var hi = historyListDataSource[i];
-						if (hi.onAirMode == 0) continue;
+						if (hi.onAirMode == 0) {
+							deleteNotifyIconRecentItem(hi.lvid);
+							util.debugWriteLine("checkHistoryLIve onairmode 0  deleteNotifyIconRecentItem " + hi.lvid);
+							continue;
+						}
 						
 						//util.debugWriteLine(i + " " + alartListDataSource[i].lastHosoDt + " " + alartList[7, i].Style.BackColor);
 						util.debugWriteLine("check history live onair " + hi.lvid);
 						var isOnAir = isOnAirLvid(hi.lvid, hi.type);
 						
-						if (!isOnAir)
+						if (!isOnAir) {
 							historyListDataSource[i].onAirMode = 0;
+							util.debugWriteLine("checkHistoryLIve !isOnAir deleteNotifyIconRecentItem " + historyListDataSource[i].lvid);
+							deleteNotifyIconRecentItem(historyListDataSource[i].lvid);
+						}
 						//util.debugWriteLine("test recent live check i " + i);
 						for (var j = 0; j < historyList.Columns.Count; j++)
 							historyList.UpdateCellValue(j, i);
-						
 					}
 					break;
 					
@@ -5482,7 +5510,17 @@ namespace namaichi
 			formAction(() => setNotifyMenuHistoryCore(items));
 		}
 		private void setNotifyMenuHistoryCore(List<RssItem> items) {
+			foreach (var _i in items)
+				util.debugWriteLine("setNotifyMenuHistoryCore " + _i.lvId);
 			try {
+				for (var i = 0; i < historyListDataSource.Count; i++) {
+					var item = items.Find(ri => ri.lvId == historyListDataSource[i].lvid); 
+					if (item != null && historyListDataSource[i].onAirMode == 0) {
+						items.Remove(item);
+						util.debugWriteLine("setNotifyMenuHistoryCore not add " + item.lvId);
+					}
+				}
+				
 				var history = new List<KeyValuePair<DateTime, ToolStripMenuItem>>();
 				for (var i = 0; i < notifyIconMenuStrip.Items.Count - 4; i++) {
 					history.Add(new KeyValuePair<DateTime, ToolStripMenuItem>(((RssItem)notifyIconMenuStrip.Items[i].Tag).pubDateDt, (ToolStripMenuItem)notifyIconMenuStrip.Items[i]));
@@ -5499,10 +5537,12 @@ namespace namaichi
 				
 				var recentItems = items.OrderByDescending((a) => a.pubDateDt)
 					.Where((a) => history.Find((b) => ((RssItem)b.Value.Tag).lvId == a.lvId).Equals(default(KeyValuePair<DateTime, ToolStripMenuItem>)))
-					.Take(5).Select((RssItem a) => getRssItemToNotifyHistory(a));
+					//.Take(5)
+					.Select((RssItem a) => getRssItemToNotifyHistory(a));
 				history.AddRange(recentItems);
 				
-				var addList = history.OrderByDescending(a => a.Key).Take(5);
+				//var addList = history.OrderByDescending(a => a.Key).Take(5);
+				var addList = history.OrderByDescending(a => a.Key);
 				
 				foreach (var item in addList) {
 					notifyIconMenuStrip.Items.Insert(0, item.Value);
@@ -6145,6 +6185,31 @@ namespace namaichi
 			if (e.KeyData == Keys.Enter) {
 				liveListSearchBtn.PerformClick();
 				e.SuppressKeyPress = true;
+			}
+		}
+		public void checkNotifyLive() {
+			while (true) {
+				try {
+					var items = notifyIconMenuStrip.Items; 
+					for (var i = 0; i < items.Count - 4; i++) {
+						if (items[i].Tag == null) {
+							util.debugWriteLine("checkNotifyLive tag not found " + items[i].Text);
+							continue;
+						}
+						var ri = (RssItem)items[i].Tag;
+						if (historyListDataSource.FirstOrDefault(hi => hi.lvid == ri.lvId) != null) 
+							continue;
+						var isOnAir = isOnAirLvid(ri.lvId, ri.type);
+						//util.debugWriteLine("checkNotifyLive check " + ri.lvId + " " + isOnAir);
+						if (!isOnAir)
+							formAction(() => items.Remove(items[i]));
+					}
+					break;
+					
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					Thread.Sleep(1000);
+				}
 			}
 		}
 	}

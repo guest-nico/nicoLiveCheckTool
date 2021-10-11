@@ -553,6 +553,7 @@ namespace namaichi
 			this.ユーザーID = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.コミュニティID = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.historyKeyword = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.お気に入り = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.説明 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.label3 = new System.Windows.Forms.Label();
@@ -602,6 +603,7 @@ namespace namaichi
 			this.toolStripMenuItem44 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator39 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem45 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem57 = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.alartList)).BeginInit();
@@ -1838,7 +1840,6 @@ namespace namaichi
 			this.toolStripMenuItem31.Name = "toolStripMenuItem31";
 			this.toolStripMenuItem31.Size = new System.Drawing.Size(162, 22);
 			this.toolStripMenuItem31.Text = "限定";
-			this.toolStripMenuItem31.Visible = false;
 			// 
 			// toolStripMenuItem19
 			// 
@@ -2163,6 +2164,7 @@ namespace namaichi
 									this.toolStripMenuItem26,
 									this.toolStripMenuItem27,
 									this.toolStripMenuItem28,
+									this.toolStripMenuItem57,
 									this.toolStripMenuItem29,
 									this.toolStripMenuItem30});
 			this.colorHistoryColorColumnMenu.Name = "colorHistoryColorColumnMenu";
@@ -5058,6 +5060,7 @@ namespace namaichi
 									this.ユーザーID,
 									this.コミュニティID,
 									this.historyKeyword,
+									this.Column4,
 									this.お気に入り,
 									this.説明});
 			this.historyList.ContextMenuStrip = this.historyListMenu;
@@ -5132,6 +5135,13 @@ namespace namaichi
 			this.historyKeyword.Name = "historyKeyword";
 			this.historyKeyword.ReadOnly = true;
 			this.historyKeyword.Visible = false;
+			// 
+			// Column4
+			// 
+			this.Column4.DataPropertyName = "isMemberOnly";
+			this.Column4.HeaderText = "限定";
+			this.Column4.Name = "Column4";
+			this.Column4.ReadOnly = true;
 			// 
 			// お気に入り
 			// 
@@ -5572,6 +5582,12 @@ namespace namaichi
 			this.toolStripMenuItem45.Text = "この行を削除する";
 			this.toolStripMenuItem45.Click += new System.EventHandler(this.HistoryListDeleteRowMenuClick);
 			// 
+			// toolStripMenuItem57
+			// 
+			this.toolStripMenuItem57.Name = "toolStripMenuItem57";
+			this.toolStripMenuItem57.Size = new System.Drawing.Size(162, 22);
+			this.toolStripMenuItem57.Text = "限定";
+			// 
 			// MainForm
 			// 
 			this.AllowDrop = true;
@@ -5640,6 +5656,8 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem57;
+		private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
 		private System.Windows.Forms.ToolStripMenuItem alartListUpOnAirMenu;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem56;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem55;

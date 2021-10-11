@@ -11,6 +11,8 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
+using namaichi.rec;
 
 namespace namaichi.info
 {
@@ -58,10 +60,10 @@ namespace namaichi.info
 		}
 		*/
 		public HistoryInfo() {
-			description = null;
+			//description = null;
 		}
 		//public HistoryInfo(RssItem ri, SortableBindingList<AlartInfo> alartData, List<AlartInfo> targetAi)
-		public HistoryInfo(RssItem ri, List<AlartInfo> targetAi = null)
+		public HistoryInfo(RssItem ri, MainForm form, List<AlartInfo> targetAi = null)
 		{
 			this.dt = DateTime.Parse(ri.pubDate);
 			this.dtStr = dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
@@ -71,7 +73,9 @@ namespace namaichi.info
 			this.communityName = util.removeTag(ri.comName);
 			this.userId = ri.userId;
 			this.communityId = ri.comId;
-			this.description = util.removeTag(ri.description);
+			if (string.IsNullOrEmpty(ri.description))
+				Task.Run(() => setDescription(form));
+			else description = util.removeTag(ri.description);
 			this.type = ri.type;
 			//this.ri = ri;
 			onAirMode = ri.isMemberOnly ? 2 : 1;
@@ -173,6 +177,16 @@ namespace namaichi.info
 			}
 		}
 		*/
+		private void setDescription(MainForm form) {
+			var hg = new HosoInfoGetter();
+			if (hg.get("https://live2.nicovideo.jp/watch/" + lvid, null)) {
+				form.formAction(() => {
+					description = hg.description;
+					form.historyList.Refresh();
+					form.notAlartList.Refresh();
+				});
+			}
+		}
 		public string Dt
         {
 			get { return dtStr == null ? dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss") : dtStr; }

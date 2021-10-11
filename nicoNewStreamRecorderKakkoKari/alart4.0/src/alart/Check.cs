@@ -924,13 +924,15 @@ namespace namaichi.alart
 			return true;
 		}
 		private void addLogList(RssItem item, List<AlartInfo> targetAi) {
-			var hi = new HistoryInfo(item, targetAi);
+			var hi = new HistoryInfo(item, form, targetAi);
 			//hi.userId = item.userId;
+			if (hi.isMemberOnly)
+				util.debugWriteLine("ismemberonly a " + hi.lvid + " " + hi.title);
 			form.addHistoryList(hi);
 		}
 		private void addNearAlartList(RssItem item, AlartInfo nearAlartAi) {
 			var a = new List<AlartInfo>(){nearAlartAi};
-			var hi = new HistoryInfo(item, a);
+			var hi = new HistoryInfo(item, form, a);
 			
 			var isNosetComId = nearAlartAi.communityId == "" ||
 					nearAlartAi.communityId == null;

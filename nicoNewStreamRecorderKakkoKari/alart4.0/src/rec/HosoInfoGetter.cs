@@ -81,7 +81,7 @@ namespace namaichi.rec
 			isMemberOnly = res.IndexOf("isFollowerOnly&quot;:true,&quot;") > -1
 				|| res.IndexOf("\"program_icon onlym\">フォロワー限定") > -1
 				|| res.IndexOf("\"program-status-icon community-only\">フォロワー限定") > -1;
-			isPayment = res.IndexOf("&quot;payment&quot;") > -1;
+			isPayment = util.getRegGroup(res, "&quot;condition&quot;:.+?&quot;(payment)&quot;:&quot;") != null;
 			isClosed = res.IndexOf("\"content_status\":\"closed\"") > -1;
 			return ret;
 		}

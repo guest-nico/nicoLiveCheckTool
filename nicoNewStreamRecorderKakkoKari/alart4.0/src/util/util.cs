@@ -33,8 +33,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.99";
-	public static string versionDayStr = "2021/10/08";
+	public static string versionStr = "ver0.1.7.100";
+	public static string versionDayStr = "2021/10/11";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;

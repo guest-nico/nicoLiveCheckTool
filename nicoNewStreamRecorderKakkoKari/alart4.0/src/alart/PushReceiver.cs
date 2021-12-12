@@ -389,10 +389,11 @@ namespace namaichi.alart
 			//ch "{\"title\":\"KawaiianTVが生放送を開始\",\"body\":\"～夢アド可鈴の深堀り情報番組！？～ YUMEステーション #62\",\"icon\":\"https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/ch2601967.jpg?1548247262\",\"data\":{\"on_click\":\"http://live.nicovideo.jp/watch/lv318248031?from=webpush&_topic=live_channel_program_onairs\",\"created_at\":\"2019-02-06T19:30:10.941+09:00\",\"ttl\":600,\"log_params\":{\"content_type\":\"live.channel.program.onairs\",\"content_ids\":\"lv318248031\"}}}";
 			var ret = new List<RssItem>();
 			try {
-				var isCom = dec.IndexOf("\"content_type\":\"live.user.program.onairs\"") > -1;
+				//var isCom = dec.IndexOf("\"content_type\":\"live.user.program.onairs\"") > -1;
+				var isCom = dec.IndexOf("\"content_type\":\"live.user") > -1;
 				var isJikken = dec.IndexOf("\"content_type\":\"live.user.program.cas.onairs\"") > -1;
-				string title, lvid, thumbnail, dt, comName, hostName;//
-				hostName = null;
+				string lvid, thumbnail, dt;//title, comName, hostName;//
+				//hostName = null;
 				
 				lvid = util.getRegGroup(dec, "\"content_ids\":\"(lv\\d+)\"");
 				if (check.checkedLvIdList.Find(x => x.lvId == lvid) != null)
@@ -402,13 +403,13 @@ namespace namaichi.alart
 				if (dt != null && DateTime.Parse(dt) < startTime && !bool.Parse(config.get("IsStartTimeAllCheck")))
 					return new List<RssItem>();
 				if (isCom || isJikken) {
-					title = util.getRegGroup(dec, "\"body\":\".+? で、*「(.+?)」を放送\"");
-					comName = util.getRegGroup(dec, "\"body\":\"(.+?) で、*「");
-					hostName = util.getRegGroup(dec, "\"title\":\"(.+?)さんが生放送(\\(実験放送\\))*を開始\"");
+					//title = util.getRegGroup(dec, "\"body\":\".+? で、*「(.+?)」を放送\"");
+					//comName = util.getRegGroup(dec, "\"body\":\"(.+?) で、*「");
+					//hostName = util.getRegGroup(dec, "\"title\":\"(.+?)さんが生放送(\\(実験放送\\))*を開始\"");
 					
 				} else {
-					title = util.getRegGroup(dec, "\"body\":\"(.+?)\",\"icon\"");
-					comName = util.getRegGroup(dec, "\"title\":\"(.+?)が生放送を開始\"");
+					//title = util.getRegGroup(dec, "\"body\":\"(.+?)\",\"icon\"");
+					//comName = util.getRegGroup(dec, "\"title\":\"(.+?)が生放送を開始\"");
 				}
 				
 				var hg = new namaichi.rec.HosoInfoGetter();
@@ -427,23 +428,28 @@ namespace namaichi.alart
 				
 				util.debugWriteLine("description " + hg.description);
 				util.debugWriteLine("userId " + hg.userId);
-				util.debugWriteLine("userName " + hostName);
+				util.debugWriteLine("userName " + hg.userName);
 				
-				if (title == null || lvid == null || thumbnail == null ||
-				    	dt == null || comName == null || hg.communityId == null ||
+				if (hg.title == null || lvid == null || thumbnail == null ||
+				    	dt == null || hg.group == null || hg.communityId == null ||
 				    	hg.tags == null || hg.description == null ||
-				    	(isCom && (hostName == null || hg.userId == null))) {
+				    	(isCom && (hg.userName == null || hg.userId == null))) {
 					check.form.addLogText("push error " + dec);
-					util.debugWriteLine("push error null " + dec);
+					util.debugWriteLine("push error null " + dec + " t " + hg.title + " lvid " + lvid + " thumb " + thumbnail + " dt " + dt + " comN " + hg.group + " comi " + hg.communityId + " tag " + hg.tags + " desc " + hg.description + " isc " + isCom + " un " + hg.userName + " ui " + hg.userId);
 					return null;
-					
+				}
+				if (dec.IndexOf("video_live.onairs") > -1) {
+					util.debugWriteLine("video_live.onairs push " + dec);
+					#if DEBUG
+						//check.form.addLogText("video_live.onairs push " + dec);
+					#endif
 				}
 //				util.debugWriteLine("communityId " + hg.communityId);
 //				util.debugWriteLine("tags " + string.Join(", ", hg.tags));
 //				util.debugWriteLine("userid " + hg.userId);
 //				util.debugWriteLine("description " + hg.description);
 				
-				var i = new RssItem(title, lvid, dt, hg.description, comName, hg.communityId, hostName, hg.thumbnail, hg.isMemberOnly.ToString(), "", hg.isPayment);
+				var i = new RssItem(hg.title, lvid, dt, hg.description, hg.group, hg.communityId, hg.userName, hg.thumbnail, hg.isMemberOnly.ToString(), "", hg.isPayment);
 				i.setUserId(hg.userId);
 				i.setTag(hg.tags);
 				i.category = hg.category;

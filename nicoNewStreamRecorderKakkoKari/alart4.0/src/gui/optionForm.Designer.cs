@@ -160,6 +160,8 @@ namespace namaichi
 			this.label64 = new System.Windows.Forms.Label();
 			this.applyBtn = new System.Windows.Forms.Button();
 			this.groupBox12 = new System.Windows.Forms.GroupBox();
+			this.label67 = new System.Windows.Forms.Label();
+			this.startUpWaitList = new System.Windows.Forms.NumericUpDown();
 			this.isAllowMultiProcessChkBox = new System.Windows.Forms.CheckBox();
 			this.isTasktrayStartChkBox = new System.Windows.Forms.CheckBox();
 			this.isStartUpChkBox = new System.Windows.Forms.CheckBox();
@@ -176,22 +178,22 @@ namespace namaichi
 			this.label49 = new System.Windows.Forms.Label();
 			this.label48 = new System.Windows.Forms.Label();
 			this.defaultBehaviorGroupBox = new System.Windows.Forms.GroupBox();
+			this.appliJChkBox = new System.Windows.Forms.CheckBox();
+			this.appliIChkBox = new System.Windows.Forms.CheckBox();
+			this.appliHChkBox = new System.Windows.Forms.CheckBox();
+			this.appliGChkBox = new System.Windows.Forms.CheckBox();
+			this.appliEChkBox = new System.Windows.Forms.CheckBox();
+			this.appliDChkBox = new System.Windows.Forms.CheckBox();
+			this.appliCChkBox = new System.Windows.Forms.CheckBox();
+			this.appliBChkBox = new System.Windows.Forms.CheckBox();
 			this.isPopupChkBox = new System.Windows.Forms.CheckBox();
 			this.isBaloonChkBox = new System.Windows.Forms.CheckBox();
 			this.isWebChkBox = new System.Windows.Forms.CheckBox();
 			this.isMailChkBox = new System.Windows.Forms.CheckBox();
 			this.isSoundChkBox = new System.Windows.Forms.CheckBox();
 			this.appliAChkBox = new System.Windows.Forms.CheckBox();
-			this.appliBChkBox = new System.Windows.Forms.CheckBox();
-			this.appliCChkBox = new System.Windows.Forms.CheckBox();
-			this.appliDChkBox = new System.Windows.Forms.CheckBox();
-			this.appliEChkBox = new System.Windows.Forms.CheckBox();
 			this.appliFChkBox = new System.Windows.Forms.CheckBox();
-			this.appliGChkBox = new System.Windows.Forms.CheckBox();
-			this.appliHChkBox = new System.Windows.Forms.CheckBox();
-			this.appliIChkBox = new System.Windows.Forms.CheckBox();
 			this.isDefaultAutoReserveChkBox = new System.Windows.Forms.CheckBox();
-			this.appliJChkBox = new System.Windows.Forms.CheckBox();
 			this.sampleColorText = new System.Windows.Forms.TextBox();
 			this.backColorBtn = new System.Windows.Forms.Button();
 			this.textColorBtn = new System.Windows.Forms.Button();
@@ -304,6 +306,7 @@ namespace namaichi
 			this.displayGroup.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.fontList)).BeginInit();
 			this.groupBox12.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.startUpWaitList)).BeginInit();
 			this.groupBox11.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.liveListUpdateMinutesList)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.thresholdpageList)).BeginInit();
@@ -1565,6 +1568,8 @@ namespace namaichi
 			// 
 			// groupBox12
 			// 
+			this.groupBox12.Controls.Add(this.label67);
+			this.groupBox12.Controls.Add(this.startUpWaitList);
 			this.groupBox12.Controls.Add(this.isAllowMultiProcessChkBox);
 			this.groupBox12.Controls.Add(this.isTasktrayStartChkBox);
 			this.groupBox12.Controls.Add(this.isStartUpChkBox);
@@ -1574,6 +1579,31 @@ namespace namaichi
 			this.groupBox12.TabIndex = 10;
 			this.groupBox12.TabStop = false;
 			this.groupBox12.Text = "起動設定";
+			// 
+			// label67
+			// 
+			this.label67.Location = new System.Drawing.Point(350, 20);
+			this.label67.Name = "label67";
+			this.label67.Size = new System.Drawing.Size(29, 18);
+			this.label67.TabIndex = 11;
+			this.label67.Text = "秒後";
+			// 
+			// startUpWaitList
+			// 
+			this.startUpWaitList.Location = new System.Drawing.Point(300, 18);
+			this.startUpWaitList.Maximum = new decimal(new int[] {
+									1000,
+									0,
+									0,
+									0});
+			this.startUpWaitList.Name = "startUpWaitList";
+			this.startUpWaitList.Size = new System.Drawing.Size(47, 19);
+			this.startUpWaitList.TabIndex = 14;
+			this.startUpWaitList.Value = new decimal(new int[] {
+									10,
+									0,
+									0,
+									0});
 			// 
 			// isAllowMultiProcessChkBox
 			// 
@@ -1597,9 +1627,9 @@ namespace namaichi
 			// 
 			this.isStartUpChkBox.Location = new System.Drawing.Point(19, 18);
 			this.isStartUpChkBox.Name = "isStartUpChkBox";
-			this.isStartUpChkBox.Size = new System.Drawing.Size(340, 19);
+			this.isStartUpChkBox.Size = new System.Drawing.Size(286, 19);
 			this.isStartUpChkBox.TabIndex = 2;
-			this.isStartUpChkBox.Text = "PCの起動時に自動でツールを起動する";
+			this.isStartUpChkBox.Text = "PCの起動時に自動でツールを起動する。PCの起動から";
 			this.isStartUpChkBox.UseVisualStyleBackColor = true;
 			// 
 			// groupBox11
@@ -1793,6 +1823,86 @@ namespace namaichi
 			this.defaultBehaviorGroupBox.TabStop = false;
 			this.defaultBehaviorGroupBox.Text = "登録時のデフォルト動作";
 			// 
+			// appliJChkBox
+			// 
+			this.appliJChkBox.AutoSize = true;
+			this.appliJChkBox.Location = new System.Drawing.Point(338, 66);
+			this.appliJChkBox.Name = "appliJChkBox";
+			this.appliJChkBox.Size = new System.Drawing.Size(56, 16);
+			this.appliJChkBox.TabIndex = 27;
+			this.appliJChkBox.Text = "アプリJ";
+			this.appliJChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliIChkBox
+			// 
+			this.appliIChkBox.AutoSize = true;
+			this.appliIChkBox.Location = new System.Drawing.Point(255, 66);
+			this.appliIChkBox.Name = "appliIChkBox";
+			this.appliIChkBox.Size = new System.Drawing.Size(52, 16);
+			this.appliIChkBox.TabIndex = 26;
+			this.appliIChkBox.Text = "アプリI";
+			this.appliIChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliHChkBox
+			// 
+			this.appliHChkBox.AutoSize = true;
+			this.appliHChkBox.Location = new System.Drawing.Point(172, 66);
+			this.appliHChkBox.Name = "appliHChkBox";
+			this.appliHChkBox.Size = new System.Drawing.Size(57, 16);
+			this.appliHChkBox.TabIndex = 25;
+			this.appliHChkBox.Text = "アプリH";
+			this.appliHChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliGChkBox
+			// 
+			this.appliGChkBox.AutoSize = true;
+			this.appliGChkBox.Location = new System.Drawing.Point(89, 66);
+			this.appliGChkBox.Name = "appliGChkBox";
+			this.appliGChkBox.Size = new System.Drawing.Size(57, 16);
+			this.appliGChkBox.TabIndex = 24;
+			this.appliGChkBox.Text = "アプリG";
+			this.appliGChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliEChkBox
+			// 
+			this.appliEChkBox.AutoSize = true;
+			this.appliEChkBox.Location = new System.Drawing.Point(338, 44);
+			this.appliEChkBox.Name = "appliEChkBox";
+			this.appliEChkBox.Size = new System.Drawing.Size(56, 16);
+			this.appliEChkBox.TabIndex = 22;
+			this.appliEChkBox.Text = "アプリE";
+			this.appliEChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliDChkBox
+			// 
+			this.appliDChkBox.AutoSize = true;
+			this.appliDChkBox.Location = new System.Drawing.Point(255, 44);
+			this.appliDChkBox.Name = "appliDChkBox";
+			this.appliDChkBox.Size = new System.Drawing.Size(57, 16);
+			this.appliDChkBox.TabIndex = 16;
+			this.appliDChkBox.Text = "アプリD";
+			this.appliDChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliCChkBox
+			// 
+			this.appliCChkBox.AutoSize = true;
+			this.appliCChkBox.Location = new System.Drawing.Point(172, 44);
+			this.appliCChkBox.Name = "appliCChkBox";
+			this.appliCChkBox.Size = new System.Drawing.Size(57, 16);
+			this.appliCChkBox.TabIndex = 17;
+			this.appliCChkBox.Text = "アプリC";
+			this.appliCChkBox.UseVisualStyleBackColor = true;
+			// 
+			// appliBChkBox
+			// 
+			this.appliBChkBox.AutoSize = true;
+			this.appliBChkBox.Location = new System.Drawing.Point(89, 44);
+			this.appliBChkBox.Name = "appliBChkBox";
+			this.appliBChkBox.Size = new System.Drawing.Size(57, 16);
+			this.appliBChkBox.TabIndex = 15;
+			this.appliBChkBox.Text = "アプリB";
+			this.appliBChkBox.UseVisualStyleBackColor = true;
+			// 
 			// isPopupChkBox
 			// 
 			this.isPopupChkBox.Location = new System.Drawing.Point(6, 18);
@@ -1848,46 +1958,6 @@ namespace namaichi
 			this.appliAChkBox.Text = "アプリA";
 			this.appliAChkBox.UseVisualStyleBackColor = true;
 			// 
-			// appliBChkBox
-			// 
-			this.appliBChkBox.AutoSize = true;
-			this.appliBChkBox.Location = new System.Drawing.Point(89, 44);
-			this.appliBChkBox.Name = "appliBChkBox";
-			this.appliBChkBox.Size = new System.Drawing.Size(57, 16);
-			this.appliBChkBox.TabIndex = 15;
-			this.appliBChkBox.Text = "アプリB";
-			this.appliBChkBox.UseVisualStyleBackColor = true;
-			// 
-			// appliCChkBox
-			// 
-			this.appliCChkBox.AutoSize = true;
-			this.appliCChkBox.Location = new System.Drawing.Point(172, 44);
-			this.appliCChkBox.Name = "appliCChkBox";
-			this.appliCChkBox.Size = new System.Drawing.Size(57, 16);
-			this.appliCChkBox.TabIndex = 17;
-			this.appliCChkBox.Text = "アプリC";
-			this.appliCChkBox.UseVisualStyleBackColor = true;
-			// 
-			// appliDChkBox
-			// 
-			this.appliDChkBox.AutoSize = true;
-			this.appliDChkBox.Location = new System.Drawing.Point(255, 44);
-			this.appliDChkBox.Name = "appliDChkBox";
-			this.appliDChkBox.Size = new System.Drawing.Size(57, 16);
-			this.appliDChkBox.TabIndex = 16;
-			this.appliDChkBox.Text = "アプリD";
-			this.appliDChkBox.UseVisualStyleBackColor = true;
-			// 
-			// appliEChkBox
-			// 
-			this.appliEChkBox.AutoSize = true;
-			this.appliEChkBox.Location = new System.Drawing.Point(338, 44);
-			this.appliEChkBox.Name = "appliEChkBox";
-			this.appliEChkBox.Size = new System.Drawing.Size(56, 16);
-			this.appliEChkBox.TabIndex = 22;
-			this.appliEChkBox.Text = "アプリE";
-			this.appliEChkBox.UseVisualStyleBackColor = true;
-			// 
 			// appliFChkBox
 			// 
 			this.appliFChkBox.AutoSize = true;
@@ -1898,36 +1968,6 @@ namespace namaichi
 			this.appliFChkBox.Text = "アプリF";
 			this.appliFChkBox.UseVisualStyleBackColor = true;
 			// 
-			// appliGChkBox
-			// 
-			this.appliGChkBox.AutoSize = true;
-			this.appliGChkBox.Location = new System.Drawing.Point(89, 66);
-			this.appliGChkBox.Name = "appliGChkBox";
-			this.appliGChkBox.Size = new System.Drawing.Size(57, 16);
-			this.appliGChkBox.TabIndex = 24;
-			this.appliGChkBox.Text = "アプリG";
-			this.appliGChkBox.UseVisualStyleBackColor = true;
-			// 
-			// appliHChkBox
-			// 
-			this.appliHChkBox.AutoSize = true;
-			this.appliHChkBox.Location = new System.Drawing.Point(172, 66);
-			this.appliHChkBox.Name = "appliHChkBox";
-			this.appliHChkBox.Size = new System.Drawing.Size(57, 16);
-			this.appliHChkBox.TabIndex = 25;
-			this.appliHChkBox.Text = "アプリH";
-			this.appliHChkBox.UseVisualStyleBackColor = true;
-			// 
-			// appliIChkBox
-			// 
-			this.appliIChkBox.AutoSize = true;
-			this.appliIChkBox.Location = new System.Drawing.Point(255, 66);
-			this.appliIChkBox.Name = "appliIChkBox";
-			this.appliIChkBox.Size = new System.Drawing.Size(52, 16);
-			this.appliIChkBox.TabIndex = 26;
-			this.appliIChkBox.Text = "アプリI";
-			this.appliIChkBox.UseVisualStyleBackColor = true;
-			// 
 			// isDefaultAutoReserveChkBox
 			// 
 			this.isDefaultAutoReserveChkBox.Location = new System.Drawing.Point(225, 114);
@@ -1936,16 +1976,6 @@ namespace namaichi
 			this.isDefaultAutoReserveChkBox.TabIndex = 27;
 			this.isDefaultAutoReserveChkBox.Text = "自動予約";
 			this.isDefaultAutoReserveChkBox.UseVisualStyleBackColor = true;
-			// 
-			// appliJChkBox
-			// 
-			this.appliJChkBox.AutoSize = true;
-			this.appliJChkBox.Location = new System.Drawing.Point(338, 66);
-			this.appliJChkBox.Name = "appliJChkBox";
-			this.appliJChkBox.Size = new System.Drawing.Size(56, 16);
-			this.appliJChkBox.TabIndex = 27;
-			this.appliJChkBox.Text = "アプリJ";
-			this.appliJChkBox.UseVisualStyleBackColor = true;
 			// 
 			// sampleColorText
 			// 
@@ -2998,6 +3028,7 @@ namespace namaichi
 			this.displayGroup.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.fontList)).EndInit();
 			this.groupBox12.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.startUpWaitList)).EndInit();
 			this.groupBox11.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.liveListUpdateMinutesList)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.thresholdpageList)).EndInit();
@@ -3028,6 +3059,8 @@ namespace namaichi
 			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.NumericUpDown startUpWaitList;
+		private System.Windows.Forms.Label label67;
 		private System.Windows.Forms.CheckBox isOverwriteOldReserveChkBox;
 		private System.Windows.Forms.CheckBox IsExistInHistoryListNotAlartChkBox;
 		private System.Windows.Forms.CheckBox isDefaultAutoReserveChkBox;

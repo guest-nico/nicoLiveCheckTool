@@ -156,6 +156,7 @@ namespace namaichi
 				{"maxNotAlartDisplay",maxNotAlartDisplayList.Text},
 				{"maxLogDisplay",maxLogDisplayList.Text},
 				{"IsStartUp",isStartUpChkBox.Checked.ToString().ToLower()},
+				{"startUpWait",startUpWaitList.Text},
 				{"IsAllowMultiProcess",isAllowMultiProcessChkBox.Checked.ToString().ToLower()},
 				{"poploc",poplocList.Text},
 				{"poptime",poptimeList.Text},
@@ -355,6 +356,7 @@ namespace namaichi
 			maxNotAlartDisplayList.Text = cfg.get("maxNotAlartDisplay");
 			maxLogDisplayList.Text = cfg.get("maxLogDisplay");
 			isStartUpChkBox.Checked = bool.Parse(cfg.get("IsStartUp"));
+			startUpWaitList.Text = cfg.get("startUpWait");
 			isAllowMultiProcessChkBox.Checked = bool.Parse(cfg.get("IsAllowMultiProcess"));
 			
 			poplocList.Text = cfg.get("poploc");
@@ -715,7 +717,8 @@ namespace namaichi
 		{
 			recentColorBtn.Enabled = recentSampleColorText.Enabled = !isAlartListColorRecent.Checked;
 		}
-		void setStartUpMenu(bool isDelete) {
+		/*
+		void setStartUpMenu(bool bisDelete) {
 			try {
 				var exe = Application.ExecutablePath;
 				
@@ -762,6 +765,7 @@ namespace namaichi
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
+		*/
 		void setStartUpMenu2(bool isDelete) {
 			try {
 				var exe = Application.ExecutablePath;
@@ -787,6 +791,8 @@ namespace namaichi
 				if (isDelete) return;
 				
 				using (var sw = new StreamWriter(dir + "/" + exeName + ".bat", false, Encoding.GetEncoding("shift_jis"))) {
+					sw.WriteLine("@if not \"%~0\"==\"%~dp0.\\%~nx0\" start /min cmd /c,\"%~dp0.\\%~nx0\" %* & goto :eof");
+					sw.WriteLine("timeout " + cfg.get("startUpWait"));
 					sw.WriteLine("start \"\" \"" + exe + "\"");
 				}
 				

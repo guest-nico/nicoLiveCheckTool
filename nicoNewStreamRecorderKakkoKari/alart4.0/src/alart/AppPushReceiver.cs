@@ -487,7 +487,8 @@ namespace namaichi.alart
 				var d = "";
 				foreach (var a in proto.AppDatas) d += a.Value;
 				//var lvid = util.getRegGroup(d, "program_id\\\\\":\\\\\"(lv\\d+)"); google protobuf
-				var lvid = util.getRegGroup(d, "program_id\":\"(lv\\d+)"); //google protobuf 
+				//var lvid = util.getRegGroup(d, "program_id\":\"(lv\\d+)"); //google protobuf
+				var lvid = util.getRegGroup(d, "(live_onair|video_live)-(lv\\d+)", 2);
 				if (lvid != null) {
 					if (check.checkedLvIdList.Find(x => x.lvId == lvid) != null) 
 						return;
@@ -508,6 +509,11 @@ namespace namaichi.alart
 							}
 						});
 					}
+				} else {
+					util.debugWriteLine("app push no lvid " + d);
+					#if DEBUG
+						check.form.addLogText("app push no lvid " + d);
+					#endif
 				}
 					
 				
@@ -651,23 +657,24 @@ namespace namaichi.alart
 						//var reg = new Regex("\\[生放送開始\\](.+?)さんが「(.+?)」を開始しました。");
 						//var m = reg.Match(msg.AppData.ToString());
 						//hostName = util.getRegGroup(appData, "user_name\\\\\":\\\\\"(.+?)\\\\\"");
-						hostName = util.getRegGroup(appData, "user_name\":\"(.+?)\"");
+						//hostName = util.getRegGroup(appData, "user_name\":\"(.+?)\"");
+						hostName = hg.userName;
 						comName = (hg.group != null) ? hg.group : "";
 						isCom = true;
 					} else {
 						//var reg = new Regex("\\[生放送開始\\](.+?)「(.+?)」を開始しました。");
 						//var m = reg.Match(msg.AppData.ToString());
 						//comName = util.getRegGroup(appData, "channel_name\\\\\":\\\\\"(.+?)\\\\\"");
-						comName = util.getRegGroup(appData, "channel_name\":\"(.+?)\"");
+						//comName = util.getRegGroup(appData, "channel_name\":\"(.+?)\"");
+						comName = hg.group != null ? hg.group : "";
 						//comId = util.getRegGroup(appData, "channel_id\\\\\":\\\\\"(.+?)\\\\\"");
 						isCom = false;
 						if (!string.IsNullOrEmpty(hg.userName)) hostName = hg.userName;
 					}
 					//title = util.getRegGroup(appData, "program_title\\\\\":\\\\\"(.+?)\\\\\"");
-					title = util.getRegGroup(appData, "program_title\":\"(.+?)\"");
-					
+					//title = util.getRegGroup(appData, "program_title\":\"(.+?)\"");
+					title = hg.title;
 				}
-				
 				
 				util.debugWriteLine("description " + hg.description);
 				util.debugWriteLine("userId " + hg.userId);
@@ -679,7 +686,10 @@ namespace namaichi.alart
 				    	dt == DateTime.MinValue || comName == null || hg.communityId == null ||
 				    	hg.tags == null || hg.description == null ||
 				    	(isCom && (hostName == null || hg.userId == null))) {
-					check.form.addLogText("app push error " + msg);
+					#if DEBUG
+						//check.form.addLogText("app push error " + msg + " lv " + lvid);
+						check.form.addLogText("app push error title " + title + " lvid " + lvid + " thumb " + hg.thumbnail + " dt " + dt + " comN " + comName + " comi " + hg.communityId + " tag " + hg.tags + " desc " + hg.description + " isc " + isCom + " un " + hostName + " ui " + hg.userId);
+					#endif
 					util.debugWriteLine("app push error nullinfo " + msg);
 					return null;
 					
@@ -694,6 +704,9 @@ namespace namaichi.alart
 				var ret = new List<RssItem>();
 				ret.Add(i);
 				check.checkedLvIdList.Add(i);
+				#if DEBUG
+					check.form.addLogText("app push found lvid " + lvid + " title " + title + " " + comName);
+				#endif
 				return ret;
 				
 			} catch (Exception e) {

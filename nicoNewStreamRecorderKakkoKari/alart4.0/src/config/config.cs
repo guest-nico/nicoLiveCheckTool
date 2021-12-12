@@ -194,6 +194,7 @@ public class config
 			{"maxLogDisplay","100"},
 			{"maxReserveHistoryDisplay","100"},
 			{"IsStartUp","false"},
+			{"startUpWait","10"},
 			{"IsAllowMultiProcess","false"},
 			
 			{"poploc","右下"},

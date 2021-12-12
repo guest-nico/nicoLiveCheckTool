@@ -89,7 +89,7 @@ namespace namaichi
 		public Thread madeThread;
 		public object liveListLock = new object();
 		//public SemaphoreSlim liveListLockS = new SemaphoreSlim(1, 1);
-		public bool isLiveListLocking = false;
+		//public bool isLiveListLocking = false;
 		private bool isLiveListTimeProcessing = false;
 		
 		private ToolMenuProcess toolMenuProcess;
@@ -123,7 +123,7 @@ namespace namaichi
 			ThreadPool.SetMinThreads(20, 20);
 			
 			
-			if (Array.IndexOf(args, "-std-read") > -1) startStdRead();
+			//if (Array.IndexOf(args, "-std-read") > -1) startStdRead();
 			
 //			#if !DEBUGE
 //				if (config.get("IsLogFile") == "true") 
@@ -618,6 +618,7 @@ namespace namaichi
 			var v = new VersionForm(config, this);
 			v.ShowDialog();
 		}
+		/*
 		void startStdRead() {
 			Task.Factory.StartNew(() => {
 	         	while (true) {
@@ -635,6 +636,7 @@ namespace namaichi
 				}
 			});
 		}
+		*/
 		void AlartListDragDrop(object sender, DragEventArgs e)
 		{
 			try {
@@ -3066,9 +3068,10 @@ namespace namaichi
 				categoryBtnPanel.Controls[headCateIndex - 1].Visible = true;
 			}
 		}
-		public void formAction(Action a, int timeout = 30000) {
+		public void formAction(Action a, int timeout = 30000, [CallerMemberName] string memberName = "") {
 			if (IsDisposed || !util.isShowWindow) return;
 			
+			util.debugWriteLine("formaction " + memberName + " " + lastHosoStatusBar.Text);
 			if (Thread.CurrentThread == madeThread) {
 				try {
 					a.Invoke();
@@ -3079,13 +3082,14 @@ namespace namaichi
 				try {
 					var r = BeginInvoke((MethodInvoker)delegate() {
 					//Invoke((MethodInvoker)delegate() {
-						try {    
+						try {
 				       		a.Invoke();
 				       	} catch (Exception e) {
 							util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 						}
 					
 					}).AsyncWaitHandle.WaitOne(timeout);
+					//});
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				} 
@@ -3100,8 +3104,8 @@ namespace namaichi
 		public void removeLiveListItem(LiveInfo li) {
 			if (Thread.CurrentThread == madeThread)
 					util.debugWriteLine("lock form thread removeLiveListItem");
-			liveListLockAction(() => 
-					_removeLiveListItem(li));
+			//liveListLockAction(() => 
+					_removeLiveListItem(li);//);
 		}
 		public void _removeLiveListItem(LiveInfo li) {
 			try {
@@ -3454,11 +3458,15 @@ namespace namaichi
 					
 				}
 				formAction(() => {
-					allCategoryBtn.Text = string.Format("全て({0}/{1})", allC, allC);
-					for (var i = 0; i < mainCategories.Length; i++) {
-						btns[i].Text = btnsText[i];
-						//util.debugWriteLine("btnsText[i] " + btnsText[i]);
-					}
+					try {
+						allCategoryBtn.Text = string.Format("全て({0}/{1})", allC, allC);
+						for (var i = 0; i < mainCategories.Length; i++) {
+							btns[i].Text = btnsText[i];
+							//util.debugWriteLine("btnsText[i] " + btnsText[i]);
+						}
+		           	} catch (Exception e) {
+		           		util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+		           	}
 				});
 				util.debugWriteLine("setLiveListNum time " + (DateTime.Now - dt));
 			} catch (Exception e) {
@@ -5632,15 +5640,28 @@ namespace namaichi
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
-		
+		/*
+		public void liveListLockAction(Action a, [CallerMemberName] string memberName = "") {
+			if (Thread.CurrentThread == madeThread) {
+				addLogText("_test " + memberName);
+				_liveListLockAction(a, memberName);
+			}
+			else {
+				//lock (liveListLock) {
+				//Monitor.Enter(liveListLock, ref flg);
+					_liveListLockAction(a, memberName);
+				//}
+			}
+		}
+		*/
 		public void liveListLockAction(Action a, [CallerMemberName] string memberName = "") {
 			int scrollI = 0;
 			bool flg = false;
 			Monitor.Enter(liveListLock, ref flg);
 			var dt = DateTime.Now;
-			if (isLiveListLocking) {
-				util.debugWriteLine("live list locking");
-			} else isLiveListLocking = true;
+			//if (isLiveListLocking) {
+			//	util.debugWriteLine("live list locking");
+			//} else isLiveListLocking = true;
 			
 			util.debugWriteLine("liveListLockAction 0 " + memberName);
 			try {
@@ -5649,7 +5670,7 @@ namespace namaichi
 			} finally {
 				setScrollIndex(liveList, scrollI);
 				try {
-					isLiveListLocking = false;
+					//isLiveListLocking = false;
 					if (flg) Monitor.Exit(liveListLock);
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);

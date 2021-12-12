@@ -74,7 +74,7 @@ namespace namaichi.info
 			this.userId = ri.userId;
 			this.communityId = ri.comId;
 			if (string.IsNullOrEmpty(ri.description))
-				Task.Run(() => setDescription(form));
+				Task.Factory.StartNew(() => setDescription(form));
 			else description = util.removeTag(ri.description);
 			this.type = ri.type;
 			//this.ri = ri;

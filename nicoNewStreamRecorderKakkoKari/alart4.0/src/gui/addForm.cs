@@ -459,9 +459,9 @@ namespace namaichi
 		void AddFormLoad(object sender, EventArgs e)
 		{
 			if (editAi != null) return;
-			if (hosoIdText.Text != "") getInfoFromHosoIdBtn.PerformClick();
 			if (communityId.Text != "") getCommunityInfoBtn.PerformClick();
 			if (userIdText.Text != "") getUserInfoBtn.PerformClick();
+			if (hosoIdText.Text != "") getInfoFromHosoIdBtn.PerformClick();
 		}
 		
 		void AddFormDragDrop(object sender, DragEventArgs e)

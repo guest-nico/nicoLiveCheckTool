@@ -627,6 +627,7 @@ namespace namaichi.alart
 				var d = "";
 				foreach (var a in msg.AppDatas) d += a.Value;
 				var appData = d;
+				util.debugWriteLine("app push receive " + d);
 				bool isCom;
 				if (!r) {
 					check.form.addLogText("スマホプッシュ通知から取得した放送のページが取得できませんでした " + lvid);
@@ -705,7 +706,7 @@ namespace namaichi.alart
 				ret.Add(i);
 				check.checkedLvIdList.Add(i);
 				#if DEBUG
-					check.form.addLogText("app push found lvid " + lvid + " title " + title + " " + comName);
+					//check.form.addLogText("app push found lvid " + lvid + " title " + title + " " + comName);
 				#endif
 				return ret;
 				

@@ -101,21 +101,27 @@ namespace namaichi.alart
 			try {
 				var ret = new List<string[]>();
 				
-				var userList = getUserList();
-				if (userList != null) {
-					ret.AddRange(userList);
-					result[0] = true;
-				} else form.addLogText("ユーザーフォローの取得に失敗しました");
-				var chList = getChList();
-				if (chList != null) {
-					ret.AddRange(chList);
-					result[1] = true;
-				} else form.addLogText("チャンネルフォローの取得に失敗しました");
-				var coList = getCoList();
-				if (coList != null) {
-					ret.AddRange(coList);
-					result[2] = true;
-				} else form.addLogText("コミュニティフォローの取得に失敗しました");
+				if (types == null || types[0]) {
+					var userList = getUserList();
+					if (userList != null) {
+						ret.AddRange(userList);
+						result[0] = true;
+					} else form.addLogText("ユーザーフォローの取得に失敗しました");
+				}
+				if (types == null || types[1]) {
+					var chList = getChList();
+					if (chList != null) {
+						ret.AddRange(chList);
+						result[1] = true;
+					} else form.addLogText("チャンネルフォローの取得に失敗しました");
+				}
+				if (types == null || types[2]) {
+					var coList = getCoList();
+					if (coList != null) {
+						ret.AddRange(coList);
+						result[2] = true;
+					} else form.addLogText("コミュニティフォローの取得に失敗しました");
+				}
 				
 				return ret;
 			} catch (Exception e) {
@@ -268,7 +274,6 @@ namespace namaichi.alart
 			
 			var h = new Dictionary<string, string>();
 			if (type == 0) {
-				
 				var _h = new Dictionary<string, string>() {
 					{"User-Agent", "Niconico/1.0 (Linux; U; Android 7.1.2; ja-jp; nicoandroid LGM-V300K) Version/" + form.config.get("niconicoAppVer")},
 					//{"Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"},
@@ -297,6 +302,12 @@ namespace namaichi.alart
 				h.Add("X-Model-Name", "GAOO747-UK");
 				h.Add("X-Connection-Environment", "wifi");
 				return h;
+			} else if (type == 2) {
+				//mypage
+				h.Add("Cookie", "user_session=" + _c);
+				h.Add("X-Frontend-Id", "6");
+				h.Add("X-Frontend-Version", "0");
+				return h;
 			}
 			return null;
 			/*
@@ -306,8 +317,6 @@ namespace namaichi.alart
 			h.Add("X-Os-Version", "5.1.1");
 			h.Add("Cookie", "SP_SESSION_KEY=user_session_278215_1c52ad018016dfa09654b1d0ed2a1f005063c3070cb83dca122635d234d");
 			*/
-			
-
 		}
 		private List<string[]> getUserList() {
 			var url = "https://public.api.nicovideo.jp/v1/nicoex/user/followees.json?limit=25"; //25&cursor=
@@ -336,6 +345,35 @@ namespace namaichi.alart
 				return null;
 			}
 		}
+		/*
+		private List<string[]> getUserList2() {
+			var url = "https://nvapi.nicovideo.jp/v1/users/me/following/users?pageSize=100"; //25&cursor=
+			var cur = "";
+			try {
+				var ret = new List<string[]>();
+				for (var i = 0; i < 1000; i++) {
+					var h = getHeader(2);
+					var r = util.sendRequest(url + (i == 0 ? "" : "&cursor=" + cur), h, null, "GET");
+					if (r == null) return null;
+					using (var rr = r.GetResponseStream())
+					using (var sr = new StreamReader(rr)) {
+						var res = sr.ReadToEnd();
+						if (res == null) return null;
+						var m = new Regex("\"id\":(\\d+),\"nickname\":\"(.+?)\"").Matches(res);
+						foreach (Match _m in m) {
+							ret.Add(new string[]{_m.Groups[1].Value, _m.Groups[2].Value});
+						}
+						cur = util.getRegGroup(res, "\"cursor\":\"(.+?)\"");
+						if (cur == "cursorEnd") break;
+					}
+				}
+				return ret;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+				return null;
+			}
+		}
+		*/
 		private List<string[]> getChList() {
 			var url = "https://api.cas.nicovideo.jp/v1/user/following/channels?offset="; //0&limit=25"
 			try {

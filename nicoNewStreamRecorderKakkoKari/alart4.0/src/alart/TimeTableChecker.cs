@@ -58,9 +58,10 @@ namespace namaichi.alart
 						if (DateTime.Now.AddSeconds(10) > l.pubDateDt) {
 							util.debugWriteLine("timeline alart " + l.lvId + " " + l.title);
 							if (check.checkedLvIdList.Find(x => x.lvId == l.lvId) == null) {
-								if (string.IsNullOrEmpty(l.description)) {
-									l = setHosoInfo(l);
-									if (l == null) continue;
+								if (string.IsNullOrEmpty(l.description) ||
+								   	string.IsNullOrEmpty(l.hostName)) {
+									var __l = setHosoInfo(l);
+									if (__l != null) l = __l;
 								}
 								check.foundLive(new List<RssItem>{l});
 							}
@@ -186,7 +187,7 @@ namespace namaichi.alart
 										hig.description, 
 										util.getCommunityName(hig.communityId, out _isFollow, null), 
 										hig.communityId,
-										"", 
+										hig.userName,//"", 
 										hig.thumbnail, "false", "", hig.isPayment);
 								ri.type = hig.type;
 								ri.tags = hig.tags;
@@ -249,6 +250,8 @@ namespace namaichi.alart
 										var ret = new Reservation(check.container, ri.lvId, config).live2Reserve(bool.Parse(config.get("IsOverwriteOldReserve")));
 										if (ret == "ok") {
 											check.form.addLogText(ri.lvId + " " + ri.comName + (string.IsNullOrEmpty(ri.comName) ? (ri.title) : (ri.comName + "(" + ri.title + ")")) + "のタイムシフトを予約しました");
+											var hi = new HistoryInfo(ri, check.form);
+											check.form.addReserveHistoryList(hi);
 										} else {
 											if (ret != "既に予約済みです。")
 												check.form.addLogText(ri.lvId + "(" + ri.comName + ")のタイムシフトの予約に失敗しました " + ret);

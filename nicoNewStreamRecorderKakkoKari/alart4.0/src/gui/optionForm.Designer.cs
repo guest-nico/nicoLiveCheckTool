@@ -2725,7 +2725,7 @@ namespace namaichi
 			this.isRssChkBox.Name = "isRssChkBox";
 			this.isRssChkBox.Size = new System.Drawing.Size(400, 43);
 			this.isRssChkBox.TabIndex = 2;
-			this.isRssChkBox.Text = "カテゴリページから取得する\r\n（公式放送を除いてフォローしていない放送も取得できますが開始から1分程遅れます）";
+			this.isRssChkBox.Text = "カテゴリページから取得する\r\n（公式放送を除いてフォローしていない放送も取得できますが開始から1分程遅れます。番組説明文の情報から通知を行うことはできません。）";
 			this.isRssChkBox.UseVisualStyleBackColor = true;
 			// 
 			// groupBox7

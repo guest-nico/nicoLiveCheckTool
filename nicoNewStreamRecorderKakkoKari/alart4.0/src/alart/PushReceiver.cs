@@ -249,7 +249,7 @@ namespace namaichi.alart
 				try {
 					var dec = pc.decrypt(data, privateKey, publicKey, auth);
 					util.debugWriteLine("dec " + dec);
-					if (dec.IndexOf(".onairs\",\"") == -1 ||
+					if (dec.IndexOf(".onairs\"") == -1 ||
 					   	dec == null) return;
 					
 					var items = getItem(dec);

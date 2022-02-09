@@ -64,14 +64,12 @@ namespace namaichi.alart
 						});
 						
 					}
-
 					check.foundLive(items);
-					setDescription(items);
+					//setDescription(items);
 					if (isOnlyStartTimeCheck) return;
 					
 					isStartTimeAllCheck = false;
 					isFirst = false;
-					
 					
 					if (check.checkedLvIdList.Count > 20000)
 						check.deleteOldCheckedLvIdList();
@@ -81,6 +79,9 @@ namespace namaichi.alart
 					Thread.Sleep(_t * 1000);
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					var _t = int.Parse(config.get("rssUpdateInterval"));
+					if (_t < 15) _t = 15;
+					Thread.Sleep(_t * 1000);
 				}
 			}
 			check.form.addLogText("カテゴリページからの取得を終了します");

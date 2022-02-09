@@ -125,6 +125,7 @@ namespace namaichi.rec
 //					if (communityId == null) communityId = "official";
 					userId = null;
 //					communityId = null;
+					userName = util.getRegGroup(data, "supplier\":{\"name\":\"(.+?)\"");
 					
 				} else {
 					var isChannel = util.getRegGroup(data, "visualProviderType\":\"(channel)\",\"title\"") != null;

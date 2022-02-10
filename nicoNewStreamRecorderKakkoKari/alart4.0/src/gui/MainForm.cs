@@ -5034,10 +5034,14 @@ namespace namaichi
 						}
 					}
 					
-					var behaviors = config.get("defaultBehavior").Split(',').Select<string, bool>(x => x == "1").ToArray();
+					var behaviors = config.get("defaultBehavior").
+							Split(',').ToDictionary(
+		        					x => x.Split(':')[0].Replace("Chkbox", ""), 
+		        					x => bool.Parse(x.Split(':')[1]));
 					var textColor = ColorTranslator.FromHtml(config.get("defaultTextColor"));
 					var backColor = ColorTranslator.FromHtml(config.get("defaultBackColor"));
 					var isAutoReserve = bool.Parse(config.get("IsDefaultAutoReserve"));
+					var soundtype = int.Parse(config.get("defaultSound"));
 					var now = DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
 					var followStr = isFollow ? "フォロー解除する" : "フォローする";
 					var _ai = new AlartInfo("", id, 
@@ -5050,7 +5054,7 @@ namespace namaichi
 					_ai.setBehavior(behaviors);
 					_ai.textColor = textColor;
 					_ai.backColor = backColor;
-			
+					_ai.soundType = soundtype;
 					userAlartListDataSource.Add(_ai);
 					
 					Task.Factory.StartNew(() => {

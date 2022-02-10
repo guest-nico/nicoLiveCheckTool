@@ -1064,8 +1064,12 @@ namespace namaichi.alart
 				
 				var textColor = ColorTranslator.FromHtml(form.config.get("defaultTextColor"));
 				var backColor = ColorTranslator.FromHtml(form.config.get("defaultBackColor"));
-				var behaviors = form.config.get("defaultBehavior").Split(',').Select<string, bool>(x => x == "1").ToArray();
+				var behaviors = form.config.get("defaultBehavior").
+					Split(',').ToDictionary(
+        					x => x.Split(':')[0].Replace("Chkbox", ""), 
+        					x => bool.Parse(x.Split(':')[1]));
 				var isAutoReserve = bool.Parse(form.config.get("IsDefaultAutoReserve"));
+				var soundtype = int.Parse(form.config.get("defaultSound"));
 				var now = DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
 				if (!isContainCom && !string.IsNullOrEmpty(ri.comId)) {
 					var isFollow = false;
@@ -1081,6 +1085,7 @@ namespace namaichi.alart
 					ai.setBehavior(behaviors);
 					ai.textColor = textColor;
 					ai.backColor = backColor;
+					ai.soundType = soundtype;
 					alartListDataSource.Add(ai);
 				}
 				if (!isContainUser && !string.IsNullOrEmpty(ri.userId)) {
@@ -1097,6 +1102,7 @@ namespace namaichi.alart
 					ai.setBehavior(behaviors);
 					ai.textColor = textColor;
 					ai.backColor = backColor;
+					ai.soundType = soundtype;
 					if (!bool.Parse(form.config.get("IsAddAlartedUserToUserList")))
 						alartListDataSource.Add(ai);
 					else {

@@ -425,10 +425,14 @@ namespace namaichi.rec
 			var mainFollowList = new FollowChecker(form, cc)
 					.getFollowList(followMode);
 			if (mainFollowList == null) return;
-			var behaviors = form.config.get("defaultBehavior").Split(',').Select<string, bool>(x => x == "1").ToArray();
+			var behavior = form.config.get("defaultBehavior").
+					Split(',').ToDictionary(
+        					x => x.Split(':')[0].Replace("ChkBox", ""), 
+        					x => bool.Parse(x.Split(':')[1]));
 			var textColor = ColorTranslator.FromHtml(form.config.get("defaultTextColor"));
 			var backColor = ColorTranslator.FromHtml(form.config.get("defaultBackColor"));
 			var isAutoReserve = bool.Parse(form.config.get("IsDefaultAutoReserve"));
+			var soundtype = int.Parse(form.config.get("defaultSound"));
 			int got = 0, error = 0;
 			for (var i = 0; i < addList.Count; i++) {
 				var id = addList[i];
@@ -457,9 +461,10 @@ namespace namaichi.rec
 						false, false, false, "", 
 						comFollow, userFollow, "", "", "True,True,True", 
 						isAutoReserve, 0);
-				ai.setBehavior(behaviors);
+				ai.setBehavior(behavior);
 				ai.textColor = textColor;
 				ai.backColor = backColor;
+				ai.soundType = soundtype;
 				
 				form.formAction(() => {
 					var ds = isAddToCom ? form.alartListDataSource : 

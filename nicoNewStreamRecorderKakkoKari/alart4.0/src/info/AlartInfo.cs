@@ -10,6 +10,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace namaichi.info
 {
@@ -336,23 +337,24 @@ namespace namaichi.info
         public string toString() {
         	return "コミュニティID=" + communityId + " コミュニティ名=" + communityName + " ユーザーID=" + hostId + " ユーザー名=" + hostName;
         }
-        public void setBehavior(bool[] arr) {
+        public void setBehavior(Dictionary<string, bool> dic) {
         	try {
-	        	this.popup = arr[0];
-	        	this.baloon = arr[1];
-	        	this.browser = arr[2];
-				this.mail = arr[3];
-				this.sound = arr[4];
-				this.appliA = arr[5];
-				this.appliB = arr[6];
-				this.appliC = arr[7];
-				this.appliD = arr[8];
-				this.appliE = arr[9];
-				this.appliF = arr[10];
-				this.appliG = arr[11];
-				this.appliH = arr[12];
-				this.appliI = arr[13];
-				this.appliJ = arr[14];
+        		this.popup = dic["isPopup"];
+        		this.baloon = dic["isBaloon"];
+        		this.browser = dic["isWeb"];
+				this.mail = dic["isMail"];
+				this.sound = dic["isSound"];
+				this.appliA = dic["appliA"];
+				this.appliB = dic["appliB"];
+				this.appliC = dic["appliC"];
+				this.appliD = dic["appliD"];
+				this.appliE = dic["appliE"];
+				this.appliF = dic["appliF"];
+				this.appliG = dic["appliG"];
+				this.appliH = dic["appliH"];
+				this.appliI = dic["appliI"];
+				this.appliJ = dic["appliJ"];
+				this.isSoundId = dic["isDefaultSoundId"];
         	} catch (Exception e) {
         		util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
         	}

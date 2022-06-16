@@ -57,6 +57,7 @@ namespace namaichi.alart
 				form.addLogText("フォローリストの取得中に未知のエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);	
 			}
 		}
+		/*
 		public List<string[]> getFollowListFromApp(bool[] types = null, bool isLog = true) {
 			try {
 				var ret = new List<string[]>();
@@ -97,6 +98,7 @@ namespace namaichi.alart
 				return null;
 			}
 		}
+		*/
 		public List<string[]> getFollowList(bool[] types = null, bool isLog = true) {
 			try {
 				var ret = new List<string[]>();
@@ -160,6 +162,7 @@ namespace namaichi.alart
 				return null;
 			}
 		}
+		/*
 		private List<string[]> checkFollowPageApp(string url) {
 			//?offset=0&limit=1000  original25 cas
 			//page=0&pageSize=50
@@ -218,6 +221,7 @@ namespace namaichi.alart
 				return null;
 			}
 		}
+		*/
 		private List<string[]> checkFollowPageFromMyPage(string url) {
 			try
 			{

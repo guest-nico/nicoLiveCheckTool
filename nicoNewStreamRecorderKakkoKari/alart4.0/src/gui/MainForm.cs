@@ -786,6 +786,7 @@ namespace namaichi
 					ai.recentColorMode = bool.Parse(config.get("IscheckRecent")) ? ((isMemberOnly) ? 2 : 1) : 0;
 					ai.lastLvType = type;
 					ai.lastLvTitle = title;
+					ai.addHistory(ai.lastHosoDt, ai.lastHostDate + " " + lvid.Replace("e", "") + " " + title);
 					
 					var i = alartListDataSource.IndexOf(ai);
 					if (i > -1)
@@ -2479,12 +2480,18 @@ namespace namaichi
 		*/
 		void SearchBtnClick(object sender, EventArgs e)
 		{
-			alartListSearchStr = searchText.Text.Split(new char[]{' ', '　'});
 			//var cur = alartList.CurrentCell;
 			//if (cur == null || cur.RowIndex == -1) return;
 			//var targetColumns = new int[] {0, 1, 2, 3, 4, alartList.Columns.Count - 1};
-			alartList.CurrentCell = null;
 			try {
+				if (searchText.Text != "") {
+					var isBeforeSearch = true;
+					foreach (DataGridViewRow r in alartList.Rows)
+						if (!r.Visible) isBeforeSearch = false;
+					if (isBeforeSearch)	
+						searchBtn.Tag = alartList.FirstDisplayedScrollingRowIndex;
+				}
+				alartList.CurrentCell = null;
 				for (var i = alartListDataSource.Count - 1; i > -1; i--) {
 					alartList.Rows[i].Visible = isAlartListSearchVisible(alartListDataSource[i]);
 					/*
@@ -2501,8 +2508,12 @@ namespace namaichi
 					}
 					*/
 				}
+				if (searchText.Text == "" && searchBtn.Tag != null)
+					alartList.FirstDisplayedScrollingRowIndex = (int)searchBtn.Tag;
 				//if (util.getRegGroup(cur.Value.ToString(), "(" + searchStr + ")") != null) return;
 				//System.Windows.Forms.MessageBox.Show("見つかりませんでした");
+				searchText.Focus();
+				//searchText.SelectAll();
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
@@ -2510,7 +2521,8 @@ namespace namaichi
 		private bool isAlartListSearchVisible(AlartInfo ai) {
 			try {
 				//var searchStr = liveListSearchStr;
-				var sa = alartListSearchStr;
+				var sa = searchText.Text.Split(new char[]{' ', '　'});
+				//var sa = alartListSearchStr;
 				var c = new string[]{ai.communityId, ai.hostId, ai.communityName, ai.hostName, ai.memo, ai.keyword};
 				foreach (var s in sa) {
 					var isDisplay = false;
@@ -6192,8 +6204,13 @@ namespace namaichi
 		{
 			try {
 				if (e.ColumnIndex == 8 &&
-				    	!string.IsNullOrEmpty(alartListDataSource[e.RowIndex].lastLvTitle))
-					e.ToolTipText = alartListDataSource[e.RowIndex].lastLvTitle;
+				    	!string.IsNullOrEmpty(alartListDataSource[e.RowIndex].lastLvTitle)) {
+					//e.ToolTipText = alartListDataSource[e.RowIndex].lastLvTitle;
+					var ai = alartListDataSource[e.RowIndex];
+					if (ai.alartHistory.Count == 0) e.ToolTipText = ai.lastHostDate + " " + ai.lastLvid.Replace("e", "") + " " + ai.lastLvTitle;
+					else e.ToolTipText = string.Join("\n", ai.alartHistory.Select(x => x.Value));
+				}
+				
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace);
 			}

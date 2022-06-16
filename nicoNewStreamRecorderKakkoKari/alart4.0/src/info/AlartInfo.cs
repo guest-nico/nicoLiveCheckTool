@@ -46,6 +46,7 @@ namespace namaichi.info
 		public string lastLvid = "";
 		public string lastLvType = "";
 		public string lastLvTitle = "";
+		public List<KeyValuePair<DateTime, string>> alartHistory = new List<KeyValuePair<DateTime, string>>();
 		public string keyword = "";
 		
 		public DateTime lastHosoDt = DateTime.MinValue;
@@ -357,6 +358,16 @@ namespace namaichi.info
 				this.isSoundId = dic["isDefaultSoundId"];
         	} catch (Exception e) {
         		util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+        	}
+        }
+        public void addHistory(DateTime dt, string timeTitleLvid) {
+        	try {
+	        	alartHistory.Add(new KeyValuePair<DateTime, string>(dt, timeTitleLvid));
+	        	var h = alartHistory.OrderBy(x => x.Key).ToList();
+	        	if (h.Count > 5) h.RemoveRange(0, h.Count - 5);
+	        	alartHistory = h;
+        	} catch (Exception e) {
+        		util.debugWriteLine(e.Message + e.Source + e.StackTrace);
         	}
         }
 	}

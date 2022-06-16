@@ -326,7 +326,7 @@ public class config
 	        {"pushChId", ""},
 	        {"appPushId", ""},
 	        {"appPushToken", ""},
-	        {"nicoCasAppVer", "3.9.0"},
+	        {"nicoCasAppVer", "3.38.0"},
 	        {"niconicoAppVer", "6.14.1"},
 			
 	        {"thresholdpage", "10"},

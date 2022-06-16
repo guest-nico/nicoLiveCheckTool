@@ -99,6 +99,7 @@ namespace namaichi.utility
 		                    	etc.isAutoReserve = ai.isAutoReserve;
 		                    	etc.recentColorMode = ai.recentColorMode;
 		                    	etc.lastLvTitle = ai.lastLvTitle;
+		                    	etc.alartHistory = ai.alartHistory;
 		                    	var json = JToken.FromObject(etc).ToString(Formatting.None);
 		                    	sw.WriteLine(json);
 		                    }
@@ -242,11 +243,13 @@ namespace namaichi.utility
 					var isAutoReserve = false;
 					var recentColorMode = 0;
 					var lastLvTitle = "";
+					var alartHistory = new List<KeyValuePair<DateTime, string>>();
 					if (itemLineNum != 29 && !string.IsNullOrEmpty(lines[i + 0])) {
 						var etc = JsonConvert.DeserializeObject<AiEtcInfo>(lines[i + 0]);
 						isAutoReserve = etc.isAutoReserve;
 						recentColorMode = etc.recentColorMode;
 						lastLvTitle = etc.lastLvTitle;
+						alartHistory = etc.alartHistory;
 					}
 					//if (lines[i + 1] == "" && lines[i + 2] == "" && lines[i + 3] == "") continue;
 					AlartInfo ai;
@@ -305,6 +308,7 @@ namespace namaichi.utility
 								isMustCom, isMustUser, isMustKeyword, cki,
 								isCustomKeyword, memberOnlyMode, isAutoReserve, 
 								recentColorMode, lastLvTitle);
+						ai.alartHistory = alartHistory;
 					}
 					//if ((ai.communityId == null || ai.communityId == "") &&
 					//    (ai.hostId == null || ai.hostId == "")) continue;
@@ -488,6 +492,7 @@ namespace namaichi.utility
 			public bool isAutoReserve = false;
 			public int recentColorMode = 0;
 			public string lastLvTitle = "";
+			public List<KeyValuePair<DateTime, string>> alartHistory = new List<KeyValuePair<DateTime, string>>();
 		}
 	}
 }

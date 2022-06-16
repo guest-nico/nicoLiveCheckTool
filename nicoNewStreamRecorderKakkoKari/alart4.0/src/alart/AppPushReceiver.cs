@@ -246,6 +246,7 @@ namespace namaichi.alart
 				return null;
 			}
 		}
+		/*
 		private bool sendTokenNico(string pushToken) {
 			util.debugWriteLine("app push sendTokenNico " + pushToken);
 			try {
@@ -289,6 +290,7 @@ namespace namaichi.alart
 				return false;
 			}
 		}
+		*/
 		private bool sendTokenNico2(string pushToken) {
 			util.debugWriteLine("app push sendTokenNico " + pushToken);
 			try {

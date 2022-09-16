@@ -786,7 +786,7 @@ namespace namaichi
 					ai.recentColorMode = bool.Parse(config.get("IscheckRecent")) ? ((isMemberOnly) ? 2 : 1) : 0;
 					ai.lastLvType = type;
 					ai.lastLvTitle = title;
-					ai.addHistory(ai.lastHosoDt, ai.lastHostDate + " " + lvid.Replace("e", "") + " " + title);
+					ai.addHistory(ai.lastHosoDt, lvid.Replace("e", "") + " " + ai.lastHostDate + " " + title);
 					
 					var i = alartListDataSource.IndexOf(ai);
 					if (i > -1)
@@ -2795,6 +2795,7 @@ namespace namaichi
 					
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					Thread.Sleep(1000);
 				}
 			}
 		}
@@ -2816,6 +2817,7 @@ namespace namaichi
 			if (!isCheck) {
 				util.debugWriteLine("isOnAir isCheck false deleteNotifyIconRecentItem " + ai.lastLvid);
 				deleteNotifyIconRecentItem(ai.lastLvid);
+				ReflectionListLv(ai.lastLvid);
 				return false;
 			}
 			
@@ -2826,7 +2828,7 @@ namespace namaichi
 			}
 			return isOnAir;
 		}
-		private bool isOnAirLvid(string lvid, string type, bool debugWriteLog = false) {
+		public bool isOnAirLvid(string lvid, string type, bool debugWriteLog = false) {
 			util.debugWriteLine("isOnairLyid " + lvid + " " + type);
 			var isProgramInfo = (check.container != null &&
 			    	(type == "user" || type == "community" ||
@@ -2877,6 +2879,7 @@ namespace namaichi
 				util.debugWriteLine("終了判定 embed " + lvid + " " + _res);
 				util.debugWriteLine("isOnAirLvid !_ret deleteNotifyIconRecentItem " + lvid);
 				deleteNotifyIconRecentItem(lvid);
+				ReflectionListLv(lvid);
 			}
 			return _ret;
 		}
@@ -5048,7 +5051,7 @@ namespace namaichi
 					
 					var behaviors = config.get("defaultBehavior").
 							Split(',').ToDictionary(
-		        					x => x.Split(':')[0].Replace("Chkbox", ""), 
+		        					x => x.Split(':')[0].Replace("ChkBox", ""), 
 		        					x => bool.Parse(x.Split(':')[1]));
 					var textColor = ColorTranslator.FromHtml(config.get("defaultTextColor"));
 					var backColor = ColorTranslator.FromHtml(config.get("defaultBackColor"));
@@ -6252,6 +6255,25 @@ namespace namaichi
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 					Thread.Sleep(1000);
 				}
+			}
+		}
+		private void ReflectionListLv(string lvid) {
+			try {
+				var l = liveListDataSource.Where(x => x.lvId == lvid).ToList();
+				var lc = l.Count();
+				for (var i = l.Count - 1; i > -1; i--)
+					formAction(() => liveListDataSource.Remove(l[i]));
+				foreach (var ai in alartListDataSource) {
+					if (ai.lastLvid == lvid) {
+						ai.recentColorMode = 0;
+						ai.lastLvid = lvid + "e";
+					}
+				}
+				foreach (var hi in historyListDataSource) {
+					hi.onAirMode = 0;
+				}
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
 			}
 		}
 	}

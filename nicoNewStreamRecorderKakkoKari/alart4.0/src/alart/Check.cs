@@ -1066,7 +1066,7 @@ namespace namaichi.alart
 				var backColor = ColorTranslator.FromHtml(form.config.get("defaultBackColor"));
 				var behaviors = form.config.get("defaultBehavior").
 					Split(',').ToDictionary(
-        					x => x.Split(':')[0].Replace("Chkbox", ""), 
+        					x => x.Split(':')[0].Replace("ChkBox", ""), 
         					x => bool.Parse(x.Split(':')[1]));
 				var isAutoReserve = bool.Parse(form.config.get("IsDefaultAutoReserve"));
 				var soundtype = int.Parse(form.config.get("defaultSound"));
@@ -1086,7 +1086,7 @@ namespace namaichi.alart
 					ai.textColor = textColor;
 					ai.backColor = backColor;
 					ai.soundType = soundtype;
-					alartListDataSource.Add(ai);
+					form.formAction(() => alartListDataSource.Add(ai));
 				}
 				if (!isContainUser && !string.IsNullOrEmpty(ri.userId)) {
 					var isFollow = false;
@@ -1104,18 +1104,17 @@ namespace namaichi.alart
 					ai.backColor = backColor;
 					ai.soundType = soundtype;
 					if (!bool.Parse(form.config.get("IsAddAlartedUserToUserList")))
-						alartListDataSource.Add(ai);
+						form.formAction(() => alartListDataSource.Add(ai));
 					else {
 						ai.communityId = null;
 						ai.communityName = null;
-						form.userAlartListDataSource.Add(ai);
+						form.formAction(() => form.userAlartListDataSource.Add(ai));
 					}
 				}
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
-
 	}
 	public class DoProcessInfo {
 		public bool isAppliA;

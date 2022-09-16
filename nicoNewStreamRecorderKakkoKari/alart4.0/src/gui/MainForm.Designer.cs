@@ -756,7 +756,7 @@ namespace namaichi
 			// 
 			this.updateLiveListMenu.Name = "updateLiveListMenu";
 			this.updateLiveListMenu.Size = new System.Drawing.Size(290, 22);
-			this.updateLiveListMenu.Text = "番組一覧の更新(&N)";
+			this.updateLiveListMenu.Text = "放送中リストの更新(&N)";
 			this.updateLiveListMenu.Click += new System.EventHandler(this.UpdateLiveListMenuClick);
 			// 
 			// updateCateCategoryMenu
@@ -845,7 +845,7 @@ namespace namaichi
 			// 
 			this.updateAutoUpdateStartMenu.Name = "updateAutoUpdateStartMenu";
 			this.updateAutoUpdateStartMenu.Size = new System.Drawing.Size(290, 22);
-			this.updateAutoUpdateStartMenu.Text = "番組一覧の自動更新開始(&A)";
+			this.updateAutoUpdateStartMenu.Text = "放送中リストの自動更新開始(&A)";
 			this.updateAutoUpdateStartMenu.Click += new System.EventHandler(this.UpdateAutoUpdateStartMenuClick);
 			// 
 			// updateAutoUpdateStopMenu
@@ -853,7 +853,7 @@ namespace namaichi
 			this.updateAutoUpdateStopMenu.Enabled = false;
 			this.updateAutoUpdateStopMenu.Name = "updateAutoUpdateStopMenu";
 			this.updateAutoUpdateStopMenu.Size = new System.Drawing.Size(290, 22);
-			this.updateAutoUpdateStopMenu.Text = "番組一覧の自動更新停止(&S)";
+			this.updateAutoUpdateStopMenu.Text = "放送中リストの自動更新停止(&S)";
 			this.updateAutoUpdateStopMenu.Click += new System.EventHandler(this.UpdateAutoUpdateStopMenuClick);
 			// 
 			// updateAutoUpdateFirstMenu
@@ -881,7 +881,7 @@ namespace namaichi
 									this.update6hourDelMenu});
 			this.updateAutoDeleteMenu.Name = "updateAutoDeleteMenu";
 			this.updateAutoDeleteMenu.Size = new System.Drawing.Size(290, 22);
-			this.updateAutoDeleteMenu.Text = "番組一覧の自動削除基準(&B)";
+			this.updateAutoDeleteMenu.Text = "放送中リストの自動削除基準(&B)";
 			this.updateAutoDeleteMenu.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.UpdateAutoDeleteMenuDropDownItemClicked);
 			// 
 			// updateNoDelMenu

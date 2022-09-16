@@ -89,7 +89,7 @@ namespace namaichi.alart
 		}
 		private void setLiveList() {
 			try {
-				var openTimeList = getCasOpenTimeList();
+				var openTimeList = getCasOpenTimeList(false);
 				var url = "https://live.nicovideo.jp/api/getZeroTimeline?date=";//2019-09-15";
 				addLiveListDay(url + DateTime.Now.ToString("yyyy-MM-dd"), openTimeList);
 				addLiveListDay(url + DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"), openTimeList);
@@ -306,7 +306,7 @@ namespace namaichi.alart
 		public void stop() {
 			isRetry = false;
 		}
-		private List<TanzakuItem> getCasOpenTimeList() {
+		public List<TanzakuItem> getCasOpenTimeList(bool isAll) {
 			var ret = new List<TanzakuItem>();
 			var endTime = DateTime.Parse(DateTime.Now.AddDays(2).ToShortDateString());
 			try {
@@ -321,10 +321,14 @@ namespace namaichi.alart
 					var isEnd = false;
 					foreach (var o in tanzakuObj.data.items) {
 						util.debugWriteLine("getCasOpentime " + o.showTime.beginAt);
-						if (o.showTime.beginAt > endTime || !o.isChannelRelatedOfficial) {
-							isEnd = true;
-							break;
-						} else ret.Add(o); 
+						if (isAll) ret.Add(o);
+						else {
+							if (o.showTime.beginAt > endTime || !o.isChannelRelatedOfficial) {
+								isEnd = true;
+								break;
+							} else ret.Add(o);
+						}
+						
 					}
 					if (tanzakuObj.data.cursor.IndexOf("cursorEnd/cursorEnd") > -1) isEnd = true;
 					if (isEnd) break;
@@ -345,11 +349,13 @@ namespace namaichi.alart
 					var isEnd = false;
 					foreach (var o in tanzakuObj.data.items) {
 						util.debugWriteLine("getCasOpentime " + o.showTime.beginAt);
-						if (!o.isChannelRelatedOfficial) {
-							isEnd = true;
-							break;
-						} else 
-							ret.Add(o);
+						if (isAll) ret.Add(o);
+						else {
+							if (!o.isChannelRelatedOfficial) {
+								isEnd = true;
+								break;
+							} else ret.Add(o);
+						}
 					}
 					if (tanzakuObj.data.cursor.IndexOf("cursorEnd/cursorEnd") > -1) isEnd = true;
 					if (isEnd) break;

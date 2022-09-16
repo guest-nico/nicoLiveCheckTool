@@ -362,6 +362,8 @@ namespace namaichi.info
         }
         public void addHistory(DateTime dt, string timeTitleLvid) {
         	try {
+        		foreach (var s in alartHistory)
+        			if (s.Value == timeTitleLvid) return;
 	        	alartHistory.Add(new KeyValuePair<DateTime, string>(dt, timeTitleLvid));
 	        	var h = alartHistory.OrderBy(x => x.Key).ToList();
 	        	if (h.Count > 5) h.RemoveRange(0, h.Count - 5);

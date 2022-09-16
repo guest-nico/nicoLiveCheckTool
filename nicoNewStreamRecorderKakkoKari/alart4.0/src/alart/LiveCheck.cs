@@ -311,6 +311,8 @@ namespace namaichi.alart
 		}
 		private List<LiveInfo> getOfficialLiveItems() {
 			try {
+				var officialLiveList = new TimeTableChecker(form.check, form.config).getCasOpenTimeList(true);
+				
 				var r = util.getPageSource("https://live.nicovideo.jp/focus");
 				if (r == null) {
 					foreach (var li in form.liveListDataSource) 
@@ -321,6 +323,7 @@ namespace namaichi.alart
 				}
 				var m = new Regex("id&quot;:&quot;(lv\\d+)").Matches(r);
 				var ret = new List<LiveInfo>();
+				var existCount = new int[2];
 				foreach (Match _m in m) {
 					var lvid = _m.Groups[1].Value;
 					var isAdded = false;
@@ -336,21 +339,42 @@ namespace namaichi.alart
 							isAdded = true;
 						}
 					}
-					if (isAdded) continue;
+					if (isAdded) 
+						continue;
 					
-					var hig = new HosoInfoGetter();
-					var _r = hig.get(lvid, null);
-					if (!_r) continue;
-					if (hig.type != "official" || hig.openDt > DateTime.Now || hig.isClosed) continue;
-					
-					var ri = new RssItem(hig.title, lvid, hig.openDt.ToString(), hig.description, hig.group, hig.communityId, hig.userName, hig.thumbnail, hig.isMemberOnly.ToString(), "", hig.isPayment);
+					var opentimeItem = officialLiveList.FirstOrDefault(x => x.id == lvid);
+					RssItem ri = null;
+					if (opentimeItem == null) {
+						var hig = new HosoInfoGetter();
+						var _r = hig.get(lvid, null);
+						if (!_r) continue;
+						if (hig.type != "official" || hig.openDt > DateTime.Now || hig.isClosed) continue;
+						
+						ri = new RssItem(hig.title, lvid, hig.openDt.ToString(), hig.description, hig.group, hig.communityId, hig.userName, hig.thumbnail, hig.isMemberOnly.ToString(), "", hig.isPayment);
+						existCount[0]++;
+					} else {
+						ri = new RssItem(opentimeItem.title, lvid, 
+								opentimeItem.showTime.beginAt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"),
+								opentimeItem.description, 
+								opentimeItem.contentOwner.name, 
+								opentimeItem.socialGroupId,
+								"", 
+								opentimeItem.thumbnailUrl, opentimeItem.isMemberOnly.ToString(), "", opentimeItem.isPayProgram);
+							ri.type = "official";
+							ri.tags = new string[]{""};
+							ri.pubDateDt = opentimeItem.onAirTime.beginAt;
+						existCount[1]++;
+							
+					}
 					ri.type = "official";
-					ri.setUserId(hig.userId);
+					ri.setUserId("");
 					ri.tags = new string[]{""};
 					ri.pubDateDt = DateTime.Parse(ri.pubDate);
 					var _li = new LiveInfo(ri, form.alartListDataSource.ToArray(), form.config, form.userAlartListDataSource.ToArray());
 					ret.Add(_li);
+					
 				}
+				util.debugWriteLine("exist count " + existCount[0] + " " + existCount[1]);
 				return ret;
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);

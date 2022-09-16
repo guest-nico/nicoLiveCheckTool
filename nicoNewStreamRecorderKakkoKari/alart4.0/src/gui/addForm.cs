@@ -184,7 +184,7 @@ namespace namaichi
 				_ret.lastLvTitle = inputLvidItem.title;
 				if (!isInputLvidItemClosed)
 					_ret.recentColorMode = bool.Parse(form.config.get("IscheckRecent")) ? ((inputLvidItem.isMemberOnly) ? 2 : 1) : 0;				
-				_ret.addHistory(inputLvidItem.pubDateDt, _ret.lastHostDate + " " + inputLvidItem.lvId.Replace("e", "") + " " + inputLvidItem.title);
+				_ret.addHistory(inputLvidItem.pubDateDt, inputLvidItem.lvId.Replace("e", "") + " " + _ret.lastHostDate + " " + inputLvidItem.title);
 			}
 			if (!duplicationCheckOk(_ret)) return;
 			ret = _ret;

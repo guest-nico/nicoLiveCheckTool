@@ -203,24 +203,22 @@ namespace namaichi.rec
 			var si = SourceInfoSerialize.load(isSub);
 			if (si == null) return null;
 			
-//			var importer = await SunokoLibrary.Application.CookieGetters.Default.GetInstanceAsync(si, false);
-			ICookieImporter importer = await SunokoLibrary.Application.CookieGetters.Default.GetInstanceAsync(si, false).ConfigureAwait(false);
-			
-//			var importers = new SunokoLibrary.Application.CookieGetters(true, null);
-//			var importera = (await SunokoLibrary.Application.CookieGetters.Browsers.IEProtected.GetCookiesAsync(TargetUrl));
-//			foreach (var rr in importer.Cookies)
-//				util.debugWriteLine(rr);
-			//importer = await importers.GetInstanceAsync(si, true);
+			ICookieImporter importer = null;
+			var mode = 1;
+			if (mode == 0)
+				importer = await SunokoLibrary.Application.CookieGetters.Default.GetInstanceAsync(si, false).ConfigureAwait(false);
+			else if (mode == 1) {
+				var ty = Type.GetType(si.EngineId + ", SnkLib.App.CookieGetter");
+				if (ty == null) return null;
+				var factory = (ICookieImporterFactory)Activator.CreateInstance(ty);
+				if (factory == null) return null;
+				importer = factory.GetCookieImporter(si);
+			}
 			if (importer == null) return null;
 			
 
 			CookieImportResult result = await importer.GetCookiesAsync(TargetUrl).ConfigureAwait(false);
 			if (result.Status != CookieImportState.Success) return null;
-			
-			//if (result.Cookies["user_session"] == null) return null;
-			//var cookie = result.Cookies["user_session"].Value;
-
-			//util.debugWriteLine("usersession " + cookie);
 			
 			var requireCookies = new List<Cookie>();
 			var cc = new CookieContainer();
@@ -246,9 +244,9 @@ namespace namaichi.rec
 			return cc;
 			
 		}
-		private bool isHtml5Login(CookieContainer cc, string url) {
+		public bool isHtml5Login(CookieContainer cc, string url) {
 			
-			var c = cc.GetCookieHeader(new Uri(url));
+			//var c = cc.GetCookieHeader(new Uri(url));
 			//for (var i = 0; i < 1; i++) {
 				/*
 				var headers = new WebHeaderCollection();
@@ -282,8 +280,8 @@ namespace namaichi.rec
 				//var isFollow = false;
 				string uid = null;
 				try {
-					var fl = new FollowChecker(form, cc).getFollowList(new bool[]{true, false, false}, false);
-					if (fl == null) return false;
+					//var fl = new FollowChecker(form, cc).getFollowList(new bool[]{true, false, false}, false);
+					//if (fl == null) return false;
 					
 					var us = cc.GetCookies(new Uri(url))["user_session"];
 					uid = us == null ? null : util.getRegGroup(us.Value, "user_session_(.+?)_");

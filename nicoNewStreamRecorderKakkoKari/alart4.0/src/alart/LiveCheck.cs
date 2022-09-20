@@ -311,7 +311,7 @@ namespace namaichi.alart
 		}
 		private List<LiveInfo> getOfficialLiveItems() {
 			try {
-				var officialLiveList = new TimeTableChecker(form.check, form.config).getCasOpenTimeList(true);
+				var officialLiveList = new TimeTableChecker(form.check, form.config).getCasOpenTimeList(false);
 				
 				var r = util.getPageSource("https://live.nicovideo.jp/focus");
 				if (r == null) {
@@ -321,11 +321,15 @@ namespace namaichi.alart
 						if (li.type == "official") li.lastExistTime = DateTime.Now;
 					return new List<LiveInfo>();
 				}
-				var m = new Regex("id&quot;:&quot;(lv\\d+)").Matches(r);
+				if (r.IndexOf("これからの放送予定") > -1)
+					r = r.Substring(0, r.IndexOf("これからの放送予定"));
+				var m = new Regex("(lv\\d+)").Matches(r);
 				var ret = new List<LiveInfo>();
 				var existCount = new int[2];
-				foreach (Match _m in m) {
-					var lvid = _m.Groups[1].Value;
+				var lvList = new List<string>();
+				foreach (Match _m in m) lvList.Add(_m.Groups[1].Value);
+				lvList = lvList.Distinct().ToList();
+				foreach (var lvid in lvList) {
 					var isAdded = false;
 					foreach (var li in form.liveListDataSource) {
 						if (li.type != "official" && li.lvId == lvid) {
@@ -366,6 +370,8 @@ namespace namaichi.alart
 						existCount[1]++;
 							
 					}
+					if (ri.pubDateDt > DateTime.Now) continue;
+					
 					ri.type = "official";
 					ri.setUserId("");
 					ri.tags = new string[]{""};

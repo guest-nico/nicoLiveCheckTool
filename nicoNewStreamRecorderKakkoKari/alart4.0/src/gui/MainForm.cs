@@ -953,17 +953,17 @@ namespace namaichi
 			}
 		}
 		public bool userFollowCellClick(AlartInfo ai, SortableBindingList<AlartInfo> dataSource, DataGridView list, bool isLog = true) {
-			//var userId = alartList[1, rowIndex].Value.ToString();
 			try {
 				
 					
 				var rowIndex = dataSource.IndexOf(ai);
 				if (rowIndex == -1) return false;
 				if ((string)alartList[7, rowIndex].Value == "") return false;
+				if (string.IsNullOrEmpty(ai.hostFollow)) return false;
 				
 				bool isOk = false;
 				
-				var isFollow = (string)alartList[7, rowIndex].Value == "フォローする";
+				var isFollow = ai.hostFollow == "フォローする";
 				if (bool.Parse(config.get("IsConfirmFollow"))) {
 					var msg = "ユーザーID " + ai.hostId + "を";
 					var r = MessageBox.Show(msg + "フォロー" + (isFollow ? "" : "解除") + "しますか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button2);
@@ -2829,7 +2829,7 @@ namespace namaichi
 			return isOnAir;
 		}
 		public bool isOnAirLvid(string lvid, string type, bool debugWriteLog = false) {
-			util.debugWriteLine("isOnairLyid " + lvid + " " + type);
+			util.debugWriteLine("isOnairLvid " + lvid + " " + type);
 			var isProgramInfo = (check.container != null &&
 			    	(type == "user" || type == "community" ||
 			     		type == "channel"));
@@ -4882,7 +4882,7 @@ namespace namaichi
 						}
 						
 						//util.debugWriteLine(i + " " + alartListDataSource[i].lastHosoDt + " " + alartList[7, i].Style.BackColor);
-						util.debugWriteLine("check history live onair " + hi.lvid);
+						util.debugWriteLine("check history live onair " + hi.lvid + " " + hi.type);
 						var isOnAir = isOnAirLvid(hi.lvid, hi.type);
 						
 						if (!isOnAir) {
@@ -6270,11 +6270,79 @@ namespace namaichi
 					}
 				}
 				foreach (var hi in historyListDataSource) {
-					hi.onAirMode = 0;
+					if (hi.lvid == lvid) hi.onAirMode = 0;
 				}
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
 			}
+		}
+		List<AlartInfo> getSelectedAiList(DataGridView list, SortableBindingList<AlartInfo> dataSource) {
+			try {
+				if (list.SelectedCells.Count == 0) return null;
+				var selectedAIList = new List<AlartInfo>();
+				foreach (DataGridViewCell c in list.SelectedCells) {
+					try {
+						var ai = (AlartInfo)dataSource[c.RowIndex];
+						if (selectedAIList.IndexOf(ai) > -1) continue;
+						else selectedAIList.Add(ai);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
+				}
+				return selectedAIList;
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+				return null;
+			}
+		}
+		void AlartListFollowComMenuClick(object sender, EventArgs e)
+		{
+			AlartListFollowMenuClickCore(false, true);
+		}
+		void AlartListFollowUserMenuClick(object sender, EventArgs e)
+		{
+			AlartListFollowMenuClickCore(true, true);
+		}
+		void AlartListUnFollowComMenuClick(object sender, EventArgs e)
+		{
+			AlartListFollowMenuClickCore(false, false);
+		}
+		void AlartListUnFollowUserMenuClick(object sender, EventArgs e)
+		{
+			AlartListFollowMenuClickCore(true, false);
+		}
+		void AlartListFollowMenuClickCore(bool isUser, bool isFollowMode) {
+			try {
+				var isUserMode = !favoriteCommunityBtn.Checked;
+				var list = isUserMode ? userAlartList : alartList;
+				var dataSource = isUserMode ? userAlartListDataSource : alartListDataSource;
+				
+				var selectedAIList = getSelectedAiList(list, dataSource);
+				if (selectedAIList == null) {
+					MessageBox.Show("選択された行が見つかりませんでした");
+					return;
+				}
+				
+				foreach (var ai in selectedAIList) {
+					if (isUser) {
+						if (ai.hostFollow == (isFollowMode ? "フォローする" : "フォロー解除する"))
+							userFollowCellClick(ai, dataSource, list);
+					} else {
+						if (ai.communityFollow == (isFollowMode ? "フォローする" : "フォロー解除する"))
+							comChannelFollowCellClick(ai);
+					}
+					
+				}
+				changedListContent();
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
+		}
+		void AlartListFollowMenuOpening(object sender, CancelEventArgs e)
+		{
+			var isUserMode = !favoriteCommunityBtn.Checked;
+			alartListFollowComMenu.Visible = 
+					alartListUnFollowComMenu.Visible = !isUserMode;
 		}
 	}
 }

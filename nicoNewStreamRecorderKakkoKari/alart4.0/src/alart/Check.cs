@@ -1051,15 +1051,14 @@ namespace namaichi.alart
 					if (!string.IsNullOrEmpty(ai.communityId) && 
 					    	ai.communityId != "official" && ai.communityId == ri.comId) 
 						isContainCom = true;
-					if (!string.IsNullOrEmpty(ai.hostId) && 
-					    	ai.hostId == ri.userId) 
-						isContainUser = true;
 				}
 				foreach (var ai in _userAlartListDataSource) {
 					if (!string.IsNullOrEmpty(ai.hostId) && 
 					    	ai.hostId == ri.userId) 
 						isContainUser = true;
 				}
+				if (isContainCom && isContainUser) return;
+				
 				//form.addLogText("放送ID:" + ri.lvId + " コミュID:" + ri.comId + " ユーザーID:" + ri.userId + " お気に入りリスト内に放送を開始したコミュニティが見つかり" + (isContainCom ? "ました" : "ませんでした") + " お気に入りリスト内に放送を開始したユーザーが見つかり" + (isContainUser ? "ました" : "ませんでした"));
 				
 				var textColor = ColorTranslator.FromHtml(form.config.get("defaultTextColor"));
@@ -1071,7 +1070,11 @@ namespace namaichi.alart
 				var isAutoReserve = bool.Parse(form.config.get("IsDefaultAutoReserve"));
 				var soundtype = int.Parse(form.config.get("defaultSound"));
 				var now = DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss");
-				if (!isContainCom && !string.IsNullOrEmpty(ri.comId)) {
+				
+				var isUserFollow = false;
+				var userName = util.getUserName(ri.userId, out isUserFollow, container, true, form.config);
+				var userFollow = (userName == null || container == null) ? "" : (isUserFollow ? "フォロー解除する" : "フォローする");
+				if (!isContainCom) {
 					var isFollow = false;
 					var comName = util.getCommunityName(ri.comId, out isFollow, container);
 					var comFollow = (comName == null || container == null) ? "" : (isFollow ? "フォロー解除する" : "フォローする");
@@ -1081,18 +1084,14 @@ namespace namaichi.alart
 							false, false, false, false, false, 
 							false, false, false, false, false, 
 							false, false, false, "", 
-							comFollow, "", "", "", "True,True,True", isAutoReserve, 0);
+							comFollow, userFollow, "", "", "True,True,True", isAutoReserve, 0);
 					ai.setBehavior(behaviors);
 					ai.textColor = textColor;
 					ai.backColor = backColor;
 					ai.soundType = soundtype;
 					form.formAction(() => alartListDataSource.Add(ai));
 				}
-				if (!isContainUser && !string.IsNullOrEmpty(ri.userId)) {
-					var isFollow = false;
-					var userName = util.getUserName(ri.userId, out isFollow, container, true, form.config);
-					var userFollow = (userName == null || container == null) ? "" : (isFollow ? "フォロー解除する" : "フォローする");
-					
+				if (!isContainUser) {
 					var ai = new AlartInfo(ri.comId, ri.userId, 
 							ri.comName, ri.hostName, "", now, false, false, 
 							false, false, false, false, false, 
@@ -1103,9 +1102,7 @@ namespace namaichi.alart
 					ai.textColor = textColor;
 					ai.backColor = backColor;
 					ai.soundType = soundtype;
-					if (!bool.Parse(form.config.get("IsAddAlartedUserToUserList")))
-						form.formAction(() => alartListDataSource.Add(ai));
-					else {
+					if (bool.Parse(form.config.get("IsAddAlartedUserToUserList"))) {
 						ai.communityId = null;
 						ai.communityName = null;
 						form.formAction(() => form.userAlartListDataSource.Add(ai));

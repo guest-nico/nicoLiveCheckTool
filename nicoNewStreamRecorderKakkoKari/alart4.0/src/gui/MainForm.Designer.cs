@@ -325,6 +325,13 @@ namespace namaichi
 			this.editLineMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.removeLineMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+			this.alartComListFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.alartListFollowMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.alartListFollowComMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.alartListFollowUserMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.alartListUnFollowComMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.alartListUnFollowUserMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator41 = new System.Windows.Forms.ToolStripSeparator();
 			this.openAppliAMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliBMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliCMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -447,6 +454,8 @@ namespace namaichi
 			this.toolStripMenuItem36 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem37 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator32 = new System.Windows.Forms.ToolStripSeparator();
+			this.alartUserListFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator40 = new System.Windows.Forms.ToolStripSeparator();
 			this.openAppliAUserFavoriteMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliBUserFavoriteMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliCUserFavoriteMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -608,6 +617,7 @@ namespace namaichi
 			this.statusStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.alartList)).BeginInit();
 			this.contextMenuStrip1.SuspendLayout();
+			this.alartListFollowMenu.SuspendLayout();
 			this.notifyIconMenuStrip.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage3.SuspendLayout();
@@ -2807,6 +2817,8 @@ namespace namaichi
 									this.editLineMenu,
 									this.removeLineMenu,
 									this.toolStripSeparator8,
+									this.alartComListFollowMenu,
+									this.toolStripSeparator41,
 									this.openAppliAMenu,
 									this.openAppliBMenu,
 									this.openAppliCMenu,
@@ -2818,7 +2830,7 @@ namespace namaichi
 									this.openAppliIMenu,
 									this.openAppliJMenu});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(269, 418);
+			this.contextMenuStrip1.Size = new System.Drawing.Size(269, 446);
 			this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStrip1Opening);
 			// 
 			// openLastHosoMenu
@@ -2891,6 +2903,58 @@ namespace namaichi
 			// 
 			this.toolStripSeparator8.Name = "toolStripSeparator8";
 			this.toolStripSeparator8.Size = new System.Drawing.Size(265, 6);
+			// 
+			// alartComListFollowMenu
+			// 
+			this.alartComListFollowMenu.DropDown = this.alartListFollowMenu;
+			this.alartComListFollowMenu.Name = "alartComListFollowMenu";
+			this.alartComListFollowMenu.Size = new System.Drawing.Size(268, 22);
+			this.alartComListFollowMenu.Text = "フォロー";
+			// 
+			// alartListFollowMenu
+			// 
+			this.alartListFollowMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.alartListFollowComMenu,
+									this.alartListFollowUserMenu,
+									this.alartListUnFollowComMenu,
+									this.alartListUnFollowUserMenu});
+			this.alartListFollowMenu.Name = "contextMenuStrip6";
+			this.alartListFollowMenu.OwnerItem = this.alartUserListFollowMenu;
+			this.alartListFollowMenu.Size = new System.Drawing.Size(248, 92);
+			this.alartListFollowMenu.Opening += new System.ComponentModel.CancelEventHandler(this.AlartListFollowMenuOpening);
+			// 
+			// alartListFollowComMenu
+			// 
+			this.alartListFollowComMenu.Name = "alartListFollowComMenu";
+			this.alartListFollowComMenu.Size = new System.Drawing.Size(247, 22);
+			this.alartListFollowComMenu.Text = "この行のコミュニティをフォローする";
+			this.alartListFollowComMenu.Click += new System.EventHandler(this.AlartListFollowComMenuClick);
+			// 
+			// alartListFollowUserMenu
+			// 
+			this.alartListFollowUserMenu.Name = "alartListFollowUserMenu";
+			this.alartListFollowUserMenu.Size = new System.Drawing.Size(247, 22);
+			this.alartListFollowUserMenu.Text = "この行のユーザーをフォローする";
+			this.alartListFollowUserMenu.Click += new System.EventHandler(this.AlartListFollowUserMenuClick);
+			// 
+			// alartListUnFollowComMenu
+			// 
+			this.alartListUnFollowComMenu.Name = "alartListUnFollowComMenu";
+			this.alartListUnFollowComMenu.Size = new System.Drawing.Size(247, 22);
+			this.alartListUnFollowComMenu.Text = "この行のコミュニティをフォロー解除する";
+			this.alartListUnFollowComMenu.Click += new System.EventHandler(this.AlartListUnFollowComMenuClick);
+			// 
+			// alartListUnFollowUserMenu
+			// 
+			this.alartListUnFollowUserMenu.Name = "alartListUnFollowUserMenu";
+			this.alartListUnFollowUserMenu.Size = new System.Drawing.Size(247, 22);
+			this.alartListUnFollowUserMenu.Text = "この行のユーザーをフォロー解除する";
+			this.alartListUnFollowUserMenu.Click += new System.EventHandler(this.AlartListUnFollowUserMenuClick);
+			// 
+			// toolStripSeparator41
+			// 
+			this.toolStripSeparator41.Name = "toolStripSeparator41";
+			this.toolStripSeparator41.Size = new System.Drawing.Size(265, 6);
 			// 
 			// openAppliAMenu
 			// 
@@ -3786,6 +3850,7 @@ namespace namaichi
 			this.userAlartList.Sorted += new System.EventHandler(this.UserAlartListSorted);
 			this.userAlartList.DragDrop += new System.Windows.Forms.DragEventHandler(this.UserAlartListDragDrop);
 			this.userAlartList.DragEnter += new System.Windows.Forms.DragEventHandler(this.listDragEnter);
+			this.userAlartList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AlartListKeyDown);
 			// 
 			// dataGridViewTextBoxColumn25
 			// 
@@ -4037,6 +4102,8 @@ namespace namaichi
 									this.toolStripMenuItem36,
 									this.toolStripMenuItem37,
 									this.toolStripSeparator32,
+									this.alartUserListFollowMenu,
+									this.toolStripSeparator40,
 									this.openAppliAUserFavoriteMenu,
 									this.openAppliBUserFavoriteMenu,
 									this.openAppliCUserFavoriteMenu,
@@ -4048,7 +4115,7 @@ namespace namaichi
 									this.openAppliIUserFavoriteMenu,
 									this.openAppliJUserFavoriteMenu});
 			this.contextMenuStrip4.Name = "contextMenuStrip1";
-			this.contextMenuStrip4.Size = new System.Drawing.Size(269, 374);
+			this.contextMenuStrip4.Size = new System.Drawing.Size(269, 402);
 			// 
 			// toolStripMenuItem10
 			// 
@@ -4106,6 +4173,18 @@ namespace namaichi
 			// 
 			this.toolStripSeparator32.Name = "toolStripSeparator32";
 			this.toolStripSeparator32.Size = new System.Drawing.Size(265, 6);
+			// 
+			// alartUserListFollowMenu
+			// 
+			this.alartUserListFollowMenu.DropDown = this.alartListFollowMenu;
+			this.alartUserListFollowMenu.Name = "alartUserListFollowMenu";
+			this.alartUserListFollowMenu.Size = new System.Drawing.Size(268, 22);
+			this.alartUserListFollowMenu.Text = "フォロー";
+			// 
+			// toolStripSeparator40
+			// 
+			this.toolStripSeparator40.Name = "toolStripSeparator40";
+			this.toolStripSeparator40.Size = new System.Drawing.Size(265, 6);
 			// 
 			// openAppliAUserFavoriteMenu
 			// 
@@ -5615,6 +5694,7 @@ namespace namaichi
 			this.statusStrip1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.alartList)).EndInit();
 			this.contextMenuStrip1.ResumeLayout(false);
+			this.alartListFollowMenu.ResumeLayout(false);
 			this.notifyIconMenuStrip.ResumeLayout(false);
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
@@ -5656,6 +5736,15 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripMenuItem alartUserListFollowMenu;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator41;
+		private System.Windows.Forms.ToolStripMenuItem alartComListFollowMenu;
+		private System.Windows.Forms.ContextMenuStrip alartListFollowMenu;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator40;
+		private System.Windows.Forms.ToolStripMenuItem alartListUnFollowUserMenu;
+		private System.Windows.Forms.ToolStripMenuItem alartListUnFollowComMenu;
+		private System.Windows.Forms.ToolStripMenuItem alartListFollowUserMenu;
+		private System.Windows.Forms.ToolStripMenuItem alartListFollowComMenu;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem57;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
 		private System.Windows.Forms.ToolStripMenuItem alartListUpOnAirMenu;

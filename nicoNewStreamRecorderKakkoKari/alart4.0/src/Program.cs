@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Net;
 using System.Windows.Forms;
 using System.Threading;
 
@@ -18,7 +19,6 @@ namespace namaichi
 	internal sealed class Program
 	{
 		public static string arg = "";
-		public static string dotNetVersion = "4.0";
 		
 		/// <summary>
 		/// Program entry point.
@@ -39,8 +39,11 @@ namespace namaichi
 				
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
+			#if !NET40
+				ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls |SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+			#endif
 			
-			var form = new MainForm(args, dotNetVersion);
+			var form = new MainForm(args);
 			
 			#if !DEBUG
 				if (!bool.Parse(form.config.get("IsAllowMultiProcess"))) {

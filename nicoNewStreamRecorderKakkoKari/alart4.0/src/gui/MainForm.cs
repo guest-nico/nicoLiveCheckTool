@@ -75,7 +75,6 @@ namespace namaichi
 		
 		public Mutex mutex = null;
 		//private Thread madeThread;
-		private string dotNetVersion = null;
 		
 		private DateTime lastBalloonTime = DateTime.MinValue;
 		private DateTime lastIconBalloonTime = DateTime.MinValue;
@@ -108,12 +107,9 @@ namespace namaichi
 		private string[] liveListSearchStr = new string[]{""};
 		private string[] alartListSearchStr = new string[]{""};
 		
-		public MainForm(string[] args, string dotNetVersion)
+		public MainForm(string[] args)
 		{
-			
-			
 			madeThread = Thread.CurrentThread;
-			this.dotNetVersion = dotNetVersion;
 			toolMenuProcess = new ToolMenuProcess(this);
 			
 			//config.set("IsTimeTable", "false");
@@ -593,7 +589,7 @@ namespace namaichi
 			
 			//dll
 			var task = Task.Factory.StartNew(() => {
-				util.dllCheck(this, dotNetVersion);
+				util.dllCheck(this);
 				xpTest();
 			});
 			
@@ -5030,13 +5026,15 @@ namespace namaichi
 			
 			var id = util.getRegGroup(userAddText.Text, "(\\d+)");
 			if (id == null) {
-				MessageBox.Show("読み込めませんでした", "");
+				MessageBox.Show("IDを読み込めませんでした", "");
+				userAddText.Select();
 				return;
 			}
 			bool isFollow = false;
 			var name = util.getUserName(id, out isFollow, check.container, true, config);
 			if (name == null) {
-				MessageBox.Show("読み込めませんでした", "");
+				MessageBox.Show("ユーザー情報を取得できませんでした", "");
+				userAddText.Select();
 				return;
 			}
 			
@@ -5045,6 +5043,7 @@ namespace namaichi
 					foreach (var ai in userAlartListDataSource) {
 						if (ai.hostId == id) {
 							MessageBox.Show("既に登録されています", "");
+							userAddText.Select();
 							return;
 						}
 					}
@@ -5071,6 +5070,8 @@ namespace namaichi
 					_ai.backColor = backColor;
 					_ai.soundType = soundtype;
 					userAlartListDataSource.Add(_ai);
+					userAddText.Text = "";
+					userAddText.Select();
 					
 					Task.Factory.StartNew(() => {
 						new AlartListFileManager(true, this).save();
@@ -6343,6 +6344,13 @@ namespace namaichi
 			var isUserMode = !favoriteCommunityBtn.Checked;
 			alartListFollowComMenu.Visible = 
 					alartListUnFollowComMenu.Visible = !isUserMode;
+		}
+		void UserAddTextKeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar == '\r' || e.KeyChar == '\n') {
+				userAddBtn.PerformClick();
+				e.Handled = true;
+			}
 		}
 	}
 }

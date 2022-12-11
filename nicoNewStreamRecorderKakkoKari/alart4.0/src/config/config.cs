@@ -225,7 +225,7 @@ public class config
 			{"soundCVolume","50"},
 			{"onlyIconColor","#000000"},
 			
-			{"defaultBehavior","0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"},
+			{"defaultBehavior","appliJChkBox:False,appliIChkBox:False,appliHChkBox:False,appliGChkBox:False,appliEChkBox:False,appliDChkBox:False,appliCChkBox:False,appliBChkBox:False,isPopupChkBox:False,isBaloonChkBox:False,isWebChkBox:False,isMailChkBox:False,isSoundChkBox:False,appliAChkBox:False,appliFChkBox:False,isDefaultAutoReserveChkBox:False,isDefaultSoundIdChkBox:True"},
 			{"defaultTextColor","#000000"},
 			{"defaultBackColor","#ffe0ff"},
 			{"defaultSound","0"},
@@ -326,7 +326,7 @@ public class config
 	        {"pushChId", ""},
 	        {"appPushId", ""},
 	        {"appPushToken", ""},
-	        {"nicoCasAppVer", "3.38.0"},
+	        {"nicoCasAppVer", "3.25.0"},
 	        {"niconicoAppVer", "6.14.1"},
 			
 	        {"thresholdpage", "10"},

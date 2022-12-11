@@ -340,10 +340,10 @@ string param;
 var url = "https://api.cas.nicovideo.jp/v1/services/ex/app/nicocas_android/installations";
 var headers = new Dictionary<string, string>() {
       {"Content-Type", "application/json; charset=UTF-8"},
-      {"User-Agent", "nicocas-Android/3.3.0"},
+      {"User-Agent", "nicocas-Android/3.44.1"}, //ニコニコ生放送アプリのバージョン
       {"Cookie", "user_session=" + userSession},
       {"X-Frontend-Id", "90"},
-      {"X-Frontend-Version", "3.3.0"},
+      {"X-Frontend-Version", "3.44.1"}, //ニコニコ生放送アプリのバージョン
       {"X-Os-Version", "22"},
       {"X-Model-Name", "dream2qltechn"},
       {"X-Connection-Environment", "wifi"},
@@ -388,6 +388,9 @@ else {
 }
 ```
 [*AppPushReceiver.cs*](https://github.com/guest-nico/nicoLiveCheckTool/blob/master/nicoNewStreamRecorderKakkoKari/alart4.0/src/alart/AppPushReceiver.cs)  
+
+ニコニコ生放送アプリのバージョンについて  
+ヘッダーに指定するニコニコ生放送アプリのバージョンは、時々以前のバージョンでは接続できなくなることがあるようでした。  
 
 ```
 //niconicoアプリ用 現在は使用していません

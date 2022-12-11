@@ -33,8 +33,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.110";
-	public static string versionDayStr = "2022/10/20";
+	public static string versionStr = "ver0.1.7.111";
+	public static string versionDayStr = "2022/12/11";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -707,9 +707,9 @@ class util {
 		}
 		return null;
 	}
-	public static string postResStr(string url, Dictionary<string, string> headers, byte[] content) {
+	public static string postResStr(string url, Dictionary<string, string> headers, byte[] content, bool isGetErrorMessage = false) {
 		try {
-			var res = sendRequest(url, headers, content, "POST");
+			var res = sendRequest(url, headers, content, "POST", isGetErrorMessage);
 			if (res == null) {
 				debugWriteLine("postResStr res null");
 				return null;
@@ -1605,7 +1605,7 @@ class util {
         var utB = Encoding.Convert(Encoding.Unicode, Encoding.UTF8, b);
         return Encoding.UTF8.GetString(utB);
     }
-    public static void dllCheck(namaichi.MainForm form, string dotNetVersion) {
+    public static void dllCheck(namaichi.MainForm form) {
 		var path = getJarPath()[0];
 		var dlls = new string[]{"websocket4net.dll", 
 				//"NAudio.dll",
@@ -1628,7 +1628,7 @@ class util {
 		if (msg != "") 
 			form.formAction(() => util.showMessageBoxCenterForm(form, path + "内に" + msg + "が見つかりませんでした"));
 		
-		if (dotNetVersion == "4.0") {
+		#if NET40
 			//.net4 dll
 			dlls = new string[]{"Microsoft.Threading.Tasks.dll", 
 					"Microsoft.Threading.Tasks.Extensions.Desktop.dll",
@@ -1643,8 +1643,7 @@ class util {
 			}
 			if (msg != "") 
 				form.formAction(() => util.showMessageBoxCenterForm(form, path + "内に" + msg + "が見つかりませんでした。ver0.1.7.45以前からの更新の場合、解凍してできたファイルをこのフォルダに全てコピーすると動作するかもしれません。"));
-		}
-		
+    	#endif
 	}
     public static string getTimeGuid() {
 		var dt = DateTime.Now;

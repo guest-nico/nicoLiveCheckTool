@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 using System.Reflection.Emit;
+using System.Security.Authentication;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Net;
@@ -335,12 +336,16 @@ namespace namaichi.alart
 				
 				var param = "{\"token\": \"" + pushToken + "\"}";
 				byte[] postDataBytes = Encoding.ASCII.GetBytes(param);
-				var res = util.postResStr(url, headers, postDataBytes);
+				var res = util.postResStr(url, headers, postDataBytes, true);
 				util.debugWriteLine("app push send token " + res);
-				if (res == null) {
-					util.updateAppVersion("nicocas", config);
-					headers["User-Agent"] = "nicocas-Android/" + config.get("nicoCasAppVer");
-					headers["X-Frontend-Version"] = config.get("nicoCasAppVer");
+				if (res == null) return false;
+				if (res.IndexOf("UPGRADE_REQUIRED") > -1) {
+					//util.updateAppVersion("nicocas", config);
+					var ver = util.getRegGroup(res, "version\":\"(.+?)\"");
+					if (ver == null) return false;
+					config.set("nicoCasAppVer", ver);
+					headers["User-Agent"] = "nicocas-Android/" + ver;
+					headers["X-Frontend-Version"] = ver;
 					res = util.postResStr(url, headers, postDataBytes);
 					util.debugWriteLine("app push send token2 " + res);
 					if (res == null) {
@@ -403,7 +408,11 @@ namespace namaichi.alart
 				
 				using (var client = new TcpClient("mtalk.google.com", 5228))
 				using (sslStream = new SslStream(client.GetStream(), false, delegate { return true; })) {
-				    sslStream.AuthenticateAsClient("mtalk.google.com");
+					#if NET40
+				    	sslStream.AuthenticateAsClient("mtalk.google.com");
+				    #else
+				    	sslStream.AuthenticateAsClient("mtalk.google.com", null, SslProtocols.Tls | (SslProtocols)768 | (SslProtocols)3072, true);
+				    #endif
 				    sslStream.ReadTimeout = 100 * 60 * 1000;
 					
 					sslStream.Write(new byte[]{kMCSVersion, (byte)MCSProtoTag.kLoginRequestTag});
@@ -787,13 +796,6 @@ namespace namaichi.alart
 					using (var ms = new MemoryStream(msg.ToArray())) {
 						loginResp = Serializer.Deserialize<LoginResponse>(ms);
 					}
-					/*
-					using (var ms = new MemoryStream(msg.ToArray()))
-					using (var cs = new  CodedInputStream(ms)) {
-						lresp.MergeFrom(cs);
-						
-					}
-					*/ 
 					util.debugWriteLine("RECV LOGIN RESP " + loginResp);
 					return loginResp;
 				case MCSProtoTag.kIqStanzaTag:

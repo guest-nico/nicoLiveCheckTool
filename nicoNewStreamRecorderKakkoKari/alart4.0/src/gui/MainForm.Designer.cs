@@ -331,6 +331,7 @@ namespace namaichi
 			this.alartListFollowUserMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.alartListUnFollowComMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.alartListUnFollowUserMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.alartUserListFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator41 = new System.Windows.Forms.ToolStripSeparator();
 			this.openAppliAMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliBMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -454,7 +455,6 @@ namespace namaichi
 			this.toolStripMenuItem36 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem37 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator32 = new System.Windows.Forms.ToolStripSeparator();
-			this.alartUserListFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator40 = new System.Windows.Forms.ToolStripSeparator();
 			this.openAppliAUserFavoriteMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliBUserFavoriteMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -2919,7 +2919,7 @@ namespace namaichi
 									this.alartListUnFollowComMenu,
 									this.alartListUnFollowUserMenu});
 			this.alartListFollowMenu.Name = "contextMenuStrip6";
-			this.alartListFollowMenu.OwnerItem = this.alartUserListFollowMenu;
+			this.alartListFollowMenu.OwnerItem = this.alartComListFollowMenu;
 			this.alartListFollowMenu.Size = new System.Drawing.Size(248, 92);
 			this.alartListFollowMenu.Opening += new System.ComponentModel.CancelEventHandler(this.AlartListFollowMenuOpening);
 			// 
@@ -2950,6 +2950,13 @@ namespace namaichi
 			this.alartListUnFollowUserMenu.Size = new System.Drawing.Size(247, 22);
 			this.alartListUnFollowUserMenu.Text = "この行のユーザーをフォロー解除する";
 			this.alartListUnFollowUserMenu.Click += new System.EventHandler(this.AlartListUnFollowUserMenuClick);
+			// 
+			// alartUserListFollowMenu
+			// 
+			this.alartUserListFollowMenu.DropDown = this.alartListFollowMenu;
+			this.alartUserListFollowMenu.Name = "alartUserListFollowMenu";
+			this.alartUserListFollowMenu.Size = new System.Drawing.Size(268, 22);
+			this.alartUserListFollowMenu.Text = "フォロー";
 			// 
 			// toolStripSeparator41
 			// 
@@ -3781,6 +3788,7 @@ namespace namaichi
 			this.userAddText.Name = "userAddText";
 			this.userAddText.Size = new System.Drawing.Size(180, 19);
 			this.userAddText.TabIndex = 26;
+			this.userAddText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.UserAddTextKeyPress);
 			// 
 			// label6
 			// 
@@ -4173,13 +4181,6 @@ namespace namaichi
 			// 
 			this.toolStripSeparator32.Name = "toolStripSeparator32";
 			this.toolStripSeparator32.Size = new System.Drawing.Size(265, 6);
-			// 
-			// alartUserListFollowMenu
-			// 
-			this.alartUserListFollowMenu.DropDown = this.alartListFollowMenu;
-			this.alartUserListFollowMenu.Name = "alartUserListFollowMenu";
-			this.alartUserListFollowMenu.Size = new System.Drawing.Size(268, 22);
-			this.alartUserListFollowMenu.Text = "フォロー";
 			// 
 			// toolStripSeparator40
 			// 

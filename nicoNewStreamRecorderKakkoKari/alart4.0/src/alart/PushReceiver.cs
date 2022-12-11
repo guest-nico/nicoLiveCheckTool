@@ -102,7 +102,11 @@ namespace namaichi.alart
 				headers.Add(new KeyValuePair<string, string>("Ssc-WebSocket-Version", "13"));
 				
 				util.debugWriteLine("push connect  ");
-				ws = new WebSocket(url, "", null, headers, util.userAgent, "", WebSocketVersion.Rfc6455, null, SslProtocols.None);
+				#if NET40
+					ws = new WebSocket(url, "", null, headers, util.userAgent, "", WebSocketVersion.Rfc6455, null, SslProtocols.None);
+				#else
+					ws = new WebSocket(url, "", null, headers, util.userAgent, "", WebSocketVersion.Rfc6455, null, SslProtocols.Tls | (SslProtocols)768 | (SslProtocols)3072);
+				#endif
 				ws.Opened += onOpen;
 				ws.Closed += onClose;
 				ws.DataReceived += onDataReceive;
@@ -385,8 +389,8 @@ namespace namaichi.alart
 		}
 		public List<RssItem> getItem(string dec) {
 			
-			//com "{\"title\":\"すのーまんさんが生放送を開始\",\"body\":\"名作探訪録 で、「【GB】ポケットキョロちゃん【初見プレイ】」を放送\",\"icon\":\"https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/3122/31221850.jpg?1496114222\",\"data\":{\"on_click\":\"http://live.nicovideo.jp/watch/lv318353209?from=webpush&_topic=live_user_program_onairs\",\"created_at\":\"2019-02-06T09:00:05.738+09:00\",\"ttl\":600,\"log_params\":{\"content_type\":\"live.user.program.onairs\",\"content_ids\":\"lv318353209\"}}}";
-			//ch "{\"title\":\"KawaiianTVが生放送を開始\",\"body\":\"～夢アド可鈴の深堀り情報番組！？～ YUMEステーション #62\",\"icon\":\"https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/ch2601967.jpg?1548247262\",\"data\":{\"on_click\":\"http://live.nicovideo.jp/watch/lv318248031?from=webpush&_topic=live_channel_program_onairs\",\"created_at\":\"2019-02-06T19:30:10.941+09:00\",\"ttl\":600,\"log_params\":{\"content_type\":\"live.channel.program.onairs\",\"content_ids\":\"lv318248031\"}}}";
+			//com "{\"title\":\"userNameさんが生放送を開始\",\"body\":\"comName で、「title」を放送\",\"icon\":\"https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/0000/00000000.jpg?0000000000\",\"data\":{\"on_click\":\"http://live.nicovideo.jp/watch/lv000000000?from=webpush&_topic=live_user_program_onairs\",\"created_at\":\"2019-02-06T09:00:05.738+09:00\",\"ttl\":600,\"log_params\":{\"content_type\":\"live.user.program.onairs\",\"content_ids\":\"lv000000000\"}}}";
+			//ch "{\"title\":\"channelNameが生放送を開始\",\"body\":\"title\",\"icon\":\"https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/ch0000000.jpg?0000000000\",\"data\":{\"on_click\":\"http://live.nicovideo.jp/watch/lv000000000?from=webpush&_topic=live_channel_program_onairs\",\"created_at\":\"2019-02-06T19:30:10.941+09:00\",\"ttl\":600,\"log_params\":{\"content_type\":\"live.channel.program.onairs\",\"content_ids\":\"lv000000000\"}}}";
 			var ret = new List<RssItem>();
 			try {
 				//var isCom = dec.IndexOf("\"content_type\":\"live.user.program.onairs\"") > -1;
@@ -495,9 +499,6 @@ namespace namaichi.alart
 }
 
 /*
-\"{\"title\":\"すのーまんさんが生放送を開始\",\"body\":\"名作探訪録 で、「【GB】ポケットキョロちゃん【初見プレイ】」を放送\",\"icon\":\"https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/3122/31221850.jpg?1496114222\",\"data\":{\"on_click\":\"http://live.nicovideo.jp/watch/lv318353209?from=webpush&_topic=live_user_program_onairs\",\"created_at\":\"2019-02-06T09:00:05.738+09:00\",\"ttl\":600,\"log_params\":{\"content_type\":\"live.user.program.onairs\",\"content_ids\":\"lv318353209\"}}}\";
-
-
 Cookieの取得に成功しました
 push error {"title":"ﾃﾛｯﾌﾟ奨励さんが生放送(実験放送)を開始","body":"201111111111 で「【チカチカ注意】休憩と言う名の超絶放置をしながらネタを貼る放送【ミュート推奨】」を放送","icon":"https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/966/9662936.jpg?1337479306","data":{"on_click":"https://cas.nicovideo.jp/lv318396546?from=webpush&_topic=live_user_program_cas_onairs","created_at":"2019-02-08T14:00:07.509+09:00","ttl":600,"log_params":{"content_type":"live.user.program.cas.onairs","content_ids":"lv318396546"}}}
 push error {"title":"ふじさわさんが生放送(実験放送)を開始","body":"藤沢牧場 で「きょうのりりっくのていてん　2月8日　夜」を放送","icon":"https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/77/770606.jpg?1539041196","data":{"on_click":"https://cas.nicovideo.jp/lv318401367?from=webpush&_topic=live_user_program_cas_onairs","created_at":"2019-02-08T15:51:14.889+09:00","ttl":600,"log_params":{"content_type":"live.user.program.cas.onairs","content_ids":"lv318401367"}}}

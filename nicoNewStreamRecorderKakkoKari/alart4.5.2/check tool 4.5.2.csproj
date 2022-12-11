@@ -60,16 +60,16 @@
       <HintPath>..\alart4.0\bin\Debug\Interop.IWshRuntimeLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\newtonsoft.json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\packages\protobuf-net.2.4.4.nupkg\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="SnkLib.App.CookieGetter">
-      <HintPath>..\packages\SnkLib.App.CookieGetter.2.4.0.0\lib\net45\SnkLib.App.CookieGetter.dll</HintPath>
+      <HintPath>..\packages\SnkLib.App.CookieGetter.2.4.2.0\lib\net45\SnkLib.App.CookieGetter.dll</HintPath>
     </Reference>
     <Reference Include="SnkLib.App.CookieGetter.Forms">
-      <HintPath>..\packages\SnkLib.App.CookieGetter.Forms.1.4.1.0\lib\net45\SnkLib.App.CookieGetter.Forms.dll</HintPath>
+      <HintPath>..\packages\SnkLib.App.CookieGetter.Forms.1.4.3.0\lib\net45\SnkLib.App.CookieGetter.Forms.dll</HintPath>
     </Reference>
     <Reference Include="SuperSocket.ClientEngine">
       <HintPath>..\packages\SuperSocket.ClientEngine.Core.0.10.0\lib\net45\SuperSocket.ClientEngine.dll</HintPath>
@@ -104,6 +104,9 @@
     </Compile>
     <Compile Include="..\alart4.0\src\alart\AppPushReceiver.cs">
       <Link>src\alart\AppPushReceiver.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\alart\AutoReserveChecker.cs">
+      <Link>src\alart\AutoReserveChecker.cs</Link>
     </Compile>
     <Compile Include="..\alart4.0\src\alart\CategoryCheck.cs">
       <Link>src\alart\CategoryCheck.cs</Link>
@@ -142,6 +145,9 @@
     <Compile Include="..\alart4.0\src\alart\TimeTableChecker.cs">
       <Link>src\alart\TimeTableChecker.cs</Link>
     </Compile>
+    <Compile Include="..\alart4.0\src\alart\TwitterCheck.cs">
+      <Link>src\alart\TwitterCheck.cs</Link>
+    </Compile>
     <Compile Include="..\alart4.0\src\config\config.cs">
       <Link>src\config\config.cs</Link>
     </Compile>
@@ -160,6 +166,12 @@
     <Compile Include="..\alart4.0\src\gui\addTaskForm.Designer.cs">
       <Link>src\gui\addTaskForm.Designer.cs</Link>
       <DependentUpon>addTaskForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\AddTwitterForm.cs">
+      <Link>src\gui\AddTwitterForm.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\AddTwitterForm.Designer.cs">
+      <Link>src\gui\AddTwitterForm.Designer.cs</Link>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\BulkAddFromFollowAccountForm.cs">
       <Link>src\gui\BulkAddFromFollowAccountForm.cs</Link>
@@ -272,6 +284,9 @@
       <Link>src\gui\WriteThumbnailMemoForm.Designer.cs</Link>
       <DependentUpon>WriteThumbnailMemoForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\alart4.0\src\info\ActivityTimeline.cs">
+      <Link>src\info\ActivityTimeline.cs</Link>
+    </Compile>
     <Compile Include="..\alart4.0\src\info\AlartInfo.cs">
       <Link>src\info\AlartInfo.cs</Link>
     </Compile>
@@ -299,8 +314,14 @@
     <Compile Include="..\alart4.0\src\info\TaskInfo.cs">
       <Link>src\info\TaskInfo.cs</Link>
     </Compile>
+    <Compile Include="..\alart4.0\src\info\TwitterInfo.cs">
+      <Link>src\info\TwitterInfo.cs</Link>
+    </Compile>
     <Compile Include="..\alart4.0\src\Logger\TraceListener.cs">
       <Link>src\Logger\TraceListener.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\Program.cs">
+      <Link>src\Program.cs</Link>
     </Compile>
     <Compile Include="..\alart4.0\src\rec\CookieGetter.cs">
       <Link>src\rec\CookieGetter.cs</Link>
@@ -325,6 +346,9 @@
     </Compile>
     <Compile Include="..\alart4.0\src\rec\RecordingManager.cs">
       <Link>src\rec\RecordingManager.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\rec\Reservation.cs">
+      <Link>src\rec\Reservation.cs</Link>
     </Compile>
     <Compile Include="..\alart4.0\src\rec\ToolMenuChecker.cs">
       <Link>src\rec\ToolMenuChecker.cs</Link>
@@ -359,11 +383,17 @@
     <Compile Include="..\alart4.0\src\util\RegGetter.cs">
       <Link>src\util\RegGetter.cs</Link>
     </Compile>
+    <Compile Include="..\alart4.0\src\util\ReserveHistoryListFileManager.cs.cs">
+      <Link>src\util\ReserveHistoryListFileManager.cs.cs</Link>
+    </Compile>
     <Compile Include="..\alart4.0\src\util\SourceInfoSerialize.cs">
       <Link>src\util\SourceInfoSerialize.cs</Link>
     </Compile>
     <Compile Include="..\alart4.0\src\util\TaskListFileManager.cs">
       <Link>src\util\TaskListFileManager.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\util\TwitterListFileManager.cs">
+      <Link>src\util\TwitterListFileManager.cs</Link>
     </Compile>
     <Compile Include="..\alart4.0\src\util\util.cs">
       <Link>src\util\util.cs</Link>
@@ -372,7 +402,6 @@
       <Link>src\util\varint.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\Program.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\alart4.0\src\gui\%28check.ico">
@@ -394,6 +423,10 @@
     <EmbeddedResource Include="..\alart4.0\src\gui\addTaskForm.resx">
       <Link>src\gui\addTaskForm.resx</Link>
       <DependentUpon>addTaskForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\AddTwitterForm.resx">
+      <Link>src\gui\AddTwitterForm.resx</Link>
+      <DependentUpon>AddTwitterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\app.resx">
       <Link>src\gui\app.resx</Link>

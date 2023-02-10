@@ -148,11 +148,12 @@ namespace namaichi.rec
 			}
 		}
 		public string live2Reserve(bool isOverwrite) {
-			var r = getLive2ReserveRes(isOverwrite);
+			//var r = getLive2ReserveRes(isOverwrite);
+			var r = getLive2ReserveRes2();
 			if (r == "タイムシフトの予約上限に達しました。" 
 			    	&& isOverwrite) {
-				if (overwriteReserve())
-					return r;
+				//return overwriteReserve2();
+				return r;
 			}
 			return r;
 		}
@@ -204,6 +205,18 @@ namespace namaichi.rec
 			header.Add("X-Frontend-Id", "9");
 			return header;
 		}
+		private Dictionary<string, string> getLive2ReserveHeader2(string id) {
+			if (id.StartsWith("lv")) id = util.getRegGroup(lv, "(\\d+)");
+			var url = "https://live2.nicovideo.jp/api/v2/programs/" + lv + "/timeshift/reservation";
+			var header = new Dictionary<string, string>();
+			header.Add("Cookie", cc.GetCookieHeader(new Uri(url)));
+			header.Add("Accept", "application/json");
+			header.Add("Referer", "https://live.nicovideo.jp/");
+			header.Add("Origin", "https://live2.nicovideo.jp");
+			header.Add("User-Agent", util.userAgent);
+			return header;
+		}
+		/*
 		private bool overwriteReserve() {
 			var res = util.getPageSource("https://live.nicovideo.jp/my_timeshift_list", cc);
 			if (res == null) return false;
@@ -215,5 +228,31 @@ namespace namaichi.rec
 			res = util.getPageSource(url, cc);
 			return res != null;
 		}
+		*/
+		public string getLive2ReserveRes2() {
+			try {
+				var url = "https://live2.nicovideo.jp/api/v2/programs/" + lv + "/timeshift/reservation";
+				var header = getLive2ReserveHeader2(lv);
+				var r = util.sendRequest(url, header, null, "POST", true);
+				if (r == null) return null;
+				using (var rr = r.GetResponseStream())
+				using (var sr = new StreamReader(rr)) {
+					var res = sr.ReadToEnd();
+					if (res.IndexOf("\"status\":200") > -1) return "ok";
+					if (res.IndexOf("\"errorCode\":\"OVER_USE\"") > -1)
+						return "タイムシフトの予約上限に達しました。";
+					if (res.IndexOf("\"errorCode\":\"PROGRAM_NOT_FOUND\"") > -1)
+						return "放送が予約に対応していない等、何らかの理由により予約できませんでした";
+					if (res.IndexOf("\"errorCode\":\"DUPLICATED\"") > -1)
+						return "既に予約済みです。";
+					return null;
+				}
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+				return null;
+			}
+			
+		}
 	}
+	 
 }

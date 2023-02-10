@@ -61,7 +61,7 @@ namespace namaichi.alart
 				clearConfigSetting();
 				
 				if (!getOkIdToken(out id, out token)) {
-					check.form.addLogText("スマホ通知のIDが取得できませんでした");
+					check.form.addLogText("スマホプッシュ通知のIDが取得できませんでした");
 					return;
 				}
 				config.set("appPushId", id);
@@ -171,7 +171,7 @@ namespace namaichi.alart
 				var rb = util.postResBytes(url, headers, postDataBytes);
 				if (rb == null) {
 					util.debugWriteLine("checkin post error");
-					check.form.addLogText("スマホ通知のチェックインのPOSTに失敗しました");
+					check.form.addLogText("スマホプッシュ通知のチェックインのPOSTに失敗しました");
 					return false;
 				}
 				
@@ -197,7 +197,7 @@ namespace namaichi.alart
 				*/
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				check.form.addLogText("スマホ通知のチェックインの取得中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				check.form.addLogText("スマホプッシュ通知のチェックインの取得中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return false;
 			}
 		}
@@ -238,12 +238,12 @@ namespace namaichi.alart
 				util.debugWriteLine(token);
 				
 				if (token == null) {
-					check.form.addLogText("スマホ通知のトークンの取得に失敗しました");
+					check.form.addLogText("スマホプッシュ通知のトークンの取得に失敗しました");
 				}
 				return token;
 			} catch (Exception e) {
 				util.debugWriteLine("gettoken error " + e.Message + e.Source + e.StackTrace + e.TargetSite);
-				check.form.addLogText("スマホ通知のトークンの取得中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				check.form.addLogText("スマホプッシュ通知のトークンの取得中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return null;
 			}
 		}
@@ -252,7 +252,7 @@ namespace namaichi.alart
 			util.debugWriteLine("app push sendTokenNico " + pushToken);
 			try {
 				if (check.container == null) {
-					check.form.addLogText("Cookieが確認できなかったためスマホ通知のトークンを送信できませんでした");
+					check.form.addLogText("Cookieが確認できなかったためスマホプッシュ通知のトークンを送信できませんでした");
 					return false;
 				}
 				var urlCookie = check.container.GetCookieHeader(new Uri("https://live2.nicovideo.jp")) + ";";
@@ -282,12 +282,12 @@ namespace namaichi.alart
 				
 				byte[] postDataBytes = Encoding.ASCII.GetBytes(param);
 				var r = util.postResStr(url, headers, postDataBytes);
-				if (r == null) check.form.addLogText("スマホ通知のトークンの送信に失敗しました");
+				if (r == null) check.form.addLogText("スマホプッシュ通知のトークンの送信に失敗しました");
 				util.debugWriteLine(r);
 				return r == "{}";
 			} catch (Exception e) {
 				util.debugWriteLine("gettoken error " + e.Message + e.Source + e.StackTrace + e.TargetSite);
-				check.form.addLogText("スマホ通知のトークンの送信中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				check.form.addLogText("スマホプッシュ通知のトークンの送信中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return false;
 			}
 		}
@@ -296,7 +296,7 @@ namespace namaichi.alart
 			util.debugWriteLine("app push sendTokenNico " + pushToken);
 			try {
 				if (check.container == null) {
-					check.form.addLogText("Cookieが確認できなかったためスマホ通知のトークンを送信できませんでした");
+					check.form.addLogText("Cookieが確認できなかったためスマホプッシュ通知のトークンを送信できませんでした");
 					return false;
 				}
 				
@@ -315,6 +315,21 @@ namespace namaichi.alart
 					{"Connection", "Keep-Alive"},
 					//{"Accept-Encoding", "gzip"},
 				};
+				var headersNicoPush = new Dictionary<string, string>() {
+					{"Content-Type", "application/json; charset=UTF-8"},
+					{"X-NICOPUSH-PROJECT", "gPAEzReVxIr4ddJB"},
+					{"User-Agent", "nicocas-Android/" + config.get("nicoCasAppVer")},
+					{"Cookie", "user_session=" + userSession},
+					{"X-Frontend-Id", "90"},
+					{"X-Frontend-Version", config.get("nicoCasAppVer")},
+					{"X-Os-Version", "25"},
+					{"X-Model-Name", "dream2qltechn"},
+					{"X-Connection-Environment", "wifi"},
+					{"X-Request-With", ""},
+					{"Connection", "Keep-Alive"},
+					//{"Accept-Encoding", "gzip"},
+				};
+				/*
 				var acPassHeaders = new Dictionary<string, string>() {
 					//{"Content-Type", "application/json; charset=UTF-8"},
 					{"User-Agent", "okhttp/3.10.0"},
@@ -327,7 +342,7 @@ namespace namaichi.alart
 					{"Connection", "Keep-Alive"},
 					//{"Accept-Encoding", "gzip"},
 				};
-				
+				*/
 				//var url = "https://account.nicovideo.jp/api/v1/users/account_passport";
 				//var r = util.postResStr(url, acPassHeaders, null);
 				//util.debugWriteLine("account_passport " + r);
@@ -349,23 +364,66 @@ namespace namaichi.alart
 					res = util.postResStr(url, headers, postDataBytes);
 					util.debugWriteLine("app push send token2 " + res);
 					if (res == null) {
-						check.form.addLogText("スマホ通知のトークンの送信に失敗しました");
+						check.form.addLogText("スマホプッシュ通知のトークンの送信に失敗しました");
 						return false;
 					}
 				}
+				if (res.IndexOf("\"status\":200") == -1) {
+					check.form.addLogText("スマホプッシュ通知のトークンの送信に失敗しました " + res);
+					check.form.addLogText("スマホプッシュ通知のトークンを送信できませんでした " + (pushToken == null ? "null" : (pushToken == "" ? "no" : (pushToken.Length > 5 ? pushToken.Substring(0, 5) : "str"))));
+					return false;
+				}
+				
+				url = "https://public.api.nicovideo.jp/v1/nicopush/topics.json?topics=cas_all_nicocas";
+				var rr = util.sendRequest(url, headersNicoPush, null, "GET", true);
+				if (rr == null) {
+					check.form.addLogText("スマホプッシュ通知の設定の取得に失敗しました");
+					//return false;
+				}
+				if (rr != null) {
+					using (var sr = new StreamReader(rr.GetResponseStream())) {
+						res = sr.ReadToEnd();
+						if (res.IndexOf("\"status\":200") == -1) {
+							check.form.addLogText("スマホプッシュ通知の設定の取得に失敗しました");
+						}
+						if (res.IndexOf("\"on\":true") == -1)
+							check.form.addLogText("スマホアプリ内でプッシュ通知が有効に設定されていませんでした。スマホプッシュ通知を受信できない可能性があります。");
+					}
+				}
+				
+				url = "https://public.api.nicovideo.jp/v1/nicopush/topics.json?topics=cas_all_user&topics=cas_all_channel&topics=cas_all_admin";
+				rr = util.sendRequest(url, headersNicoPush, null, "GET", true);
+				if (rr == null) {
+					check.form.addLogText("スマホプッシュ通知の設定の取得に失敗しました");
+					//return false;
+				}
+				if (rr != null) {
+					using (var sr = new StreamReader(rr.GetResponseStream())) {
+						res = sr.ReadToEnd();
+						if (res.IndexOf("\"status\":200") == -1) {
+							check.form.addLogText("スマホプッシュ通知の設定の取得に失敗しました");
+						}
+						if (res.IndexOf("\"cas_all_channel\",\"on\":false") > -1)
+							check.form.addLogText("スマホアプリ内でチャンネル放送のプッシュ通知が有効に設定されていませんでした。スマホプッシュ通知を受信できない可能性があります。");
+						if (res.IndexOf("\"cas_all_user\",\"on\":false") > -1)
+							check.form.addLogText("スマホアプリ内でユーザー放送のプッシュ通知が有効に設定されていませんでした。スマホプッシュ通知を受信できない可能性があります。");
+						//if (res.IndexOf("\"cas_all_admin\",\"on\":false") > -1)
+					}
+				}
+
 				
 				url = "https://api.cas.nicovideo.jp/v1/services/ex/app/nicocas_android/notification/blocks";
 				param = "{\"all\": [\"nicocas\"],\"channel\": [],\"user\": []}";
 				postDataBytes = Encoding.ASCII.GetBytes(param);
 				var _res = util.sendRequest(url, headers, postDataBytes, "DELETE");
-				//if (res == null) check.form.addLogText("スマホ通知のブロック設定の送信に失敗しました");
+				//if (res == null) check.form.addLogText("スマホプッシュ通知のブロック設定の送信に失敗しました");
 				if (_res != null) {
 					using (var getResStream = _res.GetResponseStream())
 					using (var resStream = new System.IO.StreamReader(getResStream)) {
 						var _r = resStream.ReadToEnd();
 						util.debugWriteLine("app push blocks delete " + _r);
 						if (_r == null || _r.IndexOf("200") == -1) 
-							check.form.addLogText("スマホ通知のブロック設定に失敗しました " + _r);
+							check.form.addLogText("スマホプッシュ通知のブロック設定に失敗しました " + _r);
 					}
 				} else util.debugWriteLine("app push blocks delete null");
 				
@@ -374,21 +432,21 @@ namespace namaichi.alart
 				param = "{\"status\": \"disabled\",\"time\": {\"end\": \"0:00\", \"start\": \"7:00\"}}";
 				postDataBytes = Encoding.ASCII.GetBytes(param);
 				_res = util.sendRequest(url, headers, postDataBytes, "PUT");
-				//if (res == null) check.form.addLogText("スマホ通知の時間設定の送信に失敗しました");
+				//if (res == null) check.form.addLogText("スマホプッシュ通知の時間設定の送信に失敗しました");
 				if (_res != null) {
 					using (var getResStream = _res.GetResponseStream())
 					using (var resStream = new System.IO.StreamReader(getResStream)) {
 						var _r = resStream.ReadToEnd();
 						util.debugWriteLine("app push time put " + _r);
 						if (_r == null || _r.IndexOf("200") == -1) 
-							check.form.addLogText("スマホ通知の時間設定に失敗しました" + _r);
+							check.form.addLogText("スマホプッシュ通知の時間設定に失敗しました" + _r);
 					}
 				} else util.debugWriteLine("app push time put null");
 				*/
 				return true;
 			} catch (Exception e) {
 				util.debugWriteLine("gettoken error " + e.Message + e.Source + e.StackTrace + e.TargetSite);
-				check.form.addLogText("スマホ通知のトークンの送信中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				check.form.addLogText("スマホプッシュ通知のトークンの送信中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return false;
 			}
 		}
@@ -452,9 +510,7 @@ namespace namaichi.alart
 				    	util.debugWriteLine("apppush after tag");
 						var _tag = (MCSProtoTag)Enum.ToObject(typeof(MCSProtoTag), responseTag);
 				    	util.debugWriteLine(DateTime.Now + " resp tag " + responseTag + " ");
-				    	
-				    	//
-				    	
+				    					    	
 				    	if (_tag == MCSProtoTag.kHeartbeatPingTag || _tag == MCSProtoTag.kCloseTag)
 				    		break;
 				    	else if (_tag != MCSProtoTag.kLoginResponseTag && _tag != MCSProtoTag.kIqStanzaTag
@@ -723,6 +779,7 @@ namespace namaichi.alart
 				
 			} catch (Exception e) {
 				util.debugWriteLine("app push getitem error " + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				check.form.addLogText("スマホプッシュ通知から受信中に何らかの問題が発生しました " + e.Message + e.Source + e.StackTrace);
 				return null;
 			}
 		}
@@ -853,7 +910,7 @@ namespace namaichi.alart
 					
 					return responseTag;
 				} catch (IOException e) {
-					if (e.Message.IndexOf("一定の時間を過ぎても") > -1) continue;
+					if (e.Message.IndexOf("一定の時間を過ぎても") > -1) return -1;
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 					return -1;
 				} catch (Exception e) {

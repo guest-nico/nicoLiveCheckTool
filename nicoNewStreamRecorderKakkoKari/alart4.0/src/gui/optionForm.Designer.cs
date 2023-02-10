@@ -2654,7 +2654,7 @@ namespace namaichi
 			// 
 			this.groupBox13.Controls.Add(this.isOverwriteOldReserveChkBox);
 			this.groupBox13.Controls.Add(this.isAutoReserveChkBox);
-			this.groupBox13.Location = new System.Drawing.Point(5, 259);
+			this.groupBox13.Location = new System.Drawing.Point(5, 269);
 			this.groupBox13.Name = "groupBox13";
 			this.groupBox13.Size = new System.Drawing.Size(420, 77);
 			this.groupBox13.TabIndex = 7;
@@ -2669,6 +2669,7 @@ namespace namaichi
 			this.isOverwriteOldReserveChkBox.TabIndex = 16;
 			this.isOverwriteOldReserveChkBox.Text = "予約リストが一杯の場合、古い予約を削除して予約する";
 			this.isOverwriteOldReserveChkBox.UseVisualStyleBackColor = true;
+			this.isOverwriteOldReserveChkBox.Visible = false;
 			// 
 			// isAutoReserveChkBox
 			// 
@@ -2687,27 +2688,28 @@ namespace namaichi
 			this.groupBox8.Controls.Add(this.isRssChkBox);
 			this.groupBox8.Location = new System.Drawing.Point(5, 10);
 			this.groupBox8.Name = "groupBox8";
-			this.groupBox8.Size = new System.Drawing.Size(420, 184);
+			this.groupBox8.Size = new System.Drawing.Size(420, 194);
 			this.groupBox8.TabIndex = 6;
 			this.groupBox8.TabStop = false;
 			this.groupBox8.Text = "取得元";
 			// 
 			// isTimeTableChkBox
 			// 
-			this.isTimeTableChkBox.Location = new System.Drawing.Point(19, 135);
+			this.isTimeTableChkBox.Location = new System.Drawing.Point(19, 147);
 			this.isTimeTableChkBox.Name = "isTimeTableChkBox";
-			this.isTimeTableChkBox.Size = new System.Drawing.Size(400, 43);
+			this.isTimeTableChkBox.Size = new System.Drawing.Size(400, 33);
 			this.isTimeTableChkBox.TabIndex = 8;
 			this.isTimeTableChkBox.Text = "公式放送の番組表から取得する\r\n（公式放送のみ取得できます）";
 			this.isTimeTableChkBox.UseVisualStyleBackColor = true;
 			// 
 			// isAppPushChkBox
 			// 
-			this.isAppPushChkBox.Location = new System.Drawing.Point(19, 96);
+			this.isAppPushChkBox.Location = new System.Drawing.Point(19, 98);
 			this.isAppPushChkBox.Name = "isAppPushChkBox";
-			this.isAppPushChkBox.Size = new System.Drawing.Size(400, 43);
+			this.isAppPushChkBox.Size = new System.Drawing.Size(400, 53);
 			this.isAppPushChkBox.TabIndex = 7;
-			this.isAppPushChkBox.Text = "スマホプッシュ通知から取得する\r\n（フォローしているユーザー、チャンネルの放送のみ取得できますがほぼ遅延なく届きます）";
+			this.isAppPushChkBox.Text = "スマホプッシュ通知から取得する\r\n（フォローしているユーザー、チャンネルの放送のみ取得できますがほぼ遅延なく届きます。スマホアプリ内でプッシュ通知をオフにしている" +
+			"場合にはスマホプッシュ通知を受信できないことがあります。）";
 			this.isAppPushChkBox.UseVisualStyleBackColor = true;
 			// 
 			// isPushChkBox
@@ -2736,7 +2738,7 @@ namespace namaichi
 			this.groupBox7.Controls.Add(this.label7);
 			this.groupBox7.Controls.Add(this.label8);
 			this.groupBox7.Controls.Add(this.rssUpdateIntervalList);
-			this.groupBox7.Location = new System.Drawing.Point(5, 200);
+			this.groupBox7.Location = new System.Drawing.Point(5, 210);
 			this.groupBox7.Name = "groupBox7";
 			this.groupBox7.Size = new System.Drawing.Size(420, 53);
 			this.groupBox7.TabIndex = 5;

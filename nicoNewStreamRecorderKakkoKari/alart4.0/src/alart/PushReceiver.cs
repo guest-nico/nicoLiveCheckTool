@@ -179,6 +179,7 @@ namespace namaichi.alart
 					break;
 				} catch (Exception ee) {
 					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					Thread.Sleep(5000);
 				}
 			}
 			
@@ -253,8 +254,8 @@ namespace namaichi.alart
 				try {
 					var dec = pc.decrypt(data, privateKey, publicKey, auth);
 					util.debugWriteLine("dec " + dec);
-					if (dec.IndexOf(".onairs\"") == -1 ||
-					   	dec == null) return;
+					if (dec.IndexOf("onairs") == -1 ||
+					    dec == null) return;
 					
 					var items = getItem(dec);
 					if (items != null) {
@@ -399,7 +400,8 @@ namespace namaichi.alart
 				string lvid, thumbnail, dt;//title, comName, hostName;//
 				//hostName = null;
 				
-				lvid = util.getRegGroup(dec, "\"content_ids\":\"(lv\\d+)\"");
+				//lvid = util.getRegGroup(dec, "\"content_ids\":\"(lv\\d+)\"");
+				lvid = util.getRegGroup(dec, "watch/(lv\\d+)");
 				if (check.checkedLvIdList.Find(x => x.lvId == lvid) != null)
 					return ret;
 				thumbnail = util.getRegGroup(dec, "\"icon\":\"(.+?)\"");

@@ -39,7 +39,7 @@ namespace namaichi.alart
 				try {
 					util.debugWriteLine("auto reserve check ");
 					
-					if (DateTime.Now - lastGetTime > TimeSpan.FromMinutes(5)) {
+					if (DateTime.Now - lastGetTime > TimeSpan.FromMinutes(10)) {
 						checkTimeline();
 						lastGetTime = DateTime.Now;
 					}
@@ -57,7 +57,7 @@ namespace namaichi.alart
 			var recentUpdateDt = DateTime.MinValue;
 			var aiList = check.form.alartListDataSource.ToList();
 			aiList.AddRange(check.form.userAlartListDataSource.ToList());
-			for (var i = 0; i < 5; i++) {
+			for (var i = 0; i < 10; i++) {
 				try {
 					util.debugWriteLine("autoreserve i " + i);
 					var _url = url + (min == null ? "" : ("?untilId=" + min));

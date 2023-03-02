@@ -2735,11 +2735,8 @@ namespace namaichi
 			
 		}
 		public void recentLiveCheck() {
-			
 			var recentNum = recentLiveCheckCore(true);
 			recentNum += recentLiveCheckCore(false);
-			
-			
 		}
 		public int recentLiveCheckCore(bool isUserMode) {
 			//var isCheck30min = bool.Parse(config.get("Ischeck30min"));
@@ -2756,7 +2753,10 @@ namespace namaichi
 					var c = getAlartListCount(isUserMode);
 					for (var i = c - 1; i > -1; i--) {
 						//util.debugWriteLine(i + " " + alartListDataSource[i].lastHosoDt + " " + alartList[7, i].Style.BackColor);
-						if (dataSource[i].recentColorMode == 0) continue;
+						if (dataSource[i].recentColorMode == 0) {
+							list.UpdateCellValue(8, i);
+							continue;
+						}
 						
 						var isRecentProcess = false;
 						if (checkMode == 0) {
@@ -2783,7 +2783,7 @@ namespace namaichi
 							for (var j = 0; j < list.Columns.Count; j++)
 								list.UpdateCellValue(j, i);
 						//}
-						
+						setNotifyIcon();
 					}
 					//var ii = notifyIcon.Icon == Icon;
 					return recentNum;

@@ -145,10 +145,9 @@ namespace namaichi.alart
 				foreach (var l in list) {
 					if (l.provider_type != "official") continue;
 					
-					l.startTime = DateTime.Parse(l.start_date + " " + l.start_time);
+					if (l.startTime == DateTime.MinValue)
+						l.startTime = DateTime.Parse(l.start_date + " " + l.start_time);
 					if ((l.status != "onair" && l.startTime < DateTime.Now.AddHours(-2))) continue;
-					
-					//if ((l.status == "onair" || l.startTime > DateTime.Now.AddHours(-2))) {
 						 var listRi = timeTableList.Find(n => n.lvId == "lv" + l.id);
 						//if (((isAllCheck && l.status == "onair") || l.startTime > DateTime.Now.AddHours(-2)) && liveList.Find(n => n.lvId == l.id) == null) {
 						
@@ -197,8 +196,7 @@ namespace namaichi.alart
 								else util.debugWriteLine("hig open start onaji " + hig.openDt + " " + hig.dt + " " + ri.lvId);
 							} else {
 								util.debugWriteLine("not found time and page");
-								var dt = DateTime.Parse(l.start_date + " " + l.start_time);
-								ri = new RssItem(l.title, "lv" + l.id, dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"),
+								ri = new RssItem(l.title, "lv" + l.id, l.startTime.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"),
 										l.description, 
 										"", 
 										"",
@@ -206,7 +204,7 @@ namespace namaichi.alart
 										l.thumbnail_url, "false", "", l.isPayment);
 								ri.type = l.provider_type;
 								ri.tags = new string[]{""};
-								ri.pubDateDt = dt;
+								ri.pubDateDt = l.startTime;
 								//if (!string.IsNullOrEmpty(hig.userName)) ri.hostName = hig.userName;
 								//if (hig.openDt != hig.dt) util.debugWriteLine("hig open start tigau " + hig.openDt + " " + hig.dt + " " + ri.lvId);
 								//else util.debugWriteLine("hig open start onaji " + hig.openDt + " " + hig.dt + " " + ri.lvId);
@@ -368,62 +366,92 @@ namespace namaichi.alart
 			return ret;
 		}
 		private TimeLineInfo[] getNewTimeLineList(string res) {
-			var m = new Regex("(<tr[\\s\\S]+?</tr>)").Matches(res);
 			var ret = new List<TimeLineInfo>();
-			foreach (Match _m in m) {
+			var isNew = true;
+			if (isNew) {
 				try {
-					var mValue = _m.Value.Replace("\n", "").Replace("\r", "");
-					
-					var lv = util.getRegGroup(mValue, "id=\"stream_lv(\\d+)");
-					//var title = util.getRegGroup(mValue, "<h2 class=\"item_title\">[\\s\\S]+?<a[\\s\\S]+?>([\\s\\S]*?<span id=\"play_arrow[\\s\\S]*?</span>)([\\s\\S]*?)</a>", 2);
-					var title = getInnerText(util.getRegGroup(mValue, "<h2 class=\"item_title\">([\\s\\S]*?)</h2>"));
-					var description = getInnerText(util.getRegGroup(mValue, "<p class=\"item_description\">([\\s\\S]*?)</p"));
-					var isChannel = mValue.IndexOf("<li class=\"timetablePage-ProgramList_TitleIcon-channel\">") > -1;
-					var isOfficial = mValue.IndexOf("<li class=\"timetablePage-ProgramList_TitleIcon-official\">") > -1;
-					var provider_type = isOfficial ? "official" : (isChannel ? "channel" : "community");
-					var thumbnail_url = util.getRegGroup(mValue, "<div class=\"item_thumb\">[\\s\\S]*?src=\"(.+?)\"");
-					
-					var start_date = getInnerText(util.getRegGroup(mValue, "(<span class=\"start_date\"[\\s\\S]*?</span>)"));
-					var end_date = getInnerText(util.getRegGroup(mValue, "(<span id=\"end_date[\\s\\S]*?</span>)"));
-					var start_time = util.getRegGroup(mValue, "<span class=\"start_time\">(.*?)</span>");
-					var end_time = util.getRegGroup(mValue, "<span id=\"end_date[\\s\\S]*?(\\d+:\\d+)</span>");
-					if (string.IsNullOrEmpty(start_date)) {
-						util.debugWriteLine("start time no " + lv);
-						check.form.addLogText("start time no lv" + lv);
-						continue;
+					var dataprops = util.getRegGroup(res, "data-props=\"(.+?)\"");
+					if (dataprops == null) {
+						check.form.addLogText("番組表から放送を取得できませんでした");
+						return new List<TimeLineInfo>().ToArray();
 					}
-					var total_time = (DateTime.Parse(end_date + " " + end_time) - DateTime.Parse(start_date + " " + start_time)).ToString();
-					var isTsEnd = mValue.IndexOf("class=\"item ts_end\">") > -1;
-					var isTs = mValue.IndexOf("class=\"item play\">") > -1;
-					var isOnAir = mValue.IndexOf(" play onair\">") > -1;
-					var status = isOnAir ? "onair" : (isTs ? "timeshift" : "tsend");
-					if (lv == null || title == null || description == null || provider_type == null ||
-							thumbnail_url == null || start_date == null || start_time == null ||
-							end_date == null || end_time == null || total_time == null ||
-							status == null) {
-						util.debugWriteLine("timetable timelinePage null " + lv + " " + title + " " + description + " " +
-								provider_type + " " + thumbnail_url + " " + start_date +
-								" " + start_time + " " + end_date + " " + end_time + " " + 
-								total_time + " " + status);
-						#if DEBUG
-							check.form.addLogText(lv + " title " + title + " desc " + description + " type " +
-								provider_type + " thumb " + thumbnail_url + " startdt " + start_date +
-								" starttime " + start_time + " end dt " + end_date + " endtime " + end_time + " totaltime " + 
-								total_time + " status " + status);
-						#endif
-						continue;
+					dataprops = dataprops.Replace("&quot;", "\"");
+					var propsObj = Newtonsoft.Json.JsonConvert.DeserializeObject<TimeTablePageInfo>(dataprops);
+					foreach (var p in propsObj.timetable.programs) {
+						var id = p.id.StartsWith("lv") ? p.id.Substring(2) : p.id;
+						var startDt = util.getUnixToDatetime(p.beginAt / 1000);
+						var endDt = util.getUnixToDatetime(p.endAt / 1000);
+						var status = p.liveCycle == "ON_AIR" ? "onair" : "RELEASED";
+						var ti = new TimeLineInfo(id, p.title, 
+								p.description, p.providerType, 
+								p.thumbnailUrl, null, null, null, null, null, status, p.isPayProgram);
+						ti.startTime = startDt;
+						ret.Add(ti);
 					}
-					var isPayment = mValue.IndexOf("\"timetablePage-ProgramList_TitleIcon-pay\">") > -1;
-					ret.Add(new TimeLineInfo(lv, title, description, provider_type, thumbnail_url, start_date, end_date, start_time, end_time, total_time, status, isPayment));
 				} catch (Exception e) {
-					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-					util.debugWriteLine(_m.Value);
-					#if DEBUG
-						check.form.addLogText("timetable timelinePage ParseEror " + _m.Value);
-					#endif
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+					check.form.addLogText("番組表からの取得中に何らかの問題が発生しました。 " + e.Message + e.Source + e.StackTrace);
 				}
+				return ret.ToArray();
+			} else {
+				var m = new Regex("(<tr[\\s\\S]+?</tr>)").Matches(res);
+				foreach (Match _m in m) {
+					try {
+						var mValue = _m.Value.Replace("\n", "").Replace("\r", "");
+						var lv = util.getRegGroup(mValue, "id=\"stream_lv(\\d+)");
+						//var title = util.getRegGroup(mValue, "<h2 class=\"item_title\">[\\s\\S]+?<a[\\s\\S]+?>([\\s\\S]*?<span id=\"play_arrow[\\s\\S]*?</span>)([\\s\\S]*?)</a>", 2);
+						//var title = getInnerText(util.getRegGroup(mValue, "<h2 class=\"item_title\">([\\s\\S]*?)</h2>"));
+						var title = util.getRegGroup(mValue, "<h2 class=\"___title___.+?<!-- -->([\\s\\S]*?)</a>");
+						var description = getInnerText(util.getRegGroup(mValue, "<p class=\"item_description\">([\\s\\S]*?)</p"));
+						var isChannel = mValue.IndexOf("<li class=\"timetablePage-ProgramList_TitleIcon-channel\">") > -1;
+						var isOfficial = mValue.IndexOf("<li class=\"timetablePage-ProgramList_TitleIcon-official\">") > -1;
+						var provider_type = isOfficial ? "official" : (isChannel ? "channel" : "community");
+						var thumbnail_url = util.getRegGroup(mValue, "<div class=\"item_thumb\">[\\s\\S]*?src=\"(.+?)\"");
+						
+						//var start_date = getInnerText(util.getRegGroup(mValue, "(<span class=\"start_date\"[\\s\\S]*?</span>)"));
+						var start_date = getInnerText(util.getRegGroup(mValue, "(<span class=\"___start-date[\\s\\S]*?</span>)"));
+						var end_date = getInnerText(util.getRegGroup(mValue, "(<span id=\"end_date[\\s\\S]*?</span>)"));
+						//var start_time = util.getRegGroup(mValue, "<span class=\"start_time\">(.*?)</span>");
+						var start_time = getInnerText(util.getRegGroup(mValue, "(<span class=\"___start-time.*?</span>)"));
+						var end_time = util.getRegGroup(mValue, "<span id=\"end_date[\\s\\S]*?(\\d+:\\d+)</span>");
+						if (string.IsNullOrEmpty(start_date)) {
+							util.debugWriteLine("start time no " + lv);
+							check.form.addLogText("start time no lv" + lv);
+							continue;
+						}
+						var total_time = (DateTime.Parse(end_date + " " + end_time) - DateTime.Parse(start_date + " " + start_time)).ToString();
+						var isTsEnd = mValue.IndexOf("class=\"item ts_end\">") > -1;
+						var isTs = mValue.IndexOf("class=\"item play\">") > -1;
+						var isOnAir = mValue.IndexOf(" play onair\">") > -1;
+						var status = isOnAir ? "onair" : (isTs ? "timeshift" : "tsend");
+						if (lv == null || title == null || description == null || provider_type == null ||
+								thumbnail_url == null || start_date == null || start_time == null ||
+								end_date == null || end_time == null || total_time == null ||
+								status == null) {
+							util.debugWriteLine("timetable timelinePage null " + lv + " " + title + " " + description + " " +
+									provider_type + " " + thumbnail_url + " " + start_date +
+									" " + start_time + " " + end_date + " " + end_time + " " + 
+									total_time + " " + status);
+							#if DEBUG
+								check.form.addLogText(lv + " title " + title + " desc " + description + " type " +
+									provider_type + " thumb " + thumbnail_url + " startdt " + start_date +
+									" starttime " + start_time + " end dt " + end_date + " endtime " + end_time + " totaltime " + 
+									total_time + " status " + status);
+							#endif
+							continue;
+						}
+						var isPayment = mValue.IndexOf("\"timetablePage-ProgramList_TitleIcon-pay\">") > -1;
+						ret.Add(new TimeLineInfo(lv, title, description, provider_type, thumbnail_url, start_date, end_date, start_time, end_time, total_time, status, isPayment));
+					} catch (Exception e) {
+						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+						util.debugWriteLine(_m.Value);
+						#if DEBUG
+							check.form.addLogText("timetable timelinePage ParseEror " + _m.Value);
+						#endif
+					}
+				}
+				return ret.ToArray();
 			}
-			return ret.ToArray();
 		}
 		private string getInnerText(string t) {
 			if (t == null) return null;
@@ -473,4 +501,24 @@ namespace namaichi.alart
 		
 		public DateTime startTime = DateTime.MinValue;
 	}
+	class TimeTablePageInfo {
+		public ttpTimeTable timetable = null;
+		public class ttpTimeTable {
+			public List<ttpPrograms> programs = null;
+		}
+		public class ttpPrograms {
+			public string id = null;
+			public string title = null;
+			public string description = null;
+			public string providerType = null;
+			public string thumbnailUrl = null;
+			public long beginAt = 0;
+			public long endAt = 0;
+			public string liveCycle = null;
+			public bool isFollowerOnly = false;
+			public bool isPayProgram = false;
+		}
+	}
+	
+	
 }

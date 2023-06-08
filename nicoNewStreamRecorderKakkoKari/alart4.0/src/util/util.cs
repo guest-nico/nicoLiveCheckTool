@@ -33,8 +33,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.114";
-	public static string versionDayStr = "2023/04/23";
+	public static string versionStr = "ver0.1.7.115";
+	public static string versionDayStr = "2023/06/09";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -766,7 +766,7 @@ class util {
 			return null;
 		}
 	}
-	public static HttpWebResponse sendRequest(string url, Dictionary<string, string> headers, byte[] content, string method, bool isGetErrorMessage = false) {
+	public static HttpWebResponse sendRequest(string url, Dictionary<string, string> headers, byte[] content, string method, bool isGetErrorMessage = false, CookieContainer cc = null) {
 		util.debugWriteLine("access__ sendRequest" + url);
 		try {
 			var req = (HttpWebRequest)WebRequest.Create(url);
@@ -775,6 +775,7 @@ class util {
 			req.Headers.Add("Accept-Encoding", "gzip,deflate");
 			req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 			req.Timeout = 5000;
+			req.CookieContainer = cc;
 			
 			foreach (var h in headers) {
 				if (h.Key.ToLower().Replace("-", "") == "contenttype")

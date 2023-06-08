@@ -443,12 +443,12 @@ namespace namaichi
 //			cookieFileSanshouBtn.Enabled = isCookieFileSiteiChkBox.Checked;
 		}
 		
-		async void loginBtn_Click(object sender, EventArgs e)
+		void loginBtn_Click(object sender, EventArgs e)
 		{
 			
 			var cg = new rec.CookieGetter(cfg, form);
 			//var cc = await cg.getAccountCookie(mailText.Text, passText.Text);
-			var cc = await cg.getAccountCookie(mailText.Text, passText.Text);
+			var cc = cg.getAccountCookie(mailText.Text, passText.Text);
 			if (cc == null) {
 				MessageBox.Show("login error", "", MessageBoxButtons.OK);
 				return;

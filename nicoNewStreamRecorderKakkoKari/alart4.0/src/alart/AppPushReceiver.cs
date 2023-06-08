@@ -88,7 +88,7 @@ namespace namaichi.alart
 			if (!checkin(out _id, out _token)) return false;
 			var pushToken = getToken(_id, _token);
 			if (pushToken == null) return false;
-			if (!sendTokenNico2(pushToken)) return false;
+			if (!sendTokenNico3(pushToken)) return false;
 			
 			id = _id;
 			token = _token;
@@ -443,6 +443,64 @@ namespace namaichi.alart
 					}
 				} else util.debugWriteLine("app push time put null");
 				*/
+				return true;
+			} catch (Exception e) {
+				util.debugWriteLine("gettoken error " + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				check.form.addLogText("スマホプッシュ通知のトークンの送信中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return false;
+			}
+		}
+		private bool sendTokenNico3(string pushToken) {
+			util.debugWriteLine("app push sendTokenNico " + pushToken);
+			try {
+				if (check.container == null) {
+					check.form.addLogText("Cookieが確認できなかったためスマホプッシュ通知のトークンを送信できませんでした");
+					return false;
+				}
+				
+				var urlCookie = check.container.GetCookieHeader(new Uri("https://live2.nicovideo.jp")) + ";";
+				var userSession = util.getRegGroup(urlCookie, "user_session=(.+?);");
+				var headers = new Dictionary<string, string>() {
+					{"Content-Type", "application/json; charset=UTF-8"},
+					{"User-Agent", "nicocas-Android/" + config.get("nicoCasAppVer")},
+					{"Cookie", "user_session=" + userSession},
+					{"X-Frontend-Id", "90"},
+					{"X-Frontend-Version", config.get("nicoCasAppVer")},
+					{"X-Os-Version", "25"},
+					{"X-Model-Name", "dream2qltechn"},
+					{"X-Connection-Environment", "wifi"},
+					{"X-Request-With", ""},
+					{"Connection", "Keep-Alive"},
+					//{"Accept-Encoding", "gzip"},
+				};
+				
+				var url = "https://public.api.nicovideo.jp/v1/nicopush/gcm/endpoints.json";
+				
+				var param = "{\"clientapp\":\"nicocas_android\",\"endpoint\":{\"token\":\"" + pushToken + "\"}}";
+				byte[] postDataBytes = Encoding.ASCII.GetBytes(param);
+				var res = util.postResStr(url, headers, postDataBytes, true);
+				util.debugWriteLine("app push send token " + res);
+				if (res == null) return false;
+				if (res.IndexOf("UPGRADE_REQUIRED") > -1) {
+					//util.updateAppVersion("nicocas", config);
+					var ver = util.getRegGroup(res, "version\":\"(.+?)\"");
+					if (ver == null) return false;
+					config.set("nicoCasAppVer", ver);
+					headers["User-Agent"] = "nicocas-Android/" + ver;
+					headers["X-Frontend-Version"] = ver;
+					res = util.postResStr(url, headers, postDataBytes);
+					util.debugWriteLine("app push send token2 " + res);
+					if (res == null) {
+						check.form.addLogText("スマホプッシュ通知のトークンの送信に失敗しました");
+						return false;
+					}
+				}
+				if (res.IndexOf("\"status\":200") == -1) {
+					check.form.addLogText("スマホプッシュ通知のトークンの送信に失敗しました " + res);
+					check.form.addLogText("スマホプッシュ通知のトークンを送信できませんでした " + (pushToken == null ? "null" : (pushToken == "" ? "no" : (pushToken.Length > 5 ? pushToken.Substring(0, 5) : "str"))));
+					return false;
+				}
+				
 				return true;
 			} catch (Exception e) {
 				util.debugWriteLine("gettoken error " + e.Message + e.Source + e.StackTrace + e.TargetSite);

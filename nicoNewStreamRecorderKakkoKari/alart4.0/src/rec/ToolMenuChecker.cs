@@ -373,7 +373,7 @@ namespace namaichi.rec
 			try {
 				var cg = new rec.CookieGetter(form.config, form);
 				//var cc = cg.getAccountCookie(mail, pass).Result;
-				var cc = cg.getAccountCookie(mail, pass).Result;
+				var cc = cg.getAccountCookie(mail, pass);
 				
 				if (cc == null || 
 				    	cc.GetCookies(TargetUrl)["user_session"] == null) {

@@ -7,10 +7,13 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using namaichi.alart;
+using namaichi.gui;
 using SunokoLibrary.Application;
 using System.Net.Http;
 using System.Collections.Generic;
@@ -154,7 +157,7 @@ namespace namaichi.rec
 				var mail = accountId;
 				var pass = accountPass;
 				//var accCC = await getAccountCookie(mail, pass).ConfigureAwait(false);
-				var accCC = await getAccountCookie(mail, pass).ConfigureAwait(false);
+				var accCC = getAccountCookie(mail, pass);
 				log += (accCC == null) ? "アカウントログインからユーザーセッションを取得できませんでした。" : "アカウントログインからユーザーセッションを取得しました。";
 				if (accCC != null) {
 					util.debugWriteLine("account ishtml5login" + util.getMainSubStr(isSub));
@@ -346,7 +349,7 @@ namespace namaichi.rec
 			//}
 			//return false;
 		}
-		async public Task<CookieContainer> getAccountCookie(string mail, string pass) {
+		public CookieContainer getAccountCookie(string mail, string pass) {
 			
 			if (mail == null || pass == null) return null;
 			
@@ -355,7 +358,7 @@ namespace namaichi.rec
 			string loginUrl;
 			Dictionary<string, string> param;
 			if (isNew) {
-				loginUrl = "https://account.nicovideo.jp/login/redirector";
+				loginUrl = "https://account.nicovideo.jp/login/redirector?show_button_twitter=1&site=niconico&show_button_facebook=1&sec=header_pc&next_url=/";
 				param = new Dictionary<string, string> {
 					{"mail_tel", mail}, {"password", pass}, {"auth_id", "15263781"}//dummy
 				};
@@ -367,27 +370,77 @@ namespace namaichi.rec
 			}
 			
 			try {
-				var handler = new System.Net.Http.HttpClientHandler();
-				handler.UseCookies = true;
-				var http = new System.Net.Http.HttpClient(handler);
-				var content = new System.Net.Http.FormUrlEncodedContent(param);
+				var h = new Dictionary<string, string>();
+				h.Add("Referer", "https://account.nicovideo.jp/login?site=niconico&next_url=%2F&sec=header_pc&cmnhd_ref=device%3Dpc%26site%3Dniconico%26pos%3Dheader_login%26page%3Dtop");
+				h.Add("Content-Type", "application/x-www-form-urlencoded");
+				h.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8");
+				h.Add("User-Agent", util.userAgent);
 				
-				http.DefaultRequestHeaders.Add( "User-Agent", util.userAgent);
-				var _res = await http.PostAsync(loginUrl, content).ConfigureAwait(false);
-				var res = await _res.Content.ReadAsStringAsync().ConfigureAwait(false);
-	//			var a = _res.Headers;
+				//var _d = "mail_tel=" + WebUtility.UrlEncode(param["mail_tel"]) + "&password=" + WebUtility.UrlEncode(param["password"]) + "&auth_id=" + param["auth_id"];
+				var _d = "mail_tel=" + HttpUtility.UrlEncode(param["mail_tel"]) + "&password=" + HttpUtility.UrlEncode(param["password"]) + "&auth_id=" + param["auth_id"];
+				var d = Encoding.ASCII.GetBytes(_d);
+				var cc = new CookieContainer();
 				
-	//			if (res.IndexOf("login_status = 'login'") < 0) return null;
-				
-				var cc = handler.CookieContainer;
-				
-				var c = cc.GetCookies(TargetUrl)["user_session"];
-				var secureC = cc.GetCookies(TargetUrl)["user_session_secure"];
-				cc = setUserSession(cc, c, secureC);
-				log += (c == null) ? "ユーザーセッションが見つかりませんでした。" : "ユーザーセッションが見つかりました。";
-				log += (secureC == null) ? "secureユーザーセッションが見つかりませんでした。" : "secureユーザーセッションが見つかりました。";
-				if (c == null && secureC == null) return null;
-				return cc;
+				var r = util.sendRequest(loginUrl, h, d, "POST", false, cc);
+				util.debugWriteLine(cc.GetCookieHeader(new Uri(loginUrl)));
+				if (r == null) {
+					log += "ログインページに接続できませんでした";
+					return null;
+				}
+				var _cc = cc.GetCookies(new Uri(loginUrl));
+				if (_cc["user_session"] != null) {
+					//cc.Add(r.Cookies["user_session"]);
+					return cc;
+				}
+				if (r.ResponseUri == null || !r.ResponseUri.AbsolutePath.StartsWith("/mfa")) {
+					log += "ログインに失敗しました。";
+					return null;
+				}
+				using (var sr = new StreamReader(r.GetResponseStream())) {
+					var res = sr.ReadToEnd();
+					util.debugWriteLine(res);
+					
+					var browName = util.getRegGroup(res, "id=\"deviceNameInput\".+?value=\"(.+?)\"");
+	                if (browName == null) browName = "Google Chrome (Windows)";
+	                var mfaUrl = util.getRegGroup(res, "<form action=\"(.+?)\"");
+	                if (mfaUrl == null) {
+	                	log += "2段階認証のURLを取得できませんでした。";
+						return null;
+	                }
+	                mfaUrl = "https://account.nicovideo.jp" + mfaUrl;
+	                var sendTo = util.getRegGroup(res, "class=\"userAccount\">(.+?)</span>");
+	                if (sendTo == null && util.getRegGroup(res, "(スマートフォンのアプリを使って)") != null) {
+	                	sendTo = "app";
+	                }
+	                var f = new MfaInputForm(sendTo);
+	                
+	                var dr = f.ShowDialog();
+	                if (f.code == null) {
+	                	log += "二段階認証のコードが入力されていませんでした";
+	                	return null;
+	                }
+	                util.debugWriteLine(mfaUrl);
+	                h["Referer"] = r.ResponseUri.OriginalString;
+	                h["Origin"] = "https://account.nicovideo.jp";
+	                _d = "otp=" + f.code + "&loginBtn=%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3&device_name=Google+Chrome+%28Windows%29";
+	                d = Encoding.ASCII.GetBytes(_d);
+	                var _r = util.sendRequest(mfaUrl, h, d, "POST", false, cc);
+	                if (_r == null) {
+	                	log += "二段階認証のコードを正常に送信できませんでした";
+	                	return null;
+	                }
+	                using (var _sr = new StreamReader(_r.GetResponseStream())) {
+	                	res = _sr.ReadToEnd();
+	                	util.debugWriteLine(res);
+	                }
+	                _cc = cc.GetCookies(new Uri(loginUrl));
+					if (_cc["user_session"] != null) {
+						return cc;
+	                } else {
+	                	log += "2段階認証のログインに失敗しました";
+	                	return null;
+	                }
+				}
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message+e.StackTrace);
 				return null;

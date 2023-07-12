@@ -368,7 +368,7 @@ namespace namaichi.alart
 		}
 		private void appliProcess(string appliPath, string lvid, string args) {
 			if (appliPath == null || appliPath == "") return;
-			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
+			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
 
 			try {
 				appliPath = appliPath.Trim();
@@ -557,8 +557,10 @@ namespace namaichi.alart
 			return rssItem.userId == alartUserId;
 		}
 		public string getUserIdFromLvid(string lvid, out bool isFailureAccess, CookieContainer container) {
-			var url = "https://live2.nicovideo.jp/watch/" + lvid;
-			var res = util.getPageSource(url, container);
+			var url = "https://live.nicovideo.jp/watch/" + lvid;
+			//var res = util.getPageSource(url, container);
+			var h = util.getHeader(container, null, url);
+			var res = new Curl().getStr(url, h, CurlHttpVersion.CURL_HTTP_VERSION_2TLS, "GET", null, false);
 			isFailureAccess = res == null;
 			//if (isFailureAccess) {
 			//	return null;
@@ -719,7 +721,7 @@ namespace namaichi.alart
 			*/
 		}
 		private void openBrowser(RssItem item) {
-			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(item.lvId, "(\\d+)");
+			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(item.lvId, "(\\d+)");
 			util.openUrlBrowser(url, form.config);
 		}
 		public void foundLive(List<RssItem> items, bool isAddLive = true) {

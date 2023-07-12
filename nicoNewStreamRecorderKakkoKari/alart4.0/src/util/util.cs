@@ -33,8 +33,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.115";
-	public static string versionDayStr = "2023/06/09";
+	public static string versionStr = "ver0.1.7.116";
+	public static string versionDayStr = "2023/07/12";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -1903,5 +1903,16 @@ class util {
 		    mBHook = SetWindowsHookEx(whCbt, new HookProc(CBTProc), hInstance, threadId);
 		}
 		return System.Windows.Forms.MessageBox.Show(text, caption, btn, icon);
+	}
+	public static Dictionary<string, string> getHeader(CookieContainer cc, string referer, string url) {
+		var ret = new Dictionary<string, string>() {
+			{"Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"},
+			{"Accept-Language", "ja,en-US;q=0.7,en;q=0.3"},
+			{"Cache-Control", "no-cache"},
+			{"User-Agent", userAgent}
+		};
+		if (cc != null) ret["Cookie"] = cc.GetCookieHeader(new Uri(url));
+		if (referer != null) ret["Referer"] = referer;
+		return ret;
 	}
 }

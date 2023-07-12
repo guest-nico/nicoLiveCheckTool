@@ -199,20 +199,20 @@ namespace namaichi.rec
 			header.Add("Cookie", cc.GetCookieHeader(new Uri(useUrl)));
 			header.Add("Accept", "application/json, text/plain, */*");
 			header.Add("Content-Type", "application/x-www-form-urlencoded");
-			header.Add("Referer", "https://live2.nicovideo.jp/watch/lv" + id);
-			header.Add("Origin", "https://live2.nicovideo.jp");
+			header.Add("Referer", "https://live.nicovideo.jp/watch/lv" + id);
+			header.Add("Origin", "https://live.nicovideo.jp");
 			header.Add("User-Agent", util.userAgent);
 			header.Add("X-Frontend-Id", "9");
 			return header;
 		}
 		private Dictionary<string, string> getLive2ReserveHeader2(string id) {
 			if (id.StartsWith("lv")) id = util.getRegGroup(lv, "(\\d+)");
-			var url = "https://live2.nicovideo.jp/api/v2/programs/" + lv + "/timeshift/reservation";
+			var url = "https://live.nicovideo.jp/api/v2/programs/" + lv + "/timeshift/reservation";
 			var header = new Dictionary<string, string>();
 			header.Add("Cookie", cc.GetCookieHeader(new Uri(url)));
 			header.Add("Accept", "application/json");
 			header.Add("Referer", "https://live.nicovideo.jp/");
-			header.Add("Origin", "https://live2.nicovideo.jp");
+			header.Add("Origin", "https://live.nicovideo.jp");
 			header.Add("User-Agent", util.userAgent);
 			return header;
 		}

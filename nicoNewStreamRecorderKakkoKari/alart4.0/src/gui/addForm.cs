@@ -66,6 +66,15 @@ namespace namaichi
 			//
 			setDefaultBehavior();
 			setAppliName();
+			mustComList.Text = mustUserList.Text = 
+					mustKeywordList.Text = "十分条件";
+			var l = new System.Windows.Forms.Control[]{
+					mustComList, mustUserList, mustKeywordList};
+			var tt = new ToolTip();
+			tt.InitialDelay = 10;
+			tt.ReshowDelay = 10;
+			foreach (var _l in l)
+				tt.SetToolTip(_l, "混在する場合、必要条件が優先されます");
 			
 			if (id == null) {
 				if (isUserMode) setUserModeForm();
@@ -172,8 +181,8 @@ namespace namaichi
 					userFollow, "", keywordText.Text, 
 					textColorBtn.BackColor, backColorBtn.BackColor,
 					defaultSoundList.SelectedIndex, 
-					isDefaultSoundIdChkBox.Checked, isMustComChkBox.Checked,
-					isMustUserChkBox.Checked, isMustKeywordChkBox.Checked,
+					isDefaultSoundIdChkBox.Checked, mustComList.Text == "必要条件",
+					mustUserList.Text == "必要条件", mustKeywordList.Text == "必要条件",
 					customKw, isCustomKeywordRadioBtn.Checked, memberOnly,
 					isAutoReserveChkBox.Checked, 0, "");
 			if (inputLvidItem != null) {
@@ -255,9 +264,9 @@ namespace namaichi
 			editAi.backColor = backColorBtn.BackColor;
 			editAi.soundType = defaultSoundList.SelectedIndex;
 			editAi.isSoundId = isDefaultSoundIdChkBox.Checked;
-			editAi.isMustCom = isMustComChkBox.Checked;
-			editAi.isMustUser = isMustUserChkBox.Checked;
-			editAi.isMustKeyword = isMustKeywordChkBox.Checked;
+			editAi.isMustCom = mustComList.Text == "必要条件";
+			editAi.isMustUser = mustUserList.Text == "必要条件";
+			editAi.isMustKeyword = mustKeywordList.Text == "必要条件";
 			editAi.cki = customKw;
 			editAi.isCustomKeyword = isCustomKeywordRadioBtn.Checked;
 			editAi.memberOnlyMode = memberOnly;
@@ -355,7 +364,7 @@ namespace namaichi
 					userIdText.Text = userNameText.Text = "";
 			communityFollowChkBox.Checked = userFollowChkBox.Checked = false;
 			
-			var url =  "https://live2.nicovideo.jp/watch/" + id;
+			var url =  "https://live.nicovideo.jp/watch/" + id;
 			var hig = new HosoInfoGetter();
 			hig.get(url, form.check.container);
 			
@@ -585,9 +594,9 @@ namespace namaichi
 			if (!string.IsNullOrEmpty(editAi.hostId))
 				if (ThumbnailManager.isExist(editAi.hostId, out userThumb))
 					userThumbBox.Image = userThumb;
-			isMustComChkBox.Checked = editAi.isMustCom;
-			isMustUserChkBox.Checked = editAi.isMustUser;
-			isMustKeywordChkBox.Checked = editAi.isMustKeyword;
+			mustComList.Text = editAi.isMustCom ? "必要条件" : "十分条件";
+			mustUserList.Text = editAi.isMustUser ? "必要条件" : "十分条件";
+			mustKeywordList.Text = editAi.isMustKeyword ? "必要条件" : "十分条件";
 			customKw = editAi.cki;
 			if (customKw != null) customKeywordBtn.Text = "カスタム設定(" + customKw[0].name + ")";
 			if (editAi.isCustomKeyword) isCustomKeywordRadioBtn.Checked = true;
@@ -696,10 +705,10 @@ namespace namaichi
 			label1.Visible = label2.Visible = 
 					communityId.Visible = communityNameText.Visible =
 					getCommunityInfoBtn.Visible = communityFollowChkBox.Visible = 
-					isMustComChkBox.Visible = 
+					mustComList.Visible = mustUserList.Visible =
 					label6.Visible = label9.Visible = 
 					keywordText.Visible = customKeywordBtn.Visible =
-					isCustomKeywordRadioBtn.Visible = isMustKeywordChkBox.Visible = 
+					isCustomKeywordRadioBtn.Visible = mustKeywordList.Visible = 
 					isSimpleKeywordRadioBtn.Visible = officialBtn.Visible = false;
 		}
 		
@@ -848,5 +857,4 @@ namespace namaichi
 			}
 		}
 	}
-
 }

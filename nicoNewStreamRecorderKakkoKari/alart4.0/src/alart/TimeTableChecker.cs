@@ -14,6 +14,7 @@ using System.ComponentModel.Design;
 using System.Threading;
 using System.Net;
 using System.Xml.Linq;
+using namaichi.utility;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using namaichi.info;
@@ -124,7 +125,9 @@ namespace namaichi.alart
 				var isNew = true;
 				if (isNew) {
 					url = "https://live.nicovideo.jp/timetable?date=" + url.Substring(url.IndexOf("=") + 1).Replace("-", "");
-					res = util.getPageSource(url);
+					//res = util.getPageSource(url);
+					var h = util.getHeader(null, null, null);
+					res = new Curl().getStr(url, h, CurlHttpVersion.CURL_HTTP_VERSION_2TLS, "GET", null, false);
 					if (res == null) {
 						util.debugWriteLine("timetable zerotimeline res null");
 						check.form.addLogText("公式番組表からデータが取得できませんでした2 " + url);

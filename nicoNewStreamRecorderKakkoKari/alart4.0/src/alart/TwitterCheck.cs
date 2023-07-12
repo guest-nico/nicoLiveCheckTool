@@ -145,7 +145,7 @@ namespace namaichi.alart
 				try {
 					var hig = new HosoInfoGetter();
 					RssItem item;
-					if (hig.get("https://live2.nicovideo.jp/watch/" + lv, form.check.container)) {
+					if (hig.get("https://live.nicovideo.jp/watch/" + lv, form.check.container)) {
 						item = new RssItem(hig.title, lv, hig.openDt.ToString(), hig.description, hig.group, hig.communityId, hig.userName, null, hig.isMemberOnly ? "限定" : "", "", hig.isPayment);
 						item.setUserId(hig.userId);
 						item.setTag(hig.tags);

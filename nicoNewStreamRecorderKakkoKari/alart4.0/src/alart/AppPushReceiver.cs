@@ -301,7 +301,7 @@ namespace namaichi.alart
 				}
 				
 				//ok
-				var urlCookie = check.container.GetCookieHeader(new Uri("https://live2.nicovideo.jp")) + ";";
+				var urlCookie = check.container.GetCookieHeader(new Uri("https://live.nicovideo.jp")) + ";";
 				var userSession = util.getRegGroup(urlCookie, "user_session=(.+?);");
 				var headers = new Dictionary<string, string>() {
 					{"Content-Type", "application/json; charset=UTF-8"},
@@ -458,7 +458,7 @@ namespace namaichi.alart
 					return false;
 				}
 				
-				var urlCookie = check.container.GetCookieHeader(new Uri("https://live2.nicovideo.jp")) + ";";
+				var urlCookie = check.container.GetCookieHeader(new Uri("https://live.nicovideo.jp")) + ";";
 				var userSession = util.getRegGroup(urlCookie, "user_session=(.+?);");
 				var headers = new Dictionary<string, string>() {
 					{"Content-Type", "application/json; charset=UTF-8"},

@@ -179,7 +179,7 @@ namespace namaichi.info
 		*/
 		private void setDescription(MainForm form) {
 			var hg = new HosoInfoGetter();
-			if (hg.get("https://live2.nicovideo.jp/watch/" + lvid, null)) {
+			if (hg.get("https://live.nicovideo.jp/watch/" + lvid, null)) {
 				form.formAction(() => {
 					description = hg.description;
 					form.historyList.Refresh();

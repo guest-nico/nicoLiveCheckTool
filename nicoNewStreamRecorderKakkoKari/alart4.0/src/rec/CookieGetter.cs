@@ -292,11 +292,25 @@ namespace namaichi.rec
 						
 					if (uid != null) {
 						var _url = "https://public.api.nicovideo.jp/v1/user/followees/niconico-users/" + uid + ".json";
-						var res = util.getPageSource(_url, cc);
+						var h = new Dictionary<string, string>();
+						h.Add("User-Agent", "nicocas-Android/" + cfg.get("nicoCasAppVer"));
+						h.Add("X-Frontend-Id", "90");
+						h.Add("X-Frontend-Version", cfg.get("nicoCasAppVer"));
+						h.Add("X-Os-Version", "25");
+						var _res = util.sendRequest(_url, h, null, "GET", true, cc);
+						using (var r = _res.GetResponseStream())
+						using (var sr = new StreamReader(r)) {
+							var rr = sr.ReadToEnd();
+							util.debugWriteLine("unjoin2 res " + rr);
+							//return rr.IndexOf("\"status\":200") > -1;
+							if (rr.IndexOf("\"status\":200") > -1) isLogin = true;
+						}
+						//var res = util.getPageSource(_url, cc);
+						 
 						//form.addLogText("cookie check " + (res != null));
 						
 						//var n = util.getUserName(uid, out isFollow, cc, true);
-						if (res != null) isLogin = true;
+						//if (res != null) isLogin = true;
 						
 						
 						if (!isLogin) {

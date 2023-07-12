@@ -13,6 +13,7 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using namaichi.info;
+using namaichi.utility;
 
 namespace namaichi.alart
 {
@@ -98,7 +99,9 @@ namespace namaichi.alart
 				
 					string res = null;
 					for (var k = 0; k < 10; k++) {
-						res = util.getPageSource(url.Replace("#", i.ToString()), null);
+						//res = util.getPageSource(url.Replace("#", i.ToString()), null);
+						var h = util.getHeader(null, null, null);
+						res = new Curl().getStr(url.Replace("#", i.ToString()), h, CurlHttpVersion.CURL_HTTP_VERSION_2TLS, "GET", null, false);
 						if (res == null) {
 							Thread.Sleep(5000);
 							//break;

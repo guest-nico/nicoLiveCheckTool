@@ -45,7 +45,7 @@ namespace namaichi
 		protected void CopyUrlMenuClick(object sender, EventArgs e)
 		{
 			if (ri.lvId == null || ri.lvId == "") return;
-			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ri.lvId, "(\\d+)");
+			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(ri.lvId, "(\\d+)");
 			util.setClipBordText(url);
 		}
 		
@@ -77,14 +77,14 @@ namespace namaichi
 		void OpenWebBrowserMenuClick(object sender, EventArgs e)
 		{
 			if (ri.lvId == null || ri.lvId == "") return;
-			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ri.lvId, "(\\d+)");
+			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(ri.lvId, "(\\d+)");
 			util.openUrlBrowser(url, config);
 		}
 		void OpenAppliMenuClick(object sender, EventArgs e)
 		{
 			var i = ((ToolStripMenuItem)sender).Name[9];
 			var path = config.get("appli" + i.ToString() + "Path");
-			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ri.lvId, "(\\d+)");
+			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(ri.lvId, "(\\d+)");
 			var args = config.get("appli" + i.ToString() + "Args");
 			appliProcess(path, url + " " + args);
 		}
@@ -116,7 +116,7 @@ namespace namaichi
 		}
 		protected void allClick(object sender, EventArgs e)
 		{
-			var url = "https://live2.nicovideo.jp/watch/" + ri.lvId;
+			var url = "https://live.nicovideo.jp/watch/" + ri.lvId;
 			util.openUrlBrowser(url, config);
 
 			if ((isTest && isTestClosePopup) ||

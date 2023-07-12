@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Net;
+using namaichi.utility;
 
 namespace namaichi.rec
 {
@@ -39,8 +40,10 @@ namespace namaichi.rec
 		}
 		public bool get(string _url, CookieContainer container) {
 			var lvid = util.getRegGroup(_url, "((lv|c[oh])\\d+)");
-			var url =  "https://live2.nicovideo.jp/watch/" + lvid;
-			var res = util.getPageSource(url, container);
+			var url =  "https://live.nicovideo.jp/watch/" + lvid;
+			//var res = util.getPageSource(url, container);
+			var h = util.getHeader(container, null, url);
+			var res = new Curl().getStr(url, h, CurlHttpVersion.CURL_HTTP_VERSION_2TLS, "GET", null, false);
 			if (res == null) return false;
 			
 			title = util.getRegGroup(res, "<meta property=\"og:title\" content=\"(.*?)\"");

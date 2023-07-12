@@ -121,7 +121,7 @@ namespace namaichi.alart
 		}
 		public static void appliProcess(string appliPath, string lvid, string args) {
 			if (appliPath == null || appliPath == "") return;
-			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
+			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
 
 			try {
 				appliPath = appliPath.Trim();
@@ -150,7 +150,7 @@ namespace namaichi.alart
 			}
 		}
 		public static void openBrowser(RssItem item, MainForm form) {
-			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(item.lvId, "(\\d+)");
+			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(item.lvId, "(\\d+)");
 			util.openUrlBrowser(url, form.config);
 		}
 		

@@ -1136,7 +1136,7 @@ namespace namaichi
 					//var ai = (AlartInfo)dataSource[list.CurrentCell.RowIndex];
 					var ai = (AlartInfo)dataSource[c.RowIndex];
 					if (ai.lastLvid == null || ai.lastLvid == "") continue;
-					var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lastLvid, "(\\d+)");
+					var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lastLvid, "(\\d+)");
 					util.openUrlBrowser(url, config);
 				} catch (Exception ee) {
 					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
@@ -1214,7 +1214,7 @@ namespace namaichi
 				var ai = (AlartInfo)dataSource[min];
 				
 				if (ai.lastLvid == null || ai.lastLvid == "") return;
-				var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lastLvid, "(\\d+)");
+				var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lastLvid, "(\\d+)");
 				Clipboard.SetText(url);
 					
 				
@@ -1473,7 +1473,7 @@ namespace namaichi
 	       		//var ret = 0;
 	       		//var tipTitle = ((item.isMemberOnly) ? "(限定)" : "") + item.comName;
 	       		var tipTitle = item.comName;
-				var url = "https://live2.nicovideo.jp/watch/" + item.lvId;
+				var url = "https://live.nicovideo.jp/watch/" + item.lvId;
 				var content = url;
 				if (ai != null && ai.keyword != null && ai.keyword != "") content = ai.keyword + "-" + url;
 				
@@ -1927,7 +1927,7 @@ namespace namaichi
 						if (selectedRowIndexList.IndexOf(c.RowIndex) > -1) continue;
 						selectedRowIndexList.Add(c.RowIndex);
 						var ti = (TaskInfo)taskListDataSource[c.RowIndex];
-						var url = "https://live2.nicovideo.jp/watch/" + ti.lvId;
+						var url = "https://live.nicovideo.jp/watch/" + ti.lvId;
 						util.openUrlBrowser(url, config);
 				}
 				
@@ -1950,7 +1950,7 @@ namespace namaichi
 			if (curCell == null || curCell.RowIndex == -1) return;
 			var ai = (TaskInfo)taskListDataSource[taskList.CurrentCell.RowIndex];
 			if (ai.lvId == null || ai.lvId == "") return;
-			var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lvId, "(\\d+)");
+			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lvId, "(\\d+)");
 			Clipboard.SetText(url);
 		}
 		
@@ -2557,7 +2557,7 @@ namespace namaichi
 			var lvid = util.getRegGroup(notifyIcon.BalloonTipText + " " + notifyIcon.BalloonTipTitle, "(lv\\d+)");
 			string url = null;
 			if (lvid != null) {
-				url = "https://live2.nicovideo.jp/watch/" + lvid;
+				url = "https://live.nicovideo.jp/watch/" + lvid;
 			} else {
 				url = notifyUrl;
 			}
@@ -2711,7 +2711,7 @@ namespace namaichi
 					var n = ((ToolStripMenuItem)sender).Name.Substring(9, 1);
 					var path = config.get("appli" + n + "Path");
 					var args = config.get("appli" + n + "Args");
-					var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lastLvid, "(\\d+)");
+					var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lastLvid, "(\\d+)");
 					
 					util.appliProcess(path, url + " " + args);
 			
@@ -2830,7 +2830,7 @@ namespace namaichi
 			    	(type == "user" || type == "community" ||
 			     		type == "channel"));
 			if (false && isProgramInfo) {
-				var url = "https://live2.nicovideo.jp/watch/" + lvid + "/programinfo";
+				var url = "https://live.nicovideo.jp/watch/" + lvid + "/programinfo";
 				
 				var h = new Dictionary<string, string>(){{"user_session", check.container.GetCookies(new Uri(url))["user_session"].Value}};
 				
@@ -2863,7 +2863,8 @@ namespace namaichi
 			}
 			
 			var _url = "https://live.nicovideo.jp/embed/" + lvid;
-			var _res = util.getPageSource(_url, null);
+			//var _res = util.getPageSource(_url, null);
+			var _res = new Curl().getStr(_url, util.getHeader(null, null, null), CurlHttpVersion.CURL_HTTP_VERSION_2TLS, "GET", null, false);
 			if (_res == null) {
 				util.debugWriteLine("放送の確認に失敗しました " + lvid);
 				return true;
@@ -2915,7 +2916,7 @@ namespace namaichi
 				if (action == "なにもしない") return;
 				else if (action.StartsWith("最近行われた放送のURLを")) {
 					if (ai.lastLvid != null && ai.lastLvid != "") {
-						var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lastLvid, "(\\d+)");
+						var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lastLvid, "(\\d+)");
 						if (action.EndsWith("開く"))
 							util.openUrlBrowser(url, config);
 						else Clipboard.SetText(url);
@@ -4391,7 +4392,7 @@ namespace namaichi
 			var li = ds[cur.RowIndex];
 			if (string.IsNullOrEmpty(li.lvid)) return;
 			
-			var url = "https://live2.nicovideo.jp/watch/" + li.lvid;
+			var url = "https://live.nicovideo.jp/watch/" + li.lvid;
 			util.openUrlBrowser(url, config);
 		}
 		void HistoryListOpenCommunityUrlMenuClick(object sender, EventArgs e)
@@ -4455,7 +4456,7 @@ namespace namaichi
 			var li = ds[cur.RowIndex];
 			if (string.IsNullOrEmpty(li.lvid)) return;
 			try {
-				var url = "https://live2.nicovideo.jp/watch/" + li.lvid;
+				var url = "https://live.nicovideo.jp/watch/" + li.lvid;
 				Clipboard.SetText(url);
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
@@ -4690,7 +4691,7 @@ namespace namaichi
 			var li = notAlartListDataSource[cur.RowIndex];
 			if (string.IsNullOrEmpty(li.lvid)) return;
 			
-			var url = "https://live2.nicovideo.jp/watch/" + li.lvid;
+			var url = "https://live.nicovideo.jp/watch/" + li.lvid;
 			util.openUrlBrowser(url, config);
 		}
 		
@@ -4729,7 +4730,7 @@ namespace namaichi
 			var li = notAlartListDataSource[cur.RowIndex];
 			if (string.IsNullOrEmpty(li.lvid)) return;
 			try {
-				var url = "https://live2.nicovideo.jp/watch/" + li.lvid;
+				var url = "https://live.nicovideo.jp/watch/" + li.lvid;
 				Clipboard.SetText(url);
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
@@ -5589,7 +5590,7 @@ namespace namaichi
 					(a.title.Length > 20 ? a.title.Substring(0, 20) + ".." : a.title) + 
 					"(" + (a.comName.Length > 20 ? a.comName.Substring(0, 20) + ".." : a.comName) + ")";
 			var menu = new ToolStripMenuItem(text, null, (o, e) => 
-					util.openUrlBrowser("https://live2.nicovideo.jp/watch/" + a.lvId, config));
+					util.openUrlBrowser("https://live.nicovideo.jp/watch/" + a.lvId, config));
 			menu.Tag = a;
 			var ret = new KeyValuePair<DateTime, ToolStripMenuItem>(a.pubDateDt, menu);
 			return ret;

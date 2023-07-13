@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -49,10 +50,20 @@ namespace namaichi.utility
 		}
 		public string getStr(string url, Dictionary<string, string> headers, CurlHttpVersion httpVer, string method = "GET", string postData = "", bool isAddHeader = false) {
 			try {
+				var _r = util.sendRequest(url, headers, null, "GET", false, null);
+				using (var _rr = _r.GetResponseStream())
+				using (var rrr = new StreamReader(_rr)) {
+						return rrr.ReadToEnd();
+				}
+				
+				
 				var urlList = new List<string>(){url};
 				var r = get(urlList, headers, httpVer, method, postData, isAddHeader);
 				if (r.Count == 0) return null;
-				return r[0].Value == null ? null : Encoding.UTF8.GetString(r[0].Value);
+				if (r[0].Value == null) return null;
+				var ret = Encoding.UTF8.GetString(r[0].Value);
+				if (ret.Length == 0) return null;;
+				return ret;
 			} catch (Exception e) {
 				Debug.WriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return null;

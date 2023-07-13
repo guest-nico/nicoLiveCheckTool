@@ -39,9 +39,9 @@ namespace namaichi
 				
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			#if !NET40
-				ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls |SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-			#endif
+			
+			ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | 
+					SecurityProtocolType.Tls | (SecurityProtocolType)0x00000C00 |  (SecurityProtocolType)0x00000300;
 			
 			var form = new MainForm(args);
 			

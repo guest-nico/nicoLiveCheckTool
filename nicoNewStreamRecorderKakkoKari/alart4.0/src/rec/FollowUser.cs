@@ -47,6 +47,7 @@ namespace namaichi.rec
 			
 //			return false;
 		}
+		/*
 		private bool join(string comId, CookieContainer cc, MainForm form, config.config cfg) {
 			util.debugWriteLine("follow user " + comId);
 			for (int i = 0; i < 3; i++) {
@@ -84,6 +85,7 @@ namespace namaichi.rec
 					
 					if (!isJidouShounin) return false;
 					*/
+					/*
 				} catch (Exception) {
 					return false;
 				}
@@ -113,6 +115,7 @@ namespace namaichi.rec
 						{"mode", "commit"}, {"title", "フォローリクエスト"}
 					});
 					*/
+					/*
 					var enc = Encoding.GetEncoding("UTF-8");
 					string data =
 					    "item_type=1&item_id=" + comId + "&token=" + token;
@@ -186,6 +189,7 @@ namespace namaichi.rec
 			util.debugWriteLine("フォロー失敗");
 			return false;
 		}
+		*/
 		private bool join2(string comId, CookieContainer cc, MainForm form, config.config cfg) {
 			util.debugWriteLine("follow user2 " + comId);
 			try {
@@ -199,7 +203,8 @@ namespace namaichi.rec
 					{"Cookie", cc.GetCookieHeader(new Uri(url))},
 				};
 				
-				var res = util.postResStr(url, headers, null);
+				string d = null;
+				var res = util.postResStr(url, headers, d);
 				util.debugWriteLine("user follow2 res " + res);
 				if (res == null) {
 					util.debugWriteLine("user join2 null ");
@@ -225,7 +230,8 @@ namespace namaichi.rec
 					{"Cookie", cc.GetCookieHeader(new Uri(url))},
 				};
 				
-				var res = util.postResStr(url, headers, null);
+				string d = null;
+				var res = util.postResStr(url, headers, d);
 				util.debugWriteLine("user follow2 res " + res);
 				if (res == null) {
 					util.debugWriteLine("user join3 null ");
@@ -249,6 +255,7 @@ namespace namaichi.rec
 			return isUnJoinedTask;
 //			return false;
 		}
+		/*
 		private bool unJoin(string comId, CookieContainer cc, MainForm form, config.config cfg) {
 			for (int i = 0; i < 3; i++) {
 //				var myPageUrl = "http://www.nicovideo.jp/my";
@@ -273,7 +280,7 @@ namespace namaichi.rec
 					return false;
 				}
 				*/
-				
+				/*
 				try {
 					var pageRes = util.getPageSource(comUrl, cc);
 					var token = util.getRegGroup(pageRes, "data-csrf-token=\"(.+?)\"");
@@ -296,6 +303,7 @@ namespace namaichi.rec
 						{"commit", "はい、フォローを解除します"}, {"time", time}, {"commit_key", commit_key}
 					});
 					*/
+					/*
 					var enc = Encoding.GetEncoding("UTF-8");
 					string data =
 					    "id_list[1][]=" + comId + "&token=" + token;
@@ -345,6 +353,8 @@ namespace namaichi.rec
 			util.debugWriteLine("フォロー解除失敗 " + comId);
 			return false;
 		}
+		*/
+		/*
 		private bool unJoin2(string comId, CookieContainer cc, MainForm form, config.config cfg) {
 			util.debugWriteLine("follow user2 " + comId);
 			try {
@@ -369,6 +379,7 @@ namespace namaichi.rec
 				return false;
 			}
 		}
+		*/
 		private bool unJoin3(string comId, CookieContainer cc, MainForm form, config.config cfg) {
 			util.debugWriteLine("follow user3 " + comId);
 			try {
@@ -382,14 +393,10 @@ namespace namaichi.rec
 					{"Cookie", cc.GetCookieHeader(new Uri(url))},
 				};
 				
-				var res = util.sendRequest(url, headers, null, "DELETE", false);
-				using (var r = res.GetResponseStream())
-				using (var sr = new StreamReader(r)) {
-					var rr = sr.ReadToEnd();
-					util.debugWriteLine("unjoin2 res " + rr);
-					return rr.IndexOf("\"status\":200") > -1;
-				}
-				
+				string d = null; 
+				var rr = util.postResStr(url, headers, d, false, "DELETE");
+				util.debugWriteLine("unjoin2 res " + rr);
+				return rr.IndexOf("\"status\":200") > -1;
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return false;

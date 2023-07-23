@@ -87,7 +87,6 @@ namespace namaichi
                     
                     var container = new CookieContainer();
                     container.PerDomainCapacity = 200;
-                    var client = new HttpClient(new HttpClientHandler() { CookieContainer = container, Proxy = null, UseProxy = false });
                     
                     var result = await cookieImporter.GetCookiesAsync(myPage);
                     

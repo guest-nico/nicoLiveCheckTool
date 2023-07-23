@@ -185,61 +185,6 @@ namespace namaichi.alart
 				return isContainAddedLv;
 			}
 		}
-		private void setDescription(List<RssItem> items) {
-			try {
-				if (items.Count == 0) return;
-				
-				var setOkNum = 0;
-				var oldestDt = DateTime.MaxValue;
-				foreach (var item in items) 
-					if (oldestDt > item.pubDateDt) oldestDt = item.pubDateDt;
-				for (var i = 10; i < 100; i += 10) {
-					var url = "https://api.cas.nicovideo.jp/v2/tanzakus/topic/live/content-groups/onair/items?cursor=" + i + "/cursorEnd/cursorEnd/cursorEnd/" + (i - 10);
-					var res = util.getPageSource(url);
-					if (res == null) return;
-					
-					var tanzakuObj = Newtonsoft.Json.JsonConvert.DeserializeObject<TanzakuOnAir>(res);
-					if (tanzakuObj.meta.status != "200") return;
-					
-					foreach (var o in tanzakuObj.data.items) {
-						var ri = items.Find(x => x.lvId == o.id);
-						if (ri == null) continue;
-						if (o.description.Length > 100) 
-							o.description = o.description.Substring(0, 100);
-						ri.description = o.description;
-						
-						var li = check.form.liveListDataSource.FirstOrDefault(x => x.lvId == o.id);
-						if (li != null) {
-							li.description = o.description;
-							var liI = check.form.liveListDataSource.IndexOf(li);
-							if (liI > -1) check.form.liveList.UpdateCellValue(5, liI);
-						} else {
-							//util.debugWriteLine("aa");
-						}
-						li = check.form.liveListDataReserve.Find(x => x.lvId == o.id);
-						if (li != null) li.description = o.description;
-						var hi = check.form.historyListDataSource.FirstOrDefault(x => x.lvid == o.id);
-						if (hi != null) {
-							hi.description = o.description;
-							var hiI = check.form.historyListDataSource.IndexOf(hi);
-							if (hiI > -1) check.form.historyList.UpdateCellValue(9, hiI);
-						}
-						hi = check.form.notAlartListDataSource.FirstOrDefault(x => x.lvid == o.id);
-						if (hi != null) {
-							hi.description = o.description;
-							var hiI = check.form.notAlartListDataSource.IndexOf(hi);
-							if (hiI > -1) check.form.notAlartList.UpdateCellValue(9, hiI);
-						}
-						
-						setOkNum++;
-						if (setOkNum >= items.Count) return;
-						if (o.showTime.beginAt < oldestDt) return;
-					}
-				}
-			} catch (Exception e) {
-				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-			}
-		}
 		public void stop() {
 			isRetry = false;
 		}

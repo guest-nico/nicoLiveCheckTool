@@ -336,48 +336,21 @@ namespace namaichi.alart
 				
 				byte[] postDataBytes = Encoding.ASCII.GetBytes(param);
 				
-				
-				var req = (HttpWebRequest)WebRequest.Create(url);
-				req.Method = "POST";
-				req.Proxy = null;
-				req.CookieContainer = check.container;
-				req.Referer = "https://account.nicovideo.jp/my/account";
-				req.ContentLength = postDataBytes.Length;
-				
-				req.ContentType = "application/json";
-				req.Headers.Add("x-request-with", "https://account.nicovideo.jp/my/account");
-				req.Headers.Add("x-frontend-id", "8");
-				req.Headers.Add("Accept-Encoding", "gzip,deflate");
-				req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-				//req.UserAgent = util.userAgent;
-				//req.Headers.Add("Accept-Encoding", "gzip, deflate, br");
-				using (var stream = req.GetRequestStream()) {
-					try {
-						stream.Write(postDataBytes, 0, postDataBytes.Length);
-					} catch (Exception e) {
-			       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
-			       	}
+				var h = util.getHeader(check.container, "https://account.nicovideo.jp/my/account", url);
+				h.Add("Content-Type", "application/json");
+				h.Add("x-request-with", "https://account.nicovideo.jp/my/account");
+				h.Add("x-frontend-id", "8");
+				var resStr = util.postResStr(url, h, param, true, "POST");
+				if (resStr == null) {
+					check.form.addLogText("ブラウザプッシュ通知の登録時に正常な応答がありませんでした");
+					return false;
 				}
-	//					stream.Close();
-				
-	
-				var res = req.GetResponse();
-				
-				using (var getResStream = res.GetResponseStream())
-				using (var resStream = new StreamReader(getResStream)) {
-					foreach (var h in res.Headers) util.debugWriteLine("header " + h + " " + res.Headers[h.ToString()]);
-					var resStr = resStream.ReadToEnd();
-					util.debugWriteLine("nico send post res " + resStr);
-					if (resStr == null) {
-						check.form.addLogText("ブラウザプッシュ通知の登録時に正常な応答がありませんでした");
-					}
-					if (resStr.IndexOf("\"status\":200") > -1) {
-						auth = Convert.FromBase64String(sendAuth);
-						config.set("pushAuth", sendAuth);
-						return true;
-					} else {
-						check.form.addLogText("ブラウザプッシュ通知の登録が正常に行えませんでした" + resStr);
-					}
+				if (resStr.IndexOf("\"status\":200") > -1) {
+					auth = Convert.FromBase64String(sendAuth);
+					config.set("pushAuth", sendAuth);
+					return true;
+				} else {
+					check.form.addLogText("ブラウザプッシュ通知の登録が正常に行えませんでした" + resStr);
 				}
 				
 			} catch (Exception e) {

@@ -79,6 +79,12 @@ Bass.NetWrapper
 (c) 2005-2016 by radio42, Hamburg, Germany  
 <http://www.un4seen.com/bass.html#license>  
   
+curl
+https://github.com/curl/curl
+Copyright (c) 1996 - 2023, Daniel Stenberg, <daniel@haxx.se>, and many
+contributors, see the THANKS file.
+https://github.com/curl/curl/blob/master/COPYING
+  
 フリー素材「取り放題.com」様  
 http://toriho-dai.com/  
 otosozai.com様  

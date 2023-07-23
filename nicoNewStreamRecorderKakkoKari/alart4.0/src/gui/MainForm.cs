@@ -215,6 +215,14 @@ namespace namaichi
 			followerOnlyColor = bool.Parse(config.get("IsFollowerOnlyOtherColor")) ?
 				ColorTranslator.FromHtml(config.get("followerOnlyColor")) : Color.Empty;
 			evenRowsColor = ColorTranslator.FromHtml(config.get("evenRowsColor"));
+			
+			if (util.isCurl) {
+				try {
+					Curl.curl_global_init((1<<0) | (1<<1));//CURL_GLOBAL_SSL|CURL_GLOBAL_WIN32
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+				}
+			}
 		}
 		private void formInitSetting() {
 			alartList.DataSource = alartListDataSource;
@@ -571,7 +579,6 @@ namespace namaichi
 			    
 			});
 			
-			
 			//.net
 			util.debugWriteLine(".net version check");
 			var ver = util.Get45PlusFromRegistry();  
@@ -586,13 +593,13 @@ namespace namaichi
 					//});
 				//});
 			}
-			
 			//dll
 			var task = Task.Factory.StartNew(() => {
 				util.dllCheck(this);
 				xpTest();
 			});
-			
+			util.debugWriteLine("OS: " + util.CheckOSName());
+			util.debugWriteLine("OSType: " + util.CheckOSType());
 			
 			return;
 		}
@@ -2830,6 +2837,7 @@ namespace namaichi
 			    	(type == "user" || type == "community" ||
 			     		type == "channel"));
 			if (false && isProgramInfo) {
+				/*
 				var url = "https://live.nicovideo.jp/watch/" + lvid + "/programinfo";
 				
 				var h = new Dictionary<string, string>(){{"user_session", check.container.GetCookies(new Uri(url))["user_session"].Value}};
@@ -2859,7 +2867,7 @@ namespace namaichi
 					}
 					
 					return ret;
-				}
+				}*/
 			}
 			
 			var _url = "https://live.nicovideo.jp/embed/" + lvid;

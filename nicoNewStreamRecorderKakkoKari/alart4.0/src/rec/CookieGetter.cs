@@ -10,10 +10,12 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using namaichi.alart;
 using namaichi.gui;
+using namaichi.utility;
 using SunokoLibrary.Application;
 using System.Net.Http;
 using System.Collections.Generic;
@@ -291,57 +293,14 @@ namespace namaichi.rec
 					//form.addLogText("usersession " + (us != null) + " uid " + (uid != null));
 						
 					if (uid != null) {
-						var _url = "https://public.api.nicovideo.jp/v1/user/followees/niconico-users/" + uid + ".json";
-						var h = new Dictionary<string, string>();
-						h.Add("User-Agent", "nicocas-Android/" + cfg.get("nicoCasAppVer"));
-						h.Add("X-Frontend-Id", "90");
-						h.Add("X-Frontend-Version", cfg.get("nicoCasAppVer"));
-						h.Add("X-Os-Version", "25");
-						var _res = util.sendRequest(_url, h, null, "GET", true, cc);
-						using (var r = _res.GetResponseStream())
-						using (var sr = new StreamReader(r)) {
-							var rr = sr.ReadToEnd();
-							util.debugWriteLine("unjoin2 res " + rr);
-							//return rr.IndexOf("\"status\":200") > -1;
-							if (rr.IndexOf("\"status\":200") > -1) isLogin = true;
-						}
-						//var res = util.getPageSource(_url, cc);
-						 
-						//form.addLogText("cookie check " + (res != null));
-						
-						//var n = util.getUserName(uid, out isFollow, cc, true);
-						//if (res != null) isLogin = true;
 						
 						
 						if (!isLogin) {
 							//test0
 							util.debugWriteLine("access__ isHtml5Login 0 ");
-							var _req = (HttpWebRequest)WebRequest.Create("https://www.nicovideo.jp/my/channel");
-							_req.Proxy = null;
-							_req.CookieContainer = cc;
-							_req.Headers.Add("Accept-Encoding", "gzip,deflate");
-							_req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-							//_req.CookieContainer = new CookieContainer();
-							try {
-								using (var r = (HttpWebResponse)_req.GetResponse())
-								using (var _r = r.GetResponseStream())
-								using (var __sr = new System.IO.StreamReader(_r)) {
-									var __r = __sr.ReadToEnd();
-									//util.debugWriteLine("__r + " + __r);
-									us = _req.CookieContainer.GetCookies(new Uri("https://www.nicovideo.jp/my/channel"))["user_session"];
-									if (__r != null) isLogin = true;
-									//form.addLogText("cookie check3 " + isLogin + " " + (us != null));
-									util.debugWriteLine(isLogin);
-								}
-							} catch (Exception ee) {
-								util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
-								//form.addLogText("cookie check3 exception");
-							}
-							
+							var n = util.getMyName(cc, cc.GetCookies(new Uri(url))["user_session"].Value);
+							isLogin = n != null;
 						}
-						//test0
-						
-						
 					}
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
@@ -394,6 +353,25 @@ namespace namaichi.rec
 				var _d = "mail_tel=" + HttpUtility.UrlEncode(param["mail_tel"]) + "&password=" + HttpUtility.UrlEncode(param["password"]) + "&auth_id=" + param["auth_id"];
 				var d = Encoding.ASCII.GetBytes(_d);
 				var cc = new CookieContainer();
+				
+				if (util.isCurl) {
+					var curlR = new Curl().getStr(loginUrl, h, CurlHttpVersion.CURL_HTTP_VERSION_1_1, "POST", _d, true);
+					if (curlR == null) {
+						log += "ログインページに接続できませんでした";
+						return null;
+					}
+					var m = new Regex("Set-Cookie: (.+?)=(.+?);").Matches(curlR);
+					if (m.Count == 0) return null;
+					Cookie us = null, secureC = null;  
+					foreach (Match _m in m) {
+						if (_m.Groups[1].Value == "user_session") us = new Cookie(_m.Groups[1].Value, _m.Groups[2].Value);
+						if (_m.Groups[1].Value == "user_session_secure") secureC = new Cookie(_m.Groups[1].Value, _m.Groups[2].Value);
+					}
+					if (us != null) {
+						setUserSession(cc, us, secureC, null);
+						return cc;
+					}
+				}
 				
 				var r = util.sendRequest(loginUrl, h, d, "POST", false, cc);
 				util.debugWriteLine(cc.GetCookieHeader(new Uri(loginUrl)));

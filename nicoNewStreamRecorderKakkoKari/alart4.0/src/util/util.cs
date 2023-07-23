@@ -15,6 +15,7 @@ using System.Threading;
 using System.Net.Mail;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using namaichi.utility;
 using Un4seen.Bass;
 using namaichi.config;
 using namaichi.info;
@@ -33,13 +34,12 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.118";
-	public static string versionDayStr = "2023/07/15";
+	public static string versionStr = "ver0.1.7.119";
+	public static string versionDayStr = "2023/07/23";
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
-	
-	private static HttpClient httpClient = new HttpClient(new HttpClientHandler { UseCookies = false });
+	public static bool isCurl = true;
 	
 	public static string getRegGroup(string target, string reg, int group = 1, Regex r = null) {
 		if (r == null)
@@ -508,85 +508,17 @@ class util {
 		}
 		return null;
 	}
-	/*
-	public static string getPageSource(string _url, ref WebHeaderCollection getheaders, CookieContainer container = null, string referer = null, bool isFirstLog = true, int timeoutMs = 5000) {
-		util.debugWriteLine("access__ getpage Source 0" + _url);
-		timeoutMs = 5000;
-		/*
-		string a;
-		try {
-//			a = container.GetCookieHeader(new Uri(_url));
-		} catch (Exception e) {
-			util.debugWriteLine("getpage get cookie header error " + _url + e.Message+e.StackTrace);
-			return null;
-		}
-		*
-//		if (isFirstLog)
-//			util.debugWriteLine("getpagesource " + _url + " ");
-			
-//		util.debugWriteLine("getpage 02");
-		for (int i = 0; i < 1; i++) {
-			try {
-				var isWebRequest = true;
-				if (isWebRequest) {
-					var req = (HttpWebRequest)WebRequest.Create(_url);
-					
-					req.Proxy = null;
-					req.AllowAutoRedirect = true;
-					if (referer != null) req.Referer = referer;
-					if (container != null) req.CookieContainer = container;
-					req.UserAgent = "NicoLiveCheckTool " + versionStr + " guestnicon@gmail.com";
-					//req.UserAgent = "NicoaLiveCheckTool " + versionStr + " guest@niconmail.com";
-					req.Headers.Add("Accept-Encoding", "gzip,deflate");
-					req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-					
-	
-					req.Timeout = timeoutMs;
-					var res = (HttpWebResponse)req.GetResponse();
-					using (var dataStream = res.GetResponseStream())
-					using (var reader = new StreamReader(dataStream)) {
-						var resStr = reader.ReadToEnd();
-						getheaders = res.Headers;
-						
-						//dataStream.Dispose();
-						//reader.Dispose();
-						return resStr;
-					}
-				} else {
-					//var handler = new HttpClientHandler();
-					//handler.CookieContainer = container;
-					var s = getHttpStringAsync(container, _url).Result;
-					return s;
-					
-				}
-			} catch (Exception e) {
-				System.Threading.Tasks.Task.Factory.StartNew(() => {
-					util.debugWriteLine("getpage error " + _url + e.Message+e.StackTrace);
-				});
-	//				System.Threading.Thread.Sleep(3000);
-				continue;
-			}
-		}
-			
-		return null;
-	}
-	*/
 	public static string userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36";
 	public static string getPageSource(string _url, CookieContainer container = null, string referer = null, bool isFirstLog = true, int timeoutMs = 5000) {
+	
 		util.debugWriteLine("access__ getpage Source 1" + _url);
-		timeoutMs = 5000;
-		/*
-		string a = "";
-		try {
-//			a = container.GetCookieHeader(new Uri(_url));
-		} catch (Exception e) {
-			util.debugWriteLine("getpage get cookie header error " + _url + e.Message+e.StackTrace);
-			return null;
+		if (isCurl) {
+			var curlH = getHeader(container, referer, _url);
+			var curlR = new Curl().getStr(_url, curlH, CurlHttpVersion.CURL_HTTP_VERSION_1_1, "GET", null, false);
+			return curlR;
 		}
-		if (isFirstLog)
-			util.debugWriteLine("getpagesource " + _url + " " + a);
-		*/	
-//		util.debugWriteLine("getpage 02");
+		timeoutMs = 5000;
+		
 		for (int i = 0; i < 1; i++) {
 			try {
 				var isWebRequest = true;
@@ -628,13 +560,6 @@ class util {
 		
 						return resStr;
 					}
-				} else {
-					//var handler = new HttpClientHandler();
-					//handler.CookieContainer = container;
-					var s = getHttpStringAsync(container, _url).Result;
-					
-					return s;
-					
 				}
 			} catch (Exception e) {
 				System.Threading.Tasks.Task.Factory.StartNew(() => {
@@ -646,17 +571,6 @@ class util {
 		}
 			
 		return null;
-	}
-	async private static System.Threading.Tasks.Task<string> getHttpStringAsync(CookieContainer container, string url) {
-		try {
-			if (container != null)
-				httpClient.DefaultRequestHeaders.Add("Cookie", container.GetCookieHeader(new Uri(url)));
-			var s = await httpClient.GetStringAsync(url);
-			return s;
-		} catch (Exception e) {
-			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-			return null;
-		}
 	}
 	public static byte[] getFileBytes(string url, CookieContainer container) {
 		util.debugWriteLine("access__ getFileBytes" + url);
@@ -707,60 +621,64 @@ class util {
 		}
 		return null;
 	}
-	public static string postResStr(string url, Dictionary<string, string> headers, byte[] content, bool isGetErrorMessage = false) {
+	public static string getResStr(string url, Dictionary<string, string> headers, bool isGetErrorMessage = false) {
+		string d = null; 
+		return postResStr(url, headers, d, isGetErrorMessage, "GET");
+	}
+	public static string postResStr(string url, Dictionary<string, string> headers, byte[] content, bool isGetErrorMessage = false, string method = "POST") {
+		var d = content == null ? null : Encoding.UTF8.GetString(content);
+		return postResStr(url, headers, d, isGetErrorMessage, method);
+	}
+	public static string postResStr(string url, Dictionary<string, string> headers, string content, bool isGetErrorMessage = false, string method = "POST") {
 		try {
-			var res = sendRequest(url, headers, content, "POST", isGetErrorMessage);
-			if (res == null) {
-				debugWriteLine("postResStr res null");
-				return null;
-			}
-			
-			debugWriteLine(res.StatusCode + " " + res.StatusDescription);
-			
-			//var resStream = res.GetResponseStream();
-			using (var getResStream = res.GetResponseStream())
-			using (var resStream = new System.IO.StreamReader(getResStream)) {
-				//foreach (var h in res.Headers) Debug.WriteLine("header " + h + " " + res.Headers[h.ToString()]);
-				/*
-				List<byte> rb = new List<byte>();
-				for (var i = 0; i < 10; i++) {
-					var a = new byte[100000];
-					var readC = resStream.Read(a, 0, a.Length);
-					if (readC == 0) break;
-					Debug.WriteLine("read c " + readC);
-					for (var j = 0; j < readC; j++) rb.Add(a[j]);
-					
-					Debug.WriteLine("read " + i);
-				}
-				*/
-				var resStr = resStream.ReadToEnd();
-				//return getRegGroup(resStr,
+			if (isCurl) {
 				
-				return resStr;
+				var r = new Curl().getStr(url, headers, CurlHttpVersion.CURL_HTTP_VERSION_1_1, method, content, false, true);
+				return r;
+			} else {
+				var d = content == null ? null :  Encoding.UTF8.GetBytes(content);
+				var res = sendRequest(url, headers, d, method, isGetErrorMessage);
+				if (res == null) {
+					debugWriteLine("postResStr res null");
+					return null;
+				}
+				debugWriteLine(res.StatusCode + " " + res.StatusDescription);
+				
+				using (var getResStream = res.GetResponseStream())
+				using (var resStream = new System.IO.StreamReader(getResStream)) {
+					var resStr = resStream.ReadToEnd();
+					return resStr;
+				}
 			}
 		} catch (Exception ee) {
 			debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			return null;
 		}
 	}
-	public static byte[] postResBytes(string url, Dictionary<string, string> headers, byte[] content) {
+	public static byte[] postResBytes(string url, Dictionary<string, string> headers, byte[] content, string method = "POST") {
 		try {
-			var res = sendRequest(url, headers, content, "POST");
+			if (isCurl && false) {
+				//var d = content == null ? null : Encoding.UTF8.GetString(content);
+				var r = new Curl().getBytes(url, headers, CurlHttpVersion.CURL_HTTP_VERSION_2TLS, method, content, false);
+				return r;
+			} else {
+				var res = sendRequest(url, headers, content, method);
 			
-			debugWriteLine(res.StatusCode + " " + res.StatusDescription);
-			
-			//var resStream = res.GetResponseStream();
-			using (var resStream = res.GetResponseStream()) {
-				var buf = new List<byte>();
-				for (var k = 0; k < 10; k++) {
-					var b = new byte[1000];
-					var c = resStream.Read(b, 0, b.Length);
-					if (c == 0) break;
-					for (var j = 0; j < c; j++) buf.Add(b[j]);
+				debugWriteLine(res.StatusCode + " " + res.StatusDescription);
+				
+				//var resStream = res.GetResponseStream();
+				var a = res.StatusCode;
+				using (var resStream = res.GetResponseStream()) {
+					var buf = new List<byte>();
+					for (var k = 0; k < 10; k++) {
+						var b = new byte[1000];
+						var c = resStream.Read(b, 0, b.Length);
+						if (c == 0) break;
+						for (var j = 0; j < c; j++) buf.Add(b[j]);
+					}
+					return buf.ToArray();
 				}
-				return buf.ToArray();
 			}
-			
 		} catch (Exception ee) {
 			debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			return null;
@@ -772,8 +690,8 @@ class util {
 			var req = (HttpWebRequest)WebRequest.Create(url);
 			req.Method = method;
 			req.Proxy = null;
-			req.Headers.Add("Accept-Encoding", "gzip,deflate");
-			req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+			//req.Headers.Add("Accept-Encoding", "gzip,deflate");
+			//req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 			req.Timeout = 5000;
 			req.CookieContainer = cc;
 			
@@ -1121,6 +1039,70 @@ class util {
        return 4.5;      
     return -1;
    }
+	public static string CheckOSName()
+        {
+            string result = "";
+
+            System.Management.ManagementClass mc =
+                new System.Management.ManagementClass("Win32_OperatingSystem");
+            System.Management.ManagementObjectCollection moc = mc.GetInstances();
+
+            try
+            {
+                foreach (System.Management.ManagementObject mo in moc)
+                {
+                    result = mo["Caption"].ToString();
+                    if (mo["CSDVersion"] != null)
+                        result += " " + mo["CSDVersion"].ToString();
+                    result += " (" + mo["Version"].ToString() + ")";
+                }
+            }
+            catch (Exception e)
+            {
+                util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+                return result;
+            }
+
+            return result;
+        }
+        public static string CheckOSType()
+        {
+            string result = "";
+
+            System.Management.ManagementClass mc =
+                new System.Management.ManagementClass("Win32_OperatingSystem");
+            System.Management.ManagementObjectCollection moc = mc.GetInstances();
+
+            try
+            {
+                foreach (System.Management.ManagementObject mo in moc)
+                {
+                    if (mo["Version"].ToString().StartsWith("5.1"))
+                        result = "XP";
+                    else if (mo["Version"].ToString().StartsWith("6.0"))
+                        result = "Vista";
+                    else if (mo["Version"].ToString().StartsWith("6.1"))
+                        result = "7";
+                    else if (mo["Version"].ToString().StartsWith("6.2"))
+                        result = "8";
+                    else if (mo["Version"].ToString().StartsWith("6.3"))
+                        result = "8.1";
+                    else if (mo["Version"].ToString().StartsWith("10.0"))
+                        result = "10";
+                    else if (mo["Version"].ToString().StartsWith("11.0"))
+                        result = "11";
+                    else
+                        result = "other";
+                }
+            }
+            catch (Exception e)
+            {
+                util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+                return result;
+            }
+            return result;
+        }
+
 	public static string getMainSubStr(bool isSub, bool isKakko = false) {
 		var ret = (isSub) ? "サブ" : "メイン";
 		if (isKakko) ret = "(" + ret + ")";
@@ -1733,14 +1715,9 @@ class util {
 					{"Connection", "keep-alive"},
 					{"Upgrade-Insecure-Requests", "1"},
 				};
-			var r = sendRequest(url, _h, null, "GET");
-			if (r == null) return null;
-			using (var st = r.GetResponseStream())
-			using (var sr = new StreamReader(st)) {
-				var res = sr.ReadToEnd();
-				var n = util.getRegGroup(res, "\"nickname\":\"(.+?)\"");
-				return n;
-			}
+			var res = getResStr(url, _h, false);
+			var n = util.getRegGroup(res, "\"nickname\":\"(.+?)\"");
+			return n;
 		} catch (Exception e) {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 		}

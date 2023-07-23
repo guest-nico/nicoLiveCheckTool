@@ -26,7 +26,7 @@ namespace namaichi.rec
 		config.config cfg;
 		
 		string useUrl = "https://live.nicovideo.jp/api/timeshift.ticket.use";
-		string reservationsUrl = "https://live.nicovideo.jp/api/timeshift.reservations";
+		//string reservationsUrl = "https://live.nicovideo.jp/api/timeshift.reservations";
 		
 		public Reservation(CookieContainer cc, string lv, config.config cfg)
 		{
@@ -34,6 +34,7 @@ namespace namaichi.rec
 			this.lv = lv;
 			this.cfg = cfg;
 		}
+		/*
 		public string reserve() {
 			var id = util.getRegGroup(lv, "(\\d+)");
 			//var url = "https://live.nicovideo.jp/api/watchingreservation?mode=confirm_watch_my&vid=" + id + "&next_url&analytic";
@@ -96,7 +97,8 @@ namespace namaichi.rec
 			}
 			//return "ok";
 		}
-
+		*/
+		/*
 		async private Task<string> watchingReservation(string token, string id, string mode) {
 			util.debugWriteLine("watching reservation post " + token + " " + mode);
 			try {
@@ -147,6 +149,7 @@ namespace namaichi.rec
 				return null;
 			}
 		}
+		*/
 		public string live2Reserve(bool isOverwrite) {
 			//var r = getLive2ReserveRes(isOverwrite);
 			var r = getLive2ReserveRes2();
@@ -157,12 +160,14 @@ namespace namaichi.rec
 			}
 			return r;
 		}
+		/*
 		private string getLive2ReserveRes(bool isOverwrite) {
 			var id = util.getRegGroup(lv, "(\\d+)");
 			var header = getLive2ReserveHeader(id);
 			
 			var reserveData = Encoding.ASCII.GetBytes("vid=" + id + "&overwrite=" + 
 					(isOverwrite ? "1" : "0"));
+			
 			var r = util.sendRequest(reservationsUrl, header, reserveData, "POST", true);
 			try {
 				using (var rs = r.GetResponseStream())
@@ -184,6 +189,7 @@ namespace namaichi.rec
 				return "予約できませんでした " + e.Message;
 			}
 		}
+		*/
 		public bool useLive2Reserve() {
 			var id = util.getRegGroup(lv, "(\\d+)");
 			
@@ -207,7 +213,7 @@ namespace namaichi.rec
 		}
 		private Dictionary<string, string> getLive2ReserveHeader2(string id) {
 			if (id.StartsWith("lv")) id = util.getRegGroup(lv, "(\\d+)");
-			var url = "https://live.nicovideo.jp/api/v2/programs/" + lv + "/timeshift/reservation";
+			var url = "https://live2.nicovideo.jp/api/v2/programs/" + lv + "/timeshift/reservation";
 			var header = new Dictionary<string, string>();
 			header.Add("Cookie", cc.GetCookieHeader(new Uri(url)));
 			header.Add("Accept", "application/json");
@@ -229,24 +235,50 @@ namespace namaichi.rec
 			return res != null;
 		}
 		*/
+		/*
+		private string overwriteReserve2() {
+			try {
+				var res = util.getPageSource("https://live.nicovideo.jp/embed/timeshift-reservations", cc);
+				if (res == null) return "予約の上書き中、予約リストの取得に失敗しました";
+				var props = util.getRegGroup(res, "data-props=\"(.+)\"");
+				if (res == null) return "予約の上書き中、予約リスト内の情報の取得に失敗しました";
+				props = props.Replace("&quot;", "\"");
+				var json = JObject.Parse(props);
+				
+				
+				var oldId = util.getRegGroup(res, "programId&quot;:&quot;(lv\\d+)");
+				if (oldId == null) return "予約の上書き中、予約中の放送IDの取得に失敗しました";
+				var delUrl = "https://live2.nicovideo.jp/api/v2/timeshift/reservations?programIds=" + oldId; 
+				var header = getLive2ReserveHeader2(lv);
+				var r = util.sendRequest(delUrl, header, null, "DELETE", true);
+				if (r == null) return "予約の上書き中、以前の予約の取り消しに失敗しました";
+				using (var rr = r.GetResponseStream())
+				using (var sr = new StreamReader(rr)) {
+					var delRes = sr.ReadToEnd();
+					if (delRes.IndexOf("\"status\":200") == -1) return "予約の上書き中、以前の予約の取り消しに失敗しました";
+				}
+				return getLive2ReserveRes2();
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+				return "予約の上書き中、何らかの問題が発生しました。";
+			}
+		}
+		*/
 		public string getLive2ReserveRes2() {
 			try {
 				var url = "https://live2.nicovideo.jp/api/v2/programs/" + lv + "/timeshift/reservation";
 				var header = getLive2ReserveHeader2(lv);
-				var r = util.sendRequest(url, header, null, "POST", true);
-				if (r == null) return null;
-				using (var rr = r.GetResponseStream())
-				using (var sr = new StreamReader(rr)) {
-					var res = sr.ReadToEnd();
-					if (res.IndexOf("\"status\":200") > -1) return "ok";
-					if (res.IndexOf("\"errorCode\":\"OVER_USE\"") > -1)
-						return "タイムシフトの予約上限に達しました。";
-					if (res.IndexOf("\"errorCode\":\"PROGRAM_NOT_FOUND\"") > -1)
-						return "放送が予約に対応していない等、何らかの理由により予約できませんでした";
-					if (res.IndexOf("\"errorCode\":\"DUPLICATED\"") > -1)
-						return "既に予約済みです。";
-					return null;
-				}
+				string d = null;
+				var res = util.postResStr(url, header, d, true, "POST");
+				if (res.IndexOf("\"status\":200") > -1) return "ok";
+				if (res.IndexOf("\"errorCode\":\"OVER_USE\"") > -1)
+					return "タイムシフトの予約上限に達しました。";
+				if (res.IndexOf("\"errorCode\":\"PROGRAM_NOT_FOUND\"") > -1)
+					return "放送が予約に対応していない等、何らかの理由により予約できませんでした";
+				if (res.IndexOf("\"errorCode\":\"DUPLICATED\"") > -1)
+					return "既に予約済みです。";
+				return null;
+					
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
 				return null;

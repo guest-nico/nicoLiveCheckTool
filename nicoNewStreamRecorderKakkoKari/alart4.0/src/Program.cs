@@ -41,19 +41,12 @@ namespace namaichi
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			
-			//ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | 
-			//		SecurityProtocolType.Tls | (SecurityProtocolType)0x00000C00 |  (SecurityProtocolType)0x00000300;
 			try {
 				ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | 
 						SecurityProtocolType.Tls | (SecurityProtocolType)0x00000C00 |  (SecurityProtocolType)0x00000300;
 			} catch (Exception e) {
 				Debug.WriteLine(e.Message + e.Source + e.StackTrace);
 			}
-			/*
-			#if !NET40
-				ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls |SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-			#endif
-			*/
 			var form = new MainForm(args);
 			
 			#if !DEBUG

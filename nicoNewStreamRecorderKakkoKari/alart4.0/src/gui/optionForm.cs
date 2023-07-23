@@ -823,7 +823,11 @@ namespace namaichi
 		
 		void BtnReloadClick(object sender, EventArgs e)
 		{
-			var tsk = nicoSessionComboBox1.Selector.UpdateAsync();
+			try {
+				var tsk = nicoSessionComboBox1.Selector.UpdateAsync();
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace);
+			}
 		}
 		
 		void IsCheckOnAirRadioBtnCheckedChanged(object sender, EventArgs e)

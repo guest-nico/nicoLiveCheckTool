@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using namaichi.config;
+using namaichi.utility;
 
 namespace namaichi.rec
 {
@@ -47,29 +48,21 @@ namespace namaichi.rec
 			var joinUrl = "https://com.nicovideo.jp/api/v1/communities/" + comId.Substring(2) + "/follows.json";
 			var headers = new Dictionary<string, string>();
 			headers.Add("Accept", "application/json, text/plain, */*");
-			headers.Add("Accept-Encoding", "gzip, deflate, br");
+			//headers.Add("Accept-Encoding", "gzip, deflate, br");
 			headers.Add("Accept-Language", "ja,en-US;q=0.7,en;q=0.3");
 			headers.Add("Referer", "https://com.nicovideo.jp/motion/" + comId);
 			headers.Add("User-Agent", util.userAgent);
 			headers.Add("Cookie", cc.GetCookieHeader(new Uri(comApiUrl)));
 			try {
-				var res = util.sendRequest(comApiUrl, headers, null, "GET");
-				if (res == null) {
+				var r = util.getResStr(comApiUrl, headers, false);
+				if (r == null) {
 					form.addLogText("コミュニティ情報の取得に失敗しました");
 					return false;
 				}
-				using (var rs = res.GetResponseStream())
-				using (var sr = new StreamReader(rs)) {
-					var r = sr.ReadToEnd();
-					if (r == null) {
-						form.addLogText("コミュニティ情報の取得に失敗しました");
-						return false;
-					}
-					var isJidouShounin = r.IndexOf("\"community_auto_accept_entry\":1") > -1; 
-					var msg = (isJidouShounin ? "フォローを試みます。" : "自動承認ではありませんでした。");
-					form.addLogText(msg);
-					if (!isJidouShounin) return false;
-				}
+				var isJidouShounin = r.IndexOf("\"community_auto_accept_entry\":1") > -1; 
+				var msg = (isJidouShounin ? "フォローを試みます。" : "自動承認ではありませんでした。");
+				form.addLogText(msg);
+				if (!isJidouShounin) return false;
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				form.addLogText("何らかの問題によりコミュニティ情報の取得に失敗しました " + e.Message + e.StackTrace);
@@ -82,28 +75,21 @@ namespace namaichi.rec
 				headers.Add("Origin", "https://com.nicovideo.jp");
 				headers.Add("X-Requested-By", "https://com.nicovideo.jp/motion/" + comId);
 				foreach (var h in headers) util.debugWriteLine(h.Key + " " + h.Value);
-				var res = util.sendRequest(joinUrl, headers, null, "POST");
-				if (res == null) {
+				string d = null; 
+				var r = util.postResStr(joinUrl, headers, d, false, "POST");
+				if (r == null) {
 					form.addLogText("フォローへのアクセスに失敗しました");
 					return false;
 				}
-				using (var rs = res.GetResponseStream())
-				using (var sr = new StreamReader(rs)) {
-					var r = sr.ReadToEnd();
-					
-					var isSuccess = r.IndexOf("\"status\":200") > -1; 
-					//var _m = (isPlayOnlyMode) ? "視聴" : "録画";
-					
-					//form.addLogText((isSuccess ?
-					//		"フォローしました。" + _m + "開始までしばらくお待ちください。" : "フォローに失敗しました。"));
-					return isSuccess;
-				}
+				var isSuccess = r.IndexOf("\"status\":200") > -1; 
+				return isSuccess;
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				form.addLogText("何らかの問題によりフォローに失敗しました " + e.Message + e.StackTrace);
 				return false;
 			}
 		}
+		/*
 		private bool join(string comId, CookieContainer cc, MainForm form, config.config cfg, bool isSub) {
 			for (int i = 0; i < 2; i++) {
 //				var myPageUrl = "http://www.nicovideo.jp/my";
@@ -129,6 +115,7 @@ namespace namaichi.rec
 //					var _cc = cgret.Result[(isSub) ? 1 : 0];
 //					util.debugWriteLine(cg.pageSource);
 					*/
+					/*
 					//var res = util.getPageSource(url, ref headers, ccc, url);
 					var res = util.getPageSource(url, ccc, url);
 					if (res == null) return false;
@@ -232,6 +219,7 @@ namespace namaichi.rec
 			util.debugWriteLine("フォロー失敗");
 			return false;
 		}
+		*/
 		public bool unFollowCommunity(string comId, CookieContainer cc, MainForm form, config.config cfg) {
 			if (comId == null) {
 				form.addLogText("このコミュニティはフォロー解除できませんでした。" + util.getMainSubStr(isSub, true));
@@ -248,78 +236,25 @@ namespace namaichi.rec
 //				var myPageUrl = "http://www.nicovideo.jp/my";
 //				var comUrl = "https://com.nicovideo.jp/community/" + comId; 
 				var url = "https://com.nicovideo.jp/leave/" + comId;
-				var headers = new WebHeaderCollection();
-				headers.Add("Upgrade-Insecure-Requests", "1");
+				var headers = new Dictionary<string, string>();
+				//var headers = new WebHeaderCollection();
+				headers.Add("Cookie", cc.GetCookieHeader(new Uri(url)));
 				headers.Add("User-Agent", util.userAgent);
-				/*
-				try {
-					var cg = new CookieGetter(cfg);
-					var cgret = cg.getHtml5RecordCookie(url, isSub);
-					cgret.Wait();
-
-					if (cgret == null || cgret.Result == null) {
-						System.Threading.Thread.Sleep(3000);
-						continue;
-					}
-					var _cc = cgret.Result[0];
-
-				} catch (Exception e) {
-					return false;
-				}
-				*/
-				
+				headers.Add("Content-Type", "application/json; charset=utf-8");
+				headers.Add("Referer", url);
+				headers.Add("Upgrade-Insecure-Requests", "1");
 				try {
 					var leavePageRes = util.getPageSource(url, cc);
 					var time = util.getRegGroup(leavePageRes, "\"hidden\" name=\"time\" value=\"(\\d+)\"");
 					var commit_key = util.getRegGroup(leavePageRes, "\"hidden\" name=\"commit_key\" value=\"(.+?)\"");
-					                                      
-					var handler = new System.Net.Http.HttpClientHandler();
-					handler.UseCookies = true;
-					handler.CookieContainer = cc;
-					handler.Proxy = null;
-					
-					var http = new System.Net.Http.HttpClient(handler);
-					http.DefaultRequestHeaders.Referrer = new Uri(url);
-					/*
-					var content = new System.Net.Http.FormUrlEncodedContent(new Dictionary<string, string>
-					{
-						{"commit", "はい、フォローを解除します"}, {"time", time}, {"commit_key", commit_key}
-					});
-					*/
 					var enc = Encoding.GetEncoding("UTF-8");
 					string data =
 					    "time=" + time + "&commit_key=" + commit_key + "&commit=" + System.Web.HttpUtility.UrlEncode("はい、フォローを解除します", enc);
-					byte[] postDataBytes = Encoding.ASCII.GetBytes(data);
-					
-					util.debugWriteLine("access__ followCommunity unjoin");
-					var req = (HttpWebRequest)WebRequest.Create(url);
-					req.Method = "POST";
-					req.Proxy = null;
-					req.CookieContainer = cc;
-					req.Referer = url;
-					req.ContentLength = postDataBytes.Length;
-					req.ContentType = "application/x-www-form-urlencoded";
-	//				req.Headers.Add("Referer", url);
-					req.Headers.Add("Accept-Encoding", "gzip,deflate");
-					req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-					using (var stream = req.GetRequestStream()) {
-						try {
-							stream.Write(postDataBytes, 0, postDataBytes.Length);
-						} catch (Exception e) {
-				       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
-				       	}
-					}
-	
-					var res = req.GetResponse();
-					
-					using (var getResStream = res.GetResponseStream())
-					using (var resStream = new System.IO.StreamReader(getResStream)) {
-						var resStr = resStream.ReadToEnd();
-		
-						var isSuccess = resStr.IndexOf("このコミュニティのフォローを解除しました") > -1;
-						return isSuccess;
-					}
-					
+					headers["Content-Type"] = "application/x-www-form-urlencoded";
+					var r = util.postResStr(url, headers, data, true, "POST");
+					if (r == null) continue;
+					var isSuccess = r.IndexOf("このコミュニティのフォローを解除しました") > -1;
+					return isSuccess;
 				} catch (Exception e) {
 					form.addLogText("フォロー解除に失敗しました。");
 					util.debugWriteLine(e.Message+e.StackTrace);

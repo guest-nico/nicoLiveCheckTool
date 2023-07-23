@@ -293,8 +293,6 @@ namespace namaichi.rec
 					//form.addLogText("usersession " + (us != null) + " uid " + (uid != null));
 						
 					if (uid != null) {
-						
-						
 						if (!isLogin) {
 							//test0
 							util.debugWriteLine("access__ isHtml5Login 0 ");

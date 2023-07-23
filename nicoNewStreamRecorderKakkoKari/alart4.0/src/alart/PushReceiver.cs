@@ -103,7 +103,7 @@ namespace namaichi.alart
 				
 				util.debugWriteLine("push connect  ");
 				#if NET40
-					ws = new WebSocket(url, "", null, headers, util.userAgent, "", WebSocketVersion.Rfc6455, null, SslProtocols.None);
+					ws = new WebSocket(url, "", null, headers, util.userAgent, "", WebSocketVersion.Rfc6455, null, SslProtocols.Tls);
 				#else
 					ws = new WebSocket(url, "", null, headers, util.userAgent, "", WebSocketVersion.Rfc6455, null, SslProtocols.Tls | (SslProtocols)768 | (SslProtocols)3072);
 				#endif
@@ -352,7 +352,6 @@ namespace namaichi.alart
 				} else {
 					check.form.addLogText("ブラウザプッシュ通知の登録が正常に行えませんでした" + resStr);
 				}
-				
 			} catch (Exception e) {
 				check.form.addLogText("ブラウザプッシュ通知の登録中に問題が発生しました" + e.Message + e.StackTrace + e.Source + e.TargetSite);
 				util.debugWriteLine(e.Message+e.StackTrace);

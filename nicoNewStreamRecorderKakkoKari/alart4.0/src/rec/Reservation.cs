@@ -278,7 +278,6 @@ namespace namaichi.rec
 				if (res.IndexOf("\"errorCode\":\"DUPLICATED\"") > -1)
 					return "既に予約済みです。";
 				return null;
-					
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
 				return null;

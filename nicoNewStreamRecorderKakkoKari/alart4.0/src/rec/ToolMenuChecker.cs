@@ -164,24 +164,24 @@ namespace namaichi.rec
 			while (true) {
 				try {
 					foreach (var ai in form.alartListDataSource) {
-						if (isUser && ai.hostId == id 
-						    	&& string.IsNullOrEmpty(ai.hostName)) {
+						if (isUser && ai.hostId == id) {
+						    	//&& string.IsNullOrEmpty(ai.hostName)) {
 							//string name = util.getRegGroup(res, "name=\"(.+?)\"");
 							form.alartListSetName(ai, isUser, name);
-						} else if (!isUser && ai.communityId == id 
-						    	&& string.IsNullOrEmpty(ai.communityName)) {
+						} else if (!isUser && ai.communityId == id) {
+						    	//&& string.IsNullOrEmpty(ai.communityName)) {
 							//if (id.StartsWith("ch")) name = util.getRegGroup(res, "name=\"(.+?)\"");
 							//else name = util.getRegGroup(res, "name=\"(.+?)\"");
 							form.alartListSetName(ai, isUser, name);
 						}
 					}
 					foreach (var ai in form.userAlartListDataSource) {
-						if (isUser && ai.hostId == id 
-						    	&& string.IsNullOrEmpty(ai.hostName)) {
+						if (isUser && ai.hostId == id) {
+						    	//&& string.IsNullOrEmpty(ai.hostName)) {
 							//string name = util.getRegGroup(res, "name=\"(.+?)\"");
 							form.alartListSetName(ai, isUser, name);
-						} else if (!isUser && ai.communityId == id 
-						    	&& string.IsNullOrEmpty(ai.communityName)) {
+						} else if (!isUser && ai.communityId == id) {
+						    	//&& string.IsNullOrEmpty(ai.communityName)) {
 							//if (id.StartsWith("ch")) name = util.getRegGroup(res, "name=\"(.+?)\"");
 							//else name = util.getRegGroup(res, "name=\"(.+?)\"");
 							form.alartListSetName(ai, isUser, name);

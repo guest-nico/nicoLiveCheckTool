@@ -14,6 +14,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace namaichi.utility
 {
@@ -38,11 +39,14 @@ namespace namaichi.utility
 		}
 		public byte[] getBytes(string url, Dictionary<string, string> headers, CurlHttpVersion httpVer, string method = "GET", byte[] postData = null, bool isAddHeader = false) {
 			try {
-				var isCurl = util.isCurl;
-				if (isCurl) {
+				if (util.isUseCurl(httpVer)) {
 					util.debugWriteLine("curl get str " + url);
 					int httpCode;
 					var r2 = get2(url, headers, httpVer, out httpCode, method, postData, isAddHeader);
+					if (r2 == null) {
+						util.debugWriteLine("curl error null " + url);
+						return null;
+					}
 					if (r2 == null) return null;
 					var a = Encoding.UTF8.GetString(r2);
 					if (r2.Length == 0) return null;
@@ -59,14 +63,17 @@ namespace namaichi.utility
 				return null;
 			}
 		}
-		public string getStr(string url, Dictionary<string, string> headers, CurlHttpVersion httpVer, string method = "GET", string postData = "", bool isAddHeader = false, bool isGetErrorMessage = false) {
+		public string getStr(string url, Dictionary<string, string> headers, CurlHttpVersion httpVer, string method = "GET", string postData = "", bool isAddHeader = false, bool isGetErrorMessage = false, bool isFollowLocation = true) {
 			try {
-				var isCurl = util.isCurl;
-				if (isCurl) {
+				if (util.isUseCurl(httpVer)) {
 					util.debugWriteLine("curl get str " + url);
 					int httpCode;
 					var d = postData == null ? null : Encoding.UTF8.GetBytes(postData);
-					var r2 = get2(url, headers, httpVer, out httpCode, method, d, isAddHeader);
+					var r2 = get2(url, headers, httpVer, out httpCode, method, d, isAddHeader, isFollowLocation);
+					if (r2 == null) {
+						util.debugWriteLine("curl error null " + url);
+						return null;
+					}
 					var ret = Encoding.UTF8.GetString(r2);
 					var asciiret = Encoding.ASCII.GetString(r2);
 					util.debugWriteLine("curl ret " + url + " " + httpCode);
@@ -92,9 +99,10 @@ namespace namaichi.utility
 				return null;
 			}
 		}
-		public byte[] get2(string url, Dictionary<string, string> headers, CurlHttpVersion httpVer, out int httpCode, string method = "GET", byte[] postData = null, bool isAddHeader = false) {
+		public byte[] get2(string url, Dictionary<string, string> headers, CurlHttpVersion httpVer, out int httpCode, string method = "GET", byte[] postData = null, bool isAddHeader = false, bool isFollowLocation = true) {
 			byte[] ret = new byte[0];
 			httpCode = 0;
+			var retPtr = IntPtr.Zero;
 			try {
 				var addH = new string[12];
 				foreach (var h in headers) {
@@ -109,7 +117,14 @@ namespace namaichi.utility
 				int num = 0, headerNum = 0;
 				var a = postData == null ? 0 : postData.Length;
 				var postLen = postData == null ? 0 : postData.Length;
-				var retPtr = curl_get(url, method, postData, postLen, httpVer, out num, out headerNum, addH[0], addH[1], addH[2], addH[3], addH[4], addH[5], addH[6], addH[7], addH[8], addH[9], addH[10], addH[11]);
+				retPtr = curl_get(url, method, postData, postLen, httpVer, out num, out headerNum, isFollowLocation, addH[0], addH[1], addH[2], addH[3], addH[4], addH[5], addH[6], addH[7], addH[8], addH[9], addH[10], addH[11]);
+				if (num == 0) {
+					//CURLE_OK以外の場合、numに0、headerNumにcurlcode
+					//通信自体ができなかった場合もCURLE_OKが返ることがあるが取得データは0なのでエラーとして処理
+					//通信途中で問題が起こった場合もおそらくCURLE_OKが返るため成否判定は課題
+					util.debugWriteLine("curl get error " + headerNum + url);
+					return null;
+				}
 				
 				Array.Resize(ref ret, num);
 				Marshal.Copy(retPtr, ret, 0, num);
@@ -127,23 +142,19 @@ namespace namaichi.utility
 					ret = b;
 				}
 				
-				memFree(retPtr);
 				return ret;
 				
 			} catch (Exception ee) {
 				Debug.WriteLine(ee.Message + ee.Source + ee.StackTrace);
+			} finally {
+				try {
+					memFree(retPtr);
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+				}
 			}
 			return ret;
 		}
-		
-		//private static int writeCallBack(byte[] ptr, int sz, int nmemb, object userdata) {
-		
-		//private  IntPtr writeCallBack(IntPtr ptr, IntPtr sz, IntPtr nmemb, IntPtr userdata) {
-		//	//Debug.WriteLine(Encoding.UTF8.GetString(ptr));
-		//	return (IntPtr)(sz.ToInt32() * nmemb.ToInt32());
-		//	//return 0;
-		//}
-		
 		public struct MemoryStruct {
 			public IntPtr memory;
 			public int size;
@@ -154,6 +165,19 @@ namespace namaichi.utility
 		
 		[DllImport("libcurl.dll", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr curl_global_init(long flags);
+		[DllImport("libcurl.dll", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr curl_easy_init();
+		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr curl_easy_setopt(IntPtr curl, CURLoption opt, string s);
+		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr curl_easy_setopt(IntPtr curl, CURLoption opt, long s);
+		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern CURLcode curl_easy_perform(IntPtr curl);
+		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern string curl_easy_strerror(CURLcode code);
+		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void curl_easy_cleanup(IntPtr curl);
+		
 		[DllImport("curl_wrap.dll", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int testInt(int i, int j);
 		[DllImport("curl_wrap.dll", CallingConvention = CallingConvention.Cdecl)]
@@ -161,11 +185,11 @@ namespace namaichi.utility
 		public static extern IntPtr curl_get(string url, string method, 
 				//string sendData, int sendLen, CurlHttpVersion httpVer,
 				byte[] sendData, int sendLen, CurlHttpVersion httpVer,
-				out int num, out int headerNum, string addHeader0, 
-				string addHeader1, string addHeader2, string addHeader3, 
-				string addHeader4, string addHeader5, string addHeader6, 
-				string addHeader7, string addHeader8, string addHeader9, 
-				string addHeader10, string addHeader11);
+				out int num, out int headerNum, bool isFollowLocation,
+				string addHeader0,string addHeader1, string addHeader2, 
+				string addHeader3, string addHeader4, string addHeader5, 
+				string addHeader6, string addHeader7, string addHeader8, 
+				string addHeader9, string addHeader10, string addHeader11);
 		[DllImport("curl_wrap.dll", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void memFree(IntPtr p);
 	}

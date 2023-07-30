@@ -8,6 +8,7 @@
  */
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -347,13 +348,14 @@ namespace namaichi.rec
 				h.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8");
 				h.Add("User-Agent", util.userAgent);
 				
-				//var _d = "mail_tel=" + WebUtility.UrlEncode(param["mail_tel"]) + "&password=" + WebUtility.UrlEncode(param["password"]) + "&auth_id=" + param["auth_id"];
 				var _d = "mail_tel=" + HttpUtility.UrlEncode(param["mail_tel"]) + "&password=" + HttpUtility.UrlEncode(param["password"]) + "&auth_id=" + param["auth_id"];
 				var d = Encoding.ASCII.GetBytes(_d);
 				var cc = new CookieContainer();
 				
-				if (util.isCurl) {
-					var curlR = new Curl().getStr(loginUrl, h, CurlHttpVersion.CURL_HTTP_VERSION_1_1, "POST", _d, true);
+				util.debugWriteLine(cc.GetCookieHeader(new Uri(loginUrl)));
+				
+				if (util.isUseCurl(CurlHttpVersion.CURL_HTTP_VERSION_1_1)) {
+					var curlR = new Curl().getStr(loginUrl, h, CurlHttpVersion.CURL_HTTP_VERSION_1_1, "POST", _d, true, true, false);
 					if (curlR == null) {
 						log += "ログインページに接続できませんでした";
 						return null;
@@ -366,13 +368,91 @@ namespace namaichi.rec
 						if (_m.Groups[1].Value == "user_session_secure") secureC = new Cookie(_m.Groups[1].Value, _m.Groups[2].Value);
 					}
 					if (us != null) {
-						setUserSession(cc, us, secureC, null);
+						setUserSession(cc, us, secureC);
 						return cc;
 					}
+					
+					var locationM = new Regex("Location: (.+)").Matches(curlR);
+					if (locationM.Count == 0) {
+						log += "ログイン接続の転送先が見つかりませんでした";
+						return null;
+					}
+					var location = locationM[locationM.Count - 1].Groups[1].Value;
+					location = util.getRegGroup(curlR, "Location: (.+)\r");
+					if (location == null) return null;
+					//location = WebUtility.UrlDecode(location);
+					
+					var setCookie = new Dictionary<string, string>();
+					var setCookieM = new Regex("Set-Cookie: (.+?)=(.*?);").Matches(curlR);
+					foreach (Match _m in setCookieM) {
+						var key = _m.Groups[1].Value;
+						if (setCookie.ContainsKey(key)) {
+						    	if (_m.Groups[2].Value == "") setCookie.Remove(key);
+						    	else if (_m.Groups[2].Value != "") setCookie[key] = _m.Groups[2].Value;
+						    }
+						else if (_m.Groups[2].Value != "") setCookie.Add(key, _m.Groups[2].Value);
+					}
+					h["Cookie"] = string.Join("; ", setCookie.Select(x => x.Key + "=" + x.Value).ToArray());
+					h.Remove("Content-Type");
+					var curlR2 = new Curl().getStr(location, h, CurlHttpVersion.CURL_HTTP_VERSION_1_1, "GET", null, true, true, false);
+					
+					var browName = util.getRegGroup(curlR2, "id=\"deviceNameInput\".+?value=\"(.+?)\"");
+	                if (browName == null) browName = "Google Chrome (Windows)";
+	                var mfaUrl = util.getRegGroup(curlR2, "<form action=\"(.+?)\"");
+	                if (mfaUrl == null || mfaUrl.IndexOf("/mfa") == -1) {
+	                	log += "ログインに失敗しました";
+						return null;
+	                }
+	                mfaUrl = "https://account.nicovideo.jp" + mfaUrl;
+	                //mfaUrl = WebUtility.UrlDecode(mfaUrl);
+	                var sendTo = util.getRegGroup(curlR2, "class=\"userAccount\">(.+?)</span>");
+	                if (sendTo == null && util.getRegGroup(curlR2, "(スマートフォンのアプリを使って)") != null) {
+	                	sendTo = "app";
+	                }
+	                var f = new MfaInputForm(sendTo);
+	                
+	                var dr = f.ShowDialog();
+	                if (f.code == null) {
+	                	log += "二段階認証のコードが入力されていませんでした";
+	                	return null;
+	                }
+	                util.debugWriteLine(mfaUrl);
+	                h["Referer"] = location;
+	                h["Origin"] = "https://account.nicovideo.jp";
+	                h["Content-Type"] = "application/x-www-form-urlencoded";
+	                _d = "otp=" + f.code + "&loginBtn=%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3&device_name=Google+Chrome+%28Windows%29";
+	                var curlR3 = new Curl().getStr(mfaUrl, h, CurlHttpVersion.CURL_HTTP_VERSION_1_1, "POST", _d, true, true, false);
+	                if (curlR3 == null) {
+	                	log += "二段階認証のコードを正常に送信できませんでした";
+	                	return null;
+	                }
+	                setCookieM = new Regex("Set-Cookie: (.+?)=(.*?);").Matches(curlR3);
+					foreach (Match _m in setCookieM) {
+						var key = _m.Groups[1].Value;
+						if (setCookie.ContainsKey(key)) {
+						    	if (_m.Groups[2].Value == "") setCookie.Remove(key);
+						    	else setCookie[key] = _m.Groups[2].Value;
+						    }
+						else setCookie.Add(key, _m.Groups[2].Value);
+					}
+	                h["Cookie"] = string.Join("; ", setCookie.Select(x => x.Key + "=" + x.Value).ToArray());
+	                var location2 = util.getRegGroup(curlR3, "Location: (.+)\r");
+	                
+	                var curlR4 = new Curl().getStr(location2, h, CurlHttpVersion.CURL_HTTP_VERSION_1_1, "GET", null, true, true, false);
+	                m = new Regex("Set-Cookie: (.+?)=(.+?);").Matches(curlR4);
+					if (m.Count == 0) return null;
+					foreach (Match _m in m) {
+						if (_m.Groups[1].Value == "user_session") us = new Cookie(_m.Groups[1].Value, _m.Groups[2].Value);
+						if (_m.Groups[1].Value == "user_session_secure") secureC = new Cookie(_m.Groups[1].Value, _m.Groups[2].Value);
+					}
+					if (us != null) {
+						setUserSession(cc, us, secureC);
+						return cc;
+					}
+					return null; 
 				}
 				
-				var r = util.sendRequest(loginUrl, h, d, "POST", false, cc);
-				util.debugWriteLine(cc.GetCookieHeader(new Uri(loginUrl)));
+				var r = util.sendRequest(loginUrl, h, d, "POST", true, cc);
 				if (r == null) {
 					log += "ログインページに接続できませんでした";
 					return null;
@@ -414,7 +494,7 @@ namespace namaichi.rec
 	                h["Origin"] = "https://account.nicovideo.jp";
 	                _d = "otp=" + f.code + "&loginBtn=%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3&device_name=Google+Chrome+%28Windows%29";
 	                d = Encoding.ASCII.GetBytes(_d);
-	                var _r = util.sendRequest(mfaUrl, h, d, "POST", false, cc);
+	                var _r = util.sendRequest(mfaUrl, h, d, "POST", true, cc);
 	                if (_r == null) {
 	                	log += "二段階認証のコードを正常に送信できませんでした";
 	                	return null;

@@ -601,6 +601,23 @@ namespace namaichi
 			util.debugWriteLine("OS: " + util.CheckOSName());
 			util.debugWriteLine("OSType: " + util.CheckOSType());
 			
+			try {
+				var r = util.sendRequest("https://live.nicovideo.jp/", util.getHeader(null, null, null), null, "GET", false, null);
+				if (r == null) throw new Exception("webrequest null");
+				using (var s = r.GetResponseStream())
+				using (var sr = new StreamReader(s)) {
+					var srr = sr.ReadToEnd();
+					util.isWebRequestOk = true;
+					#if DEBUG
+						addLogText("debug: webrequestを有効にします");
+					#endif
+				}
+			} catch (Exception eee) {
+				util.debugWriteLine(eee.Message + eee.Source);
+				#if DEBUG
+					addLogText("debug: curlを使用します");
+				#endif
+			}
 			return;
 		}
 		void xpTest() {
@@ -3935,7 +3952,7 @@ namespace namaichi
 		
 		void AlartListRowEnter(object sender, DataGridViewCellEventArgs e)
 		{
-			util.debugWriteLine("alartlist row enter " + e.RowIndex);
+			util.debugWriteLine("alartlist row enter " + e.RowIndex + " " + e.ColumnIndex);
 			var isUserMode = ((DataGridView)sender).Name == "userAlartList";
 			if (e.RowIndex == -1)
 				return;
@@ -4049,6 +4066,19 @@ namespace namaichi
 			formAction(() => {
 				if (isUser) ai.hostName = name;
 				else ai.communityName = name;
+				try {
+					var columnI = isUser ? 3 : 2;
+					for (var i = 0; i < alartListDataSource.Count; i++) {
+						if (alartListDataSource[i] == ai)
+							alartList.UpdateCellValue(columnI, i);
+					}
+					for (var i = 0; i < userAlartListDataSource.Count; i++) {
+						if (userAlartListDataSource[i] == ai)
+							userAlartList.UpdateCellValue(columnI, i);
+					}
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.TargetSite);
+				}
 			});
 		}
 		void CheckExistsComMenuClick(object sender, EventArgs e)

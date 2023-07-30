@@ -50,8 +50,13 @@ namespace namaichi.alart
 				foreach (var f in followList)
 					util.debugWriteLine("fff " + f[0] + " " + f[1]);
 				
-				if (Array.IndexOf(result, true) > -1)
-					form.addLogText("フォローリストを取得しました " + followList.Count + "件");
+				if (Array.IndexOf(result, true) > -1) {
+					int uNum, chNum, coNum;
+					chNum = followList.Count(x => x[0].StartsWith("ch"));
+					coNum = followList.Count(x => x[0].StartsWith("co"));
+					uNum = followList.Count - chNum - coNum;
+					form.addLogText("フォローリストを取得しました " + followList.Count + "件(ユーザー:" + uNum + " コミュニティ:" + coNum + " チャンネル:" + chNum + ")");
+				}
 				updateAlartList(followList);
 				
 			} catch (Exception e) {
@@ -120,7 +125,7 @@ namespace namaichi.alart
 					} else form.addLogText("チャンネルフォローの取得に失敗しました");
 				}
 				if (types == null || types[2]) {
-					var coList = getCoList();
+					var coList = getCoList2();
 					if (coList != null) {
 						ret.AddRange(coList);
 						result[2] = true;
@@ -264,9 +269,10 @@ namespace namaichi.alart
 				for (var i = 0; i < 1000; i++) {
 					var h = getHeader(2);
 					string d = null; 
-					var res = util.postResStr(url, h, d, false, "GET");
+					var res = util.postResStr(url + "&cursor=" + cur, h, d, false, "GET");
 					if (res == null) return null;
 					var m = new Regex("\"id\":(\\d+),\"nickname\":\"(.+?)\"").Matches(res);
+					var addBuf = new List<string[]>();
 					foreach (Match _m in m) {
 						ret.Add(new string[]{_m.Groups[1].Value, _m.Groups[2].Value});
 					}
@@ -340,6 +346,37 @@ namespace namaichi.alart
 					foreach (Match _m in m) {
 						ret.Add(new string[]{_m.Groups[1].Value, _m.Groups[2].Value});
 					}
+				}
+				return ret;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+				return null;
+			}
+		}
+		private List<string[]> getCoList2() {
+			var url = "https://com.nicovideo.jp/api/v1/my/follows.json?limit=100&offset=";//0
+			try {
+				var h = util.getHeader(container, "https://www.nicovideo.jp/", url);
+				h.Add("X-Frontend-Id", "6");
+				
+				var ret = new List<string[]>();
+				for (var i = 0; i < 1000; i++) {
+					var res = util.getResStr(url + (i * 100).ToString(), h, false);
+					if (res == null) return null;
+					var m = new Regex("\"global_id\":\"(co\\d+)\",\"name\":\"(.+?)\"").Matches(res);
+					if (m.Count == 0) break;
+					foreach (Match _m in m) {
+						ret.Add(new string[]{_m.Groups[1].Value, _m.Groups[2].Value});
+					}
+					if (m.Count < 100) break;
+				}
+				
+				url = "https://com.nicovideo.jp/api/v1/my/communities.json?sort=%2Bcreate_time";
+				var _res = util.getResStr(url, h, false);
+				if (_res == null) return null;
+				var m2 = new Regex("\"global_id\":\"(co\\d+)\",\"name\":\"(.+?)\"").Matches(_res);
+				foreach (Match _m in m2) {
+					ret.Add(new string[]{_m.Groups[1].Value, _m.Groups[2].Value});
 				}
 				return ret;
 			} catch (Exception e) {

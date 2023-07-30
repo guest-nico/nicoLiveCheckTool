@@ -34,8 +34,11 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.120";
-	public static string versionDayStr = "2023/07/24";
+	public static string versionStr = "ver0.1.7.121";
+	public static string versionDayStr = "2023/07/31";
+	public static string osName = null;
+	public static string osType = null;
+	public static bool isWebRequestOk = false;
 	public static bool isShowWindow = true;
 	public static bool isStdIO = false;
 	public static string[] jarPath = null;
@@ -1056,6 +1059,7 @@ class util {
                         result += " " + mo["CSDVersion"].ToString();
                     result += " (" + mo["Version"].ToString() + ")";
                 }
+                osName = result;
             }
             catch (Exception e)
             {
@@ -1094,6 +1098,7 @@ class util {
                     else
                         result = "other";
                 }
+                osType = result;
             }
             catch (Exception e)
             {
@@ -1891,5 +1896,12 @@ class util {
 		if (cc != null) ret["Cookie"] = cc.GetCookieHeader(new Uri(url));
 		if (referer != null) ret["Referer"] = referer;
 		return ret;
+	}
+	public static bool isUseCurl(CurlHttpVersion httpVer) {
+		if (httpVer != CurlHttpVersion.CURL_HTTP_VERSION_1_1) return true;
+		if ((util.osName != null && 
+		     (util.osName.IndexOf("Windows 1") > -1)) || util.isWebRequestOk)
+			return false;
+		return util.isCurl;
 	}
 }

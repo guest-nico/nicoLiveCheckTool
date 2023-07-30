@@ -2931,6 +2931,7 @@ namespace namaichi
 			this.nicoSessionComboBox1.Name = "nicoSessionComboBox1";
 			this.nicoSessionComboBox1.Size = new System.Drawing.Size(297, 20);
 			this.nicoSessionComboBox1.TabIndex = 15;
+			this.nicoSessionComboBox1.SelectedIndexChanged += new System.EventHandler(this.NicoSessionComboBox1SelectedIndexChanged);
 			// 
 			// isCookieFileSiteiChkBox
 			// 

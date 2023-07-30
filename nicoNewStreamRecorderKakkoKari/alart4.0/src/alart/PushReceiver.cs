@@ -40,6 +40,7 @@ namespace namaichi.alart
 		private Check check;
 		private config.config config;
 		private bool isRetry = true;
+		private bool isFirst = true;
 		
 		private DateTime startTime = DateTime.Now;
 		
@@ -58,6 +59,7 @@ namespace namaichi.alart
 			_auth = config.get("pushAuth");
 			this.uaid = config.get("pushUa");
 			this.channelId = config.get("pushChId");
+			
 			
 			if (pri == "" || pub == "" ||
 			    	_auth == "" || uaid == "" ||
@@ -107,6 +109,7 @@ namespace namaichi.alart
 				#else
 					ws = new WebSocket(url, "", null, headers, util.userAgent, "", WebSocketVersion.Rfc6455, null, SslProtocols.Tls | (SslProtocols)768 | (SslProtocols)3072);
 				#endif
+				
 				ws.Opened += onOpen;
 				ws.Closed += onClose;
 				ws.DataReceived += onDataReceive;
@@ -114,6 +117,12 @@ namespace namaichi.alart
 				ws.Error += onError;
 				
 				ws.Open();
+				/*
+				Task.Factory.StartNew(() => sendPingPong(ws));
+				sendPingPong(ws);
+				util.debugWriteLine("aaaaaping");
+				*/
+				
 			} catch (Exception ee) {
 				util.debugWriteLine("push connect exception " + ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 				return false;
@@ -130,6 +139,7 @@ namespace namaichi.alart
 						util.debugWriteLine("connect timeout ws exception " + e.Message + e.Source + e.StackTrace + e.TargetSite);
 						
 					}
+					check.form.addLogText("ブラウザプッシュ通知の再接続に失敗しました");
 					return false;
 				}
 				
@@ -145,11 +155,36 @@ namespace namaichi.alart
 					util.debugWriteLine("ws connect exception " + eee.Message + eee.Source + eee.StackTrace + eee.TargetSite);
 				}
 				util.debugWriteLine("ws connect exception " + ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+				check.form.addLogText("ブラウザプッシュ通知の再接続に失敗しました " + ee.Message + ee.Source + ee.StackTrace);
 				return false;
 			}
 			
 			return true;
 		}
+		/*
+		private void sendPingPong(WebSocket _ws) {
+			util.debugWriteLine("sendPingPong " + _ws);
+			Thread.Sleep(1000);
+			try {
+				while (_ws.State == WebSocketState.Connecting || 
+				       _ws.State == WebSocketState.Open) {
+					try {
+                      	//_ws.SendPing("{}");
+                      	_ws.SendPong("{}");
+                      	//_ws.Send("{}");
+                      	util.debugWriteLine("send ws ping pong ");
+					} catch (Exception e) {
+						util.debugWriteLine("ws ping pong error " + e.Message + e.Source + e.StackTrace);
+					}
+                    Thread.Sleep(3000);
+				}
+				util.debugWriteLine("end ws ping pong");
+			} catch (Exception e) {
+				util.debugWriteLine("ping pong unknown error " + e.Message + e.Source + e.StackTrace);
+				int i;
+			}
+		}
+		*/
 		private void onOpen(object sender, EventArgs e) {
 			
 			util.debugWriteLine("on open ");
@@ -168,7 +203,9 @@ namespace namaichi.alart
 		private void onClose(object sender, EventArgs e) {
 			
 			util.debugWriteLine("on close " + e.ToString());
-			check.form.addLogText("ブラウザプッシュ通知の受信を終了しました");
+			#if DEBUG
+				check.form.addLogText("debug: ブラウザプッシュ通知の受信を終了しました");
+			#endif
 			
 			while (true && isRetry) {
 				try {
@@ -195,8 +232,13 @@ namespace namaichi.alart
 			util.debugWriteLine("on message " + e.Message);
 			
 			if (e.Message.IndexOf("hello") > -1 && e.Message.IndexOf("200") > -1) {
-				if (channelId != null && uaid != null)
+				if (channelId != null && uaid != null && isFirst) {
 					check.form.addLogText("ブラウザプッシュ通知の受信を開始しました");
+					#if DEBUG
+						check.form.addLogText("debug: ブラウザプッシュ通知の受信を開始しました");
+					#endif
+				}
+				isFirst = false;
 				
 				if (channelId == null) {
 					//var _chid2 = System.Guid.NewGuid().ToString();
@@ -456,7 +498,6 @@ namespace namaichi.alart
 			foreach (var _n in n) resetDict.Add(_n, "");
 			config.saveFromForm(resetDict);
 		}
-		
 	}
 	class GetItemRetryPr {
 		private string dec;

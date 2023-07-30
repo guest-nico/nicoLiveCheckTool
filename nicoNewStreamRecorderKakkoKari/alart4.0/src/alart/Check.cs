@@ -864,10 +864,12 @@ namespace namaichi.alart
 				
 				if (DateTime.Now - lastGetCookieTime> TimeSpan.FromHours(1)) {
 					lastGetCookieTime= DateTime.MaxValue;
-					Task.Factory.StartNew(() => {
-						setCookie(false, false);
-						lastGetCookieTime = DateTime.Now;
-					});
+					if (form.config.get("BrowserNum") == "2") {
+						Task.Factory.StartNew(() => {
+							setCookie(false, false);
+							lastGetCookieTime = DateTime.Now;
+						});
+					}
 				}
 				
 				if (DateTime.Now - lastCheckNotifyHistoryTime > TimeSpan.FromMinutes(5)) {

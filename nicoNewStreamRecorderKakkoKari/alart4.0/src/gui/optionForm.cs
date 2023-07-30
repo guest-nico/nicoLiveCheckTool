@@ -948,5 +948,11 @@ namespace namaichi
 			var v = Math.Ceiling(liveListUpdateMinutesList.Value * 20);
 			if (l.Value > v) l.Value = v;
 		}
+		void NicoSessionComboBox1SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (nicoSessionComboBox1.Text.IndexOf("Chrome") > -1 && 
+			    	(util.osName == null || util.osName.IndexOf("Windows 1") > -1))
+				MessageBox.Show("2023年7月現在、Google Chromeはブラウザの実行中にクッキーを取得できないことがあるようです。こちらでクッキーを取得できない場合、別のブラウザを選択していただくか、「ブラウザとクッキーを共有せず、次のアカウントでログインする」を選択していただくとログインが可能になるかもしれません。");
+		}
 	}
 }

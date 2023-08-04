@@ -34,8 +34,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.121";
-	public static string versionDayStr = "2023/07/31";
+	public static string versionStr = "ver0.1.7.122";
+	public static string versionDayStr = "2023/08/04";
 	public static string osName = null;
 	public static string osType = null;
 	public static bool isWebRequestOk = false;
@@ -1235,7 +1235,8 @@ class util {
 			url = "https://ext.nicovideo.jp/thumb_" + ((isChannel) ? "channel" : "community") + "/" + communityNum;
 			res = getPageSource(url, cc, null, false, 3);
 			//title = getRegGroup(res, "<p class=\"chcm_tit\">(.+?)</p>");
-			title = getRegGroup(res, "<title>(.+?)‐(ニコニコミュニティ|ニコニコチャンネル)</title>");
+			if (res != null)
+				title = getRegGroup(res, "<title>(.+?)‐(ニコニコミュニティ|ニコニコチャンネル)</title>");
 		} else {
 			title = WebUtility.HtmlDecode(title);
 		}

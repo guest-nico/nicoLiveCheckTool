@@ -99,7 +99,7 @@ namespace namaichi.alart
 			util.debugWriteLine("app push checkin");
 			id = token = null;
 			try {
-				//var url = "http://android.clients.google.com/checkin";
+				//var url = "https://android.clients.google.com/checkin";
 				var url = "https://android.googleapis.com/checkin";
 				
 				var cr = new CheckinRequest();
@@ -167,7 +167,8 @@ namespace namaichi.alart
 				*/
 				var headers = new Dictionary<string, string>() {
 					{"Content-Type", "application/x-protobuffer"},
-					{"User-Agent", "Android-Checkin/2.0 (vbox86p JLS36G); gzip"}				};
+					//{"User-Agent", "Android-Checkin/2.0 (vbox86p JLS36G); gzip"}};
+					{"User-Agent", "Dalvik/2.1.0 (Linux; U; Android 7.1.2;"}};
 				byte[] rb = null;
 				if (util.isCurl && true) {
 					rb = new Curl().getBytes(url, headers, CurlHttpVersion.CURL_HTTP_VERSION_1_1, "POST",postDataBytes, false);
@@ -360,7 +361,8 @@ namespace namaichi.alart
 					return false;
 				}
 				
-				var param = "{\"clientapp\":\"nicocas_android\",\"endpoint\":{\"token\":\"" + pushToken + "\"}}";
+				//var param = "{\"clientapp\":\"nicocas_android\",\"endpoint\":{\"token\":\"" + pushToken + "\"}}";
+				var param = "{\"destApp\":\"nicocas_android\",\"endpoint\":{\"token\":\"" + pushToken + "\"}}";
 				byte[] postDataBytes = Encoding.ASCII.GetBytes(param);
 				
 				var urlCookie = check.container.GetCookieHeader(new Uri("https://live.nicovideo.jp")) + ";";
@@ -378,9 +380,11 @@ namespace namaichi.alart
 					{"Content-Length", postDataBytes.Length.ToString()},
 				};
 				
-				var url = "https://public.api.nicovideo.jp/v1/nicopush/gcm/endpoints.json";
+				//var url = "https://public.api.nicovideo.jp/v1/nicopush/gcm/endpoints.json";
+				//var res = util.postResStr(url, headers, param, false, "POST");
 				
-				var res = util.postResStr(url, headers, param, false, "POST");
+				var url = "https://api.push.nicovideo.jp/v1/nicopush/gcm/endpoints.json";
+				var res = new Curl().getStr(url, headers, CurlHttpVersion.CURL_HTTP_VERSION_2TLS, "POST", param, false, true, false);
 				
 				util.debugWriteLine("app push send token " + res);
 				if (res == null) return false;

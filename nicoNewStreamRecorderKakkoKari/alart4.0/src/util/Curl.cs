@@ -56,7 +56,14 @@ namespace namaichi.utility
 					}
 					return r2;
 				} else {
-					return util.getFileBytes(url, null);
+					var _d = postData;
+					var r22 = util.sendRequest(url, headers, _d, method, false, null);
+					using (var r2 = r22.GetResponseStream())
+					using (var ms = new MemoryStream()) {
+						r2.CopyTo(ms);
+						return ms.ToArray();
+					}
+					
 				}
 			} catch (Exception e) {
 				Debug.WriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);

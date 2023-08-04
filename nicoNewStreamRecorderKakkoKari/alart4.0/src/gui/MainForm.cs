@@ -1417,7 +1417,6 @@ namespace namaichi
 		}
 		public void setHosoLogStatusBar(RssItem item) {
 			formAction(() => {
-			
    		       	try {
 					var buf = "[" + DateTime.Parse(item.pubDate).ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss") + "] 放送ID：" + item.lvId + " コミュニティID：" + item.comId + "　ユーザー名：" + item.hostName;
 					lastHosoStatusBar.Text = buf;

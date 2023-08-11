@@ -358,6 +358,7 @@ namespace namaichi.alart
 							} else ret.Add(o);
 						}
 					}
+					if (tanzakuObj.data.cursor == null) break;
 					if (tanzakuObj.data.cursor.IndexOf("cursorEnd/cursorEnd") > -1) isEnd = true;
 					if (isEnd) break;
 				}

@@ -81,8 +81,13 @@ namespace namaichi.alart
 			}
 			if (bool.Parse(form.config.get("IsPush"))) {
 				Task.Factory.StartNew(() => {
-					pr = new PushReceiver(this, form.config);
-					pr.start();
+					if (util.osName == null || util.osName.IndexOf("XP") == -1) {
+						pr = new PushReceiver(this, form.config);
+						pr.start();
+					} else {
+						pr = new PushReceiverCurl(this, form.config);
+						pr.start();
+					}
 				});
 			}
 			if (bool.Parse(form.config.get("IsAppPush"))) {
@@ -756,8 +761,13 @@ namespace namaichi.alart
 			}
 			if (bool.Parse(form.config.get("IsPush"))) {
 				Task.Factory.StartNew(() => {
-					pr = new PushReceiver(this, form.config);
-					pr.start();
+					if (util.osName == null || util.osName.IndexOf("XP") == -1) {
+						pr = new PushReceiver(this, form.config);
+						pr.start();
+					} else {
+						pr = new PushReceiverCurl(this, form.config);
+						pr.start();
+					}
 				});
 			}
 			if (bool.Parse(form.config.get("IsAppPush"))) {

@@ -27,22 +27,22 @@ namespace namaichi.alart
 	/// </summary>
 	public class PushReceiver
 	{
-		private PushCrypto pc = new PushCrypto();
-		private byte[] privateKey;
-		private byte[] publicKey;
-		private byte[] auth;
-		private string uaid;
-		private string channelId;
+		protected PushCrypto pc = new PushCrypto();
+		protected byte[] privateKey;
+		protected byte[] publicKey;
+		protected byte[] auth;
+		protected string uaid = null;
+		protected string channelId = null;
 		
 		private WebSocket ws;
-		private DateTime lastWebsocketConnectTime;
+		protected DateTime lastWebsocketConnectTime;
 		
-		private Check check;
-		private config.config config;
-		private bool isRetry = true;
-		private bool isFirst = true;
+		protected Check check;
+		protected config.config config;
+		protected bool isRetry = true;
+		protected bool isFirst = true;
 		
-		private DateTime startTime = DateTime.Now;
+		protected DateTime startTime = DateTime.Now;
 		
 		public PushReceiver(Check check, config.config config) {
 			this.check = check;
@@ -88,7 +88,7 @@ namespace namaichi.alart
 			connect();
 			
 		}
-		public bool connect() {
+		virtual public bool connect() {
 			
 			lock(this) {
 				var  isPass = (TimeSpan.FromSeconds(5) > (DateTime.Now - lastWebsocketConnectTime));
@@ -140,6 +140,7 @@ namespace namaichi.alart
 						
 					}
 					check.form.addLogText("ブラウザプッシュ通知の再接続に失敗しました");
+					isFirst = true;
 					return false;
 				}
 				
@@ -194,7 +195,7 @@ namespace namaichi.alart
 				"{\"messageType\":\"hello\",\"broadcasts\":null,\"use_webpush\":true}"
 				: "{\"messageType\":\"hello\",\"broadcasts\":null,\"use_webpush\":true,\"uaid\":\"" + uaid + "\"}";
 			try {
-				ws.Send(mes);
+				wsSend(mes);
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
@@ -228,10 +229,12 @@ namespace namaichi.alart
 			util.debugWriteLine("on data " + e.Data);
 		}
 		private void onMessageReceive(object sender, MessageReceivedEventArgs e) {
+			onMessageReceiveCore(e.Message);
+		}
+		protected void onMessageReceiveCore(string message) {
+			util.debugWriteLine("on message " + message);
 			
-			util.debugWriteLine("on message " + e.Message);
-			
-			if (e.Message.IndexOf("hello") > -1 && e.Message.IndexOf("200") > -1) {
+			if (message.IndexOf("hello") > -1 && message.IndexOf("200") > -1) {
 				if (channelId != null && uaid != null && isFirst) {
 					check.form.addLogText("ブラウザプッシュ通知の受信を開始しました");
 					#if DEBUG
@@ -240,6 +243,8 @@ namespace namaichi.alart
 				}
 				isFirst = false;
 				
+				var isChannnelIdNull = channelId == null;
+				util.debugWriteLine("channnel id  " + channelId + " uaid " + uaid);
 				if (channelId == null) {
 					//var _chid2 = System.Guid.NewGuid().ToString();
 					var _chid = util.getTimeGuid();
@@ -251,19 +256,19 @@ namespace namaichi.alart
 					var regMes = "{\"channelID\":\"" + _chid + "\",\"messageType\":\"register\",\"key\":\"" + pubBase64 + "\"}";
 					util.debugWriteLine("register send " + regMes);
 					try {
-						ws.Send(regMes);
+						wsSend(regMes);
 					} catch (Exception ee) {
 						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 					}
 				}
 				if (uaid == null) {
-					uaid = util.getRegGroup(e.Message, "\"uaid\":\"(.+?)\"");
+					uaid = util.getRegGroup(message, "\"uaid\":\"(.+?)\"");
 					config.set("pushUa", uaid);
 				}
 				return;
 			}
 			
-			if (e.Message.IndexOf("\"messageType\":\"register\"") > -1) {
+			if (message.IndexOf("\"messageType\":\"register\"") > -1) {
 				if (check.container == null) {
 					check.form.addLogText("ブラウザプッシュ通知のIDが取得できませんでした");
 					
@@ -278,20 +283,20 @@ namespace namaichi.alart
 					return;
 				}
 					
-				channelId = util.getRegGroup(e.Message, "\"channelID\":\"(.+?)\"");
+				channelId = util.getRegGroup(message, "\"channelID\":\"(.+?)\"");
 				if (channelId == null) util.debugWriteLine("channelId not found");
 				config.set("pushChId", channelId);
 				
-				var endpoint = util.getRegGroup(e.Message, "\"pushEndpoint\":\"(.+?)\"");
+				var endpoint = util.getRegGroup(message, "\"pushEndpoint\":\"(.+?)\"");
 				if (sendEndpoint(endpoint))
 					check.form.addLogText("ブラウザプッシュ通知の受信を開始しました");
 				else check.form.addLogText("ブラウザプッシュ通知の接続に失敗しました");
 					
 			}
 			
-			if (e.Message.IndexOf("\"messageType\":\"notification\"") > -1) {
+			if (message.IndexOf("\"messageType\":\"notification\"") > -1) {
 				if (privateKey == null || publicKey == null || auth == null) return;
-				var data = util.getRegGroup(e.Message, "\"data\":\"(.+?)\"");
+				var data = util.getRegGroup(message, "\"data\":\"(.+?)\"");
 				if (data == null) return;
 				try {
 					var dec = pc.decrypt(data, privateKey, publicKey, auth);
@@ -322,6 +327,9 @@ namespace namaichi.alart
 				}
 			}
 			
+		}
+		virtual protected void wsSend(string s) {
+			ws.Send(s);
 		}
 		private bool sendEndpoint(string endpoint) {
 			

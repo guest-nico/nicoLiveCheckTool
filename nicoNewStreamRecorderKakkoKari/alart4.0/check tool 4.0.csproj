@@ -165,6 +165,7 @@
     </Compile>
     <Compile Include="src\alart\PushCrypto.cs" />
     <Compile Include="src\alart\PushReceiver.cs" />
+    <Compile Include="src\alart\PushReceiverCurl.cs" />
     <Compile Include="src\alart\RssCheck.cs" />
     <Compile Include="src\alart\TaskCheck.cs" />
     <Compile Include="src\alart\ThumbnailManager.cs" />
@@ -369,11 +370,26 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="curl_wrap.dll">
+    <None Include="curl_wrap_normal.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="curl_wrap_ws.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Help\BassNet.chm" />
+    <None Include="libcrypto-3.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="libcurl.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="libcurl_ws.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="libssl-3.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="nghttp2.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />

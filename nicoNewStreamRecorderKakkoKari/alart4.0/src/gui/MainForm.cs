@@ -216,10 +216,17 @@ namespace namaichi
 				ColorTranslator.FromHtml(config.get("followerOnlyColor")) : Color.Empty;
 			evenRowsColor = ColorTranslator.FromHtml(config.get("evenRowsColor"));
 			
+			util.debugWriteLine("OS: " + util.CheckOSName());
+			util.debugWriteLine("OSType: " + util.CheckOSType());
 			if (util.isCurl) {
 				try {
 					Curl.curl_global_init((1<<0) | (1<<1));//CURL_GLOBAL_SSL|CURL_GLOBAL_WIN32
 				} catch (Exception e) {
+					if (e.ToString().IndexOf("DllNotFound") > -1) {
+						MessageBox.Show("libcurlのライブラリが正常に読み込めませんでした。libcurl.dllもしくは依存ライブラリが正常に配置されていない可能性があります");
+					}
+					if (util.osName != null && util.osName.IndexOf("XP") > -1)
+							MessageBox.Show("Windows XPの場合、Visual Studio 2015 の Visual C++ 再頒布可能パッケージが必要です。");
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace);
 				}
 			}
@@ -598,8 +605,6 @@ namespace namaichi
 				util.dllCheck(this);
 				xpTest();
 			});
-			util.debugWriteLine("OS: " + util.CheckOSName());
-			util.debugWriteLine("OSType: " + util.CheckOSType());
 			
 			try {
 				var r = util.sendRequest("https://live.nicovideo.jp/", util.getHeader(null, null, null), null, "GET", false, null);

@@ -34,8 +34,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.122";
-	public static string versionDayStr = "2023/08/04";
+	public static string versionStr = "ver0.1.7.123";
+	public static string versionDayStr = "2023/08/12";
 	public static string osName = null;
 	public static string osType = null;
 	public static bool isWebRequestOk = false;
@@ -1904,5 +1904,37 @@ class util {
 		     (util.osName.IndexOf("Windows 1") > -1)) || util.isWebRequestOk)
 			return false;
 		return util.isCurl;
+	}
+	public static bool libcurlWsDllCheck(out string mes) {
+		var path = getJarPath()[0];
+		var dlls = new string[]{"libssl-3.dll",
+				"libcrypto-3.dll", "nghttp2.dll"};
+		mes = "";
+		foreach (var n in dlls) {
+			if (!File.Exists(path + "/" + n)) 
+				mes += (mes == "" ? "" : ",") + n;
+		}
+		util.debugWriteLine("libcurlWsDllCheck " + mes);
+		return mes == ""; 
+	}
+	public static bool vcr140Check(out string mes) {
+		mes = "";
+		bool isExists = false;
+		try {
+			var pp = Environment.GetEnvironmentVariable("PATH");
+			if (pp == null) return false;
+			var l = pp.Split(';');
+			foreach (var _l in l) {
+				var d = _l.Trim(new char[]{' ', '/', '\\'});
+				if (File.Exists(d + "/VCRUNTIME140.dll"))
+					isExists = true; 
+			}
+			if (!isExists) mes += "環境変数PATHの中にVCRUNTIME140.dllが見つかりませんでした";
+		} catch (Exception e) {
+			util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+			mes += e.Message + e.Source + e.StackTrace;
+		}
+		util.debugWriteLine("vcr140Check " + mes + " " + isExists);
+		return isExists;
 	}
 }

@@ -134,6 +134,9 @@
     <Compile Include="..\alart4.0\src\alart\PushReceiver.cs">
       <Link>src\alart\PushReceiver.cs</Link>
     </Compile>
+    <Compile Include="..\alart4.0\src\alart\PushReceiverCurl.cs">
+      <Link>src\alart\PushReceiverCurl.cs</Link>
+    </Compile>
     <Compile Include="..\alart4.0\src\alart\RssCheck.cs">
       <Link>src\alart\RssCheck.cs</Link>
     </Compile>

@@ -94,6 +94,7 @@ namespace namaichi.utility
 				} else {
 					var _d = postData == null ? null : Encoding.UTF8.GetBytes(postData);
 					var r22 = util.sendRequest(url, headers, _d, method, false, null);
+					if (r22 == null) return null;
 					using (var r2 = r22.GetResponseStream())
 					using (var r3 = new StreamReader(r2)) {
 						var a = r3.ReadToEnd();
@@ -172,18 +173,17 @@ namespace namaichi.utility
 		
 		[DllImport("libcurl.dll", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr curl_global_init(long flags);
-		[DllImport("libcurl.dll", CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr curl_easy_init();
-		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr curl_easy_setopt(IntPtr curl, CURLoption opt, string s);
-		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr curl_easy_setopt(IntPtr curl, CURLoption opt, long s);
-		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-		public static extern CURLcode curl_easy_perform(IntPtr curl);
+		
 		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
 		public static extern string curl_easy_strerror(CURLcode code);
 		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void curl_easy_cleanup(IntPtr curl);
+		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern CURLcode curl_ws_send(IntPtr curl, string buffer, int buflen,
+                      out int sent, int fragsize, curlWsFlags flags);
+		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern CURLcode curl_ws_recv(IntPtr easy, out string buffer, int buflen,
+                      out int recv, out curl_ws_frame meta);
 		
 		[DllImport("curl_wrap.dll", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int testInt(int i, int j);
@@ -199,6 +199,21 @@ namespace namaichi.utility
 				string addHeader9, string addHeader10, string addHeader11);
 		[DllImport("curl_wrap.dll", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void memFree(IntPtr p);
+		
+		//ws
+		[DllImport("curl_wrap.dll", CallingConvention = CallingConvention.Cdecl)]
+		public static extern CURLcode curl_ws_send_wrap(IntPtr curl, string buffer, int buflen,
+                      out int sent, int fragsize, int flags);
+		[DllImport("curl_wrap.dll", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr curl_ws_recv_wrap(IntPtr curl, out CURLcode retCode, out uint recv);
+		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern CURLcode curl_easy_perform(IntPtr curl);
+		[DllImport("libcurl.dll", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr curl_easy_init();
+		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr curl_easy_setopt(IntPtr curl, CURLoption opt, string s);
+		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr curl_easy_setopt(IntPtr curl, CURLoption opt, long s);
 	}
 	
 	public enum CURLoption {
@@ -211,7 +226,8 @@ namespace namaichi.utility
 		CURLOPT_HTTP_VERSION = 84,
 		CURLOPT_TIMEOUT = 13,
 		CURLOPT_POSTFIELDS = 10015,
-		CURLOPT_POSTFIELDSIZE = 60
+		CURLOPT_POSTFIELDSIZE = 60,
+		CURLOPT_CONNECT_ONLY = 141
 	}
 	public enum CURLMoption {
 		CURLMOPT_PIPELINING = 3
@@ -399,5 +415,24 @@ namespace namaichi.utility
 	public struct curlMsgData {
 		public IntPtr whatever;    /* message-specific data */
 		public CURLcode result;   /* return code for transfer */
+	}
+	[Flags]
+	public enum curlWsFlags {
+		CURLWS_TEXT = (1<<0),
+		CURLWS_BINARY = (1<<1),
+		CURLWS_CONT = (1<<2),
+		CURLWS_CLOSE = (1<<3),
+		CURLWS_PING = (1<<4),
+		CURLWS_OFFSET = (1<<5)
+	}
+	public struct curl_ws_frame {
+		int age;              /* zero */
+		int flags;            /* See the CURLWS_* defines */
+		int offset;    /* the offset of this data into the frame */
+		int bytesleft; /* number of pending bytes left of the payload */
+	}
+	public class curl_slist {
+		public string data = null;
+		public curl_slist next = null;
 	}
 }

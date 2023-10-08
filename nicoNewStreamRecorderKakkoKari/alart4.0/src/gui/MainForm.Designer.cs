@@ -331,7 +331,6 @@ namespace namaichi
 			this.alartListFollowUserMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.alartListUnFollowComMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.alartListUnFollowUserMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.alartUserListFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator41 = new System.Windows.Forms.ToolStripSeparator();
 			this.openAppliAMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliBMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -343,6 +342,7 @@ namespace namaichi
 			this.openAppliHMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliIMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliJMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.alartUserListFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.notifyIconMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.notifyIconRecentSeparator = new System.Windows.Forms.ToolStripSeparator();
@@ -391,6 +391,17 @@ namespace namaichi
 			this.liveListRemoveFavoriteCommunityMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
 			this.liveListDeleteRowMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator42 = new System.Windows.Forms.ToolStripSeparator();
+			this.liveListOpenAppliAMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.liveListOpenAppliBMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.liveListOpenAppliCMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.liveListOpenAppliDMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.liveListOpenAppliEMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.liveListOpenAppliFMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.liveListOpenAppliGMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.liveListOpenAppliHMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.liveListOpenAppliIMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.liveListOpenAppliJMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.liveListSearchBtn = new System.Windows.Forms.Button();
 			this.liveListSearchText = new System.Windows.Forms.TextBox();
 			this.categoryRightBtn = new System.Windows.Forms.Button();
@@ -1024,7 +1035,7 @@ namespace namaichi
 									this.appliIOffMenuItem,
 									this.appliJOffMenuItem});
 			this.notifyOffMenuItem.Name = "notifyOffMenuItem";
-			this.notifyOffMenuItem.Size = new System.Drawing.Size(143, 22);
+			this.notifyOffMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.notifyOffMenuItem.Text = "一時機能OFF";
 			this.notifyOffMenuItem.DropDownOpening += new System.EventHandler(this.NotifyOffMenuItemDropDownOpening);
 			this.notifyOffMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.NotifyOffMenuItemDropDownItemClicked);
@@ -2919,7 +2930,7 @@ namespace namaichi
 									this.alartListUnFollowComMenu,
 									this.alartListUnFollowUserMenu});
 			this.alartListFollowMenu.Name = "contextMenuStrip6";
-			this.alartListFollowMenu.OwnerItem = this.alartComListFollowMenu;
+			this.alartListFollowMenu.OwnerItem = this.alartUserListFollowMenu;
 			this.alartListFollowMenu.Size = new System.Drawing.Size(248, 92);
 			this.alartListFollowMenu.Opening += new System.ComponentModel.CancelEventHandler(this.AlartListFollowMenuOpening);
 			// 
@@ -2950,13 +2961,6 @@ namespace namaichi
 			this.alartListUnFollowUserMenu.Size = new System.Drawing.Size(247, 22);
 			this.alartListUnFollowUserMenu.Text = "この行のユーザーをフォロー解除する";
 			this.alartListUnFollowUserMenu.Click += new System.EventHandler(this.AlartListUnFollowUserMenuClick);
-			// 
-			// alartUserListFollowMenu
-			// 
-			this.alartUserListFollowMenu.DropDown = this.alartListFollowMenu;
-			this.alartUserListFollowMenu.Name = "alartUserListFollowMenu";
-			this.alartUserListFollowMenu.Size = new System.Drawing.Size(268, 22);
-			this.alartUserListFollowMenu.Text = "フォロー";
 			// 
 			// toolStripSeparator41
 			// 
@@ -3032,6 +3036,13 @@ namespace namaichi
 			this.openAppliJMenu.Size = new System.Drawing.Size(268, 22);
 			this.openAppliJMenu.Text = "最近行われた放送のURLをアプリJで開く";
 			this.openAppliJMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// alartUserListFollowMenu
+			// 
+			this.alartUserListFollowMenu.DropDown = this.alartListFollowMenu;
+			this.alartUserListFollowMenu.Name = "alartUserListFollowMenu";
+			this.alartUserListFollowMenu.Size = new System.Drawing.Size(268, 22);
+			this.alartUserListFollowMenu.Text = "フォロー";
 			// 
 			// notifyIcon
 			// 
@@ -3327,9 +3338,20 @@ namespace namaichi
 									this.liveListAddFavoriteCommunityMenu,
 									this.liveListRemoveFavoriteCommunityMenu,
 									this.toolStripSeparator12,
-									this.liveListDeleteRowMenu});
+									this.liveListDeleteRowMenu,
+									this.toolStripSeparator42,
+									this.liveListOpenAppliAMenu,
+									this.liveListOpenAppliBMenu,
+									this.liveListOpenAppliCMenu,
+									this.liveListOpenAppliDMenu,
+									this.liveListOpenAppliEMenu,
+									this.liveListOpenAppliFMenu,
+									this.liveListOpenAppliGMenu,
+									this.liveListOpenAppliHMenu,
+									this.liveListOpenAppliIMenu,
+									this.liveListOpenAppliJMenu});
 			this.contextMenuStrip3.Name = "contextMenuStrip1";
-			this.contextMenuStrip3.Size = new System.Drawing.Size(245, 226);
+			this.contextMenuStrip3.Size = new System.Drawing.Size(245, 452);
 			// 
 			// liveListOpenUrlMenu
 			// 
@@ -3462,6 +3484,81 @@ namespace namaichi
 			this.liveListDeleteRowMenu.Size = new System.Drawing.Size(244, 22);
 			this.liveListDeleteRowMenu.Text = "この行を削除する";
 			this.liveListDeleteRowMenu.Click += new System.EventHandler(this.LiveListDeleteRowMenuClick);
+			// 
+			// toolStripSeparator42
+			// 
+			this.toolStripSeparator42.Name = "toolStripSeparator42";
+			this.toolStripSeparator42.Size = new System.Drawing.Size(241, 6);
+			// 
+			// liveListOpenAppliAMenu
+			// 
+			this.liveListOpenAppliAMenu.Name = "liveListOpenAppliAMenu";
+			this.liveListOpenAppliAMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliAMenu.Text = "放送URLをアプリAで開く";
+			this.liveListOpenAppliAMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
+			// 
+			// liveListOpenAppliBMenu
+			// 
+			this.liveListOpenAppliBMenu.Name = "liveListOpenAppliBMenu";
+			this.liveListOpenAppliBMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliBMenu.Text = "放送URLをアプリBで開く";
+			this.liveListOpenAppliBMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
+			// 
+			// liveListOpenAppliCMenu
+			// 
+			this.liveListOpenAppliCMenu.Name = "liveListOpenAppliCMenu";
+			this.liveListOpenAppliCMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliCMenu.Text = "放送URLをアプリCで開く";
+			this.liveListOpenAppliCMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
+			// 
+			// liveListOpenAppliDMenu
+			// 
+			this.liveListOpenAppliDMenu.Name = "liveListOpenAppliDMenu";
+			this.liveListOpenAppliDMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliDMenu.Text = "放送URLをアプリDで開く";
+			this.liveListOpenAppliDMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
+			// 
+			// liveListOpenAppliEMenu
+			// 
+			this.liveListOpenAppliEMenu.Name = "liveListOpenAppliEMenu";
+			this.liveListOpenAppliEMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliEMenu.Text = "放送URLをアプリEで開く";
+			this.liveListOpenAppliEMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
+			// 
+			// liveListOpenAppliFMenu
+			// 
+			this.liveListOpenAppliFMenu.Name = "liveListOpenAppliFMenu";
+			this.liveListOpenAppliFMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliFMenu.Text = "放送URLをアプリFで開く";
+			this.liveListOpenAppliFMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
+			// 
+			// liveListOpenAppliGMenu
+			// 
+			this.liveListOpenAppliGMenu.Name = "liveListOpenAppliGMenu";
+			this.liveListOpenAppliGMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliGMenu.Text = "放送URLをアプリGで開く";
+			this.liveListOpenAppliGMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
+			// 
+			// liveListOpenAppliHMenu
+			// 
+			this.liveListOpenAppliHMenu.Name = "liveListOpenAppliHMenu";
+			this.liveListOpenAppliHMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliHMenu.Text = "放送URLをアプリHで開く";
+			this.liveListOpenAppliHMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
+			// 
+			// liveListOpenAppliIMenu
+			// 
+			this.liveListOpenAppliIMenu.Name = "liveListOpenAppliIMenu";
+			this.liveListOpenAppliIMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliIMenu.Text = "放送URLをアプリIで開く";
+			this.liveListOpenAppliIMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
+			// 
+			// liveListOpenAppliJMenu
+			// 
+			this.liveListOpenAppliJMenu.Name = "liveListOpenAppliJMenu";
+			this.liveListOpenAppliJMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliJMenu.Text = "放送URLをアプリJで開く";
+			this.liveListOpenAppliJMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
 			// 
 			// liveListSearchBtn
 			// 
@@ -5737,6 +5834,17 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripMenuItem liveListOpenAppliJMenu;
+		private System.Windows.Forms.ToolStripMenuItem liveListOpenAppliIMenu;
+		private System.Windows.Forms.ToolStripMenuItem liveListOpenAppliHMenu;
+		private System.Windows.Forms.ToolStripMenuItem liveListOpenAppliGMenu;
+		private System.Windows.Forms.ToolStripMenuItem liveListOpenAppliFMenu;
+		private System.Windows.Forms.ToolStripMenuItem liveListOpenAppliEMenu;
+		private System.Windows.Forms.ToolStripMenuItem liveListOpenAppliDMenu;
+		private System.Windows.Forms.ToolStripMenuItem liveListOpenAppliCMenu;
+		private System.Windows.Forms.ToolStripMenuItem liveListOpenAppliBMenu;
+		private System.Windows.Forms.ToolStripMenuItem liveListOpenAppliAMenu;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator42;
 		private System.Windows.Forms.ToolStripMenuItem alartUserListFollowMenu;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator41;
 		private System.Windows.Forms.ToolStripMenuItem alartComListFollowMenu;

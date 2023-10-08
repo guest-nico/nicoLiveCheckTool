@@ -364,8 +364,11 @@ namespace namaichi.alart
 			
 			var sendAuth = Convert.ToBase64String(pc.generateAuth());
 			var _pub = Convert.ToBase64String(publicKey);
-			var param = "{\"clientapp\":\"nico_account_webpush\",\"endpoint\":{\"endpoint\":\"" + endpoint + "\",\"auth\":\"" + sendAuth + "\",\"p256dh\":\"" + _pub + "\"}}";
-			var url = "https://public.api.nicovideo.jp/v1/nicopush/webpush/endpoints.json";
+			//var param = "{\"clientapp\":\"nico_account_webpush\",\"endpoint\":{\"endpoint\":\"" + endpoint + "\",\"auth\":\"" + sendAuth + "\",\"p256dh\":\"" + _pub + "\"}}";
+			//var url = "https://public.api.nicovideo.jp/v1/nicopush/webpush/endpoints.json";
+			
+			var param = "{\"destApp\":\"nico_account_webpush\",\"endpoint\":{\"endpoint\":\"" + endpoint + "\",\"auth\":\"" + sendAuth + "\",\"p256dh\":\"" + _pub + "\"}}";
+			var url = "https://api.push.nicovideo.jp/v1/nicopush/webpush/endpoints.json";
 			util.debugWriteLine("param " + param);
 			util.debugWriteLine("send register cookie " + check.container.GetCookieHeader(new Uri(url)));
 			try {
@@ -388,6 +391,7 @@ namespace namaichi.alart
 				
 				var h = util.getHeader(check.container, "https://account.nicovideo.jp/my/account", url);
 				h.Add("Content-Type", "application/json");
+				//h.Add("x-request-with", "https://account.nicovideo.jp/my/account");
 				h.Add("x-request-with", "https://account.nicovideo.jp/my/account");
 				h.Add("x-frontend-id", "8");
 				var resStr = util.postResStr(url, h, param, true, "POST");

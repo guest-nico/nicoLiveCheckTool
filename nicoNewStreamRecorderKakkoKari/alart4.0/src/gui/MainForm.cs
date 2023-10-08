@@ -373,6 +373,7 @@ namespace namaichi
 	        	var r = o.ShowDialog();
 	        	if (r == DialogResult.OK) {
 	        		var newSize = config.get("fontSize");
+	        		applyMenuSetting();
 	        		if (size != newSize) {
 	        			var formSize = Size;
 	        			var loc = Location;
@@ -2430,8 +2431,9 @@ namespace namaichi
 			var n = (char)((int)'A' + i - 15);
 			var item = (ToolStripMenuItem)contextMenuStrip1.Items.Find("openAppli" + n + "Menu", true)[0];
 			item.Visible = alartList.Columns[i].Visible;
+			item = (ToolStripMenuItem)contextMenuStrip3.Items.Find("liveListOpenAppli" + n + "Menu", true)[0];
+			item.Visible = alartList.Columns[i].Visible;
 		}
-		
 		void IsTaskListDisplayTabMenuClick(object sender, EventArgs e)
 		{
 			var i = displayTaskTabMenu.DropDownItems.IndexOf((ToolStripMenuItem)sender);
@@ -2704,15 +2706,15 @@ namespace namaichi
 			for (var i = 0; i < 10; i++) {
 				var n = (char)(A + i);
 				var item = (ToolStripMenuItem)contextMenuStrip1.Items.Find("openAppli" + n + "Menu", true)[0];
+				var item2 = (ToolStripMenuItem)contextMenuStrip3.Items.Find("liveListOpenAppli" + n + "Menu", true)[0];
 				
-				item.Visible = //bool.Parse(config.get("ShowApp" + n));
-					//((ToolStripMenuItem)displayFavoriteTabMenu.DropDownItems.Find("isDisplayAppli" + n + "TabMenu", true)[0]).Checked;
-					alartList.Columns[i + 15].Visible;
+				item.Visible = item2.Visible = alartList.Columns[i + 15].Visible;
 				
 				var name = config.get("appli" + n + "Name");
 				if (name == "") name = "アプリ" + n;
 				formAction(() => {
 					item.Text = "最近行われた放送のURLを" + name + "で開く";
+					item2.Text = "放送URLを" + name + "で開く";
 					
 					alartList.Columns[i + 15].HeaderText = name;
 					taskList.Columns[i + 10].HeaderText = name;
@@ -6393,6 +6395,32 @@ namespace namaichi
 			if (e.KeyChar == '\r' || e.KeyChar == '\n') {
 				userAddBtn.PerformClick();
 				e.Handled = true;
+			}
+		}
+		void LiveListOpenAppliMenuClick(object sender, EventArgs e)
+		{
+			var dataSource = liveListDataSource;
+			var list = liveList;
+			
+			var selectedRowIndexList = new List<int>();
+			foreach (DataGridViewCell c in list.SelectedCells) {
+				try {
+					if (selectedRowIndexList.IndexOf(c.RowIndex) > -1) continue;
+					selectedRowIndexList.Add(c.RowIndex);
+					var li = (LiveInfo)dataSource[c.RowIndex];
+					
+					if (string.IsNullOrEmpty(li.lvId)) return;
+			
+					var n = ((ToolStripMenuItem)sender).Name.Substring(17, 1);
+					var path = config.get("appli" + n + "Path");
+					var args = config.get("appli" + n + "Args");
+					var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(li.lvId, "(\\d+)");
+					
+					util.appliProcess(path, url + " " + args);
+			
+				} catch (Exception eee) {
+					util.debugWriteLine(eee.Message + eee.Source + eee.StackTrace + eee.TargetSite);
+				}
 			}
 		}
 	}

@@ -452,7 +452,6 @@ namespace namaichi
 			this.label30.Name = "label30";
 			this.label30.Size = new System.Drawing.Size(337, 29);
 			this.label30.TabIndex = 47;
-			this.label30.Text = "初期設定ではD以降の列が隠れています。「表示」メニューから表示の切り替えができます。";
 			// 
 			// label26
 			// 
@@ -1250,7 +1249,7 @@ namespace namaichi
 			this.groupBox2.Size = new System.Drawing.Size(420, 396);
 			this.groupBox2.TabIndex = 1;
 			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "お気に入りのコミュニティタブの設定";
+			this.groupBox2.Text = "お気に入りの設定";
 			// 
 			// IsConfirmFollowChkBox
 			// 

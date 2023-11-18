@@ -362,8 +362,12 @@ namespace namaichi.info
         }
         public void addHistory(DateTime dt, string timeTitleLvid) {
         	try {
-        		foreach (var s in alartHistory)
-        			if (s.Value == timeTitleLvid) return;
+        		foreach (var s in alartHistory) {
+        			if (string.IsNullOrEmpty(s.Value)) continue;
+        			var lv = util.getRegGroup(s.Value, "(lv\\d+)");
+        			var newLv = util.getRegGroup(timeTitleLvid, "(lv\\d+)");
+        			if (s.Value == timeTitleLvid || newLv == lv) return;
+        		}
 	        	alartHistory.Add(new KeyValuePair<DateTime, string>(dt, timeTitleLvid));
 	        	var h = alartHistory.OrderBy(x => x.Key).ToList();
 	        	if (h.Count > 5) h.RemoveRange(0, h.Count - 5);

@@ -139,8 +139,8 @@ namespace namaichi.alart
 						util.debugWriteLine("connect timeout ws exception " + e.Message + e.Source + e.StackTrace + e.TargetSite);
 						
 					}
-					check.form.addLogText("ブラウザプッシュ通知の再接続に失敗しました");
-					isFirst = true;
+					//check.form.addLogText("ブラウザプッシュ通知の再接続に失敗しました");
+					//isFirst = true;
 					return false;
 				}
 				
@@ -156,7 +156,7 @@ namespace namaichi.alart
 					util.debugWriteLine("ws connect exception " + eee.Message + eee.Source + eee.StackTrace + eee.TargetSite);
 				}
 				util.debugWriteLine("ws connect exception " + ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
-				check.form.addLogText("ブラウザプッシュ通知の再接続に失敗しました " + ee.Message + ee.Source + ee.StackTrace);
+				//check.form.addLogText("ブラウザプッシュ通知の再接続に失敗しました " + ee.Message + ee.Source + ee.StackTrace);
 				return false;
 			}
 			
@@ -208,10 +208,14 @@ namespace namaichi.alart
 				check.form.addLogText("debug: ブラウザプッシュ通知の受信を終了しました");
 			#endif
 			
-			while (true && isRetry) {
+			for (var i = 0; isRetry; i++) {
+			//while (true && isRetry) {
 				try {
 					if (!connect()) {
 						Thread.Sleep(5000);
+						if (i < int.MaxValue) i++;
+						if (i % 5 == 0) 
+							check.form.addLogText("ブラウザプッシュ通知に再接続します");
 						continue;
 					}
 					break;
@@ -289,8 +293,8 @@ namespace namaichi.alart
 				
 				var endpoint = util.getRegGroup(message, "\"pushEndpoint\":\"(.+?)\"");
 				if (sendEndpoint(endpoint))
-					check.form.addLogText("ブラウザプッシュ通知の受信を開始しました");
-				else check.form.addLogText("ブラウザプッシュ通知の接続に失敗しました");
+					check.form.addLogText("ブラウザプッシュ通知の受信を設定しました");
+				else check.form.addLogText("ブラウザプッシュ通知の設定に失敗しました");
 					
 			}
 			

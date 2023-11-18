@@ -1156,23 +1156,22 @@ namespace namaichi
 			var list = isUserMode ? userAlartList : alartList;
 			var dataSource = isUserMode ? userAlartListDataSource : alartListDataSource;
 
-			//var curCell = list.CurrentCell;
-			//if (curCell == null || curCell.RowIndex == -1) return;
-			var selectedRowIndexList = new List<int>();
+			var selectedLvList = new List<string>();
 			foreach (DataGridViewCell c in list.SelectedCells) {
 				try {
-					if (selectedRowIndexList.IndexOf(c.RowIndex) > -1) continue;
-					selectedRowIndexList.Add(c.RowIndex);
-					//var ai = (AlartInfo)dataSource[list.CurrentCell.RowIndex];
 					var ai = (AlartInfo)dataSource[c.RowIndex];
 					if (ai.lastLvid == null || ai.lastLvid == "") continue;
 					var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lastLvid, "(\\d+)");
-					util.openUrlBrowser(url, config);
+					if (selectedLvList.IndexOf(url) > -1) continue;
+					selectedLvList.Add(url);
 				} catch (Exception ee) {
 					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 				}
 			}
-
+			if (selectedLvList.Count > 10 && MessageBox.Show(selectedLvList.Count + "の放送が選択されています。このまま開きますか？", "", MessageBoxButtons.YesNo) 
+			    	!= DialogResult.Yes) return;
+			foreach (var url in selectedLvList)
+				util.openUrlBrowser(url, config);
 		}
 		void OpenCommunityUrlClick(object sender, EventArgs e)
 		{
@@ -1180,14 +1179,9 @@ namespace namaichi
 			var list = isUserMode ? userAlartList : alartList;
 			var dataSource = isUserMode ? userAlartListDataSource : alartListDataSource;
 			
-			//var curCell = list.CurrentCell;
-			//if (curCell == null || curCell.RowIndex == -1) return;
-			var selectedRowIndexList = new List<int>();
+			var selectedLvList = new List<string>();
 			foreach (DataGridViewCell c in list.SelectedCells) {
 				try {
-					if (selectedRowIndexList.IndexOf(c.RowIndex) > -1) continue;
-					selectedRowIndexList.Add(c.RowIndex);
-					//var ai = (AlartInfo)dataSource[list.CurrentCell.RowIndex];
 					var ai = (AlartInfo)dataSource[c.RowIndex];
 					if (ai.communityId == null || ai.communityId == "") continue;
 					
@@ -1195,14 +1189,16 @@ namespace namaichi
 					var url = (isChannel) ? 
 						("https://ch.nicovideo.jp/" + ai.communityId) :
 						("https://com.nicovideo.jp/community/" + ai.communityId);
-				
-					util.openUrlBrowser(url, config);
+					if (selectedLvList.IndexOf(url) > -1) continue;
+					selectedLvList.Add(url);
 				} catch (Exception ee) {
 					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 				}
 			}
-			
-			
+			if (selectedLvList.Count > 10 && MessageBox.Show(selectedLvList.Count + "の放送が選択されています。このまま開きますか？", "", MessageBoxButtons.YesNo) 
+			    	!= DialogResult.Yes) return;
+			foreach (var url in selectedLvList)
+				util.openUrlBrowser(url, config);
 		}
 		void OpenUserUrlClick(object sender, EventArgs e)
 		{
@@ -1210,24 +1206,22 @@ namespace namaichi
 			var list = isUserMode ? userAlartList : alartList;
 			var dataSource = isUserMode ? userAlartListDataSource : alartListDataSource;
 			
-			//var curCell = list.CurrentCell;
-			//if (curCell == null || curCell.RowIndex == -1) return;
-			var selectedRowIndexList = new List<int>();
+			var selectedLvList = new List<string>();
 			foreach (DataGridViewCell c in list.SelectedCells) {
 				try {
-					if (selectedRowIndexList.IndexOf(c.RowIndex) > -1) continue;
-					selectedRowIndexList.Add(c.RowIndex);
-					//var ai = (AlartInfo)dataSource[curCell.RowIndex];
 					var ai = (AlartInfo)dataSource[c.RowIndex];
 					if (ai.hostId == null || ai.hostId == "") continue;
 					var url = "https://www.nicovideo.jp/user/" + ai.hostId;
-					util.openUrlBrowser(url, config);
+					if (selectedLvList.IndexOf(url) > -1) continue;
+					selectedLvList.Add(url);
 				} catch (Exception ee) {
 					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 				}
 			}
-			
-			
+			if (selectedLvList.Count > 10 && MessageBox.Show(selectedLvList.Count + "の放送が選択されています。このまま開きますか？", "", MessageBoxButtons.YesNo) 
+			    	!= DialogResult.Yes) return;
+			foreach (var url in selectedLvList)
+				util.openUrlBrowser(url, config);
 		}
 		
 		void CopyLastHosoMenuClick(object sender, EventArgs e)
@@ -1237,16 +1231,20 @@ namespace namaichi
 				var list = isUserMode ? userAlartList : alartList;
 				var dataSource = isUserMode ? userAlartListDataSource : alartListDataSource;
 				
-				if (list.SelectedCells.Count == 0) return;
-				var min = int.MaxValue;
-				foreach (DataGridViewCell c in list.SelectedCells)
-					if (c.RowIndex < min) min = c.RowIndex;
-				var ai = (AlartInfo)dataSource[min];
-				
-				if (ai.lastLvid == null || ai.lastLvid == "") return;
-				var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lastLvid, "(\\d+)");
-				Clipboard.SetText(url);
-					
+				var selectedLvList = new List<string>();
+				foreach (DataGridViewCell c in list.SelectedCells) {
+					try {
+						var ai = (AlartInfo)dataSource[c.RowIndex];
+						if (string.IsNullOrEmpty(ai.lastLvid)) continue;
+						
+						var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lastLvid, "(\\d+)");
+						if (selectedLvList.IndexOf(url) > -1) continue;
+						selectedLvList.Add(url);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
+				}
+				Clipboard.SetText(string.Join("\n", selectedLvList.ToArray()));
 				
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
@@ -1260,20 +1258,24 @@ namespace namaichi
 				var list = isUserMode ? userAlartList : alartList;
 				var dataSource = isUserMode ? userAlartListDataSource : alartListDataSource;
 				
-				//var curCell = alartList.CurrentCell;
-				//if (curCell == null || curCell.RowIndex == -1) return;
-				if (list.SelectedCells.Count == 0) return;
-				var min = int.MaxValue;
-				foreach (DataGridViewCell c in list.SelectedCells)
-					if (c.RowIndex < min) min = c.RowIndex;
-				var ai = (AlartInfo)dataSource[min];
-				if (ai.communityId == null || ai.communityId == "") return;
+				var selectedLvList = new List<string>();
+				foreach (DataGridViewCell c in list.SelectedCells) {
+					try {
+						var ai = (AlartInfo)dataSource[c.RowIndex];
+						if (string.IsNullOrEmpty(ai.communityId)) continue;
+						
+						var isChannel = ai.communityId.IndexOf("ch") > -1;
+						var url = (isChannel) ? 
+								("https://ch.nicovideo.jp/" + ai.communityId) :
+								("https://com.nicovideo.jp/community/" + ai.communityId);
+						if (selectedLvList.IndexOf(url) > -1) continue;
+						selectedLvList.Add(url);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
+				}
+				Clipboard.SetText(string.Join("\n", selectedLvList.ToArray()));
 				
-				var isChannel = ai.communityId.IndexOf("ch") > -1;
-				var url = (isChannel) ? 
-					("https://ch.nicovideo.jp/" + ai.communityId) :
-					("https://com.nicovideo.jp/community/" + ai.communityId);
-				Clipboard.SetText(url);
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
@@ -1286,17 +1288,21 @@ namespace namaichi
 				var list = isUserMode ? userAlartList : alartList;
 				var dataSource = isUserMode ? userAlartListDataSource : alartListDataSource;
 				
-				//var curCell = alartList.CurrentCell;
-				//if (curCell == null || curCell.RowIndex == -1) return;
-				if (list.SelectedCells.Count == 0) return;
-				var min = int.MaxValue;
-				foreach (DataGridViewCell c in list.SelectedCells)
-					if (c.RowIndex < min) min = c.RowIndex;
-				var ai = (AlartInfo)dataSource[min];
-				if (ai.hostId == null || ai.hostId == "") return;
+				var selectedLvList = new List<string>();
+				foreach (DataGridViewCell c in list.SelectedCells) {
+					try {
+						var ai = (AlartInfo)dataSource[c.RowIndex];
+						if (string.IsNullOrEmpty(ai.hostId)) continue;
+						
+						var url = "https://www.nicovideo.jp/user/" + ai.hostId;
+						if (selectedLvList.IndexOf(url) > -1) continue;
+						selectedLvList.Add(url);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
+				}
+				Clipboard.SetText(string.Join("\n", selectedLvList.ToArray()));
 				
-				var url = "https://www.nicovideo.jp/user/" + ai.hostId;
-				Clipboard.SetText(url);
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
@@ -1950,24 +1956,19 @@ namespace namaichi
 		}
 		void TaskListOpenUrlMenuClick(object sender, EventArgs e)
 		{
+			
 			try {
-				var selectedRowIndexList = new List<int>();
+				var selectedLvList = new List<string>();
 				foreach (DataGridViewCell c in taskList.SelectedCells) {
-						if (selectedRowIndexList.IndexOf(c.RowIndex) > -1) continue;
-						selectedRowIndexList.Add(c.RowIndex);
-						var ti = (TaskInfo)taskListDataSource[c.RowIndex];
-						var url = "https://live.nicovideo.jp/watch/" + ti.lvId;
-						util.openUrlBrowser(url, config);
+					var ti = (TaskInfo)taskListDataSource[c.RowIndex];
+					var url = "https://live.nicovideo.jp/watch/" + ti.lvId;
+					if (selectedLvList.IndexOf(url) > -1) continue;
+					selectedLvList.Add(url);
 				}
-				
-				/*
-				var curCell = taskList.CurrentCell;
-				if (curCell == null || curCell.RowIndex == -1) return;
-				var ai = (TaskInfo)taskListDataSource[taskList.CurrentCell.RowIndex];
-				if (ai.lvId == null || ai.lvId == "") return;
-				var url = "https://live2.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lvId, "(\\d+)");
-				util.openUrlBrowser(url, config);
-				*/
+				if (selectedLvList.Count > 10 && MessageBox.Show(selectedLvList.Count + "の放送が選択されています。このまま開きますか？", "", MessageBoxButtons.YesNo) 
+				    	!= DialogResult.Yes) return;
+				foreach (var url in selectedLvList)
+					util.openUrlBrowser(url, config);
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
@@ -1975,21 +1976,44 @@ namespace namaichi
 		
 		void TaskListCopyUrlMenuClick(object sender, EventArgs e)
 		{
-			var curCell = taskList.CurrentCell;
-			if (curCell == null || curCell.RowIndex == -1) return;
-			var ai = (TaskInfo)taskListDataSource[taskList.CurrentCell.RowIndex];
-			if (ai.lvId == null || ai.lvId == "") return;
-			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lvId, "(\\d+)");
-			Clipboard.SetText(url);
+			try {
+				var selectedRowUrl = new List<string>();
+				foreach (DataGridViewCell c in taskList.SelectedCells) {
+					try {
+						var ti = (TaskInfo)taskListDataSource[c.RowIndex];
+						//if (string.IsNullOrEmpty(ti.lvId)) continue;
+						var url = "https://live.nicovideo.jp/watch/" + ti.lvId;
+						//if (selectedRowUrl.IndexOf(url) > -1) continue;
+						selectedRowUrl.Add(url);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace);
+					}
+				}
+				Clipboard.SetText(string.Join("\n", selectedRowUrl.ToArray()));
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
 		}
 		
 		void TaskListCopyArgsMenuClick(object sender, EventArgs e)
 		{
-			var curCell = taskList.CurrentCell;
-			if (curCell == null || curCell.RowIndex == -1) return;
-			var ai = (TaskInfo)taskListDataSource[taskList.CurrentCell.RowIndex];
-			if (ai.args == null || ai.args == "") return;
-			Clipboard.SetText(ai.args);
+			try {
+				var selectedRowUrl = new List<string>();
+				foreach (DataGridViewCell c in taskList.SelectedCells) {
+					try {
+						var ti = (TaskInfo)taskListDataSource[c.RowIndex];
+						//if (string.IsNullOrEmpty(ti.args)) continue;
+						var url = ti.args == null ? "" : ti.args;
+						//if (selectedRowUrl.IndexOf(url) > -1) continue;
+						selectedRowUrl.Add(url);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace);
+					}
+				}
+				Clipboard.SetText(string.Join("\n", selectedRowUrl.ToArray()));
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
 		}
 		
 		void TaskListRemoveLineMenuClick(object sender, EventArgs e)
@@ -2028,17 +2052,6 @@ namespace namaichi
        		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
        		       	}
 				});
-				/*
-	       		if (this.IsDisposed) return;
-	       		if (!this.IsHandleCreated) return;
-	        	this.BeginInvoke((MethodInvoker)delegate() {
-       		       	try {
-						taskListDataSource.Remove(ti);
-       		       	} catch (Exception e) {
-       		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
-       		       	}
-				});
-				*/
 	       	} catch (Exception e) {
 	       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
 	       	}
@@ -2054,19 +2067,6 @@ namespace namaichi
        		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
        		       	}
 				});
-				/*
-	       		if (IsDisposed) return;
-	       		if (!IsHandleCreated) return;
-	        	BeginInvoke((System.Windows.Forms.MethodInvoker)delegate() {
-       		       	try {
-	       		    	ti.status = "完了";
-	       		    	if (taskListDataSource.IndexOf(ti) != -1)
-	       		    		taskList.UpdateCellValue(4, taskListDataSource.IndexOf(ti));
-       		       	} catch (Exception e) {
-       		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
-       		       	}
-				});
-				*/
 	       		changedListContent();
 	       	} catch (Exception e) {
 	       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
@@ -3345,13 +3345,23 @@ namespace namaichi
 		void LiveListOpenUrlMenuClick(object sender, EventArgs e)
 		{
 			try {
-				var curCell = liveList.CurrentCell;
-				if (curCell == null || curCell.RowIndex == -1) return;
-				var li = (LiveInfo)liveListDataSource[curCell.RowIndex];
-				if (li.lvId == null || li.lvId == "") return;
-				var url = "https://live.nicovideo.jp/watch/" + li.lvId;
-				util.openUrlBrowser(url, config);
-				
+				var selectedLvList = new List<string>();
+				foreach (DataGridViewCell c in liveList.SelectedCells) {
+					try {
+						var li = (LiveInfo)liveListDataSource[c.RowIndex];
+						if (string.IsNullOrEmpty(li.lvId)) continue;
+						
+						var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(li.lvId, "(\\d+)");
+						if (selectedLvList.IndexOf(url) > -1) continue;
+						selectedLvList.Add(url);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
+				}
+				if (selectedLvList.Count > 10 && MessageBox.Show(selectedLvList.Count + "の放送が選択されています。このまま開きますか？", "", MessageBoxButtons.YesNo) 
+				    	!= DialogResult.Yes) return;
+				foreach (var url in selectedLvList)
+					util.openUrlBrowser(url, config);
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
@@ -3359,16 +3369,26 @@ namespace namaichi
 		void LiveListOpenCommunityUrlMenuClick(object sender, EventArgs e)
 		{
 			try {
-				var curCell = liveList.CurrentCell;
-				if (curCell == null || curCell.RowIndex == -1) return;
-				var li = (LiveInfo)liveListDataSource[curCell.RowIndex];
-				if (li.comId == null || li.comId == "") return;
-				var isChannel = li.comId.IndexOf("ch") > -1;
-				var comUrl = (isChannel) ? 
-					("https://ch.nicovideo.jp/" + li.comId) :
-					("https://com.nicovideo.jp/community/" + li.comId);
-				util.openUrlBrowser(comUrl, config);
-				
+				var selectedLvList = new List<string>();
+				foreach (DataGridViewCell c in liveList.SelectedCells) {
+					try {
+						var li = (LiveInfo)liveListDataSource[c.RowIndex];
+						if (string.IsNullOrEmpty(li.comId)) continue;
+						
+						var isChannel = li.comId.IndexOf("ch") > -1;
+						var url = (isChannel) ? 
+								("https://ch.nicovideo.jp/" + li.comId) :
+								("https://com.nicovideo.jp/community/" + li.comId);
+						if (selectedLvList.IndexOf(url) > -1) continue;
+						selectedLvList.Add(url);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
+				}
+				if (selectedLvList.Count > 10 && MessageBox.Show(selectedLvList.Count + "の放送が選択されています。このまま開きますか？", "", MessageBoxButtons.YesNo) 
+				    	!= DialogResult.Yes) return;
+				foreach (var url in selectedLvList)
+					util.openUrlBrowser(url, config);
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
@@ -3452,27 +3472,39 @@ namespace namaichi
 		
 		void LiveListCopyMenuDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
-			var cur = liveList.CurrentCell;
-			if (cur.RowIndex == -1) return;
-			var li = liveListDataSource[cur.RowIndex];
 			var t = e.ClickedItem.Text;
-			if (t == "放送URL") {
-				var url = "https://live.nicovideo.jp/watch/" + li.lvId;
-				Clipboard.SetText(url);
-			} else if (t == "コミュニティURL") {
-				var isChannel = li.comId.IndexOf("ch") > -1;
-				var comUrl = (isChannel) ? 
-						("https://ch.nicovideo.jp/" + li.comId) :
-						("https://com.nicovideo.jp/community/" + li.comId);
-				Clipboard.SetText(comUrl);
-			} else if (t == "放送タイトル") {
-				Clipboard.SetText(li.title);
-			} else if (t == "放送者") {
-				Clipboard.SetText(li.hostName);
-			} else if (t == "コミュニティ名") {
-				Clipboard.SetText(li.comName);
-			} else if (t == "説明") {
-				Clipboard.SetText(li.description);
+			try {
+				var selectedLvList = new List<string>();
+				foreach (DataGridViewCell c in liveList.SelectedCells) {
+					try {
+						var li = (LiveInfo)liveListDataSource[c.RowIndex];
+						var url = "";
+						if (t == "放送URL") {
+							url = "https://live.nicovideo.jp/watch/" + li.lvId;
+						} else if (t == "コミュニティURL") {
+							var isChannel = li.comId.IndexOf("ch") > -1;
+							url = (isChannel) ? 
+									("https://ch.nicovideo.jp/" + li.comId) :
+									("https://com.nicovideo.jp/community/" + li.comId);
+						} else if (t == "放送タイトル") {
+							url = li.title;
+						} else if (t == "放送者") {
+							url = li.hostName;
+						} else if (t == "コミュニティ名") {
+							url = li.comName;
+						} else if (t == "説明") {
+							url = li.description;
+						}
+						if (string.IsNullOrEmpty(url)) continue;
+						if (selectedLvList.IndexOf(url) > -1) continue;
+						selectedLvList.Add(url);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
+				}
+				Clipboard.SetText(string.Join("\n", selectedLvList.ToArray()));
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
 		}
 		
@@ -4430,14 +4462,28 @@ namespace namaichi
 				list = reserveHistoryList;
 				ds = reserveHistoryListDataSource;
 			}
-			var cur = list.CurrentCell;
-			if (cur.RowIndex == -1) return;
 			
-			var li = ds[cur.RowIndex];
-			if (string.IsNullOrEmpty(li.lvid)) return;
-			
-			var url = "https://live.nicovideo.jp/watch/" + li.lvid;
-			util.openUrlBrowser(url, config);
+			try {
+				var selectedLvList = new List<string>();
+				foreach (DataGridViewCell c in list.SelectedCells) {
+					try {
+						var hi = (HistoryInfo)ds[c.RowIndex];
+						if (string.IsNullOrEmpty(hi.lvid)) continue;
+						
+						var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(hi.lvid, "(\\d+)");
+						if (selectedLvList.IndexOf(url) > -1) continue;
+						selectedLvList.Add(url);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
+				}
+				if (selectedLvList.Count > 10 && MessageBox.Show(selectedLvList.Count + "の放送が選択されています。このまま開きますか？", "", MessageBoxButtons.YesNo) 
+				    	!= DialogResult.Yes) return;
+				foreach (var url in selectedLvList)
+					util.openUrlBrowser(url, config);
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
 		}
 		void HistoryListOpenCommunityUrlMenuClick(object sender, EventArgs e)
 		{
@@ -4450,17 +4496,31 @@ namespace namaichi
 				list = reserveHistoryList;
 				ds = reserveHistoryListDataSource;
 			}
-			var cur = list.CurrentCell;
-			if (cur.RowIndex == -1) return;
 			
-			var li = ds[cur.RowIndex];
-			if (string.IsNullOrEmpty(li.communityId)) return;
-			
-			var isChannel = li.communityId.IndexOf("ch") > -1;
-			var url = (isChannel) ? 
-				("https://ch.nicovideo.jp/" + li.communityId) :
-				("https://com.nicovideo.jp/community/" + li.communityId);
-			util.openUrlBrowser(url, config);
+			try {
+				var selectedLvList = new List<string>();
+				foreach (DataGridViewCell c in list.SelectedCells) {
+					try {
+						var hi = (HistoryInfo)ds[c.RowIndex];
+						if (string.IsNullOrEmpty(hi.communityId)) continue;
+						
+						var isChannel = hi.communityId.IndexOf("ch") > -1;
+						var url = (isChannel) ? 
+								("https://ch.nicovideo.jp/" + hi.communityId) :
+								("https://com.nicovideo.jp/community/" + hi.communityId);
+						if (selectedLvList.IndexOf(url) > -1) continue;
+						selectedLvList.Add(url);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
+				}
+				if (selectedLvList.Count > 10 && MessageBox.Show(selectedLvList.Count + "の放送が選択されています。このまま開きますか？", "", MessageBoxButtons.YesNo) 
+				    	!= DialogResult.Yes) return;
+				foreach (var url in selectedLvList)
+					util.openUrlBrowser(url, config);
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
 		}
 		void HistoryListOpenUserUrlMenuClick(object sender, EventArgs e)
 		{
@@ -4494,14 +4554,21 @@ namespace namaichi
 				list = reserveHistoryList;
 				ds = reserveHistoryListDataSource;
 			}
-			var cur = list.CurrentCell;
-			if (cur.RowIndex == -1) return;
-			
-			var li = ds[cur.RowIndex];
-			if (string.IsNullOrEmpty(li.lvid)) return;
 			try {
-				var url = "https://live.nicovideo.jp/watch/" + li.lvid;
-				Clipboard.SetText(url);
+				var selectedLvList = new List<string>();
+				foreach (DataGridViewCell c in list.SelectedCells) {
+					try {
+						var hi = (HistoryInfo)ds[c.RowIndex];
+						if (string.IsNullOrEmpty(hi.lvid)) continue;
+						
+						var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(hi.lvid, "(\\d+)");
+						if (selectedLvList.IndexOf(url) > -1) continue;
+						selectedLvList.Add(url);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
+				}
+				Clipboard.SetText(string.Join("\n", selectedLvList.ToArray()));
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
@@ -4517,19 +4584,25 @@ namespace namaichi
 				list = reserveHistoryList;
 				ds = reserveHistoryListDataSource;
 			}
-			var cur = list.CurrentCell;
-			if (cur.RowIndex == -1) return;
-			
-			var li = ds[cur.RowIndex];
-			if (string.IsNullOrEmpty(li.communityId)) return;
-			
-			var isChannel = li.communityId.IndexOf("ch") > -1;
-			var url = (isChannel) ? 
-				("https://ch.nicovideo.jp/" + li.communityId) :
-				("https://com.nicovideo.jp/community/" + li.communityId);
-			
 			try {
-				Clipboard.SetText(url);
+				var selectedLvList = new List<string>();
+				foreach (DataGridViewCell c in list.SelectedCells) {
+					try {
+						var hi = (HistoryInfo)ds[c.RowIndex];
+						if (string.IsNullOrEmpty(hi.communityId)) continue;
+						
+						var isChannel = hi.communityId.IndexOf("ch") > -1;
+						var url = (isChannel) ? 
+								("https://ch.nicovideo.jp/" + hi.communityId) :
+								("https://com.nicovideo.jp/community/" + hi.communityId);
+						
+						if (selectedLvList.IndexOf(url) > -1) continue;
+						selectedLvList.Add(url);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
+				}
+				Clipboard.SetText(string.Join("\n", selectedLvList.ToArray()));
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
@@ -4729,29 +4802,51 @@ namespace namaichi
 		
 		void NotAlartListOpenUrlMenuClick(object sender, EventArgs e)
 		{
-			var cur = notAlartList.CurrentCell;
-			if (cur.RowIndex == -1) return;
-			
-			var li = notAlartListDataSource[cur.RowIndex];
-			if (string.IsNullOrEmpty(li.lvid)) return;
-			
-			var url = "https://live.nicovideo.jp/watch/" + li.lvid;
-			util.openUrlBrowser(url, config);
+			try {
+				var selectedLvList = new List<string>();
+				foreach (DataGridViewCell c in notAlartList.SelectedCells) {
+					try {
+						var hi = (HistoryInfo)notAlartListDataSource[c.RowIndex];
+						if (string.IsNullOrEmpty(hi.lvid)) continue;
+						
+						var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(hi.lvid, "(\\d+)");
+						if (selectedLvList.IndexOf(url) > -1) continue;
+						selectedLvList.Add(url);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
+				}
+				foreach (var url in selectedLvList)
+					util.openUrlBrowser(url, config);
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
 		}
 		
 		void NotAlartListOpenCommunityUrlMenuClick(object sender, EventArgs e)
 		{
-			var cur = notAlartList.CurrentCell;
-			if (cur.RowIndex == -1) return;
-			
-			var li = notAlartListDataSource[cur.RowIndex];
-			if (string.IsNullOrEmpty(li.communityId)) return;
-			
-			var isChannel = li.communityId.IndexOf("ch") > -1;
-			var url = (isChannel) ? 
-				("https://ch.nicovideo.jp/" + li.communityId) :
-				("https://com.nicovideo.jp/community/" + li.communityId);
-			util.openUrlBrowser(url, config);
+			try {
+				var selectedLvList = new List<string>();
+				foreach (DataGridViewCell c in notAlartList.SelectedCells) {
+					try {
+						var hi = (HistoryInfo)notAlartListDataSource[c.RowIndex];
+						if (string.IsNullOrEmpty(hi.communityId)) continue;
+						
+						var isChannel = hi.communityId.IndexOf("ch") > -1;
+						var url = (isChannel) ? 
+								("https://ch.nicovideo.jp/" + hi.communityId) :
+								("https://com.nicovideo.jp/community/" + hi.communityId);
+						if (selectedLvList.IndexOf(url) > -1) continue;
+						selectedLvList.Add(url);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
+				}
+				foreach (var url in selectedLvList)
+					util.openUrlBrowser(url, config);
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
 		}
 		
 		void NotAlartListOpenUserUrlMenuClick(object sender, EventArgs e)
@@ -4768,14 +4863,21 @@ namespace namaichi
 		
 		void NotAlartListCopyUrlMenuClick(object sender, EventArgs e)
 		{
-			var cur = notAlartList.CurrentCell;
-			if (cur.RowIndex == -1) return;
-			
-			var li = notAlartListDataSource[cur.RowIndex];
-			if (string.IsNullOrEmpty(li.lvid)) return;
 			try {
-				var url = "https://live.nicovideo.jp/watch/" + li.lvid;
-				Clipboard.SetText(url);
+				var selectedLvList = new List<string>();
+				foreach (DataGridViewCell c in notAlartList.SelectedCells) {
+					try {
+						var hi = (HistoryInfo)notAlartListDataSource[c.RowIndex];
+						if (string.IsNullOrEmpty(hi.lvid)) continue;
+						
+						var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(hi.lvid, "(\\d+)");
+						if (selectedLvList.IndexOf(url) > -1) continue;
+						selectedLvList.Add(url);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
+				}
+				Clipboard.SetText(string.Join("\n", selectedLvList.ToArray()));
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
@@ -4783,6 +4885,28 @@ namespace namaichi
 		
 		void NotAlartListCopyCommunityUrlMenuClick(object sender, EventArgs e)
 		{
+			try {
+				var selectedLvList = new List<string>();
+				foreach (DataGridViewCell c in notAlartList.SelectedCells) {
+					try {
+						var hi = (HistoryInfo)notAlartListDataSource[c.RowIndex];
+						if (string.IsNullOrEmpty(hi.communityId)) continue;
+						
+						var isChannel = hi.communityId.IndexOf("ch") > -1;
+						var url = (isChannel) ? 
+								("https://ch.nicovideo.jp/" + hi.communityId) :
+								("https://com.nicovideo.jp/community/" + hi.communityId);
+						if (selectedLvList.IndexOf(url) > -1) continue;
+						selectedLvList.Add(url);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+					}
+				}
+				Clipboard.SetText(string.Join("\n", selectedLvList.ToArray()));
+			} catch (Exception ee) {
+				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
+			}
+			/*
 			var cur = notAlartList.CurrentCell;
 			if (cur.RowIndex == -1) return;
 			
@@ -4799,6 +4923,7 @@ namespace namaichi
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
+			*/
 		}
 		
 		void NotAlartListCopyUserUrlMenuClick(object sender, EventArgs e)

@@ -220,6 +220,7 @@ namespace namaichi.rec
 			header.Add("Referer", "https://live.nicovideo.jp/");
 			header.Add("Origin", "https://live.nicovideo.jp");
 			header.Add("User-Agent", util.userAgent);
+			header.Add("X-Frontend-Id", "9");
 			return header;
 		}
 		/*

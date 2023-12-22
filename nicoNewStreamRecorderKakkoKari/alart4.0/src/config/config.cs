@@ -363,6 +363,8 @@ public class config
 			{"HistoryPanelDistance",""},
 			{"activeTab","0"},
 			{"favoriteActiveTab","0"},
+			{"osName",""},
+			{"osType",""},
 			
 			{"alartBackColor","-986896"},
 			{"alartForeColor","-16777216"},

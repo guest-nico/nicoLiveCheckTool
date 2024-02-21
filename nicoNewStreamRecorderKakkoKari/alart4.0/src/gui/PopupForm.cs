@@ -79,7 +79,7 @@ namespace namaichi
 			}
 			
 			var url = "https://live.nicovideo.jp/watch/" + item.lvId;
-			titleLabel.Links.Add(0, titleLabel.Text.Length, url);
+			titleLabel.Links.Add(0, 0, url);
 			if (isTest) this.isTopMostPara = isTopMost;
 			else this.isTopMostPara = bool.Parse(config.get("IsTopMostPopup"));
 			
@@ -175,7 +175,7 @@ namespace namaichi
 		{
 			LinkLabel sender = (LinkLabel)_sender;
 			if (e.Button == MouseButtons.Left) {
-				if (sender.Links.Count > 0 && sender.Links[0].Length != 0) {
+				if (sender.Links.Count > 0) {
 					string url = (string)sender.Links[0].LinkData;
 					util.openUrlBrowser(url, config);
 				}

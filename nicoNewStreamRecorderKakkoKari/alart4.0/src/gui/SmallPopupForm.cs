@@ -74,7 +74,7 @@ namespace namaichi
 				titleLabel.LinkColor = ForeColor;
 			}
 			var url = "https://live.nicovideo.jp/watch/" + item.lvId;
-			titleLabel.Links.Add(0, titleLabel.Text.Length, url);
+			titleLabel.Links.Add(0, 0, url);
 			if (isTest) this.isTopMostPara = isTopMost;
 			else this.isTopMostPara = bool.Parse(config.get("IsTopMostPopup"));
 			

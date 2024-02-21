@@ -186,6 +186,7 @@ public class config
 			{"IsAddAlartedComUser","false"},
 			{"IsAddAlartedUserToUserList","false"},
 			{"IsExistInHistoryListNotAlart","true"},
+			{"IsUpdateComHostName","true"},
 			
 			{"IsbroadLog","false"},
 			{"IsLogFile","false"},

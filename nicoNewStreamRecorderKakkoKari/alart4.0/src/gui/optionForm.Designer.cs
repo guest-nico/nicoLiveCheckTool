@@ -292,6 +292,7 @@ namespace namaichi
 			this.cookieFileSanshouBtn = new System.Windows.Forms.Button();
 			this.btnReload = new System.Windows.Forms.Button();
 			this.useSecondLoginChkBox = new System.Windows.Forms.CheckBox();
+			this.IsUpdateComUserNameChkBox = new System.Windows.Forms.CheckBox();
 			this.appliTab.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -335,7 +336,7 @@ namespace namaichi
 			// 
 			// button3
 			// 
-			this.button3.Location = new System.Drawing.Point(249, 582);
+			this.button3.Location = new System.Drawing.Point(249, 604);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size(74, 23);
 			this.button3.TabIndex = 1;
@@ -345,7 +346,7 @@ namespace namaichi
 			// 
 			// button4
 			// 
-			this.button4.Location = new System.Drawing.Point(329, 582);
+			this.button4.Location = new System.Drawing.Point(329, 604);
 			this.button4.Name = "button4";
 			this.button4.Size = new System.Drawing.Size(74, 23);
 			this.button4.TabIndex = 1;
@@ -1064,7 +1065,7 @@ namespace namaichi
 			this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(441, 572);
+			this.tabControl1.Size = new System.Drawing.Size(441, 594);
 			this.tabControl1.TabIndex = 1;
 			// 
 			// commonTab
@@ -1074,7 +1075,7 @@ namespace namaichi
 			this.commonTab.Location = new System.Drawing.Point(4, 22);
 			this.commonTab.Name = "commonTab";
 			this.commonTab.Padding = new System.Windows.Forms.Padding(3);
-			this.commonTab.Size = new System.Drawing.Size(433, 546);
+			this.commonTab.Size = new System.Drawing.Size(433, 568);
 			this.commonTab.TabIndex = 2;
 			this.commonTab.Text = "一般";
 			this.commonTab.UseVisualStyleBackColor = true;
@@ -1090,7 +1091,7 @@ namespace namaichi
 			this.groupBox1.Controls.Add(this.label60);
 			this.groupBox1.Controls.Add(this.isBroadLogChkBox);
 			this.groupBox1.Controls.Add(this.isLogChkBtn);
-			this.groupBox1.Location = new System.Drawing.Point(5, 408);
+			this.groupBox1.Location = new System.Drawing.Point(5, 430);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(420, 139);
 			this.groupBox1.TabIndex = 11;
@@ -1223,6 +1224,7 @@ namespace namaichi
 			// 
 			this.groupBox2.Controls.Add(this.IsConfirmFollowChkBox);
 			this.groupBox2.Controls.Add(this.delThumbChkBox);
+			this.groupBox2.Controls.Add(this.IsUpdateComUserNameChkBox);
 			this.groupBox2.Controls.Add(this.IsExistInHistoryListNotAlartChkBox);
 			this.groupBox2.Controls.Add(this.isAddAlartedUserToUserListChkBox);
 			this.groupBox2.Controls.Add(this.IsAddAlartedComUserChkBox);
@@ -1246,7 +1248,7 @@ namespace namaichi
 			this.groupBox2.Controls.Add(this.isStartTimeAllCheckChkBox);
 			this.groupBox2.Location = new System.Drawing.Point(5, 10);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(420, 396);
+			this.groupBox2.Size = new System.Drawing.Size(420, 418);
 			this.groupBox2.TabIndex = 1;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "お気に入りの設定";
@@ -2998,11 +3000,20 @@ namespace namaichi
 			this.useSecondLoginChkBox.Text = "ブラウザからクッキーが取得できなかった場合、次のアカウントでログインする";
 			this.useSecondLoginChkBox.UseVisualStyleBackColor = true;
 			// 
+			// IsUpdateComUserNameChkBox
+			// 
+			this.IsUpdateComUserNameChkBox.Location = new System.Drawing.Point(19, 399);
+			this.IsUpdateComUserNameChkBox.Name = "IsUpdateComUserNameChkBox";
+			this.IsUpdateComUserNameChkBox.Size = new System.Drawing.Size(350, 19);
+			this.IsUpdateComUserNameChkBox.TabIndex = 11;
+			this.IsUpdateComUserNameChkBox.Text = "コミュニティ名とユーザー名を定期的に更新する";
+			this.IsUpdateComUserNameChkBox.UseVisualStyleBackColor = true;
+			// 
 			// optionForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(453, 632);
+			this.ClientSize = new System.Drawing.Size(453, 654);
 			this.Controls.Add(this.button4);
 			this.Controls.Add(this.button3);
 			this.Controls.Add(this.tabControl1);
@@ -3060,6 +3071,7 @@ namespace namaichi
 			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.CheckBox IsUpdateComUserNameChkBox;
 		private System.Windows.Forms.NumericUpDown startUpWaitList;
 		private System.Windows.Forms.Label label67;
 		private System.Windows.Forms.CheckBox isOverwriteOldReserveChkBox;

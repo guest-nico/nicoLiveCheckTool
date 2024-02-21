@@ -694,6 +694,7 @@ namespace namaichi.alart
 			sw.WriteLine("[限定] " + ((ri.isMemberOnly) ? "限定" : "オープン") + br);
 			sw.WriteLine("[放送タイプ] " + ((isJikken) ? "nicocas" : "nicolive"));
 			sw.WriteLine("[放送者] " + ri.hostName + br);
+			sw.WriteLine("[放送者ID] " + ri.userId + br);
 			sw.WriteLine("[コミュニティ名] " + ri.comName + br);
 			sw.WriteLine("[コミュニティID] " + ri.comId + br);
 			sw.WriteLine("[説明] " + ri.description + br);

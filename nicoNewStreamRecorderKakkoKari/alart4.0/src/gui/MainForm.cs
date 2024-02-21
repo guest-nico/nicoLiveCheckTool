@@ -2684,7 +2684,8 @@ namespace namaichi
 							var name = ai.communityName;
 							var newNameFollow = followList.Find(n => n[0] == ai.communityId);
 							if (newNameFollow != null) {
-								ai.communityName = newNameFollow[1];
+								if (bool.Parse(check.form.config.get("IsUpdateComHostName")))
+									ai.communityName = newNameFollow[1];
 								isFollow = true; 
 							}
 							ai.communityFollow = (isFollow) ? "フォロー解除する" : "フォローする";
@@ -2695,7 +2696,8 @@ namespace namaichi
 							var name = ai.hostName;
 							var newNameFollow = followList.Find(n => n[0] == ai.hostId);
 							if (newNameFollow != null) {
-								ai.hostName = newNameFollow[1];
+								if (bool.Parse(check.form.config.get("IsUpdateComHostName")))
+									ai.hostName = newNameFollow[1];
 								isFollow = true; 
 							}
 							ai.hostFollow = (isFollow) ? "フォロー解除する" : "フォローする";
@@ -2851,7 +2853,7 @@ namespace namaichi
 			    	ai.communityId.StartsWith("ch") ||
 			    	ai.communityId == "official") {
 				isCheck = elapsed < TimeSpan.FromHours(100);
-			} else isCheck = elapsed < TimeSpan.FromHours(6);
+			} else isCheck = elapsed < TimeSpan.FromHours(24);
 			if (!isCheck) {
 				util.debugWriteLine("isOnAir isCheck false deleteNotifyIconRecentItem " + ai.lastLvid);
 				deleteNotifyIconRecentItem(ai.lastLvid);
@@ -3275,7 +3277,7 @@ namespace namaichi
 				        if (li == null) continue;
 				        var isDelete = (delMin != 0 && ((TimeSpan)(now - li.pubDateDt)).TotalMinutes > delMin) ||
 				        	(!string.IsNullOrEmpty(li.comId) && 
-				        	 	((li.comId.StartsWith("co") && now - li.pubDateDt > TimeSpan.FromHours(6)) || 
+				        	 	((li.comId.StartsWith("co") && now - li.pubDateDt > TimeSpan.FromHours(24)) || 
 				        	  (li.comId.StartsWith("ch") && now - li.pubDateDt > TimeSpan.FromHours(100))));
 				    	if (isDelete) {
 				           	 var th = li.thumbnail;
@@ -3296,7 +3298,7 @@ namespace namaichi
 					var li = liveListDataReserve[i];
 					if (li == null) continue;
 					var isDelete = (delMin != 0 && ((TimeSpan)(now - li.pubDateDt)).TotalMinutes > delMin) ||
-				    		(string.IsNullOrEmpty(li.comId) && li.comId.StartsWith("co") && now - li.pubDateDt > TimeSpan.FromHours(6));
+				    		(string.IsNullOrEmpty(li.comId) && li.comId.StartsWith("co") && now - li.pubDateDt > TimeSpan.FromHours(24));
 					
 					if (isDelete) {
 						var th = li.thumbnail;

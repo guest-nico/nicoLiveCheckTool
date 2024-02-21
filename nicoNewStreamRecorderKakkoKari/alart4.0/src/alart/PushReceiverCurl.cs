@@ -78,17 +78,7 @@ namespace namaichi.alart
 				headers.Add(new KeyValuePair<string, string>("Ssc-WebSocket-Version", "13"));
 				
 				Curl.curl_easy_setopt(easy, CURLoption.CURLOPT_CONNECT_ONLY, 2L);
-				/*
-				curl_slist slist = new curl_slist();
-				var next = slist;
-				for (var i = 0; i < headers.Count; i++) {
-					next.data = headers[i].Key + ": " + headers[i].Value;
-					if (i  < headers.Count - 1) {
-						next.next = new curl_slist();
-						next = next.next;
-					}
-				}
-				*/
+				
 				var code = Curl.curl_easy_perform(easy);
 				util.debugWriteLine("curl ws connect code " + code);
 				if(code != CURLcode.CURLE_OK) {

@@ -34,8 +34,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.127";
-	public static string versionDayStr = "2024/02/21";
+	public static string versionStr = "ver0.1.7.128";
+	public static string versionDayStr = "2024/03/14";
 	public static string osName = null;
 	public static string osType = null;
 	public static bool isWebRequestOk = false;

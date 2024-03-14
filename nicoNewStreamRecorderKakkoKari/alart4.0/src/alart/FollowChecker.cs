@@ -15,6 +15,7 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.Net;
 using namaichi;
+using namaichi.utility;
 using SuperSocket.ClientEngine;
 
 namespace namaichi.alart
@@ -224,6 +225,8 @@ namespace namaichi.alart
 				h.Add("Cookie", "user_session=" + _c);
 				h.Add("X-Frontend-Id", "6");
 				h.Add("X-Frontend-Version", "0");
+				h.Add("Referer", "https://www.nicovideo.jp/");
+				h.Add("User-Agent", util.userAgent);
 				return h;
 			}
 			return null;
@@ -268,9 +271,12 @@ namespace namaichi.alart
 				var ret = new List<string[]>();
 				for (var i = 0; i < 1000; i++) {
 					var h = getHeader(2);
-					string d = null; 
-					var res = util.postResStr(url + "&cursor=" + cur, h, d, false, "GET");
-					if (res == null) return null;
+					var _url = cur == "" ? url : (url + "&cursor=" + cur);
+					var res = new Curl().getStr(_url, h, CurlHttpVersion.CURL_HTTP_VERSION_2TLS, "GET", null, false, true, true);
+					if (res == null) {
+						form.addLogText("ユーザーフォローを取得できませんでした");
+						return null;
+					}
 					var m = new Regex("\"id\":(\\d+),\"nickname\":\"(.+?)\"").Matches(res);
 					var addBuf = new List<string[]>();
 					foreach (Match _m in m) {
@@ -282,6 +288,7 @@ namespace namaichi.alart
 				return ret;
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+				form.addLogText("ユーザーフォローの取得中に問題が発生しました " + e.Message + e.Source + e.StackTrace);
 				return null;
 			}
 		}

@@ -105,7 +105,7 @@ namespace namaichi.alart
 				
 				util.debugWriteLine("push connect  ");
 				#if NET40
-					ws = new WebSocket(url, "", null, headers, util.userAgent, "", WebSocketVersion.Rfc6455, null, SslProtocols.Tls);
+					ws = new WebSocket(url, "", null, headers, util.userAgent, "", WebSocketVersion.Rfc6455, null, SslProtocols.Tls | (SslProtocols)768 | (SslProtocols)3072);
 				#else
 					ws = new WebSocket(url, "", null, headers, util.userAgent, "", WebSocketVersion.Rfc6455, null, SslProtocols.Tls | (SslProtocols)768 | (SslProtocols)3072);
 				#endif

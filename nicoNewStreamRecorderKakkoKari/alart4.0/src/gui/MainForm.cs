@@ -1451,15 +1451,24 @@ namespace namaichi
 		}
 		public void sortAlartList(bool isUserMode) {
 			var list = isUserMode ? userAlartList : alartList;
-			var order = (list.SortOrder == SortOrder.None) ? "none" : ((list.SortOrder == SortOrder.Ascending) ? "asc" : "des");
-			util.debugWriteLine("sortAlartList " + order + " isusermode " + isUserMode);
+			var _order = (list.SortOrder == SortOrder.None) ? "none" : ((list.SortOrder == SortOrder.Ascending) ? "asc" : "des");
+			util.debugWriteLine("sortAlartList " + _order + " isusermode " + isUserMode);
 			
-			if (list.SortOrder == SortOrder.None) return;
-			var direction = (list.SortOrder == SortOrder.Ascending) ? ListSortDirection.Ascending : ListSortDirection.Descending;
+			var order = list.SortOrder;
+			var column = list.SortedColumn;
+			if (order == SortOrder.None) {
+				if (config.get("alartListUpOnAirMode") != "0") {
+					order = SortOrder.Ascending;
+					foreach (DataGridViewColumn c in list.Columns)
+						if (c.HeaderText == "最近の放送日時")
+							column = c;
+				} else return;
+			}
+			var direction = (order == SortOrder.Ascending) ? ListSortDirection.Ascending : ListSortDirection.Descending;
 			formAction(() => {
 	       		//var ret = 0;
    		       	try {
-					list.Sort(list.SortedColumn, direction);
+					list.Sort(column, direction);
    		       	} catch (Exception e) {
    		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
    		       	}
@@ -2914,9 +2923,15 @@ namespace namaichi
 				util.debugWriteLine("放送の確認に失敗しました " + lvid);
 				return true;
 			}
-			
-			var _ret = _res.IndexOf("status-onair\">") > -1 || 
-					_res.IndexOf("status-comingsoon\">") > -1; 
+			var startTStr = util.getRegGroup(_res, "datetime=\"(.+?)\"");
+			var isNotStarted = (startTStr != null && DateTime.Parse(startTStr) > DateTime.Now);
+			if (isNotStarted)
+				util.debugWriteLine("is not started " + lvid);
+			//var _ret = _res.IndexOf("status-onair\">") > -1 ||
+			//			_res.IndexOf("status-comingsoon\">") > -1;
+			var _ret = _res.IndexOf("data-status=\"onair\"") > -1 ||
+					_res.IndexOf("data-status=\"comingsoon\"") > -1 ||
+					(startTStr != null && DateTime.Parse(startTStr) > DateTime.Now - TimeSpan.FromMinutes(2));
 			if (!_ret) {
 				util.debugWriteLine("終了判定 embed " + lvid + " " + _res);
 				util.debugWriteLine("isOnAirLvid !_ret deleteNotifyIconRecentItem " + lvid);

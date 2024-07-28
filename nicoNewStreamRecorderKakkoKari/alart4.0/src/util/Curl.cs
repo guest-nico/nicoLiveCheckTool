@@ -181,9 +181,6 @@ namespace namaichi.utility
 		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
 		public static extern CURLcode curl_ws_send(IntPtr curl, string buffer, int buflen,
                       out int sent, int fragsize, curlWsFlags flags);
-		[DllImport("libcurl.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-		public static extern CURLcode curl_ws_recv(IntPtr easy, out string buffer, int buflen,
-                      out int recv, out curl_ws_frame meta);
 		
 		[DllImport("curl_wrap.dll", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int testInt(int i, int j);
@@ -424,12 +421,6 @@ namespace namaichi.utility
 		CURLWS_CLOSE = (1<<3),
 		CURLWS_PING = (1<<4),
 		CURLWS_OFFSET = (1<<5)
-	}
-	public struct curl_ws_frame {
-		int age;              /* zero */
-		int flags;            /* See the CURLWS_* defines */
-		int offset;    /* the offset of this data into the frame */
-		int bytesleft; /* number of pending bytes left of the payload */
 	}
 	public class curl_slist {
 		public string data = null;

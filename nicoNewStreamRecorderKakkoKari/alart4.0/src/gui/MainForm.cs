@@ -129,8 +129,6 @@ namespace namaichi
 			System.Diagnostics.Debug.Listeners.Clear();
 			System.Diagnostics.Debug.Listeners.Add(new Logger.TraceListener());
 		    
-			
-			
 			InitializeComponent();
 			Text = "放送チェックツール（仮 " + util.versionStr;
 			
@@ -399,6 +397,8 @@ namespace namaichi
 	        		    resetColorSetting();
 	        		    
     		         	check.setCookie();
+    		         	followCheck();
+    		         	
     		         	check.resetCheck();
     		         	setAppliNameAndContextMenu();
     		         	recentLiveCheck();
@@ -2452,8 +2452,15 @@ namespace namaichi
 			var n = (char)((int)'A' + i - 15);
 			var item = (ToolStripMenuItem)contextMenuStrip1.Items.Find("openAppli" + n + "Menu", true)[0];
 			item.Visible = alartList.Columns[i].Visible;
+			var itemUser = (ToolStripMenuItem)contextMenuStrip4.Items.Find("openAppli" + n + "UserFavoriteMenu", true)[0];
+			itemUser.Visible = alartList.Columns[i].Visible;
 			item = (ToolStripMenuItem)contextMenuStrip3.Items.Find("liveListOpenAppli" + n + "Menu", true)[0];
 			item.Visible = alartList.Columns[i].Visible;
+			
+			var item3 = (ToolStripMenuItem)historyListMenu.Items.Find("openAppli" + n + "HistoryMenu", true)[0];
+			item3.Visible = alartList.Columns[i].Visible;
+			var item4 = (ToolStripMenuItem)notAlartListMenu.Items.Find("openAppli" + n + "NotAlartMenu", true)[0];
+			item4.Visible = alartList.Columns[i].Visible;
 		}
 		void IsTaskListDisplayTabMenuClick(object sender, EventArgs e)
 		{
@@ -2729,15 +2736,22 @@ namespace namaichi
 			for (var i = 0; i < 10; i++) {
 				var n = (char)(A + i);
 				var item = (ToolStripMenuItem)contextMenuStrip1.Items.Find("openAppli" + n + "Menu", true)[0];
+				var itemUser = (ToolStripMenuItem)contextMenuStrip4.Items.Find("openAppli" + n + "UserFavoriteMenu", true)[0];
 				var item2 = (ToolStripMenuItem)contextMenuStrip3.Items.Find("liveListOpenAppli" + n + "Menu", true)[0];
+				var item3 = (ToolStripMenuItem)historyListMenu.Items.Find("openAppli" + n + "HistoryMenu", true)[0];
+				var item4 = (ToolStripMenuItem)notAlartListMenu.Items.Find("openAppli" + n + "NotAlartMenu", true)[0];
 				
-				item.Visible = item2.Visible = alartList.Columns[i + 15].Visible;
+				item.Visible = itemUser.Visible = item2.Visible = item3.Visible = item4.Visible = 
+						alartList.Columns[i + 15].Visible;
 				
 				var name = config.get("appli" + n + "Name");
 				if (name == "") name = "アプリ" + n;
 				formAction(() => {
 					item.Text = "最近行われた放送のURLを" + name + "で開く";
+					itemUser.Text = "最近行われた放送のURLを" + name + "で開く";
 					item2.Text = "放送URLを" + name + "で開く";
+					item3.Text = "放送URLを" + name + "で開く";
+					item4.Text = "放送URLを" + name + "で開く";
 					
 					alartList.Columns[i + 15].HeaderText = name;
 					taskList.Columns[i + 10].HeaderText = name;
@@ -2747,29 +2761,51 @@ namespace namaichi
 		}
 		void recentLiveAppliOpenMenu_Click(object sender, EventArgs e)
 		{
-			var isUserMode = !favoriteCommunityBtn.Checked;
-			var dataSource = isUserMode ? userAlartListDataSource : alartListDataSource;
-			var list = isUserMode ? userAlartList : alartList;
-			
 			var selectedRowIndexList = new List<int>();
-			foreach (DataGridViewCell c in list.SelectedCells) {
-				try {
-					if (selectedRowIndexList.IndexOf(c.RowIndex) > -1) continue;
-					selectedRowIndexList.Add(c.RowIndex);
-					//var ai = (AlartInfo)dataSource[curCell.RowIndex];
-					var ai = (AlartInfo)dataSource[c.RowIndex];
-					
-					if (ai.lastLvid == "" || ai.lastLvid == null) return;
+			var lvList = new List<string>();
+			var parent = ((ToolStripMenuItem)sender).GetCurrentParent();
+			if (parent == contextMenuStrip1 || parent == contextMenuStrip4) {
+				var isUserMode = !favoriteCommunityBtn.Checked;
+				var dataSource = isUserMode ? userAlartListDataSource : alartListDataSource;
+				var list = isUserMode ? userAlartList : alartList;
+				foreach (DataGridViewCell c in list.SelectedCells) {
+					try {
+						if (selectedRowIndexList.IndexOf(c.RowIndex) > -1) continue;
+						selectedRowIndexList.Add(c.RowIndex);
+						var ai = (AlartInfo)dataSource[c.RowIndex];
+						lvList.Add(ai.lastLvid);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace);
+					}
+				}
+			} else if (parent == historyListMenu || parent == notAlartListMenu) {
+				var dataSource = parent == historyListMenu ? 
+						historyListDataSource : notAlartListDataSource;
+				var list = parent == historyListMenu ? historyList : notAlartList;
+				foreach (DataGridViewCell c in list.SelectedCells) {
+					try {
+						if (selectedRowIndexList.IndexOf(c.RowIndex) > -1) continue;
+						selectedRowIndexList.Add(c.RowIndex);
+						var hi = (HistoryInfo)dataSource[c.RowIndex];
+						lvList.Add(hi.lvid);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace);
+					}
+				}
+			}
 			
+			
+			foreach (var lv in lvList) {
+				if (string.IsNullOrEmpty(lv)) continue;
+				try {
 					var n = ((ToolStripMenuItem)sender).Name.Substring(9, 1);
 					var path = config.get("appli" + n + "Path");
 					var args = config.get("appli" + n + "Args");
-					var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lastLvid, "(\\d+)");
+					var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(lv, "(\\d+)");
 					
 					util.appliProcess(path, url + " " + args);
-			
-				} catch (Exception eee) {
-					util.debugWriteLine(eee.Message + eee.Source + eee.StackTrace + eee.TargetSite);
+				} catch (Exception ee) {
+					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace);
 				}
 			}
 		}
@@ -2784,8 +2820,6 @@ namespace namaichi
 			} else if (notifyIcon.Icon != defaultNotifyIcon) {
 				notifyIcon.Icon = defaultNotifyIcon;
 			}
-			
-			
 		}
 		public void recentLiveCheck() {
 			var recentNum = recentLiveCheckCore(true);
@@ -5895,7 +5929,6 @@ namespace namaichi
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 				util.debugWriteLine("live list action " + memberName + " " + scrollI + " now " + liveList.FirstDisplayedScrollingRowIndex + " " + (DateTime.Now - dt));
-				
 			}
 		}
 		private void loadControlLayout() {
@@ -6577,5 +6610,15 @@ namespace namaichi
 				}
 			}
 		}
+		public void followCheck() {
+			if ((alartListDataSource.Count > 0 || userAlartListDataSource.Count > 0)) {
+				Task.Factory.StartNew(() => new FollowChecker(this, check.container).check());
+			}
+		}
+		void aaaaaa(ToolStrip parent) {
+			util.debugWriteLine(parent + " / " + (parent == logListMenu) + " /" + (parent == historyListMenu));
+			
+		}
 	}
 }
+

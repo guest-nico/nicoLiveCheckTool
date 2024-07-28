@@ -144,6 +144,7 @@ namespace namaichi
 				{"IsAddAlartedUserToUserList",isAddAlartedUserToUserListChkBox.Checked.ToString().ToLower()},
 				{"IsExistInHistoryListNotAlart",IsExistInHistoryListNotAlartChkBox.Checked.ToString().ToLower()},
 				{"IsUpdateComHostName",IsUpdateComUserNameChkBox.Checked.ToString().ToLower()},
+				{"IsNotSleep",IsNotSleepChkBox.Checked.ToString().ToLower()},
 				
 				{"rssUpdateInterval",rssUpdateIntervalList.Text},
 				{"userNameUpdateInterval",userNameUpdateIntervalList.Text},
@@ -345,6 +346,7 @@ namespace namaichi
 			isAddAlartedUserToUserListChkBox.Checked = bool.Parse(cfg.get("IsAddAlartedUserToUserList"));
 			IsExistInHistoryListNotAlartChkBox.Checked = bool.Parse(cfg.get("IsExistInHistoryListNotAlart"));
 			IsUpdateComUserNameChkBox.Checked = bool.Parse(cfg.get("IsUpdateComHostName"));
+			IsNotSleepChkBox.Checked = bool.Parse(cfg.get("IsNotSleep"));
 			
 			rssUpdateIntervalList.Text = cfg.get("rssUpdateInterval");
 			userNameUpdateIntervalList.Text = cfg.get("userNameUpdateInterval");

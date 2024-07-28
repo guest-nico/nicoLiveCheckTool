@@ -318,7 +318,10 @@ namespace namaichi.rec
 						}
 								
 						var cc = getUserSession(f.mail, f.pass);
-						if (cc == null) return;
+						if (cc == null) {
+							form.addLogText("Cookieが取得できませんでした");
+							return;
+						}
 						
 						/*
 						var res = util.getPageSource("https://www.nicovideo.jp/my/", cc);
@@ -346,13 +349,27 @@ namespace namaichi.rec
 							form.addLogText("フォローリストが見つかりませんでした");
 							return;
 						}
-						var addFollowList = getAddFollowList(followList);
-						if (addFollowList == null) return;
+						var addCount = new int[]{0, 0, 0};
+						var addFollowList = getAddFollowList(followList, out addCount);
+						if (addFollowList == null) {
+							form.addLogText("追加する項目は存在しませんでした");
+							return;
+						}
 						var isStartRet = -1;
-						Task.Factory.StartNew(() =>
-								isStartRet = util.showModelessMessageBox(name + "(" + id + ") の" + (f.isAddToCom ? "参加コミュ" : "フォローユーザーID") + "は\r\n未登録：" + addFollowList.Count + "件　登録済み：" + (followList.Count - addFollowList.Count) + "　です。\r\n未登録の" + (f.isAddToCom ? "参加コミュニティ" : "フォローユーザーID") + "を登録しますか？", "確認", form, 1 | 0x100 | 0x20)
-						).Wait();
-						if (isStartRet != 1) return;
+						var msg = name + "(" + id + ") の" 
+								+ (f.isAddToCom ? "参加コミュ" : "フォローユーザーID") + "は\r\n未登録：" 
+								+  addFollowList.Count + "件" 
+								+ "(ユーザー:" + addCount[0] + " コミュニティ:" + addCount[1] + " チャンネル:" + addCount[2] 
+								+ ")　登録済み："	+ (followList.Count - addFollowList.Count) 
+								+ "　です。\r\n未登録の" + (f.isAddToCom ? "参加コミュニティ" : "フォローユーザーID")
+								+ "を登録しますか？";
+						Task.Factory.StartNew(() => {
+								//isStartRet = util.showModelessMessageBox(msg, "確認", form, 1 | 0x100 | 0x20)
+								if (MessageBox.Show(msg, "確認", MessageBoxButtons.OKCancel) == DialogResult.OK)
+									isStartRet = 1;
+						}).Wait();
+						if (isStartRet != 1) 
+							return;
 						
 						var l = new ToolMenuLock((f.isAddToCom ? "参加コミュ" : "フォローユーザー") + "一括登録中", addFollowList.Count);
 						bulkAddFromFollowComLock = l;
@@ -388,7 +405,8 @@ namespace namaichi.rec
 				return null;
 			}
 		}
-		private List<string[]> getAddFollowList(List<string[]> followList) {
+		private List<string[]> getAddFollowList(List<string[]> followList, out int[] addDataCount) {
+			addDataCount = new int[]{0, 0, 0}; //user 0 com 1 ch 2
 			try {
 				var noList = new List<string[]>();
 	//			foreach (var _followList in followList) {
@@ -412,6 +430,7 @@ namespace namaichi.rec
 								util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 							}
 						}
+						addDataCount[id[0].StartsWith("co") ? 1 : (id[0].StartsWith("ch") ? 2 : 0)]++;
 					}
 	//			}
 				return noList;
@@ -480,6 +499,7 @@ namespace namaichi.rec
 			bulkAddFromFollowComLock = null;
 			setToolMenuStatusBar();
 			//form.changedListContent();
+			form.followCheck();
 			new utility.AlartListFileManager(false, form).save();
 		}
 		public void getThumbBulk(bool isUser) {

@@ -34,8 +34,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.7.128";
-	public static string versionDayStr = "2024/03/14";
+	public static string versionStr = "ver0.1.7.129";
+	public static string versionDayStr = "2024/07/29";
 	public static string osName = null;
 	public static string osType = null;
 	public static bool isWebRequestOk = false;
@@ -1117,53 +1117,12 @@ class util {
 		util.debugWriteLine("access__ getUserName " + userId);
 		isFollow = false; 
 		if (userId == "official" || userId == null || userId == "") return null;
-		
-		
 			
 		if (isRequireFollow) {
-			var url = "https://public.api.nicovideo.jp/v1/user/followees/niconico-users/" + userId + ".json";
-			var h = new Dictionary<string, string>();
-			h.Add("User-Agent", "nicocas-Android/" + cfg.get("nicoCasAppVer"));
-			h.Add("X-Frontend-Id", "90");
-			h.Add("X-Frontend-Version", cfg.get("nicoCasAppVer"));
-			h.Add("X-Os-Version", "25");
-			//var _res = util.sendRequest(url, h, null, "GET");
-			var res = util.getPageSource(url, container);
-			/*
-			string res = null;
-			using (var r = _res.GetResponseStream())
-			using (var sr = new StreamReader(r)) {
-				sr.ReadToEnd();
-			}
-			*/
-			isFollow = res != null && res.IndexOf("true") > -1;
-			/*
-			var url = "https://www.nicovideo.jp/user/" + userId;
-			var res = util.getPageSource(url, container);
-	
-			if (res == null) return null;
-			var name = util.getRegGroup(res, "<meta property=\"og:title\" content=\"(.+?)\">"); 
-			if (name == null)
-				name = util.getRegGroup(res, "<meta property=\"og:title\" content=\"(.+?)さんのユーザーページ\">");
-			if (name == null) return null;
-			if (name.EndsWith(" - niconico(ニコニコ)")) 
-				name = name.Replace(" - niconico(ニコニコ)", "");
-			//watching nowatching class
-			if (res.IndexOf("class=\"watching\"") > -1) isFollow = true;
-			return name;
-			*/
-		} else {
-			
-			/*
-			var url = "http://ext.nicovideo.jp/thumb_user/" + userId;
-			var res = util.getPageSource(url, null);
-			if (res != null) {
-				var name = util.getRegGroup(res, "<title>(.+?)さんのプロフィール‐ニコニコ動画</title>");
-				if (name != null) return name;
-			}
-			*/
-			//return null;
+			var name = getUserNameFollow(userId, out isFollow, container);
+			if (name != null) return name;
 		}
+		
 		var _url = "https://api.live2.nicovideo.jp/api/v1/user/nickname?userId=" + userId;
 		var r = util.getPageSource(_url, null);
 		if (r != null && !r.StartsWith("{\"error\":\"")) {
@@ -1190,8 +1149,44 @@ class util {
 			var name = util.getRegGroup(_res, "<nickname>(.+?)</nickname>");
 			if (name != null) return name;
 		}
+		/*
+		var url = "http://ext.nicovideo.jp/thumb_user/" + userId;
+		var res = util.getPageSource(url, null);
+		if (res != null) {
+			var name = util.getRegGroup(res, "<title>(.+?)さんのプロフィール‐ニコニコ動画</title>");
+			if (name != null) return name;
+		}
+		*/
 		return null;
-	}
+    }
+    private static string getUserNameFollow(string userId, out bool isFollow, CookieContainer container) {
+        isFollow = false;
+		/*
+		var url = "https://public.api.nicovideo.jp/v1/user/followees/niconico-users/" + userId + ".json";
+		var h = new Dictionary<string, string>();
+		h.Add("User-Agent", "nicocas-Android/" + cfg.get("nicoCasAppVer"));
+		h.Add("X-Frontend-Id", "90");
+		h.Add("X-Frontend-Version", cfg.get("nicoCasAppVer"));
+		h.Add("X-Os-Version", "25");
+		//var _res = util.sendRequest(url, h, null, "GET");
+		var res = util.getPageSource(url, container);
+		
+		isFollow = res != null && res.IndexOf("true") > -1;
+		*/
+		
+		var url = "https://www.nicovideo.jp/user/" + userId;
+		var res = util.getPageSource(url, container);
+
+		if (res == null) return null;
+		if (res != null) {
+			var name = util.getRegGroup(res, "<meta property=\"profile:username\" content=\"(.+?)\">"); 
+			if (name == null) return null;
+			if (res.IndexOf("&quot;isFollowing&quot;:true") > -1)
+				isFollow = true;
+			return name;
+		}
+		return null;
+    }
 	public static string getCommunityName(string communityNum, out bool isFollow, CookieContainer cc) {
 		isFollow = false;
 		if (communityNum == null || communityNum == "" || communityNum == "official") return null;
@@ -1357,6 +1352,7 @@ class util {
 				reader.Close();
 				*/
 			} else if (mode == 2) {
+				Bass.BASS_Free();
 				var init = Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero);
 				util.debugWriteLine("bass init " + init);
 				
@@ -1364,6 +1360,7 @@ class util {
 				util.debugWriteLine("bass handle " + handle);
 				Bass.BASS_SetConfig(BASSConfig.BASS_CONFIG_GVOL_STREAM, (int)(volume * 10000));
 				Bass.BASS_ChannelPlay(handle, false);
+				
 			}
 			
 		} catch (Exception e) {
@@ -1936,5 +1933,18 @@ class util {
 		}
 		util.debugWriteLine("vcr140Check " + mes + " " + isExists);
 		return isExists;
+	}
+	[DllImport("kernel32.dll")]
+	extern static int SetThreadExecutionState(uint esFlags);
+	public static void setThreadExecutionState() {
+		try {
+			//var r = SetThreadExecutionState(1 | 2 | 0x80000000);
+			//var r = SetThreadExecutionState(1 | 0x80000000);
+			var r = SetThreadExecutionState(1);
+			util.debugWriteLine("setThreadExecutionState " + r);
+			
+		} catch (Exception e) {
+			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+		}
 	}
 }

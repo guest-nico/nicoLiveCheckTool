@@ -224,7 +224,6 @@ namespace namaichi.alart
 					Thread.Sleep(5000);
 				}
 			}
-			
 		}
 		private void onError(object sender, SuperSocket.ClientEngine.ErrorEventArgs e) {
 			util.debugWriteLine("on error " + e.Exception.Message + e.Exception.Source + e.Exception.StackTrace + e.Exception.TargetSite);

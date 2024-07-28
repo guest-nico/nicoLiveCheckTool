@@ -120,16 +120,6 @@ namespace namaichi
 			this.isDisplayWebTabMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.isDisplayMailTabMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.isDisplaySoundTabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliATabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliBTabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliCTabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliDTabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliETabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliFTabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliGTabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliHTabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliITabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliJTabMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.isDisplaySoundTypeTabMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.isDisplayMemoTabMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.displayTaskTabMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -331,6 +321,7 @@ namespace namaichi
 			this.alartListFollowUserMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.alartListUnFollowComMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.alartListUnFollowUserMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.alartUserListFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator41 = new System.Windows.Forms.ToolStripSeparator();
 			this.openAppliAMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliBMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -342,7 +333,6 @@ namespace namaichi
 			this.openAppliHMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliIMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliJMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.alartUserListFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.notifyIconMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.notifyIconRecentSeparator = new System.Windows.Forms.ToolStripSeparator();
@@ -561,6 +551,17 @@ namespace namaichi
 			this.historyListAddAlartListMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator27 = new System.Windows.Forms.ToolStripSeparator();
 			this.historyListDeleteRowMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator43 = new System.Windows.Forms.ToolStripSeparator();
+			this.openAppliAHistoryMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliBHistoryMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliCHistoryMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliDHistoryMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliEHistoryMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliFHistoryMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliGHistoryMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliHHistoryMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliIHistoryMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliJHistoryMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.label7 = new System.Windows.Forms.Label();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.historySplitContainer = new System.Windows.Forms.SplitContainer();
@@ -602,6 +603,17 @@ namespace namaichi
 			this.notAlartListAddAlartListMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator28 = new System.Windows.Forms.ToolStripSeparator();
 			this.notAlartListDeleteRowMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator44 = new System.Windows.Forms.ToolStripSeparator();
+			this.openAppliANotAlartMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliBNotAlartMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliCNotAlartMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliDNotAlartMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliENotAlartMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliFNotAlartMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliGNotAlartMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliHNotAlartMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliINotAlartMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openAppliJNotAlartMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.label5 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
@@ -624,6 +636,16 @@ namespace namaichi
 			this.toolStripMenuItem44 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator39 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem45 = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliJTabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliITabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliHTabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliGTabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliFTabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliETabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliDTabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliCTabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliBTabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliATabMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.alartList)).BeginInit();
@@ -700,7 +722,6 @@ namespace namaichi
 									this.toolStripSeparator1,
 									this.終了ToolStripMenuItem});
 			this.fileMenuItem.Name = "fileMenuItem";
-			this.fileMenuItem.ShowShortcutKeys = false;
 			this.fileMenuItem.Size = new System.Drawing.Size(67, 20);
 			this.fileMenuItem.Text = "ファイル(&F)";
 			// 
@@ -1198,7 +1219,7 @@ namespace namaichi
 									this.isDisplayMemoTabMenu});
 			this.displayFavoriteTabMenu.Name = "displayFavoriteTabMenu";
 			this.displayFavoriteTabMenu.Size = new System.Drawing.Size(299, 22);
-			this.displayFavoriteTabMenu.Text = "お気に入りタブ";
+			this.displayFavoriteTabMenu.Text = "お気に入りタブ・右クリックアプリ";
 			// 
 			// isDisplayCommunityIdTabMenu
 			// 
@@ -1305,76 +1326,6 @@ namespace namaichi
 			this.isDisplaySoundTabMenu.Size = new System.Drawing.Size(156, 22);
 			this.isDisplaySoundTabMenu.Text = "音";
 			this.isDisplaySoundTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliATabMenu
-			// 
-			this.isDisplayAppliATabMenu.Name = "isDisplayAppliATabMenu";
-			this.isDisplayAppliATabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliATabMenu.Text = "アプリA";
-			this.isDisplayAppliATabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliBTabMenu
-			// 
-			this.isDisplayAppliBTabMenu.Name = "isDisplayAppliBTabMenu";
-			this.isDisplayAppliBTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliBTabMenu.Text = "アプリB";
-			this.isDisplayAppliBTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliCTabMenu
-			// 
-			this.isDisplayAppliCTabMenu.Name = "isDisplayAppliCTabMenu";
-			this.isDisplayAppliCTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliCTabMenu.Text = "アプリC";
-			this.isDisplayAppliCTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliDTabMenu
-			// 
-			this.isDisplayAppliDTabMenu.Name = "isDisplayAppliDTabMenu";
-			this.isDisplayAppliDTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliDTabMenu.Text = "アプリD";
-			this.isDisplayAppliDTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliETabMenu
-			// 
-			this.isDisplayAppliETabMenu.Name = "isDisplayAppliETabMenu";
-			this.isDisplayAppliETabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliETabMenu.Text = "アプリE";
-			this.isDisplayAppliETabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliFTabMenu
-			// 
-			this.isDisplayAppliFTabMenu.Name = "isDisplayAppliFTabMenu";
-			this.isDisplayAppliFTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliFTabMenu.Text = "アプリF";
-			this.isDisplayAppliFTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliGTabMenu
-			// 
-			this.isDisplayAppliGTabMenu.Name = "isDisplayAppliGTabMenu";
-			this.isDisplayAppliGTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliGTabMenu.Text = "アプリG";
-			this.isDisplayAppliGTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliHTabMenu
-			// 
-			this.isDisplayAppliHTabMenu.Name = "isDisplayAppliHTabMenu";
-			this.isDisplayAppliHTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliHTabMenu.Text = "アプリH";
-			this.isDisplayAppliHTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliITabMenu
-			// 
-			this.isDisplayAppliITabMenu.Name = "isDisplayAppliITabMenu";
-			this.isDisplayAppliITabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliITabMenu.Text = "アプリI";
-			this.isDisplayAppliITabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliJTabMenu
-			// 
-			this.isDisplayAppliJTabMenu.Name = "isDisplayAppliJTabMenu";
-			this.isDisplayAppliJTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliJTabMenu.Text = "アプリJ";
-			this.isDisplayAppliJTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
 			// 
 			// isDisplaySoundTypeTabMenu
 			// 
@@ -1896,67 +1847,67 @@ namespace namaichi
 			// displayHistoryDtMenu
 			// 
 			this.displayHistoryDtMenu.Name = "displayHistoryDtMenu";
-			this.displayHistoryDtMenu.Size = new System.Drawing.Size(146, 22);
+			this.displayHistoryDtMenu.Size = new System.Drawing.Size(152, 22);
 			this.displayHistoryDtMenu.Text = "放送開始日時";
 			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(146, 22);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem2.Text = "放送タイトル";
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(146, 22);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem3.Text = "放送者";
 			// 
 			// toolStripMenuItem4
 			// 
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(146, 22);
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem4.Text = "コミュニティ名";
 			// 
 			// toolStripMenuItem5
 			// 
 			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(146, 22);
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem5.Text = "放送ID";
 			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(146, 22);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem6.Text = "ユーザーID";
 			// 
 			// toolStripMenuItem7
 			// 
 			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-			this.toolStripMenuItem7.Size = new System.Drawing.Size(146, 22);
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem7.Text = "コミュニティID";
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(146, 22);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem1.Text = "キーワード";
 			// 
 			// toolStripMenuItem34
 			// 
 			this.toolStripMenuItem34.Name = "toolStripMenuItem34";
-			this.toolStripMenuItem34.Size = new System.Drawing.Size(146, 22);
+			this.toolStripMenuItem34.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem34.Text = "限定";
 			// 
 			// toolStripMenuItem8
 			// 
 			this.toolStripMenuItem8.Name = "toolStripMenuItem8";
-			this.toolStripMenuItem8.Size = new System.Drawing.Size(146, 22);
+			this.toolStripMenuItem8.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem8.Text = "お気に入り";
 			// 
 			// toolStripMenuItem9
 			// 
 			this.toolStripMenuItem9.Name = "toolStripMenuItem9";
-			this.toolStripMenuItem9.Size = new System.Drawing.Size(146, 22);
+			this.toolStripMenuItem9.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem9.Text = "説明";
 			// 
 			// toolStripSeparator20
@@ -2930,7 +2881,7 @@ namespace namaichi
 									this.alartListUnFollowComMenu,
 									this.alartListUnFollowUserMenu});
 			this.alartListFollowMenu.Name = "contextMenuStrip6";
-			this.alartListFollowMenu.OwnerItem = this.alartUserListFollowMenu;
+			this.alartListFollowMenu.OwnerItem = this.alartComListFollowMenu;
 			this.alartListFollowMenu.Size = new System.Drawing.Size(248, 92);
 			this.alartListFollowMenu.Opening += new System.ComponentModel.CancelEventHandler(this.AlartListFollowMenuOpening);
 			// 
@@ -2961,6 +2912,13 @@ namespace namaichi
 			this.alartListUnFollowUserMenu.Size = new System.Drawing.Size(247, 22);
 			this.alartListUnFollowUserMenu.Text = "この行のユーザーをフォロー解除する";
 			this.alartListUnFollowUserMenu.Click += new System.EventHandler(this.AlartListUnFollowUserMenuClick);
+			// 
+			// alartUserListFollowMenu
+			// 
+			this.alartUserListFollowMenu.DropDown = this.alartListFollowMenu;
+			this.alartUserListFollowMenu.Name = "alartUserListFollowMenu";
+			this.alartUserListFollowMenu.Size = new System.Drawing.Size(268, 22);
+			this.alartUserListFollowMenu.Text = "フォロー";
 			// 
 			// toolStripSeparator41
 			// 
@@ -3036,13 +2994,6 @@ namespace namaichi
 			this.openAppliJMenu.Size = new System.Drawing.Size(268, 22);
 			this.openAppliJMenu.Text = "最近行われた放送のURLをアプリJで開く";
 			this.openAppliJMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
-			// 
-			// alartUserListFollowMenu
-			// 
-			this.alartUserListFollowMenu.DropDown = this.alartListFollowMenu;
-			this.alartUserListFollowMenu.Name = "alartUserListFollowMenu";
-			this.alartUserListFollowMenu.Size = new System.Drawing.Size(268, 22);
-			this.alartUserListFollowMenu.Text = "フォロー";
 			// 
 			// notifyIcon
 			// 
@@ -5096,28 +5047,39 @@ namespace namaichi
 									this.toolStripSeparator25,
 									this.historyListAddAlartListMenu,
 									this.toolStripSeparator27,
-									this.historyListDeleteRowMenu});
+									this.historyListDeleteRowMenu,
+									this.toolStripSeparator43,
+									this.openAppliAHistoryMenu,
+									this.openAppliBHistoryMenu,
+									this.openAppliCHistoryMenu,
+									this.openAppliDHistoryMenu,
+									this.openAppliEHistoryMenu,
+									this.openAppliFHistoryMenu,
+									this.openAppliGHistoryMenu,
+									this.openAppliHHistoryMenu,
+									this.openAppliIHistoryMenu,
+									this.openAppliJHistoryMenu});
 			this.historyListMenu.Name = "logListMenu";
-			this.historyListMenu.Size = new System.Drawing.Size(178, 198);
+			this.historyListMenu.Size = new System.Drawing.Size(269, 424);
 			// 
 			// historyListOpenUrlMenu
 			// 
 			this.historyListOpenUrlMenu.Name = "historyListOpenUrlMenu";
-			this.historyListOpenUrlMenu.Size = new System.Drawing.Size(177, 22);
+			this.historyListOpenUrlMenu.Size = new System.Drawing.Size(268, 22);
 			this.historyListOpenUrlMenu.Text = "放送URLを開く";
 			this.historyListOpenUrlMenu.Click += new System.EventHandler(this.HistoryListOpenUrlMenuClick);
 			// 
 			// historyListOpenCommunityUrlMenu
 			// 
 			this.historyListOpenCommunityUrlMenu.Name = "historyListOpenCommunityUrlMenu";
-			this.historyListOpenCommunityUrlMenu.Size = new System.Drawing.Size(177, 22);
+			this.historyListOpenCommunityUrlMenu.Size = new System.Drawing.Size(268, 22);
 			this.historyListOpenCommunityUrlMenu.Text = "コミュニティURLを開く";
 			this.historyListOpenCommunityUrlMenu.Click += new System.EventHandler(this.HistoryListOpenCommunityUrlMenuClick);
 			// 
 			// historyListOpenUserUrlMenu
 			// 
 			this.historyListOpenUserUrlMenu.Name = "historyListOpenUserUrlMenu";
-			this.historyListOpenUserUrlMenu.Size = new System.Drawing.Size(177, 22);
+			this.historyListOpenUserUrlMenu.Size = new System.Drawing.Size(268, 22);
 			this.historyListOpenUserUrlMenu.Text = "ユーザーURLを開く";
 			this.historyListOpenUserUrlMenu.Visible = false;
 			this.historyListOpenUserUrlMenu.Click += new System.EventHandler(this.HistoryListOpenUserUrlMenuClick);
@@ -5125,26 +5087,26 @@ namespace namaichi
 			// toolStripSeparator24
 			// 
 			this.toolStripSeparator24.Name = "toolStripSeparator24";
-			this.toolStripSeparator24.Size = new System.Drawing.Size(174, 6);
+			this.toolStripSeparator24.Size = new System.Drawing.Size(265, 6);
 			// 
 			// historyListCopyUrlMenu
 			// 
 			this.historyListCopyUrlMenu.Name = "historyListCopyUrlMenu";
-			this.historyListCopyUrlMenu.Size = new System.Drawing.Size(177, 22);
+			this.historyListCopyUrlMenu.Size = new System.Drawing.Size(268, 22);
 			this.historyListCopyUrlMenu.Text = "URLをコピー";
 			this.historyListCopyUrlMenu.Click += new System.EventHandler(this.HistoryListCopyUrlMenuClick);
 			// 
 			// historyListCopyCommunityUrlMenu
 			// 
 			this.historyListCopyCommunityUrlMenu.Name = "historyListCopyCommunityUrlMenu";
-			this.historyListCopyCommunityUrlMenu.Size = new System.Drawing.Size(177, 22);
+			this.historyListCopyCommunityUrlMenu.Size = new System.Drawing.Size(268, 22);
 			this.historyListCopyCommunityUrlMenu.Text = "コミュニティURLをコピー";
 			this.historyListCopyCommunityUrlMenu.Click += new System.EventHandler(this.HistoryListCopyCommunityUrlMenuClick);
 			// 
 			// historyListCopyUserUrlMenu
 			// 
 			this.historyListCopyUserUrlMenu.Name = "historyListCopyUserUrlMenu";
-			this.historyListCopyUserUrlMenu.Size = new System.Drawing.Size(177, 22);
+			this.historyListCopyUserUrlMenu.Size = new System.Drawing.Size(268, 22);
 			this.historyListCopyUserUrlMenu.Text = "ユーザーURLをコピー";
 			this.historyListCopyUserUrlMenu.Visible = false;
 			this.historyListCopyUserUrlMenu.Click += new System.EventHandler(this.HistoryListCopyUserUrlMenuClick);
@@ -5152,26 +5114,101 @@ namespace namaichi
 			// toolStripSeparator25
 			// 
 			this.toolStripSeparator25.Name = "toolStripSeparator25";
-			this.toolStripSeparator25.Size = new System.Drawing.Size(174, 6);
+			this.toolStripSeparator25.Size = new System.Drawing.Size(265, 6);
 			// 
 			// historyListAddAlartListMenu
 			// 
 			this.historyListAddAlartListMenu.Name = "historyListAddAlartListMenu";
-			this.historyListAddAlartListMenu.Size = new System.Drawing.Size(177, 22);
+			this.historyListAddAlartListMenu.Size = new System.Drawing.Size(268, 22);
 			this.historyListAddAlartListMenu.Text = "お気に入りに登録する";
 			this.historyListAddAlartListMenu.Click += new System.EventHandler(this.HistoryListAddAlartListMenuClick);
 			// 
 			// toolStripSeparator27
 			// 
 			this.toolStripSeparator27.Name = "toolStripSeparator27";
-			this.toolStripSeparator27.Size = new System.Drawing.Size(174, 6);
+			this.toolStripSeparator27.Size = new System.Drawing.Size(265, 6);
 			// 
 			// historyListDeleteRowMenu
 			// 
 			this.historyListDeleteRowMenu.Name = "historyListDeleteRowMenu";
-			this.historyListDeleteRowMenu.Size = new System.Drawing.Size(177, 22);
+			this.historyListDeleteRowMenu.Size = new System.Drawing.Size(268, 22);
 			this.historyListDeleteRowMenu.Text = "この行を削除する";
 			this.historyListDeleteRowMenu.Click += new System.EventHandler(this.HistoryListDeleteRowMenuClick);
+			// 
+			// toolStripSeparator43
+			// 
+			this.toolStripSeparator43.Name = "toolStripSeparator43";
+			this.toolStripSeparator43.Size = new System.Drawing.Size(265, 6);
+			// 
+			// openAppliAHistoryMenu
+			// 
+			this.openAppliAHistoryMenu.Name = "openAppliAHistoryMenu";
+			this.openAppliAHistoryMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliAHistoryMenu.Text = "最近行われた放送のURLをアプリAで開く";
+			this.openAppliAHistoryMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliBHistoryMenu
+			// 
+			this.openAppliBHistoryMenu.Name = "openAppliBHistoryMenu";
+			this.openAppliBHistoryMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliBHistoryMenu.Text = "最近行われた放送のURLをアプリBで開く";
+			this.openAppliBHistoryMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliCHistoryMenu
+			// 
+			this.openAppliCHistoryMenu.Name = "openAppliCHistoryMenu";
+			this.openAppliCHistoryMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliCHistoryMenu.Text = "最近行われた放送のURLをアプリCで開く";
+			this.openAppliCHistoryMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliDHistoryMenu
+			// 
+			this.openAppliDHistoryMenu.Name = "openAppliDHistoryMenu";
+			this.openAppliDHistoryMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliDHistoryMenu.Text = "最近行われた放送のURLをアプリDで開く";
+			this.openAppliDHistoryMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliEHistoryMenu
+			// 
+			this.openAppliEHistoryMenu.Name = "openAppliEHistoryMenu";
+			this.openAppliEHistoryMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliEHistoryMenu.Text = "最近行われた放送のURLをアプリEで開く";
+			this.openAppliEHistoryMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliFHistoryMenu
+			// 
+			this.openAppliFHistoryMenu.Name = "openAppliFHistoryMenu";
+			this.openAppliFHistoryMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliFHistoryMenu.Text = "最近行われた放送のURLをアプリFで開く";
+			this.openAppliFHistoryMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliGHistoryMenu
+			// 
+			this.openAppliGHistoryMenu.Name = "openAppliGHistoryMenu";
+			this.openAppliGHistoryMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliGHistoryMenu.Text = "最近行われた放送のURLをアプリGで開く";
+			this.openAppliGHistoryMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliHHistoryMenu
+			// 
+			this.openAppliHHistoryMenu.Name = "openAppliHHistoryMenu";
+			this.openAppliHHistoryMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliHHistoryMenu.Text = "最近行われた放送のURLをアプリHで開く";
+			this.openAppliHHistoryMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliIHistoryMenu
+			// 
+			this.openAppliIHistoryMenu.Name = "openAppliIHistoryMenu";
+			this.openAppliIHistoryMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliIHistoryMenu.Text = "最近行われた放送のURLをアプリIで開く";
+			this.openAppliIHistoryMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliJHistoryMenu
+			// 
+			this.openAppliJHistoryMenu.Name = "openAppliJHistoryMenu";
+			this.openAppliJHistoryMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliJHistoryMenu.Text = "最近行われた放送のURLをアプリJで開く";
+			this.openAppliJHistoryMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
 			// 
 			// label7
 			// 
@@ -5483,28 +5520,39 @@ namespace namaichi
 									this.toolStripSeparator26,
 									this.notAlartListAddAlartListMenu,
 									this.toolStripSeparator28,
-									this.notAlartListDeleteRowMenu});
+									this.notAlartListDeleteRowMenu,
+									this.toolStripSeparator44,
+									this.openAppliANotAlartMenu,
+									this.openAppliBNotAlartMenu,
+									this.openAppliCNotAlartMenu,
+									this.openAppliDNotAlartMenu,
+									this.openAppliENotAlartMenu,
+									this.openAppliFNotAlartMenu,
+									this.openAppliGNotAlartMenu,
+									this.openAppliHNotAlartMenu,
+									this.openAppliINotAlartMenu,
+									this.openAppliJNotAlartMenu});
 			this.notAlartListMenu.Name = "logListMenu";
-			this.notAlartListMenu.Size = new System.Drawing.Size(178, 198);
+			this.notAlartListMenu.Size = new System.Drawing.Size(269, 424);
 			// 
 			// notAlartListOpenUrlMenu
 			// 
 			this.notAlartListOpenUrlMenu.Name = "notAlartListOpenUrlMenu";
-			this.notAlartListOpenUrlMenu.Size = new System.Drawing.Size(177, 22);
+			this.notAlartListOpenUrlMenu.Size = new System.Drawing.Size(268, 22);
 			this.notAlartListOpenUrlMenu.Text = "放送URLを開く";
 			this.notAlartListOpenUrlMenu.Click += new System.EventHandler(this.NotAlartListOpenUrlMenuClick);
 			// 
 			// notAlartListOpenCommunityUrlMenu
 			// 
 			this.notAlartListOpenCommunityUrlMenu.Name = "notAlartListOpenCommunityUrlMenu";
-			this.notAlartListOpenCommunityUrlMenu.Size = new System.Drawing.Size(177, 22);
+			this.notAlartListOpenCommunityUrlMenu.Size = new System.Drawing.Size(268, 22);
 			this.notAlartListOpenCommunityUrlMenu.Text = "コミュニティURLを開く";
 			this.notAlartListOpenCommunityUrlMenu.Click += new System.EventHandler(this.NotAlartListOpenCommunityUrlMenuClick);
 			// 
 			// notAlartListOpenUserUrlMenu
 			// 
 			this.notAlartListOpenUserUrlMenu.Name = "notAlartListOpenUserUrlMenu";
-			this.notAlartListOpenUserUrlMenu.Size = new System.Drawing.Size(177, 22);
+			this.notAlartListOpenUserUrlMenu.Size = new System.Drawing.Size(268, 22);
 			this.notAlartListOpenUserUrlMenu.Text = "ユーザーURLを開く";
 			this.notAlartListOpenUserUrlMenu.Visible = false;
 			this.notAlartListOpenUserUrlMenu.Click += new System.EventHandler(this.NotAlartListOpenUserUrlMenuClick);
@@ -5512,26 +5560,26 @@ namespace namaichi
 			// toolStripSeparator22
 			// 
 			this.toolStripSeparator22.Name = "toolStripSeparator22";
-			this.toolStripSeparator22.Size = new System.Drawing.Size(174, 6);
+			this.toolStripSeparator22.Size = new System.Drawing.Size(265, 6);
 			// 
 			// notAlartListCopyUrlMenu
 			// 
 			this.notAlartListCopyUrlMenu.Name = "notAlartListCopyUrlMenu";
-			this.notAlartListCopyUrlMenu.Size = new System.Drawing.Size(177, 22);
+			this.notAlartListCopyUrlMenu.Size = new System.Drawing.Size(268, 22);
 			this.notAlartListCopyUrlMenu.Text = "URLをコピー";
 			this.notAlartListCopyUrlMenu.Click += new System.EventHandler(this.NotAlartListCopyUrlMenuClick);
 			// 
 			// notAlartListCopyCommunityUrlMenu
 			// 
 			this.notAlartListCopyCommunityUrlMenu.Name = "notAlartListCopyCommunityUrlMenu";
-			this.notAlartListCopyCommunityUrlMenu.Size = new System.Drawing.Size(177, 22);
+			this.notAlartListCopyCommunityUrlMenu.Size = new System.Drawing.Size(268, 22);
 			this.notAlartListCopyCommunityUrlMenu.Text = "コミュニティURLをコピー";
 			this.notAlartListCopyCommunityUrlMenu.Click += new System.EventHandler(this.NotAlartListCopyCommunityUrlMenuClick);
 			// 
 			// notAlartListCopyUserUrlMenu
 			// 
 			this.notAlartListCopyUserUrlMenu.Name = "notAlartListCopyUserUrlMenu";
-			this.notAlartListCopyUserUrlMenu.Size = new System.Drawing.Size(177, 22);
+			this.notAlartListCopyUserUrlMenu.Size = new System.Drawing.Size(268, 22);
 			this.notAlartListCopyUserUrlMenu.Text = "ユーザーURLをコピー";
 			this.notAlartListCopyUserUrlMenu.Visible = false;
 			this.notAlartListCopyUserUrlMenu.Click += new System.EventHandler(this.NotAlartListCopyUserUrlMenuClick);
@@ -5539,26 +5587,101 @@ namespace namaichi
 			// toolStripSeparator26
 			// 
 			this.toolStripSeparator26.Name = "toolStripSeparator26";
-			this.toolStripSeparator26.Size = new System.Drawing.Size(174, 6);
+			this.toolStripSeparator26.Size = new System.Drawing.Size(265, 6);
 			// 
 			// notAlartListAddAlartListMenu
 			// 
 			this.notAlartListAddAlartListMenu.Name = "notAlartListAddAlartListMenu";
-			this.notAlartListAddAlartListMenu.Size = new System.Drawing.Size(177, 22);
+			this.notAlartListAddAlartListMenu.Size = new System.Drawing.Size(268, 22);
 			this.notAlartListAddAlartListMenu.Text = "お気に入りに登録する";
 			this.notAlartListAddAlartListMenu.Click += new System.EventHandler(this.NotAlartListAddAlartListMenuClick);
 			// 
 			// toolStripSeparator28
 			// 
 			this.toolStripSeparator28.Name = "toolStripSeparator28";
-			this.toolStripSeparator28.Size = new System.Drawing.Size(174, 6);
+			this.toolStripSeparator28.Size = new System.Drawing.Size(265, 6);
 			// 
 			// notAlartListDeleteRowMenu
 			// 
 			this.notAlartListDeleteRowMenu.Name = "notAlartListDeleteRowMenu";
-			this.notAlartListDeleteRowMenu.Size = new System.Drawing.Size(177, 22);
+			this.notAlartListDeleteRowMenu.Size = new System.Drawing.Size(268, 22);
 			this.notAlartListDeleteRowMenu.Text = "この行を削除する";
 			this.notAlartListDeleteRowMenu.Click += new System.EventHandler(this.NotAlartListDeleteRowMenuClick);
+			// 
+			// toolStripSeparator44
+			// 
+			this.toolStripSeparator44.Name = "toolStripSeparator44";
+			this.toolStripSeparator44.Size = new System.Drawing.Size(265, 6);
+			// 
+			// openAppliANotAlartMenu
+			// 
+			this.openAppliANotAlartMenu.Name = "openAppliANotAlartMenu";
+			this.openAppliANotAlartMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliANotAlartMenu.Text = "最近行われた放送のURLをアプリAで開く";
+			this.openAppliANotAlartMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliBNotAlartMenu
+			// 
+			this.openAppliBNotAlartMenu.Name = "openAppliBNotAlartMenu";
+			this.openAppliBNotAlartMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliBNotAlartMenu.Text = "最近行われた放送のURLをアプリBで開く";
+			this.openAppliBNotAlartMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliCNotAlartMenu
+			// 
+			this.openAppliCNotAlartMenu.Name = "openAppliCNotAlartMenu";
+			this.openAppliCNotAlartMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliCNotAlartMenu.Text = "最近行われた放送のURLをアプリCで開く";
+			this.openAppliCNotAlartMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliDNotAlartMenu
+			// 
+			this.openAppliDNotAlartMenu.Name = "openAppliDNotAlartMenu";
+			this.openAppliDNotAlartMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliDNotAlartMenu.Text = "最近行われた放送のURLをアプリDで開く";
+			this.openAppliDNotAlartMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliENotAlartMenu
+			// 
+			this.openAppliENotAlartMenu.Name = "openAppliENotAlartMenu";
+			this.openAppliENotAlartMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliENotAlartMenu.Text = "最近行われた放送のURLをアプリEで開く";
+			this.openAppliENotAlartMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliFNotAlartMenu
+			// 
+			this.openAppliFNotAlartMenu.Name = "openAppliFNotAlartMenu";
+			this.openAppliFNotAlartMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliFNotAlartMenu.Text = "最近行われた放送のURLをアプリFで開く";
+			this.openAppliFNotAlartMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliGNotAlartMenu
+			// 
+			this.openAppliGNotAlartMenu.Name = "openAppliGNotAlartMenu";
+			this.openAppliGNotAlartMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliGNotAlartMenu.Text = "最近行われた放送のURLをアプリGで開く";
+			this.openAppliGNotAlartMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliHNotAlartMenu
+			// 
+			this.openAppliHNotAlartMenu.Name = "openAppliHNotAlartMenu";
+			this.openAppliHNotAlartMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliHNotAlartMenu.Text = "最近行われた放送のURLをアプリHで開く";
+			this.openAppliHNotAlartMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliINotAlartMenu
+			// 
+			this.openAppliINotAlartMenu.Name = "openAppliINotAlartMenu";
+			this.openAppliINotAlartMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliINotAlartMenu.Text = "最近行われた放送のURLをアプリIで開く";
+			this.openAppliINotAlartMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// openAppliJNotAlartMenu
+			// 
+			this.openAppliJNotAlartMenu.Name = "openAppliJNotAlartMenu";
+			this.openAppliJNotAlartMenu.Size = new System.Drawing.Size(268, 22);
+			this.openAppliJNotAlartMenu.Text = "最近行われた放送のURLをアプリJで開く";
+			this.openAppliJNotAlartMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
 			// 
 			// label5
 			// 
@@ -5765,6 +5888,76 @@ namespace namaichi
 			this.toolStripMenuItem45.Text = "この行を削除する";
 			this.toolStripMenuItem45.Click += new System.EventHandler(this.HistoryListDeleteRowMenuClick);
 			// 
+			// isDisplayAppliJTabMenu
+			// 
+			this.isDisplayAppliJTabMenu.Name = "isDisplayAppliJTabMenu";
+			this.isDisplayAppliJTabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliJTabMenu.Text = "アプリJ";
+			this.isDisplayAppliJTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliITabMenu
+			// 
+			this.isDisplayAppliITabMenu.Name = "isDisplayAppliITabMenu";
+			this.isDisplayAppliITabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliITabMenu.Text = "アプリI";
+			this.isDisplayAppliITabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliHTabMenu
+			// 
+			this.isDisplayAppliHTabMenu.Name = "isDisplayAppliHTabMenu";
+			this.isDisplayAppliHTabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliHTabMenu.Text = "アプリH";
+			this.isDisplayAppliHTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliGTabMenu
+			// 
+			this.isDisplayAppliGTabMenu.Name = "isDisplayAppliGTabMenu";
+			this.isDisplayAppliGTabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliGTabMenu.Text = "アプリG";
+			this.isDisplayAppliGTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliFTabMenu
+			// 
+			this.isDisplayAppliFTabMenu.Name = "isDisplayAppliFTabMenu";
+			this.isDisplayAppliFTabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliFTabMenu.Text = "アプリF";
+			this.isDisplayAppliFTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliETabMenu
+			// 
+			this.isDisplayAppliETabMenu.Name = "isDisplayAppliETabMenu";
+			this.isDisplayAppliETabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliETabMenu.Text = "アプリE";
+			this.isDisplayAppliETabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliDTabMenu
+			// 
+			this.isDisplayAppliDTabMenu.Name = "isDisplayAppliDTabMenu";
+			this.isDisplayAppliDTabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliDTabMenu.Text = "アプリD";
+			this.isDisplayAppliDTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliCTabMenu
+			// 
+			this.isDisplayAppliCTabMenu.Name = "isDisplayAppliCTabMenu";
+			this.isDisplayAppliCTabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliCTabMenu.Text = "アプリC";
+			this.isDisplayAppliCTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliBTabMenu
+			// 
+			this.isDisplayAppliBTabMenu.Name = "isDisplayAppliBTabMenu";
+			this.isDisplayAppliBTabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliBTabMenu.Text = "アプリB";
+			this.isDisplayAppliBTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliATabMenu
+			// 
+			this.isDisplayAppliATabMenu.Name = "isDisplayAppliATabMenu";
+			this.isDisplayAppliATabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliATabMenu.Text = "アプリA";
+			this.isDisplayAppliATabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
 			// MainForm
 			// 
 			this.AllowDrop = true;
@@ -5834,6 +6027,28 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripMenuItem openAppliJNotAlartMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliINotAlartMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliHNotAlartMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliGNotAlartMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliFNotAlartMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliENotAlartMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliDNotAlartMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliCNotAlartMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliBNotAlartMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliANotAlartMenu;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator44;
+		private System.Windows.Forms.ToolStripMenuItem openAppliJHistoryMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliIHistoryMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliHHistoryMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliGHistoryMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliFHistoryMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliEHistoryMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliDHistoryMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliCHistoryMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliBHistoryMenu;
+		private System.Windows.Forms.ToolStripMenuItem openAppliAHistoryMenu;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator43;
 		private System.Windows.Forms.ToolStripMenuItem liveListOpenAppliJMenu;
 		private System.Windows.Forms.ToolStripMenuItem liveListOpenAppliIMenu;
 		private System.Windows.Forms.ToolStripMenuItem liveListOpenAppliHMenu;

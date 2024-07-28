@@ -68,6 +68,7 @@ namespace namaichi.alart
 		}
 		public void start() {
 			setCookie();
+			form.followCheck();
 			
 			//Task.Factory.StartNew(() => reserveStreamCheck());
 			if (bool.Parse(form.config.get("IsRss"))) {
@@ -519,7 +520,7 @@ namespace namaichi.alart
 				sound(item, targetAi[0]);
 			}
 		}
-		public void setCookie(bool isDisplayLog = true, bool isFollowCheck = true) {
+		public void setCookie(bool isDisplayLog = true) {
 			try {
 				var url = "https://www.nicovideo.jp/my/top";
 				url = "https://live.nicovideo.jp/my";
@@ -535,10 +536,6 @@ namespace namaichi.alart
 					container = res[0];
 				}
 			} catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);}
-			
-			if ((alartListDataSource.Count > 0 || form.userAlartListDataSource.Count > 0) && isFollowCheck) {
-				Task.Factory.StartNew(() => new FollowChecker(form, container).check());
-			}
 		}
 		public bool isUserIdFromLvidOk(RssItem rssItem, string alartUserId, out bool isSuccessAccess) {
 			util.debugWriteLine("isUserIdFromLvidOk id " + alartUserId);
@@ -877,7 +874,7 @@ namespace namaichi.alart
 					lastGetCookieTime= DateTime.MaxValue;
 					if (form.config.get("BrowserNum") == "2") {
 						Task.Factory.StartNew(() => {
-							setCookie(false, false);
+							setCookie(false);
 							lastGetCookieTime = DateTime.Now;
 						});
 					}
@@ -890,6 +887,8 @@ namespace namaichi.alart
 						lastCheckNotifyHistoryTime = DateTime.Now;
 					});
 				}
+				if (bool.Parse(form.config.get("IsNotSleep")))
+					util.setThreadExecutionState();
 				Thread.Sleep(10000);
 			}
 			

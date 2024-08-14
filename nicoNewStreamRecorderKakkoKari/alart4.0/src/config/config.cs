@@ -385,6 +385,8 @@ public class config
 			{"notAlartListSortColumn","0"},
 			{"reserveHistoryListSortOrder","no"},
 			{"reserveHistoryListSortColumn","0"},
+			
+			{"IsShowNoComAlartMessageAgain", "false"},
 		};
 
 		try {

@@ -240,6 +240,10 @@ namespace namaichi.alart
 				var url = "https://android.clients.google.com/c2dm/register3";
 				var r = util.postResStr(url, headers, postDataBytes);
 				util.debugWriteLine(r);
+				if (r == null) {
+					check.form.addLogText("スマホプッシュ通知のトークンの取得に失敗しました");
+					return null;
+				}
 				var token = new Regex("token=(.+)").Match(r).Groups[1].Value;
 				util.debugWriteLine(token);
 				

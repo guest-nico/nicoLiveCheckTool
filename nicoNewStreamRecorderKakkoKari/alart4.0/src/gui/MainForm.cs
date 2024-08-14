@@ -542,6 +542,10 @@ namespace namaichi
 			
 			formInitSetting();
 			
+			if (!bool.Parse(config.get("IsShowNoComAlartMessageAgain")) &&
+					MessageBox.Show("2024年8月15日現在、ニコニコミュニティのサービスが停止しているため、コミュニティが条件に設定されている場合には正常に通知されないことがあります。\nこのバージョンではお気に入りの条件について、次のような動作となっています。\n\nコミュニティのみが条件に設定されている場合：\n通知を行わない\n\nユーザーIDやキーワードと共に条件が設定されている場合：\nコミュニティ以外の条件のみを用いて条件を判定\n\n次からこのメッセージを表示しない", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+				config.set("IsShowNoComAlartMessageAgain", "true");
+			
 			if (config.brokenCopyFile != null)
 				System.Windows.Forms.MessageBox.Show("設定ファイルを読み込めませんでした。設定ファイルをバックアップしました。" + config.brokenCopyFile);
 			
@@ -6621,4 +6625,3 @@ namespace namaichi
 		}
 	}
 }
-

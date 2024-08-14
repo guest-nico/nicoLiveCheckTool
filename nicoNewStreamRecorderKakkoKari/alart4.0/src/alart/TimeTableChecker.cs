@@ -331,7 +331,9 @@ namespace namaichi.alart
 						}
 						
 					}
-					if (tanzakuObj.data.cursor.IndexOf("cursorEnd/cursorEnd") > -1) isEnd = true;
+					var cursor = tanzakuObj.data.cursor; 
+					if (cursor == null) break; 
+					if (cursor.IndexOf("cursorEnd/cursorEnd") > -1) isEnd = true;
 					if (isEnd) break;
 				}
 			} catch (Exception e) {

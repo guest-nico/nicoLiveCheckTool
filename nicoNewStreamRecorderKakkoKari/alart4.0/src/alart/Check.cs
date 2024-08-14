@@ -284,8 +284,9 @@ namespace namaichi.alart
 			isUserOk = alartItem.hostName == item.hostName || alartItem.hostId == item.userId;
 			isKeywordOk = item.isMatchKeyword(alartItem);
 			
-			if ((string.IsNullOrEmpty(alartItem.communityId) !=
-			     	string.IsNullOrEmpty(alartItem.communityName)) ||
+			//if ((string.IsNullOrEmpty(alartItem.communityId) !=
+			//     	string.IsNullOrEmpty(alartItem.communityName)) ||
+			if (
 			     (string.IsNullOrEmpty(alartItem.hostId) !=
 			     	 string.IsNullOrEmpty(alartItem.hostName))) return false;
 			
@@ -295,6 +296,12 @@ namespace namaichi.alart
 				return false;
 			}
 			
+			//community暫定措置
+			if (alartItem.communityId != null && alartItem.communityId.StartsWith("co")) {
+				if (!isNosetComId && isNosetHostName && isNosetKeyword)
+				    return false;
+				isComOk = alartItem.isMustCom; //mustならok、orなら!okとして判定に関与しないよう扱い
+			}
 			
 			if (!isAlartMatch(alartItem, isComOk, 
 					isUserOk, isKeywordOk, isNosetComId, 

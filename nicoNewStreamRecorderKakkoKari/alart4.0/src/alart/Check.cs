@@ -300,7 +300,6 @@ namespace namaichi.alart
 			if (alartItem.communityId != null && alartItem.communityId.StartsWith("co")) {
 				if (!isNosetComId && isNosetHostName && isNosetKeyword)
 				    return false;
-				isComOk = alartItem.isMustCom; //mustならok、orなら!okとして判定に関与しないよう扱い
 			}
 			
 			if (!isAlartMatch(alartItem, isComOk, 
@@ -352,32 +351,40 @@ namespace namaichi.alart
 		private bool isAlartMatch(AlartInfo alartItem, bool isComOk, 
 				bool isUserOk, bool isKeywordOk, bool isNosetComId, 
 				bool isNosetHostName, bool isNosetKeyword, RssItem ri) {
-			if (!isComOk && !isUserOk && !isKeywordOk) return false;
-			if (alartItem.isMustCom && !isNosetComId && !isComOk) 
-				return false;
-			if (alartItem.isMustUser && !isNosetHostName && !isUserOk) 
-				return false;
-			if (alartItem.isMustKeyword && !isNosetKeyword && !isKeywordOk) 
-				return false;
 			
-			/*
-			if ((!isNosetComId && isComOk) ||
-				    (!isNosetHostName && isUserOk) ||
-				    (!isNosetKeyword && isKeywordOk)) {
+			if (ri.comId != null && ri.comId.StartsWith("co")) {
+				if (!isUserOk && !isKeywordOk) return false;
 				
+				if (alartItem.isMustUser && !isNosetHostName && !isUserOk) 
+					return false;
+				if (alartItem.isMustKeyword && !isNosetKeyword && !isKeywordOk) 
+					return false;
+				
+				if (!(!isNosetHostName && isUserOk) &&
+					    !(!isNosetKeyword && isKeywordOk)) {
+					return false;
+				}
+				if (!isMemberOnlyOk(alartItem, ri)) return false;
+				
+				return true;
 			} else {
-				continue;
+				if (!isComOk && !isUserOk && !isKeywordOk) return false;
+				if (alartItem.isMustCom && !isNosetComId && !isComOk) 
+					return false;
+				if (alartItem.isMustUser && !isNosetHostName && !isUserOk) 
+					return false;
+				if (alartItem.isMustKeyword && !isNosetKeyword && !isKeywordOk) 
+					return false;
+				
+				if (!(!isNosetComId && isComOk) &&
+					    !(!isNosetHostName && isUserOk) &&
+					    !(!isNosetKeyword && isKeywordOk)) {
+					return false;
+				}
+				if (!isMemberOnlyOk(alartItem, ri)) return false;
+				
+				return true;
 			}
-			*/
-			
-			if (!(!isNosetComId && isComOk) &&
-				    !(!isNosetHostName && isUserOk) &&
-				    !(!isNosetKeyword && isKeywordOk)) {
-				return false;
-			}
-			if (!isMemberOnlyOk(alartItem, ri)) return false;
-			
-			return true;
 		}
 		private void appliProcess(string appliPath, string lvid, string args) {
 			if (appliPath == null || appliPath == "") return;

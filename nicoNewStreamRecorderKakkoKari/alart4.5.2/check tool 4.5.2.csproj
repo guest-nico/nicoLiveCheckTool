@@ -173,6 +173,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\AddTwitterForm.cs">
       <Link>src\gui\AddTwitterForm.cs</Link>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\AddTwitterForm.Designer.cs">
       <Link>src\gui\AddTwitterForm.Designer.cs</Link>
@@ -219,6 +220,7 @@
     </Compile>
     <Compile Include="..\alart4.0\src\gui\MfaInputForm.cs">
       <Link>src\gui\MfaInputForm.cs</Link>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\alart4.0\src\gui\MfaInputForm.Designer.cs">
       <Link>src\gui\MfaInputForm.Designer.cs</Link>

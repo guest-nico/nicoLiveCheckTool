@@ -315,7 +315,10 @@ namespace namaichi
 			*/
 			var isFollow = false;
 			var comName = util.getCommunityName(num, out isFollow, form.check.container);
-			if (comName == null) return;
+			if (comName == null) {
+				comName = "取得できませんでした";
+				//return;
+			}
 			communityFollowChkBox.Checked = isFollow;
 			communityNameText.Text = comName;
 			

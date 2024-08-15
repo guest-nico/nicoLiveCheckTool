@@ -27,7 +27,6 @@
     <DelaySign>False</DelaySign>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <RunCodeAnalysis>False</RunCodeAnalysis>
-    <SourceAnalysisOverrideSettingsFile>E:\Users\zack\AppData\Roaming\ICSharpCode/SharpDevelop4\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -219,7 +218,9 @@
     <Compile Include="src\gui\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\gui\MfaInputForm.cs" />
+    <Compile Include="src\gui\MfaInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="src\gui\MfaInputForm.Designer.cs">
       <DependentUpon>MfaInputForm.cs</DependentUpon>
     </Compile>

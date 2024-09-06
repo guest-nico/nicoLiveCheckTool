@@ -549,7 +549,9 @@ namespace namaichi.alart
 						form.addLogText("Cookieの取得に成功しました", true);
 					container = res[0];
 				}
-			} catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);}
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
 		}
 		public bool isUserIdFromLvidOk(RssItem rssItem, string alartUserId, out bool isSuccessAccess) {
 			util.debugWriteLine("isUserIdFromLvidOk id " + alartUserId);

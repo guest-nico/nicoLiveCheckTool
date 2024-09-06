@@ -180,10 +180,14 @@ namespace namaichi.rec
 			return ret.ToArray();
 		}
 		private string getThumbnail(string res) {
-			var url = util.getRegGroup(res, "&quot;thumbnailSmallImageUrl&quot;:&quot;(.+?)&quot;");
-			if (url == null)
-			url = util.getRegGroup(res, "<meta property=\"og:image\" content=\"(.+?)\"");
-			return url;
+			var samuneUrl = util.getRegGroup(res, "uri50x50&quot;.+?(https:.+?)&quot;");
+			if (samuneUrl == null) samuneUrl = util.getRegGroup(res, "&quot;thumbnailImageUrl&quot;:&quot;(.+?)&quot;");
+			if (samuneUrl == null) samuneUrl = util.getRegGroup(res, "&quot;small&quot;:&quot;(.+?)&quot;");
+			if (samuneUrl == null) samuneUrl = util.getRegGroup(res, "thumbnail:.+?'(https*://.+?)'");
+			if (samuneUrl == null) samuneUrl = util.getRegGroup(res, "<thumb_url>(.+?)</thumb_url>");
+			if (samuneUrl == null) samuneUrl = util.getRegGroup(res, "&quot;thumbnail_url&quot;:&quot;(.+?)&quot;");
+			if (samuneUrl == null) samuneUrl = util.getRegGroup(res, "<meta property=\"og:image\" content=\"(.+?)\"");
+			return samuneUrl;
 		}
 		private void setOpenDt(string res) {
 			

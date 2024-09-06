@@ -222,7 +222,6 @@ namespace namaichi.rec
 			}
 			if (importer == null) return null;
 			
-
 			CookieImportResult result = await importer.GetCookiesAsync(TargetUrl).ConfigureAwait(false);
 			if (result.Status != CookieImportState.Success) return null;
 			

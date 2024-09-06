@@ -34,8 +34,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.8.1";
-	public static string versionDayStr = "2024/08/15";
+	public static string versionStr = "ver0.1.8.2";
+	public static string versionDayStr = "2024/09/06";
 	public static string osName = null;
 	public static string osType = null;
 	public static bool isWebRequestOk = false;
@@ -1719,6 +1719,10 @@ class util {
 					{"Upgrade-Insecure-Requests", "1"},
 				};
 			var res = getResStr(url, _h, false);
+			if (res == null) {
+				util.debugWriteLine("getMyName res null url " + url);
+				return null;
+			}
 			var n = util.getRegGroup(res, "\"nickname\":\"(.+?)\"");
 			return n;
 		} catch (Exception e) {

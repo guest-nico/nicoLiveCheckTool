@@ -117,12 +117,13 @@ namespace namaichi
 			}
 			Image img;
 			var dt0 = DateTime.Now;
-			if (!ThumbnailManager.isExist(ri.comId, out img)) {
+			var thumbId = string.IsNullOrEmpty(ri.comId) || ri.comId == "co0" ? ri.userId : ri.comId;
+			if (!ThumbnailManager.isExist(thumbId, out img)) {
 				util.debugWriteLine("is not exist thumbnail time " + (DateTime.Now - dt0) + " " + ri.comName);
 				
-				img = ThumbnailManager.getImageId(ri.comId);
+				img = ThumbnailManager.getImageId(thumbId);
 				var isSaveCache = bool.Parse(config.get("alartCacheIcon"));
-				if (img != null && isSaveCache) ThumbnailManager.saveImage(img, ri.comId);
+				if (img != null && isSaveCache) ThumbnailManager.saveImage(img, thumbId .StartsWith("c") ? ri.comId : ri.userId);
 				if (img == null && !string.IsNullOrEmpty(url)) 
 					img = ThumbnailManager.getThumbnailRssUrl(url, isSaveCache, true);
 			} else {

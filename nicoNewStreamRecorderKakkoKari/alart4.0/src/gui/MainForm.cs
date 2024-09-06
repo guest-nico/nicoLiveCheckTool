@@ -541,6 +541,7 @@ namespace namaichi
 			
 			
 			formInitSetting();
+			setNotifyOff();
 			
 			if (!bool.Parse(config.get("IsShowNoComAlartMessageAgain")) &&
 					MessageBox.Show("2024年8月15日現在、ニコニコミュニティのサービスが停止しているため、コミュニティが条件に設定されている場合には正常に通知されないことがあります。\nこのバージョンではお気に入りの条件について、次のような動作となっています。\n\nコミュニティのみが条件に設定されている場合：\n通知を行わない\n\nユーザーIDやキーワードと共に条件が設定されている場合：\nコミュニティ以外の条件のみを用いて条件を判定\n\n次からこのメッセージを表示しない", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
@@ -2277,20 +2278,6 @@ namespace namaichi
 					if (c.HeaderText == menu.Text)
 						c.Visible = showReserveHistoryListColumns[i] == '1';
 			}
-			
-			var notifyOffs = new string[] {
-					"OffPop","OffBalloon",
-					"OffWeb","OffMail","OffSound","OffAppA",
-					"OffAppB","OffAppC","OffAppD",
-					"OffAppE","OffAppF","OffAppG",
-					"OffAppH","OffAppI","OffAppJ"};
-			var isAllOff = true;
-			for(var i = 0; i < notifyOffs.Length; i++) {
-				var isOff = bool.Parse(config.get(notifyOffs[i]));
-				notifyOffList[i + 2] = isOff;
-				if (!isOff) isAllOff = false;
-			}
-			notifyOffList[0] = isAllOff;
 			
 			//更新メニュー
 			var min = new int[]{0, 5, 10, 15, 20, 30, 60, 360};
@@ -6619,9 +6606,20 @@ namespace namaichi
 				Task.Factory.StartNew(() => new FollowChecker(this, check.container).check());
 			}
 		}
-		void aaaaaa(ToolStrip parent) {
-			util.debugWriteLine(parent + " / " + (parent == logListMenu) + " /" + (parent == historyListMenu));
-			
+		void setNotifyOff() {
+			var notifyOffs = new string[] {
+					"OffPop","OffBalloon",
+					"OffWeb","OffMail","OffSound","OffAppA",
+					"OffAppB","OffAppC","OffAppD",
+					"OffAppE","OffAppF","OffAppG",
+					"OffAppH","OffAppI","OffAppJ"};
+			var isAllOff = true;
+			for(var i = 0; i < notifyOffs.Length; i++) {
+				var isOff = bool.Parse(config.get(notifyOffs[i]));
+				notifyOffList[i + 2] = isOff;
+				if (!isOff) isAllOff = false;
+			}
+			notifyOffList[0] = isAllOff;
 		}
 	}
 }

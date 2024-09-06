@@ -19,7 +19,7 @@ namespace namaichi.alart
 	/// </summary>
 	public partial class PopupDisplay : Form
 	{
-		private MainForm form;
+		public MainForm form;
 		public List<int> posList = new List<int>();
 		private Rectangle workingArea;
 		private Size[] popupSize = null; //0-normal 1-small

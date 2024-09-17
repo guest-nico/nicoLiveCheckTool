@@ -46,9 +46,10 @@ namespace namaichi.info
 		public nicoad nicoad;
 		public bool isPayProgram;
 		public string getThumb() {
-			if (!string.IsNullOrEmpty(socialGroup.thumbnailUrl)) 
+			if (!string.IsNullOrEmpty(socialGroup.thumbnailUrl) &&
+					socialGroup.id != "co0")
 				return socialGroup.thumbnailUrl;
-			if (!string.IsNullOrEmpty(programProvider.icon)) 
+			if (!string.IsNullOrEmpty(programProvider.icon))
 				return programProvider.icon;
 			if (!string.IsNullOrEmpty(screenshotThumbnail.liveScreenshotThumbnailUrl)) 
 				return screenshotThumbnail.liveScreenshotThumbnailUrl;

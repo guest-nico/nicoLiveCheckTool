@@ -305,7 +305,7 @@ namespace namaichi.alart
 			if (!isAlartMatch(alartItem, isComOk, 
 					isUserOk, isKeywordOk, isNosetComId, 
 					isNosetHostName, isNosetKeyword, item)) {
-				if ((!isNosetComId && isComOk) ||
+				if ((!isNosetComId && isComOk && item.comId != "co0") ||
 					    (!isNosetHostName && isUserOk)) {
 					nearAlartAi = alartItem;
 					isSuccessAccess = setUserId(item);

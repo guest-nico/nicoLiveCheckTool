@@ -708,8 +708,8 @@ namespace namaichi.alart
 			sw.WriteLine("[放送タイプ] " + ((isJikken) ? "nicocas" : "nicolive"));
 			sw.WriteLine("[放送者] " + ri.hostName + br);
 			sw.WriteLine("[放送者ID] " + ri.userId + br);
-			sw.WriteLine("[コミュニティ名] " + ri.comName + br);
-			sw.WriteLine("[コミュニティID] " + ri.comId + br);
+			sw.WriteLine("[チャンネル名] " + ri.comName + br);
+			sw.WriteLine("[チャンネルID] " + ri.comId + br);
 			sw.WriteLine("[説明] " + ri.description + br);
 			sw.WriteLine("[放送ID] " + ri.lvId + br);
 //			if (groupUrl != null)
@@ -1034,10 +1034,10 @@ namespace namaichi.alart
 				
 				var sameCommunityLive = new List<LiveInfo>();
 				foreach (var l in _liveListDataSource)
-					if (!string.IsNullOrEmpty(l.comId) && l.comId.StartsWith("co") && l.comId == item.comId)
+					if (!string.IsNullOrEmpty(l.comId) && l.comId.StartsWith("co") && l.comId == item.comId && l.comId != "co0")
 						sameCommunityLive.Add(l);
 				foreach (var l in _liveListDataReserve)
-					if (!string.IsNullOrEmpty(l.comId) && l.comId.StartsWith("co") && l.comId == item.comId)
+					if (!string.IsNullOrEmpty(l.comId) && l.comId.StartsWith("co") && l.comId == item.comId && l.comId != "co0")
 						sameCommunityLive.Add(l);
 				foreach (var l in sameCommunityLive)
 					form.removeLiveListItem(l);

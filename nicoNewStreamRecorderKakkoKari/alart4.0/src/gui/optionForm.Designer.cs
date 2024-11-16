@@ -118,6 +118,16 @@ namespace namaichi
 			this.browserPathText = new System.Windows.Forms.TextBox();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.commonTab = new System.Windows.Forms.TabPage();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.isLogFileChkBox = new System.Windows.Forms.CheckBox();
+			this.maxLogDisplayList = new System.Windows.Forms.NumericUpDown();
+			this.maxNotAlartDisplayList = new System.Windows.Forms.NumericUpDown();
+			this.label62 = new System.Windows.Forms.Label();
+			this.label61 = new System.Windows.Forms.Label();
+			this.maxHistoryDisplayList = new System.Windows.Forms.NumericUpDown();
+			this.label60 = new System.Windows.Forms.Label();
+			this.isBroadLogChkBox = new System.Windows.Forms.CheckBox();
+			this.isLogChkBtn = new System.Windows.Forms.CheckBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.IsConfirmFollowChkBox = new System.Windows.Forms.CheckBox();
 			this.delThumbChkBox = new System.Windows.Forms.CheckBox();
@@ -144,6 +154,13 @@ namespace namaichi
 			this.isRecentCheckRadioBtn = new System.Windows.Forms.CheckBox();
 			this.isStartTimeAllCheckChkBox = new System.Windows.Forms.CheckBox();
 			this.common2Tab = new System.Windows.Forms.TabPage();
+			this.groupBox12 = new System.Windows.Forms.GroupBox();
+			this.IsNotSleepChkBox = new System.Windows.Forms.CheckBox();
+			this.label67 = new System.Windows.Forms.Label();
+			this.startUpWaitList = new System.Windows.Forms.NumericUpDown();
+			this.isAllowMultiProcessChkBox = new System.Windows.Forms.CheckBox();
+			this.isTasktrayStartChkBox = new System.Windows.Forms.CheckBox();
+			this.isStartUpChkBox = new System.Windows.Forms.CheckBox();
 			this.displayGroup = new System.Windows.Forms.GroupBox();
 			this.evenRowsColorBtn = new System.Windows.Forms.Button();
 			this.fontList = new System.Windows.Forms.NumericUpDown();
@@ -263,6 +280,9 @@ namespace namaichi
 			this.rssUpdateIntervalList = new System.Windows.Forms.NumericUpDown();
 			this.accountTab = new System.Windows.Forms.TabPage();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.userSessionText = new System.Windows.Forms.TextBox();
+			this.useUserSessionRadioBtn = new System.Windows.Forms.RadioButton();
+			this.userSessionTestBtn = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.cookieFileText = new System.Windows.Forms.TextBox();
@@ -277,30 +297,19 @@ namespace namaichi
 			this.cookieFileSanshouBtn = new System.Windows.Forms.Button();
 			this.btnReload = new System.Windows.Forms.Button();
 			this.useSecondLoginChkBox = new System.Windows.Forms.CheckBox();
-			this.groupBox12 = new System.Windows.Forms.GroupBox();
-			this.IsNotSleepChkBox = new System.Windows.Forms.CheckBox();
-			this.label67 = new System.Windows.Forms.Label();
-			this.startUpWaitList = new System.Windows.Forms.NumericUpDown();
-			this.isAllowMultiProcessChkBox = new System.Windows.Forms.CheckBox();
-			this.isTasktrayStartChkBox = new System.Windows.Forms.CheckBox();
-			this.isStartUpChkBox = new System.Windows.Forms.CheckBox();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.isLogFileChkBox = new System.Windows.Forms.CheckBox();
-			this.maxLogDisplayList = new System.Windows.Forms.NumericUpDown();
-			this.maxNotAlartDisplayList = new System.Windows.Forms.NumericUpDown();
-			this.label62 = new System.Windows.Forms.Label();
-			this.label61 = new System.Windows.Forms.Label();
-			this.maxHistoryDisplayList = new System.Windows.Forms.NumericUpDown();
-			this.label60 = new System.Windows.Forms.Label();
-			this.isBroadLogChkBox = new System.Windows.Forms.CheckBox();
-			this.isLogChkBtn = new System.Windows.Forms.CheckBox();
 			this.appliTab.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.commonTab.SuspendLayout();
+			this.groupBox1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.maxLogDisplayList)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.maxNotAlartDisplayList)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.maxHistoryDisplayList)).BeginInit();
 			this.groupBox2.SuspendLayout();
 			this.common2Tab.SuspendLayout();
+			this.groupBox12.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.startUpWaitList)).BeginInit();
 			this.displayGroup.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.fontList)).BeginInit();
 			this.groupBox11.SuspendLayout();
@@ -327,12 +336,6 @@ namespace namaichi
 			((System.ComponentModel.ISupportInitialize)(this.rssUpdateIntervalList)).BeginInit();
 			this.accountTab.SuspendLayout();
 			this.groupBox3.SuspendLayout();
-			this.groupBox12.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.startUpWaitList)).BeginInit();
-			this.groupBox1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.maxLogDisplayList)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.maxNotAlartDisplayList)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.maxHistoryDisplayList)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// button3
@@ -1081,6 +1084,146 @@ namespace namaichi
 			this.commonTab.Text = "一般";
 			this.commonTab.UseVisualStyleBackColor = true;
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.isLogFileChkBox);
+			this.groupBox1.Controls.Add(this.maxLogDisplayList);
+			this.groupBox1.Controls.Add(this.maxNotAlartDisplayList);
+			this.groupBox1.Controls.Add(this.label62);
+			this.groupBox1.Controls.Add(this.label61);
+			this.groupBox1.Controls.Add(this.maxHistoryDisplayList);
+			this.groupBox1.Controls.Add(this.label60);
+			this.groupBox1.Controls.Add(this.isBroadLogChkBox);
+			this.groupBox1.Controls.Add(this.isLogChkBtn);
+			this.groupBox1.Location = new System.Drawing.Point(5, 430);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(420, 139);
+			this.groupBox1.TabIndex = 13;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "ログ・履歴";
+			// 
+			// isLogFileChkBox
+			// 
+			this.isLogFileChkBox.Location = new System.Drawing.Point(19, 120);
+			this.isLogFileChkBox.Name = "isLogFileChkBox";
+			this.isLogFileChkBox.Size = new System.Drawing.Size(271, 19);
+			this.isLogFileChkBox.TabIndex = 13;
+			this.isLogFileChkBox.Text = "ログをファイルに出力する(通常時は非推奨)";
+			this.isLogFileChkBox.UseVisualStyleBackColor = true;
+			// 
+			// maxLogDisplayList
+			// 
+			this.maxLogDisplayList.Location = new System.Drawing.Point(351, 142);
+			this.maxLogDisplayList.Maximum = new decimal(new int[] {
+									10000,
+									0,
+									0,
+									0});
+			this.maxLogDisplayList.Minimum = new decimal(new int[] {
+									1,
+									0,
+									0,
+									0});
+			this.maxLogDisplayList.Name = "maxLogDisplayList";
+			this.maxLogDisplayList.Size = new System.Drawing.Size(51, 19);
+			this.maxLogDisplayList.TabIndex = 12;
+			this.maxLogDisplayList.Value = new decimal(new int[] {
+									100,
+									0,
+									0,
+									0});
+			this.maxLogDisplayList.Visible = false;
+			// 
+			// maxNotAlartDisplayList
+			// 
+			this.maxNotAlartDisplayList.Location = new System.Drawing.Point(227, 97);
+			this.maxNotAlartDisplayList.Maximum = new decimal(new int[] {
+									10000,
+									0,
+									0,
+									0});
+			this.maxNotAlartDisplayList.Minimum = new decimal(new int[] {
+									1,
+									0,
+									0,
+									0});
+			this.maxNotAlartDisplayList.Name = "maxNotAlartDisplayList";
+			this.maxNotAlartDisplayList.Size = new System.Drawing.Size(51, 19);
+			this.maxNotAlartDisplayList.TabIndex = 12;
+			this.maxNotAlartDisplayList.Value = new decimal(new int[] {
+									100,
+									0,
+									0,
+									0});
+			// 
+			// label62
+			// 
+			this.label62.Location = new System.Drawing.Point(143, 143);
+			this.label62.Name = "label62";
+			this.label62.Size = new System.Drawing.Size(205, 18);
+			this.label62.TabIndex = 11;
+			this.label62.Text = "ログの最大表示件数：";
+			this.label62.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label62.Visible = false;
+			// 
+			// label61
+			// 
+			this.label61.Location = new System.Drawing.Point(19, 98);
+			this.label61.Name = "label61";
+			this.label61.Size = new System.Drawing.Size(205, 18);
+			this.label61.TabIndex = 11;
+			this.label61.Text = "通知しなかった履歴の最大表示件数：";
+			this.label61.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// maxHistoryDisplayList
+			// 
+			this.maxHistoryDisplayList.Location = new System.Drawing.Point(227, 75);
+			this.maxHistoryDisplayList.Maximum = new decimal(new int[] {
+									10000,
+									0,
+									0,
+									0});
+			this.maxHistoryDisplayList.Minimum = new decimal(new int[] {
+									1,
+									0,
+									0,
+									0});
+			this.maxHistoryDisplayList.Name = "maxHistoryDisplayList";
+			this.maxHistoryDisplayList.Size = new System.Drawing.Size(51, 19);
+			this.maxHistoryDisplayList.TabIndex = 12;
+			this.maxHistoryDisplayList.Value = new decimal(new int[] {
+									100,
+									0,
+									0,
+									0});
+			// 
+			// label60
+			// 
+			this.label60.Location = new System.Drawing.Point(19, 76);
+			this.label60.Name = "label60";
+			this.label60.Size = new System.Drawing.Size(205, 18);
+			this.label60.TabIndex = 11;
+			this.label60.Text = "通知履歴の最大表示件数：";
+			this.label60.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// isBroadLogChkBox
+			// 
+			this.isBroadLogChkBox.Location = new System.Drawing.Point(19, 40);
+			this.isBroadLogChkBox.Name = "isBroadLogChkBox";
+			this.isBroadLogChkBox.Size = new System.Drawing.Size(400, 29);
+			this.isBroadLogChkBox.TabIndex = 3;
+			this.isBroadLogChkBox.Text = "全ての番組開始情報をテキストに保存する(broadLog-**-**.txt)（※放置しておくとファイルサイズが膨大になるのでファイルサイズに注意してください）";
+			this.isBroadLogChkBox.UseVisualStyleBackColor = true;
+			// 
+			// isLogChkBtn
+			// 
+			this.isLogChkBtn.Location = new System.Drawing.Point(19, 18);
+			this.isLogChkBtn.Name = "isLogChkBtn";
+			this.isLogChkBtn.Size = new System.Drawing.Size(340, 19);
+			this.isLogChkBtn.TabIndex = 2;
+			this.isLogChkBtn.Text = "お気に入りの放送開始情報をテキストに保存する(favoriteLog.txt)";
+			this.isLogChkBtn.UseVisualStyleBackColor = true;
+			// 
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.IsConfirmFollowChkBox);
@@ -1138,7 +1281,7 @@ namespace namaichi
 			this.IsUpdateComUserNameChkBox.Name = "IsUpdateComUserNameChkBox";
 			this.IsUpdateComUserNameChkBox.Size = new System.Drawing.Size(350, 19);
 			this.IsUpdateComUserNameChkBox.TabIndex = 11;
-			this.IsUpdateComUserNameChkBox.Text = "コミュニティ名とユーザー名を定期的に更新する";
+			this.IsUpdateComUserNameChkBox.Text = "ユーザー名とチャンネル名を定期的に更新する";
 			this.IsUpdateComUserNameChkBox.UseVisualStyleBackColor = true;
 			// 
 			// IsExistInHistoryListNotAlartChkBox
@@ -1166,7 +1309,7 @@ namespace namaichi
 			this.IsAddAlartedComUserChkBox.Name = "IsAddAlartedComUserChkBox";
 			this.IsAddAlartedComUserChkBox.Size = new System.Drawing.Size(350, 19);
 			this.IsAddAlartedComUserChkBox.TabIndex = 11;
-			this.IsAddAlartedComUserChkBox.Text = "通知した放送のコミュニティ・ユーザーが登録されていなければ登録する";
+			this.IsAddAlartedComUserChkBox.Text = "通知した放送のユーザー・チャンネルが登録されていなければ登録する";
 			this.IsAddAlartedComUserChkBox.UseVisualStyleBackColor = true;
 			this.IsAddAlartedComUserChkBox.CheckedChanged += new System.EventHandler(this.IsAddAlartedComUserChkBoxCheckedChanged);
 			// 
@@ -1296,10 +1439,10 @@ namespace namaichi
 			this.doublecmodeList.Items.AddRange(new object[] {
 									"なにもしない",
 									"最近行われた放送のURLを開く",
-									"コミュニティURLを開く",
+									"チャンネルURLを開く",
 									"ユーザーURLを開く",
 									"最近行われた放送のURLをコピー",
-									"コミュニティURLをコピー",
+									"チャンネルURLをコピー",
 									"ユーザーURLをコピー"});
 			this.doublecmodeList.Location = new System.Drawing.Point(146, 221);
 			this.doublecmodeList.Name = "doublecmodeList";
@@ -1320,7 +1463,7 @@ namespace namaichi
 			this.isdragComChkBox.Name = "isdragComChkBox";
 			this.isdragComChkBox.Size = new System.Drawing.Size(390, 19);
 			this.isdragComChkBox.TabIndex = 6;
-			this.isdragComChkBox.Text = "コミュニティのドラッグ登録時に、最新の放送履歴からユーザー情報を取得する";
+			this.isdragComChkBox.Text = "チャンネルのドラッグ登録時に、最新の放送履歴からユーザー情報を取得する";
 			this.isdragComChkBox.UseVisualStyleBackColor = true;
 			// 
 			// isChangeIconChkBox
@@ -1363,6 +1506,82 @@ namespace namaichi
 			this.common2Tab.TabIndex = 6;
 			this.common2Tab.Text = "一般2";
 			this.common2Tab.UseVisualStyleBackColor = true;
+			// 
+			// groupBox12
+			// 
+			this.groupBox12.Controls.Add(this.IsNotSleepChkBox);
+			this.groupBox12.Controls.Add(this.label67);
+			this.groupBox12.Controls.Add(this.startUpWaitList);
+			this.groupBox12.Controls.Add(this.isAllowMultiProcessChkBox);
+			this.groupBox12.Controls.Add(this.isTasktrayStartChkBox);
+			this.groupBox12.Controls.Add(this.isStartUpChkBox);
+			this.groupBox12.Location = new System.Drawing.Point(5, 176);
+			this.groupBox12.Name = "groupBox12";
+			this.groupBox12.Size = new System.Drawing.Size(420, 113);
+			this.groupBox12.TabIndex = 51;
+			this.groupBox12.TabStop = false;
+			this.groupBox12.Text = "環境設定";
+			// 
+			// IsNotSleepChkBox
+			// 
+			this.IsNotSleepChkBox.Location = new System.Drawing.Point(19, 84);
+			this.IsNotSleepChkBox.Name = "IsNotSleepChkBox";
+			this.IsNotSleepChkBox.Size = new System.Drawing.Size(350, 19);
+			this.IsNotSleepChkBox.TabIndex = 50;
+			this.IsNotSleepChkBox.Text = "PCがスリープモードに入らないようにする";
+			this.IsNotSleepChkBox.UseVisualStyleBackColor = true;
+			// 
+			// label67
+			// 
+			this.label67.Location = new System.Drawing.Point(350, 20);
+			this.label67.Name = "label67";
+			this.label67.Size = new System.Drawing.Size(29, 18);
+			this.label67.TabIndex = 11;
+			this.label67.Text = "秒後";
+			// 
+			// startUpWaitList
+			// 
+			this.startUpWaitList.Location = new System.Drawing.Point(300, 18);
+			this.startUpWaitList.Maximum = new decimal(new int[] {
+									1000,
+									0,
+									0,
+									0});
+			this.startUpWaitList.Name = "startUpWaitList";
+			this.startUpWaitList.Size = new System.Drawing.Size(47, 19);
+			this.startUpWaitList.TabIndex = 14;
+			this.startUpWaitList.Value = new decimal(new int[] {
+									10,
+									0,
+									0,
+									0});
+			// 
+			// isAllowMultiProcessChkBox
+			// 
+			this.isAllowMultiProcessChkBox.Location = new System.Drawing.Point(19, 62);
+			this.isAllowMultiProcessChkBox.Name = "isAllowMultiProcessChkBox";
+			this.isAllowMultiProcessChkBox.Size = new System.Drawing.Size(350, 19);
+			this.isAllowMultiProcessChkBox.TabIndex = 9;
+			this.isAllowMultiProcessChkBox.Text = "多重起動を許可する";
+			this.isAllowMultiProcessChkBox.UseVisualStyleBackColor = true;
+			// 
+			// isTasktrayStartChkBox
+			// 
+			this.isTasktrayStartChkBox.Location = new System.Drawing.Point(19, 40);
+			this.isTasktrayStartChkBox.Name = "isTasktrayStartChkBox";
+			this.isTasktrayStartChkBox.Size = new System.Drawing.Size(350, 19);
+			this.isTasktrayStartChkBox.TabIndex = 6;
+			this.isTasktrayStartChkBox.Text = "タスクトレイに収納された状態で起動する";
+			this.isTasktrayStartChkBox.UseVisualStyleBackColor = true;
+			// 
+			// isStartUpChkBox
+			// 
+			this.isStartUpChkBox.Location = new System.Drawing.Point(19, 18);
+			this.isStartUpChkBox.Name = "isStartUpChkBox";
+			this.isStartUpChkBox.Size = new System.Drawing.Size(286, 19);
+			this.isStartUpChkBox.TabIndex = 2;
+			this.isStartUpChkBox.Text = "PCの起動時に自動でツールを起動する。PCの起動から";
+			this.isStartUpChkBox.UseVisualStyleBackColor = true;
 			// 
 			// displayGroup
 			// 
@@ -1544,10 +1763,10 @@ namespace namaichi
 			this.brodoubleList.Items.AddRange(new object[] {
 									"なにもしない",
 									"放送のURLを開く",
-									"コミュニティURLを開く",
+									"チャンネルURLを開く",
 									"放送のURLをコピー",
-									"コミュニティURLをコピー",
-									"お気に入りコミュニティに登録"});
+									"チャンネルURLをコピー",
+									"お気に入りチャンネルに登録"});
 			this.brodoubleList.Location = new System.Drawing.Point(175, 69);
 			this.brodoubleList.Name = "brodoubleList";
 			this.brodoubleList.Size = new System.Drawing.Size(167, 20);
@@ -2644,6 +2863,9 @@ namespace namaichi
 			// 
 			// groupBox3
 			// 
+			this.groupBox3.Controls.Add(this.userSessionText);
+			this.groupBox3.Controls.Add(this.useUserSessionRadioBtn);
+			this.groupBox3.Controls.Add(this.userSessionTestBtn);
 			this.groupBox3.Controls.Add(this.label2);
 			this.groupBox3.Controls.Add(this.label1);
 			this.groupBox3.Controls.Add(this.cookieFileText);
@@ -2660,10 +2882,39 @@ namespace namaichi
 			this.groupBox3.Controls.Add(this.useSecondLoginChkBox);
 			this.groupBox3.Location = new System.Drawing.Point(5, 10);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(385, 275);
+			this.groupBox3.Size = new System.Drawing.Size(385, 338);
 			this.groupBox3.TabIndex = 19;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "ニコニコ動画アカウントの共有　(普段ニコニコ生放送を見ているブラウザ)";
+			// 
+			// userSessionText
+			// 
+			this.userSessionText.Location = new System.Drawing.Point(20, 295);
+			this.userSessionText.Name = "userSessionText";
+			this.userSessionText.Size = new System.Drawing.Size(277, 19);
+			this.userSessionText.TabIndex = 23;
+			// 
+			// useUserSessionRadioBtn
+			// 
+			this.useUserSessionRadioBtn.Checked = true;
+			this.useUserSessionRadioBtn.Location = new System.Drawing.Point(6, 271);
+			this.useUserSessionRadioBtn.Name = "useUserSessionRadioBtn";
+			this.useUserSessionRadioBtn.Size = new System.Drawing.Size(311, 18);
+			this.useUserSessionRadioBtn.TabIndex = 22;
+			this.useUserSessionRadioBtn.TabStop = true;
+			this.useUserSessionRadioBtn.Text = "ユーザーセッションを指定してログインする";
+			this.useUserSessionRadioBtn.UseVisualStyleBackColor = true;
+			// 
+			// userSessionTestBtn
+			// 
+			this.userSessionTestBtn.Location = new System.Drawing.Point(302, 293);
+			this.userSessionTestBtn.Margin = new System.Windows.Forms.Padding(2);
+			this.userSessionTestBtn.Name = "userSessionTestBtn";
+			this.userSessionTestBtn.Size = new System.Drawing.Size(69, 23);
+			this.userSessionTestBtn.TabIndex = 21;
+			this.userSessionTestBtn.Text = "テスト";
+			this.userSessionTestBtn.UseVisualStyleBackColor = true;
+			this.userSessionTestBtn.Click += new System.EventHandler(this.UserSessionTestBtnClick);
 			// 
 			// label2
 			// 
@@ -2804,222 +3055,6 @@ namespace namaichi
 			this.useSecondLoginChkBox.Text = "ブラウザからクッキーが取得できなかった場合、次のアカウントでログインする";
 			this.useSecondLoginChkBox.UseVisualStyleBackColor = true;
 			// 
-			// groupBox12
-			// 
-			this.groupBox12.Controls.Add(this.IsNotSleepChkBox);
-			this.groupBox12.Controls.Add(this.label67);
-			this.groupBox12.Controls.Add(this.startUpWaitList);
-			this.groupBox12.Controls.Add(this.isAllowMultiProcessChkBox);
-			this.groupBox12.Controls.Add(this.isTasktrayStartChkBox);
-			this.groupBox12.Controls.Add(this.isStartUpChkBox);
-			this.groupBox12.Location = new System.Drawing.Point(5, 176);
-			this.groupBox12.Name = "groupBox12";
-			this.groupBox12.Size = new System.Drawing.Size(420, 113);
-			this.groupBox12.TabIndex = 51;
-			this.groupBox12.TabStop = false;
-			this.groupBox12.Text = "環境設定";
-			// 
-			// IsNotSleepChkBox
-			// 
-			this.IsNotSleepChkBox.Location = new System.Drawing.Point(19, 84);
-			this.IsNotSleepChkBox.Name = "IsNotSleepChkBox";
-			this.IsNotSleepChkBox.Size = new System.Drawing.Size(350, 19);
-			this.IsNotSleepChkBox.TabIndex = 50;
-			this.IsNotSleepChkBox.Text = "PCがスリープモードに入らないようにする";
-			this.IsNotSleepChkBox.UseVisualStyleBackColor = true;
-			// 
-			// label67
-			// 
-			this.label67.Location = new System.Drawing.Point(350, 20);
-			this.label67.Name = "label67";
-			this.label67.Size = new System.Drawing.Size(29, 18);
-			this.label67.TabIndex = 11;
-			this.label67.Text = "秒後";
-			// 
-			// startUpWaitList
-			// 
-			this.startUpWaitList.Location = new System.Drawing.Point(300, 18);
-			this.startUpWaitList.Maximum = new decimal(new int[] {
-									1000,
-									0,
-									0,
-									0});
-			this.startUpWaitList.Name = "startUpWaitList";
-			this.startUpWaitList.Size = new System.Drawing.Size(47, 19);
-			this.startUpWaitList.TabIndex = 14;
-			this.startUpWaitList.Value = new decimal(new int[] {
-									10,
-									0,
-									0,
-									0});
-			// 
-			// isAllowMultiProcessChkBox
-			// 
-			this.isAllowMultiProcessChkBox.Location = new System.Drawing.Point(19, 62);
-			this.isAllowMultiProcessChkBox.Name = "isAllowMultiProcessChkBox";
-			this.isAllowMultiProcessChkBox.Size = new System.Drawing.Size(350, 19);
-			this.isAllowMultiProcessChkBox.TabIndex = 9;
-			this.isAllowMultiProcessChkBox.Text = "多重起動を許可する";
-			this.isAllowMultiProcessChkBox.UseVisualStyleBackColor = true;
-			// 
-			// isTasktrayStartChkBox
-			// 
-			this.isTasktrayStartChkBox.Location = new System.Drawing.Point(19, 40);
-			this.isTasktrayStartChkBox.Name = "isTasktrayStartChkBox";
-			this.isTasktrayStartChkBox.Size = new System.Drawing.Size(350, 19);
-			this.isTasktrayStartChkBox.TabIndex = 6;
-			this.isTasktrayStartChkBox.Text = "タスクトレイに収納された状態で起動する";
-			this.isTasktrayStartChkBox.UseVisualStyleBackColor = true;
-			// 
-			// isStartUpChkBox
-			// 
-			this.isStartUpChkBox.Location = new System.Drawing.Point(19, 18);
-			this.isStartUpChkBox.Name = "isStartUpChkBox";
-			this.isStartUpChkBox.Size = new System.Drawing.Size(286, 19);
-			this.isStartUpChkBox.TabIndex = 2;
-			this.isStartUpChkBox.Text = "PCの起動時に自動でツールを起動する。PCの起動から";
-			this.isStartUpChkBox.UseVisualStyleBackColor = true;
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.isLogFileChkBox);
-			this.groupBox1.Controls.Add(this.maxLogDisplayList);
-			this.groupBox1.Controls.Add(this.maxNotAlartDisplayList);
-			this.groupBox1.Controls.Add(this.label62);
-			this.groupBox1.Controls.Add(this.label61);
-			this.groupBox1.Controls.Add(this.maxHistoryDisplayList);
-			this.groupBox1.Controls.Add(this.label60);
-			this.groupBox1.Controls.Add(this.isBroadLogChkBox);
-			this.groupBox1.Controls.Add(this.isLogChkBtn);
-			this.groupBox1.Location = new System.Drawing.Point(5, 430);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(420, 139);
-			this.groupBox1.TabIndex = 13;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "ログ・履歴";
-			// 
-			// isLogFileChkBox
-			// 
-			this.isLogFileChkBox.Location = new System.Drawing.Point(19, 120);
-			this.isLogFileChkBox.Name = "isLogFileChkBox";
-			this.isLogFileChkBox.Size = new System.Drawing.Size(271, 19);
-			this.isLogFileChkBox.TabIndex = 13;
-			this.isLogFileChkBox.Text = "ログをファイルに出力する(通常時は非推奨)";
-			this.isLogFileChkBox.UseVisualStyleBackColor = true;
-			// 
-			// maxLogDisplayList
-			// 
-			this.maxLogDisplayList.Location = new System.Drawing.Point(351, 142);
-			this.maxLogDisplayList.Maximum = new decimal(new int[] {
-									10000,
-									0,
-									0,
-									0});
-			this.maxLogDisplayList.Minimum = new decimal(new int[] {
-									1,
-									0,
-									0,
-									0});
-			this.maxLogDisplayList.Name = "maxLogDisplayList";
-			this.maxLogDisplayList.Size = new System.Drawing.Size(51, 19);
-			this.maxLogDisplayList.TabIndex = 12;
-			this.maxLogDisplayList.Value = new decimal(new int[] {
-									100,
-									0,
-									0,
-									0});
-			this.maxLogDisplayList.Visible = false;
-			// 
-			// maxNotAlartDisplayList
-			// 
-			this.maxNotAlartDisplayList.Location = new System.Drawing.Point(227, 97);
-			this.maxNotAlartDisplayList.Maximum = new decimal(new int[] {
-									10000,
-									0,
-									0,
-									0});
-			this.maxNotAlartDisplayList.Minimum = new decimal(new int[] {
-									1,
-									0,
-									0,
-									0});
-			this.maxNotAlartDisplayList.Name = "maxNotAlartDisplayList";
-			this.maxNotAlartDisplayList.Size = new System.Drawing.Size(51, 19);
-			this.maxNotAlartDisplayList.TabIndex = 12;
-			this.maxNotAlartDisplayList.Value = new decimal(new int[] {
-									100,
-									0,
-									0,
-									0});
-			// 
-			// label62
-			// 
-			this.label62.Location = new System.Drawing.Point(143, 143);
-			this.label62.Name = "label62";
-			this.label62.Size = new System.Drawing.Size(205, 18);
-			this.label62.TabIndex = 11;
-			this.label62.Text = "ログの最大表示件数：";
-			this.label62.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			this.label62.Visible = false;
-			// 
-			// label61
-			// 
-			this.label61.Location = new System.Drawing.Point(19, 98);
-			this.label61.Name = "label61";
-			this.label61.Size = new System.Drawing.Size(205, 18);
-			this.label61.TabIndex = 11;
-			this.label61.Text = "通知しなかった履歴の最大表示件数：";
-			this.label61.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// maxHistoryDisplayList
-			// 
-			this.maxHistoryDisplayList.Location = new System.Drawing.Point(227, 75);
-			this.maxHistoryDisplayList.Maximum = new decimal(new int[] {
-									10000,
-									0,
-									0,
-									0});
-			this.maxHistoryDisplayList.Minimum = new decimal(new int[] {
-									1,
-									0,
-									0,
-									0});
-			this.maxHistoryDisplayList.Name = "maxHistoryDisplayList";
-			this.maxHistoryDisplayList.Size = new System.Drawing.Size(51, 19);
-			this.maxHistoryDisplayList.TabIndex = 12;
-			this.maxHistoryDisplayList.Value = new decimal(new int[] {
-									100,
-									0,
-									0,
-									0});
-			// 
-			// label60
-			// 
-			this.label60.Location = new System.Drawing.Point(19, 76);
-			this.label60.Name = "label60";
-			this.label60.Size = new System.Drawing.Size(205, 18);
-			this.label60.TabIndex = 11;
-			this.label60.Text = "通知履歴の最大表示件数：";
-			this.label60.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// isBroadLogChkBox
-			// 
-			this.isBroadLogChkBox.Location = new System.Drawing.Point(19, 40);
-			this.isBroadLogChkBox.Name = "isBroadLogChkBox";
-			this.isBroadLogChkBox.Size = new System.Drawing.Size(400, 29);
-			this.isBroadLogChkBox.TabIndex = 3;
-			this.isBroadLogChkBox.Text = "全ての番組開始情報をテキストに保存する(broadLog-**-**.txt)（※放置しておくとファイルサイズが膨大になるのでファイルサイズに注意してください）";
-			this.isBroadLogChkBox.UseVisualStyleBackColor = true;
-			// 
-			// isLogChkBtn
-			// 
-			this.isLogChkBtn.Location = new System.Drawing.Point(19, 18);
-			this.isLogChkBtn.Name = "isLogChkBtn";
-			this.isLogChkBtn.Size = new System.Drawing.Size(340, 19);
-			this.isLogChkBtn.TabIndex = 2;
-			this.isLogChkBtn.Text = "お気に入りの放送開始情報をテキストに保存する(favoriteLog.txt)";
-			this.isLogChkBtn.UseVisualStyleBackColor = true;
-			// 
 			// optionForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -3041,9 +3076,15 @@ namespace namaichi
 			this.groupBox5.PerformLayout();
 			this.tabControl1.ResumeLayout(false);
 			this.commonTab.ResumeLayout(false);
+			this.groupBox1.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.maxLogDisplayList)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.maxNotAlartDisplayList)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.maxHistoryDisplayList)).EndInit();
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
 			this.common2Tab.ResumeLayout(false);
+			this.groupBox12.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.startUpWaitList)).EndInit();
 			this.displayGroup.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.fontList)).EndInit();
 			this.groupBox11.ResumeLayout(false);
@@ -3074,14 +3115,11 @@ namespace namaichi
 			this.accountTab.ResumeLayout(false);
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox3.PerformLayout();
-			this.groupBox12.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.startUpWaitList)).EndInit();
-			this.groupBox1.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.maxLogDisplayList)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.maxNotAlartDisplayList)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.maxHistoryDisplayList)).EndInit();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.Button userSessionTestBtn;
+		private System.Windows.Forms.RadioButton useUserSessionRadioBtn;
+		private System.Windows.Forms.TextBox userSessionText;
 		private System.Windows.Forms.CheckBox IsNotSleepChkBox;
 		private System.Windows.Forms.CheckBox IsUpdateComUserNameChkBox;
 		private System.Windows.Forms.NumericUpDown startUpWaitList;

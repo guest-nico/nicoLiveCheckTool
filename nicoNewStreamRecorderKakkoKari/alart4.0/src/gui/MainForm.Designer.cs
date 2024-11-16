@@ -120,6 +120,16 @@ namespace namaichi
 			this.isDisplayWebTabMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.isDisplayMailTabMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.isDisplaySoundTabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliATabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliBTabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliCTabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliDTabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliETabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliFTabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliGTabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliHTabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliITabMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.isDisplayAppliJTabMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.isDisplaySoundTypeTabMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.isDisplayMemoTabMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.displayTaskTabMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -276,13 +286,13 @@ namespace namaichi
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.addBtn = new System.Windows.Forms.Button();
 			this.alartList = new System.Windows.Forms.DataGridView();
-			this.ｺﾐｭﾆﾃｨID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ﾁｬﾝﾈﾙID = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.ﾕｰｻﾞｰID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ｺﾐｭﾆﾃｨ名 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ﾁｬﾝﾈﾙ名 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.ﾕｰｻﾞｰ名 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.ｷｰﾜｰﾄﾞ = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.合致条件 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-			this.ｺﾐｭﾆﾃｨﾌｫﾛｰ = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.ﾁｬﾝﾈﾙﾌｫﾛｰ = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.ﾕｰｻﾞｰﾌｫﾛｰ = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.最近の放送日時 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.登録日時 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -321,7 +331,6 @@ namespace namaichi
 			this.alartListFollowUserMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.alartListUnFollowComMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.alartListUnFollowUserMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.alartUserListFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator41 = new System.Windows.Forms.ToolStripSeparator();
 			this.openAppliAMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliBMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -333,6 +342,7 @@ namespace namaichi
 			this.openAppliHMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliIMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliJMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.alartUserListFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.notifyIconMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.notifyIconRecentSeparator = new System.Windows.Forms.ToolStripSeparator();
@@ -570,7 +580,7 @@ namespace namaichi
 			this.放送開始日時 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.放送タイトル = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.放送者 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.コミュニティ名 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.チャンネル名 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.放送ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.ユーザーID = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.コミュニティID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -636,16 +646,6 @@ namespace namaichi
 			this.toolStripMenuItem44 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator39 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem45 = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliJTabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliITabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliHTabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliGTabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliFTabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliETabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliDTabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliCTabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliBTabMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.isDisplayAppliATabMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.alartList)).BeginInit();
@@ -728,45 +728,45 @@ namespace namaichi
 			// openSettingFolderMenu
 			// 
 			this.openSettingFolderMenu.Name = "openSettingFolderMenu";
-			this.openSettingFolderMenu.Size = new System.Drawing.Size(334, 22);
+			this.openSettingFolderMenu.Size = new System.Drawing.Size(332, 22);
 			this.openSettingFolderMenu.Text = "設定ファイルフォルダーを開く(&F)";
 			this.openSettingFolderMenu.Click += new System.EventHandler(this.OpenSettingFolderMenuClick);
 			// 
 			// toolStripSeparator34
 			// 
 			this.toolStripSeparator34.Name = "toolStripSeparator34";
-			this.toolStripSeparator34.Size = new System.Drawing.Size(331, 6);
+			this.toolStripSeparator34.Size = new System.Drawing.Size(329, 6);
 			// 
 			// readNamarokuListMenu
 			// 
 			this.readNamarokuListMenu.Name = "readNamarokuListMenu";
-			this.readNamarokuListMenu.Size = new System.Drawing.Size(334, 22);
-			this.readNamarokuListMenu.Text = "namarokuの登録コミュニティ設定を読み込んでみる(&N)";
+			this.readNamarokuListMenu.Size = new System.Drawing.Size(332, 22);
+			this.readNamarokuListMenu.Text = "namarokuの登録チャンネル設定を読み込んでみる(&N)";
 			this.readNamarokuListMenu.Click += new System.EventHandler(this.ReadNamarokuListMenuClick);
 			// 
 			// readNamarokuUserListMenu
 			// 
 			this.readNamarokuUserListMenu.Name = "readNamarokuUserListMenu";
-			this.readNamarokuUserListMenu.Size = new System.Drawing.Size(334, 22);
+			this.readNamarokuUserListMenu.Size = new System.Drawing.Size(332, 22);
 			this.readNamarokuUserListMenu.Text = "namarokuの登録ユーザー設定を読み込んでみる(&U)";
 			this.readNamarokuUserListMenu.Click += new System.EventHandler(this.ReadNamarokuUserListMenuClick);
 			// 
 			// bulkAddFromFollowComMenu
 			// 
 			this.bulkAddFromFollowComMenu.Name = "bulkAddFromFollowComMenu";
-			this.bulkAddFromFollowComMenu.Size = new System.Drawing.Size(334, 22);
-			this.bulkAddFromFollowComMenu.Text = "参加中のコミュニティから一括登録する(&C)";
+			this.bulkAddFromFollowComMenu.Size = new System.Drawing.Size(332, 22);
+			this.bulkAddFromFollowComMenu.Text = "参加中のユーザー・チャンネルから一括登録する(&C)";
 			this.bulkAddFromFollowComMenu.Click += new System.EventHandler(this.BulkAddFromFollowComMenuClick);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(331, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(329, 6);
 			// 
 			// 終了ToolStripMenuItem
 			// 
 			this.終了ToolStripMenuItem.Name = "終了ToolStripMenuItem";
-			this.終了ToolStripMenuItem.Size = new System.Drawing.Size(334, 22);
+			this.終了ToolStripMenuItem.Size = new System.Drawing.Size(332, 22);
 			this.終了ToolStripMenuItem.Text = "終了(&X)";
 			this.終了ToolStripMenuItem.Click += new System.EventHandler(this.endMenu_Click);
 			// 
@@ -1056,7 +1056,7 @@ namespace namaichi
 									this.appliIOffMenuItem,
 									this.appliJOffMenuItem});
 			this.notifyOffMenuItem.Name = "notifyOffMenuItem";
-			this.notifyOffMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.notifyOffMenuItem.Size = new System.Drawing.Size(143, 22);
 			this.notifyOffMenuItem.Text = "一時機能OFF";
 			this.notifyOffMenuItem.DropDownOpening += new System.EventHandler(this.NotifyOffMenuItemDropDownOpening);
 			this.notifyOffMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.NotifyOffMenuItemDropDownItemClicked);
@@ -1225,7 +1225,7 @@ namespace namaichi
 			// 
 			this.isDisplayCommunityIdTabMenu.Name = "isDisplayCommunityIdTabMenu";
 			this.isDisplayCommunityIdTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayCommunityIdTabMenu.Text = "コミュニティID";
+			this.isDisplayCommunityIdTabMenu.Text = "チャンネルID";
 			this.isDisplayCommunityIdTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
 			// 
 			// isDisplayUserIdTabMenu
@@ -1239,7 +1239,7 @@ namespace namaichi
 			// 
 			this.isDisplayCommunityNameTabMenu.Name = "isDisplayCommunityNameTabMenu";
 			this.isDisplayCommunityNameTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayCommunityNameTabMenu.Text = "コミュニティ名";
+			this.isDisplayCommunityNameTabMenu.Text = "チャンネル名";
 			this.isDisplayCommunityNameTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
 			// 
 			// isDisplayUserNameTabMenu
@@ -1268,7 +1268,7 @@ namespace namaichi
 			// 
 			this.isDisplayCommunityFollowTabMenu.Name = "isDisplayCommunityFollowTabMenu";
 			this.isDisplayCommunityFollowTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayCommunityFollowTabMenu.Text = "コミュニティフォロー";
+			this.isDisplayCommunityFollowTabMenu.Text = "チャンネルフォロー";
 			this.isDisplayCommunityFollowTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
 			// 
 			// isDisplayUserFollowTabMenu
@@ -1326,6 +1326,76 @@ namespace namaichi
 			this.isDisplaySoundTabMenu.Size = new System.Drawing.Size(156, 22);
 			this.isDisplaySoundTabMenu.Text = "音";
 			this.isDisplaySoundTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliATabMenu
+			// 
+			this.isDisplayAppliATabMenu.Name = "isDisplayAppliATabMenu";
+			this.isDisplayAppliATabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliATabMenu.Text = "アプリA";
+			this.isDisplayAppliATabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliBTabMenu
+			// 
+			this.isDisplayAppliBTabMenu.Name = "isDisplayAppliBTabMenu";
+			this.isDisplayAppliBTabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliBTabMenu.Text = "アプリB";
+			this.isDisplayAppliBTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliCTabMenu
+			// 
+			this.isDisplayAppliCTabMenu.Name = "isDisplayAppliCTabMenu";
+			this.isDisplayAppliCTabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliCTabMenu.Text = "アプリC";
+			this.isDisplayAppliCTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliDTabMenu
+			// 
+			this.isDisplayAppliDTabMenu.Name = "isDisplayAppliDTabMenu";
+			this.isDisplayAppliDTabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliDTabMenu.Text = "アプリD";
+			this.isDisplayAppliDTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliETabMenu
+			// 
+			this.isDisplayAppliETabMenu.Name = "isDisplayAppliETabMenu";
+			this.isDisplayAppliETabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliETabMenu.Text = "アプリE";
+			this.isDisplayAppliETabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliFTabMenu
+			// 
+			this.isDisplayAppliFTabMenu.Name = "isDisplayAppliFTabMenu";
+			this.isDisplayAppliFTabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliFTabMenu.Text = "アプリF";
+			this.isDisplayAppliFTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliGTabMenu
+			// 
+			this.isDisplayAppliGTabMenu.Name = "isDisplayAppliGTabMenu";
+			this.isDisplayAppliGTabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliGTabMenu.Text = "アプリG";
+			this.isDisplayAppliGTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliHTabMenu
+			// 
+			this.isDisplayAppliHTabMenu.Name = "isDisplayAppliHTabMenu";
+			this.isDisplayAppliHTabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliHTabMenu.Text = "アプリH";
+			this.isDisplayAppliHTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliITabMenu
+			// 
+			this.isDisplayAppliITabMenu.Name = "isDisplayAppliITabMenu";
+			this.isDisplayAppliITabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliITabMenu.Text = "アプリI";
+			this.isDisplayAppliITabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
+			// 
+			// isDisplayAppliJTabMenu
+			// 
+			this.isDisplayAppliJTabMenu.Name = "isDisplayAppliJTabMenu";
+			this.isDisplayAppliJTabMenu.Size = new System.Drawing.Size(156, 22);
+			this.isDisplayAppliJTabMenu.Text = "アプリJ";
+			this.isDisplayAppliJTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
 			// 
 			// isDisplaySoundTypeTabMenu
 			// 
@@ -1571,7 +1641,7 @@ namespace namaichi
 			// 
 			this.isDisplayCommunityNameOnAirTabMenu.Name = "isDisplayCommunityNameOnAirTabMenu";
 			this.isDisplayCommunityNameOnAirTabMenu.Size = new System.Drawing.Size(134, 22);
-			this.isDisplayCommunityNameOnAirTabMenu.Text = "コミュニティ名";
+			this.isDisplayCommunityNameOnAirTabMenu.Text = "チャンネル名";
 			// 
 			// isDisplayDescriptionOnAirTabMenu
 			// 
@@ -1589,7 +1659,7 @@ namespace namaichi
 			// 
 			this.isDisplayCommunityIDOnAirTabMenu.Name = "isDisplayCommunityIDOnAirTabMenu";
 			this.isDisplayCommunityIDOnAirTabMenu.Size = new System.Drawing.Size(134, 22);
-			this.isDisplayCommunityIDOnAirTabMenu.Text = "コミュニティID";
+			this.isDisplayCommunityIDOnAirTabMenu.Text = "チャンネルID";
 			// 
 			// isDisplayElapsedTimeOnAirTabMenu
 			// 
@@ -1692,7 +1762,7 @@ namespace namaichi
 			// 
 			this.toolStripMenuItem49.Name = "toolStripMenuItem49";
 			this.toolStripMenuItem49.Size = new System.Drawing.Size(156, 22);
-			this.toolStripMenuItem49.Text = "コミュニティ名";
+			this.toolStripMenuItem49.Text = "チャンネル名";
 			// 
 			// toolStripMenuItem50
 			// 
@@ -1710,7 +1780,7 @@ namespace namaichi
 			// 
 			this.toolStripMenuItem52.Name = "toolStripMenuItem52";
 			this.toolStripMenuItem52.Size = new System.Drawing.Size(156, 22);
-			this.toolStripMenuItem52.Text = "コミュニティID";
+			this.toolStripMenuItem52.Text = "チャンネルID";
 			// 
 			// toolStripMenuItem53
 			// 
@@ -1780,7 +1850,7 @@ namespace namaichi
 			// 
 			this.toolStripMenuItem14.Name = "toolStripMenuItem14";
 			this.toolStripMenuItem14.Size = new System.Drawing.Size(146, 22);
-			this.toolStripMenuItem14.Text = "コミュニティ名";
+			this.toolStripMenuItem14.Text = "チャンネル名";
 			// 
 			// toolStripMenuItem15
 			// 
@@ -1798,7 +1868,7 @@ namespace namaichi
 			// 
 			this.toolStripMenuItem17.Name = "toolStripMenuItem17";
 			this.toolStripMenuItem17.Size = new System.Drawing.Size(146, 22);
-			this.toolStripMenuItem17.Text = "コミュニティID";
+			this.toolStripMenuItem17.Text = "チャンネルID";
 			// 
 			// toolStripMenuItem18
 			// 
@@ -1847,67 +1917,67 @@ namespace namaichi
 			// displayHistoryDtMenu
 			// 
 			this.displayHistoryDtMenu.Name = "displayHistoryDtMenu";
-			this.displayHistoryDtMenu.Size = new System.Drawing.Size(152, 22);
+			this.displayHistoryDtMenu.Size = new System.Drawing.Size(146, 22);
 			this.displayHistoryDtMenu.Text = "放送開始日時";
 			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(146, 22);
 			this.toolStripMenuItem2.Text = "放送タイトル";
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(146, 22);
 			this.toolStripMenuItem3.Text = "放送者";
 			// 
 			// toolStripMenuItem4
 			// 
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(152, 22);
-			this.toolStripMenuItem4.Text = "コミュニティ名";
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(146, 22);
+			this.toolStripMenuItem4.Text = "チャンネル名";
 			// 
 			// toolStripMenuItem5
 			// 
 			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(146, 22);
 			this.toolStripMenuItem5.Text = "放送ID";
 			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(146, 22);
 			this.toolStripMenuItem6.Text = "ユーザーID";
 			// 
 			// toolStripMenuItem7
 			// 
 			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-			this.toolStripMenuItem7.Size = new System.Drawing.Size(152, 22);
-			this.toolStripMenuItem7.Text = "コミュニティID";
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(146, 22);
+			this.toolStripMenuItem7.Text = "チャンネルID";
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(146, 22);
 			this.toolStripMenuItem1.Text = "キーワード";
 			// 
 			// toolStripMenuItem34
 			// 
 			this.toolStripMenuItem34.Name = "toolStripMenuItem34";
-			this.toolStripMenuItem34.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem34.Size = new System.Drawing.Size(146, 22);
 			this.toolStripMenuItem34.Text = "限定";
 			// 
 			// toolStripMenuItem8
 			// 
 			this.toolStripMenuItem8.Name = "toolStripMenuItem8";
-			this.toolStripMenuItem8.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem8.Size = new System.Drawing.Size(146, 22);
 			this.toolStripMenuItem8.Text = "お気に入り";
 			// 
 			// toolStripMenuItem9
 			// 
 			this.toolStripMenuItem9.Name = "toolStripMenuItem9";
-			this.toolStripMenuItem9.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem9.Size = new System.Drawing.Size(146, 22);
 			this.toolStripMenuItem9.Text = "説明";
 			// 
 			// toolStripSeparator20
@@ -1954,7 +2024,7 @@ namespace namaichi
 			// 
 			this.colorCommunityIdMenu.Name = "colorCommunityIdMenu";
 			this.colorCommunityIdMenu.Size = new System.Drawing.Size(156, 22);
-			this.colorCommunityIdMenu.Text = "コミュニティID";
+			this.colorCommunityIdMenu.Text = "チャンネルID";
 			// 
 			// colorUserIdMenu
 			// 
@@ -1966,7 +2036,7 @@ namespace namaichi
 			// 
 			this.colorCommunityNameMenu.Name = "colorCommunityNameMenu";
 			this.colorCommunityNameMenu.Size = new System.Drawing.Size(156, 22);
-			this.colorCommunityNameMenu.Text = "コミュニティ名";
+			this.colorCommunityNameMenu.Text = "チャンネル名";
 			// 
 			// colorUserNameMenu
 			// 
@@ -1991,7 +2061,7 @@ namespace namaichi
 			// 
 			this.colorComFollowMenu.Name = "colorComFollowMenu";
 			this.colorComFollowMenu.Size = new System.Drawing.Size(156, 22);
-			this.colorComFollowMenu.Text = "コミュニティフォロー";
+			this.colorComFollowMenu.Text = "チャンネルフォロー";
 			this.colorComFollowMenu.Visible = false;
 			// 
 			// colorUserFollowMenu
@@ -2166,7 +2236,7 @@ namespace namaichi
 			// 
 			this.toolStripMenuItem24.Name = "toolStripMenuItem24";
 			this.toolStripMenuItem24.Size = new System.Drawing.Size(146, 22);
-			this.toolStripMenuItem24.Text = "コミュニティ名";
+			this.toolStripMenuItem24.Text = "チャンネル名";
 			// 
 			// toolStripMenuItem25
 			// 
@@ -2184,7 +2254,7 @@ namespace namaichi
 			// 
 			this.toolStripMenuItem27.Name = "toolStripMenuItem27";
 			this.toolStripMenuItem27.Size = new System.Drawing.Size(146, 22);
-			this.toolStripMenuItem27.Text = "コミュニティID";
+			this.toolStripMenuItem27.Text = "チャンネルID";
 			// 
 			// toolStripMenuItem28
 			// 
@@ -2280,7 +2350,7 @@ namespace namaichi
 			this.launchAppMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 									this.アプリケーションが設定されていませんでしたToolStripMenuItem});
 			this.launchAppMenuItem.Name = "launchAppMenuItem";
-			this.launchAppMenuItem.Size = new System.Drawing.Size(303, 22);
+			this.launchAppMenuItem.Size = new System.Drawing.Size(322, 22);
 			this.launchAppMenuItem.Text = "アプリケーションを起動(&L)";
 			this.launchAppMenuItem.DropDownOpening += new System.EventHandler(this.LaunchAppMenuItemDropDownOpening);
 			this.launchAppMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.LaunchAppMenuItemDropDownItemClicked);
@@ -2295,96 +2365,96 @@ namespace namaichi
 			// toolStripSeparator35
 			// 
 			this.toolStripSeparator35.Name = "toolStripSeparator35";
-			this.toolStripSeparator35.Size = new System.Drawing.Size(300, 6);
+			this.toolStripSeparator35.Size = new System.Drawing.Size(319, 6);
 			// 
 			// checkExistsComMenu
 			// 
 			this.checkExistsComMenu.Name = "checkExistsComMenu";
-			this.checkExistsComMenu.Size = new System.Drawing.Size(303, 22);
-			this.checkExistsComMenu.Text = "コミュニティ存在チェック＋未取得コミュ名取得(&C)";
+			this.checkExistsComMenu.Size = new System.Drawing.Size(322, 22);
+			this.checkExistsComMenu.Text = "チャンネル存在チェック＋未取得チャンネル名取得(&C)";
 			this.checkExistsComMenu.Click += new System.EventHandler(this.CheckExistsComMenuClick);
 			// 
 			// checkExistsUserMenu
 			// 
 			this.checkExistsUserMenu.Name = "checkExistsUserMenu";
-			this.checkExistsUserMenu.Size = new System.Drawing.Size(303, 22);
+			this.checkExistsUserMenu.Size = new System.Drawing.Size(322, 22);
 			this.checkExistsUserMenu.Text = "ユーザー存在チェック＋未取得ユーザー名取得(&U)";
 			this.checkExistsUserMenu.Click += new System.EventHandler(this.CheckExistsUserMenuClick);
 			// 
 			// toolStripSeparator18
 			// 
 			this.toolStripSeparator18.Name = "toolStripSeparator18";
-			this.toolStripSeparator18.Size = new System.Drawing.Size(300, 6);
+			this.toolStripSeparator18.Size = new System.Drawing.Size(319, 6);
 			// 
 			// getUserInfoFromComMenu
 			// 
 			this.getUserInfoFromComMenu.Name = "getUserInfoFromComMenu";
-			this.getUserInfoFromComMenu.Size = new System.Drawing.Size(303, 22);
-			this.getUserInfoFromComMenu.Text = "コミュの最新放送からユーザ情報を一括取得(&V)";
+			this.getUserInfoFromComMenu.Size = new System.Drawing.Size(322, 22);
+			this.getUserInfoFromComMenu.Text = "チャンネルの最新放送からユーザ情報を一括取得(&V)";
 			this.getUserInfoFromComMenu.Click += new System.EventHandler(this.GetUserInfoFromComMenuClick);
 			// 
 			// getComThumbBulkMenu
 			// 
 			this.getComThumbBulkMenu.Name = "getComThumbBulkMenu";
-			this.getComThumbBulkMenu.Size = new System.Drawing.Size(303, 22);
-			this.getComThumbBulkMenu.Text = "未取得コミュ画一括取得(&G)";
+			this.getComThumbBulkMenu.Size = new System.Drawing.Size(322, 22);
+			this.getComThumbBulkMenu.Text = "未取得チャンネル画一括取得(&G)";
 			this.getComThumbBulkMenu.Click += new System.EventHandler(this.GetComThumbBulkMenuClick);
 			// 
 			// getUserThumbBulkMenu
 			// 
 			this.getUserThumbBulkMenu.Name = "getUserThumbBulkMenu";
-			this.getUserThumbBulkMenu.Size = new System.Drawing.Size(303, 22);
+			this.getUserThumbBulkMenu.Size = new System.Drawing.Size(322, 22);
 			this.getUserThumbBulkMenu.Text = "未取得ユーザ画一括取得(&H)";
 			this.getUserThumbBulkMenu.Click += new System.EventHandler(this.GetUserThumbBulkMenuClick);
 			// 
 			// toolStripSeparator19
 			// 
 			this.toolStripSeparator19.Name = "toolStripSeparator19";
-			this.toolStripSeparator19.Size = new System.Drawing.Size(300, 6);
+			this.toolStripSeparator19.Size = new System.Drawing.Size(319, 6);
 			// 
 			// bulkUserFollowMenu
 			// 
 			this.bulkUserFollowMenu.Name = "bulkUserFollowMenu";
-			this.bulkUserFollowMenu.Size = new System.Drawing.Size(303, 22);
+			this.bulkUserFollowMenu.Size = new System.Drawing.Size(322, 22);
 			this.bulkUserFollowMenu.Text = "お気に入りユーザーを一括フォロー";
 			this.bulkUserFollowMenu.Click += new System.EventHandler(this.BulkUserFollowMenuClick);
 			// 
 			// bulkCommunityFollowMenu
 			// 
 			this.bulkCommunityFollowMenu.Name = "bulkCommunityFollowMenu";
-			this.bulkCommunityFollowMenu.Size = new System.Drawing.Size(303, 22);
-			this.bulkCommunityFollowMenu.Text = "お気に入りコミュニティを一括フォロー";
+			this.bulkCommunityFollowMenu.Size = new System.Drawing.Size(322, 22);
+			this.bulkCommunityFollowMenu.Text = "お気に入りユーザー・チャンネルを一括フォロー";
 			this.bulkCommunityFollowMenu.Click += new System.EventHandler(this.BulkCommunityFollowMenuClick);
 			// 
 			// bulkChannelFollowMenu
 			// 
 			this.bulkChannelFollowMenu.Name = "bulkChannelFollowMenu";
-			this.bulkChannelFollowMenu.Size = new System.Drawing.Size(303, 22);
+			this.bulkChannelFollowMenu.Size = new System.Drawing.Size(322, 22);
 			this.bulkChannelFollowMenu.Text = "お気に入りチャンネルを一括フォロー";
 			this.bulkChannelFollowMenu.Click += new System.EventHandler(this.BulkChannelFollowMenuClick);
 			// 
 			// toolStripSeparator9
 			// 
 			this.toolStripSeparator9.Name = "toolStripSeparator9";
-			this.toolStripSeparator9.Size = new System.Drawing.Size(300, 6);
+			this.toolStripSeparator9.Size = new System.Drawing.Size(319, 6);
 			// 
 			// duplicateCheckMenu
 			// 
 			this.duplicateCheckMenu.Name = "duplicateCheckMenu";
-			this.duplicateCheckMenu.Size = new System.Drawing.Size(303, 22);
+			this.duplicateCheckMenu.Size = new System.Drawing.Size(322, 22);
 			this.duplicateCheckMenu.Text = "重複チェック";
 			this.duplicateCheckMenu.Click += new System.EventHandler(this.DuplicateCheckMenuClick);
 			// 
 			// toolStripSeparator29
 			// 
 			this.toolStripSeparator29.Name = "toolStripSeparator29";
-			this.toolStripSeparator29.Size = new System.Drawing.Size(300, 6);
+			this.toolStripSeparator29.Size = new System.Drawing.Size(319, 6);
 			// 
 			// optionMenuItem
 			// 
 			this.optionMenuItem.Name = "optionMenuItem";
 			this.optionMenuItem.ShowShortcutKeys = false;
-			this.optionMenuItem.Size = new System.Drawing.Size(303, 22);
+			this.optionMenuItem.Size = new System.Drawing.Size(322, 22);
 			this.optionMenuItem.Text = "オプション(&O)";
 			this.optionMenuItem.Click += new System.EventHandler(this.optionItem_Select);
 			// 
@@ -2479,13 +2549,13 @@ namespace namaichi
 			this.alartList.ColumnHeadersHeight = 25;
 			this.alartList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.alartList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-									this.ｺﾐｭﾆﾃｨID,
+									this.ﾁｬﾝﾈﾙID,
 									this.ﾕｰｻﾞｰID,
-									this.ｺﾐｭﾆﾃｨ名,
+									this.ﾁｬﾝﾈﾙ名,
 									this.ﾕｰｻﾞｰ名,
 									this.ｷｰﾜｰﾄﾞ,
 									this.合致条件,
-									this.ｺﾐｭﾆﾃｨﾌｫﾛｰ,
+									this.ﾁｬﾝﾈﾙﾌｫﾛｰ,
 									this.ﾕｰｻﾞｰﾌｫﾛｰ,
 									this.最近の放送日時,
 									this.登録日時,
@@ -2531,15 +2601,15 @@ namespace namaichi
 			this.alartList.DragEnter += new System.Windows.Forms.DragEventHandler(this.listDragEnter);
 			this.alartList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AlartListKeyDown);
 			// 
-			// ｺﾐｭﾆﾃｨID
+			// ﾁｬﾝﾈﾙID
 			// 
-			this.ｺﾐｭﾆﾃｨID.DataPropertyName = "communityId";
-			this.ｺﾐｭﾆﾃｨID.FillWeight = 2F;
-			this.ｺﾐｭﾆﾃｨID.HeaderText = "ｺﾐｭﾆﾃｨID";
-			this.ｺﾐｭﾆﾃｨID.MinimumWidth = 2;
-			this.ｺﾐｭﾆﾃｨID.Name = "ｺﾐｭﾆﾃｨID";
-			this.ｺﾐｭﾆﾃｨID.ReadOnly = true;
-			this.ｺﾐｭﾆﾃｨID.Width = 77;
+			this.ﾁｬﾝﾈﾙID.DataPropertyName = "communityId";
+			this.ﾁｬﾝﾈﾙID.FillWeight = 2F;
+			this.ﾁｬﾝﾈﾙID.HeaderText = "ﾁｬﾝﾈﾙID";
+			this.ﾁｬﾝﾈﾙID.MinimumWidth = 2;
+			this.ﾁｬﾝﾈﾙID.Name = "ﾁｬﾝﾈﾙID";
+			this.ﾁｬﾝﾈﾙID.ReadOnly = true;
+			this.ﾁｬﾝﾈﾙID.Width = 77;
 			// 
 			// ﾕｰｻﾞｰID
 			// 
@@ -2548,12 +2618,12 @@ namespace namaichi
 			this.ﾕｰｻﾞｰID.Name = "ﾕｰｻﾞｰID";
 			this.ﾕｰｻﾞｰID.ReadOnly = true;
 			// 
-			// ｺﾐｭﾆﾃｨ名
+			// ﾁｬﾝﾈﾙ名
 			// 
-			this.ｺﾐｭﾆﾃｨ名.DataPropertyName = "communityName";
-			this.ｺﾐｭﾆﾃｨ名.HeaderText = "ｺﾐｭﾆﾃｨ名";
-			this.ｺﾐｭﾆﾃｨ名.Name = "ｺﾐｭﾆﾃｨ名";
-			this.ｺﾐｭﾆﾃｨ名.ReadOnly = true;
+			this.ﾁｬﾝﾈﾙ名.DataPropertyName = "communityName";
+			this.ﾁｬﾝﾈﾙ名.HeaderText = "ﾁｬﾝﾈﾙ名";
+			this.ﾁｬﾝﾈﾙ名.Name = "ﾁｬﾝﾈﾙ名";
+			this.ﾁｬﾝﾈﾙ名.ReadOnly = true;
 			// 
 			// ﾕｰｻﾞｰ名
 			// 
@@ -2579,12 +2649,12 @@ namespace namaichi
 			this.合致条件.Visible = false;
 			this.合致条件.Width = 70;
 			// 
-			// ｺﾐｭﾆﾃｨﾌｫﾛｰ
+			// ﾁｬﾝﾈﾙﾌｫﾛｰ
 			// 
-			this.ｺﾐｭﾆﾃｨﾌｫﾛｰ.DataPropertyName = "communityFollow";
-			this.ｺﾐｭﾆﾃｨﾌｫﾛｰ.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.ｺﾐｭﾆﾃｨﾌｫﾛｰ.HeaderText = "ｺﾐｭﾆﾃｨﾌｫﾛｰ";
-			this.ｺﾐｭﾆﾃｨﾌｫﾛｰ.Name = "ｺﾐｭﾆﾃｨﾌｫﾛｰ";
+			this.ﾁｬﾝﾈﾙﾌｫﾛｰ.DataPropertyName = "communityFollow";
+			this.ﾁｬﾝﾈﾙﾌｫﾛｰ.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.ﾁｬﾝﾈﾙﾌｫﾛｰ.HeaderText = "ﾁｬﾝﾈﾙﾌｫﾛｰ";
+			this.ﾁｬﾝﾈﾙﾌｫﾛｰ.Name = "ﾁｬﾝﾈﾙﾌｫﾛｰ";
 			// 
 			// ﾕｰｻﾞｰﾌｫﾛｰ
 			// 
@@ -2806,7 +2876,7 @@ namespace namaichi
 			// 
 			this.openCommunityUrlMenu.Name = "openCommunityUrlMenu";
 			this.openCommunityUrlMenu.Size = new System.Drawing.Size(268, 22);
-			this.openCommunityUrlMenu.Text = "コミュニティURLを開く";
+			this.openCommunityUrlMenu.Text = "チャンネルURLを開く";
 			this.openCommunityUrlMenu.Click += new System.EventHandler(this.OpenCommunityUrlClick);
 			// 
 			// openUserUrlMenu
@@ -2832,7 +2902,7 @@ namespace namaichi
 			// 
 			this.copyCommunityUrlMenu.Name = "copyCommunityUrlMenu";
 			this.copyCommunityUrlMenu.Size = new System.Drawing.Size(268, 22);
-			this.copyCommunityUrlMenu.Text = "コミュニティURLをコピー";
+			this.copyCommunityUrlMenu.Text = "チャンネルURLをコピー";
 			this.copyCommunityUrlMenu.Click += new System.EventHandler(this.CopyCommunityUrlMenuClick);
 			// 
 			// copyUserUrlMenu
@@ -2881,44 +2951,37 @@ namespace namaichi
 									this.alartListUnFollowComMenu,
 									this.alartListUnFollowUserMenu});
 			this.alartListFollowMenu.Name = "contextMenuStrip6";
-			this.alartListFollowMenu.OwnerItem = this.alartComListFollowMenu;
-			this.alartListFollowMenu.Size = new System.Drawing.Size(248, 92);
+			this.alartListFollowMenu.OwnerItem = this.alartUserListFollowMenu;
+			this.alartListFollowMenu.Size = new System.Drawing.Size(246, 92);
 			this.alartListFollowMenu.Opening += new System.ComponentModel.CancelEventHandler(this.AlartListFollowMenuOpening);
 			// 
 			// alartListFollowComMenu
 			// 
 			this.alartListFollowComMenu.Name = "alartListFollowComMenu";
-			this.alartListFollowComMenu.Size = new System.Drawing.Size(247, 22);
-			this.alartListFollowComMenu.Text = "この行のコミュニティをフォローする";
+			this.alartListFollowComMenu.Size = new System.Drawing.Size(245, 22);
+			this.alartListFollowComMenu.Text = "この行のチャンネルをフォローする";
 			this.alartListFollowComMenu.Click += new System.EventHandler(this.AlartListFollowComMenuClick);
 			// 
 			// alartListFollowUserMenu
 			// 
 			this.alartListFollowUserMenu.Name = "alartListFollowUserMenu";
-			this.alartListFollowUserMenu.Size = new System.Drawing.Size(247, 22);
+			this.alartListFollowUserMenu.Size = new System.Drawing.Size(245, 22);
 			this.alartListFollowUserMenu.Text = "この行のユーザーをフォローする";
 			this.alartListFollowUserMenu.Click += new System.EventHandler(this.AlartListFollowUserMenuClick);
 			// 
 			// alartListUnFollowComMenu
 			// 
 			this.alartListUnFollowComMenu.Name = "alartListUnFollowComMenu";
-			this.alartListUnFollowComMenu.Size = new System.Drawing.Size(247, 22);
-			this.alartListUnFollowComMenu.Text = "この行のコミュニティをフォロー解除する";
+			this.alartListUnFollowComMenu.Size = new System.Drawing.Size(245, 22);
+			this.alartListUnFollowComMenu.Text = "この行のチャンネルをフォロー解除する";
 			this.alartListUnFollowComMenu.Click += new System.EventHandler(this.AlartListUnFollowComMenuClick);
 			// 
 			// alartListUnFollowUserMenu
 			// 
 			this.alartListUnFollowUserMenu.Name = "alartListUnFollowUserMenu";
-			this.alartListUnFollowUserMenu.Size = new System.Drawing.Size(247, 22);
+			this.alartListUnFollowUserMenu.Size = new System.Drawing.Size(245, 22);
 			this.alartListUnFollowUserMenu.Text = "この行のユーザーをフォロー解除する";
 			this.alartListUnFollowUserMenu.Click += new System.EventHandler(this.AlartListUnFollowUserMenuClick);
-			// 
-			// alartUserListFollowMenu
-			// 
-			this.alartUserListFollowMenu.DropDown = this.alartListFollowMenu;
-			this.alartUserListFollowMenu.Name = "alartUserListFollowMenu";
-			this.alartUserListFollowMenu.Size = new System.Drawing.Size(268, 22);
-			this.alartUserListFollowMenu.Text = "フォロー";
 			// 
 			// toolStripSeparator41
 			// 
@@ -2994,6 +3057,13 @@ namespace namaichi
 			this.openAppliJMenu.Size = new System.Drawing.Size(268, 22);
 			this.openAppliJMenu.Text = "最近行われた放送のURLをアプリJで開く";
 			this.openAppliJMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// alartUserListFollowMenu
+			// 
+			this.alartUserListFollowMenu.DropDown = this.alartListFollowMenu;
+			this.alartUserListFollowMenu.Name = "alartUserListFollowMenu";
+			this.alartUserListFollowMenu.Size = new System.Drawing.Size(268, 22);
+			this.alartUserListFollowMenu.Text = "フォロー";
 			// 
 			// notifyIcon
 			// 
@@ -3157,7 +3227,7 @@ namespace namaichi
 			// dataGridViewTextBoxColumn9
 			// 
 			this.dataGridViewTextBoxColumn9.DataPropertyName = "ComName";
-			this.dataGridViewTextBoxColumn9.HeaderText = "コミュニティ名";
+			this.dataGridViewTextBoxColumn9.HeaderText = "チャンネル名";
 			this.dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
 			this.dataGridViewTextBoxColumn9.ReadOnly = true;
 			// 
@@ -3183,7 +3253,7 @@ namespace namaichi
 			// dataGridViewTextBoxColumn10
 			// 
 			this.dataGridViewTextBoxColumn10.DataPropertyName = "ComId";
-			this.dataGridViewTextBoxColumn10.HeaderText = "コミュニティID";
+			this.dataGridViewTextBoxColumn10.HeaderText = "チャンネルID";
 			this.dataGridViewTextBoxColumn10.Name = "dataGridViewTextBoxColumn10";
 			this.dataGridViewTextBoxColumn10.ReadOnly = true;
 			this.dataGridViewTextBoxColumn10.Width = 70;
@@ -3302,26 +3372,26 @@ namespace namaichi
 									this.liveListOpenAppliIMenu,
 									this.liveListOpenAppliJMenu});
 			this.contextMenuStrip3.Name = "contextMenuStrip1";
-			this.contextMenuStrip3.Size = new System.Drawing.Size(245, 452);
+			this.contextMenuStrip3.Size = new System.Drawing.Size(243, 452);
 			// 
 			// liveListOpenUrlMenu
 			// 
 			this.liveListOpenUrlMenu.Name = "liveListOpenUrlMenu";
-			this.liveListOpenUrlMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenUrlMenu.Size = new System.Drawing.Size(242, 22);
 			this.liveListOpenUrlMenu.Text = "放送URLを開く";
 			this.liveListOpenUrlMenu.Click += new System.EventHandler(this.LiveListOpenUrlMenuClick);
 			// 
 			// liveListOpenCommunityUrlMenu
 			// 
 			this.liveListOpenCommunityUrlMenu.Name = "liveListOpenCommunityUrlMenu";
-			this.liveListOpenCommunityUrlMenu.Size = new System.Drawing.Size(244, 22);
-			this.liveListOpenCommunityUrlMenu.Text = "コミュニティURLを開く";
+			this.liveListOpenCommunityUrlMenu.Size = new System.Drawing.Size(242, 22);
+			this.liveListOpenCommunityUrlMenu.Text = "チャンネルURLを開く";
 			this.liveListOpenCommunityUrlMenu.Click += new System.EventHandler(this.LiveListOpenCommunityUrlMenuClick);
 			// 
 			// toolStripSeparator10
 			// 
 			this.toolStripSeparator10.Name = "toolStripSeparator10";
-			this.toolStripSeparator10.Size = new System.Drawing.Size(241, 6);
+			this.toolStripSeparator10.Size = new System.Drawing.Size(239, 6);
 			// 
 			// liveListCopyMenu
 			// 
@@ -3334,180 +3404,180 @@ namespace namaichi
 									this.liveListCommunityNameCopyMenu,
 									this.liveListDescriptionCopyMenu});
 			this.liveListCopyMenu.Name = "liveListCopyMenu";
-			this.liveListCopyMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListCopyMenu.Size = new System.Drawing.Size(242, 22);
 			this.liveListCopyMenu.Text = "コピー";
 			this.liveListCopyMenu.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.LiveListCopyMenuDropDownItemClicked);
 			// 
 			// liveListUrlCopyMenu
 			// 
 			this.liveListUrlCopyMenu.Name = "liveListUrlCopyMenu";
-			this.liveListUrlCopyMenu.Size = new System.Drawing.Size(143, 22);
+			this.liveListUrlCopyMenu.Size = new System.Drawing.Size(141, 22);
 			this.liveListUrlCopyMenu.Text = "放送URL";
 			// 
 			// liveListCommunityUrlCopyMenu
 			// 
 			this.liveListCommunityUrlCopyMenu.Name = "liveListCommunityUrlCopyMenu";
-			this.liveListCommunityUrlCopyMenu.Size = new System.Drawing.Size(143, 22);
-			this.liveListCommunityUrlCopyMenu.Text = "コミュニティURL";
+			this.liveListCommunityUrlCopyMenu.Size = new System.Drawing.Size(141, 22);
+			this.liveListCommunityUrlCopyMenu.Text = "チャンネルURL";
 			// 
 			// toolStripSeparator14
 			// 
 			this.toolStripSeparator14.Name = "toolStripSeparator14";
-			this.toolStripSeparator14.Size = new System.Drawing.Size(140, 6);
+			this.toolStripSeparator14.Size = new System.Drawing.Size(138, 6);
 			// 
 			// liveListTitleCopyMenu
 			// 
 			this.liveListTitleCopyMenu.Name = "liveListTitleCopyMenu";
-			this.liveListTitleCopyMenu.Size = new System.Drawing.Size(143, 22);
+			this.liveListTitleCopyMenu.Size = new System.Drawing.Size(141, 22);
 			this.liveListTitleCopyMenu.Text = "放送タイトル";
 			// 
 			// liveListHostNameCopyMenu
 			// 
 			this.liveListHostNameCopyMenu.Name = "liveListHostNameCopyMenu";
-			this.liveListHostNameCopyMenu.Size = new System.Drawing.Size(143, 22);
+			this.liveListHostNameCopyMenu.Size = new System.Drawing.Size(141, 22);
 			this.liveListHostNameCopyMenu.Text = "放送者";
 			// 
 			// liveListCommunityNameCopyMenu
 			// 
 			this.liveListCommunityNameCopyMenu.Name = "liveListCommunityNameCopyMenu";
-			this.liveListCommunityNameCopyMenu.Size = new System.Drawing.Size(143, 22);
-			this.liveListCommunityNameCopyMenu.Text = "コミュニティ名";
+			this.liveListCommunityNameCopyMenu.Size = new System.Drawing.Size(141, 22);
+			this.liveListCommunityNameCopyMenu.Text = "チャンネル名";
 			// 
 			// liveListDescriptionCopyMenu
 			// 
 			this.liveListDescriptionCopyMenu.Name = "liveListDescriptionCopyMenu";
-			this.liveListDescriptionCopyMenu.Size = new System.Drawing.Size(143, 22);
+			this.liveListDescriptionCopyMenu.Size = new System.Drawing.Size(141, 22);
 			this.liveListDescriptionCopyMenu.Text = "説明";
 			// 
 			// toolStripSeparator13
 			// 
 			this.toolStripSeparator13.Name = "toolStripSeparator13";
-			this.toolStripSeparator13.Size = new System.Drawing.Size(241, 6);
+			this.toolStripSeparator13.Size = new System.Drawing.Size(239, 6);
 			// 
 			// liveListWriteSamuneMemoMenu
 			// 
 			this.liveListWriteSamuneMemoMenu.Name = "liveListWriteSamuneMemoMenu";
-			this.liveListWriteSamuneMemoMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListWriteSamuneMemoMenu.Size = new System.Drawing.Size(242, 22);
 			this.liveListWriteSamuneMemoMenu.Text = "サムネにメモを書く";
 			this.liveListWriteSamuneMemoMenu.Click += new System.EventHandler(this.LiveListWriteSamuneMemoMenuClick);
 			// 
 			// liveListNGthumbnailMenu
 			// 
 			this.liveListNGthumbnailMenu.Name = "liveListNGthumbnailMenu";
-			this.liveListNGthumbnailMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListNGthumbnailMenu.Size = new System.Drawing.Size(242, 22);
 			this.liveListNGthumbnailMenu.Text = "NGサムネにする(簡易NG)";
 			this.liveListNGthumbnailMenu.Click += new System.EventHandler(this.LiveListNGthumbnailMenuClick);
 			// 
 			// liveListUpdateSamuneMenu
 			// 
 			this.liveListUpdateSamuneMenu.Name = "liveListUpdateSamuneMenu";
-			this.liveListUpdateSamuneMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListUpdateSamuneMenu.Size = new System.Drawing.Size(242, 22);
 			this.liveListUpdateSamuneMenu.Text = "サムネを再取得する";
 			this.liveListUpdateSamuneMenu.Click += new System.EventHandler(this.LiveListUpdateSamuneMenuClick);
 			// 
 			// toolStripSeparator11
 			// 
 			this.toolStripSeparator11.Name = "toolStripSeparator11";
-			this.toolStripSeparator11.Size = new System.Drawing.Size(241, 6);
+			this.toolStripSeparator11.Size = new System.Drawing.Size(239, 6);
 			// 
 			// liveListAddFavoriteCommunityMenu
 			// 
 			this.liveListAddFavoriteCommunityMenu.Name = "liveListAddFavoriteCommunityMenu";
-			this.liveListAddFavoriteCommunityMenu.Size = new System.Drawing.Size(244, 22);
-			this.liveListAddFavoriteCommunityMenu.Text = "コミュニティをお気に入りに登録する";
+			this.liveListAddFavoriteCommunityMenu.Size = new System.Drawing.Size(242, 22);
+			this.liveListAddFavoriteCommunityMenu.Text = "チャンネルをお気に入りに登録する";
 			this.liveListAddFavoriteCommunityMenu.Click += new System.EventHandler(this.LiveListAddFavoriteCommunityMenuClick);
 			// 
 			// liveListRemoveFavoriteCommunityMenu
 			// 
 			this.liveListRemoveFavoriteCommunityMenu.Name = "liveListRemoveFavoriteCommunityMenu";
-			this.liveListRemoveFavoriteCommunityMenu.Size = new System.Drawing.Size(244, 22);
-			this.liveListRemoveFavoriteCommunityMenu.Text = "コミュニティをお気に入りから削除する";
+			this.liveListRemoveFavoriteCommunityMenu.Size = new System.Drawing.Size(242, 22);
+			this.liveListRemoveFavoriteCommunityMenu.Text = "チャンネルをお気に入りから削除する";
 			this.liveListRemoveFavoriteCommunityMenu.Click += new System.EventHandler(this.LiveListRemoveFavoriteCommunityMenuClick);
 			// 
 			// toolStripSeparator12
 			// 
 			this.toolStripSeparator12.Name = "toolStripSeparator12";
-			this.toolStripSeparator12.Size = new System.Drawing.Size(241, 6);
+			this.toolStripSeparator12.Size = new System.Drawing.Size(239, 6);
 			// 
 			// liveListDeleteRowMenu
 			// 
 			this.liveListDeleteRowMenu.Name = "liveListDeleteRowMenu";
-			this.liveListDeleteRowMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListDeleteRowMenu.Size = new System.Drawing.Size(242, 22);
 			this.liveListDeleteRowMenu.Text = "この行を削除する";
 			this.liveListDeleteRowMenu.Click += new System.EventHandler(this.LiveListDeleteRowMenuClick);
 			// 
 			// toolStripSeparator42
 			// 
 			this.toolStripSeparator42.Name = "toolStripSeparator42";
-			this.toolStripSeparator42.Size = new System.Drawing.Size(241, 6);
+			this.toolStripSeparator42.Size = new System.Drawing.Size(239, 6);
 			// 
 			// liveListOpenAppliAMenu
 			// 
 			this.liveListOpenAppliAMenu.Name = "liveListOpenAppliAMenu";
-			this.liveListOpenAppliAMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliAMenu.Size = new System.Drawing.Size(242, 22);
 			this.liveListOpenAppliAMenu.Text = "放送URLをアプリAで開く";
 			this.liveListOpenAppliAMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
 			// 
 			// liveListOpenAppliBMenu
 			// 
 			this.liveListOpenAppliBMenu.Name = "liveListOpenAppliBMenu";
-			this.liveListOpenAppliBMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliBMenu.Size = new System.Drawing.Size(242, 22);
 			this.liveListOpenAppliBMenu.Text = "放送URLをアプリBで開く";
 			this.liveListOpenAppliBMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
 			// 
 			// liveListOpenAppliCMenu
 			// 
 			this.liveListOpenAppliCMenu.Name = "liveListOpenAppliCMenu";
-			this.liveListOpenAppliCMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliCMenu.Size = new System.Drawing.Size(242, 22);
 			this.liveListOpenAppliCMenu.Text = "放送URLをアプリCで開く";
 			this.liveListOpenAppliCMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
 			// 
 			// liveListOpenAppliDMenu
 			// 
 			this.liveListOpenAppliDMenu.Name = "liveListOpenAppliDMenu";
-			this.liveListOpenAppliDMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliDMenu.Size = new System.Drawing.Size(242, 22);
 			this.liveListOpenAppliDMenu.Text = "放送URLをアプリDで開く";
 			this.liveListOpenAppliDMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
 			// 
 			// liveListOpenAppliEMenu
 			// 
 			this.liveListOpenAppliEMenu.Name = "liveListOpenAppliEMenu";
-			this.liveListOpenAppliEMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliEMenu.Size = new System.Drawing.Size(242, 22);
 			this.liveListOpenAppliEMenu.Text = "放送URLをアプリEで開く";
 			this.liveListOpenAppliEMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
 			// 
 			// liveListOpenAppliFMenu
 			// 
 			this.liveListOpenAppliFMenu.Name = "liveListOpenAppliFMenu";
-			this.liveListOpenAppliFMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliFMenu.Size = new System.Drawing.Size(242, 22);
 			this.liveListOpenAppliFMenu.Text = "放送URLをアプリFで開く";
 			this.liveListOpenAppliFMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
 			// 
 			// liveListOpenAppliGMenu
 			// 
 			this.liveListOpenAppliGMenu.Name = "liveListOpenAppliGMenu";
-			this.liveListOpenAppliGMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliGMenu.Size = new System.Drawing.Size(242, 22);
 			this.liveListOpenAppliGMenu.Text = "放送URLをアプリGで開く";
 			this.liveListOpenAppliGMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
 			// 
 			// liveListOpenAppliHMenu
 			// 
 			this.liveListOpenAppliHMenu.Name = "liveListOpenAppliHMenu";
-			this.liveListOpenAppliHMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliHMenu.Size = new System.Drawing.Size(242, 22);
 			this.liveListOpenAppliHMenu.Text = "放送URLをアプリHで開く";
 			this.liveListOpenAppliHMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
 			// 
 			// liveListOpenAppliIMenu
 			// 
 			this.liveListOpenAppliIMenu.Name = "liveListOpenAppliIMenu";
-			this.liveListOpenAppliIMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliIMenu.Size = new System.Drawing.Size(242, 22);
 			this.liveListOpenAppliIMenu.Text = "放送URLをアプリIで開く";
 			this.liveListOpenAppliIMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
 			// 
 			// liveListOpenAppliJMenu
 			// 
 			this.liveListOpenAppliJMenu.Name = "liveListOpenAppliJMenu";
-			this.liveListOpenAppliJMenu.Size = new System.Drawing.Size(244, 22);
+			this.liveListOpenAppliJMenu.Size = new System.Drawing.Size(242, 22);
 			this.liveListOpenAppliJMenu.Text = "放送URLをアプリJで開く";
 			this.liveListOpenAppliJMenu.Click += new System.EventHandler(this.LiveListOpenAppliMenuClick);
 			// 
@@ -3912,7 +3982,7 @@ namespace namaichi
 			// 
 			this.dataGridViewTextBoxColumn25.DataPropertyName = "communityId";
 			this.dataGridViewTextBoxColumn25.FillWeight = 2F;
-			this.dataGridViewTextBoxColumn25.HeaderText = "ｺﾐｭﾆﾃｨID";
+			this.dataGridViewTextBoxColumn25.HeaderText = "ﾁｬﾝﾈﾙID";
 			this.dataGridViewTextBoxColumn25.MinimumWidth = 2;
 			this.dataGridViewTextBoxColumn25.Name = "dataGridViewTextBoxColumn25";
 			this.dataGridViewTextBoxColumn25.ReadOnly = true;
@@ -3929,7 +3999,7 @@ namespace namaichi
 			// dataGridViewTextBoxColumn27
 			// 
 			this.dataGridViewTextBoxColumn27.DataPropertyName = "communityName";
-			this.dataGridViewTextBoxColumn27.HeaderText = "ｺﾐｭﾆﾃｨ名";
+			this.dataGridViewTextBoxColumn27.HeaderText = "ﾁｬﾝﾈﾙ名";
 			this.dataGridViewTextBoxColumn27.Name = "dataGridViewTextBoxColumn27";
 			this.dataGridViewTextBoxColumn27.ReadOnly = true;
 			this.dataGridViewTextBoxColumn27.Visible = false;
@@ -3963,7 +4033,7 @@ namespace namaichi
 			// 
 			this.dataGridViewButtonColumn3.DataPropertyName = "communityFollow";
 			this.dataGridViewButtonColumn3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.dataGridViewButtonColumn3.HeaderText = "ｺﾐｭﾆﾃｨﾌｫﾛｰ";
+			this.dataGridViewButtonColumn3.HeaderText = "ﾁｬﾝﾈﾙﾌｫﾛｰ";
 			this.dataGridViewButtonColumn3.Name = "dataGridViewButtonColumn3";
 			this.dataGridViewButtonColumn3.Visible = false;
 			// 
@@ -4318,7 +4388,7 @@ namespace namaichi
 			this.favoriteCommunityBtn.Size = new System.Drawing.Size(76, 23);
 			this.favoriteCommunityBtn.TabIndex = 34;
 			this.favoriteCommunityBtn.TabStop = true;
-			this.favoriteCommunityBtn.Text = "コミュニティID";
+			this.favoriteCommunityBtn.Text = "チャンネルID";
 			this.favoriteCommunityBtn.UseCompatibleTextRendering = true;
 			this.favoriteCommunityBtn.UseMnemonic = false;
 			this.favoriteCommunityBtn.UseVisualStyleBackColor = true;
@@ -4976,7 +5046,7 @@ namespace namaichi
 			// dataGridViewTextBoxColumn37
 			// 
 			this.dataGridViewTextBoxColumn37.DataPropertyName = "communityName";
-			this.dataGridViewTextBoxColumn37.HeaderText = "コミュニティ名";
+			this.dataGridViewTextBoxColumn37.HeaderText = "チャンネル名";
 			this.dataGridViewTextBoxColumn37.Name = "dataGridViewTextBoxColumn37";
 			this.dataGridViewTextBoxColumn37.ReadOnly = true;
 			// 
@@ -4997,7 +5067,7 @@ namespace namaichi
 			// dataGridViewTextBoxColumn40
 			// 
 			this.dataGridViewTextBoxColumn40.DataPropertyName = "communityId";
-			this.dataGridViewTextBoxColumn40.HeaderText = "コミュニティID";
+			this.dataGridViewTextBoxColumn40.HeaderText = "チャンネルID";
 			this.dataGridViewTextBoxColumn40.Name = "dataGridViewTextBoxColumn40";
 			this.dataGridViewTextBoxColumn40.ReadOnly = true;
 			// 
@@ -5073,7 +5143,7 @@ namespace namaichi
 			// 
 			this.historyListOpenCommunityUrlMenu.Name = "historyListOpenCommunityUrlMenu";
 			this.historyListOpenCommunityUrlMenu.Size = new System.Drawing.Size(268, 22);
-			this.historyListOpenCommunityUrlMenu.Text = "コミュニティURLを開く";
+			this.historyListOpenCommunityUrlMenu.Text = "チャンネルURLを開く";
 			this.historyListOpenCommunityUrlMenu.Click += new System.EventHandler(this.HistoryListOpenCommunityUrlMenuClick);
 			// 
 			// historyListOpenUserUrlMenu
@@ -5100,7 +5170,7 @@ namespace namaichi
 			// 
 			this.historyListCopyCommunityUrlMenu.Name = "historyListCopyCommunityUrlMenu";
 			this.historyListCopyCommunityUrlMenu.Size = new System.Drawing.Size(268, 22);
-			this.historyListCopyCommunityUrlMenu.Text = "コミュニティURLをコピー";
+			this.historyListCopyCommunityUrlMenu.Text = "チャンネルURLをコピー";
 			this.historyListCopyCommunityUrlMenu.Click += new System.EventHandler(this.HistoryListCopyCommunityUrlMenuClick);
 			// 
 			// historyListCopyUserUrlMenu
@@ -5275,7 +5345,7 @@ namespace namaichi
 									this.放送開始日時,
 									this.放送タイトル,
 									this.放送者,
-									this.コミュニティ名,
+									this.チャンネル名,
 									this.放送ID,
 									this.ユーザーID,
 									this.コミュニティID,
@@ -5320,12 +5390,12 @@ namespace namaichi
 			this.放送者.Name = "放送者";
 			this.放送者.ReadOnly = true;
 			// 
-			// コミュニティ名
+			// チャンネル名
 			// 
-			this.コミュニティ名.DataPropertyName = "communityName";
-			this.コミュニティ名.HeaderText = "コミュニティ名";
-			this.コミュニティ名.Name = "コミュニティ名";
-			this.コミュニティ名.ReadOnly = true;
+			this.チャンネル名.DataPropertyName = "communityName";
+			this.チャンネル名.HeaderText = "チャンネル名";
+			this.チャンネル名.Name = "チャンネル名";
+			this.チャンネル名.ReadOnly = true;
 			// 
 			// 放送ID
 			// 
@@ -5344,7 +5414,7 @@ namespace namaichi
 			// コミュニティID
 			// 
 			this.コミュニティID.DataPropertyName = "communityId";
-			this.コミュニティID.HeaderText = "コミュニティID";
+			this.コミュニティID.HeaderText = "チャンネルID";
 			this.コミュニティID.Name = "コミュニティID";
 			this.コミュニティID.ReadOnly = true;
 			// 
@@ -5385,7 +5455,7 @@ namespace namaichi
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(795, 14);
 			this.label3.TabIndex = 28;
-			this.label3.Text = "通知しなかった履歴(コミュニティまたはユーザーの条件に適合していたが、その他の条件が外れていたため通知しなかった放送。条件から外れていた項目は黄色の背景。)";
+			this.label3.Text = "通知しなかった履歴(チャンネルまたはユーザーの条件に適合していたが、その他の条件が外れていたため通知しなかった放送。条件から外れていた項目は黄色の背景。)";
 			// 
 			// notAlartList
 			// 
@@ -5450,7 +5520,7 @@ namespace namaichi
 			// dataGridViewTextBoxColumn19
 			// 
 			this.dataGridViewTextBoxColumn19.DataPropertyName = "communityName";
-			this.dataGridViewTextBoxColumn19.HeaderText = "コミュニティ名";
+			this.dataGridViewTextBoxColumn19.HeaderText = "チャンネル名";
 			this.dataGridViewTextBoxColumn19.Name = "dataGridViewTextBoxColumn19";
 			this.dataGridViewTextBoxColumn19.ReadOnly = true;
 			// 
@@ -5471,7 +5541,7 @@ namespace namaichi
 			// dataGridViewTextBoxColumn22
 			// 
 			this.dataGridViewTextBoxColumn22.DataPropertyName = "communityId";
-			this.dataGridViewTextBoxColumn22.HeaderText = "コミュニティID";
+			this.dataGridViewTextBoxColumn22.HeaderText = "チャンネルID";
 			this.dataGridViewTextBoxColumn22.Name = "dataGridViewTextBoxColumn22";
 			this.dataGridViewTextBoxColumn22.ReadOnly = true;
 			// 
@@ -5546,7 +5616,7 @@ namespace namaichi
 			// 
 			this.notAlartListOpenCommunityUrlMenu.Name = "notAlartListOpenCommunityUrlMenu";
 			this.notAlartListOpenCommunityUrlMenu.Size = new System.Drawing.Size(268, 22);
-			this.notAlartListOpenCommunityUrlMenu.Text = "コミュニティURLを開く";
+			this.notAlartListOpenCommunityUrlMenu.Text = "チャンネルURLを開く";
 			this.notAlartListOpenCommunityUrlMenu.Click += new System.EventHandler(this.NotAlartListOpenCommunityUrlMenuClick);
 			// 
 			// notAlartListOpenUserUrlMenu
@@ -5573,7 +5643,7 @@ namespace namaichi
 			// 
 			this.notAlartListCopyCommunityUrlMenu.Name = "notAlartListCopyCommunityUrlMenu";
 			this.notAlartListCopyCommunityUrlMenu.Size = new System.Drawing.Size(268, 22);
-			this.notAlartListCopyCommunityUrlMenu.Text = "コミュニティURLをコピー";
+			this.notAlartListCopyCommunityUrlMenu.Text = "チャンネルURLをコピー";
 			this.notAlartListCopyCommunityUrlMenu.Click += new System.EventHandler(this.NotAlartListCopyCommunityUrlMenuClick);
 			// 
 			// notAlartListCopyUserUrlMenu
@@ -5826,7 +5896,7 @@ namespace namaichi
 			// 
 			this.toolStripMenuItem39.Name = "toolStripMenuItem39";
 			this.toolStripMenuItem39.Size = new System.Drawing.Size(177, 22);
-			this.toolStripMenuItem39.Text = "コミュニティURLを開く";
+			this.toolStripMenuItem39.Text = "チャンネルURLを開く";
 			this.toolStripMenuItem39.Click += new System.EventHandler(this.HistoryListOpenCommunityUrlMenuClick);
 			// 
 			// toolStripMenuItem40
@@ -5853,7 +5923,7 @@ namespace namaichi
 			// 
 			this.toolStripMenuItem42.Name = "toolStripMenuItem42";
 			this.toolStripMenuItem42.Size = new System.Drawing.Size(177, 22);
-			this.toolStripMenuItem42.Text = "コミュニティURLをコピー";
+			this.toolStripMenuItem42.Text = "チャンネルURLをコピー";
 			this.toolStripMenuItem42.Click += new System.EventHandler(this.HistoryListCopyCommunityUrlMenuClick);
 			// 
 			// toolStripMenuItem43
@@ -5887,76 +5957,6 @@ namespace namaichi
 			this.toolStripMenuItem45.Size = new System.Drawing.Size(177, 22);
 			this.toolStripMenuItem45.Text = "この行を削除する";
 			this.toolStripMenuItem45.Click += new System.EventHandler(this.HistoryListDeleteRowMenuClick);
-			// 
-			// isDisplayAppliJTabMenu
-			// 
-			this.isDisplayAppliJTabMenu.Name = "isDisplayAppliJTabMenu";
-			this.isDisplayAppliJTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliJTabMenu.Text = "アプリJ";
-			this.isDisplayAppliJTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliITabMenu
-			// 
-			this.isDisplayAppliITabMenu.Name = "isDisplayAppliITabMenu";
-			this.isDisplayAppliITabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliITabMenu.Text = "アプリI";
-			this.isDisplayAppliITabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliHTabMenu
-			// 
-			this.isDisplayAppliHTabMenu.Name = "isDisplayAppliHTabMenu";
-			this.isDisplayAppliHTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliHTabMenu.Text = "アプリH";
-			this.isDisplayAppliHTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliGTabMenu
-			// 
-			this.isDisplayAppliGTabMenu.Name = "isDisplayAppliGTabMenu";
-			this.isDisplayAppliGTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliGTabMenu.Text = "アプリG";
-			this.isDisplayAppliGTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliFTabMenu
-			// 
-			this.isDisplayAppliFTabMenu.Name = "isDisplayAppliFTabMenu";
-			this.isDisplayAppliFTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliFTabMenu.Text = "アプリF";
-			this.isDisplayAppliFTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliETabMenu
-			// 
-			this.isDisplayAppliETabMenu.Name = "isDisplayAppliETabMenu";
-			this.isDisplayAppliETabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliETabMenu.Text = "アプリE";
-			this.isDisplayAppliETabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliDTabMenu
-			// 
-			this.isDisplayAppliDTabMenu.Name = "isDisplayAppliDTabMenu";
-			this.isDisplayAppliDTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliDTabMenu.Text = "アプリD";
-			this.isDisplayAppliDTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliCTabMenu
-			// 
-			this.isDisplayAppliCTabMenu.Name = "isDisplayAppliCTabMenu";
-			this.isDisplayAppliCTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliCTabMenu.Text = "アプリC";
-			this.isDisplayAppliCTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliBTabMenu
-			// 
-			this.isDisplayAppliBTabMenu.Name = "isDisplayAppliBTabMenu";
-			this.isDisplayAppliBTabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliBTabMenu.Text = "アプリB";
-			this.isDisplayAppliBTabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
-			// 
-			// isDisplayAppliATabMenu
-			// 
-			this.isDisplayAppliATabMenu.Name = "isDisplayAppliATabMenu";
-			this.isDisplayAppliATabMenu.Size = new System.Drawing.Size(156, 22);
-			this.isDisplayAppliATabMenu.Text = "アプリA";
-			this.isDisplayAppliATabMenu.Click += new System.EventHandler(this.IsAlartListDisplayTabMenuClick);
 			// 
 			// MainForm
 			// 
@@ -6297,7 +6297,7 @@ namespace namaichi
 		private System.Windows.Forms.DataGridViewTextBoxColumn ユーザーID;
 		private System.Windows.Forms.DataGridViewTextBoxColumn コミュニティID;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 放送ID;
-		private System.Windows.Forms.DataGridViewTextBoxColumn コミュニティ名;
+		private System.Windows.Forms.DataGridViewTextBoxColumn チャンネル名;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 放送者;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn15;
@@ -6611,13 +6611,13 @@ namespace namaichi
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem readNamarokuListMenu;
 		private System.Windows.Forms.DataGridViewButtonColumn ﾕｰｻﾞｰﾌｫﾛｰ;
-		private System.Windows.Forms.DataGridViewButtonColumn ｺﾐｭﾆﾃｨﾌｫﾛｰ;
+		private System.Windows.Forms.DataGridViewButtonColumn ﾁｬﾝﾈﾙﾌｫﾛｰ;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 登録日時;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 最近の放送日時;
 		private System.Windows.Forms.DataGridViewTextBoxColumn ﾕｰｻﾞｰ名;
-		private System.Windows.Forms.DataGridViewTextBoxColumn ｺﾐｭﾆﾃｨ名;
+		private System.Windows.Forms.DataGridViewTextBoxColumn ﾁｬﾝﾈﾙ名;
 		private System.Windows.Forms.DataGridViewTextBoxColumn ﾕｰｻﾞｰID;
-		private System.Windows.Forms.DataGridViewTextBoxColumn ｺﾐｭﾆﾃｨID;
+		private System.Windows.Forms.DataGridViewTextBoxColumn ﾁｬﾝﾈﾙID;
 		private System.Windows.Forms.DataGridViewTextBoxColumn comment;
 		private System.Windows.Forms.DataGridViewCheckBoxColumn アプリC;
 		private System.Windows.Forms.DataGridViewCheckBoxColumn アプリB;

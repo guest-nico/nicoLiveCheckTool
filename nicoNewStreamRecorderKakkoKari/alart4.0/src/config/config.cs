@@ -123,6 +123,7 @@ public class config
 		defaultConfig = new Dictionary<string, string>(){
 			{"accountId",""},
 			{"accountPass",""},
+			{"user_session_setting",""},
 			{"user_session",""},
 			{"user_session_secure",""},
 			{"browserNum","1"},

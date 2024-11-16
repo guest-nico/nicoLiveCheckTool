@@ -33,7 +33,7 @@ namespace namaichi.rec
 //			var comId = (isJikken) ? util.getRegGroup(res, "&quot;followPageUrl&quot;\\:&quot;.+?motion/(.+?)&quot;") :
 //					util.getRegGroup(res, "Nicolive_JS_Conf\\.Recommend = \\{type\\: 'community', community_id\\: '(co\\d+)'");
 			if (comId == null) {
-				form.addLogText("このコミュニティはフォローできませんでした。" + util.getMainSubStr(isSub, true));
+				form.addLogText("このチャンネルはフォローできませんでした。" + util.getMainSubStr(isSub, true));
 				return false;
 			}
 			
@@ -56,7 +56,7 @@ namespace namaichi.rec
 			try {
 				var r = util.getResStr(comApiUrl, headers, false);
 				if (r == null) {
-					form.addLogText("コミュニティ情報の取得に失敗しました");
+					form.addLogText("チャンネル情報の取得に失敗しました");
 					return false;
 				}
 				var isJidouShounin = r.IndexOf("\"community_auto_accept_entry\":1") > -1; 
@@ -65,7 +65,7 @@ namespace namaichi.rec
 				if (!isJidouShounin) return false;
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				form.addLogText("何らかの問題によりコミュニティ情報の取得に失敗しました " + e.Message + e.StackTrace);
+				form.addLogText("何らかの問題によりチャンネル情報の取得に失敗しました " + e.Message + e.StackTrace);
 				return false;
 			}
 			
@@ -222,7 +222,7 @@ namespace namaichi.rec
 		*/
 		public bool unFollowCommunity(string comId, CookieContainer cc, MainForm form, config.config cfg) {
 			if (comId == null) {
-				form.addLogText("このコミュニティはフォロー解除できませんでした。" + util.getMainSubStr(isSub, true));
+				form.addLogText("このチャンネルはフォロー解除できませんでした。" + util.getMainSubStr(isSub, true));
 				return false;
 			}
 			
@@ -253,7 +253,7 @@ namespace namaichi.rec
 					headers["Content-Type"] = "application/x-www-form-urlencoded";
 					var r = util.postResStr(url, headers, data, true, "POST");
 					if (r == null) continue;
-					var isSuccess = r.IndexOf("このコミュニティのフォローを解除しました") > -1;
+					var isSuccess = r.IndexOf("このチャンネルのフォローを解除しました") > -1;
 					return isSuccess;
 				} catch (Exception e) {
 					form.addLogText("フォロー解除に失敗しました。");

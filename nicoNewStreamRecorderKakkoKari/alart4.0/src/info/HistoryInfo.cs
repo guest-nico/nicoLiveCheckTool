@@ -95,9 +95,9 @@ namespace namaichi.info
 						if (!string.IsNullOrEmpty(ai.communityId)) {
 							if (ai.communityId == hi.communityId || 
 							    	(ai.communityId == "official" && ri.type == "official")) {
-								if (hi.favorite.IndexOf("ｺﾐｭﾆﾃｨID") == -1) {
+								if (hi.favorite.IndexOf("ﾁｬﾝﾈﾙID") == -1) {
 									if (hi.favorite != "") hi.favorite += ",";
-									hi.favorite += "ｺﾐｭﾆﾃｨID";
+									hi.favorite += "ﾁｬﾝﾈﾙID";
 								}
 	//							if (memo != "") memo += ",";
 	//							memo += ai.memo;
@@ -144,7 +144,7 @@ namespace namaichi.info
 					foreach (var ai in aiList) {
 						if (communityId != null && communityId == ai.communityId) {
 							if (favorite != "") favorite += ",";
-							favorite += "ｺﾐｭﾆﾃｨID";
+							favorite += "ﾁｬﾝﾈﾙID";
 //							if (memo != "") memo += ",";
 //							memo += ai.memo;
 							textColor = ai.textColor;

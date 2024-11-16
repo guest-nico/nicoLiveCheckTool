@@ -34,8 +34,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.8.3";
-	public static string versionDayStr = "2024/09/17";
+	public static string versionStr = "ver0.1.8.4";
+	public static string versionDayStr = "2024/11/17";
 	public static string osName = null;
 	public static string osType = null;
 	public static bool isWebRequestOk = false;
@@ -315,7 +315,7 @@ class util {
 	}
 	public static string getFileNameTypeSample(string filenametype) {
 			//var format = cfg.get("filenameformat");
-			return getDokujiSetteiFileName("放送者名", "コミュ名", "タイトル", "lv12345", "co9876", filenametype, DateTime.Now);
+			return getDokujiSetteiFileName("放送者名", "チャンネル名", "タイトル", "lv12345", "co9876", filenametype, DateTime.Now);
 		}
 	public static string getOkCommentFileName(config cfg, string fName, string lvid, bool isTimeShift, bool isRtmp) {
 		var kakutyousi = (cfg.get("IsgetcommentXml") == "true") ? ".xml" : ".json";

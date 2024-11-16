@@ -81,127 +81,127 @@ namespace namaichi
 									this.openAppliIMenu,
 									this.openAppliJMenu});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(221, 390);
+			this.contextMenuStrip1.Size = new System.Drawing.Size(176, 390);
 			// 
 			// copyUrlMenu
 			// 
 			this.copyUrlMenu.Name = "copyUrlMenu";
-			this.copyUrlMenu.Size = new System.Drawing.Size(220, 22);
+			this.copyUrlMenu.Size = new System.Drawing.Size(175, 22);
 			this.copyUrlMenu.Text = "放送URLをコピー";
 			this.copyUrlMenu.Click += new System.EventHandler(this.CopyUrlMenuClick);
 			// 
 			// copyCommunityUrlMenu
 			// 
 			this.copyCommunityUrlMenu.Name = "copyCommunityUrlMenu";
-			this.copyCommunityUrlMenu.Size = new System.Drawing.Size(220, 22);
-			this.copyCommunityUrlMenu.Text = "コミュニティURLをコピー";
+			this.copyCommunityUrlMenu.Size = new System.Drawing.Size(175, 22);
+			this.copyCommunityUrlMenu.Text = "チャンネルURLをコピー";
 			this.copyCommunityUrlMenu.Click += new System.EventHandler(this.CopyCommunityUrlMenuClick);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(217, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(172, 6);
 			// 
 			// copyTitleMenu
 			// 
 			this.copyTitleMenu.Name = "copyTitleMenu";
-			this.copyTitleMenu.Size = new System.Drawing.Size(220, 22);
+			this.copyTitleMenu.Size = new System.Drawing.Size(175, 22);
 			this.copyTitleMenu.Text = "放送タイトルをコピー";
 			this.copyTitleMenu.Click += new System.EventHandler(this.CopyTitleMenuClick);
 			// 
 			// copyHostNameMenu
 			// 
 			this.copyHostNameMenu.Name = "copyHostNameMenu";
-			this.copyHostNameMenu.Size = new System.Drawing.Size(220, 22);
+			this.copyHostNameMenu.Size = new System.Drawing.Size(175, 22);
 			this.copyHostNameMenu.Text = "放送者をコピー";
 			this.copyHostNameMenu.Click += new System.EventHandler(this.CopyHostNameMenuClick);
 			// 
 			// copyCommunityNameMenu
 			// 
 			this.copyCommunityNameMenu.Name = "copyCommunityNameMenu";
-			this.copyCommunityNameMenu.Size = new System.Drawing.Size(220, 22);
-			this.copyCommunityNameMenu.Text = "コミュニティ名をコピー";
+			this.copyCommunityNameMenu.Size = new System.Drawing.Size(175, 22);
+			this.copyCommunityNameMenu.Text = "チャンネル名をコピー";
 			this.copyCommunityNameMenu.Click += new System.EventHandler(this.CopyCommunityNameMenuClick);
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(217, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(172, 6);
 			// 
 			// openWebBrowserMenu
 			// 
 			this.openWebBrowserMenu.Name = "openWebBrowserMenu";
-			this.openWebBrowserMenu.Size = new System.Drawing.Size(220, 22);
+			this.openWebBrowserMenu.Size = new System.Drawing.Size(175, 22);
 			this.openWebBrowserMenu.Text = "Webブラウザで開く";
 			this.openWebBrowserMenu.Click += new System.EventHandler(this.OpenWebBrowserMenuClick);
 			// 
 			// openAppliAMenu
 			// 
 			this.openAppliAMenu.Name = "openAppliAMenu";
-			this.openAppliAMenu.Size = new System.Drawing.Size(220, 22);
+			this.openAppliAMenu.Size = new System.Drawing.Size(175, 22);
 			this.openAppliAMenu.Text = "アプリAで開く";
 			this.openAppliAMenu.Click += new System.EventHandler(this.OpenAppliMenuClick);
 			// 
 			// openAppliBMenu
 			// 
 			this.openAppliBMenu.Name = "openAppliBMenu";
-			this.openAppliBMenu.Size = new System.Drawing.Size(220, 22);
+			this.openAppliBMenu.Size = new System.Drawing.Size(175, 22);
 			this.openAppliBMenu.Text = "アプリBで開く";
 			this.openAppliBMenu.Click += new System.EventHandler(this.OpenAppliMenuClick);
 			// 
 			// openAppliCMenu
 			// 
 			this.openAppliCMenu.Name = "openAppliCMenu";
-			this.openAppliCMenu.Size = new System.Drawing.Size(220, 22);
+			this.openAppliCMenu.Size = new System.Drawing.Size(175, 22);
 			this.openAppliCMenu.Text = "アプリCで開く";
 			this.openAppliCMenu.Click += new System.EventHandler(this.OpenAppliMenuClick);
 			// 
 			// openAppliDMenu
 			// 
 			this.openAppliDMenu.Name = "openAppliDMenu";
-			this.openAppliDMenu.Size = new System.Drawing.Size(220, 22);
+			this.openAppliDMenu.Size = new System.Drawing.Size(175, 22);
 			this.openAppliDMenu.Text = "アプリDで開く";
 			this.openAppliDMenu.Click += new System.EventHandler(this.OpenAppliMenuClick);
 			// 
 			// openAppliEMenu
 			// 
 			this.openAppliEMenu.Name = "openAppliEMenu";
-			this.openAppliEMenu.Size = new System.Drawing.Size(220, 22);
+			this.openAppliEMenu.Size = new System.Drawing.Size(175, 22);
 			this.openAppliEMenu.Text = "アプリEで開く";
 			this.openAppliEMenu.Click += new System.EventHandler(this.OpenAppliMenuClick);
 			// 
 			// openAppliFMenu
 			// 
 			this.openAppliFMenu.Name = "openAppliFMenu";
-			this.openAppliFMenu.Size = new System.Drawing.Size(220, 22);
+			this.openAppliFMenu.Size = new System.Drawing.Size(175, 22);
 			this.openAppliFMenu.Text = "アプリFで開く";
 			this.openAppliFMenu.Click += new System.EventHandler(this.OpenAppliMenuClick);
 			// 
 			// openAppliGMenu
 			// 
 			this.openAppliGMenu.Name = "openAppliGMenu";
-			this.openAppliGMenu.Size = new System.Drawing.Size(220, 22);
+			this.openAppliGMenu.Size = new System.Drawing.Size(175, 22);
 			this.openAppliGMenu.Text = "アプリGで開く";
 			this.openAppliGMenu.Click += new System.EventHandler(this.OpenAppliMenuClick);
 			// 
 			// openAppliHMenu
 			// 
 			this.openAppliHMenu.Name = "openAppliHMenu";
-			this.openAppliHMenu.Size = new System.Drawing.Size(220, 22);
+			this.openAppliHMenu.Size = new System.Drawing.Size(175, 22);
 			this.openAppliHMenu.Text = "アプリHで開く";
 			this.openAppliHMenu.Click += new System.EventHandler(this.OpenAppliMenuClick);
 			// 
 			// openAppliIMenu
 			// 
 			this.openAppliIMenu.Name = "openAppliIMenu";
-			this.openAppliIMenu.Size = new System.Drawing.Size(220, 22);
+			this.openAppliIMenu.Size = new System.Drawing.Size(175, 22);
 			this.openAppliIMenu.Text = "アプリIで開く";
 			this.openAppliIMenu.Click += new System.EventHandler(this.OpenAppliMenuClick);
 			// 
 			// openAppliJMenu
 			// 
 			this.openAppliJMenu.Name = "openAppliJMenu";
-			this.openAppliJMenu.Size = new System.Drawing.Size(220, 22);
+			this.openAppliJMenu.Size = new System.Drawing.Size(175, 22);
 			this.openAppliJMenu.Text = "アプリJで開く";
 			this.openAppliJMenu.Click += new System.EventHandler(this.OpenAppliMenuClick);
 			// 

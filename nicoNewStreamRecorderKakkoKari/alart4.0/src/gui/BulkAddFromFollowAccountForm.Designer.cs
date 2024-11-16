@@ -143,7 +143,7 @@ namespace namaichi
 			this.comRadioBtn.Size = new System.Drawing.Size(72, 24);
 			this.comRadioBtn.TabIndex = 7;
 			this.comRadioBtn.TabStop = true;
-			this.comRadioBtn.Text = "ｺﾐｭﾆﾃｨID";
+			this.comRadioBtn.Text = "ﾁｬﾝﾈﾙID";
 			this.comRadioBtn.UseVisualStyleBackColor = true;
 			// 
 			// userRadioBtn
@@ -186,7 +186,7 @@ namespace namaichi
 			this.Name = "BulkAddFromFollowAccountForm";
 			this.ShowIcon = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "参加コミュを登録したいニコニコ動画アカウントの入力";
+			this.Text = "参加ユーザー・チャンネルを登録したいニコニコ動画アカウントの入力";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}

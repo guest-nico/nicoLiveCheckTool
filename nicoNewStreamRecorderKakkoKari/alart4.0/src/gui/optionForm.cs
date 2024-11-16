@@ -81,11 +81,12 @@ namespace namaichi
 		private Dictionary<string, string> getFormData() {
 			//var selectedImporter = nicoSessionComboBox1.Selector.SelectedImporter;
 //			var browserName = (selectedImporter != null) ? selectedImporter.SourceInfo.BrowserName : "";
-			var browserNum = (useCookieRadioBtn.Checked) ? "2" : "1";
+			var browserNum = (useCookieRadioBtn.Checked) ? "2" : (useAccountLoginRadioBtn.Checked ? "1" : "3");
 //			var browserNum2 = (useCookieRadioBtn2.Checked) ? "2" : "1";
 			return new Dictionary<string, string>(){
 				{"accountId",mailText.Text},
 				{"accountPass",passText.Text},
+				{"user_session_setting",userSessionText.Text},
 				//{"user_session",passText.Text},
 				{"browserNum",browserNum},
 //				{"isAllBrowserMode",checkBoxShowAll.Checked.ToString().ToLower()},
@@ -282,9 +283,11 @@ namespace namaichi
         private void setFormFromConfig() {
         	mailText.Text = cfg.get("accountId");
         	passText.Text = cfg.get("accountPass");
+        	userSessionText.Text = cfg.get("user_session_setting");
         	
         	if (cfg.get("browserNum") == "1") useAccountLoginRadioBtn.Checked = true;
-        	else useCookieRadioBtn.Checked = true; 
+        	else if (cfg.get("browserNum") == "2") useCookieRadioBtn.Checked = true;
+        	else useUserSessionRadioBtn.Checked = true; 
         	useSecondLoginChkBox.Checked = bool.Parse(cfg.get("issecondlogin"));
         	isDefaultBrowserPathChkBox.Checked = bool.Parse(cfg.get("IsdefaultBrowserPath"));
         	isDefaultBrowserPathChkBox_UpdateAction();
@@ -586,7 +589,7 @@ namespace namaichi
 			
 			
 			var title = "[ニコ生]ユーザー名の放送開始";
-			var msg = DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss") + "\nユーザー名 が コミュニティ名 で 放送タイトル を開始しました。\nhttps://live.nicovideo.jp/watch/lv********\nhttps://com.nicovideo.jp/community/co*******";
+			var msg = DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss") + "\nユーザー名 が チャンネル名 で 放送タイトル を開始しました。\nhttps://live.nicovideo.jp/watch/lv********\nhttps://com.nicovideo.jp/community/co*******";
 			
 			Task.Factory.StartNew(() => {
 				string eMsg;
@@ -948,6 +951,24 @@ namespace namaichi
 			var l = thresholdpageList;
 			var v = Math.Ceiling(liveListUpdateMinutesList.Value * 20);
 			if (l.Value > v) l.Value = v;
+		}
+		void UserSessionTestBtnClick(object sender, EventArgs e)
+		{
+			UserSessionTest(userSessionText.Text);
+		}
+		void UserSessionTest(string us) {
+			try {
+				var cg = new rec.CookieGetter(cfg, form);
+				var cc = cg.getUserSessionCookie(us);
+				if (cc == null || !cg.isHtml5Login(cc, "https://live.nicovideo.jp/")) {
+					util.showMessageBoxCenterForm(this, "login error " + cg.log, "", MessageBoxButtons.OK);
+					return;
+				}
+				else util.showMessageBoxCenterForm(this, "login ok", "", MessageBoxButtons.OK);
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+				util.showMessageBoxCenterForm(this, "login error " + e.Message + e.Source + e.StackTrace, "", MessageBoxButtons.OK);
+			}
 		}
 	}
 }

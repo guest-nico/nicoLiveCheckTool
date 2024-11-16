@@ -59,8 +59,8 @@ namespace namaichi.rec
 			if (!isSub) {
 				cc = await getCookieContainer(cfg.get("BrowserNum"),
 						cfg.get("issecondlogin"), cfg.get("accountId"), 
-						cfg.get("accountPass"), cfg.get("user_session"),
-						cfg.get("user_session_secure"), false,
+						cfg.get("accountPass"), cfg.get("user_session_setting"),
+						cfg.get("user_session"), cfg.get("user_session_secure"), false,
 						url);
 				if (cc != null) {
 					var c = cc.GetCookies(TargetUrl)["user_session"];
@@ -82,8 +82,8 @@ namespace namaichi.rec
 			} else {
 				cc = await getCookieContainer(cfg.get("BrowserNum2"),
 						cfg.get("issecondlogin2"), cfg.get("accountId2"), 
-						cfg.get("accountPass2"), cfg.get("user_session2"),
-						cfg.get("user_session_secure2"), true, 
+						cfg.get("accountPass2"), cfg.get("user_session_setting2"),
+						cfg.get("user_session2"), cfg.get("user_session_secure2"), true, 
 						url);
 				if (cc != null) {
 					var c = cc.GetCookies(TargetUrl)["user_session2"];
@@ -107,8 +107,8 @@ namespace namaichi.rec
 		}
 		async private Task<CookieContainer> getCookieContainer(
 				string browserNum, string isSecondLogin, string accountId,
-				string accountPass, string userSession, string userSessionSecure,
-				bool isSub, string url) {
+				string accountPass, string userSessionSetting, string userSession, 
+				string userSessionSecure, bool isSub, string url) {
 			
 			var userSessionCC = getUserSessionCC(userSession, userSessionSecure);
 			log += (userSessionCC == null) ? "前回のユーザーセッションが見つかりませんでした。" : "前回のユーザーセッションが見つかりました。";
@@ -176,6 +176,19 @@ namespace namaichi.rec
 							//cfg.set("user_session_secure", secureC.Value);
 							uss = secureC.Value;
 						*/
+						return accCC;
+					}
+				}
+			}
+			
+			if (browserNum == "3" || 
+			    	isSecondLogin == "true") {
+				var accCC = getUserSessionCookie(userSessionSetting);
+				log += (accCC == null) ? "ユーザーセッションログインからユーザーセッションを取得できませんでした。" : "アカウントログインからユーザーセッションを取得しました。";
+				if (accCC != null) {
+					util.debugWriteLine("userSession setting ishtml5login");
+					if (isHtml5Login(accCC, url)) {
+						util.debugWriteLine("userSession setting login ok");
 						return accCC;
 					}
 				}
@@ -512,6 +525,21 @@ namespace namaichi.rec
 				}
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message+e.StackTrace);
+				return null;
+			}
+		}
+		public CookieContainer getUserSessionCookie(string us) {
+			try {
+				if (string.IsNullOrEmpty(us)) {
+					log += "UserSessionが設定されていませんでした " + (us == null ? "null" : "空欄");
+					return null;
+				}
+				var cc = new CookieContainer();
+				setUserSession(cc, new Cookie("user_session", us), null, null);
+				return cc;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message+e.StackTrace);
+				log += e.Message + e.Source + e.StackTrace;
 				return null;
 			}
 		}

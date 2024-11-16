@@ -336,7 +336,7 @@ namespace namaichi.info
         }
         
         public string toString() {
-        	return "コミュニティID=" + communityId + " コミュニティ名=" + communityName + " ユーザーID=" + hostId + " ユーザー名=" + hostName;
+        	return "チャンネルID=" + communityId + " チャンネル名=" + communityName + " ユーザーID=" + hostId + " ユーザー名=" + hostName;
         }
         public void setBehavior(Dictionary<string, bool> dic) {
         	try {

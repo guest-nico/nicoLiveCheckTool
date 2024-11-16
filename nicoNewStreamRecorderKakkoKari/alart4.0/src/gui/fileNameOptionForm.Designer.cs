@@ -241,7 +241,7 @@ namespace namaichi
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(123, 22);
 			this.label14.TabIndex = 0;
-			this.label14.Text = "{4} コミュニティ名";
+			this.label14.Text = "{4} チャンネル名";
 			// 
 			// label13
 			// 
@@ -250,7 +250,7 @@ namespace namaichi
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(123, 22);
 			this.label13.TabIndex = 0;
-			this.label13.Text = "{3} コミュニティID";
+			this.label13.Text = "{3} チャンネルID";
 			// 
 			// label12
 			// 

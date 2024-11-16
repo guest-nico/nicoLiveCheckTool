@@ -100,12 +100,12 @@ namespace namaichi
 			this.label16 = new System.Windows.Forms.Label();
 			this.officialBtn = new System.Windows.Forms.Button();
 			this.label13 = new System.Windows.Forms.Label();
+			this.mustComList = new System.Windows.Forms.ComboBox();
+			this.mustUserList = new System.Windows.Forms.ComboBox();
 			this.mustKeywordList = new System.Windows.Forms.ComboBox();
 			this.memberOnlyList = new System.Windows.Forms.ComboBox();
 			this.isOfficialChkBtn = new System.Windows.Forms.CheckBox();
 			this.panel2 = new System.Windows.Forms.Panel();
-			this.mustUserList = new System.Windows.Forms.ComboBox();
-			this.mustComList = new System.Windows.Forms.ComboBox();
 			this.behaviorGroupBox.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comThumbBox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.userThumbBox)).BeginInit();
@@ -140,7 +140,7 @@ namespace namaichi
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(68, 15);
 			this.label1.TabIndex = 4;
-			this.label1.Text = "コミュニティID";
+			this.label1.Text = "チャンネルID";
 			// 
 			// label2
 			// 
@@ -148,7 +148,7 @@ namespace namaichi
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(68, 15);
 			this.label2.TabIndex = 5;
-			this.label2.Text = "コミュニティ名";
+			this.label2.Text = "チャンネル名";
 			// 
 			// communityId
 			// 
@@ -593,7 +593,7 @@ namespace namaichi
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(256, 48);
 			this.label9.TabIndex = 23;
-			this.label9.Text = "（コミュニティ名、コミュニティID、放送者名、タイトル、説明、放送ID。スペース区切りでワードを複数指定可(OR条件)。語頭に「-」で「含まない」判定(NOT条件" +
+			this.label9.Text = "（放送者名、チャンネル名、チャンネルID、タイトル、説明、放送ID。スペース区切りでワードを複数指定可(OR条件)。語頭に「-」で「含まない」判定(NOT条件" +
 			")）。";
 			// 
 			// comThumbBox
@@ -774,6 +774,30 @@ namespace namaichi
 			this.label13.TabIndex = 9;
 			this.label13.Text = "限定・有料";
 			// 
+			// mustComList
+			// 
+			this.mustComList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.mustComList.FormattingEnabled = true;
+			this.mustComList.Items.AddRange(new object[] {
+									"十分条件",
+									"必要条件"});
+			this.mustComList.Location = new System.Drawing.Point(257, 69);
+			this.mustComList.Name = "mustComList";
+			this.mustComList.Size = new System.Drawing.Size(82, 20);
+			this.mustComList.TabIndex = 28;
+			// 
+			// mustUserList
+			// 
+			this.mustUserList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.mustUserList.FormattingEnabled = true;
+			this.mustUserList.Items.AddRange(new object[] {
+									"十分条件",
+									"必要条件"});
+			this.mustUserList.Location = new System.Drawing.Point(257, 170);
+			this.mustUserList.Name = "mustUserList";
+			this.mustUserList.Size = new System.Drawing.Size(82, 20);
+			this.mustUserList.TabIndex = 28;
+			// 
 			// mustKeywordList
 			// 
 			this.mustKeywordList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -824,30 +848,6 @@ namespace namaichi
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(381, 377);
 			this.panel2.TabIndex = 31;
-			// 
-			// mustUserList
-			// 
-			this.mustUserList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.mustUserList.FormattingEnabled = true;
-			this.mustUserList.Items.AddRange(new object[] {
-									"十分条件",
-									"必要条件"});
-			this.mustUserList.Location = new System.Drawing.Point(257, 170);
-			this.mustUserList.Name = "mustUserList";
-			this.mustUserList.Size = new System.Drawing.Size(82, 20);
-			this.mustUserList.TabIndex = 28;
-			// 
-			// mustComList
-			// 
-			this.mustComList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.mustComList.FormattingEnabled = true;
-			this.mustComList.Items.AddRange(new object[] {
-									"十分条件",
-									"必要条件"});
-			this.mustComList.Location = new System.Drawing.Point(257, 69);
-			this.mustComList.Name = "mustComList";
-			this.mustComList.Size = new System.Drawing.Size(82, 20);
-			this.mustComList.TabIndex = 28;
 			// 
 			// addForm
 			// 

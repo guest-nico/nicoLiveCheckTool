@@ -164,9 +164,9 @@ namespace namaichi.info
 					
 					if ((!string.IsNullOrEmpty(comId) && (comId == ai.communityId)) ||
 							(type == "official" && ai.communityId == "official")) {
-						if (_favorite.IndexOf("コミュニティID") == -1) {
+						if (_favorite.IndexOf("チャンネルID") == -1) {
 							if (_favorite != "") _favorite += ",";
-							_favorite += "コミュニティID";
+							_favorite += "チャンネルID";
 						}
 						if (memo != "") memo += ",";
 						memo += ai.memo;

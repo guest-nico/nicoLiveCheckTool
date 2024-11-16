@@ -38,7 +38,7 @@ namespace namaichi.rec
 			this.form = form;
 		}
 		public void exitsCheckClicked(bool isUser) {
-			var str = isUser ? "ユーザー" : "コミュニティ";
+			var str = isUser ? "ユーザー" : "チャンネル";
 			if ((isUser && userExistsCheckLock != null) ||
 			    	(!isUser && coChExistsCheckLock != null)) {
 				var res = form.showMessageBox("既に" + str + "存在チェック実行中です。中断しますか？", 
@@ -54,7 +54,7 @@ namespace namaichi.rec
 						MessageBoxIcon.Warning, 
 						MessageBoxDefaultButton.Button2);
 				if (res == DialogResult.Cancel) return;
-				var l = isUser ? new ToolMenuLock("ユーザー存在チェック中", -1) : new ToolMenuLock("コミュ存在チェック中", -1); 
+				var l = isUser ? new ToolMenuLock("ユーザー存在チェック中", -1) : new ToolMenuLock("チャンネル存在チェック中", -1); 
 				setExistsCheckLock(isUser, l);
 				setToolMenuStatusBar();
 				Task.Factory.StartNew(() => existsCheck(l, form, str, isUser));
@@ -295,7 +295,7 @@ namespace namaichi.rec
 		public void addBulkFromFollowComStart() 
 		{
 			if (bulkAddFromFollowComLock != null) {
-				var res = form.showMessageBox("既に参加コミュ一括登録実行中です。中断しますか？", 
+				var res = form.showMessageBox("既に参加ユーザー・チャンネル一括登録実行中です。中断しますか？", 
 						"確認", MessageBoxButtons.OKCancel, 
 						MessageBoxIcon.Warning, 
 						MessageBoxDefaultButton.Button2);
@@ -357,11 +357,11 @@ namespace namaichi.rec
 						}
 						var isStartRet = -1;
 						var msg = name + "(" + id + ") の" 
-								+ (f.isAddToCom ? "参加コミュ" : "フォローユーザーID") + "は\r\n未登録：" 
+								+ (f.isAddToCom ? "参加チャンネル" : "フォローユーザーID") + "は\r\n未登録：" 
 								+  addFollowList.Count + "件" 
 								+ "(ユーザー:" + addCount[0] + " コミュニティ:" + addCount[1] + " チャンネル:" + addCount[2] 
 								+ ")　登録済み："	+ (followList.Count - addFollowList.Count) 
-								+ "　です。\r\n未登録の" + (f.isAddToCom ? "参加コミュニティ" : "フォローユーザーID")
+								+ "　です。\r\n未登録の" + (f.isAddToCom ? "参加チャンネル" : "フォローユーザーID")
 								+ "を登録しますか？";
 						Task.Factory.StartNew(() => {
 								//isStartRet = util.showModelessMessageBox(msg, "確認", form, 1 | 0x100 | 0x20)
@@ -371,7 +371,7 @@ namespace namaichi.rec
 						if (isStartRet != 1) 
 							return;
 						
-						var l = new ToolMenuLock((f.isAddToCom ? "参加コミュ" : "フォローユーザー") + "一括登録中", addFollowList.Count);
+						var l = new ToolMenuLock((f.isAddToCom ? "参加チャンネル" : "フォローユーザー") + "一括登録中", addFollowList.Count);
 						bulkAddFromFollowComLock = l;
 						setToolMenuStatusBar();
 						Task.Factory.StartNew(() => bulkAddFromFollowCom(l, addFollowList, followList.Count, f.follow, cc, f.isAddToCom));
@@ -456,7 +456,7 @@ namespace namaichi.rec
 			for (var i = 0; i < addList.Count; i++) {
 				var id = addList[i];
 				if (bulkAddFromFollowComLock != _lock) {
-					util.showModelessMessageBox("参加コミュ一括登録が中断されました", "", form);
+					util.showModelessMessageBox("参加チャンネル一括登録が中断されました", "", form);
 					setToolMenuStatusBar();
 					return;
 				}
@@ -495,7 +495,7 @@ namespace namaichi.rec
 				setToolMenuStatusBar();
 				//Thread.Sleep(2000);
 			}
-			util.showModelessMessageBox("新規登録：" + got + "　登録済み：" + (allNum - got) + "　エラー：" + error, "参加コミュ登録完了", form);
+			util.showModelessMessageBox("新規登録：" + got + "　登録済み：" + (allNum - got) + "　エラー：" + error, "参加チャンネル登録完了", form);
 			bulkAddFromFollowComLock = null;
 			setToolMenuStatusBar();
 			//form.changedListContent();
@@ -514,12 +514,12 @@ namespace namaichi.rec
 				else comThumbLock = null;
 				setToolMenuStatusBar();
 			} else {
-				var res = form.showMessageBox("取得完了までに未取得" + (isUser ? "ユーザ" : "コミュ") + "画数のの\"約3倍の秒数\"がかかります。チェックしますか？",
+				var res = form.showMessageBox("取得完了までに未取得" + (isUser ? "ユーザ" : "チャンネル") + "画数のの\"約3倍の秒数\"がかかります。チェックしますか？",
 						"確認", MessageBoxButtons.OKCancel, 
 						MessageBoxIcon.Warning, 
 						MessageBoxDefaultButton.Button2);
 				if (res == DialogResult.Cancel) return;
-				var l = isUser ? new ToolMenuLock("未取得ユーザ画取得中", -1) : new ToolMenuLock("未取得コミュ画取得中", -1); 
+				var l = isUser ? new ToolMenuLock("未取得ユーザ画取得中", -1) : new ToolMenuLock("未取得チャンネル画取得中", -1); 
 				if (isUser) userThumbLock = l;
 				else comThumbLock = l;
 				setToolMenuStatusBar();
@@ -569,7 +569,7 @@ namespace namaichi.rec
 				var ai = getAiList[i];
 				if ((isUser && userThumbLock != _lock) ||
 				    	(!isUser && comThumbLock != _lock)) {
-					util.showModelessMessageBox("未取得" + (isUser ? "ユーザ" : "コミュ") + "画取得が中断されました", "", form);
+					util.showModelessMessageBox("未取得" + (isUser ? "ユーザ" : "チャンネル") + "画取得が中断されました", "", form);
 					setToolMenuStatusBar();
 					return;
 				}
@@ -587,7 +587,7 @@ namespace namaichi.rec
 				setToolMenuStatusBar();
 				Thread.Sleep(3000);
 			}
-			util.showModelessMessageBox("取得：" + got + "　画像無し：" + no + "　エラー：" + error, "未取得" + (isUser ? "ユーザ" : "コミュ") + "画取得終了", form);
+			util.showModelessMessageBox("取得：" + got + "　画像無し：" + no + "　エラー：" + error, "未取得" + (isUser ? "ユーザ" : "チャンネル") + "画取得終了", form);
 			if (isUser) userThumbLock = null;
 			else comThumbLock = null;
 			setToolMenuStatusBar();

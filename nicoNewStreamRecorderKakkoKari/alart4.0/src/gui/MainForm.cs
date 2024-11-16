@@ -841,8 +841,6 @@ namespace namaichi
 					setNotifyIcon();
    		       	} catch (Exception e) {
    		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
-   		       		//debug
-   		       		//addLogText("[最近の放送日時 debug]エラー " + lvid + e.Message + e.Source + e.StackTrace + e.TargetSite);
    		       	}  	
 			});
 		}
@@ -1447,7 +1445,7 @@ namespace namaichi
 		public void setHosoLogStatusBar(RssItem item) {
 			formAction(() => {
    		       	try {
-					var buf = "[" + DateTime.Parse(item.pubDate).ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss") + "] 放送ID：" + item.lvId + " コミュニティID：" + item.comId + "　ユーザー名：" + item.hostName;
+					var buf = "[" + DateTime.Parse(item.pubDate).ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss") + "] 放送ID：" + item.lvId + " チャンネルID：" + item.comId + "　ユーザー名：" + item.hostName;
 					lastHosoStatusBar.Text = buf;
    		       	} catch (Exception e) {
    		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
@@ -3006,7 +3004,7 @@ namespace namaichi
 							util.openUrlBrowser(url, config);
 						else Clipboard.SetText(url);
 					}
-				} else if (action.StartsWith("コミュニティURLを")) {
+				} else if (action.StartsWith("チャンネルURLを")) {
 					if (ai.communityId != null && ai.communityId != "") {
 						var url = (ai.communityId.IndexOf("ch") > -1) ? 
 								("https://ch.nicovideo.jp/" + ai.communityId) :
@@ -3535,7 +3533,7 @@ namespace namaichi
 						var url = "";
 						if (t == "放送URL") {
 							url = "https://live.nicovideo.jp/watch/" + li.lvId;
-						} else if (t == "コミュニティURL") {
+						} else if (t == "チャンネルURL") {
 							var isChannel = li.comId.IndexOf("ch") > -1;
 							url = (isChannel) ? 
 									("https://ch.nicovideo.jp/" + li.comId) :
@@ -3544,7 +3542,7 @@ namespace namaichi
 							url = li.title;
 						} else if (t == "放送者") {
 							url = li.hostName;
-						} else if (t == "コミュニティ名") {
+						} else if (t == "チャンネル名") {
 							url = li.comName;
 						} else if (t == "説明") {
 							url = li.description;
@@ -3611,8 +3609,6 @@ namespace namaichi
 			Task.Factory.StartNew(() => resetLiveList());
 		}
 		void resetLiveList() {
-			//util.debugWriteLine((System.Windows.Forms.RadioButton)sender);
-			
 			if (Thread.CurrentThread == madeThread)
 					util.debugWriteLine("lock form thread resetLiveList");
 			
@@ -3646,35 +3642,37 @@ namespace namaichi
 			bool isFavoriteOnly = bool.Parse(config.get("FavoriteOnly"));
 			try {
 				liveList.CurrentCell = null;
-				
 				formAction(() => {
 					for (var i = liveListDataSource.Count - 1; i > -1; i--) {
-						//var isDisplay = (isAll || liveListDataSource[i].MainCategory == cateName);
-						var isDisplay = liveListDataSource[i].isDisplay(sender.Text[0]);
-						var isMemberOnly = !string.IsNullOrEmpty(liveListDataSource[i].memberOnly);
-						
-				        if (BlindOnlyA && isMemberOnly &&
-						   		string.IsNullOrEmpty(liveListDataSource[i].favorite))
-				        	isDisplay = false;
-				        if (BlindOnlyB && isMemberOnly)
-				        	isDisplay = false;
-						if (BlindQuestion && cateName != "全て" &&
-				            	string.IsNullOrEmpty(liveListDataSource[i].lvId))
-				        	isDisplay = false;
-				        if (isFavoriteOnly && string.IsNullOrEmpty(liveListDataSource[i].favorite))
-				        	isDisplay = false;
-				        if (!isLiveListSearchVisible(liveListDataSource[i]))
-				        	isDisplay = false;
-				        
-						if (!isDisplay) {
-							liveListDataReserve.Add(liveListDataSource[i]);
-							liveListDataSource.Remove(liveListDataSource[i]);
-				        } else {
-				        	//util.debugWriteLine("disp " + liveListDataSource[i].title);
-				        }
+						try {
+							//var isDisplay = (isAll || liveListDataSource[i].MainCategory == cateName);
+							var isDisplay = liveListDataSource[i].isDisplay(sender.Text[0]);
+							var isMemberOnly = !string.IsNullOrEmpty(liveListDataSource[i].memberOnly);
+							
+					        if (BlindOnlyA && isMemberOnly &&
+							   		string.IsNullOrEmpty(liveListDataSource[i].favorite))
+					        	isDisplay = false;
+					        if (BlindOnlyB && isMemberOnly)
+					        	isDisplay = false;
+							if (BlindQuestion && cateName != "全て" &&
+					            	string.IsNullOrEmpty(liveListDataSource[i].lvId))
+					        	isDisplay = false;
+					        if (isFavoriteOnly && string.IsNullOrEmpty(liveListDataSource[i].favorite.Trim()))
+					        	isDisplay = false;
+					        if (!isLiveListSearchVisible(liveListDataSource[i]))
+					        	isDisplay = false;
+					        
+							if (!isDisplay) {
+								liveListDataReserve.Add(liveListDataSource[i]);
+								liveListDataSource.Remove(liveListDataSource[i]);
+					        } else {
+					        	//util.debugWriteLine("disp " + liveListDataSource[i].title);
+					        }
+		           		} catch (Exception e) {
+							addLogText(e.Message + e.Source + e.StackTrace + e.TargetSite);
+		           		}
 				    }
 				});
-				
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
@@ -3724,10 +3722,6 @@ namespace namaichi
 					}
 				}
 			});
-			
-			
-			
-			
 			
 		}
 		public void getVisiRow(bool isAll = false) {
@@ -4395,7 +4389,7 @@ namespace namaichi
 		{
 			var comFollowIndex = -1;
 			foreach (DataGridViewColumn c in alartList.Columns) 
-				if (c.Name == "ｺﾐｭﾆﾃｨﾌｫﾛｰ") comFollowIndex = c.Index;
+				if (c.Name == "ﾁｬﾝﾈﾙﾌｫﾛｰ") comFollowIndex = c.Index;
 			
 			var isFollow = disableFollowMenu.Checked;
 			//((DataGridViewButtonColumn)alartList.Columns[comFollowIndex]).di
@@ -6030,7 +6024,7 @@ namespace namaichi
 					return li.pubDateDt.ToString();
 			else {
 				var s = pi.GetValue(li, null).ToString();
-				if ((columnName == "放送ID" || columnName == "コミュニティID") && !string.IsNullOrEmpty(s)) {
+				if ((columnName == "放送ID" || columnName == "チャンネルID") && !string.IsNullOrEmpty(s)) {
 					return s.Substring(2).PadLeft(12);
 				} else return pi.GetValue(li, null).ToString(); 
 			}

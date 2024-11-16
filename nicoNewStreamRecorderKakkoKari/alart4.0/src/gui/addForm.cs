@@ -133,7 +133,7 @@ namespace namaichi
 			var isNoKeyword = (isSimpleKeywordRadioBtn.Checked && keywordText.Text == "") ||
 					(isCustomKeywordRadioBtn.Checked && customKw == null);
 			if (communityNameText.Text == "" && userNameText.Text == "" && isNoKeyword) {
-				util.showMessageBoxCenterForm(this, "有効なコミュニティIDかユーザーIDかキーワードが入力されていないです");
+				util.showMessageBoxCenterForm(this, "有効なチャンネルIDかユーザーIDかキーワードが入力されていないです");
 				return;
 			}
 			
@@ -216,7 +216,7 @@ namespace namaichi
 			var isNoKeyword = (isSimpleKeywordRadioBtn.Checked && keywordText.Text == "") ||
 					(isCustomKeywordRadioBtn.Checked && customKw == null);
 			if (communityNameText.Text == "" && userNameText.Text == "" && isNoKeyword) {
-				util.showMessageBoxCenterForm(this, "有効なコミュニティIDかユーザーIDかキーワードが入力されていないです");
+				util.showMessageBoxCenterForm(this, "有効なチャンネルIDかユーザーIDかキーワードが入力されていないです");
 				return;
 			}
 			
@@ -523,7 +523,7 @@ namespace namaichi
 			var isUser = !num.StartsWith("c");
 			Image img;
 			if (ThumbnailManager.isExist(num, out img)) {
-				var type = isUser ? "ユーザー" : "コミュニティ";
+				var type = isUser ? "ユーザー" : "チャンネル";
 				if (isUser) userThumbBox.Image = new Bitmap(img, userThumbBox.Size);
 				else comThumbBox.Image = new Bitmap(img, comThumbBox.Size);
 			

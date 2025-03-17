@@ -331,6 +331,7 @@ namespace namaichi
 			this.alartListFollowUserMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.alartListUnFollowComMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.alartListUnFollowUserMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.alartUserListFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator41 = new System.Windows.Forms.ToolStripSeparator();
 			this.openAppliAMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliBMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -342,7 +343,6 @@ namespace namaichi
 			this.openAppliHMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliIMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliJMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.alartUserListFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.notifyIconMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.notifyIconRecentSeparator = new System.Windows.Forms.ToolStripSeparator();
@@ -511,6 +511,17 @@ namespace namaichi
 			this.taskListCopyArgsMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
 			this.taskListRemoveLineMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator45 = new System.Windows.Forms.ToolStripSeparator();
+			this.taskOpenAppliAMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.taskOpenAppliBMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.taskOpenAppliCMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.taskOpenAppliDMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.taskOpenAppliEMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.taskOpenAppliFMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.taskOpenAppliGMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.taskOpenAppliHMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.taskOpenAppliIMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.taskOpenAppliJMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabPage5 = new System.Windows.Forms.TabPage();
 			this.addTwitterBtn = new System.Windows.Forms.Button();
 			this.twitterList = new System.Windows.Forms.DataGridView();
@@ -2862,7 +2873,7 @@ namespace namaichi
 									this.openAppliIMenu,
 									this.openAppliJMenu});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(269, 446);
+			this.contextMenuStrip1.Size = new System.Drawing.Size(269, 468);
 			this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStrip1Opening);
 			// 
 			// openLastHosoMenu
@@ -2951,7 +2962,7 @@ namespace namaichi
 									this.alartListUnFollowComMenu,
 									this.alartListUnFollowUserMenu});
 			this.alartListFollowMenu.Name = "contextMenuStrip6";
-			this.alartListFollowMenu.OwnerItem = this.alartUserListFollowMenu;
+			this.alartListFollowMenu.OwnerItem = this.alartComListFollowMenu;
 			this.alartListFollowMenu.Size = new System.Drawing.Size(246, 92);
 			this.alartListFollowMenu.Opening += new System.ComponentModel.CancelEventHandler(this.AlartListFollowMenuOpening);
 			// 
@@ -2982,6 +2993,13 @@ namespace namaichi
 			this.alartListUnFollowUserMenu.Size = new System.Drawing.Size(245, 22);
 			this.alartListUnFollowUserMenu.Text = "この行のユーザーをフォロー解除する";
 			this.alartListUnFollowUserMenu.Click += new System.EventHandler(this.AlartListUnFollowUserMenuClick);
+			// 
+			// alartUserListFollowMenu
+			// 
+			this.alartUserListFollowMenu.DropDown = this.alartListFollowMenu;
+			this.alartUserListFollowMenu.Name = "alartUserListFollowMenu";
+			this.alartUserListFollowMenu.Size = new System.Drawing.Size(268, 22);
+			this.alartUserListFollowMenu.Text = "フォロー";
 			// 
 			// toolStripSeparator41
 			// 
@@ -3057,13 +3075,6 @@ namespace namaichi
 			this.openAppliJMenu.Size = new System.Drawing.Size(268, 22);
 			this.openAppliJMenu.Text = "最近行われた放送のURLをアプリJで開く";
 			this.openAppliJMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
-			// 
-			// alartUserListFollowMenu
-			// 
-			this.alartUserListFollowMenu.DropDown = this.alartListFollowMenu;
-			this.alartUserListFollowMenu.Name = "alartUserListFollowMenu";
-			this.alartUserListFollowMenu.Size = new System.Drawing.Size(268, 22);
-			this.alartUserListFollowMenu.Text = "フォロー";
 			// 
 			// notifyIcon
 			// 
@@ -4679,47 +4690,133 @@ namespace namaichi
 									this.taskListCopyUrlMenu,
 									this.taskListCopyArgsMenu,
 									this.toolStripSeparator6,
-									this.taskListRemoveLineMenu});
+									this.taskListRemoveLineMenu,
+									this.toolStripSeparator45,
+									this.taskOpenAppliAMenu,
+									this.taskOpenAppliBMenu,
+									this.taskOpenAppliCMenu,
+									this.taskOpenAppliDMenu,
+									this.taskOpenAppliEMenu,
+									this.taskOpenAppliFMenu,
+									this.taskOpenAppliGMenu,
+									this.taskOpenAppliHMenu,
+									this.taskOpenAppliIMenu,
+									this.taskOpenAppliJMenu});
 			this.contextMenuStrip2.Name = "contextMenuStrip1";
-			this.contextMenuStrip2.Size = new System.Drawing.Size(164, 104);
+			this.contextMenuStrip2.Size = new System.Drawing.Size(269, 330);
 			// 
 			// taskListOpenUrlMenu
 			// 
 			this.taskListOpenUrlMenu.Name = "taskListOpenUrlMenu";
-			this.taskListOpenUrlMenu.Size = new System.Drawing.Size(163, 22);
+			this.taskListOpenUrlMenu.Size = new System.Drawing.Size(268, 22);
 			this.taskListOpenUrlMenu.Text = "放送のURLを開く";
 			this.taskListOpenUrlMenu.Click += new System.EventHandler(this.TaskListOpenUrlMenuClick);
 			// 
 			// toolStripSeparator5
 			// 
 			this.toolStripSeparator5.Name = "toolStripSeparator5";
-			this.toolStripSeparator5.Size = new System.Drawing.Size(160, 6);
+			this.toolStripSeparator5.Size = new System.Drawing.Size(265, 6);
 			// 
 			// taskListCopyUrlMenu
 			// 
 			this.taskListCopyUrlMenu.Name = "taskListCopyUrlMenu";
-			this.taskListCopyUrlMenu.Size = new System.Drawing.Size(163, 22);
+			this.taskListCopyUrlMenu.Size = new System.Drawing.Size(268, 22);
 			this.taskListCopyUrlMenu.Text = "放送のURLをコピー";
 			this.taskListCopyUrlMenu.Click += new System.EventHandler(this.TaskListCopyUrlMenuClick);
 			// 
 			// taskListCopyArgsMenu
 			// 
 			this.taskListCopyArgsMenu.Name = "taskListCopyArgsMenu";
-			this.taskListCopyArgsMenu.Size = new System.Drawing.Size(163, 22);
+			this.taskListCopyArgsMenu.Size = new System.Drawing.Size(268, 22);
 			this.taskListCopyArgsMenu.Text = "引数をコピー";
 			this.taskListCopyArgsMenu.Click += new System.EventHandler(this.TaskListCopyArgsMenuClick);
 			// 
 			// toolStripSeparator6
 			// 
 			this.toolStripSeparator6.Name = "toolStripSeparator6";
-			this.toolStripSeparator6.Size = new System.Drawing.Size(160, 6);
+			this.toolStripSeparator6.Size = new System.Drawing.Size(265, 6);
 			// 
 			// taskListRemoveLineMenu
 			// 
 			this.taskListRemoveLineMenu.Name = "taskListRemoveLineMenu";
-			this.taskListRemoveLineMenu.Size = new System.Drawing.Size(163, 22);
+			this.taskListRemoveLineMenu.Size = new System.Drawing.Size(268, 22);
 			this.taskListRemoveLineMenu.Text = "この行を削除";
 			this.taskListRemoveLineMenu.Click += new System.EventHandler(this.TaskListRemoveLineMenuClick);
+			// 
+			// toolStripSeparator45
+			// 
+			this.toolStripSeparator45.Name = "toolStripSeparator45";
+			this.toolStripSeparator45.Size = new System.Drawing.Size(265, 6);
+			// 
+			// taskOpenAppliAMenu
+			// 
+			this.taskOpenAppliAMenu.Name = "taskOpenAppliAMenu";
+			this.taskOpenAppliAMenu.Size = new System.Drawing.Size(268, 22);
+			this.taskOpenAppliAMenu.Text = "最近行われた放送のURLをアプリAで開く";
+			this.taskOpenAppliAMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// taskOpenAppliBMenu
+			// 
+			this.taskOpenAppliBMenu.Name = "taskOpenAppliBMenu";
+			this.taskOpenAppliBMenu.Size = new System.Drawing.Size(268, 22);
+			this.taskOpenAppliBMenu.Text = "最近行われた放送のURLをアプリBで開く";
+			this.taskOpenAppliBMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// taskOpenAppliCMenu
+			// 
+			this.taskOpenAppliCMenu.Name = "taskOpenAppliCMenu";
+			this.taskOpenAppliCMenu.Size = new System.Drawing.Size(268, 22);
+			this.taskOpenAppliCMenu.Text = "最近行われた放送のURLをアプリCで開く";
+			this.taskOpenAppliCMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// taskOpenAppliDMenu
+			// 
+			this.taskOpenAppliDMenu.Name = "taskOpenAppliDMenu";
+			this.taskOpenAppliDMenu.Size = new System.Drawing.Size(268, 22);
+			this.taskOpenAppliDMenu.Text = "最近行われた放送のURLをアプリDで開く";
+			this.taskOpenAppliDMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// taskOpenAppliEMenu
+			// 
+			this.taskOpenAppliEMenu.Name = "taskOpenAppliEMenu";
+			this.taskOpenAppliEMenu.Size = new System.Drawing.Size(268, 22);
+			this.taskOpenAppliEMenu.Text = "最近行われた放送のURLをアプリEで開く";
+			this.taskOpenAppliEMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// taskOpenAppliFMenu
+			// 
+			this.taskOpenAppliFMenu.Name = "taskOpenAppliFMenu";
+			this.taskOpenAppliFMenu.Size = new System.Drawing.Size(268, 22);
+			this.taskOpenAppliFMenu.Text = "最近行われた放送のURLをアプリFで開く";
+			this.taskOpenAppliFMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// taskOpenAppliGMenu
+			// 
+			this.taskOpenAppliGMenu.Name = "taskOpenAppliGMenu";
+			this.taskOpenAppliGMenu.Size = new System.Drawing.Size(268, 22);
+			this.taskOpenAppliGMenu.Text = "最近行われた放送のURLをアプリGで開く";
+			this.taskOpenAppliGMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// taskOpenAppliHMenu
+			// 
+			this.taskOpenAppliHMenu.Name = "taskOpenAppliHMenu";
+			this.taskOpenAppliHMenu.Size = new System.Drawing.Size(268, 22);
+			this.taskOpenAppliHMenu.Text = "最近行われた放送のURLをアプリHで開く";
+			this.taskOpenAppliHMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// taskOpenAppliIMenu
+			// 
+			this.taskOpenAppliIMenu.Name = "taskOpenAppliIMenu";
+			this.taskOpenAppliIMenu.Size = new System.Drawing.Size(268, 22);
+			this.taskOpenAppliIMenu.Text = "最近行われた放送のURLをアプリIで開く";
+			this.taskOpenAppliIMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// taskOpenAppliJMenu
+			// 
+			this.taskOpenAppliJMenu.Name = "taskOpenAppliJMenu";
+			this.taskOpenAppliJMenu.Size = new System.Drawing.Size(268, 22);
+			this.taskOpenAppliJMenu.Text = "最近行われた放送のURLをアプリJで開く";
+			this.taskOpenAppliJMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
 			// 
 			// tabPage5
 			// 
@@ -6027,6 +6124,17 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripMenuItem taskOpenAppliJMenu;
+		private System.Windows.Forms.ToolStripMenuItem taskOpenAppliIMenu;
+		private System.Windows.Forms.ToolStripMenuItem taskOpenAppliHMenu;
+		private System.Windows.Forms.ToolStripMenuItem taskOpenAppliGMenu;
+		private System.Windows.Forms.ToolStripMenuItem taskOpenAppliFMenu;
+		private System.Windows.Forms.ToolStripMenuItem taskOpenAppliEMenu;
+		private System.Windows.Forms.ToolStripMenuItem taskOpenAppliDMenu;
+		private System.Windows.Forms.ToolStripMenuItem taskOpenAppliCMenu;
+		private System.Windows.Forms.ToolStripMenuItem taskOpenAppliBMenu;
+		private System.Windows.Forms.ToolStripMenuItem taskOpenAppliAMenu;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator45;
 		private System.Windows.Forms.ToolStripMenuItem openAppliJNotAlartMenu;
 		private System.Windows.Forms.ToolStripMenuItem openAppliINotAlartMenu;
 		private System.Windows.Forms.ToolStripMenuItem openAppliHNotAlartMenu;

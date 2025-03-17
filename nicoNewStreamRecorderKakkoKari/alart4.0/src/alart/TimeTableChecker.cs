@@ -184,10 +184,11 @@ namespace namaichi.alart
 								Thread.Sleep(2000);
 							}
 							if (hig.openDt != DateTime.MinValue) {
-								var _isFollow = false; 
+								//var _isFollow = false; 
 								ri = new RssItem(l.title, "lv" + l.id, hig.dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"),
 										hig.description, 
-										util.getCommunityName(hig.communityId, out _isFollow, null), 
+										//util.getCommunityName(hig.communityId, out _isFollow, null),
+										hig.group,
 										hig.communityId,
 										hig.userName,//"", 
 										hig.thumbnail, "false", "", hig.isPayment);

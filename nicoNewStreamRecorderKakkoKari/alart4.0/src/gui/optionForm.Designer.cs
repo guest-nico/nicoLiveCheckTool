@@ -40,7 +40,7 @@ namespace namaichi
 			this.button4 = new System.Windows.Forms.Button();
 			this.appliTab = new System.Windows.Forms.TabPage();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
-			this.label30 = new System.Windows.Forms.Label();
+			this.displayArgInfoLabel = new System.Windows.Forms.LinkLabel();
 			this.label26 = new System.Windows.Forms.Label();
 			this.argJText = new System.Windows.Forms.TextBox();
 			this.label27 = new System.Windows.Forms.Label();
@@ -373,7 +373,7 @@ namespace namaichi
 			// 
 			// groupBox6
 			// 
-			this.groupBox6.Controls.Add(this.label30);
+			this.groupBox6.Controls.Add(this.displayArgInfoLabel);
 			this.groupBox6.Controls.Add(this.label26);
 			this.groupBox6.Controls.Add(this.argJText);
 			this.groupBox6.Controls.Add(this.label27);
@@ -451,12 +451,17 @@ namespace namaichi
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "アプリケーション設定(Recorder登録)";
 			// 
-			// label30
+			// displayArgInfoLabel
 			// 
-			this.label30.Location = new System.Drawing.Point(14, 399);
-			this.label30.Name = "label30";
-			this.label30.Size = new System.Drawing.Size(337, 29);
-			this.label30.TabIndex = 47;
+			this.displayArgInfoLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+									| System.Windows.Forms.AnchorStyles.Right)));
+			this.displayArgInfoLabel.Location = new System.Drawing.Point(297, 401);
+			this.displayArgInfoLabel.Name = "displayArgInfoLabel";
+			this.displayArgInfoLabel.Size = new System.Drawing.Size(124, 13);
+			this.displayArgInfoLabel.TabIndex = 47;
+			this.displayArgInfoLabel.TabStop = true;
+			this.displayArgInfoLabel.Text = "引数の書式の説明";
+			this.displayArgInfoLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.DisplayArgInfoLabelLinkClicked);
 			// 
 			// label26
 			// 
@@ -464,7 +469,7 @@ namespace namaichi
 			this.label26.Name = "label26";
 			this.label26.Size = new System.Drawing.Size(60, 15);
 			this.label26.TabIndex = 46;
-			this.label26.Text = "追加引数";
+			this.label26.Text = "引数";
 			// 
 			// argJText
 			// 
@@ -479,7 +484,7 @@ namespace namaichi
 			this.label27.Name = "label27";
 			this.label27.Size = new System.Drawing.Size(60, 15);
 			this.label27.TabIndex = 44;
-			this.label27.Text = "追加引数";
+			this.label27.Text = "引数";
 			// 
 			// argIText
 			// 
@@ -494,7 +499,7 @@ namespace namaichi
 			this.label28.Name = "label28";
 			this.label28.Size = new System.Drawing.Size(60, 15);
 			this.label28.TabIndex = 42;
-			this.label28.Text = "追加引数";
+			this.label28.Text = "引数";
 			// 
 			// argHText
 			// 
@@ -539,7 +544,7 @@ namespace namaichi
 			this.label29.Name = "label29";
 			this.label29.Size = new System.Drawing.Size(60, 15);
 			this.label29.TabIndex = 37;
-			this.label29.Text = "追加引数";
+			this.label29.Text = "引数";
 			// 
 			// argGText
 			// 
@@ -579,7 +584,7 @@ namespace namaichi
 			this.label16.Name = "label16";
 			this.label16.Size = new System.Drawing.Size(60, 15);
 			this.label16.TabIndex = 32;
-			this.label16.Text = "追加引数";
+			this.label16.Text = "引数";
 			// 
 			// argFText
 			// 
@@ -594,7 +599,7 @@ namespace namaichi
 			this.label17.Name = "label17";
 			this.label17.Size = new System.Drawing.Size(60, 15);
 			this.label17.TabIndex = 30;
-			this.label17.Text = "追加引数";
+			this.label17.Text = "引数";
 			// 
 			// argEText
 			// 
@@ -609,7 +614,7 @@ namespace namaichi
 			this.label18.Name = "label18";
 			this.label18.Size = new System.Drawing.Size(60, 15);
 			this.label18.TabIndex = 28;
-			this.label18.Text = "追加引数";
+			this.label18.Text = "引数";
 			// 
 			// argDText
 			// 
@@ -744,7 +749,7 @@ namespace namaichi
 			this.label15.Name = "label15";
 			this.label15.Size = new System.Drawing.Size(60, 15);
 			this.label15.TabIndex = 17;
-			this.label15.Text = "追加引数";
+			this.label15.Text = "引数";
 			// 
 			// argCText
 			// 
@@ -759,7 +764,7 @@ namespace namaichi
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(60, 15);
 			this.label14.TabIndex = 15;
-			this.label14.Text = "追加引数";
+			this.label14.Text = "引数";
 			// 
 			// argBText
 			// 
@@ -854,7 +859,7 @@ namespace namaichi
 			this.argA.Name = "argA";
 			this.argA.Size = new System.Drawing.Size(60, 15);
 			this.argA.TabIndex = 13;
-			this.argA.Text = "追加引数";
+			this.argA.Text = "引数";
 			// 
 			// nameJText
 			// 
@@ -2693,7 +2698,6 @@ namespace namaichi
 			this.isOverwriteOldReserveChkBox.TabIndex = 16;
 			this.isOverwriteOldReserveChkBox.Text = "予約リストが一杯の場合、古い予約を削除して予約する";
 			this.isOverwriteOldReserveChkBox.UseVisualStyleBackColor = true;
-			this.isOverwriteOldReserveChkBox.Visible = false;
 			// 
 			// isAutoReserveChkBox
 			// 
@@ -3117,6 +3121,7 @@ namespace namaichi
 			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.LinkLabel displayArgInfoLabel;
 		private System.Windows.Forms.Button userSessionTestBtn;
 		private System.Windows.Forms.RadioButton useUserSessionRadioBtn;
 		private System.Windows.Forms.TextBox userSessionText;
@@ -3277,7 +3282,6 @@ namespace namaichi
 		private System.Windows.Forms.CheckBox isPushChkBox;
 		private System.Windows.Forms.GroupBox groupBox8;
 		private System.Windows.Forms.TabPage alartTab;
-		private System.Windows.Forms.Label label30;
 		private System.Windows.Forms.Button appliGPathSanshouBtn;
 		private System.Windows.Forms.TextBox argGText;
 		private System.Windows.Forms.Label label29;

@@ -93,7 +93,7 @@ namespace namaichi.utility
 					return ret;
 				} else {
 					var _d = postData == null ? null : Encoding.UTF8.GetBytes(postData);
-					var r22 = util.sendRequest(url, headers, _d, method, false, null);
+					var r22 = util.sendRequest(url, headers, _d, method, isGetErrorMessage, null);
 					if (r22 == null) return null;
 					using (var r2 = r22.GetResponseStream())
 					using (var r3 = new StreamReader(r2)) {

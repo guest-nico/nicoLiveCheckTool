@@ -163,52 +163,52 @@ namespace namaichi.alart
 					if (ti.appliA && !form.notifyOffList[7]) {
 						var appliAPath = form.config.get("appliAPath");
 						var args = form.config.get("appliAArgs");
-						TaskCheck.appliProcess(appliAPath, lv, args);
+						util.appliProcessFromLvid(appliAPath, lv, args, form.check.container);
 					}
 					if (ti.appliB && !form.notifyOffList[8]) {
 						var appliBPath = form.config.get("appliBPath");
 						var args = form.config.get("appliBArgs");
-						TaskCheck.appliProcess(appliBPath, lv, args);
+						util.appliProcessFromLvid(appliBPath, lv, args, form.check.container);
 					}
 					if (ti.appliC && !form.notifyOffList[9]) {
 						var appliCPath = form.config.get("appliCPath");
 						var args = form.config.get("appliCArgs");
-						TaskCheck.appliProcess(appliCPath, lv, args);
+						util.appliProcessFromLvid(appliCPath, lv, args, form.check.container);
 					}
 					if (ti.appliD && !form.notifyOffList[10]) {
 						var appliDPath = form.config.get("appliDPath");
 						var args = form.config.get("appliDArgs");
-						TaskCheck.appliProcess(appliDPath, lv, args);
+						util.appliProcessFromLvid(appliDPath, lv, args, form.check.container);
 					}
 					if (ti.appliE && !form.notifyOffList[11]) {
 						var appliEPath = form.config.get("appliEPath");
 						var args = form.config.get("appliEArgs");
-						TaskCheck.appliProcess(appliEPath, lv, args);
+						util.appliProcessFromLvid(appliEPath, lv, args, form.check.container);
 					}
 					if (ti.appliF && !form.notifyOffList[12]) {
 						var appliFPath = form.config.get("appliFPath");
 						var args = form.config.get("appliFArgs");
-						TaskCheck.appliProcess(appliFPath, lv, args);
+						util.appliProcessFromLvid(appliFPath, lv, args, form.check.container);
 					}
 					if (ti.appliG && !form.notifyOffList[13]) {
 						var appliGPath = form.config.get("appliGPath");
 						var args = form.config.get("appliGArgs");
-						TaskCheck.appliProcess(appliGPath, lv, args);
+						util.appliProcessFromLvid(appliGPath, lv, args, form.check.container);
 					}
 					if (ti.appliH && !form.notifyOffList[14]) {
 						var appliHPath = form.config.get("appliHPath");
 						var args = form.config.get("appliHArgs");
-						TaskCheck.appliProcess(appliHPath, lv, args);
+						util.appliProcessFromLvid(appliHPath, lv, args, form.check.container);
 					}
 					if (ti.appliI && !form.notifyOffList[15]) {
 						var appliIPath = form.config.get("appliIPath");
 						var args = form.config.get("appliIArgs");
-						TaskCheck.appliProcess(appliIPath, lv, args);
+						util.appliProcessFromLvid(appliIPath, lv, args, form.check.container);
 					}
 					if (ti.appliJ && !form.notifyOffList[16]) {
 						var appliJPath = form.config.get("appliJPath");
 						var args = form.config.get("appliJArgs");
-						TaskCheck.appliProcess(appliJPath, lv, args);
+						util.appliProcessFromLvid(appliJPath, lv, args, form.check.container);
 					}
 					if (ti.popup && !form.notifyOffList[2]) {
 						TaskCheck.displayPopup(item, form);

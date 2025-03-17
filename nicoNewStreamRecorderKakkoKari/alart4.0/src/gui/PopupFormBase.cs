@@ -8,6 +8,7 @@
  */
 using System;
 using System.Drawing;
+using System.Net;
 using System.Windows.Forms;
 using System.Diagnostics;
 using namaichi.info;
@@ -28,6 +29,7 @@ namespace namaichi
 		protected bool isTest = false;
 		protected bool isTestClosePopup = false;
 		protected int testPopTime = 0;
+		protected CookieContainer cc = null;
 		
 		public PopupFormBase()
 		{
@@ -86,17 +88,7 @@ namespace namaichi
 			var path = config.get("appli" + i.ToString() + "Path");
 			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(ri.lvId, "(\\d+)");
 			var args = config.get("appli" + i.ToString() + "Args");
-			appliProcess(path, url + " " + args);
-		}
-		
-		private void appliProcess(string appliPath, string url) {
-			if (appliPath == null || appliPath == "") return;
-
-			try {
-				Process.Start(appliPath, url);
-			} catch (Exception e) {
-				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-			}
+			util.appliProcess(path, url, args, ri, cc);
 		}
 		protected void setAppliMenuVisible() {
 			var isTask = ri.hostName == "";

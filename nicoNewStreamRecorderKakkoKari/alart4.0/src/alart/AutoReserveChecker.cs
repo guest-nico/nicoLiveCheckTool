@@ -61,7 +61,8 @@ namespace namaichi.alart
 			
 			
 			//var addUrlBuf = getAddUrlList(ref recentUpdateDt);
-			var addUrlBuf = getAddUrlList2(ref recentUpdateDt);
+			//var addUrlBuf = getAddUrlList2(ref recentUpdateDt);
+			var addUrlBuf = getAddUrlList3(ref recentUpdateDt);
 			
 			foreach (var lvid in addUrlBuf) {
 				var pageUrl = "https://live.nicovideo.jp/watch/" + lvid;
@@ -71,7 +72,10 @@ namespace namaichi.alart
 					RssItem ri = null; 
 					if (!isReserveAiLive(lvid, higGetOk ? hig : null, aiList, out ri)) continue;
 					
-					var ret = new Reservation(check.container, lvid, config).live2Reserve(bool.Parse(config.get("IsOverwriteOldReserve")));
+					var r = new Reservation(check.container, lvid, config);
+					var ret = r.live2Reserve(bool.Parse(config.get("IsOverwriteOldReserve")));
+					if (r.delLog != null) check.form.addLogText(r.delLog + "のタイムシフト予約を削除しました");
+					
 					var hostName = higGetOk ? hig.userName : " ";
 					if (ret == "ok") {
 						check.form.addLogText(lvid + " " + hostName + "(" + hig.title + ")のタイムシフトを予約しました");
@@ -194,6 +198,40 @@ namespace namaichi.alart
 			}
 			return addUrlBuf;
 		}
+		List<string> getAddUrlList3(ref DateTime recentUpdateDt) {
+			var addUrlBuf = new List<string>();
+			var url = "https://api.feed.nicovideo.jp/v1/activities/followings/live?context=my_timeline";
+			for (var i = 0; i < 1; i++) {
+				try {
+					util.debugWriteLine("autoreserve i " + i);
+					var h = util.getHeader(check.container, "https://www.nicovideo.jp/", url);
+					h["Accept"] = "application/json";
+					h.Add("x-frontend-id", "6");
+					h.Add("x-frontend-version", "0");
+					h.Add("Origin", "https://www.nicovideo.jp");
+					var r = util.sendRequest(url, h, null, "GET", false, check.container);
+					if (r == null) return addUrlBuf;
+					using (var _r = r.GetResponseStream())
+					using (var sr = new StreamReader(_r)) {
+						var res = sr.ReadToEnd();
+						var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<activitiesC>(res);
+						if (obj.activities == null) break;
+						foreach (var d in obj.activities) {
+							if (d.kind.IndexOf("reserve") == -1) continue;
+							if (d.createdAt > recentUpdateDt) recentUpdateDt = d.createdAt;
+							
+							util.debugWriteLine("autoreserve data item opentime " + d.createdAt + " " + d.content.title);
+							var lvid = d.content.id;
+							if (lvid == null) continue;
+							addUrlBuf.Add(lvid);
+						}
+					}
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				}
+			}
+			return addUrlBuf;
+		}
 		private bool isReserveAiLive(string lvid, HosoInfoGetter hig, List<AlartInfo> aiList, out RssItem ri) {
 			string desc = "", comName = "", comId = "", hostName = "", 
 				isMemberOnly = "false", title = "";
@@ -239,5 +277,34 @@ namespace namaichi.alart
 	public class entriesDataObject {
 		public string type;
 		public string url;
+	}
+	public class activitiesC {
+		public List<activity> activities = null;
+		public string code = null;
+		public string impressionId = null;
+		public string nextCursor = null;
+	}
+	public class activity {
+		public bool sensitive;
+		public messageC message;
+		public class messageC {
+			public string text;
+		}
+		public string thumbnailUrl;
+		public messageC label;
+		public contentC content;
+		public string kind;
+		public DateTime createdAt;
+		public class contentC {
+			public string type;
+			public string id;
+			public string title;
+			public string url;
+			public DateTime startedAt;
+			public class program {
+				public string statusCode;
+				public string providerType;
+			}
+		}
 	}
 }

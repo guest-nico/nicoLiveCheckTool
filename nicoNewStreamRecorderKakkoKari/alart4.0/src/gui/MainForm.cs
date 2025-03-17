@@ -15,7 +15,7 @@ using System.Web.UI.WebControls.WebParts;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using System.ComponentModel;
-//using namaichi.gui;
+using Microsoft.Win32;
 using SunokoLibrary.Application;
 using System.Data;
 using System.Linq;
@@ -36,14 +36,6 @@ using namaichi.config;
 using namaichi.utility;
 using namaichi.rec;
 using namaichi.info;
-
-//using System;
-//using System.Collections.Generic;
-//using System.ComponentModel;
-
-//using System.Drawing;
-
-
 
 namespace namaichi
 {
@@ -86,7 +78,8 @@ namespace namaichi
 		private bool isAddFormDisplaying = false;
 		
 		public Thread madeThread;
-		public object liveListLock = new object();
+		private object liveListLockObj = new object();
+		public List<int> liveListLock = new List<int>();
 		//public SemaphoreSlim liveListLockS = new SemaphoreSlim(1, 1);
 		//public bool isLiveListLocking = false;
 		private bool isLiveListTimeProcessing = false;
@@ -990,6 +983,7 @@ namespace namaichi
 				return isOk;
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				addLogText("チャンネルのフォロー中に問題が発生しました " + e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return false;
 			}
 		}
@@ -999,7 +993,7 @@ namespace namaichi
 					
 				var rowIndex = dataSource.IndexOf(ai);
 				if (rowIndex == -1) return false;
-				if ((string)alartList[7, rowIndex].Value == "") return false;
+				if ((string)list[7, rowIndex].Value == "") return false;
 				if (string.IsNullOrEmpty(ai.hostFollow)) return false;
 				
 				bool isOk = false;
@@ -1025,10 +1019,18 @@ namespace namaichi
 					//bool isFollow;
 					util.getUserName(ai.hostId, out isFollow, check.container, true, config);
 					list[7, rowIndex].Value = (isFollow) ? "フォロー解除する" : "フォローする";
+				} else {
+					foreach (var _ai in alartListDataSource)
+						if (_ai.hostId == ai.hostId)
+							_ai.hostFollow = isFollow ? "フォロー解除する" : "フォローする";
+					foreach (var _ai in userAlartListDataSource)
+						if (_ai.hostId == ai.hostId)
+							_ai.hostFollow = isFollow ? "フォロー解除する" : "フォローする";
 				}
 				return isOk;
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				addLogText("ユーザーのフォロー中に問題が発生しました " + e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return false;
 			}
 		}
@@ -1510,12 +1512,12 @@ namespace namaichi
    		       	try {
        		        Form f;
        		        if (isTest) {
-       		        	f = (isSmall) ? ((Form)new SmallPopupForm(item, config, pd, showIndex, ai, 
+       		        	f = (isSmall) ? ((Form)new SmallPopupForm(item, config, pd, showIndex, ai, check.container, 
        		        	                                          isTest, poploc, poptime, isClickClose, isTopMost, isColor, opacity)) :
-       		        		((Form)new PopupForm(item, config, pd, showIndex, ai, 
+       		        		((Form)new PopupForm(item, config, pd, showIndex, ai, check.container, 
 								isTest, poploc, poptime, isClickClose, isTopMost, isColor, opacity));
        		        } else {
-						f = (isSmall) ? ((Form)new SmallPopupForm(item, config, pd, showIndex, ai, isTest)) : ((Form)new PopupForm(item, config, pd, showIndex, ai));
+						f = (isSmall) ? ((Form)new SmallPopupForm(item, config, pd, showIndex, ai, check.container, isTest)) : ((Form)new PopupForm(item, config, pd, showIndex, ai, check.container));
        		        }
 					f.Location = point;
 					f.Show();
@@ -2729,8 +2731,9 @@ namespace namaichi
 				var item2 = (ToolStripMenuItem)contextMenuStrip3.Items.Find("liveListOpenAppli" + n + "Menu", true)[0];
 				var item3 = (ToolStripMenuItem)historyListMenu.Items.Find("openAppli" + n + "HistoryMenu", true)[0];
 				var item4 = (ToolStripMenuItem)notAlartListMenu.Items.Find("openAppli" + n + "NotAlartMenu", true)[0];
+				var item5 = (ToolStripMenuItem)contextMenuStrip2.Items.Find("taskOpenAppli" + n + "Menu", true)[0];
 				
-				item.Visible = itemUser.Visible = item2.Visible = item3.Visible = item4.Visible = 
+				item.Visible = itemUser.Visible = item2.Visible = item3.Visible = item4.Visible = item5.Visible =  
 						alartList.Columns[i + 15].Visible;
 				
 				var name = config.get("appli" + n + "Name");
@@ -2741,6 +2744,7 @@ namespace namaichi
 					item2.Text = "放送URLを" + name + "で開く";
 					item3.Text = "放送URLを" + name + "で開く";
 					item4.Text = "放送URLを" + name + "で開く";
+					item5.Text = "放送URLを" + name + "で開く";
 					
 					alartList.Columns[i + 15].HeaderText = name;
 					taskList.Columns[i + 10].HeaderText = name;
@@ -2767,10 +2771,20 @@ namespace namaichi
 						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace);
 					}
 				}
-			} else if (parent == historyListMenu || parent == notAlartListMenu) {
-				var dataSource = parent == historyListMenu ? 
-						historyListDataSource : notAlartListDataSource;
-				var list = parent == historyListMenu ? historyList : notAlartList;
+			} else if (tabControl1.SelectedTab.Text == "通知履歴" ||
+			          tabControl1.SelectedTab.Text == "予約履歴") {
+				SortableBindingList<HistoryInfo> dataSource = null;
+				DataGridView list = null;
+				
+				if (tabControl1.SelectedTab.Text == "通知履歴") {
+					dataSource = parent == historyListMenu ? 
+							historyListDataSource : notAlartListDataSource;
+					list = parent == historyListMenu ? historyList : notAlartList;
+				} else {
+					dataSource = reserveHistoryListDataSource;
+					list = reserveHistoryList;
+				}
+				
 				foreach (DataGridViewCell c in list.SelectedCells) {
 					try {
 						if (selectedRowIndexList.IndexOf(c.RowIndex) > -1) continue;
@@ -2781,18 +2795,34 @@ namespace namaichi
 						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace);
 					}
 				}
+			} else if (tabControl1.SelectedTab.Text == "時刻起動") {
+				var dataSource = taskListDataSource;
+				var list = taskList;
+				
+				foreach (DataGridViewCell c in list.SelectedCells) {
+					try {
+						if (selectedRowIndexList.IndexOf(c.RowIndex) > -1) continue;
+						selectedRowIndexList.Add(c.RowIndex);
+						var ti = taskListDataSource[c.RowIndex];
+						lvList.Add(ti.lvId);
+					} catch (Exception ee) {
+						util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace);
+					}
+				}
 			}
-			
 			
 			foreach (var lv in lvList) {
 				if (string.IsNullOrEmpty(lv)) continue;
 				try {
-					var n = ((ToolStripMenuItem)sender).Name.Substring(9, 1);
+					//var n = ((ToolStripMenuItem)sender).Name.Substring(9, 1);
+					var n = util.getRegGroup(((ToolStripMenuItem)sender).Name, "Appli(.)");
+					
 					var path = config.get("appli" + n + "Path");
 					var args = config.get("appli" + n + "Args");
 					var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(lv, "(\\d+)");
 					
-					util.appliProcess(path, url + " " + args);
+					var ri = util.getRiFromLvid(lv, check.container);
+					util.appliProcess(path, url, args, ri, check.container);
 				} catch (Exception ee) {
 					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace);
 				}
@@ -3135,7 +3165,7 @@ namespace namaichi
 		void CategoryBtnPanelSizeChanged(object sender, EventArgs e)
 		{
 			util.debugWriteLine("category panel size " + categoryBtnPanel.Size.Width);
-			categoryBtnDisplayUpdate();
+			//categoryBtnDisplayUpdate();
 		}
 		void categoryBtnDisplayUpdate() {
 			//var freeWidth = liveListSearchText.Location.X - categoryBtnPanel.Location.X - 3;
@@ -4125,7 +4155,7 @@ namespace namaichi
 			    	}
 	           	});
 		}
-		private bool[] checkMenuLock = new bool[3];
+		//private bool[] checkMenuLock = new bool[3];
 		public void setToolMenuStatusBar(string t) {
 			formAction(() => {
 				existCheckStatusBar.Text = t;
@@ -5878,24 +5908,21 @@ namespace namaichi
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
-		/*
-		public void liveListLockAction(Action a, [CallerMemberName] string memberName = "") {
-			if (Thread.CurrentThread == madeThread) {
-				addLogText("_test " + memberName);
-				_liveListLockAction(a, memberName);
-			}
-			else {
-				//lock (liveListLock) {
-				//Monitor.Enter(liveListLock, ref flg);
-					_liveListLockAction(a, memberName);
-				//}
-			}
-		}
-		*/
 		public void liveListLockAction(Action a, [CallerMemberName] string memberName = "") {
 			int scrollI = 0;
+			var nowUnix = util.getUnixTime();
+			lock (liveListLockObj) {
+				liveListLock.Add(nowUnix);
+				if (liveListLock.Count > 3) {
+					for (var i = 0; i < liveListLock.Count - 3; i++)
+						liveListLock.RemoveAt(0);
+				}
+				if (liveListLock.Count >= 2 && nowUnix - liveListLock[0] < 2)
+					return;
+			}
 			bool flg = false;
-			Monitor.Enter(liveListLock, ref flg);
+			Monitor.TryEnter(liveListLock, 100, ref flg);
+			if (!flg) return;
 			var dt = DateTime.Now;
 			//if (isLiveListLocking) {
 			//	util.debugWriteLine("live list locking");
@@ -5904,7 +5931,7 @@ namespace namaichi
 			util.debugWriteLine("liveListLockAction 0 " + memberName);
 			try {
 				scrollI = liveList.FirstDisplayedScrollingRowIndex;
-				a.BeginInvoke(null, null).AsyncWaitHandle.WaitOne(15000, false);
+				a.BeginInvoke(null, null).AsyncWaitHandle.WaitOne(2000, false);
 			} finally {
 				setScrollIndex(liveList, scrollI);
 				try {
@@ -6588,7 +6615,8 @@ namespace namaichi
 					var args = config.get("appli" + n + "Args");
 					var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(li.lvId, "(\\d+)");
 					
-					util.appliProcess(path, url + " " + args);
+					var ri = util.getRiFromLvid(li.lvId, check.container);
+					util.appliProcess(path, url, args, ri, check.container);
 			
 				} catch (Exception eee) {
 					util.debugWriteLine(eee.Message + eee.Source + eee.StackTrace + eee.TargetSite);

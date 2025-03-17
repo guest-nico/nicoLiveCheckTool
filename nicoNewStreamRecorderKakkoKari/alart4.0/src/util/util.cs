@@ -34,8 +34,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.8.5";
-	public static string versionDayStr = "2024/11/29";
+	public static string versionStr = "ver0.1.8.6";
+	public static string versionDayStr = "2025/03/18";
 	public static string osName = null;
 	public static string osType = null;
 	public static bool isWebRequestOk = false;
@@ -242,6 +242,11 @@ class util {
 		*/
 		return name;
 	}
+	public static string getOkArg(string arg) {
+		arg = getOkFileName(arg, false);
+		return arg.Replace("\"", "”");
+	}
+	/*
 	private static string getSubFolderName(string host, string group, string title, string lvId, string communityNum, string userId, config cfg) {
 		var n = cfg.get("subFolderNameType");
 		if (n == null) n = "1";
@@ -273,14 +278,39 @@ class util {
 		else if (n == "7") return hiduke + "_" + host + "_" + group + "(" + communityNum + ")_" + title + "(" + lvId + ")";
 		else if (n == "8") return hiduke + "_" + group + "(" + communityNum + ")_" + host + "_" + title + "(" + lvId + ")";
 		else if (n == "9") return hiduke + "_" + title + "(" + lvId + ")_" + host + "_" + group + "(" + communityNum + ")";
-		else if (n == "10") return getDokujiSetteiFileName(host, group, title, lvId, communityNum, cfg.get("filenameformat"), _hiduke);
+		else if (n == "10") return getDokujiSetteiFileName(host, group, title, lvId, communityNum, cfg.get("filenameformat"), _hiduke, "0");
 		else return host + "_" + communityNum + "(" + group + ")_" + lvId + "(" + title + ")";
-		
-		
 	}
-	public static string getDokujiSetteiFileName(string host, string group, string title, string lvId, string communityNum, string format, DateTime _openTime) {
+	*/
+	public static string getDokujiSetteiArg(string host, string group, string title, string lvId, string communityNum, string format, DateTime _openTime, string hostId, string us) {
 		var type = format;
-		if (type == null) return "";
+		if (string.IsNullOrEmpty(type)) type = "{url}";
+		if (type.IndexOf("{url}") == -1 && type.IndexOf("{nourl}") == -1)
+			type = "{url} " + type;
+		if (type.IndexOf("{nourl}") > -1) {
+			type = type.Replace("{url}", " ");
+			type = type.Replace("{nourl}", " ");
+		}
+		type = type.Replace("{nourl}", " ");
+		
+		var b = "";
+		var m = new Regex(@"[^\s""]+|""([^""]*)""").Matches(type);
+		foreach (Match _m in m) {
+			if (b != "") b += " ";			
+			
+			var s = _m.Groups[0].Value;
+			if (s.StartsWith("\"")) {
+				b += s;
+				continue;
+			}
+			if (s.IndexOf("{1}") > -1 ||
+			    	s.IndexOf("{2}") > -1 ||
+			    	s.IndexOf("{4}") > -1)
+				b += "\"" + s + "\"";
+			else b += s;
+		}
+		type = b;
+		                  
 		//var dt = DateTime.Now;
 		var dt = _openTime;
 		var yearBuf = ("0000" + dt.Year.ToString());
@@ -305,17 +335,20 @@ class util {
 		type = type.Replace("{m}", minute);
 		type = type.Replace("{s}", second);
 		type = type.Replace("{0}", lvId);
-		type = type.Replace("{1}", title);
-		type = type.Replace("{2}", host);
+		type = type.Replace("{1}", getOkArg(title));
+		type = type.Replace("{2}", getOkArg(host));
 		type = type.Replace("{3}", communityNum);
-		type = type.Replace("{4}", group);
-		type = getOkFileName(type, false);
+		type = type.Replace("{4}", getOkArg(group));
+		type = type.Replace("{5}", hostId);
+		type = type.Replace("{url}", "https://live.nicovideo.jp/watch/" + lvId);
+		type = type.Replace("{us}", us);
+		type = type.Replace("{noarg}", " ");
+		//type = getOkFileName(type, false);
 		return type;
-		
 	}
 	public static string getFileNameTypeSample(string filenametype) {
 			//var format = cfg.get("filenameformat");
-			return getDokujiSetteiFileName("放送者名", "チャンネル名", "タイトル", "lv12345", "co9876", filenametype, DateTime.Now);
+			return getDokujiSetteiArg("放送者名", "チャンネル名", "タイトル", "lv12345", "ch9876", filenametype, DateTime.Now, "123", "user_session_12345_abcde");
 		}
 	public static string getOkCommentFileName(config cfg, string fName, string lvid, bool isTimeShift, bool isRtmp) {
 		var kakutyousi = (cfg.get("IsgetcommentXml") == "true") ? ".xml" : ".json";
@@ -335,147 +368,6 @@ class util {
 			util.debugWriteLine("comment file path " + fName + "/" + name + kakutyousi);
 			return fName + "/" + name + kakutyousi;
 		}
-	}
-	public static string getLastTimeshiftFileName(string host, 
-			string group, string title, string lvId, string communityNum, 
-			string userId, config cfg, long _openTime) {
-		host = getOkFileName(host, false);
-		group = getOkFileName(group, false);
-		title = getOkFileName(title, false);
-		
-		string[] jarpath = getJarPath();
-//		util.debugWriteLine(jarpath);
-		//string dirPath = jarpath[0] + "\\rec\\" + host;
-		string _dirPath = (cfg.get("IsdefaultRecordDir") == "true") ?
-			(jarpath[0] + "\\rec") : cfg.get("recordDir");
-		string dirPath = _dirPath;
-		
-		string sfn = null;
-		if (cfg.get("IscreateSubfolder") == "true") {
-			sfn = getSubFolderName(host, group, title, lvId, communityNum, userId,  cfg);
-			if (sfn.Length > 120) sfn = sfn.Substring(0, 120);
-			if (sfn == null) return null;
-			dirPath += "/" + sfn;
-		}
-		util.debugWriteLine("getLastTimeshiftFileName dirPath " + dirPath + " sfn " + sfn);
-
-		var segmentSaveType = cfg.get("segmentSaveType");
-
-		var name = getFileName(host, group, title, lvId, communityNum,  cfg, _openTime);
-		if (name.Length > 200) name = name.Substring(0, 200);
-		
-		util.debugWriteLine("getLastTimeshiftFileName name " + name);
-		                    
-		//長いパス調整
-		if (name.Length + dirPath.Length > 234) {
-			name = lvId;
-			if (name.Length + dirPath.Length > 234 && sfn != null) {
-				sfn = sfn.Substring(0, 3);
-				dirPath = _dirPath + "/" + sfn;
-								
-//				if (!Directory.Exists(dirPath)) Directory.CreateDirectory(dirPath);
-				
-				if (!Directory.Exists(dirPath)) {
-					util.debugWriteLine("getLastTS FN too long not exist dir path " + dirPath);
-					return null;
-				}
-				
-			}
-		}
-		
-		if (name.Length + dirPath.Length > 234) {
-			util.debugWriteLine("too long " + name + " " + dirPath + " " + name.Length + " " + dirPath.Length);
-			return null;
-		}
-		
-//		if (!Directory.Exists(dirPath)) Directory.CreateDirectory(dirPath);
-		if (!Directory.Exists(dirPath)) {
-			util.debugWriteLine("no exists " + dirPath);
-			return null;
-		}
-		
-		util.debugWriteLine("getLast TS FN 00");
-		
-		string existFile = null;
-		var files = Directory.GetFiles(dirPath);
-		for (int i = 0; i < 1000; i++) {
-			var fName = dirPath + "/" + name + "_" + "ts" + i.ToString();
-			
-			if (segmentSaveType == "0") {
-				//util.existFile(dirPath, name + "_ts_\\d+h\\d+m\\d+s_" + i.ToString());
-				var _existFile = util.existFile(files, "_ts_(\\d+h\\d+m\\d+s)_" + i.ToString() + ".ts", name);
-				util.debugWriteLine("getLastTimeshiftFileName existfile " + _existFile);
-				if (_existFile != null) {
-					existFile = _existFile;
-					continue;
-				}
-			}
-			
-			if (segmentSaveType == "1") {
-				if (Directory.Exists(fName)) {
-					return fName;
-				}
-				if (File.Exists(fName)) continue;
-				
-				/*
-				try {
-					//Directory.CreateDirectory(fName);
-					if (Directory.Exists(fName)) return fName;
-					continue;
-				} catch (Exception e) {
-					util.debugWriteLine("get last timeshift file create dir exception " + fName + e.Message + e.StackTrace + e.Source + e.TargetSite);
-					continue;
-				}
-				*/
-				
-				return null;
-			}
-			
-			util.debugWriteLine("getLastTimeshiftFileName dirpath " + dirPath + " fname " + fName);
-			
-			if (i == 0) {
-				util.debugWriteLine("last timeshift file " + dirPath + "/" + name + "_" + "ts" + (i - 0).ToString());
-				return null;
-//			} else util.debugWriteLine("last timeshift file " + dirPath + "/" + name + "_" + "ts" + (i - 1).ToString());
-			} else util.debugWriteLine("last timeshift file " + existFile);
-//			return dirPath + "/" + name + "_" + "ts" + (i - 1).ToString();
-			return existFile;
-//			string[] ret = {dirPath, dirPath + "/" + name + "_" + "ts" + (i - 1).ToString()};
-		}
-		return null;
-	}
-	public static string[] getLastTimeShiftFileTime(string lastFile, string segmentSaveType) {
-		if (lastFile == null) return null;
-		string fname = null;
-		if (segmentSaveType == "0") {
-			fname = lastFile + "";
-		} else {
-			var ss = new List<string>();
-			var key = new List<int>();
-			foreach (var f in Directory.GetFiles(lastFile)) {
-				if (!f.EndsWith(".ts")) continue;
-				var name = util.getRegGroup(f, ".+\\\\(.+)");
-				if (name == null) continue;
-				if (util.getRegGroup(name, "(\\d+h\\d+m\\d+s)") == null) continue;;
-				var _k = util.getRegGroup(name, "(\\d+)");
-				if (_k == null) continue;
-				ss.Add(f);
-				key.Add(int.Parse(_k));
-				  
-			}
-			if (ss.Count == 0) return null;
-			var ssArr = ss.ToArray();
-			Array.Sort(key.ToArray(), ssArr);
-			fname = ssArr[ssArr.Length - 1];
-		}
-		if (!File.Exists(fname)) return null;
-		var _name = util.getRegGroup(fname, ".+\\\\(.+)");
-		var h = util.getRegGroup(_name, "(\\d+)h");
-		var m = util.getRegGroup(_name, "(\\d+)m");
-		var s = util.getRegGroup(_name, "(\\d+)s");
-		if (h == null || m == null || s == null) return null;
-		var ret = new string[]{h, m, s};
-		return ret;
 	}
 	private static bool isExistAllExt(string fName) {
 		var ext = new string[] {".ts", ".xml", ".flv", ".avi", ".mp4",
@@ -1266,11 +1158,35 @@ class util {
 		foreach (var b in arr) s += ", " + b;
 		return s;
 	}
-	public static void appliProcess(string appliPath, string url) {
+	public static void appliProcess(string appliPath, string url, string args, RssItem ri, CookieContainer cc) {
 		if (appliPath == null || appliPath == "") return;
+		
+		try {
+			var us = "";
+			try {
+				var c = cc.GetCookies(new Uri(url));
+				us = c["user_session"] != null ? c["user_session"].Value : "";
+			} catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace);}
+			
+			var arg = util.getDokujiSetteiArg(ri.hostName, ri.comName, ri.title, ri.lvId.Trim('e'), ri.comId, args, ri.pubDateDt, ri.userId, us);
+			Process.Start(appliPath, arg);
+				
+			//Process.Start(appliPath, url);
+		} catch (Exception e) {
+			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+		}
+	}
+    public static void appliProcessFromLvid(string appliPath, string lvid, string args, CookieContainer cc) {
+		if (appliPath == null || appliPath == "") return;
+		var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
 
 		try {
-			Process.Start(appliPath, url);
+			appliPath = appliPath.Trim();
+			
+			var ri = util.getRiFromLvid(lvid, cc);
+			if (ri != null)
+				util.appliProcess(appliPath, url, args, ri, cc);
+			else Process.Start(appliPath, url + " " + args); 
 		} catch (Exception e) {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 		}
@@ -1949,6 +1865,23 @@ class util {
 			
 		} catch (Exception e) {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+		}
+	}
+	public static RssItem getRiFromLvid(string lvid, CookieContainer cc) {
+		try {
+			var hg = new namaichi.rec.HosoInfoGetter();
+			var r = hg.get(lvid, cc);
+			
+			var i = new RssItem(hg.title, lvid, hg.openDt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"), hg.description, hg.group, hg.communityId, hg.userName, hg.thumbnail, hg.isMemberOnly.ToString(), "", hg.isPayment);
+			i.setUserId(hg.userId);
+			i.setTag(hg.tags);
+			i.category = hg.category;
+			i.type = hg.type;
+			i.pubDateDt = hg.dt;
+			return i;
+		} catch (Exception e) {
+			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			return null;
 		}
 	}
 }

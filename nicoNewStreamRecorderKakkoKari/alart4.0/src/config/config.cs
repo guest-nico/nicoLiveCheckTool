@@ -348,7 +348,13 @@ public class config
 	        {"liveListCacheIcon", "true"},
 	        {"liveListGetIcon", "true"},
 	        
-	        
+	        {"IsBulkAddAuto",""},
+	        {"bulkAddAccountId",""},
+			{"bulkAddAccountPass",""},
+			{"bulkAddUser_session",""},
+			{"bulkAddFollowType",""},
+			{"bulkAddIsAddToCom",""},
+			
 			{"Height","480"},
 			{"Width","830"},
 			{"X",""},

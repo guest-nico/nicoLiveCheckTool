@@ -300,6 +300,7 @@ namespace namaichi.alart
 			if (alartItem.communityId != null && alartItem.communityId.StartsWith("co")) {
 				if (!isNosetComId && isNosetHostName && isNosetKeyword)
 				    return false;
+				//isComOk = alartItem.isMustCom; //mustならok、orなら!okとして判定に関与しないよう扱い
 			}
 			
 			if (!isAlartMatch(alartItem, isComOk, 
@@ -386,7 +387,7 @@ namespace namaichi.alart
 				return true;
 			}
 		}
-		private void appliProcess(string appliPath, string lvid, string args) {
+		private void appliProcess(string appliPath, string lvid, string args, RssItem ri) {
 			if (appliPath == null || appliPath == "") return;
 			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
 
@@ -408,7 +409,7 @@ namespace namaichi.alart
 				if (arg == null) arg = "";
 				arg += " " + url;
 				*/
-				Process.Start(appliPath, url + " " + args);
+				util.appliProcess(appliPath, url, args, ri, container);
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
@@ -471,52 +472,52 @@ namespace namaichi.alart
 			if (dpi.isAppliA && !form.notifyOffList[7]) {
 				var appliAPath = form.config.get("appliAPath");
 				var args = form.config.get("appliAArgs");
-				appliProcess(appliAPath, item.lvId, args);
+				appliProcess(appliAPath, item.lvId, args, item);
 			}
 			if (dpi.isAppliB && !form.notifyOffList[8]) {
 				var appliBPath = form.config.get("appliBPath");
 				var args = form.config.get("appliBArgs");
-				appliProcess(appliBPath, item.lvId, args);
+				appliProcess(appliBPath, item.lvId, args, item);
 			}
 			if (dpi.isAppliC && !form.notifyOffList[9]) {
 				var appliCPath = form.config.get("appliCPath");
 				var args = form.config.get("appliCArgs");
-				appliProcess(appliCPath, item.lvId, args);
+				appliProcess(appliCPath, item.lvId, args, item);
 			}
 			if (dpi.isAppliD && !form.notifyOffList[10]) {
 				var appliDPath = form.config.get("appliDPath");
 				var args = form.config.get("appliDArgs");
-				appliProcess(appliDPath, item.lvId, args);
+				appliProcess(appliDPath, item.lvId, args, item);
 			}
 			if (dpi.isAppliE && !form.notifyOffList[11]) {
 				var appliEPath = form.config.get("appliEPath");
 				var args = form.config.get("appliEArgs");
-				appliProcess(appliEPath, item.lvId, args);
+				appliProcess(appliEPath, item.lvId, args, item);
 			}
 			if (dpi.isAppliF && !form.notifyOffList[12]) {
 				var appliFPath = form.config.get("appliFPath");
 				var args = form.config.get("appliFArgs");
-				appliProcess(appliFPath, item.lvId, args);
+				appliProcess(appliFPath, item.lvId, args, item);
 			}
 			if (dpi.isAppliG && !form.notifyOffList[13]) {
 				var appliGPath = form.config.get("appliGPath");
 				var args = form.config.get("appliGArgs");
-				appliProcess(appliGPath, item.lvId, args);
+				appliProcess(appliGPath, item.lvId, args, item);
 			}
 			if (dpi.isAppliH && !form.notifyOffList[14]) {
 				var appliHPath = form.config.get("appliHPath");
 				var args = form.config.get("appliHArgs");
-				appliProcess(appliHPath, item.lvId, args);
+				appliProcess(appliHPath, item.lvId, args, item);
 			}
 			if (dpi.isAppliI && !form.notifyOffList[15]) {
 				var appliIPath = form.config.get("appliIPath");
 				var args = form.config.get("appliIArgs");
-				appliProcess(appliIPath, item.lvId, args);
+				appliProcess(appliIPath, item.lvId, args, item);
 			}
 			if (dpi.isAppliJ && !form.notifyOffList[16]) {
 				var appliJPath = form.config.get("appliJPath");
 				var args = form.config.get("appliJArgs");
-				appliProcess(appliJPath, item.lvId, args);
+				appliProcess(appliJPath, item.lvId, args, item);
 			}
 			if (dpi.isPopup && !form.notifyOffList[2] && targetAi.Count > 0) {
 				displayPopup(item, targetAi[0]);
@@ -839,6 +840,7 @@ namespace namaichi.alart
 			var lastCheckHistoryLiveTime = DateTime.MinValue;
 			var lastGetCookieTime = DateTime.Now;
 			var lastCheckNotifyHistoryTime = DateTime.Now;
+			var lastBulkAddTime = DateTime.MinValue;
 			while (true) {
 				/*
 				var ut = userNameUpdateInterval;
@@ -905,6 +907,12 @@ namespace namaichi.alart
 				}
 				if (bool.Parse(form.config.get("IsNotSleep")))
 					util.setThreadExecutionState();
+				
+				if (DateTime.Now - lastBulkAddTime > TimeSpan.FromHours(1) &&
+				    	bool.Parse(form.config.get("IsBulkAddAuto"))) {
+					new ToolMenuProcess(form).bulkAdd();
+					lastBulkAddTime = DateTime.Now;
+				}
 				Thread.Sleep(10000);
 			}
 			

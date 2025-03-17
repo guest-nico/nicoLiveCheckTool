@@ -28,6 +28,7 @@ namespace namaichi
 		
 		public SmallPopupForm(RssItem item, config.config config, 
 				PopupDisplay pd, int showIndex, AlartInfo ai,
+				CookieContainer cc,
 				bool isTest = false, string poploc = null, int poptime = 0,
 				bool isClickClose = true,  
 				bool isTopMost = true, Color[] isColor = null, double opacity = 0.9)
@@ -58,7 +59,7 @@ namespace namaichi
 			//titleLabel.Text = (item.isMemberOnly ? "(限定)" : "") + titleLabel.Text;
 			
 			hostNameLabel.Text = util.removeTag(item.hostName);
-			communityNameLabel.Text = util.removeTag(item.comName);
+			communityNameLabel.Text = item.comId != "co0" ? util.removeTag(item.comName) : "ユーザー配信";
 			descryptionLabel.Text = util.removeTag(item.description);
 			var _Text = util.removeTag(item.hostName + "/" + item.comName);
 			if (ai != null && ai.keyword != null && ai.keyword != "") _Text = ai.keyword + "-" + _Text;
@@ -98,6 +99,7 @@ namespace namaichi
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			}
+			this.cc = cc;
 		}
 		private bool isOkStrWidth(string s) {
 			var w = TextRenderer.MeasureText(s, titleLabel.Font).Width;

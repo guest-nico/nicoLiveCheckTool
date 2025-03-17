@@ -403,7 +403,7 @@ namespace namaichi.utility
 				var count = form.getAlartListCount(isUserMode);
 				for (var i = 0; i < count; i++) {
 					if (ai.communityId != null && ai.communityId != "" && ai.communityId != "official" && form.alartListDataSource[i].communityId == 
-					    	ai.communityId) {
+					    	ai.communityId && ai.communityId != "co0") {
 						var m = (ai.communityId.StartsWith("co")) ? "コミュニティ" : "チャンネル";
 						
 						

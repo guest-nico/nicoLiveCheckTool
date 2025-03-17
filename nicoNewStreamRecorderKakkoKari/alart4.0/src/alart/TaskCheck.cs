@@ -9,8 +9,10 @@
 using System;
 using System.Diagnostics;
 using System.Media;
+using System.Net;
 using System.Threading;
 using namaichi.info;
+using namaichi.rec;
 
 namespace namaichi.alart
 {
@@ -53,52 +55,52 @@ namespace namaichi.alart
 			if (ti.appliA && !form.notifyOffList[7]) {
 				var appliAPath = form.config.get("appliAPath");
 				var args = form.config.get("appliAArgs") + " " + ti.args;
-				appliProcess(appliAPath, ti.lvId, args);
+				util.appliProcessFromLvid(appliAPath, ti.lvId, args, form.check.container);
 			}
 			if (ti.appliB && !form.notifyOffList[8]) {
 				var appliBPath = form.config.get("appliBPath");
 				var args = form.config.get("appliBArgs") + " " + ti.args;
-				appliProcess(appliBPath, ti.lvId, args);
+				util.appliProcessFromLvid(appliBPath, ti.lvId, args, form.check.container);
 			}
 			if (ti.appliC && !form.notifyOffList[9]) {
 				var appliCPath = form.config.get("appliCPath");
 				var args = form.config.get("appliCArgs") + " " + ti.args;
-				appliProcess(appliCPath, ti.lvId, args);
+				util.appliProcessFromLvid(appliCPath, ti.lvId, args, form.check.container);
 			}
 			if (ti.appliD && !form.notifyOffList[10]) {
 				var appliDPath = form.config.get("appliDPath");
 				var args = form.config.get("appliDArgs") + " " + ti.args;
-				appliProcess(appliDPath, ti.lvId, args);
+				util.appliProcessFromLvid(appliDPath, ti.lvId, args, form.check.container);
 			}
 			if (ti.appliE && !form.notifyOffList[11]) {
 				var appliEPath = form.config.get("appliEPath");
 				var args = form.config.get("appliEArgs") + " " + ti.args;
-				appliProcess(appliEPath, ti.lvId, args);
+				util.appliProcessFromLvid(appliEPath, ti.lvId, args, form.check.container);
 			}
 			if (ti.appliF && !form.notifyOffList[12]) {
 				var appliFPath = form.config.get("appliFPath");
 				var args = form.config.get("appliFArgs") + " " + ti.args;
-				appliProcess(appliFPath, ti.lvId, args);
+				util.appliProcessFromLvid(appliFPath, ti.lvId, args, form.check.container);
 			}
 			if (ti.appliG && !form.notifyOffList[13]) {
 				var appliGPath = form.config.get("appliGPath");
 				var args = form.config.get("appliGArgs") + " " + ti.args;
-				appliProcess(appliGPath, ti.lvId, args);
+				util.appliProcessFromLvid(appliGPath, ti.lvId, args, form.check.container);
 			}
 			if (ti.appliH && !form.notifyOffList[14]) {
 				var appliHPath = form.config.get("appliHPath");
 				var args = form.config.get("appliHArgs") + " " + ti.args;
-				appliProcess(appliHPath, ti.lvId, args);
+				util.appliProcessFromLvid(appliHPath, ti.lvId, args, form.check.container);
 			}
 			if (ti.appliI && !form.notifyOffList[15]) {
 				var appliIPath = form.config.get("appliIPath");
 				var args = form.config.get("appliIArgs") + " " + ti.args;
-				appliProcess(appliIPath, ti.lvId, args);
+				util.appliProcessFromLvid(appliIPath, ti.lvId, args, form.check.container);
 			}
 			if (ti.appliJ && !form.notifyOffList[16]) {
 				var appliJPath = form.config.get("appliJPath");
 				var args = form.config.get("appliJArgs") + " " + ti.args;
-				appliProcess(appliJPath, ti.lvId, args);
+				util.appliProcessFromLvid(appliJPath, ti.lvId, args, form.check.container);
 			}
 			if (ti.popup && !form.notifyOffList[2]) {
 				displayPopup(item, form);
@@ -118,18 +120,6 @@ namespace namaichi.alart
 			
 			form.taskListUpdateState(ti);
 			if (ti.isDelete) form.taskListRemoveLine(ti);
-		}
-		public static void appliProcess(string appliPath, string lvid, string args) {
-			if (appliPath == null || appliPath == "") return;
-			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
-
-			try {
-				appliPath = appliPath.Trim();
-				
-				Process.Start(appliPath, url + " " + args);
-			} catch (Exception e) {
-				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-			}
 		}
 		public static void displayPopup(RssItem item, MainForm form) {
 			form.check.popup.show(item, null);

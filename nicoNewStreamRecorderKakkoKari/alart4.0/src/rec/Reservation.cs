@@ -9,10 +9,12 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace namaichi.rec
 {
@@ -27,6 +29,7 @@ namespace namaichi.rec
 		
 		string useUrl = "https://live.nicovideo.jp/api/timeshift.ticket.use";
 		//string reservationsUrl = "https://live.nicovideo.jp/api/timeshift.reservations";
+		public string delLog = null;
 		
 		public Reservation(CookieContainer cc, string lv, config.config cfg)
 		{
@@ -155,8 +158,8 @@ namespace namaichi.rec
 			var r = getLive2ReserveRes2();
 			if (r == "タイムシフトの予約上限に達しました。" 
 			    	&& isOverwrite) {
-				//return overwriteReserve2();
-				return r;
+				return overwriteReserve2();
+				//return r;
 			}
 			return r;
 		}
@@ -236,19 +239,41 @@ namespace namaichi.rec
 			return res != null;
 		}
 		*/
-		/*
+		
 		private string overwriteReserve2() {
 			try {
 				var res = util.getPageSource("https://live.nicovideo.jp/embed/timeshift-reservations", cc);
 				if (res == null) return "予約の上書き中、予約リストの取得に失敗しました";
 				var props = util.getRegGroup(res, "data-props=\"(.+)\"");
-				if (res == null) return "予約の上書き中、予約リスト内の情報の取得に失敗しました";
+				if (props == null) return "予約の上書き中、予約リスト内の情報の取得に失敗しました";
 				props = props.Replace("&quot;", "\"");
-				var json = JObject.Parse(props);
 				
+				var oldId = ""; 
+				var oldTitle = "";
+				var timeList = new List<DateTime>();
+				var lvList = new List<DateTime>();
+				var timeM = new Regex("\"openTime\":\"(.+?)\"").Matches(props);
+				var lvM = new Regex("programId\":\"(lv\\d+)").Matches(props);
+				var titleM = new Regex("title\":\"(.+?)\"").Matches(props);
 				
-				var oldId = util.getRegGroup(res, "programId&quot;:&quot;(lv\\d+)");
-				if (oldId == null) return "予約の上書き中、予約中の放送IDの取得に失敗しました";
+				if (timeM.Count != lvM.Count || timeM.Count != lvM.Count)
+					oldId = util.getRegGroup(res, "programId&quot;:&quot;(lv\\d+)");
+				else {
+					var minI = 0;
+					var minT = DateTime.MaxValue;
+					for (var i = 0; i < lvM.Count; i++) {
+						var t = DateTime.Parse(timeM[i].Groups[1].Value);
+						if (t < minT) {
+							minI = i;
+							minT = t; 
+						}
+					}
+					oldId = lvM[minI].Groups[1].Value;
+					oldTitle = titleM[minI].Groups[1].Value;
+				}
+				
+				//var oldId = util.getRegGroup(res, "programId&quot;:&quot;(lv\\d+)");
+				if (string.IsNullOrEmpty(oldId)) return "予約の上書き中、予約中の放送IDの取得に失敗しました";
 				var delUrl = "https://live2.nicovideo.jp/api/v2/timeshift/reservations?programIds=" + oldId; 
 				var header = getLive2ReserveHeader2(lv);
 				var r = util.sendRequest(delUrl, header, null, "DELETE", true);
@@ -257,14 +282,16 @@ namespace namaichi.rec
 				using (var sr = new StreamReader(rr)) {
 					var delRes = sr.ReadToEnd();
 					if (delRes.IndexOf("\"status\":200") == -1) return "予約の上書き中、以前の予約の取り消しに失敗しました";
+					util.debugWriteLine("reserve del " + oldId);
 				}
+				delLog = oldId + " " + oldTitle;
 				return getLive2ReserveRes2();
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
 				return "予約の上書き中、何らかの問題が発生しました。";
 			}
 		}
-		*/
+		
 		public string getLive2ReserveRes2() {
 			try {
 				var url = "https://live2.nicovideo.jp/api/v2/programs/" + lv + "/timeshift/reservation";

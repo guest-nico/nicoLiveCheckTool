@@ -8,7 +8,7 @@
  */
 namespace namaichi
 {
-	partial class fileNameOptionForm
+	partial class ArgOptionForm
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
@@ -37,14 +37,20 @@ namespace namaichi
 		private void InitializeComponent()
 		{
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.fileNameTypeLabel = new System.Windows.Forms.TextBox();
 			this.fileNameTypeText = new System.Windows.Forms.TextBox();
-			this.fileNameTypeLabel = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.fileNameTypeTitleBtn = new System.Windows.Forms.Button();
 			this.fileNameTypeSimpleBtn = new System.Windows.Forms.Button();
 			this.fileNameTypeDateBtn = new System.Windows.Forms.Button();
 			this.fileNameTypeDefaultBtn = new System.Windows.Forms.Button();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.label20 = new System.Windows.Forms.Label();
+			this.label15 = new System.Windows.Forms.Label();
+			this.label18 = new System.Windows.Forms.Label();
+			this.label16 = new System.Windows.Forms.Label();
+			this.label17 = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
@@ -58,8 +64,8 @@ namespace namaichi
 			this.label10 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
-			this.FileNameTypeCancelBtn = new System.Windows.Forms.Button();
 			this.fileNameTypeOkBtn = new System.Windows.Forms.Button();
+			this.copyBtn = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -67,35 +73,30 @@ namespace namaichi
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.fileNameTypeText);
 			this.groupBox1.Controls.Add(this.fileNameTypeLabel);
-			this.groupBox1.Location = new System.Drawing.Point(16, 15);
-			this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
+			this.groupBox1.Controls.Add(this.fileNameTypeText);
+			this.groupBox1.Location = new System.Drawing.Point(12, 12);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-			this.groupBox1.Size = new System.Drawing.Size(485, 121);
+			this.groupBox1.Size = new System.Drawing.Size(364, 97);
 			this.groupBox1.TabIndex = 0;
 			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "ファイル名の書式";
-			// 
-			// fileNameTypeText
-			// 
-			this.fileNameTypeText.Location = new System.Drawing.Point(8, 75);
-			this.fileNameTypeText.Margin = new System.Windows.Forms.Padding(4);
-			this.fileNameTypeText.Name = "fileNameTypeText";
-			this.fileNameTypeText.Size = new System.Drawing.Size(425, 22);
-			this.fileNameTypeText.TabIndex = 1;
-			this.fileNameTypeText.TextChanged += new System.EventHandler(this.fileNameTypeText_Changed);
+			this.groupBox1.Text = "引数の書式テスト";
 			// 
 			// fileNameTypeLabel
 			// 
-			this.fileNameTypeLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.fileNameTypeLabel.Location = new System.Drawing.Point(8, 32);
-			this.fileNameTypeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.fileNameTypeLabel.Location = new System.Drawing.Point(6, 26);
 			this.fileNameTypeLabel.Name = "fileNameTypeLabel";
-			this.fileNameTypeLabel.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
-			this.fileNameTypeLabel.Size = new System.Drawing.Size(427, 28);
-			this.fileNameTypeLabel.TabIndex = 0;
+			this.fileNameTypeLabel.ReadOnly = true;
+			this.fileNameTypeLabel.Size = new System.Drawing.Size(320, 19);
+			this.fileNameTypeLabel.TabIndex = 2;
+			// 
+			// fileNameTypeText
+			// 
+			this.fileNameTypeText.Location = new System.Drawing.Point(6, 60);
+			this.fileNameTypeText.Name = "fileNameTypeText";
+			this.fileNameTypeText.Size = new System.Drawing.Size(320, 19);
+			this.fileNameTypeText.TabIndex = 1;
+			this.fileNameTypeText.TextChanged += new System.EventHandler(this.fileNameTypeText_Changed);
 			// 
 			// groupBox2
 			// 
@@ -103,61 +104,61 @@ namespace namaichi
 			this.groupBox2.Controls.Add(this.fileNameTypeSimpleBtn);
 			this.groupBox2.Controls.Add(this.fileNameTypeDateBtn);
 			this.groupBox2.Controls.Add(this.fileNameTypeDefaultBtn);
-			this.groupBox2.Location = new System.Drawing.Point(16, 144);
-			this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
+			this.groupBox2.Location = new System.Drawing.Point(12, 115);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
-			this.groupBox2.Size = new System.Drawing.Size(485, 81);
+			this.groupBox2.Size = new System.Drawing.Size(364, 56);
 			this.groupBox2.TabIndex = 1;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "テンプレート";
 			// 
 			// fileNameTypeTitleBtn
 			// 
-			this.fileNameTypeTitleBtn.Location = new System.Drawing.Point(328, 31);
-			this.fileNameTypeTitleBtn.Margin = new System.Windows.Forms.Padding(4);
+			this.fileNameTypeTitleBtn.Location = new System.Drawing.Point(246, 25);
 			this.fileNameTypeTitleBtn.Name = "fileNameTypeTitleBtn";
-			this.fileNameTypeTitleBtn.Size = new System.Drawing.Size(99, 29);
+			this.fileNameTypeTitleBtn.Size = new System.Drawing.Size(74, 23);
 			this.fileNameTypeTitleBtn.TabIndex = 2;
 			this.fileNameTypeTitleBtn.Text = "タイトル";
 			this.fileNameTypeTitleBtn.UseVisualStyleBackColor = true;
-			this.fileNameTypeTitleBtn.Click += new System.EventHandler(this.fileNameTypeTitleBtn_Click);
+			this.fileNameTypeTitleBtn.Visible = false;
 			// 
 			// fileNameTypeSimpleBtn
 			// 
-			this.fileNameTypeSimpleBtn.Location = new System.Drawing.Point(221, 31);
-			this.fileNameTypeSimpleBtn.Margin = new System.Windows.Forms.Padding(4);
+			this.fileNameTypeSimpleBtn.Location = new System.Drawing.Point(166, 25);
 			this.fileNameTypeSimpleBtn.Name = "fileNameTypeSimpleBtn";
-			this.fileNameTypeSimpleBtn.Size = new System.Drawing.Size(99, 29);
+			this.fileNameTypeSimpleBtn.Size = new System.Drawing.Size(74, 23);
 			this.fileNameTypeSimpleBtn.TabIndex = 2;
 			this.fileNameTypeSimpleBtn.Text = "シンプル";
 			this.fileNameTypeSimpleBtn.UseVisualStyleBackColor = true;
-			this.fileNameTypeSimpleBtn.Click += new System.EventHandler(this.fileNameTypeSimpleBtn_Click);
+			this.fileNameTypeSimpleBtn.Visible = false;
 			// 
 			// fileNameTypeDateBtn
 			// 
-			this.fileNameTypeDateBtn.Location = new System.Drawing.Point(115, 31);
-			this.fileNameTypeDateBtn.Margin = new System.Windows.Forms.Padding(4);
+			this.fileNameTypeDateBtn.Location = new System.Drawing.Point(86, 25);
 			this.fileNameTypeDateBtn.Name = "fileNameTypeDateBtn";
-			this.fileNameTypeDateBtn.Size = new System.Drawing.Size(99, 29);
+			this.fileNameTypeDateBtn.Size = new System.Drawing.Size(74, 23);
 			this.fileNameTypeDateBtn.TabIndex = 2;
-			this.fileNameTypeDateBtn.Text = "日時(漢字)";
+			this.fileNameTypeDateBtn.Text = "引数なし";
 			this.fileNameTypeDateBtn.UseVisualStyleBackColor = true;
-			this.fileNameTypeDateBtn.Click += new System.EventHandler(this.fileNameTypeNitijiBtn_Click);
+			this.fileNameTypeDateBtn.Click += new System.EventHandler(this.FileNameTypeDateBtnClick);
 			// 
 			// fileNameTypeDefaultBtn
 			// 
-			this.fileNameTypeDefaultBtn.Location = new System.Drawing.Point(8, 31);
-			this.fileNameTypeDefaultBtn.Margin = new System.Windows.Forms.Padding(4);
+			this.fileNameTypeDefaultBtn.Location = new System.Drawing.Point(6, 25);
 			this.fileNameTypeDefaultBtn.Name = "fileNameTypeDefaultBtn";
-			this.fileNameTypeDefaultBtn.Size = new System.Drawing.Size(99, 29);
+			this.fileNameTypeDefaultBtn.Size = new System.Drawing.Size(74, 23);
 			this.fileNameTypeDefaultBtn.TabIndex = 2;
-			this.fileNameTypeDefaultBtn.Text = "デフォルト";
+			this.fileNameTypeDefaultBtn.Text = "サンプル";
 			this.fileNameTypeDefaultBtn.UseVisualStyleBackColor = true;
-			this.fileNameTypeDefaultBtn.Click += new System.EventHandler(this.fileNameTypeDefaultBtn_Click);
+			this.fileNameTypeDefaultBtn.Click += new System.EventHandler(this.FileNameTypeDefaultBtnClick);
 			// 
 			// groupBox3
 			// 
+			this.groupBox3.Controls.Add(this.label20);
+			this.groupBox3.Controls.Add(this.label15);
+			this.groupBox3.Controls.Add(this.label18);
+			this.groupBox3.Controls.Add(this.label16);
+			this.groupBox3.Controls.Add(this.label17);
+			this.groupBox3.Controls.Add(this.label1);
 			this.groupBox3.Controls.Add(this.label6);
 			this.groupBox3.Controls.Add(this.label5);
 			this.groupBox3.Controls.Add(this.label4);
@@ -171,175 +172,214 @@ namespace namaichi
 			this.groupBox3.Controls.Add(this.label10);
 			this.groupBox3.Controls.Add(this.label7);
 			this.groupBox3.Controls.Add(this.label2);
-			this.groupBox3.Location = new System.Drawing.Point(16, 244);
-			this.groupBox3.Margin = new System.Windows.Forms.Padding(4);
+			this.groupBox3.Location = new System.Drawing.Point(12, 177);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Padding = new System.Windows.Forms.Padding(4);
-			this.groupBox3.Size = new System.Drawing.Size(484, 175);
+			this.groupBox3.Size = new System.Drawing.Size(363, 196);
 			this.groupBox3.TabIndex = 2;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "変換記号";
 			// 
+			// label20
+			// 
+			this.label20.Location = new System.Drawing.Point(199, 134);
+			this.label20.Name = "label20";
+			this.label20.Size = new System.Drawing.Size(143, 18);
+			this.label20.TabIndex = 2;
+			this.label20.Text = "{us} (user_sessionクッキー)";
+			// 
+			// label15
+			// 
+			this.label15.Location = new System.Drawing.Point(199, 116);
+			this.label15.Name = "label15";
+			this.label15.Size = new System.Drawing.Size(92, 18);
+			this.label15.TabIndex = 1;
+			this.label15.Text = "{5} 配信者ID";
+			// 
+			// label18
+			// 
+			this.label18.BackColor = System.Drawing.Color.Transparent;
+			this.label18.Location = new System.Drawing.Point(17, 172);
+			this.label18.Name = "label18";
+			this.label18.Size = new System.Drawing.Size(355, 18);
+			this.label18.TabIndex = 0;
+			this.label18.Text = "・{url}と{nourl}がどちらも含まれていない場合、先頭に{url}が付加されます。";
+			// 
+			// label16
+			// 
+			this.label16.Location = new System.Drawing.Point(17, 154);
+			this.label16.Name = "label16";
+			this.label16.Size = new System.Drawing.Size(274, 18);
+			this.label16.TabIndex = 0;
+			this.label16.Text = "・引数が空欄の場合、放送URLのみが設定されます。";
+			// 
+			// label17
+			// 
+			this.label17.Location = new System.Drawing.Point(17, 134);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(143, 18);
+			this.label17.TabIndex = 0;
+			this.label17.Text = "{nourl} (放送URLを渡さない)";
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(17, 116);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(92, 18);
+			this.label1.TabIndex = 0;
+			this.label1.Text = "{url} (放送URL)";
+			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(23, 122);
-			this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label6.Location = new System.Drawing.Point(17, 98);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(123, 22);
+			this.label6.Size = new System.Drawing.Size(92, 18);
 			this.label6.TabIndex = 0;
 			this.label6.Text = "{W} (曜日)";
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(23, 100);
-			this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label5.Location = new System.Drawing.Point(17, 80);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(123, 22);
+			this.label5.Size = new System.Drawing.Size(92, 18);
 			this.label5.TabIndex = 0;
 			this.label5.Text = "{D} (日)";
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(23, 78);
-			this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label4.Location = new System.Drawing.Point(17, 62);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(123, 22);
+			this.label4.Size = new System.Drawing.Size(92, 18);
 			this.label4.TabIndex = 0;
 			this.label4.Text = "{M} (月)";
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(23, 55);
-			this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label3.Location = new System.Drawing.Point(17, 44);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(123, 22);
+			this.label3.Size = new System.Drawing.Size(92, 18);
 			this.label3.TabIndex = 0;
 			this.label3.Text = "{y} (2桁の西暦)";
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(153, 78);
-			this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label9.Location = new System.Drawing.Point(115, 62);
 			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(104, 22);
+			this.label9.Size = new System.Drawing.Size(78, 18);
 			this.label9.TabIndex = 0;
 			this.label9.Text = "{s} (秒)";
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(153, 55);
-			this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label8.Location = new System.Drawing.Point(115, 44);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(104, 22);
+			this.label8.Size = new System.Drawing.Size(78, 18);
 			this.label8.TabIndex = 0;
 			this.label8.Text = "{m} (分)";
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(265, 122);
-			this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label14.Location = new System.Drawing.Point(199, 98);
 			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(123, 22);
+			this.label14.Size = new System.Drawing.Size(92, 18);
 			this.label14.TabIndex = 0;
 			this.label14.Text = "{4} チャンネル名";
 			// 
 			// label13
 			// 
-			this.label13.Location = new System.Drawing.Point(265, 100);
-			this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label13.Location = new System.Drawing.Point(199, 80);
 			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(123, 22);
+			this.label13.Size = new System.Drawing.Size(92, 18);
 			this.label13.TabIndex = 0;
 			this.label13.Text = "{3} チャンネルID";
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(265, 78);
-			this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label12.Location = new System.Drawing.Point(199, 62);
 			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(123, 22);
+			this.label12.Size = new System.Drawing.Size(92, 18);
 			this.label12.TabIndex = 0;
 			this.label12.Text = "{2} 配信者名";
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(265, 55);
-			this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label11.Location = new System.Drawing.Point(199, 44);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(123, 22);
+			this.label11.Size = new System.Drawing.Size(92, 18);
 			this.label11.TabIndex = 0;
 			this.label11.Text = "{1} タイトル";
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(265, 32);
-			this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label10.Location = new System.Drawing.Point(199, 26);
 			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(123, 22);
+			this.label10.Size = new System.Drawing.Size(92, 18);
 			this.label10.TabIndex = 0;
-			this.label10.Text = "{0} lv数字(必須)";
+			this.label10.Text = "{0} lv数字";
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(153, 32);
-			this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label7.Location = new System.Drawing.Point(115, 26);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(104, 22);
+			this.label7.Size = new System.Drawing.Size(78, 18);
 			this.label7.TabIndex = 0;
 			this.label7.Text = "{h} (時)";
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(23, 32);
-			this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label2.Location = new System.Drawing.Point(17, 26);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(123, 22);
+			this.label2.Size = new System.Drawing.Size(92, 18);
 			this.label2.TabIndex = 0;
 			this.label2.Text = "{Y} (4桁の西暦)";
 			// 
-			// FileNameTypeCancelBtn
-			// 
-			this.FileNameTypeCancelBtn.Location = new System.Drawing.Point(401, 430);
-			this.FileNameTypeCancelBtn.Margin = new System.Windows.Forms.Padding(4);
-			this.FileNameTypeCancelBtn.Name = "FileNameTypeCancelBtn";
-			this.FileNameTypeCancelBtn.Size = new System.Drawing.Size(99, 29);
-			this.FileNameTypeCancelBtn.TabIndex = 2;
-			this.FileNameTypeCancelBtn.Text = "キャンセル";
-			this.FileNameTypeCancelBtn.UseVisualStyleBackColor = true;
-			this.FileNameTypeCancelBtn.Click += new System.EventHandler(this.fileNameTypeCancelBtn_Click);
-			// 
 			// fileNameTypeOkBtn
 			// 
-			this.fileNameTypeOkBtn.Location = new System.Drawing.Point(281, 430);
-			this.fileNameTypeOkBtn.Margin = new System.Windows.Forms.Padding(4);
+			this.fileNameTypeOkBtn.Location = new System.Drawing.Point(301, 384);
 			this.fileNameTypeOkBtn.Name = "fileNameTypeOkBtn";
-			this.fileNameTypeOkBtn.Size = new System.Drawing.Size(99, 29);
+			this.fileNameTypeOkBtn.Size = new System.Drawing.Size(74, 23);
 			this.fileNameTypeOkBtn.TabIndex = 2;
 			this.fileNameTypeOkBtn.Text = "OK";
 			this.fileNameTypeOkBtn.UseVisualStyleBackColor = true;
 			this.fileNameTypeOkBtn.Click += new System.EventHandler(this.fileNameTypeOkBtn_Click);
 			// 
-			// fileNameOptionForm
+			// copyBtn
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+			this.copyBtn.Location = new System.Drawing.Point(174, 384);
+			this.copyBtn.Name = "copyBtn";
+			this.copyBtn.Size = new System.Drawing.Size(111, 23);
+			this.copyBtn.TabIndex = 2;
+			this.copyBtn.Text = "クリップボードにコピー";
+			this.copyBtn.UseVisualStyleBackColor = true;
+			this.copyBtn.Click += new System.EventHandler(this.CopyBtnClick);
+			// 
+			// ArgOptionForm
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(516, 474);
+			this.ClientSize = new System.Drawing.Size(387, 417);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
+			this.Controls.Add(this.copyBtn);
 			this.Controls.Add(this.fileNameTypeOkBtn);
-			this.Controls.Add(this.FileNameTypeCancelBtn);
-			this.Margin = new System.Windows.Forms.Padding(4);
-			this.Name = "fileNameOptionForm";
-			this.Text = "FileNameOption";
+			this.Name = "ArgOptionForm";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.Text = "引数の書式";
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox3.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.Label label20;
+		private System.Windows.Forms.Label label18;
+		private System.Windows.Forms.Label label17;
+		private System.Windows.Forms.Label label16;
+		private System.Windows.Forms.TextBox fileNameTypeLabel;
+		private System.Windows.Forms.Label label15;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Button copyBtn;
 		private System.Windows.Forms.Button fileNameTypeOkBtn;
-		private System.Windows.Forms.Button FileNameTypeCancelBtn;
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.Label label12;
 		private System.Windows.Forms.Label label13;
@@ -360,7 +400,6 @@ namespace namaichi
 		private System.Windows.Forms.Button fileNameTypeDefaultBtn;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.TextBox fileNameTypeText;
-		private System.Windows.Forms.Label fileNameTypeLabel;
 		private System.Windows.Forms.GroupBox groupBox1;
 	}
 }

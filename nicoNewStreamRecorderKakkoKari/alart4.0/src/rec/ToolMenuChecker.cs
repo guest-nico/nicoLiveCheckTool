@@ -310,6 +310,10 @@ namespace namaichi.rec
 							form.formAction(() => f.ShowDialog(form));
 						}).Wait();
 						
+						if (f.DialogResult != DialogResult.OK) return;
+						if (!f.isBulkAddAuto)
+							form.config.set("IsBulkAddAuto", "false");
+							
 						if (f.mail == null) return;
 						
 						if (f.mail == "" || f.pass == "") {
@@ -370,11 +374,17 @@ namespace namaichi.rec
 						}).Wait();
 						if (isStartRet != 1) 
 							return;
+						form.config.set("IsBulkAddAuto", f.isBulkAddAuto.ToString());
+						form.config.set("bulkAddAccountId", f.mail);
+						form.config.set("bulkAddAccountPass", f.pass);
+						form.config.set("bulkAddUser_session", us.Value);
+						form.config.set("bulkAddFollowType", string.Join(",", f.follow.Select(a => a.ToString())));
+						form.config.set("bulkAddIsAddToCom", f.isAddToCom.ToString());
 						
 						var l = new ToolMenuLock((f.isAddToCom ? "参加チャンネル" : "フォローユーザー") + "一括登録中", addFollowList.Count);
 						bulkAddFromFollowComLock = l;
 						setToolMenuStatusBar();
-						Task.Factory.StartNew(() => bulkAddFromFollowCom(l, addFollowList, followList.Count, f.follow, cc, f.isAddToCom));
+						Task.Factory.StartNew(() => bulkAddFromFollowCom(l, addFollowList, followList.Count, f.follow, cc, f.isAddToCom, true));
 						
 					} catch (Exception e) {
 						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
@@ -382,6 +392,48 @@ namespace namaichi.rec
 					}
 				});
 				
+			}
+		}
+		public void bulkAdd() {
+			try {
+				CookieContainer cc = null;
+				var us = form.config.get("bulkAddUser_session");
+				var name = util.getMyName(form.check.container, util.getRegGroup(us.ToString(), "=(.+)"));
+				if (name != null)
+					cc = new CookieGetter(form.config, form).getUserSessionCookie(us);
+				else {
+					cc = getUserSession(form.config.get("bulkAddAccountId"), form.config.get("bulkAddAccountPass"));
+					if (cc == null) {
+						form.addLogText("参加中のユーザー・チャンネルから一括登録する際に前回のメールアドレスとパスワードからCookieが取得できませんでした");
+						return;
+					}
+				}
+				var followType = form.config.get("bulkAddFollowType").Split(',')
+						.Select(a => bool.Parse(a)).ToArray();
+				
+				var followList = new FollowChecker(form, cc).getFollowList(followType, false);
+				if (followList == null) {
+					form.addLogText("フォローリストが見つかりませんでした");
+					return;
+				}
+				
+				var addCount = new int[]{0, 0, 0};
+				var addFollowList = getAddFollowList(followList, out addCount);
+				if (addFollowList == null) {
+					form.addLogText("追加する項目は存在しませんでした");
+					return;
+				}
+				
+				var isAddToCom = bool.Parse(form.config.get("bulkAddIsAddToCom"));
+				var l = new ToolMenuLock((isAddToCom ? "参加チャンネル" : "フォローユーザー") + "一括登録中", addFollowList.Count);
+				bulkAddFromFollowComLock = l;
+				setToolMenuStatusBar();
+				Task.Factory.StartNew(() => bulkAddFromFollowCom(l, addFollowList, followList.Count, followType, cc, isAddToCom, false));
+				
+				
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+				form.addLogText(e.Message + e.Source + e.StackTrace);
 			}
 		}
 		private CookieContainer getUserSession(string mail, string pass) {
@@ -440,7 +492,7 @@ namespace namaichi.rec
 				return null;
 			}
 		}
-		private void bulkAddFromFollowCom(ToolMenuLock _lock, List<string[]> addList, int allNum, bool[] followMode, CookieContainer cc, bool isAddToCom) {
+		private void bulkAddFromFollowCom(ToolMenuLock _lock, List<string[]> addList, int allNum, bool[] followMode, CookieContainer cc, bool isAddToCom, bool isMsgBox) {
 			var mainFollowList = new FollowChecker(form, cc)
 					.getFollowList(followMode);
 			if (mainFollowList == null) return;
@@ -456,7 +508,9 @@ namespace namaichi.rec
 			for (var i = 0; i < addList.Count; i++) {
 				var id = addList[i];
 				if (bulkAddFromFollowComLock != _lock) {
-					util.showModelessMessageBox("参加チャンネル一括登録が中断されました", "", form);
+					if (isMsgBox)
+						util.showModelessMessageBox("参加チャンネル一括登録が中断されました", "", form);
+					else form.addLogText("参加チャンネル一括登録が中断されました");
 					setToolMenuStatusBar();
 					return;
 				}
@@ -495,7 +549,9 @@ namespace namaichi.rec
 				setToolMenuStatusBar();
 				//Thread.Sleep(2000);
 			}
-			util.showModelessMessageBox("新規登録：" + got + "　登録済み：" + (allNum - got) + "　エラー：" + error, "参加チャンネル登録完了", form);
+			if (isMsgBox)
+				util.showModelessMessageBox("新規登録：" + got + "　登録済み：" + (allNum - got) + "　エラー：" + error, "参加チャンネル登録完了", form);
+			else if (got > 0 || error > 0) form.addLogText("新規登録：" + got + "　登録済み：" + (allNum - got) + "　エラー：" + error);
 			bulkAddFromFollowComLock = null;
 			setToolMenuStatusBar();
 			//form.changedListContent();

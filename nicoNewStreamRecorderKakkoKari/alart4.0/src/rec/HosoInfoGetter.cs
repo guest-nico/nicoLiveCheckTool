@@ -46,7 +46,8 @@ namespace namaichi.rec
 			var res = new Curl().getStr(url, h, CurlHttpVersion.CURL_HTTP_VERSION_2TLS, "GET", null, false);
 			if (res == null) return false;
 			
-			title = util.getRegGroup(res, "<meta property=\"og:title\" content=\"(.*?)\"");
+			title = util.getRegGroup(res, "&quot;title&quot;:&quot;(.+?)&quot;");
+			if (title == null) title = util.getRegGroup(res, "<meta property=\"og:title\" content=\"(.*?)\"");
 			type = util.getRegGroup(res, "\"content_type\":\"(.+?)\"");
 			thumbnail = getThumbnail(res);
 			var _dt = util.getRegGroup(res, "(\\d{4}/\\d{1,2}/\\d{1,2}.{0,10}\\d{1,2}:\\d{1,2}(:\\d{1,2})*)");

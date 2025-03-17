@@ -421,7 +421,7 @@ namespace namaichi
 				var count = form.getAlartListCount(isUserMode);
 				for (var i = 0; i < count; i++) {
 					if (ai.communityId != null && ai.communityId != "" && dataSource[i].communityId == 
-					    	ai.communityId) {
+					    	ai.communityId && ai.communityId != "co0") {
 						var m = (ai.communityId.StartsWith("co")) ? "コミュニティ" : (ai.communityId == "official" ? "official" : "チャンネル");
 						
 					    //var res = util.showMessageBoxCenterForm(this, m + "ID" + ai.communityId + "は既に登録されています。削除しますか？(はい＝削除　いいえ＝削除　キャンセル＝フォームに戻る)", "確認", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);

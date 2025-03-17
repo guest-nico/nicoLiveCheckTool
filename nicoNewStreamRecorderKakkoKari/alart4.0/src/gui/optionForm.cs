@@ -60,8 +60,10 @@ namespace namaichi
 		
 		void optionOk_Click(object sender, EventArgs e)
 		{
-			var formData = getFormData();
-			cfg.saveFromForm(formData);
+			if (Tag != null && Tag.ToString() == "loaded") {
+				var formData = getFormData();
+				cfg.saveFromForm(formData);
+			}
 			
 			setStartUpMenu2(!bool.Parse(cfg.get("IsStartUp")));
 				
@@ -420,6 +422,7 @@ namespace namaichi
         	
         	var si = SourceInfoSerialize.load(false);
         	nicoSessionComboBox1.Selector.SetInfoAsync(si);
+        	Tag = "loaded";
         }
         
 		void optionCancel_Click(object sender, EventArgs e)
@@ -968,6 +971,15 @@ namespace namaichi
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
 				util.showMessageBoxCenterForm(this, "login error " + e.Message + e.Source + e.StackTrace, "", MessageBoxButtons.OK);
+			}
+		}
+		void DisplayArgInfoLabelLinkClicked(object _sender, LinkLabelLinkClickedEventArgs e)
+		{
+			util.debugWriteLine("display arg info click");
+			LinkLabel sender = (LinkLabel)_sender;
+			if (e.Button == MouseButtons.Left) {
+				var f = new ArgOptionForm(int.Parse(cfg.get("fontSize")));
+				f.ShowDialog();
 			}
 		}
 	}

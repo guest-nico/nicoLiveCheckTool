@@ -34,8 +34,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.8.6";
-	public static string versionDayStr = "2025/03/18";
+	public static string versionStr = "ver0.1.8.7";
+	public static string versionDayStr = "2025/04/08";
 	public static string osName = null;
 	public static string osType = null;
 	public static bool isWebRequestOk = false;
@@ -887,7 +887,7 @@ class util {
 			}
 			util.isLogFile = true;
 			try {
-				exceptionSw = new StreamWriter(util.getJarPath()[0] + "/errorLog.txt", true);
+				//exceptionSw = new StreamWriter(util.getJarPath()[0] + "/errorLog.txt", true);
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + " " + ee.StackTrace + " " + ee.Source + " " + ee.TargetSite);
 			}
@@ -1158,7 +1158,7 @@ class util {
 		foreach (var b in arr) s += ", " + b;
 		return s;
 	}
-	public static void appliProcess(string appliPath, string url, string args, RssItem ri, CookieContainer cc) {
+	public static void appliProcess(string appliPath, string url, string args, RssItem ri, CookieContainer cc, config cfg, int appNum, MainForm form) {
 		if (appliPath == null || appliPath == "") return;
 		
 		try {
@@ -1169,14 +1169,28 @@ class util {
 			} catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace);}
 			
 			var arg = util.getDokujiSetteiArg(ri.hostName, ri.comName, ri.title, ri.lvId.Trim('e'), ri.comId, args, ri.pubDateDt, ri.userId, us);
-			Process.Start(appliPath, arg);
+			var si = new ProcessStartInfo(appliPath, arg);
+			
+			var isMin = false;
+			var minimizedC = cfg.get("IsminimizedApp");
+			if (!string.IsNullOrEmpty(minimizedC)) {
+				var arr = minimizedC.Split(',');
+				if (bool.Parse(arr[appNum])) {
+					si.WindowStyle = ProcessWindowStyle.Minimized;
+					isMin = true;
+				}
+			}
+			if (bool.Parse(cfg.get("IsAppliLog")))
+				form.addLogText(appliPath + "を起動しました 引数：" + arg);
 				
+			CreateProcess(appliPath, arg, isMin);
+			//Process.Start(si);
 			//Process.Start(appliPath, url);
 		} catch (Exception e) {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 		}
 	}
-    public static void appliProcessFromLvid(string appliPath, string lvid, string args, CookieContainer cc) {
+    public static void appliProcessFromLvid(string appliPath, string lvid, string args, CookieContainer cc, config cfg, int appNum, MainForm form) {
 		if (appliPath == null || appliPath == "") return;
 		var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
 
@@ -1184,9 +1198,21 @@ class util {
 			appliPath = appliPath.Trim();
 			
 			var ri = util.getRiFromLvid(lvid, cc);
-			if (ri != null)
-				util.appliProcess(appliPath, url, args, ri, cc);
-			else Process.Start(appliPath, url + " " + args); 
+			if (ri != null) {
+				util.appliProcess(appliPath, url, args, ri, cc, cfg, appNum, form);
+			}
+			//else Process.Start(appliPath, url + " " + args);
+			else {
+				var isMin = false;
+			var minimizedC = cfg.get("IsminimizedApp");
+				if (!string.IsNullOrEmpty(minimizedC)) {
+					var arr = minimizedC.Split(',');
+					if (bool.Parse(arr[appNum])) {
+						isMin = true;
+					}
+				}
+				CreateProcess(appliPath, url + " " + args, isMin);
+			}
 		} catch (Exception e) {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 		}
@@ -1882,6 +1908,80 @@ class util {
 		} catch (Exception e) {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			return null;
+		}
+	}
+	[DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+    public static extern bool CreateProcess(
+        string lpApplicationName,
+        string lpCommandLine,
+        IntPtr lpProcessAttributes,
+        IntPtr lpThreadAttributes,
+        bool bInheritHandles,
+        uint dwCreationFlags,
+        IntPtr lpEnvironment,
+        string lpCurrentDirectory,
+        ref STARTUPINFO lpStartupInfo,
+        out PROCESS_INFORMATION lpProcessInformation);
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct STARTUPINFO
+    {
+        public uint cb;
+        public string lpReserved;
+        public string lpDesktop;
+        public string lpTitle;
+        public uint dwX;
+        public uint dwY;
+        public uint dwXSize;
+        public uint dwYSize;
+        public uint dwXCountChars;
+        public uint dwYCountChars;
+        public uint dwFillAttribute;
+        public uint dwFlags;
+        public ushort wShowWindow;
+        public ushort cbReserved2;
+        public IntPtr lpReserved2;
+        public IntPtr hStdInput;
+        public IntPtr hStdOutput;
+        public IntPtr hStdError;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct PROCESS_INFORMATION
+    {
+        public IntPtr hProcess;
+        public IntPtr hThread;
+        public uint dwProcessId;
+        public uint dwThreadId;
+    }
+	public static void CreateProcess(string f, string arg, bool isMin) {
+		//if (f == null || arg == null) return;
+		if (f == null) return;
+			
+		STARTUPINFO si = new STARTUPINFO();
+		PROCESS_INFORMATION pi = new PROCESS_INFORMATION();
+		
+		si.cb = (uint)Marshal.SizeOf(si);
+		
+		si.dwFlags = 0x00000001; //STARTF_USESHOWWINDOW
+		ushort SW_SHOWNORMAL = 1;
+		ushort SW_SHOWMINNOACTIVE = 7;
+		si.wShowWindow = isMin ? SW_SHOWMINNOACTIVE : SW_SHOWNORMAL;
+		bool r = CreateProcess(
+				null,
+				f + " " + arg,
+				IntPtr.Zero,
+				IntPtr.Zero,
+				false,
+				0,
+				IntPtr.Zero,
+				null,
+				ref si,
+				out pi);
+		if (!r) {
+			Thread.Sleep(1000);
+			util.debugWriteLine("create false");
+			return;
 		}
 	}
 }

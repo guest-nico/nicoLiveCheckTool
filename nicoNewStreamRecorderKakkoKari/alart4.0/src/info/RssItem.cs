@@ -62,12 +62,15 @@ namespace namaichi.info
 			this.isPayment = isPayment;
 		}
 		public bool isContainKeyword(string keyword) {
+			return isMatchInfo(keyword);
+			/*
 			return util.getRegGroup(lvId, "(" + keyword + ")") != null ||
 				util.getRegGroup(hostName == null ? "" : hostName, "(" + keyword + ")") != null ||
 				util.getRegGroup(comId == null ? "" : comId, "(" + keyword + ")") != null ||
 				util.getRegGroup(comName == null ? "" : comName, "(" + keyword + ")") != null ||
 				util.getRegGroup(description == null ? "" : description, "(" + keyword + ")") != null ||
 				util.getRegGroup(title == null ? "" : title, "(" + keyword + ")") != null;
+			*/
 
 		}
 		public bool isMatchKeyword(AlartInfo ai) {
@@ -87,6 +90,8 @@ namespace namaichi.info
 					var isNot = k.StartsWith("-") || k.StartsWith("ー");
 					if (!isNot) continue;
 					var _k = k.Remove(0,1);
+					if (isNot && isMatchInfo(k)) return false;
+					/*
 					if (isNot && (util.getRegGroup(lvId, "(" + _k + ")") != null ||
 							util.getRegGroup(hostName == null ? "" : hostName, "(" + _k + ")") != null ||
 						    util.getRegGroup(comId, "(" + _k + ")") != null ||
@@ -94,6 +99,7 @@ namespace namaichi.info
 						    util.getRegGroup(description, "(" + _k + ")") != null ||
 						    util.getRegGroup(title, "(" + _k + ")") != null))
 						return false;
+					*/
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
@@ -122,6 +128,9 @@ namespace namaichi.info
 				try {
 					var isNot = k.StartsWith("-") || k.StartsWith("ー");
 					if (isNot) continue;
+					if (!isNot && (isMatchInfo(k)))
+						return true;
+					/*
 					if (!isNot && (util.getRegGroup(lvId, "(" + k + ")") != null || 
 							util.getRegGroup(hostName == null ? "" : hostName, "(" + k + ")") != null ||
 							util.getRegGroup(comId == null ? "" : comId, "(" + k + ")") != null ||
@@ -129,13 +138,41 @@ namespace namaichi.info
 							util.getRegGroup(description == null ? "" : description, "(" + k + ")") != null ||
 							util.getRegGroup(title == null ? "" : title, "(" + k + ")") != null))
 						return true;
+					*/
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			}
 			return false;
 		}
-		
+		bool isMatchInfo(string word) {
+			if (word.StartsWith("lvid="))
+				return lvId.IndexOf(word) > -1;
+			if (word.StartsWith("hostName="))
+				return hostName != null && 
+					hostName.IndexOf(word.Substring(word.IndexOf("=") + 1)) > -1;
+			if (word.StartsWith("chId="))
+				return comId != null && 
+					comId.IndexOf(word.Substring(word.IndexOf("=") + 1)) > -1;
+			if (word.StartsWith("chName="))
+				return comName != null && 
+					comName.IndexOf(word.Substring(word.IndexOf("=") + 1)) > -1;
+			if (word.StartsWith("hostId="))
+				return userId != null && 
+					userId.IndexOf(word.Substring(word.IndexOf("=") + 1)) > -1;
+			if (word.StartsWith("title=")) {
+				return title != null && 
+					title.IndexOf(word.Substring(word.IndexOf("=") + 1)) > -1;
+			}
+			
+			return util.getRegGroup(lvId, "(" + word + ")") != null || 
+					util.getRegGroup(hostName == null ? "" : hostName, "(" + word + ")") != null ||
+					util.getRegGroup(comId == null ? "" : comId, "(" + word + ")") != null ||
+					util.getRegGroup(comName == null ? "" : comName, "(" + word + ")") != null ||
+					util.getRegGroup(userId == null ? "" : userId, "(" + word + ")") != null ||
+					util.getRegGroup(description == null ? "" : description, "(" + word + ")") != null ||
+					util.getRegGroup(title == null ? "" : title, "(" + word + ")") != null;
+		}
 		private List<string> getStringToWordsList(string s) {
 			var quot = new List<string>();
 			s = " " + s + " ";

@@ -369,7 +369,7 @@ namespace namaichi
         { player.play();}
         */
         void optionItem_Select(object sender, EventArgs e)
-        { 
+        {
         	try {
 	        	optionForm o = new optionForm(config, this);
 	        	var size = config.get("fontSize");
@@ -535,6 +535,7 @@ namespace namaichi
 			
 			formInitSetting();
 			setNotifyOff();
+			setNotifyOffColumn();
 			
 			if (!bool.Parse(config.get("IsShowNoComAlartMessageAgain")) &&
 					MessageBox.Show("2024年8月15日現在、ニコニコミュニティのサービスが停止しているため、コミュニティが条件に設定されている場合には正常に通知されないことがあります。\nこのバージョンではお気に入りの条件について、次のような動作となっています。\n\nコミュニティのみが条件に設定されている場合：\n通知を行わない\n\nユーザーIDやキーワードと共に条件が設定されている場合：\nコミュニティ以外の条件のみを用いて条件を判定\n\n次からこのメッセージを表示しない", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
@@ -710,7 +711,6 @@ namespace namaichi
 				Task.Factory.StartNew(() =>
 				         formAction(() => openAddYoyakuForm(lv))
 					);
-				//);
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
@@ -815,27 +815,35 @@ namespace namaichi
 		}
 		public void updateLastHosoDate(AlartInfo ai, string hosoDate, string lvid, bool isMemberOnly, string type, string title) {
 			util.debugWriteLine("updateLastHosoDate " + ai.lastLvid + " " + ai.communityId + " " + ai.hostId + " " + lvid + " " + hosoDate);
+			try {
+				ai.LastHostDate = hosoDate;//now.Substring(0, now.Length - 0);
+				ai.lastLvid = lvid;
+				ai.recentColorMode = bool.Parse(config.get("IscheckRecent")) ? ((isMemberOnly) ? 2 : 1) : 0;
+				ai.lastLvType = type;
+				ai.lastLvTitle = title;
+				ai.addHistory(ai.lastHosoDt, lvid.Replace("e", "") + " " + ai.lastHostDate + " " + title);
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+			}
 			formAction(() => {
 		         try {
-					ai.LastHostDate = hosoDate;//now.Substring(0, now.Length - 0);
-					ai.lastLvid = lvid;
-					ai.recentColorMode = bool.Parse(config.get("IscheckRecent")) ? ((isMemberOnly) ? 2 : 1) : 0;
-					ai.lastLvType = type;
-					ai.lastLvTitle = title;
-					ai.addHistory(ai.lastHosoDt, lvid.Replace("e", "") + " " + ai.lastHostDate + " " + title);
-					
 					var i = alartListDataSource.IndexOf(ai);
 					if (i > -1)
 						alartListDataSource.ResetItem(i);
 					i = userAlartListDataSource.IndexOf(ai);
 					if (i > -1)
 						userAlartListDataSource.ResetItem(i);
-					changedListContent();
-					setNotifyIcon();
+					
    		       	} catch (Exception e) {
    		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
    		       	}  	
 			});
+			try {
+				setNotifyIcon();
+				changedListContent();
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+			}
 		}
 		public void updateUserName(int i, string userName, bool isFollow, bool isUserMode) {
 			var dataSource = isUserMode ? userAlartListDataSource : alartListDataSource;
@@ -900,6 +908,18 @@ namespace namaichi
 			formAction(() => {
    		       	try {
 					ret = taskListDataSource.Count;
+   		       	} catch (Exception e) {
+   		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
+   		       	}
+	       		
+			});
+			return ret;
+		}
+		public int getLiveListCount() {
+			var ret = 0;
+			formAction(() => {
+   		       	try {
+					ret = liveListDataSource.Count;
    		       	} catch (Exception e) {
    		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
    		       	}
@@ -1445,9 +1465,14 @@ namespace namaichi
 			}
 		}
 		public void setHosoLogStatusBar(RssItem item) {
+			string buf = null;
+			try {
+				buf = "[" + DateTime.Parse(item.pubDate).ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss") + "] 放送ID：" + item.lvId + " チャンネルID：" + item.comId + "　ユーザー名：" + item.hostName;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
+			}
 			formAction(() => {
    		       	try {
-					var buf = "[" + DateTime.Parse(item.pubDate).ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss") + "] 放送ID：" + item.lvId + " チャンネルID：" + item.comId + "　ユーザー名：" + item.hostName;
 					lastHosoStatusBar.Text = buf;
    		       	} catch (Exception e) {
    		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
@@ -1486,20 +1511,20 @@ namespace namaichi
 			if (liveList.SortOrder == SortOrder.None) return;
 			var direction = (liveList.SortOrder == SortOrder.Ascending) ? ListSortDirection.Ascending : ListSortDirection.Descending;
 			liveListLockAction(() => {
-			    
+			    var sI = liveList.FirstDisplayedScrollingRowIndex;
+				var dt = DateTime.Now;
 				formAction(() => {
 	   		       	try {
-			            var sI = liveList.FirstDisplayedScrollingRowIndex;
-						var dt = DateTime.Now;
 					    //resultLiveListSort();
 					    
 						liveList.Sort(liveList.SortedColumn, direction);
-						setScrollIndex(liveList, sI);
-						util.debugWriteLine("sortlivelist time " + (DateTime.Now - dt) + " scroll " + liveListScrollIndex);
+						
 	   		       	} catch (Exception e) {
 	   		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
 	   		       	}
 				});
+				setScrollIndex(liveList, sI);
+				util.debugWriteLine("sortlivelist time " + (DateTime.Now - dt) + " scroll " + liveListScrollIndex);
 			});
 		}
 		public void DisplayPopup(RssItem item, Point point, bool isSmall, 
@@ -1507,24 +1532,27 @@ namespace namaichi
 				bool isTest = false, string poploc = null, int poptime = 0,
 				bool isClickClose = true, bool isTopMost = true,
 				Color[] isColor = null, double opacity = 0.9) {
-			formAction(() => {
-			
+			Form f = null;
+			try {
+   		        if (isTest) {
+   		        	f = (isSmall) ? ((Form)new SmallPopupForm(item, config, pd, showIndex, ai, check.container, this, 
+   		        	                                          isTest, poploc, poptime, isClickClose, isTopMost, isColor, opacity)) :
+   		        		((Form)new PopupForm(item, config, pd, showIndex, ai, check.form, check.container, 
+							isTest, poploc, poptime, isClickClose, isTopMost, isColor, opacity));
+   		        } else {
+					f = (isSmall) ? ((Form)new SmallPopupForm(item, config, pd, showIndex, ai, check.container, this, isTest)) : ((Form)new PopupForm(item, config, pd, showIndex, ai, this, check.container));
+   		        }
+				f.Location = point;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
+			}
+			//formAction(() => {
    		       	try {
-       		        Form f;
-       		        if (isTest) {
-       		        	f = (isSmall) ? ((Form)new SmallPopupForm(item, config, pd, showIndex, ai, check.container, 
-       		        	                                          isTest, poploc, poptime, isClickClose, isTopMost, isColor, opacity)) :
-       		        		((Form)new PopupForm(item, config, pd, showIndex, ai, check.container, 
-								isTest, poploc, poptime, isClickClose, isTopMost, isColor, opacity));
-       		        } else {
-						f = (isSmall) ? ((Form)new SmallPopupForm(item, config, pd, showIndex, ai, check.container, isTest)) : ((Form)new PopupForm(item, config, pd, showIndex, ai, check.container));
-       		        }
-					f.Location = point;
-					f.Show();
+					f.Show(this);
    		       	} catch (Exception e) {
    		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
    		       	}
-			});
+			//});
 
 		}
 		public void DisplayBalloon(RssItem item, AlartInfo ai) {
@@ -1545,10 +1573,11 @@ namespace namaichi
 				//var balloonIcon = new Icon(util.getJarPath()[0] + "/Icon//a.ico").ToBitmap().GetHicon();
 				//var balloonIcon = new Icon("a.ico").ToBitmap().GetHicon();
 				
+				var handle = Handle;
+				notifyUrl = url;
 				formAction(() => {
 					try {
-						var handle = Handle;
-						notifyUrl = url;
+						
 						//var icon = item.isMemberOnly ? ToolTipIcon.Info : ToolTipIcon.None;
 						if (item.isMemberOnly) {
 							lastIconBalloonTime = DateTime.Now;
@@ -1558,21 +1587,10 @@ namespace namaichi
 								isDisplayIconBalloon = true;
 							}
 							var _r = util.displayIconBalloon(tipTitle, content, balloonIcon, handle);
-							Task.Factory.StartNew(() => {
-					         	Thread.Sleep(30000);
-					         	isDisplayIconBalloon = false;
-					         	if (DateTime.Now - lastIconBalloonTime > TimeSpan.FromSeconds(29)) 
-					         		util.deleteNotifyIcon(handle);
-							});
-							
 						} else {
 							lastBalloonTime = DateTime.Now;
 							//return;
 							notifyIcon.ShowBalloonTip(10000, tipTitle, content, ToolTipIcon.None);
-							Task.Factory.StartNew(() => {
-					         	Thread.Sleep(30000);
-					         	if (DateTime.Now - lastBalloonTime > TimeSpan.FromSeconds(30)) closeBalloon();
-							});
 						}
 						
 						
@@ -1580,6 +1598,25 @@ namespace namaichi
        		       		util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
        		       	}
 				});
+				try {
+					if (item.isMemberOnly) {
+						Task.Factory.StartNew(() => {
+				         	Thread.Sleep(30000);
+				         	isDisplayIconBalloon = false;
+				         	if (DateTime.Now - lastIconBalloonTime > TimeSpan.FromSeconds(29)) 
+				         		formAction(() => util.deleteNotifyIcon(handle));
+						});
+					} else {
+						Task.Factory.StartNew(() => {
+				         	Thread.Sleep(30000);
+				         	if (DateTime.Now - lastBalloonTime > TimeSpan.FromSeconds(30)) 
+				         		formAction(() => closeBalloon());
+						});
+					}
+				} catch (Exception e) {
+					util.debugWriteLine(e.Message + " " + e.StackTrace + " " + e.Source + " " + e.TargetSite);
+				}
+					
 				/*
 	        	this.BeginInvoke((MethodInvoker)delegate() {
        		       	try {
@@ -2528,45 +2565,38 @@ namespace namaichi
 			//var cur = alartList.CurrentCell;
 			//if (cur == null || cur.RowIndex == -1) return;
 			//var targetColumns = new int[] {0, 1, 2, 3, 4, alartList.Columns.Count - 1};
+			searchBtnClickCore(searchText, alartList, alartListDataSource, searchBtn);
+		}
+		void searchBtnClickCore(System.Windows.Forms.TextBox _searchText, 
+				System.Windows.Forms.DataGridView list,
+				SortableBindingList<AlartInfo> dataSource, 
+				System.Windows.Forms.Button btn) {
 			try {
-				if (searchText.Text != "") {
+				if (_searchText.Text != "") {
 					var isBeforeSearch = true;
-					foreach (DataGridViewRow r in alartList.Rows)
+					foreach (DataGridViewRow r in list.Rows)
 						if (!r.Visible) isBeforeSearch = false;
 					if (isBeforeSearch)	
-						searchBtn.Tag = alartList.FirstDisplayedScrollingRowIndex;
+						btn.Tag = list.FirstDisplayedScrollingRowIndex;
 				}
-				alartList.CurrentCell = null;
-				for (var i = alartListDataSource.Count - 1; i > -1; i--) {
-					alartList.Rows[i].Visible = isAlartListSearchVisible(alartListDataSource[i]);
-					/*
-					foreach (var c in targetColumns) {
-						if (i == cur.RowIndex && c >= cur.ColumnIndex) continue;
-						var t = alartList[c, i].Value;
-						if (t == null) continue;
-						if (util.getRegGroup(t.ToString(), "(" + searchStr + ")") != null) {
-							if (!alartList.Columns[c].Visible) continue;
-							alartList.CurrentCell = alartList[c, i];
-							return;
-						}
-						
-					}
-					*/
+				list.CurrentCell = null;
+				for (var i = dataSource.Count - 1; i > -1; i--) {
+					list.Rows[i].Visible = isAlartListSearchVisible(dataSource[i], _searchText.Text);
 				}
-				if (searchText.Text == "" && searchBtn.Tag != null)
-					alartList.FirstDisplayedScrollingRowIndex = (int)searchBtn.Tag;
+				if (_searchText.Text == "" && btn.Tag != null)
+					list.FirstDisplayedScrollingRowIndex = (int)btn.Tag;
 				//if (util.getRegGroup(cur.Value.ToString(), "(" + searchStr + ")") != null) return;
 				//System.Windows.Forms.MessageBox.Show("見つかりませんでした");
-				searchText.Focus();
+				_searchText.Focus();
 				//searchText.SelectAll();
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
 		}
-		private bool isAlartListSearchVisible(AlartInfo ai) {
+		private bool isAlartListSearchVisible(AlartInfo ai, string t) {
 			try {
 				//var searchStr = liveListSearchStr;
-				var sa = searchText.Text.Split(new char[]{' ', '　'});
+				var sa = t.Split(new char[]{' ', '　'});
 				//var sa = alartListSearchStr;
 				var c = new string[]{ai.communityId, ai.hostId, ai.communityName, ai.hostName, ai.memo, ai.keyword};
 				foreach (var s in sa) {
@@ -2640,6 +2670,7 @@ namespace namaichi
 				if (j == 1) continue;
 				((ToolStripMenuItem)notifyOffMenuItem.DropDownItems[j]).Checked = notifyOffList[j];
 			}
+			setNotifyOffColumn();
 		}
 		
 		void NotifyOffMenuItemDropDownOpening(object sender, EventArgs e)
@@ -2822,7 +2853,8 @@ namespace namaichi
 					var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(lv, "(\\d+)");
 					
 					var ri = util.getRiFromLvid(lv, check.container);
-					util.appliProcess(path, url, args, ri, check.container);
+					var appNum = (int)(n[0] - 'A');
+					util.appliProcess(path, url, args, ri, check.container, config, appNum, this);
 				} catch (Exception ee) {
 					util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace);
 				}
@@ -2830,10 +2862,11 @@ namespace namaichi
 		}
 		private void setNotifyIcon() {
 			//changeIcon(recentNum);
+			var _alartListDataSource = alartListDataSource.ToArray();
 			if (bool.Parse(config.get("IschangeIcon"))) {
 		    	//(bool.Parse(config.get("IscheckOnAir")) ? 0 : 1) != -1)
 		    	var c = 0;
-				foreach (var ai in alartListDataSource)
+				foreach (var ai in _alartListDataSource)
 					if (ai.recentColorMode != 0) c++;
 				changeIcon(c);
 			} else if (notifyIcon.Icon != defaultNotifyIcon) {
@@ -3010,7 +3043,10 @@ namespace namaichi
 		private void changeIcon(int recentNum) {
 			var n = recentNum;
 			if (recentNum > 9) recentNum = 9;
-			notifyIcon.Icon = new Icon(util.getJarPath()[0] + "/Icon/number4_" + recentNum.ToString() + "c.ico");
+			var icon = new Icon(util.getJarPath()[0] + "/Icon/number4_" + recentNum.ToString() + "c.ico");
+			formAction(() => {
+				notifyIcon.Icon = icon;
+			});
 			//this.Invoke((MethodInvoker)delegate() {
 			//	Icon = new Icon("Icon/number4_" + recentNum.ToString() + "c.ico");
 			//});
@@ -3030,9 +3066,20 @@ namespace namaichi
 				else if (action.StartsWith("最近行われた放送のURLを")) {
 					if (ai.lastLvid != null && ai.lastLvid != "") {
 						var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(ai.lastLvid, "(\\d+)");
-						if (action.EndsWith("開く"))
+						if (action.EndsWith("を開く"))
 							util.openUrlBrowser(url, config);
-						else Clipboard.SetText(url);
+						else if (action.EndsWith("コピー"))
+							Clipboard.SetText(url);
+						else if (action.EndsWith("で開く")) {
+							var appName = action[16];
+							var lvid = "lv" + util.getRegGroup(ai.lastLvid, "(\\d+)+");
+							var path = config.get("appli" + appName + "Path");
+							var arg = config.get("appli" + appName + "Args");
+							var appNum = (int)(appName - 'A');
+							Task.Factory.StartNew(() => 
+									util.appliProcessFromLvid(path, lvid, arg, check.container, config, appNum, this));
+						}
+							
 					}
 				} else if (action.StartsWith("チャンネルURLを")) {
 					if (ai.communityId != null && ai.communityId != "") {
@@ -3193,8 +3240,9 @@ namespace namaichi
 				categoryBtnPanel.Controls[headCateIndex - 1].Visible = true;
 			}
 		}
-		public void formAction(Action a, int timeout = 30000, [CallerMemberName] string memberName = "") {
-			if (IsDisposed || !util.isShowWindow) return;
+		public void formAction(Action a, int timeout = 2000, [CallerMemberName] string memberName = "") {
+			util.debugWriteLine("formaction0 " + memberName + " " + lastHosoStatusBar.Text);
+			if (IsDisposed || !util.isShowWindow || !IsHandleCreated) return;
 			
 			util.debugWriteLine("formaction " + memberName + " " + lastHosoStatusBar.Text);
 			if (Thread.CurrentThread == madeThread) {
@@ -3204,8 +3252,9 @@ namespace namaichi
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			} else {
+				IAsyncResult r = null;
 				try {
-					var r = BeginInvoke((MethodInvoker)delegate() {
+					r = BeginInvoke((MethodInvoker)delegate() {
 					//Invoke((MethodInvoker)delegate() {
 						try {
 				       		a.Invoke();
@@ -3213,11 +3262,21 @@ namespace namaichi
 							util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 						}
 					
-					}).AsyncWaitHandle.WaitOne(timeout);
+					});
+					r.AsyncWaitHandle.WaitOne(timeout);
 					//});
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-				} 
+					addLogText("act " + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				} finally {
+					if (r != null) {
+						try {
+							//EndInvoke(r);
+						} catch (Exception e) {
+							util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+						}
+					}
+				}
 			}
 		}
 		private void formActionAsync(Action a) {
@@ -3252,9 +3311,9 @@ namespace namaichi
 		}
 		public void addLiveListItem(List<LiveInfo> liList, char cateChar, bool blindOnlyA, bool blindOnlyB, bool blindQuestion, bool isFavoriteOnly) {
 			//var isDisp = (cateChar == '全' || li.MainCategory[0] == cateChar);
-			formAction(() => {
+			//formAction(() => {
 				addLiveListItemCore(liList, cateChar, blindOnlyA, blindOnlyB, blindQuestion, isFavoriteOnly);
-			});
+			//});
 			
 			if (!isLiveListTimeProcessing) {
 				isLiveListTimeProcessing = true;
@@ -3282,9 +3341,11 @@ namespace namaichi
 		        	isDisp = false;
 		        if (delMin != 0 && ((TimeSpan)(now - li.pubDateDt)).TotalMinutes > delMin)
 		        	continue;
-		        if (isDisp)	{
-					liveListDataSource.Add(li);
-		        } else liveListDataReserve.Add(li);
+		        formAction(() => {
+			        if (isDisp)	{
+						liveListDataSource.Add(li);
+			        } else liveListDataReserve.Add(li);
+				});
 			}
 		    setScrollIndex(liveList, sI);
 		}
@@ -3338,10 +3399,17 @@ namespace namaichi
 		}
 		private void _deleteLiveListTime(double delMin, DateTime now) {
 			util.debugWriteLine("deletelivelistTime 0");
-			formAction(() => {
+			LiveInfo[] _liveListDataSource = null;
+			try {
+				_liveListDataSource = liveListDataSource.ToArray();
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+				return;
+			}
+			//formAction(() => {
 				try {
-					for (var i = liveListDataSource.Count - 1; i > -1; i--) {
-				        var li = liveListDataSource[i];
+					for (var i = _liveListDataSource.Count() - 1; i > -1; i--) {
+				        var li = _liveListDataSource[i];
 				        if (li == null) continue;
 				        var isDelete = (delMin != 0 && ((TimeSpan)(now - li.pubDateDt)).TotalMinutes > delMin) ||
 				        	(!string.IsNullOrEmpty(li.comId) && 
@@ -3350,16 +3418,18 @@ namespace namaichi
 				    	if (isDelete) {
 				           	 var th = li.thumbnail;
 				           	 if (th == null) continue;
-							 liveListDataSource.RemoveAt(i);
+				           	 formAction(() => {
+							 	liveListDataSource.Remove(li);
+							 });
 							 if (th != null) th.Dispose();
 						}
-						else liveList.UpdateCellValue(8, i);
+				        else formAction(() => liveList.UpdateCellValue(8, i));
 						
 					}
 	           	} catch (Exception e) {
 	           		util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 	           	}
-			});
+			//});
 			util.debugWriteLine("deletelivelistTime 1");
 			try {
 				for (var i = liveListDataReserve.Count - 1; i > -1; i--) {
@@ -3400,7 +3470,7 @@ namespace namaichi
 		void LiveListCellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
 			if (e.ColumnIndex == -1 || e.RowIndex == -1) return;
-			var act = config.get("brodouble");
+			var act = int.Parse(config.get("brodouble"));
 			var li = liveListDataSource[e.RowIndex];
 			var url = "https://live.nicovideo.jp/watch/" + li.lvId;
 			
@@ -3412,16 +3482,24 @@ namespace namaichi
 					("https://com.nicovideo.jp/community/" + li.comId);
 			}
 			
-			if (act == "1") {
+			if (act == 1) {
 				util.openUrlBrowser(url, config);
-			} else if (act == "2") {
+			} else if (act == 2) {
 				util.openUrlBrowser(comUrl, config);
-			} else if (act == "3") {
+			} else if (act == 3) {
 				Clipboard.SetText(url);
-			} else if (act == "4") {
+			} else if (act == 4) {
 				Clipboard.SetText(comUrl);
-			} else if (act == "5") {
+			} else if (act == 5) {
 				openAddForm(li.comId);
+			} else if (act >= 6 && act <= 15) {
+				var appName = (char)('A' + (act - 6));
+				var path = config.get("appli" + appName + "Path");
+				var arg = config.get("appli" + appName + "Args");
+				var appNum = (int)(appName - 'A');
+				Task.Factory.StartNew(() => 
+						util.appliProcessFromLvid(path, li.lvId, arg, check.container, config, appNum, this));
+							
 			}
 		}
 		void LiveListOpenUrlMenuClick(object sender, EventArgs e)
@@ -3672,43 +3750,48 @@ namespace namaichi
 			bool isFavoriteOnly = bool.Parse(config.get("FavoriteOnly"));
 			try {
 				liveList.CurrentCell = null;
-				formAction(() => {
-					for (var i = liveListDataSource.Count - 1; i > -1; i--) {
+				var _liveListDataSource = liveListDataSource.ToArray();
+				
+				//formAction(() => {
+					for (var i = _liveListDataSource.Count() - 1; i > -1; i--) {
 						try {
-							//var isDisplay = (isAll || liveListDataSource[i].MainCategory == cateName);
-							var isDisplay = liveListDataSource[i].isDisplay(sender.Text[0]);
-							var isMemberOnly = !string.IsNullOrEmpty(liveListDataSource[i].memberOnly);
+							var li = _liveListDataSource[i];
+							//var isDisplay = (isAll || li.MainCategory == cateName);
+							var isDisplay = li.isDisplay(sender.Text[0]);
+							var isMemberOnly = !string.IsNullOrEmpty(li.memberOnly);
 							
 					        if (BlindOnlyA && isMemberOnly &&
-							   		string.IsNullOrEmpty(liveListDataSource[i].favorite))
+							   		string.IsNullOrEmpty(li.favorite))
 					        	isDisplay = false;
 					        if (BlindOnlyB && isMemberOnly)
 					        	isDisplay = false;
 							if (BlindQuestion && cateName != "全て" &&
-					            	string.IsNullOrEmpty(liveListDataSource[i].lvId))
+					            	string.IsNullOrEmpty(li.lvId))
 					        	isDisplay = false;
-					        if (isFavoriteOnly && string.IsNullOrEmpty(liveListDataSource[i].favorite.Trim()))
+					        if (isFavoriteOnly && string.IsNullOrEmpty(li.favorite.Trim()))
 					        	isDisplay = false;
-					        if (!isLiveListSearchVisible(liveListDataSource[i]))
+					        if (!isLiveListSearchVisible(li))
 					        	isDisplay = false;
 					        
 							if (!isDisplay) {
-								liveListDataReserve.Add(liveListDataSource[i]);
-								liveListDataSource.Remove(liveListDataSource[i]);
+					        	formAction(() => {
+									liveListDataReserve.Add(li);
+									liveListDataSource.Remove(li);
+								});
 					        } else {
-					        	//util.debugWriteLine("disp " + liveListDataSource[i].title);
+					        	//util.debugWriteLine("disp " + li.title);
 					        }
 		           		} catch (Exception e) {
 							addLogText(e.Message + e.Source + e.StackTrace + e.TargetSite);
 		           		}
 				    }
-				});
+				//});
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
 			
 			try {
-				formAction(() => {
+				//formAction(() => {
 					for (var i = liveListDataReserve.Count - 1; i > -1; i--) {
 						//var isDisplay = (isAll || liveListDataReserve[i].MainCategory == cateName);
 						var isDisplay = liveListDataReserve[i].isDisplay(sender.Text[0]);
@@ -3728,30 +3811,38 @@ namespace namaichi
 				        	isDisplay = false;
 				        
 				        if (isDisplay) {
-				        	//var sI = liveList.FirstDisplayedScrollingRowIndex;
-							liveListDataSource.Add(liveListDataReserve[i]);
-							//setScrollIndex(liveList);
-							
-							liveListDataReserve.RemoveAt(i);
+				        	formAction(() => {
+					        	//var sI = liveList.FirstDisplayedScrollingRowIndex;
+								liveListDataSource.Add(liveListDataReserve[i]);
+								//setScrollIndex(liveList);
+				       		});
+				        	liveListDataReserve.RemoveAt(i);
 						}
 				    }
-				});
+				//});
 				
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
 			}
 			
-			formAction(() => {
-				for (var i = liveListDataSource.Count - 1; i > -1; i--) {
+			try {
+				var _liveListDataSource = liveListDataSource.ToArray();
+				for (var i = _liveListDataSource.Count() - 1; i > -1; i--) {
+					var li = _liveListDataSource[i];
 					//var isDisp = (liveListDataSource[i].MainCategory == cateName ||
 					//            cateName == null);
-					var isDisp = liveListDataSource[i].isDisplay(sender.Text[0]);
+					var isDisp = li.isDisplay(sender.Text[0]);
 					if (!isDisp) {
-						liveListDataReserve.Add(liveListDataSource[i]);
-						liveListDataSource.RemoveAt(i);
+						formAction(() => {
+							liveListDataReserve.Add(li);
+							liveListDataSource.Remove(li);
+						});
 					}
 				}
-			});
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+			}
+			
 			
 		}
 		public void getVisiRow(bool isAll = false) {
@@ -3860,7 +3951,7 @@ namespace namaichi
 			try  {
 				//var favorites = liveListDataSource.Select(li => !string.IsNullOrEmpty(li.Favorite));
 				//liveListDataSource.
-				formAction(() => {
+				//formAction(() => {
 					var cateChar = getCategoryChar();
 					
 					var favoriteList = new List<LiveInfo>();
@@ -3872,11 +3963,13 @@ namespace namaichi
 					favoriteList.Reverse();
 					
 					var sI = liveList.FirstDisplayedScrollingRowIndex;
-					foreach (var f in favoriteList) liveListDataSource.Remove(f);
-					
-					foreach (var f in favoriteList) {
-						liveListDataSource.Insert(0, f);
-					}
+					formAction(() => {
+						foreach (var f in favoriteList) liveListDataSource.Remove(f);
+						
+						foreach (var f in favoriteList) {
+							liveListDataSource.Insert(0, f);
+						}
+					});
 					setScrollIndex(liveList, sI);
 					
 					
@@ -3884,7 +3977,7 @@ namespace namaichi
 					//	scrollIndex = liveList.Rows.Count -1;
 //					
 					
-				});
+				//});
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
@@ -4126,25 +4219,31 @@ namespace namaichi
 //			foreach (DataGridViewCell b in alartList.Rows[0].Cells)
 //				util.debugWriteLine(b.ColumnIndex + " " + b.Value);
 			
-			formAction(() => {
+			//formAction(() => {
 			        for (var i = 0; i < 10; i++) {
 						try {
 		           			foreach (DataGridViewRow r in alartList.Rows) {
 				           		//util.debugWriteLine("r.cells.value " + r.Cells[2].Value + " " + r.Cells[1].Value);
 				           		if (isUser && alartListDataSource[r.Index].hostId == notExistId) {
-				           			alartListDataSource[r.Index].userIdColorType = setType;
-				           			alartList.UpdateCellValue(1, r.Index);
+				           			formAction(() => {
+					           			alartListDataSource[r.Index].userIdColorType = setType;
+					           			alartList.UpdateCellValue(1, r.Index);
+									});
 								}
 				           		if (!isUser && alartListDataSource[r.Index].communityId == notExistId) {
-				           			alartListDataSource[r.Index].comIdColorType = setType;
-				           			alartList.UpdateCellValue(0, r.Index);
+				           			formAction(() => {
+					           			alartListDataSource[r.Index].comIdColorType = setType;
+					           			alartList.UpdateCellValue(0, r.Index);
+				           			});
 				           		}
 				           	}
 				           	foreach (DataGridViewRow r in userAlartList.Rows) {
 				           		//util.debugWriteLine("r.cells.value " + r.Cells[2].Value + " " + r.Cells[1].Value);
 				           		if (isUser && userAlartListDataSource[r.Index].hostId == notExistId) {
-				           			userAlartListDataSource[r.Index].userIdColorType = setType;
-				           			userAlartList.UpdateCellValue(1, r.Index);
+				           			formAction(() => {
+					           			userAlartListDataSource[r.Index].userIdColorType = setType;
+					           			userAlartList.UpdateCellValue(1, r.Index);
+									});
 								}
 				           	}
 			           		break;
@@ -4153,7 +4252,7 @@ namespace namaichi
 		           			Thread.Sleep(1000);
 		           		}
 			    	}
-	           	});
+	           	//});
 		}
 		//private bool[] checkMenuLock = new bool[3];
 		public void setToolMenuStatusBar(string t) {
@@ -4482,9 +4581,9 @@ namespace namaichi
 						  	(t == "Twitter" ? twitterList : 
 						   (t == "通知履歴" ? historyList : null))));
 					if (dgv != null) {
-						formAction(() => dgv.Refresh());
+						dgv.Refresh();
 						if (dgv == historyList) 
-							formAction(() => notAlartList.Refresh());
+							notAlartList.Refresh();
 					}
 				});
 			} catch (Exception e) {
@@ -5099,18 +5198,18 @@ namespace namaichi
 			}
 			var cur = list.CurrentCell;
 			if (cur.RowIndex == -1) return;
-			formAction(() => 
-				openAddForm(ds[cur.RowIndex].lvid)
-			);
+			//formAction(() => 
+				openAddForm(ds[cur.RowIndex].lvid);
+			//);
 		}
 		
 		void NotAlartListAddAlartListMenuClick(object sender, EventArgs e)
 		{
 			var cur = notAlartList.CurrentCell;
 			if (cur.RowIndex == -1) return;
-			formAction(() => 
-				openAddForm(notAlartListDataSource[cur.RowIndex].lvid)
-			);
+			//formAction(() => 
+				openAddForm(notAlartListDataSource[cur.RowIndex].lvid);
+			//);
 		}
 		public void checkHistoryLive() {
 			while (true) {
@@ -5433,9 +5532,14 @@ namespace namaichi
 				e.CellStyle.BackColor = dataSource[e.RowIndex].backColor;
 				e.CellStyle.ForeColor = dataSource[e.RowIndex].textColor;
 			} else {
-				e.CellStyle.BackColor = (e.RowIndex % 2 != 0) ? 
-						evenRowsColor
-						: Color.FromName("window");
+				if (isNotifyOffColumn(e.ColumnIndex))
+					e.CellStyle.BackColor = Color.FromArgb(211, 211, 211);
+				else {
+					e.CellStyle.BackColor = (e.RowIndex % 2 != 0) ? 
+							evenRowsColor
+							: Color.FromName("window");
+				}
+				
 			}
 		}
 		
@@ -5833,14 +5937,20 @@ namespace namaichi
 			}
 		}
 		private KeyValuePair<DateTime, ToolStripMenuItem> getRssItemToNotifyHistory(RssItem a) {
-			var text = a.pubDateDt.ToString("dd日HH:mm") + " " + 
-					(a.title.Length > 20 ? a.title.Substring(0, 20) + ".." : a.title) + 
-					"(" + (a.comName.Length > 20 ? a.comName.Substring(0, 20) + ".." : a.comName) + ")";
-			var menu = new ToolStripMenuItem(text, null, (o, e) => 
-					util.openUrlBrowser("https://live.nicovideo.jp/watch/" + a.lvId, config));
-			menu.Tag = a;
-			var ret = new KeyValuePair<DateTime, ToolStripMenuItem>(a.pubDateDt, menu);
-			return ret;
+			try {
+				if (a.comName == null) a.comName = "";
+				var text = a.pubDateDt.ToString("dd日HH:mm") + " " + 
+						(a.title.Length > 20 ? a.title.Substring(0, 20) + ".." : a.title) + 
+						"(" + (a.comName.Length > 20 ? a.comName.Substring(0, 20) + ".." : a.comName) + ")";
+				var menu = new ToolStripMenuItem(text, null, (o, e) => 
+						util.openUrlBrowser("https://live.nicovideo.jp/watch/" + a.lvId, config));
+				menu.Tag = a;
+				var ret = new KeyValuePair<DateTime, ToolStripMenuItem>(a.pubDateDt, menu);
+				return ret;
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return new KeyValuePair<DateTime, ToolStripMenuItem>(DateTime.MinValue, null);
+			}
 		}
 		/*
 		public void liveListLockAction(Action a) {
@@ -5881,14 +5991,14 @@ namespace namaichi
 						util.debugWriteLine("in datareserve duplicate " + dup[0] + " " + dup1);
 				}
 				
-				formAction(() => {
+				//formAction(() => {
 					foreach (var d in dup) {
 						LiveInfo i = null;
 						try {
 							if (_liveListDataSource.Any(x => x.lvId == d)) {
 								i = _liveListDataSource.First(x => x.lvId == d);
 								if (i != null) {
-									liveListDataSource.Remove(i);
+									formAction(() => liveListDataSource.Remove(i));
 									continue;
 								}
 							}
@@ -5898,17 +6008,26 @@ namespace namaichi
 							if (_liveListDataReserve.Any(x => x.lvId == d)) {
 								i = _liveListDataReserve.First(x => x.lvId == d);
 								if (i != null) {
-									liveListDataReserve.Remove(i);
+									formAction(() => liveListDataReserve.Remove(i));
 								}
 							}
 						} catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);}
 					}
-				});
+				//});
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
 		}
 		public void liveListLockAction(Action a, [CallerMemberName] string memberName = "") {
+			//test
+			try {
+				util.debugWriteLine("liveListLockAction memberName " + memberName);
+				a.Invoke();
+			} catch (Exception e) {
+				util.debugWriteLine("liveList LockAction " + e.Message + e.Source + e.StackTrace);
+			}
+			return;
+			/*
 			int scrollI = 0;
 			var nowUnix = util.getUnixTime();
 			lock (liveListLockObj) {
@@ -5942,6 +6061,7 @@ namespace namaichi
 				}
 				util.debugWriteLine("live list action " + memberName + " " + scrollI + " now " + liveList.FirstDisplayedScrollingRowIndex + " " + (DateTime.Now - dt));
 			}
+			*/
 		}
 		private void loadControlLayout() {
 			try {
@@ -6011,26 +6131,30 @@ namespace namaichi
 								columnName == "コミュニティID" ||
 					                           });
 					*/
-					formAction(() => {
-						for (var i = 0; i < liveListDataSource.Count(); i++) {
-							var _key = getLiveInfoToSortKey(liveListDataSource[i], type, columnName);
+					List<LiveInfo> _liveListDataSource = null;
+					formAction(() => _liveListDataSource = liveListDataSource.ToList());
+					//formAction(() => {
+						for (var i = 0; i < _liveListDataSource.Count(); i++) {
+							var _key = getLiveInfoToSortKey(_liveListDataSource[i], type, columnName);
 							if (_key != sortedKey[i]) {
-								var moveLi = liveListDataSource.Where((l) => {
+								var moveLi = _liveListDataSource.Where((l) => {
 								    return getLiveInfoToSortKey(l, type, columnName) == sortedKey[i];
 									//return type.GetValue(l, null).ToString() == sortedKey[i];
 								}).ToList();
 		
 								foreach (var m in moveLi) {
 									if (moveLi.Count > 1) util.debugWriteLine("moveli multi " + m.lvId + " " + m.title + " " + i);
-									liveListDataSource.Remove(m);
-									liveListDataSource.Insert(i, m);
+									formAction(() => {
+										liveListDataSource.Remove(m);
+										liveListDataSource.Insert(i, m);
+									});
 								}
 							}
 						}
-					});
+					//});
 					var isChange = false;
-					for (var i = 0; i < liveListDataSource.Count(); i++) {
-						if (getLiveInfoToSortKey(liveListDataSource[i], type, columnName) != sortedKey[i]) {
+					for (var i = 0; i < _liveListDataSource.Count(); i++) {
+						if (getLiveInfoToSortKey(_liveListDataSource[i], type, columnName) != sortedKey[i]) {
 							isChange = true;
 						}
 					}
@@ -6451,6 +6575,7 @@ namespace namaichi
 		void AlartListCellToolTipTextNeeded(object sender, DataGridViewCellToolTipTextNeededEventArgs e)
 		{
 			try {
+				if (e.RowIndex == -1) return;
 				if (e.ColumnIndex == 8 &&
 				    	!string.IsNullOrEmpty(alartListDataSource[e.RowIndex].lastLvTitle)) {
 					//e.ToolTipText = alartListDataSource[e.RowIndex].lastLvTitle;
@@ -6487,9 +6612,15 @@ namespace namaichi
 							continue;
 						}
 						var ri = (RssItem)items[i].Tag;
-						if (historyListDataSource.FirstOrDefault(hi => hi.lvid == ri.lvId) != null) 
-							continue;
-						var isOnAir = isOnAirLvid(ri.lvId, ri.type);
+						
+						var isOnAir = false;
+						var hi = historyListDataSource.FirstOrDefault(_hi => _hi.lvid == ri.lvId);
+						if (hi != null) {
+							isOnAir = hi.onAirMode != 0;
+						}
+						else {
+							isOnAir = isOnAirLvid(ri.lvId, ri.type);
+						}
 						//util.debugWriteLine("checkNotifyLive check " + ri.lvId + " " + isOnAir);
 						if (!isOnAir)
 							formAction(() => items.Remove(items[i]));
@@ -6616,7 +6747,8 @@ namespace namaichi
 					var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(li.lvId, "(\\d+)");
 					
 					var ri = util.getRiFromLvid(li.lvId, check.container);
-					util.appliProcess(path, url, args, ri, check.container);
+					var appNum = (int)(n[0] - 'A');
+					util.appliProcess(path, url, args, ri, check.container, config, appNum, this);
 			
 				} catch (Exception eee) {
 					util.debugWriteLine(eee.Message + eee.Source + eee.StackTrace + eee.TargetSite);
@@ -6630,7 +6762,7 @@ namespace namaichi
 		}
 		void setNotifyOff() {
 			var notifyOffs = new string[] {
-					"OffPop","OffBalloon",
+					"OffPop", "OffBalloon",
 					"OffWeb","OffMail","OffSound","OffAppA",
 					"OffAppB","OffAppC","OffAppD",
 					"OffAppE","OffAppF","OffAppG",
@@ -6642,6 +6774,67 @@ namespace namaichi
 				if (!isOff) isAllOff = false;
 			}
 			notifyOffList[0] = isAllOff;
+			
+		}
+		void setNotifyOffColumn() {
+			var notifyOffsPropName = new string[] {
+					"popup","baloon",
+					"browser","mail","sound","appliA",
+					"appliB","appliC","appliD",
+					"appliE","appliF","appliG",
+					"appliH","appliI","appliJ"};
+			var n = notifyOffList;
+			//alartList.EnableHeadersVisualStyles = true;
+			var columns = alartList.Columns;
+			//alartList.EnableHeadersVisualStyles = false;
+			for(var i = 2; i < notifyOffList.Length; i++) {
+				var isOff = notifyOffList[i];
+				foreach (DataGridViewColumn c in columns) {
+					util.debugWriteLine("column__ " + c.Name + " " + c.DataPropertyName);
+					//c.DefaultCellStyle.BackColor = Color.Yellow;
+					if (c.DataPropertyName.ToLower().IndexOf(notifyOffsPropName[i - 2]) > -1) {
+						//c.HeaderCell.Style.BackColor = isOff ? Color.FromArgb(240, 0, 0) : Color.White;
+						//c.DefaultCellStyle.ForeColor = Color.Green;
+						break;
+					}
+				}
+			}
+			//alartList.EnableHeadersVisualStyles = false;
+			//alartList.ColumnHeadersDefaultCellStyle.BackColor = Color.Red;
+			alartList.Refresh();
+		}
+		bool isNotifyOffColumn(int columnI) {
+			var notifyOffsPropName = new string[] {
+					"popup","baloon",
+					"browser","mail","sound","appliA",
+					"appliB","appliC","appliD",
+					"appliE","appliF","appliG",
+					"appliH","appliI","appliJ"};
+			for(var i = 2; i < notifyOffList.Length; i++) {
+				var isOff = notifyOffList[i];
+				if (!isOff) continue;
+				
+				foreach (DataGridViewColumn c in alartList.Columns) {
+					var a = c.DisplayIndex;
+					if (c.Index != columnI) continue;
+					if (c.DataPropertyName.ToLower().IndexOf(notifyOffsPropName[i - 2].ToLower()) > -1) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+		void UserSearchBtnClick(object sender, EventArgs e)
+		{
+			searchBtnClickCore(userSearchText, userAlartList, 
+					userAlartListDataSource, userSearchBtn);
+		}
+		void UserSearchTextKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyData == Keys.Enter) {
+				userSearchBtn.PerformClick();
+				e.SuppressKeyPress = true;
+			}
 		}
 	}
 }

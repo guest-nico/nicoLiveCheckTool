@@ -96,6 +96,7 @@ namespace namaichi
 			this.radioButton1 = new System.Windows.Forms.RadioButton();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.onlyInfoDescriptLabel = new System.Windows.Forms.LinkLabel();
 			this.memberOnlyCheckList = new System.Windows.Forms.CheckedListBox();
 			this.label16 = new System.Windows.Forms.Label();
 			this.officialBtn = new System.Windows.Forms.Button();
@@ -593,8 +594,8 @@ namespace namaichi
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(256, 48);
 			this.label9.TabIndex = 23;
-			this.label9.Text = "（放送者名、チャンネル名、チャンネルID、タイトル、説明、放送ID。スペース区切りでワードを複数指定可(OR条件)。語頭に「-」で「含まない」判定(NOT条件" +
-			")）。";
+			this.label9.Text = "（放送者名、放送者ID、チャンネル名、チャンネルID、タイトル、説明、放送ID。スペース区切りでワードを複数指定可(OR条件)。語頭に「-」で「含まない」判定(N" +
+			"OT条件)）。";
 			// 
 			// comThumbBox
 			// 
@@ -691,6 +692,7 @@ namespace namaichi
 			// 
 			// panel1
 			// 
+			this.panel1.Controls.Add(this.onlyInfoDescriptLabel);
 			this.panel1.Controls.Add(this.memberOnlyCheckList);
 			this.panel1.Controls.Add(this.label1);
 			this.panel1.Controls.Add(this.groupBox1);
@@ -730,6 +732,16 @@ namespace namaichi
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(391, 457);
 			this.panel1.TabIndex = 30;
+			// 
+			// onlyInfoDescriptLabel
+			// 
+			this.onlyInfoDescriptLabel.Location = new System.Drawing.Point(209, 265);
+			this.onlyInfoDescriptLabel.Name = "onlyInfoDescriptLabel";
+			this.onlyInfoDescriptLabel.Size = new System.Drawing.Size(172, 11);
+			this.onlyInfoDescriptLabel.TabIndex = 35;
+			this.onlyInfoDescriptLabel.TabStop = true;
+			this.onlyInfoDescriptLabel.Text = "放送情報を指定した判定について";
+			this.onlyInfoDescriptLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnlyInfoDescriptLabelLinkClicked);
 			// 
 			// memberOnlyCheckList
 			// 
@@ -875,6 +887,7 @@ namespace namaichi
 			this.panel2.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.LinkLabel onlyInfoDescriptLabel;
 		private System.Windows.Forms.ComboBox mustUserList;
 		private System.Windows.Forms.ComboBox mustComList;
 		private System.Windows.Forms.ComboBox mustKeywordList;

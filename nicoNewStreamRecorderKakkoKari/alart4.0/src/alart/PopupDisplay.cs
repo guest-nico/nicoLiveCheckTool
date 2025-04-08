@@ -49,7 +49,9 @@ namespace namaichi.alart
 			util.debugWriteLine("popupDisplay posI " + posI + " pos " + pos + " " + ri.lvId);
 			//test
 //			if (posList.Count > 10) return;
-			form.DisplayPopup(ri, pos, isSmall, this, posI, ai);
+			form.formAction(() =>
+				form.DisplayPopup(ri, pos, isSmall, this, posI, ai)
+			);
 		}
 		private Point getPos(bool isSmall, out int posI, string poploc, 
 				bool isFix) {
@@ -92,15 +94,17 @@ namespace namaichi.alart
 					DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"), "放送説明", "チャンネル名",
 					"チャンネルID", "放送者名", thumbnailUrl, "true", "", false);
 			try {
-				popupSize = new Size[]{new PopupForm(ri, form.config, this, 0, null, form.check.container).Size,
-						new SmallPopupForm(ri, form.config, this, 0, null, form.check.container).Size};
+				popupSize = new Size[]{new PopupForm(ri, form.config, this, 0, null, form, form.check.container).Size,
+						new SmallPopupForm(ri, form.config, this, 0, null, form.check.container, form).Size};
 				
 				var posI = 0;
 				var pos = getPos(isSmall, out posI, poploc,
 						true);
-				form.DisplayPopup(ri, pos, isSmall, this, posI, null, true, 
-						poploc, poptime, isClickClose, 
-						isTopMost, isColor, opacity);
+				form.formAction(() =>
+					form.DisplayPopup(ri, pos, isSmall, this, posI, null, true, 
+							poploc, poptime, isClickClose, 
+							isTopMost, isColor, opacity)
+				);
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
@@ -110,8 +114,8 @@ namespace namaichi.alart
 			var ri = new namaichi.info.RssItem("タイトル", "lv1000000",
 					DateTime.Now.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"), "放送説明", "チャンネル名",
 					"チャンネルID", "放送者名", thumbnailUrl, "true", "", false);
-			popupSize = new Size[]{new PopupForm(ri, form.config, this, 0, null, form.check.container).Size,
-						new SmallPopupForm(ri, form.config, this, 0, null, form.check.container).Size};
+			popupSize = new Size[]{new PopupForm(ri, form.config, this, 0, null, form, form.check.container).Size,
+						new SmallPopupForm(ri, form.config, this, 0, null, form.check.container, form).Size};
 		}
 	}
 }

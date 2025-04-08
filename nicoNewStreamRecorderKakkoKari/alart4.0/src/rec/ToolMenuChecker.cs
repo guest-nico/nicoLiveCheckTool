@@ -305,7 +305,7 @@ namespace namaichi.rec
 			} else {
 				Task.Factory.StartNew(() => {
 					try {
-						var f = new BulkAddFromFollowAccountForm(int.Parse(form.config.get("fontSize")));
+						var f = new BulkAddFromFollowAccountForm(int.Parse(form.config.get("fontSize")), form.config);
 						Task.Factory.StartNew(() => {
 							form.formAction(() => f.ShowDialog(form));
 						}).Wait();

@@ -859,5 +859,10 @@ namespace namaichi
 				Controls.Find(n + "ChkBox", true)[0].Text =	"ｱﾌﾟﾘ" + ((char)('A' + i)) + "(" + c + ")";
 			}
 		}
+		void OnlyInfoDescriptLabelLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			var t = "放送情報を表す文字をつけることで、キーワードを判定する対象を設定できます。\n例　title=ゲーム\n(タイトルに「ゲーム」を含む放送が通知されます)\nlvid= 放送情報\ntitle= タイトル\nhostName= 放送者名\nhostId= 放送者のユーザーID\nchName= チャンネル名\nchId= チャンネルID";
+			MessageBox.Show(t);
+		}
 	}
 }

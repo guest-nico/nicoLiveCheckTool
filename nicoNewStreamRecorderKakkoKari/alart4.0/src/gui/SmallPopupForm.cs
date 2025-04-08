@@ -28,10 +28,11 @@ namespace namaichi
 		
 		public SmallPopupForm(RssItem item, config.config config, 
 				PopupDisplay pd, int showIndex, AlartInfo ai,
-				CookieContainer cc,
+				CookieContainer cc, MainForm form,
 				bool isTest = false, string poploc = null, int poptime = 0,
 				bool isClickClose = true,  
-				bool isTopMost = true, Color[] isColor = null, double opacity = 0.9)
+				bool isTopMost = true, Color[] isColor = null, 
+				double opacity = 0.9)
 		{
 			this.config = config;
 			this.ri = item;
@@ -100,6 +101,7 @@ namespace namaichi
 				}
 			}
 			this.cc = cc;
+			this.form = form;
 		}
 		private bool isOkStrWidth(string s) {
 			var w = TextRenderer.MeasureText(s, titleLabel.Font).Width;

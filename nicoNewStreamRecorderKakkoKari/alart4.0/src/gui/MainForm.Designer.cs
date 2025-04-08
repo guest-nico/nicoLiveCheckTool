@@ -331,7 +331,6 @@ namespace namaichi
 			this.alartListFollowUserMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.alartListUnFollowComMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.alartListUnFollowUserMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.alartUserListFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator41 = new System.Windows.Forms.ToolStripSeparator();
 			this.openAppliAMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliBMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -343,6 +342,7 @@ namespace namaichi
 			this.openAppliHMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliIMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliJMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.alartUserListFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.notifyIconMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.notifyIconRecentSeparator = new System.Windows.Forms.ToolStripSeparator();
@@ -422,40 +422,17 @@ namespace namaichi
 			this.searchText = new System.Windows.Forms.TextBox();
 			this.favoriteNumLabel = new System.Windows.Forms.Label();
 			this.searchBtn = new System.Windows.Forms.Button();
+			this.favoriteCommunityBtn = new System.Windows.Forms.RadioButton();
+			this.favoriteUserBtn = new System.Windows.Forms.RadioButton();
 			this.favoriteUserPanel = new System.Windows.Forms.Panel();
+			this.userSearchText = new System.Windows.Forms.TextBox();
+			this.userSearchBtn = new System.Windows.Forms.Button();
 			this.favoriteUserThumbBox = new System.Windows.Forms.PictureBox();
 			this.favoriteUserNumLabel = new System.Windows.Forms.Label();
 			this.userAddBtn = new System.Windows.Forms.Button();
 			this.userAddText = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.userAlartList = new System.Windows.Forms.DataGridView();
-			this.dataGridViewTextBoxColumn25 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn26 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn27 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn28 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn29 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-			this.dataGridViewButtonColumn3 = new System.Windows.Forms.DataGridViewButtonColumn();
-			this.dataGridViewButtonColumn4 = new System.Windows.Forms.DataGridViewButtonColumn();
-			this.dataGridViewTextBoxColumn30 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn31 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewCheckBoxColumn17 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dataGridViewCheckBoxColumn18 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dataGridViewCheckBoxColumn19 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dataGridViewCheckBoxColumn20 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dataGridViewCheckBoxColumn21 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dataGridViewCheckBoxColumn22 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dataGridViewCheckBoxColumn23 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dataGridViewCheckBoxColumn24 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dataGridViewCheckBoxColumn25 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dataGridViewCheckBoxColumn26 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dataGridViewCheckBoxColumn27 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dataGridViewCheckBoxColumn28 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dataGridViewCheckBoxColumn29 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dataGridViewCheckBoxColumn30 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dataGridViewCheckBoxColumn31 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dataGridViewComboBoxColumn2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-			this.dataGridViewTextBoxColumn32 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.contextMenuStrip4 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem32 = new System.Windows.Forms.ToolStripMenuItem();
@@ -477,8 +454,6 @@ namespace namaichi
 			this.openAppliHUserFavoriteMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliIUserFavoriteMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliJUserFavoriteMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.favoriteCommunityBtn = new System.Windows.Forms.RadioButton();
-			this.favoriteUserBtn = new System.Windows.Forms.RadioButton();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.addYoyakuBtn = new System.Windows.Forms.Button();
 			this.taskList = new System.Windows.Forms.DataGridView();
@@ -657,6 +632,33 @@ namespace namaichi
 			this.toolStripMenuItem44 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator39 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem45 = new System.Windows.Forms.ToolStripMenuItem();
+			this.dataGridViewTextBoxColumn25 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn26 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn27 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn28 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn29 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.dataGridViewButtonColumn3 = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.dataGridViewButtonColumn4 = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.dataGridViewTextBoxColumn30 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn31 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewCheckBoxColumn17 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn18 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn19 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn20 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn21 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn22 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn23 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn24 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn25 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn26 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn27 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn28 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn29 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn30 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewCheckBoxColumn31 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridViewComboBoxColumn2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.dataGridViewTextBoxColumn32 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.alartList)).BeginInit();
@@ -834,58 +836,58 @@ namespace namaichi
 			this.updateCateAllMenu.Checked = true;
 			this.updateCateAllMenu.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.updateCateAllMenu.Name = "updateCateAllMenu";
-			this.updateCateAllMenu.Size = new System.Drawing.Size(136, 22);
+			this.updateCateAllMenu.Size = new System.Drawing.Size(152, 22);
 			this.updateCateAllMenu.Text = "すべて(&A)";
 			// 
 			// updateCateCommon
 			// 
 			this.updateCateCommon.Name = "updateCateCommon";
-			this.updateCateCommon.Size = new System.Drawing.Size(136, 22);
+			this.updateCateCommon.Size = new System.Drawing.Size(152, 22);
 			this.updateCateCommon.Text = "一般(&B)";
 			// 
 			// updateCateTryMenu
 			// 
 			this.updateCateTryMenu.Name = "updateCateTryMenu";
-			this.updateCateTryMenu.Size = new System.Drawing.Size(136, 22);
+			this.updateCateTryMenu.Size = new System.Drawing.Size(152, 22);
 			this.updateCateTryMenu.Text = "やってみた(&C)";
 			// 
 			// updateCatePlayMenu
 			// 
 			this.updateCatePlayMenu.Name = "updateCatePlayMenu";
-			this.updateCatePlayMenu.Size = new System.Drawing.Size(136, 22);
+			this.updateCatePlayMenu.Size = new System.Drawing.Size(152, 22);
 			this.updateCatePlayMenu.Text = "ゲーム(&D)";
 			// 
 			// updateCatePresenMenu
 			// 
 			this.updateCatePresenMenu.Name = "updateCatePresenMenu";
-			this.updateCatePresenMenu.Size = new System.Drawing.Size(136, 22);
+			this.updateCatePresenMenu.Size = new System.Drawing.Size(152, 22);
 			this.updateCatePresenMenu.Text = "動画紹介(&E)";
 			// 
 			// updateCateSuperIchibaMenu
 			// 
 			this.updateCateSuperIchibaMenu.Name = "updateCateSuperIchibaMenu";
-			this.updateCateSuperIchibaMenu.Size = new System.Drawing.Size(136, 22);
+			this.updateCateSuperIchibaMenu.Size = new System.Drawing.Size(152, 22);
 			this.updateCateSuperIchibaMenu.Text = "遊ぶ(&F)";
 			this.updateCateSuperIchibaMenu.Visible = false;
 			// 
 			// updateCateFaceMenu
 			// 
 			this.updateCateFaceMenu.Name = "updateCateFaceMenu";
-			this.updateCateFaceMenu.Size = new System.Drawing.Size(136, 22);
+			this.updateCateFaceMenu.Size = new System.Drawing.Size(152, 22);
 			this.updateCateFaceMenu.Text = "顔出し(&G)";
 			this.updateCateFaceMenu.Visible = false;
 			// 
 			// updateCateRushMenu
 			// 
 			this.updateCateRushMenu.Name = "updateCateRushMenu";
-			this.updateCateRushMenu.Size = new System.Drawing.Size(136, 22);
+			this.updateCateRushMenu.Size = new System.Drawing.Size(152, 22);
 			this.updateCateRushMenu.Text = "凸待ち(&H)";
 			this.updateCateRushMenu.Visible = false;
 			// 
 			// updateCateR18Menu
 			// 
 			this.updateCateR18Menu.Name = "updateCateR18Menu";
-			this.updateCateR18Menu.Size = new System.Drawing.Size(136, 22);
+			this.updateCateR18Menu.Size = new System.Drawing.Size(152, 22);
 			this.updateCateR18Menu.Text = "R-18(&I)";
 			this.updateCateR18Menu.Visible = false;
 			// 
@@ -2718,6 +2720,7 @@ namespace namaichi
 			this.Web.HeaderText = "Web";
 			this.Web.MinimumWidth = 45;
 			this.Web.Name = "Web";
+			this.Web.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.Web.Width = 45;
 			// 
 			// ﾒｰﾙ
@@ -2736,6 +2739,7 @@ namespace namaichi
 			this.音.HeaderText = "音";
 			this.音.MinimumWidth = 45;
 			this.音.Name = "音";
+			this.音.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.音.Width = 45;
 			// 
 			// アプリA
@@ -2774,6 +2778,7 @@ namespace namaichi
 			this.ｱﾌﾟﾘC.HeaderText = "ｱﾌﾟﾘD";
 			this.ｱﾌﾟﾘC.MinimumWidth = 45;
 			this.ｱﾌﾟﾘC.Name = "ｱﾌﾟﾘC";
+			this.ｱﾌﾟﾘC.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.ｱﾌﾟﾘC.Width = 45;
 			// 
 			// ｱﾌﾟﾘE
@@ -2782,6 +2787,7 @@ namespace namaichi
 			this.ｱﾌﾟﾘE.HeaderText = "ｱﾌﾟﾘE";
 			this.ｱﾌﾟﾘE.MinimumWidth = 45;
 			this.ｱﾌﾟﾘE.Name = "ｱﾌﾟﾘE";
+			this.ｱﾌﾟﾘE.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.ｱﾌﾟﾘE.Width = 45;
 			// 
 			// ｱﾌﾟﾘF
@@ -2790,6 +2796,7 @@ namespace namaichi
 			this.ｱﾌﾟﾘF.HeaderText = "ｱﾌﾟﾘF";
 			this.ｱﾌﾟﾘF.MinimumWidth = 45;
 			this.ｱﾌﾟﾘF.Name = "ｱﾌﾟﾘF";
+			this.ｱﾌﾟﾘF.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.ｱﾌﾟﾘF.Width = 45;
 			// 
 			// ｱﾌﾟﾘG
@@ -2798,6 +2805,7 @@ namespace namaichi
 			this.ｱﾌﾟﾘG.HeaderText = "ｱﾌﾟﾘG";
 			this.ｱﾌﾟﾘG.MinimumWidth = 45;
 			this.ｱﾌﾟﾘG.Name = "ｱﾌﾟﾘG";
+			this.ｱﾌﾟﾘG.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.ｱﾌﾟﾘG.Width = 45;
 			// 
 			// ｱﾌﾟﾘH
@@ -2806,6 +2814,7 @@ namespace namaichi
 			this.ｱﾌﾟﾘH.HeaderText = "ｱﾌﾟﾘH";
 			this.ｱﾌﾟﾘH.MinimumWidth = 45;
 			this.ｱﾌﾟﾘH.Name = "ｱﾌﾟﾘH";
+			this.ｱﾌﾟﾘH.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.ｱﾌﾟﾘH.Width = 45;
 			// 
 			// ｱﾌﾟﾘI
@@ -2814,6 +2823,7 @@ namespace namaichi
 			this.ｱﾌﾟﾘI.HeaderText = "ｱﾌﾟﾘI";
 			this.ｱﾌﾟﾘI.MinimumWidth = 45;
 			this.ｱﾌﾟﾘI.Name = "ｱﾌﾟﾘI";
+			this.ｱﾌﾟﾘI.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.ｱﾌﾟﾘI.Width = 45;
 			// 
 			// ｱﾌﾟﾘJ
@@ -2822,6 +2832,7 @@ namespace namaichi
 			this.ｱﾌﾟﾘJ.HeaderText = "ｱﾌﾟﾘJ";
 			this.ｱﾌﾟﾘJ.MinimumWidth = 45;
 			this.ｱﾌﾟﾘJ.Name = "ｱﾌﾟﾘJ";
+			this.ｱﾌﾟﾘJ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.ｱﾌﾟﾘJ.Width = 45;
 			// 
 			// 音設定
@@ -2873,7 +2884,7 @@ namespace namaichi
 									this.openAppliIMenu,
 									this.openAppliJMenu});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(269, 468);
+			this.contextMenuStrip1.Size = new System.Drawing.Size(269, 446);
 			this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStrip1Opening);
 			// 
 			// openLastHosoMenu
@@ -2962,7 +2973,7 @@ namespace namaichi
 									this.alartListUnFollowComMenu,
 									this.alartListUnFollowUserMenu});
 			this.alartListFollowMenu.Name = "contextMenuStrip6";
-			this.alartListFollowMenu.OwnerItem = this.alartComListFollowMenu;
+			this.alartListFollowMenu.OwnerItem = this.alartUserListFollowMenu;
 			this.alartListFollowMenu.Size = new System.Drawing.Size(246, 92);
 			this.alartListFollowMenu.Opening += new System.ComponentModel.CancelEventHandler(this.AlartListFollowMenuOpening);
 			// 
@@ -2993,13 +3004,6 @@ namespace namaichi
 			this.alartListUnFollowUserMenu.Size = new System.Drawing.Size(245, 22);
 			this.alartListUnFollowUserMenu.Text = "この行のユーザーをフォロー解除する";
 			this.alartListUnFollowUserMenu.Click += new System.EventHandler(this.AlartListUnFollowUserMenuClick);
-			// 
-			// alartUserListFollowMenu
-			// 
-			this.alartUserListFollowMenu.DropDown = this.alartListFollowMenu;
-			this.alartUserListFollowMenu.Name = "alartUserListFollowMenu";
-			this.alartUserListFollowMenu.Size = new System.Drawing.Size(268, 22);
-			this.alartUserListFollowMenu.Text = "フォロー";
 			// 
 			// toolStripSeparator41
 			// 
@@ -3075,6 +3079,13 @@ namespace namaichi
 			this.openAppliJMenu.Size = new System.Drawing.Size(268, 22);
 			this.openAppliJMenu.Text = "最近行われた放送のURLをアプリJで開く";
 			this.openAppliJMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// alartUserListFollowMenu
+			// 
+			this.alartUserListFollowMenu.DropDown = this.alartListFollowMenu;
+			this.alartUserListFollowMenu.Name = "alartUserListFollowMenu";
+			this.alartUserListFollowMenu.Size = new System.Drawing.Size(268, 22);
+			this.alartUserListFollowMenu.Text = "フォロー";
 			// 
 			// notifyIcon
 			// 
@@ -3749,9 +3760,9 @@ namespace namaichi
 			// 
 			this.tabPage1.BackColor = System.Drawing.Color.Transparent;
 			this.tabPage1.Controls.Add(this.favoriteCommunityPanel);
-			this.tabPage1.Controls.Add(this.favoriteUserPanel);
 			this.tabPage1.Controls.Add(this.favoriteCommunityBtn);
 			this.tabPage1.Controls.Add(this.favoriteUserBtn);
+			this.tabPage1.Controls.Add(this.favoriteUserPanel);
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -3863,11 +3874,49 @@ namespace namaichi
 			this.searchBtn.UseVisualStyleBackColor = true;
 			this.searchBtn.Click += new System.EventHandler(this.SearchBtnClick);
 			// 
+			// favoriteCommunityBtn
+			// 
+			this.favoriteCommunityBtn.Appearance = System.Windows.Forms.Appearance.Button;
+			this.favoriteCommunityBtn.BackColor = System.Drawing.SystemColors.Control;
+			this.favoriteCommunityBtn.Checked = true;
+			this.favoriteCommunityBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+			this.favoriteCommunityBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.favoriteCommunityBtn.Location = new System.Drawing.Point(0, 0);
+			this.favoriteCommunityBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.favoriteCommunityBtn.Name = "favoriteCommunityBtn";
+			this.favoriteCommunityBtn.Size = new System.Drawing.Size(76, 23);
+			this.favoriteCommunityBtn.TabIndex = 34;
+			this.favoriteCommunityBtn.TabStop = true;
+			this.favoriteCommunityBtn.Text = "チャンネルID";
+			this.favoriteCommunityBtn.UseCompatibleTextRendering = true;
+			this.favoriteCommunityBtn.UseMnemonic = false;
+			this.favoriteCommunityBtn.UseVisualStyleBackColor = true;
+			this.favoriteCommunityBtn.CheckedChanged += new System.EventHandler(this.FavoriteListRadioBtnCheckedChanged);
+			// 
+			// favoriteUserBtn
+			// 
+			this.favoriteUserBtn.Appearance = System.Windows.Forms.Appearance.Button;
+			this.favoriteUserBtn.BackColor = System.Drawing.SystemColors.Control;
+			this.favoriteUserBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+			this.favoriteUserBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.favoriteUserBtn.Location = new System.Drawing.Point(79, 0);
+			this.favoriteUserBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.favoriteUserBtn.Name = "favoriteUserBtn";
+			this.favoriteUserBtn.Size = new System.Drawing.Size(67, 23);
+			this.favoriteUserBtn.TabIndex = 33;
+			this.favoriteUserBtn.Text = "ユーザーID";
+			this.favoriteUserBtn.UseCompatibleTextRendering = true;
+			this.favoriteUserBtn.UseMnemonic = false;
+			this.favoriteUserBtn.UseVisualStyleBackColor = true;
+			this.favoriteUserBtn.CheckedChanged += new System.EventHandler(this.FavoriteListRadioBtnCheckedChanged);
+			// 
 			// favoriteUserPanel
 			// 
 			this.favoriteUserPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 									| System.Windows.Forms.AnchorStyles.Left) 
 									| System.Windows.Forms.AnchorStyles.Right)));
+			this.favoriteUserPanel.Controls.Add(this.userSearchText);
+			this.favoriteUserPanel.Controls.Add(this.userSearchBtn);
 			this.favoriteUserPanel.Controls.Add(this.favoriteUserThumbBox);
 			this.favoriteUserPanel.Controls.Add(this.favoriteUserNumLabel);
 			this.favoriteUserPanel.Controls.Add(this.userAddBtn);
@@ -3878,6 +3927,24 @@ namespace namaichi
 			this.favoriteUserPanel.Name = "favoriteUserPanel";
 			this.favoriteUserPanel.Size = new System.Drawing.Size(878, 332);
 			this.favoriteUserPanel.TabIndex = 33;
+			// 
+			// userSearchText
+			// 
+			this.userSearchText.Location = new System.Drawing.Point(347, 17);
+			this.userSearchText.Name = "userSearchText";
+			this.userSearchText.Size = new System.Drawing.Size(100, 19);
+			this.userSearchText.TabIndex = 31;
+			this.userSearchText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.UserSearchTextKeyDown);
+			// 
+			// userSearchBtn
+			// 
+			this.userSearchBtn.Location = new System.Drawing.Point(453, 15);
+			this.userSearchBtn.Name = "userSearchBtn";
+			this.userSearchBtn.Size = new System.Drawing.Size(75, 23);
+			this.userSearchBtn.TabIndex = 32;
+			this.userSearchBtn.Text = "検索";
+			this.userSearchBtn.UseVisualStyleBackColor = true;
+			this.userSearchBtn.Click += new System.EventHandler(this.UserSearchBtnClick);
 			// 
 			// favoriteUserThumbBox
 			// 
@@ -3988,244 +4055,6 @@ namespace namaichi
 			this.userAlartList.DragDrop += new System.Windows.Forms.DragEventHandler(this.UserAlartListDragDrop);
 			this.userAlartList.DragEnter += new System.Windows.Forms.DragEventHandler(this.listDragEnter);
 			this.userAlartList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AlartListKeyDown);
-			// 
-			// dataGridViewTextBoxColumn25
-			// 
-			this.dataGridViewTextBoxColumn25.DataPropertyName = "communityId";
-			this.dataGridViewTextBoxColumn25.FillWeight = 2F;
-			this.dataGridViewTextBoxColumn25.HeaderText = "ﾁｬﾝﾈﾙID";
-			this.dataGridViewTextBoxColumn25.MinimumWidth = 2;
-			this.dataGridViewTextBoxColumn25.Name = "dataGridViewTextBoxColumn25";
-			this.dataGridViewTextBoxColumn25.ReadOnly = true;
-			this.dataGridViewTextBoxColumn25.Visible = false;
-			this.dataGridViewTextBoxColumn25.Width = 77;
-			// 
-			// dataGridViewTextBoxColumn26
-			// 
-			this.dataGridViewTextBoxColumn26.DataPropertyName = "hostId";
-			this.dataGridViewTextBoxColumn26.HeaderText = "ﾕｰｻﾞｰID";
-			this.dataGridViewTextBoxColumn26.Name = "dataGridViewTextBoxColumn26";
-			this.dataGridViewTextBoxColumn26.ReadOnly = true;
-			// 
-			// dataGridViewTextBoxColumn27
-			// 
-			this.dataGridViewTextBoxColumn27.DataPropertyName = "communityName";
-			this.dataGridViewTextBoxColumn27.HeaderText = "ﾁｬﾝﾈﾙ名";
-			this.dataGridViewTextBoxColumn27.Name = "dataGridViewTextBoxColumn27";
-			this.dataGridViewTextBoxColumn27.ReadOnly = true;
-			this.dataGridViewTextBoxColumn27.Visible = false;
-			// 
-			// dataGridViewTextBoxColumn28
-			// 
-			this.dataGridViewTextBoxColumn28.DataPropertyName = "hostName";
-			this.dataGridViewTextBoxColumn28.HeaderText = "ﾕｰｻﾞｰ名";
-			this.dataGridViewTextBoxColumn28.Name = "dataGridViewTextBoxColumn28";
-			this.dataGridViewTextBoxColumn28.ReadOnly = true;
-			// 
-			// dataGridViewTextBoxColumn29
-			// 
-			this.dataGridViewTextBoxColumn29.DataPropertyName = "keyword";
-			this.dataGridViewTextBoxColumn29.HeaderText = "ｷｰﾜｰﾄﾞ";
-			this.dataGridViewTextBoxColumn29.Name = "dataGridViewTextBoxColumn29";
-			this.dataGridViewTextBoxColumn29.Visible = false;
-			// 
-			// dataGridViewComboBoxColumn1
-			// 
-			this.dataGridViewComboBoxColumn1.DataPropertyName = "isAnd";
-			this.dataGridViewComboBoxColumn1.HeaderText = "合致条件";
-			this.dataGridViewComboBoxColumn1.Items.AddRange(new object[] {
-									"全て合致",
-									"いずれか"});
-			this.dataGridViewComboBoxColumn1.Name = "dataGridViewComboBoxColumn1";
-			this.dataGridViewComboBoxColumn1.Visible = false;
-			this.dataGridViewComboBoxColumn1.Width = 70;
-			// 
-			// dataGridViewButtonColumn3
-			// 
-			this.dataGridViewButtonColumn3.DataPropertyName = "communityFollow";
-			this.dataGridViewButtonColumn3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.dataGridViewButtonColumn3.HeaderText = "ﾁｬﾝﾈﾙﾌｫﾛｰ";
-			this.dataGridViewButtonColumn3.Name = "dataGridViewButtonColumn3";
-			this.dataGridViewButtonColumn3.Visible = false;
-			// 
-			// dataGridViewButtonColumn4
-			// 
-			this.dataGridViewButtonColumn4.DataPropertyName = "hostFollow";
-			this.dataGridViewButtonColumn4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.dataGridViewButtonColumn4.HeaderText = "ﾕｰｻﾞｰﾌｫﾛｰ";
-			this.dataGridViewButtonColumn4.Name = "dataGridViewButtonColumn4";
-			// 
-			// dataGridViewTextBoxColumn30
-			// 
-			this.dataGridViewTextBoxColumn30.DataPropertyName = "lastHostDate";
-			this.dataGridViewTextBoxColumn30.HeaderText = "最近の放送日時";
-			this.dataGridViewTextBoxColumn30.MinimumWidth = 112;
-			this.dataGridViewTextBoxColumn30.Name = "dataGridViewTextBoxColumn30";
-			this.dataGridViewTextBoxColumn30.ReadOnly = true;
-			this.dataGridViewTextBoxColumn30.Width = 112;
-			// 
-			// dataGridViewTextBoxColumn31
-			// 
-			this.dataGridViewTextBoxColumn31.DataPropertyName = "addDate";
-			this.dataGridViewTextBoxColumn31.HeaderText = "登録日時";
-			this.dataGridViewTextBoxColumn31.MinimumWidth = 112;
-			this.dataGridViewTextBoxColumn31.Name = "dataGridViewTextBoxColumn31";
-			this.dataGridViewTextBoxColumn31.ReadOnly = true;
-			this.dataGridViewTextBoxColumn31.Width = 112;
-			// 
-			// dataGridViewCheckBoxColumn17
-			// 
-			this.dataGridViewCheckBoxColumn17.DataPropertyName = "popup";
-			this.dataGridViewCheckBoxColumn17.HeaderText = "ﾎﾟｯﾌﾟｱｯﾌﾟ";
-			this.dataGridViewCheckBoxColumn17.MinimumWidth = 45;
-			this.dataGridViewCheckBoxColumn17.Name = "dataGridViewCheckBoxColumn17";
-			this.dataGridViewCheckBoxColumn17.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridViewCheckBoxColumn17.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.dataGridViewCheckBoxColumn17.Width = 45;
-			// 
-			// dataGridViewCheckBoxColumn18
-			// 
-			this.dataGridViewCheckBoxColumn18.DataPropertyName = "baloon";
-			this.dataGridViewCheckBoxColumn18.HeaderText = "ﾊﾞﾙｰﾝ";
-			this.dataGridViewCheckBoxColumn18.MinimumWidth = 45;
-			this.dataGridViewCheckBoxColumn18.Name = "dataGridViewCheckBoxColumn18";
-			this.dataGridViewCheckBoxColumn18.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridViewCheckBoxColumn18.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.dataGridViewCheckBoxColumn18.Width = 45;
-			// 
-			// dataGridViewCheckBoxColumn19
-			// 
-			this.dataGridViewCheckBoxColumn19.DataPropertyName = "browser";
-			this.dataGridViewCheckBoxColumn19.HeaderText = "Web";
-			this.dataGridViewCheckBoxColumn19.MinimumWidth = 45;
-			this.dataGridViewCheckBoxColumn19.Name = "dataGridViewCheckBoxColumn19";
-			this.dataGridViewCheckBoxColumn19.Width = 45;
-			// 
-			// dataGridViewCheckBoxColumn20
-			// 
-			this.dataGridViewCheckBoxColumn20.DataPropertyName = "mail";
-			this.dataGridViewCheckBoxColumn20.HeaderText = "ﾒｰﾙ";
-			this.dataGridViewCheckBoxColumn20.MinimumWidth = 45;
-			this.dataGridViewCheckBoxColumn20.Name = "dataGridViewCheckBoxColumn20";
-			this.dataGridViewCheckBoxColumn20.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridViewCheckBoxColumn20.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.dataGridViewCheckBoxColumn20.Width = 45;
-			// 
-			// dataGridViewCheckBoxColumn21
-			// 
-			this.dataGridViewCheckBoxColumn21.DataPropertyName = "sound";
-			this.dataGridViewCheckBoxColumn21.HeaderText = "音";
-			this.dataGridViewCheckBoxColumn21.MinimumWidth = 45;
-			this.dataGridViewCheckBoxColumn21.Name = "dataGridViewCheckBoxColumn21";
-			this.dataGridViewCheckBoxColumn21.Width = 45;
-			// 
-			// dataGridViewCheckBoxColumn22
-			// 
-			this.dataGridViewCheckBoxColumn22.DataPropertyName = "appliA";
-			this.dataGridViewCheckBoxColumn22.HeaderText = "ｱﾌﾟﾘA";
-			this.dataGridViewCheckBoxColumn22.MinimumWidth = 45;
-			this.dataGridViewCheckBoxColumn22.Name = "dataGridViewCheckBoxColumn22";
-			this.dataGridViewCheckBoxColumn22.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridViewCheckBoxColumn22.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.dataGridViewCheckBoxColumn22.Width = 45;
-			// 
-			// dataGridViewCheckBoxColumn23
-			// 
-			this.dataGridViewCheckBoxColumn23.DataPropertyName = "appliB";
-			this.dataGridViewCheckBoxColumn23.HeaderText = "ｱﾌﾟﾘB";
-			this.dataGridViewCheckBoxColumn23.MinimumWidth = 45;
-			this.dataGridViewCheckBoxColumn23.Name = "dataGridViewCheckBoxColumn23";
-			this.dataGridViewCheckBoxColumn23.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridViewCheckBoxColumn23.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.dataGridViewCheckBoxColumn23.Width = 45;
-			// 
-			// dataGridViewCheckBoxColumn24
-			// 
-			this.dataGridViewCheckBoxColumn24.DataPropertyName = "appliC";
-			this.dataGridViewCheckBoxColumn24.HeaderText = "ｱﾌﾟﾘC";
-			this.dataGridViewCheckBoxColumn24.MinimumWidth = 45;
-			this.dataGridViewCheckBoxColumn24.Name = "dataGridViewCheckBoxColumn24";
-			this.dataGridViewCheckBoxColumn24.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridViewCheckBoxColumn24.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.dataGridViewCheckBoxColumn24.Width = 45;
-			// 
-			// dataGridViewCheckBoxColumn25
-			// 
-			this.dataGridViewCheckBoxColumn25.DataPropertyName = "appliD";
-			this.dataGridViewCheckBoxColumn25.HeaderText = "ｱﾌﾟﾘD";
-			this.dataGridViewCheckBoxColumn25.MinimumWidth = 45;
-			this.dataGridViewCheckBoxColumn25.Name = "dataGridViewCheckBoxColumn25";
-			this.dataGridViewCheckBoxColumn25.Width = 45;
-			// 
-			// dataGridViewCheckBoxColumn26
-			// 
-			this.dataGridViewCheckBoxColumn26.DataPropertyName = "appliE";
-			this.dataGridViewCheckBoxColumn26.HeaderText = "ｱﾌﾟﾘE";
-			this.dataGridViewCheckBoxColumn26.MinimumWidth = 45;
-			this.dataGridViewCheckBoxColumn26.Name = "dataGridViewCheckBoxColumn26";
-			this.dataGridViewCheckBoxColumn26.Width = 45;
-			// 
-			// dataGridViewCheckBoxColumn27
-			// 
-			this.dataGridViewCheckBoxColumn27.DataPropertyName = "appliF";
-			this.dataGridViewCheckBoxColumn27.HeaderText = "ｱﾌﾟﾘF";
-			this.dataGridViewCheckBoxColumn27.MinimumWidth = 45;
-			this.dataGridViewCheckBoxColumn27.Name = "dataGridViewCheckBoxColumn27";
-			this.dataGridViewCheckBoxColumn27.Width = 45;
-			// 
-			// dataGridViewCheckBoxColumn28
-			// 
-			this.dataGridViewCheckBoxColumn28.DataPropertyName = "appliG";
-			this.dataGridViewCheckBoxColumn28.HeaderText = "ｱﾌﾟﾘG";
-			this.dataGridViewCheckBoxColumn28.MinimumWidth = 45;
-			this.dataGridViewCheckBoxColumn28.Name = "dataGridViewCheckBoxColumn28";
-			this.dataGridViewCheckBoxColumn28.Width = 45;
-			// 
-			// dataGridViewCheckBoxColumn29
-			// 
-			this.dataGridViewCheckBoxColumn29.DataPropertyName = "appliH";
-			this.dataGridViewCheckBoxColumn29.HeaderText = "ｱﾌﾟﾘH";
-			this.dataGridViewCheckBoxColumn29.MinimumWidth = 45;
-			this.dataGridViewCheckBoxColumn29.Name = "dataGridViewCheckBoxColumn29";
-			this.dataGridViewCheckBoxColumn29.Width = 45;
-			// 
-			// dataGridViewCheckBoxColumn30
-			// 
-			this.dataGridViewCheckBoxColumn30.DataPropertyName = "appliI";
-			this.dataGridViewCheckBoxColumn30.HeaderText = "ｱﾌﾟﾘI";
-			this.dataGridViewCheckBoxColumn30.MinimumWidth = 45;
-			this.dataGridViewCheckBoxColumn30.Name = "dataGridViewCheckBoxColumn30";
-			this.dataGridViewCheckBoxColumn30.Width = 45;
-			// 
-			// dataGridViewCheckBoxColumn31
-			// 
-			this.dataGridViewCheckBoxColumn31.DataPropertyName = "appliJ";
-			this.dataGridViewCheckBoxColumn31.HeaderText = "ｱﾌﾟﾘJ";
-			this.dataGridViewCheckBoxColumn31.MinimumWidth = 45;
-			this.dataGridViewCheckBoxColumn31.Name = "dataGridViewCheckBoxColumn31";
-			this.dataGridViewCheckBoxColumn31.Width = 45;
-			// 
-			// dataGridViewComboBoxColumn2
-			// 
-			this.dataGridViewComboBoxColumn2.DataPropertyName = "soundType";
-			this.dataGridViewComboBoxColumn2.HeaderText = "音設定";
-			this.dataGridViewComboBoxColumn2.Items.AddRange(new object[] {
-									"ﾃﾞﾌｫﾙﾄ",
-									"音A",
-									"音B",
-									"音C"});
-			this.dataGridViewComboBoxColumn2.Name = "dataGridViewComboBoxColumn2";
-			this.dataGridViewComboBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridViewComboBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.dataGridViewComboBoxColumn2.Width = 67;
-			// 
-			// dataGridViewTextBoxColumn32
-			// 
-			this.dataGridViewTextBoxColumn32.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.dataGridViewTextBoxColumn32.DataPropertyName = "memo";
-			this.dataGridViewTextBoxColumn32.HeaderText = "ﾒﾓ";
-			this.dataGridViewTextBoxColumn32.MinimumWidth = 30;
-			this.dataGridViewTextBoxColumn32.Name = "dataGridViewTextBoxColumn32";
 			// 
 			// contextMenuStrip4
 			// 
@@ -4385,42 +4214,6 @@ namespace namaichi
 			this.openAppliJUserFavoriteMenu.Size = new System.Drawing.Size(268, 22);
 			this.openAppliJUserFavoriteMenu.Text = "最近行われた放送のURLをアプリJで開く";
 			this.openAppliJUserFavoriteMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
-			// 
-			// favoriteCommunityBtn
-			// 
-			this.favoriteCommunityBtn.Appearance = System.Windows.Forms.Appearance.Button;
-			this.favoriteCommunityBtn.BackColor = System.Drawing.SystemColors.Control;
-			this.favoriteCommunityBtn.Checked = true;
-			this.favoriteCommunityBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-			this.favoriteCommunityBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.favoriteCommunityBtn.Location = new System.Drawing.Point(0, 0);
-			this.favoriteCommunityBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.favoriteCommunityBtn.Name = "favoriteCommunityBtn";
-			this.favoriteCommunityBtn.Size = new System.Drawing.Size(76, 23);
-			this.favoriteCommunityBtn.TabIndex = 34;
-			this.favoriteCommunityBtn.TabStop = true;
-			this.favoriteCommunityBtn.Text = "チャンネルID";
-			this.favoriteCommunityBtn.UseCompatibleTextRendering = true;
-			this.favoriteCommunityBtn.UseMnemonic = false;
-			this.favoriteCommunityBtn.UseVisualStyleBackColor = true;
-			this.favoriteCommunityBtn.CheckedChanged += new System.EventHandler(this.FavoriteListRadioBtnCheckedChanged);
-			// 
-			// favoriteUserBtn
-			// 
-			this.favoriteUserBtn.Appearance = System.Windows.Forms.Appearance.Button;
-			this.favoriteUserBtn.BackColor = System.Drawing.SystemColors.Control;
-			this.favoriteUserBtn.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-			this.favoriteUserBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.favoriteUserBtn.Location = new System.Drawing.Point(79, 0);
-			this.favoriteUserBtn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.favoriteUserBtn.Name = "favoriteUserBtn";
-			this.favoriteUserBtn.Size = new System.Drawing.Size(67, 23);
-			this.favoriteUserBtn.TabIndex = 33;
-			this.favoriteUserBtn.Text = "ユーザーID";
-			this.favoriteUserBtn.UseCompatibleTextRendering = true;
-			this.favoriteUserBtn.UseMnemonic = false;
-			this.favoriteUserBtn.UseVisualStyleBackColor = true;
-			this.favoriteUserBtn.CheckedChanged += new System.EventHandler(this.FavoriteListRadioBtnCheckedChanged);
 			// 
 			// tabPage2
 			// 
@@ -6055,6 +5848,253 @@ namespace namaichi
 			this.toolStripMenuItem45.Text = "この行を削除する";
 			this.toolStripMenuItem45.Click += new System.EventHandler(this.HistoryListDeleteRowMenuClick);
 			// 
+			// dataGridViewTextBoxColumn25
+			// 
+			this.dataGridViewTextBoxColumn25.DataPropertyName = "communityId";
+			this.dataGridViewTextBoxColumn25.FillWeight = 2F;
+			this.dataGridViewTextBoxColumn25.HeaderText = "ﾁｬﾝﾈﾙID";
+			this.dataGridViewTextBoxColumn25.MinimumWidth = 2;
+			this.dataGridViewTextBoxColumn25.Name = "dataGridViewTextBoxColumn25";
+			this.dataGridViewTextBoxColumn25.ReadOnly = true;
+			this.dataGridViewTextBoxColumn25.Visible = false;
+			this.dataGridViewTextBoxColumn25.Width = 77;
+			// 
+			// dataGridViewTextBoxColumn26
+			// 
+			this.dataGridViewTextBoxColumn26.DataPropertyName = "hostId";
+			this.dataGridViewTextBoxColumn26.HeaderText = "ﾕｰｻﾞｰID";
+			this.dataGridViewTextBoxColumn26.Name = "dataGridViewTextBoxColumn26";
+			this.dataGridViewTextBoxColumn26.ReadOnly = true;
+			// 
+			// dataGridViewTextBoxColumn27
+			// 
+			this.dataGridViewTextBoxColumn27.DataPropertyName = "communityName";
+			this.dataGridViewTextBoxColumn27.HeaderText = "ﾁｬﾝﾈﾙ名";
+			this.dataGridViewTextBoxColumn27.Name = "dataGridViewTextBoxColumn27";
+			this.dataGridViewTextBoxColumn27.ReadOnly = true;
+			this.dataGridViewTextBoxColumn27.Visible = false;
+			// 
+			// dataGridViewTextBoxColumn28
+			// 
+			this.dataGridViewTextBoxColumn28.DataPropertyName = "hostName";
+			this.dataGridViewTextBoxColumn28.HeaderText = "ﾕｰｻﾞｰ名";
+			this.dataGridViewTextBoxColumn28.Name = "dataGridViewTextBoxColumn28";
+			this.dataGridViewTextBoxColumn28.ReadOnly = true;
+			// 
+			// dataGridViewTextBoxColumn29
+			// 
+			this.dataGridViewTextBoxColumn29.DataPropertyName = "keyword";
+			this.dataGridViewTextBoxColumn29.HeaderText = "ｷｰﾜｰﾄﾞ";
+			this.dataGridViewTextBoxColumn29.Name = "dataGridViewTextBoxColumn29";
+			this.dataGridViewTextBoxColumn29.Visible = false;
+			// 
+			// dataGridViewComboBoxColumn1
+			// 
+			this.dataGridViewComboBoxColumn1.DataPropertyName = "isAnd";
+			this.dataGridViewComboBoxColumn1.HeaderText = "合致条件";
+			this.dataGridViewComboBoxColumn1.Items.AddRange(new object[] {
+									"全て合致",
+									"いずれか"});
+			this.dataGridViewComboBoxColumn1.Name = "dataGridViewComboBoxColumn1";
+			this.dataGridViewComboBoxColumn1.Visible = false;
+			this.dataGridViewComboBoxColumn1.Width = 70;
+			// 
+			// dataGridViewButtonColumn3
+			// 
+			this.dataGridViewButtonColumn3.DataPropertyName = "communityFollow";
+			this.dataGridViewButtonColumn3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.dataGridViewButtonColumn3.HeaderText = "ﾁｬﾝﾈﾙﾌｫﾛｰ";
+			this.dataGridViewButtonColumn3.Name = "dataGridViewButtonColumn3";
+			this.dataGridViewButtonColumn3.Visible = false;
+			// 
+			// dataGridViewButtonColumn4
+			// 
+			this.dataGridViewButtonColumn4.DataPropertyName = "hostFollow";
+			this.dataGridViewButtonColumn4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.dataGridViewButtonColumn4.HeaderText = "ﾕｰｻﾞｰﾌｫﾛｰ";
+			this.dataGridViewButtonColumn4.Name = "dataGridViewButtonColumn4";
+			// 
+			// dataGridViewTextBoxColumn30
+			// 
+			this.dataGridViewTextBoxColumn30.DataPropertyName = "lastHostDate";
+			this.dataGridViewTextBoxColumn30.HeaderText = "最近の放送日時";
+			this.dataGridViewTextBoxColumn30.MinimumWidth = 112;
+			this.dataGridViewTextBoxColumn30.Name = "dataGridViewTextBoxColumn30";
+			this.dataGridViewTextBoxColumn30.ReadOnly = true;
+			this.dataGridViewTextBoxColumn30.Width = 112;
+			// 
+			// dataGridViewTextBoxColumn31
+			// 
+			this.dataGridViewTextBoxColumn31.DataPropertyName = "addDate";
+			this.dataGridViewTextBoxColumn31.HeaderText = "登録日時";
+			this.dataGridViewTextBoxColumn31.MinimumWidth = 112;
+			this.dataGridViewTextBoxColumn31.Name = "dataGridViewTextBoxColumn31";
+			this.dataGridViewTextBoxColumn31.ReadOnly = true;
+			this.dataGridViewTextBoxColumn31.Width = 112;
+			// 
+			// dataGridViewCheckBoxColumn17
+			// 
+			this.dataGridViewCheckBoxColumn17.DataPropertyName = "popup";
+			this.dataGridViewCheckBoxColumn17.HeaderText = "ﾎﾟｯﾌﾟｱｯﾌﾟ";
+			this.dataGridViewCheckBoxColumn17.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn17.Name = "dataGridViewCheckBoxColumn17";
+			this.dataGridViewCheckBoxColumn17.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridViewCheckBoxColumn17.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn17.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn18
+			// 
+			this.dataGridViewCheckBoxColumn18.DataPropertyName = "baloon";
+			this.dataGridViewCheckBoxColumn18.HeaderText = "ﾊﾞﾙｰﾝ";
+			this.dataGridViewCheckBoxColumn18.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn18.Name = "dataGridViewCheckBoxColumn18";
+			this.dataGridViewCheckBoxColumn18.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridViewCheckBoxColumn18.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn18.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn19
+			// 
+			this.dataGridViewCheckBoxColumn19.DataPropertyName = "browser";
+			this.dataGridViewCheckBoxColumn19.HeaderText = "Web";
+			this.dataGridViewCheckBoxColumn19.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn19.Name = "dataGridViewCheckBoxColumn19";
+			this.dataGridViewCheckBoxColumn19.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn19.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn20
+			// 
+			this.dataGridViewCheckBoxColumn20.DataPropertyName = "mail";
+			this.dataGridViewCheckBoxColumn20.HeaderText = "ﾒｰﾙ";
+			this.dataGridViewCheckBoxColumn20.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn20.Name = "dataGridViewCheckBoxColumn20";
+			this.dataGridViewCheckBoxColumn20.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridViewCheckBoxColumn20.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn20.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn21
+			// 
+			this.dataGridViewCheckBoxColumn21.DataPropertyName = "sound";
+			this.dataGridViewCheckBoxColumn21.HeaderText = "音";
+			this.dataGridViewCheckBoxColumn21.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn21.Name = "dataGridViewCheckBoxColumn21";
+			this.dataGridViewCheckBoxColumn21.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn21.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn22
+			// 
+			this.dataGridViewCheckBoxColumn22.DataPropertyName = "appliA";
+			this.dataGridViewCheckBoxColumn22.HeaderText = "ｱﾌﾟﾘA";
+			this.dataGridViewCheckBoxColumn22.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn22.Name = "dataGridViewCheckBoxColumn22";
+			this.dataGridViewCheckBoxColumn22.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridViewCheckBoxColumn22.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn22.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn23
+			// 
+			this.dataGridViewCheckBoxColumn23.DataPropertyName = "appliB";
+			this.dataGridViewCheckBoxColumn23.HeaderText = "ｱﾌﾟﾘB";
+			this.dataGridViewCheckBoxColumn23.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn23.Name = "dataGridViewCheckBoxColumn23";
+			this.dataGridViewCheckBoxColumn23.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridViewCheckBoxColumn23.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn23.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn24
+			// 
+			this.dataGridViewCheckBoxColumn24.DataPropertyName = "appliC";
+			this.dataGridViewCheckBoxColumn24.HeaderText = "ｱﾌﾟﾘC";
+			this.dataGridViewCheckBoxColumn24.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn24.Name = "dataGridViewCheckBoxColumn24";
+			this.dataGridViewCheckBoxColumn24.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridViewCheckBoxColumn24.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn24.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn25
+			// 
+			this.dataGridViewCheckBoxColumn25.DataPropertyName = "appliD";
+			this.dataGridViewCheckBoxColumn25.HeaderText = "ｱﾌﾟﾘD";
+			this.dataGridViewCheckBoxColumn25.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn25.Name = "dataGridViewCheckBoxColumn25";
+			this.dataGridViewCheckBoxColumn25.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn25.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn26
+			// 
+			this.dataGridViewCheckBoxColumn26.DataPropertyName = "appliE";
+			this.dataGridViewCheckBoxColumn26.HeaderText = "ｱﾌﾟﾘE";
+			this.dataGridViewCheckBoxColumn26.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn26.Name = "dataGridViewCheckBoxColumn26";
+			this.dataGridViewCheckBoxColumn26.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn26.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn27
+			// 
+			this.dataGridViewCheckBoxColumn27.DataPropertyName = "appliF";
+			this.dataGridViewCheckBoxColumn27.HeaderText = "ｱﾌﾟﾘF";
+			this.dataGridViewCheckBoxColumn27.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn27.Name = "dataGridViewCheckBoxColumn27";
+			this.dataGridViewCheckBoxColumn27.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn27.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn28
+			// 
+			this.dataGridViewCheckBoxColumn28.DataPropertyName = "appliG";
+			this.dataGridViewCheckBoxColumn28.HeaderText = "ｱﾌﾟﾘG";
+			this.dataGridViewCheckBoxColumn28.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn28.Name = "dataGridViewCheckBoxColumn28";
+			this.dataGridViewCheckBoxColumn28.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn28.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn29
+			// 
+			this.dataGridViewCheckBoxColumn29.DataPropertyName = "appliH";
+			this.dataGridViewCheckBoxColumn29.HeaderText = "ｱﾌﾟﾘH";
+			this.dataGridViewCheckBoxColumn29.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn29.Name = "dataGridViewCheckBoxColumn29";
+			this.dataGridViewCheckBoxColumn29.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn29.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn30
+			// 
+			this.dataGridViewCheckBoxColumn30.DataPropertyName = "appliI";
+			this.dataGridViewCheckBoxColumn30.HeaderText = "ｱﾌﾟﾘI";
+			this.dataGridViewCheckBoxColumn30.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn30.Name = "dataGridViewCheckBoxColumn30";
+			this.dataGridViewCheckBoxColumn30.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn30.Width = 45;
+			// 
+			// dataGridViewCheckBoxColumn31
+			// 
+			this.dataGridViewCheckBoxColumn31.DataPropertyName = "appliJ";
+			this.dataGridViewCheckBoxColumn31.HeaderText = "ｱﾌﾟﾘJ";
+			this.dataGridViewCheckBoxColumn31.MinimumWidth = 45;
+			this.dataGridViewCheckBoxColumn31.Name = "dataGridViewCheckBoxColumn31";
+			this.dataGridViewCheckBoxColumn31.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewCheckBoxColumn31.Width = 45;
+			// 
+			// dataGridViewComboBoxColumn2
+			// 
+			this.dataGridViewComboBoxColumn2.DataPropertyName = "soundType";
+			this.dataGridViewComboBoxColumn2.HeaderText = "音設定";
+			this.dataGridViewComboBoxColumn2.Items.AddRange(new object[] {
+									"ﾃﾞﾌｫﾙﾄ",
+									"音A",
+									"音B",
+									"音C"});
+			this.dataGridViewComboBoxColumn2.Name = "dataGridViewComboBoxColumn2";
+			this.dataGridViewComboBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridViewComboBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.dataGridViewComboBoxColumn2.Width = 67;
+			// 
+			// dataGridViewTextBoxColumn32
+			// 
+			this.dataGridViewTextBoxColumn32.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.dataGridViewTextBoxColumn32.DataPropertyName = "memo";
+			this.dataGridViewTextBoxColumn32.HeaderText = "ﾒﾓ";
+			this.dataGridViewTextBoxColumn32.MinimumWidth = 30;
+			this.dataGridViewTextBoxColumn32.Name = "dataGridViewTextBoxColumn32";
+			// 
 			// MainForm
 			// 
 			this.AllowDrop = true;
@@ -6124,6 +6164,8 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.Button userSearchBtn;
+		private System.Windows.Forms.TextBox userSearchText;
 		private System.Windows.Forms.ToolStripMenuItem taskOpenAppliJMenu;
 		private System.Windows.Forms.ToolStripMenuItem taskOpenAppliIMenu;
 		private System.Windows.Forms.ToolStripMenuItem taskOpenAppliHMenu;

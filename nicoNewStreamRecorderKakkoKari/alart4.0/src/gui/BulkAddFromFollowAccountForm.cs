@@ -23,7 +23,8 @@ namespace namaichi
 		public bool isAddToCom {get; set;}
 		public bool isBulkAddAuto {get; set;}
 		public string bulkTypes = null;
-		public BulkAddFromFollowAccountForm(int fontSize)
+		config.config cfg = null;
+		public BulkAddFromFollowAccountForm(int fontSize, config.config cfg)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
@@ -33,6 +34,7 @@ namespace namaichi
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
+			this.cfg = cfg;
 			util.setFontSize(fontSize, this, false);
 		}
 		
@@ -55,6 +57,11 @@ namespace namaichi
 		void UserRadioBtnCheckedChanged(object sender, EventArgs e)
 		{
 			comChkBox.Enabled = channelChkBox.Enabled = comRadioBtn.Checked;
+		}
+		
+		void ReleaseBtnClick(object sender, EventArgs e)
+		{
+			cfg.set("IsBulkAddAuto", "false");
 		}
 	}
 }

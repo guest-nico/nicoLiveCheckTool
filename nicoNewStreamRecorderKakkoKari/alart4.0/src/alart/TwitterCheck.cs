@@ -161,54 +161,54 @@ namespace namaichi.alart
 					form.check.processedLvidList.Add(item.lvId);
 							               
 					if (ti.appliA && !form.notifyOffList[7]) {
-						var appliAPath = form.config.get("appliAPath");
+						var appliPath = form.config.get("appliAPath");
 						var args = form.config.get("appliAArgs");
-						util.appliProcessFromLvid(appliAPath, lv, args, form.check.container);
+						appliProcessFromLvid(appliPath, lv, args, 0);
 					}
 					if (ti.appliB && !form.notifyOffList[8]) {
-						var appliBPath = form.config.get("appliBPath");
+						var appliPath = form.config.get("appliBPath");
 						var args = form.config.get("appliBArgs");
-						util.appliProcessFromLvid(appliBPath, lv, args, form.check.container);
+						appliProcessFromLvid(appliPath, lv, args, 1);
 					}
 					if (ti.appliC && !form.notifyOffList[9]) {
-						var appliCPath = form.config.get("appliCPath");
+						var appliPath = form.config.get("appliCPath");
 						var args = form.config.get("appliCArgs");
-						util.appliProcessFromLvid(appliCPath, lv, args, form.check.container);
+						appliProcessFromLvid(appliPath, lv, args, 2);
 					}
 					if (ti.appliD && !form.notifyOffList[10]) {
-						var appliDPath = form.config.get("appliDPath");
+						var appliPath = form.config.get("appliDPath");
 						var args = form.config.get("appliDArgs");
-						util.appliProcessFromLvid(appliDPath, lv, args, form.check.container);
+						appliProcessFromLvid(appliPath, lv, args, 3);
 					}
 					if (ti.appliE && !form.notifyOffList[11]) {
-						var appliEPath = form.config.get("appliEPath");
+						var appliPath = form.config.get("appliEPath");
 						var args = form.config.get("appliEArgs");
-						util.appliProcessFromLvid(appliEPath, lv, args, form.check.container);
+						appliProcessFromLvid(appliPath, lv, args, 4);
 					}
 					if (ti.appliF && !form.notifyOffList[12]) {
-						var appliFPath = form.config.get("appliFPath");
+						var appliPath = form.config.get("appliFPath");
 						var args = form.config.get("appliFArgs");
-						util.appliProcessFromLvid(appliFPath, lv, args, form.check.container);
+						appliProcessFromLvid(appliPath, lv, args, 5);
 					}
 					if (ti.appliG && !form.notifyOffList[13]) {
-						var appliGPath = form.config.get("appliGPath");
+						var appliPath = form.config.get("appliGPath");
 						var args = form.config.get("appliGArgs");
-						util.appliProcessFromLvid(appliGPath, lv, args, form.check.container);
+						appliProcessFromLvid(appliPath, lv, args, 6);
 					}
 					if (ti.appliH && !form.notifyOffList[14]) {
-						var appliHPath = form.config.get("appliHPath");
+						var appliPath = form.config.get("appliHPath");
 						var args = form.config.get("appliHArgs");
-						util.appliProcessFromLvid(appliHPath, lv, args, form.check.container);
+						appliProcessFromLvid(appliPath, lv, args, 7);
 					}
 					if (ti.appliI && !form.notifyOffList[15]) {
-						var appliIPath = form.config.get("appliIPath");
+						var appliPath = form.config.get("appliIPath");
 						var args = form.config.get("appliIArgs");
-						util.appliProcessFromLvid(appliIPath, lv, args, form.check.container);
+						appliProcessFromLvid(appliPath, lv, args, 8);
 					}
 					if (ti.appliJ && !form.notifyOffList[16]) {
-						var appliJPath = form.config.get("appliJPath");
+						var appliPath = form.config.get("appliJPath");
 						var args = form.config.get("appliJArgs");
-						util.appliProcessFromLvid(appliJPath, lv, args, form.check.container);
+						appliProcessFromLvid(appliPath, lv, args, 9);
 					}
 					if (ti.popup && !form.notifyOffList[2]) {
 						TaskCheck.displayPopup(item, form);
@@ -231,6 +231,9 @@ namespace namaichi.alart
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			}
+		}
+		void appliProcessFromLvid(string path , string lvid, string args, int appNum) {
+			util.appliProcessFromLvid(path, lvid, args, form.check.container, form.config, appNum, form);
 		}
 	}
 }

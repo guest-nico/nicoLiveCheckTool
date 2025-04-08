@@ -280,6 +280,7 @@ namespace namaichi.alart
 				(!alartItem.isCustomKeyword && string.IsNullOrEmpty(alartItem.keyword));
 			if (isNosetComId && isNosetHostName && isNosetKeyword) return false;
 			
+			setUserId(item);
 			isComOk = alartItem.communityId == item.comId || (alartItem.communityId == "official" && item.type == "official");
 			isUserOk = alartItem.hostName == item.hostName || alartItem.hostId == item.userId;
 			isKeywordOk = item.isMatchKeyword(alartItem);
@@ -387,7 +388,7 @@ namespace namaichi.alart
 				return true;
 			}
 		}
-		private void appliProcess(string appliPath, string lvid, string args, RssItem ri) {
+		private void appliProcess(string appliPath, string lvid, string args, RssItem ri, int appNum) {
 			if (appliPath == null || appliPath == "") return;
 			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
 
@@ -409,7 +410,7 @@ namespace namaichi.alart
 				if (arg == null) arg = "";
 				arg += " " + url;
 				*/
-				util.appliProcess(appliPath, url, args, ri, container);
+				util.appliProcess(appliPath, url, args, ri, container, form.config, appNum, form);
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
@@ -472,52 +473,52 @@ namespace namaichi.alart
 			if (dpi.isAppliA && !form.notifyOffList[7]) {
 				var appliAPath = form.config.get("appliAPath");
 				var args = form.config.get("appliAArgs");
-				appliProcess(appliAPath, item.lvId, args, item);
+				appliProcess(appliAPath, item.lvId, args, item, 0);
 			}
 			if (dpi.isAppliB && !form.notifyOffList[8]) {
 				var appliBPath = form.config.get("appliBPath");
 				var args = form.config.get("appliBArgs");
-				appliProcess(appliBPath, item.lvId, args, item);
+				appliProcess(appliBPath, item.lvId, args, item, 1);
 			}
 			if (dpi.isAppliC && !form.notifyOffList[9]) {
 				var appliCPath = form.config.get("appliCPath");
 				var args = form.config.get("appliCArgs");
-				appliProcess(appliCPath, item.lvId, args, item);
+				appliProcess(appliCPath, item.lvId, args, item, 2);
 			}
 			if (dpi.isAppliD && !form.notifyOffList[10]) {
 				var appliDPath = form.config.get("appliDPath");
 				var args = form.config.get("appliDArgs");
-				appliProcess(appliDPath, item.lvId, args, item);
+				appliProcess(appliDPath, item.lvId, args, item, 3);
 			}
 			if (dpi.isAppliE && !form.notifyOffList[11]) {
 				var appliEPath = form.config.get("appliEPath");
 				var args = form.config.get("appliEArgs");
-				appliProcess(appliEPath, item.lvId, args, item);
+				appliProcess(appliEPath, item.lvId, args, item, 4);
 			}
 			if (dpi.isAppliF && !form.notifyOffList[12]) {
 				var appliFPath = form.config.get("appliFPath");
 				var args = form.config.get("appliFArgs");
-				appliProcess(appliFPath, item.lvId, args, item);
+				appliProcess(appliFPath, item.lvId, args, item, 5);
 			}
 			if (dpi.isAppliG && !form.notifyOffList[13]) {
 				var appliGPath = form.config.get("appliGPath");
 				var args = form.config.get("appliGArgs");
-				appliProcess(appliGPath, item.lvId, args, item);
+				appliProcess(appliGPath, item.lvId, args, item, 6);
 			}
 			if (dpi.isAppliH && !form.notifyOffList[14]) {
 				var appliHPath = form.config.get("appliHPath");
 				var args = form.config.get("appliHArgs");
-				appliProcess(appliHPath, item.lvId, args, item);
+				appliProcess(appliHPath, item.lvId, args, item, 7);
 			}
 			if (dpi.isAppliI && !form.notifyOffList[15]) {
 				var appliIPath = form.config.get("appliIPath");
 				var args = form.config.get("appliIArgs");
-				appliProcess(appliIPath, item.lvId, args, item);
+				appliProcess(appliIPath, item.lvId, args, item, 8);
 			}
 			if (dpi.isAppliJ && !form.notifyOffList[16]) {
 				var appliJPath = form.config.get("appliJPath");
 				var args = form.config.get("appliJArgs");
-				appliProcess(appliJPath, item.lvId, args, item);
+				appliProcess(appliJPath, item.lvId, args, item, 9);
 			}
 			if (dpi.isPopup && !form.notifyOffList[2] && targetAi.Count > 0) {
 				displayPopup(item, targetAi[0]);
@@ -612,11 +613,13 @@ namespace namaichi.alart
 			//return uid;
 		}
 		private bool setUserId(RssItem rssItem) {
+			if (rssItem.userId != null) return true;
+			
 			//return isSuccess
 			var isFailureAccess = false;
 			var uid = (rssItem.userId != null) ? rssItem.userId : getUserIdFromLvid(rssItem.lvId, out isFailureAccess, container);
 			if (isFailureAccess) return false;  
-			if (!rssItem.comId.StartsWith("co")) uid = "";
+			if (rssItem.comId == null || !rssItem.comId.StartsWith("co")) uid = "";
 			if (rssItem.userId == null && uid != null) rssItem.userId = uid;
 			return true;
 		}

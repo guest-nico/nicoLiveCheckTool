@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows.Forms;
 using namaichi.alart;
 using namaichi.gui;
 using namaichi.utility;
@@ -422,8 +423,11 @@ namespace namaichi.rec
 	                	sendTo = "app";
 	                }
 	                var f = new MfaInputForm(sendTo);
+	                f.TopMost = true;
 	                
-	                var dr = f.ShowDialog();
+	                DialogResult dr = DialogResult.Cancel;
+	                form.formAction(() => {dr = f.ShowDialog(form);});
+	                //var dr = f.ShowDialog(form);
 	                if (f.code == null) {
 	                	log += "二段階認証のコードが入力されていませんでした";
 	                	return null;
@@ -495,8 +499,11 @@ namespace namaichi.rec
 	                	sendTo = "app";
 	                }
 	                var f = new MfaInputForm(sendTo);
+	                f.TopMost = true;
 	                
-	                var dr = f.ShowDialog();
+	                DialogResult dr = DialogResult.Cancel;
+	                form.formAction(() => {dr = f.ShowDialog(form);});
+	                //var dr = f.ShowDialog(form);
 	                if (f.code == null) {
 	                	log += "二段階認証のコードが入力されていませんでした";
 	                	return null;

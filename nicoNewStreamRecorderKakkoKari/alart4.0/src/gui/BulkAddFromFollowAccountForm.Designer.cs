@@ -49,6 +49,7 @@ namespace namaichi
 			this.userRadioBtn = new System.Windows.Forms.RadioButton();
 			this.label3 = new System.Windows.Forms.Label();
 			this.IsBuldAddAutoChkBox = new System.Windows.Forms.CheckBox();
+			this.releaseBtn = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -166,18 +167,29 @@ namespace namaichi
 			// 
 			// IsBuldAddAutoChkBox
 			// 
-			this.IsBuldAddAutoChkBox.Location = new System.Drawing.Point(197, 83);
+			this.IsBuldAddAutoChkBox.Location = new System.Drawing.Point(173, 83);
 			this.IsBuldAddAutoChkBox.Name = "IsBuldAddAutoChkBox";
 			this.IsBuldAddAutoChkBox.Size = new System.Drawing.Size(242, 19);
 			this.IsBuldAddAutoChkBox.TabIndex = 2;
 			this.IsBuldAddAutoChkBox.Text = "定期的にこのアカウントのフォローから追加する";
 			this.IsBuldAddAutoChkBox.UseVisualStyleBackColor = true;
 			// 
+			// releaseBtn
+			// 
+			this.releaseBtn.Location = new System.Drawing.Point(403, 80);
+			this.releaseBtn.Name = "releaseBtn";
+			this.releaseBtn.Size = new System.Drawing.Size(37, 23);
+			this.releaseBtn.TabIndex = 9;
+			this.releaseBtn.Text = "解除";
+			this.releaseBtn.UseVisualStyleBackColor = true;
+			this.releaseBtn.Click += new System.EventHandler(this.ReleaseBtnClick);
+			// 
 			// BulkAddFromFollowAccountForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(440, 139);
+			this.Controls.Add(this.releaseBtn);
 			this.Controls.Add(this.okBtn);
 			this.Controls.Add(this.IsBuldAddAutoChkBox);
 			this.Controls.Add(this.label3);
@@ -200,6 +212,7 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.Button releaseBtn;
 		private System.Windows.Forms.CheckBox IsBuldAddAutoChkBox;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.RadioButton userRadioBtn;

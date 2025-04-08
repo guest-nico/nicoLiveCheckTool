@@ -111,6 +111,7 @@ namespace namaichi.gui
 			this.Name = "MfaInputForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "2段階認証";
+			this.TopMost = true;
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}

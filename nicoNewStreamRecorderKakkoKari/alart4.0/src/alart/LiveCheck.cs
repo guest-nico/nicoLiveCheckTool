@@ -117,37 +117,34 @@ namespace namaichi.alart
 				
 				//form.setScrollIndex(form.liveList, scrollI);
 			
-			
-			
 				var c = form.liveList.Rows.Count;
-				form.formAction(() => {
-				    
-					foreach (var r in _livelistDataSource) {
-						//var isDisp = (r.MainCategory[0] == cateChar || 
-						//            cateChar == '全');
-						var isDisp = r.isDisplay(cateChar);
-				        /*
-						if (form.liveList.CurrentCell != null && 
-								form.liveList.CurrentCell.RowIndex == r.Index && !vi) {
-							form.liveList.CurrentCell = null;
-							util.debugWriteLine("currencell null set");
-						}
-						*/
-						if (!isDisp) {
-							form.liveListDataReserve.Add(r);
-							form.liveListDataSource.Remove(r);
-						}
-						
-					}
-				    
-				    /*
-				    if (curCellLv != null) {
-						for (var i = 0; i < form.liveListDataSource.Count; i++)
-							if (form.liveListDataSource[i].lvId == curCellLv)
-								form.liveList.CurrentCell = form.liveList[curCellCellI, i];
+				foreach (var r in _livelistDataSource) {
+					//var isDisp = (r.MainCategory[0] == cateChar || 
+					//            cateChar == '全');
+					var isDisp = r.isDisplay(cateChar);
+			        /*
+					if (form.liveList.CurrentCell != null && 
+							form.liveList.CurrentCell.RowIndex == r.Index && !vi) {
+						form.liveList.CurrentCell = null;
+						util.debugWriteLine("currencell null set");
 					}
 					*/
-				});
+					if (!isDisp) {
+						form.formAction(() => {
+							form.liveListDataReserve.Add(r);
+							form.liveListDataSource.Remove(r);
+						});
+					}
+					
+				}
+			    
+			    /*
+			    if (curCellLv != null) {
+					for (var i = 0; i < form.liveListDataSource.Count; i++)
+						if (form.liveListDataSource[i].lvId == curCellLv)
+							form.liveList.CurrentCell = form.liveList[curCellCellI, i];
+				}
+				*/
 				
 				form.removeDuplicateLiveList();
 				

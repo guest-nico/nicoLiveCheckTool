@@ -39,7 +39,10 @@ namespace namaichi
 			this.button3 = new System.Windows.Forms.Button();
 			this.button4 = new System.Windows.Forms.Button();
 			this.appliTab = new System.Windows.Forms.TabPage();
+			this.isAppMinimizedCheckList = new System.Windows.Forms.CheckedListBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.IsAppliLogChkBox = new System.Windows.Forms.CheckBox();
+			this.isAppMinimizedList = new System.Windows.Forms.ComboBox();
 			this.displayArgInfoLabel = new System.Windows.Forms.LinkLabel();
 			this.label26 = new System.Windows.Forms.Label();
 			this.argJText = new System.Windows.Forms.TextBox();
@@ -53,6 +56,7 @@ namespace namaichi
 			this.label29 = new System.Windows.Forms.Label();
 			this.argGText = new System.Windows.Forms.TextBox();
 			this.appliGPathSanshouBtn = new System.Windows.Forms.Button();
+			this.label30 = new System.Windows.Forms.Label();
 			this.label25 = new System.Windows.Forms.Label();
 			this.appliJPathText = new System.Windows.Forms.TextBox();
 			this.label16 = new System.Windows.Forms.Label();
@@ -360,6 +364,7 @@ namespace namaichi
 			// 
 			// appliTab
 			// 
+			this.appliTab.Controls.Add(this.isAppMinimizedCheckList);
 			this.appliTab.Controls.Add(this.groupBox6);
 			this.appliTab.Controls.Add(this.groupBox5);
 			this.appliTab.Location = new System.Drawing.Point(4, 22);
@@ -371,8 +376,32 @@ namespace namaichi
 			this.appliTab.Text = "アプリ設定";
 			this.appliTab.UseVisualStyleBackColor = true;
 			// 
+			// isAppMinimizedCheckList
+			// 
+			this.isAppMinimizedCheckList.CheckOnClick = true;
+			this.isAppMinimizedCheckList.FormattingEnabled = true;
+			this.isAppMinimizedCheckList.Items.AddRange(new object[] {
+									"アプリA",
+									"アプリB",
+									"アプリC",
+									"アプリD",
+									"アプリE",
+									"アプリF",
+									"アプリG",
+									"アプリH",
+									"アプリI",
+									"アプリJ"});
+			this.isAppMinimizedCheckList.Location = new System.Drawing.Point(201, 532);
+			this.isAppMinimizedCheckList.Name = "isAppMinimizedCheckList";
+			this.isAppMinimizedCheckList.Size = new System.Drawing.Size(95, 32);
+			this.isAppMinimizedCheckList.TabIndex = 48;
+			this.isAppMinimizedCheckList.Visible = false;
+			this.isAppMinimizedCheckList.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.IsAppMinimizedCheckListItemCheck);
+			// 
 			// groupBox6
 			// 
+			this.groupBox6.Controls.Add(this.IsAppliLogChkBox);
+			this.groupBox6.Controls.Add(this.isAppMinimizedList);
 			this.groupBox6.Controls.Add(this.displayArgInfoLabel);
 			this.groupBox6.Controls.Add(this.label26);
 			this.groupBox6.Controls.Add(this.argJText);
@@ -386,6 +415,7 @@ namespace namaichi
 			this.groupBox6.Controls.Add(this.label29);
 			this.groupBox6.Controls.Add(this.argGText);
 			this.groupBox6.Controls.Add(this.appliGPathSanshouBtn);
+			this.groupBox6.Controls.Add(this.label30);
 			this.groupBox6.Controls.Add(this.label25);
 			this.groupBox6.Controls.Add(this.appliJPathText);
 			this.groupBox6.Controls.Add(this.label16);
@@ -446,10 +476,37 @@ namespace namaichi
 			this.groupBox6.Controls.Add(this.appliAPathText);
 			this.groupBox6.Location = new System.Drawing.Point(5, 103);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(423, 428);
+			this.groupBox6.Size = new System.Drawing.Size(423, 460);
 			this.groupBox6.TabIndex = 0;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "アプリケーション設定(Recorder登録)";
+			// 
+			// IsAppliLogChkBox
+			// 
+			this.IsAppliLogChkBox.Location = new System.Drawing.Point(14, 434);
+			this.IsAppliLogChkBox.Name = "IsAppliLogChkBox";
+			this.IsAppliLogChkBox.Size = new System.Drawing.Size(210, 19);
+			this.IsAppliLogChkBox.TabIndex = 49;
+			this.IsAppliLogChkBox.Text = "アプリの起動時に引数のログを表示する";
+			this.IsAppliLogChkBox.UseVisualStyleBackColor = true;
+			// 
+			// isAppMinimizedList
+			// 
+			this.isAppMinimizedList.DropDownHeight = 1;
+			this.isAppMinimizedList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.isAppMinimizedList.DropDownWidth = 1;
+			this.isAppMinimizedList.FormattingEnabled = true;
+			this.isAppMinimizedList.IntegralHeight = false;
+			this.isAppMinimizedList.Items.AddRange(new object[] {
+									"条件を設定しない",
+									"aaa"});
+			this.isAppMinimizedList.Location = new System.Drawing.Point(196, 409);
+			this.isAppMinimizedList.Name = "isAppMinimizedList";
+			this.isAppMinimizedList.Size = new System.Drawing.Size(95, 20);
+			this.isAppMinimizedList.TabIndex = 48;
+			this.isAppMinimizedList.DropDownClosed += new System.EventHandler(this.IsAppMinimizedListDropDownClosed);
+			this.isAppMinimizedList.Leave += new System.EventHandler(this.IsAppMinimizedListLeave);
+			this.isAppMinimizedList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.IsAppMinimizedListMouseDown);
 			// 
 			// displayArgInfoLabel
 			// 
@@ -477,6 +534,8 @@ namespace namaichi
 			this.argJText.Name = "argJText";
 			this.argJText.Size = new System.Drawing.Size(60, 19);
 			this.argJText.TabIndex = 45;
+			this.argJText.Enter += new System.EventHandler(this.ArgTextEnter);
+			this.argJText.Leave += new System.EventHandler(this.ArgTextLeave);
 			// 
 			// label27
 			// 
@@ -492,6 +551,8 @@ namespace namaichi
 			this.argIText.Name = "argIText";
 			this.argIText.Size = new System.Drawing.Size(60, 19);
 			this.argIText.TabIndex = 43;
+			this.argIText.Enter += new System.EventHandler(this.ArgTextEnter);
+			this.argIText.Leave += new System.EventHandler(this.ArgTextLeave);
 			// 
 			// label28
 			// 
@@ -507,6 +568,8 @@ namespace namaichi
 			this.argHText.Name = "argHText";
 			this.argHText.Size = new System.Drawing.Size(60, 19);
 			this.argHText.TabIndex = 41;
+			this.argHText.Enter += new System.EventHandler(this.ArgTextEnter);
+			this.argHText.Leave += new System.EventHandler(this.ArgTextLeave);
 			// 
 			// appliJPathSanshouBtn
 			// 
@@ -552,6 +615,8 @@ namespace namaichi
 			this.argGText.Name = "argGText";
 			this.argGText.Size = new System.Drawing.Size(60, 19);
 			this.argGText.TabIndex = 36;
+			this.argGText.Enter += new System.EventHandler(this.ArgTextEnter);
+			this.argGText.Leave += new System.EventHandler(this.ArgTextLeave);
 			// 
 			// appliGPathSanshouBtn
 			// 
@@ -562,6 +627,14 @@ namespace namaichi
 			this.appliGPathSanshouBtn.Text = "参照";
 			this.appliGPathSanshouBtn.UseVisualStyleBackColor = true;
 			this.appliGPathSanshouBtn.Click += new System.EventHandler(this.appliPathSanshouBtn_Click);
+			// 
+			// label30
+			// 
+			this.label30.Location = new System.Drawing.Point(14, 412);
+			this.label30.Name = "label30";
+			this.label30.Size = new System.Drawing.Size(180, 15);
+			this.label30.TabIndex = 34;
+			this.label30.Text = "次のアプリを最小化状態で起動する";
 			// 
 			// label25
 			// 
@@ -592,6 +665,8 @@ namespace namaichi
 			this.argFText.Name = "argFText";
 			this.argFText.Size = new System.Drawing.Size(60, 19);
 			this.argFText.TabIndex = 31;
+			this.argFText.Enter += new System.EventHandler(this.ArgTextEnter);
+			this.argFText.Leave += new System.EventHandler(this.ArgTextLeave);
 			// 
 			// label17
 			// 
@@ -607,6 +682,8 @@ namespace namaichi
 			this.argEText.Name = "argEText";
 			this.argEText.Size = new System.Drawing.Size(60, 19);
 			this.argEText.TabIndex = 29;
+			this.argEText.Enter += new System.EventHandler(this.ArgTextEnter);
+			this.argEText.Leave += new System.EventHandler(this.ArgTextLeave);
 			// 
 			// label18
 			// 
@@ -622,6 +699,8 @@ namespace namaichi
 			this.argDText.Name = "argDText";
 			this.argDText.Size = new System.Drawing.Size(60, 19);
 			this.argDText.TabIndex = 27;
+			this.argDText.Enter += new System.EventHandler(this.ArgTextEnter);
+			this.argDText.Leave += new System.EventHandler(this.ArgTextLeave);
 			// 
 			// label24
 			// 
@@ -757,6 +836,8 @@ namespace namaichi
 			this.argCText.Name = "argCText";
 			this.argCText.Size = new System.Drawing.Size(60, 19);
 			this.argCText.TabIndex = 16;
+			this.argCText.Enter += new System.EventHandler(this.ArgTextEnter);
+			this.argCText.Leave += new System.EventHandler(this.ArgTextLeave);
 			// 
 			// label14
 			// 
@@ -772,6 +853,8 @@ namespace namaichi
 			this.argBText.Name = "argBText";
 			this.argBText.Size = new System.Drawing.Size(60, 19);
 			this.argBText.TabIndex = 14;
+			this.argBText.Enter += new System.EventHandler(this.ArgTextEnter);
+			this.argBText.Leave += new System.EventHandler(this.ArgTextLeave);
 			// 
 			// label40
 			// 
@@ -937,6 +1020,8 @@ namespace namaichi
 			this.argAText.Name = "argAText";
 			this.argAText.Size = new System.Drawing.Size(60, 19);
 			this.argAText.TabIndex = 12;
+			this.argAText.Enter += new System.EventHandler(this.ArgTextEnter);
+			this.argAText.Leave += new System.EventHandler(this.ArgTextLeave);
 			// 
 			// label11
 			// 
@@ -1448,7 +1533,17 @@ namespace namaichi
 									"ユーザーURLを開く",
 									"最近行われた放送のURLをコピー",
 									"チャンネルURLをコピー",
-									"ユーザーURLをコピー"});
+									"ユーザーURLをコピー",
+									"最近行われた放送のURLをアプリAで開く",
+									"最近行われた放送のURLをアプリBで開く",
+									"最近行われた放送のURLをアプリCで開く",
+									"最近行われた放送のURLをアプリDで開く",
+									"最近行われた放送のURLをアプリEで開く",
+									"最近行われた放送のURLをアプリFで開く",
+									"最近行われた放送のURLをアプリGで開く",
+									"最近行われた放送のURLをアプリHで開く",
+									"最近行われた放送のURLをアプリIで開く",
+									"最近行われた放送のURLをアプリJで開く"});
 			this.doublecmodeList.Location = new System.Drawing.Point(146, 221);
 			this.doublecmodeList.Name = "doublecmodeList";
 			this.doublecmodeList.Size = new System.Drawing.Size(241, 20);
@@ -1771,7 +1866,17 @@ namespace namaichi
 									"チャンネルURLを開く",
 									"放送のURLをコピー",
 									"チャンネルURLをコピー",
-									"お気に入りチャンネルに登録"});
+									"お気に入りチャンネルに登録",
+									"放送のURLをアプリAで開く",
+									"放送のURLをアプリBで開く",
+									"放送のURLをアプリCで開く",
+									"放送のURLをアプリDで開く",
+									"放送のURLをアプリEで開く",
+									"放送のURLをアプリFで開く",
+									"放送のURLをアプリGで開く",
+									"放送のURLをアプリHで開く",
+									"放送のURLをアプリIで開く",
+									"放送のURLをアプリJで開く"});
 			this.brodoubleList.Location = new System.Drawing.Point(175, 69);
 			this.brodoubleList.Name = "brodoubleList";
 			this.brodoubleList.Size = new System.Drawing.Size(167, 20);
@@ -3121,6 +3226,10 @@ namespace namaichi
 			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.CheckBox IsAppliLogChkBox;
+		private System.Windows.Forms.ComboBox isAppMinimizedList;
+		private System.Windows.Forms.CheckedListBox isAppMinimizedCheckList;
+		private System.Windows.Forms.Label label30;
 		private System.Windows.Forms.LinkLabel displayArgInfoLabel;
 		private System.Windows.Forms.Button userSessionTestBtn;
 		private System.Windows.Forms.RadioButton useUserSessionRadioBtn;

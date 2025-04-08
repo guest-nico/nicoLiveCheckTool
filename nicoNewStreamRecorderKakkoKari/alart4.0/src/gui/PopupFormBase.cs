@@ -30,6 +30,7 @@ namespace namaichi
 		protected bool isTestClosePopup = false;
 		protected int testPopTime = 0;
 		protected CookieContainer cc = null;
+		protected MainForm form = null;
 		
 		public PopupFormBase()
 		{
@@ -88,7 +89,8 @@ namespace namaichi
 			var path = config.get("appli" + i.ToString() + "Path");
 			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(ri.lvId, "(\\d+)");
 			var args = config.get("appli" + i.ToString() + "Args");
-			util.appliProcess(path, url, args, ri, cc);
+			var appNum = (int)((char)i - 'A');
+			util.appliProcess(path, url, args, ri, cc, config, appNum, form);
 		}
 		protected void setAppliMenuVisible() {
 			var isTask = ri.hostName == "";

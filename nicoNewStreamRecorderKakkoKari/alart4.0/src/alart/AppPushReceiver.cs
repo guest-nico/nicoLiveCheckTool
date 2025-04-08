@@ -537,8 +537,8 @@ namespace namaichi.alart
 					} else {
 						var gir = new GetItemRetryApr(lvid, proto, this);
 						Task.Factory.StartNew(() => {
-							for (var i = 0; i < 10; i++) {
-				         		Thread.Sleep(5000);
+							for (var i = 0; i < 3; i++) {
+				         		Thread.Sleep(15000);
 				         		items = gir.getItem();
 				         		if (items == null) continue;
 				         		check.foundLive(items);

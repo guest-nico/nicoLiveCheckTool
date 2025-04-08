@@ -53,54 +53,54 @@ namespace namaichi.alart
 			                     "", "", "", "", false);
 					               
 			if (ti.appliA && !form.notifyOffList[7]) {
-				var appliAPath = form.config.get("appliAPath");
+				var appliPath = form.config.get("appliAPath");
 				var args = form.config.get("appliAArgs") + " " + ti.args;
-				util.appliProcessFromLvid(appliAPath, ti.lvId, args, form.check.container);
+				appliProcessFromLvid(appliPath, ti.lvId, args, 0);
 			}
 			if (ti.appliB && !form.notifyOffList[8]) {
-				var appliBPath = form.config.get("appliBPath");
+				var appliPath = form.config.get("appliBPath");
 				var args = form.config.get("appliBArgs") + " " + ti.args;
-				util.appliProcessFromLvid(appliBPath, ti.lvId, args, form.check.container);
+				appliProcessFromLvid(appliPath, ti.lvId, args, 1);
 			}
 			if (ti.appliC && !form.notifyOffList[9]) {
-				var appliCPath = form.config.get("appliCPath");
+				var appliPath = form.config.get("appliCPath");
 				var args = form.config.get("appliCArgs") + " " + ti.args;
-				util.appliProcessFromLvid(appliCPath, ti.lvId, args, form.check.container);
+				appliProcessFromLvid(appliPath, ti.lvId, args, 2);
 			}
 			if (ti.appliD && !form.notifyOffList[10]) {
-				var appliDPath = form.config.get("appliDPath");
+				var appliPath = form.config.get("appliDPath");
 				var args = form.config.get("appliDArgs") + " " + ti.args;
-				util.appliProcessFromLvid(appliDPath, ti.lvId, args, form.check.container);
+				appliProcessFromLvid(appliPath, ti.lvId, args, 3);
 			}
 			if (ti.appliE && !form.notifyOffList[11]) {
-				var appliEPath = form.config.get("appliEPath");
+				var appliPath = form.config.get("appliEPath");
 				var args = form.config.get("appliEArgs") + " " + ti.args;
-				util.appliProcessFromLvid(appliEPath, ti.lvId, args, form.check.container);
+				appliProcessFromLvid(appliPath, ti.lvId, args, 4);
 			}
 			if (ti.appliF && !form.notifyOffList[12]) {
-				var appliFPath = form.config.get("appliFPath");
+				var appliPath = form.config.get("appliFPath");
 				var args = form.config.get("appliFArgs") + " " + ti.args;
-				util.appliProcessFromLvid(appliFPath, ti.lvId, args, form.check.container);
+				appliProcessFromLvid(appliPath, ti.lvId, args, 5);
 			}
 			if (ti.appliG && !form.notifyOffList[13]) {
-				var appliGPath = form.config.get("appliGPath");
+				var appliPath = form.config.get("appliGPath");
 				var args = form.config.get("appliGArgs") + " " + ti.args;
-				util.appliProcessFromLvid(appliGPath, ti.lvId, args, form.check.container);
+				appliProcessFromLvid(appliPath, ti.lvId, args, 6);
 			}
 			if (ti.appliH && !form.notifyOffList[14]) {
-				var appliHPath = form.config.get("appliHPath");
+				var appliPath = form.config.get("appliHPath");
 				var args = form.config.get("appliHArgs") + " " + ti.args;
-				util.appliProcessFromLvid(appliHPath, ti.lvId, args, form.check.container);
+				appliProcessFromLvid(appliPath, ti.lvId, args, 7);
 			}
 			if (ti.appliI && !form.notifyOffList[15]) {
-				var appliIPath = form.config.get("appliIPath");
+				var appliPath = form.config.get("appliIPath");
 				var args = form.config.get("appliIArgs") + " " + ti.args;
-				util.appliProcessFromLvid(appliIPath, ti.lvId, args, form.check.container);
+				appliProcessFromLvid(appliPath, ti.lvId, args, 8);
 			}
 			if (ti.appliJ && !form.notifyOffList[16]) {
-				var appliJPath = form.config.get("appliJPath");
+				var appliPath = form.config.get("appliJPath");
 				var args = form.config.get("appliJArgs") + " " + ti.args;
-				util.appliProcessFromLvid(appliJPath, ti.lvId, args, form.check.container);
+				appliProcessFromLvid(appliPath, ti.lvId, args, 9);
 			}
 			if (ti.popup && !form.notifyOffList[2]) {
 				displayPopup(item, form);
@@ -143,6 +143,8 @@ namespace namaichi.alart
 			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(item.lvId, "(\\d+)");
 			util.openUrlBrowser(url, form.config);
 		}
-		
+		void appliProcessFromLvid(string path , string lvid, string args, int appNum) {
+			util.appliProcessFromLvid(path, lvid, args, form.check.container, form.config, appNum, form);
+		}
 	}
 }

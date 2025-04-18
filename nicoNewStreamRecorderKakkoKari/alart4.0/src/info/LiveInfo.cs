@@ -34,6 +34,7 @@ namespace namaichi.info
 		public string type;
 		
 		public string hostName;
+		public string hostId;
 		
 		//public string[] tags = null;
 		
@@ -55,7 +56,7 @@ namespace namaichi.info
 		
 		//byte[] deflateThumb = null;
 		//Image testImg = null;
-		
+		/*
 		public LiveInfo(List<KeyValuePair<string, string>> item, AlartInfo[] alartData, config.config config, AlartInfo[] userAlartData)
 		{
 			foreach (var l in item) {
@@ -105,6 +106,7 @@ namespace namaichi.info
 			//deflateThumb = b;
 			//testImg = new Bitmap(thumbnail);
 		}
+		*/
 		public LiveInfo(RssItem item, 
 				//SortableBindingList<AlartInfo> alartData,
 				AlartInfo[] alartData,
@@ -126,6 +128,7 @@ namespace namaichi.info
 			category = ri.category != null ? ri.category : new List<string>(){"一般(その他)"};
 			
 			hostName = ri.hostName;
+			hostId = ri.userId;
 			
 			favorite = getFavorite(alartData, ri, favorite);
 			favorite = getFavorite(userAlartData, ri, favorite);

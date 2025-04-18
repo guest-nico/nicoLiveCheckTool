@@ -34,13 +34,15 @@ namespace namaichi.alart
 			while (true) {
 				var now = DateTime.Now;
 				try {
-					var c = form.getTaskListCount();
+					//var c = form.getTaskListCount();
+					var c = taskListDataSource.Count;
 					for (var i = 0; i < c; i++) {
 						var ti = taskListDataSource[i];
 						if (ti.taskDt < now && ti.status == "待機中") process(ti);
 					}
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+					Thread.Sleep(2000);
 				}
 				
 				

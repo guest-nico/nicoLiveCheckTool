@@ -426,7 +426,7 @@ namespace namaichi.rec
 	                f.TopMost = true;
 	                
 	                DialogResult dr = DialogResult.Cancel;
-	                form.formAction(() => {dr = f.ShowDialog(form);});
+	                form.formAction(() => {dr = f.ShowDialog(form);}, int.MaxValue);
 	                //var dr = f.ShowDialog(form);
 	                if (f.code == null) {
 	                	log += "二段階認証のコードが入力されていませんでした";
@@ -468,7 +468,11 @@ namespace namaichi.rec
 					return null; 
 				}
 				
-				var r = util.sendRequest(loginUrl, h, d, "POST", true, cc);
+				HttpWebResponse r = null;
+				for (var i = 0; i < 3; i++) {
+					r = util.sendRequest(loginUrl, h, d, "POST", true, cc);
+					if (r != null) break;
+				}
 				if (r == null) {
 					log += "ログインページに接続できませんでした";
 					return null;
@@ -502,7 +506,7 @@ namespace namaichi.rec
 	                f.TopMost = true;
 	                
 	                DialogResult dr = DialogResult.Cancel;
-	                form.formAction(() => {dr = f.ShowDialog(form);});
+	                form.formAction(() => {dr = f.ShowDialog(form);}, int.MaxValue);
 	                //var dr = f.ShowDialog(form);
 	                if (f.code == null) {
 	                	log += "二段階認証のコードが入力されていませんでした";

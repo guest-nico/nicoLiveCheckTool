@@ -16,6 +16,9 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using System.ComponentModel;
 using Microsoft.Win32;
+using namaichi.gui;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SunokoLibrary.Application;
 using System.Data;
 using System.Linq;
@@ -274,6 +277,14 @@ namespace namaichi
 			
 			setCheckableMenuClosingEvent();
 			
+			try {
+				var liveFilterC = config.get("liveListFilter");
+				if (liveFilterC != "")
+					liveListFilterBtn.Tag = Newtonsoft.Json.JsonConvert.DeserializeObject< List<LiveListFilterInfo>>(liveFilterC);
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+				addLogText(e.Message + e.Source + e.StackTrace);
+			}
 			
 			setFormState();
 			
@@ -759,12 +770,12 @@ namespace namaichi
 					new AlartListFileManager(true, this).save();
 				});
 	        	if (o.inputLvidItem != null) check.checkedLvIdList.Add(o.inputLvidItem);
-	        	var addLive = getOnAirLastLiveList(check.checkedLvIdList, o.ret);
-	        	if (addLive != null)
 	        		Task.Factory.StartNew(() => {
-	        		                      	//check.foundLive(addLive, false);
-	        		                      	util.debugWriteLine("addform addlive after foundlive");
-	        		                      });
+                      	var addLive = getOnAirLastLiveList(check.checkedLvIdList, o.ret);
+                      	if (addLive != null)
+	                      	//check.foundLive(addLive, false);
+	                      	util.debugWriteLine("addform addlive after foundlive");
+                      });
 	        		                      
 	        } catch (Exception ee) {
         		util.debugWriteLine(ee.Message + " " + ee.StackTrace);
@@ -3165,7 +3176,9 @@ namespace namaichi
 				System.Windows.Forms.Border3DStyle.Raised);
 		}
 		void setCategoryBorderPaint() {
-			foreach (System.Windows.Forms.RadioButton c in categoryBtnPanel.Controls) {
+			foreach (var _c in categoryBtnPanel.Controls) {
+				var c = _c as System.Windows.Forms.RadioButton;
+				if (c == null) continue;
 				c.Paint += new System.Windows.Forms.PaintEventHandler(categoryBorderPaint);
 			}
 		}
@@ -3245,15 +3258,20 @@ namespace namaichi
 			if (IsDisposed || !util.isShowWindow || !IsHandleCreated) return;
 			
 			util.debugWriteLine("formaction " + memberName + " " + lastHosoStatusBar.Text);
+			//test
+			//util.debugWriteLine("formaction st " + new StackTrace(true));
 			if (Thread.CurrentThread == madeThread) {
 				try {
+					util.debugWriteLine("formaction begin sync " + memberName);
 					a.Invoke();
+					util.debugWriteLine("formaction sync end " + memberName + " " + lastHosoStatusBar.Text);
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				}
 			} else {
 				IAsyncResult r = null;
 				try {
+					util.debugWriteLine("formaction begin async " + memberName);
 					r = BeginInvoke((MethodInvoker)delegate() {
 					//Invoke((MethodInvoker)delegate() {
 						try {
@@ -3269,6 +3287,7 @@ namespace namaichi
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 					addLogText("act " + e.Message + e.Source + e.StackTrace + e.TargetSite);
 				} finally {
+					util.debugWriteLine("formaction async end " + memberName + " " + lastHosoStatusBar.Text);
 					if (r != null) {
 						try {
 							//EndInvoke(r);
@@ -3278,6 +3297,7 @@ namespace namaichi
 					}
 				}
 			}
+			util.debugWriteLine("formaction end " + memberName + " " + lastHosoStatusBar.Text);
 		}
 		private void formActionAsync(Action a) {
 			_formActionAsync(a).Wait();
@@ -3341,6 +3361,8 @@ namespace namaichi
 		        	isDisp = false;
 		        if (delMin != 0 && ((TimeSpan)(now - li.pubDateDt)).TotalMinutes > delMin)
 		        	continue;
+		        if (!isLiveFilterMatch(li))
+		        	isDisp = false;
 		        formAction(() => {
 			        if (isDisp)	{
 						liveListDataSource.Add(li);
@@ -3772,7 +3794,8 @@ namespace namaichi
 					        	isDisplay = false;
 					        if (!isLiveListSearchVisible(li))
 					        	isDisplay = false;
-					        
+					        if (!isLiveFilterMatch(li))
+					        	isDisplay = false;
 							if (!isDisplay) {
 					        	formAction(() => {
 									liveListDataReserve.Add(li);
@@ -3793,8 +3816,9 @@ namespace namaichi
 			try {
 				//formAction(() => {
 					for (var i = liveListDataReserve.Count - 1; i > -1; i--) {
-						//var isDisplay = (isAll || liveListDataReserve[i].MainCategory == cateName);
-						var isDisplay = liveListDataReserve[i].isDisplay(sender.Text[0]);
+						var isDisplay = (isAll || liveListDataReserve[i].MainCategory == cateName);
+						//var isDisplay = liveListDataReserve[i].isDisplay(sender.Text[0]);
+						
 						var isMemberOnly = !string.IsNullOrEmpty(liveListDataReserve[i].memberOnly);
 						
 				        if (BlindOnlyA && isMemberOnly &&
@@ -3809,6 +3833,8 @@ namespace namaichi
 				        	isDisplay = false;
 				        if (!isLiveListSearchVisible(liveListDataReserve[i]))
 				        	isDisplay = false;
+				        if (!isLiveFilterMatch(liveListDataReserve[i]))
+		        			isDisplay = false;
 				        
 				        if (isDisplay) {
 				        	formAction(() => {
@@ -5905,10 +5931,28 @@ namespace namaichi
 				for (var i = 0; i < notifyIconMenuStrip.Items.Count - 4; i++) {
 					history.Add(new KeyValuePair<DateTime, ToolStripMenuItem>(((RssItem)notifyIconMenuStrip.Items[i].Tag).pubDateDt, (ToolStripMenuItem)notifyIconMenuStrip.Items[i]));
 				}
+				//del date
+				var dtList = new List<DateTime>();
+				dtList.AddRange(items.Select(x => x.pubDateDt).ToList());
+				dtList.AddRange(history.Where(x => items.IndexOf((RssItem)x.Value.Tag) == -1).Select(x => x.Key));
+				var delDtList = new List<DateTime>();
+				if (dtList.Count > 20) {
+					delDtList = dtList.OrderBy(x => x).Take(dtList.Count - 20).ToList();
+					items = items.Where(x => delDtList.IndexOf(x.pubDateDt) == -1).ToList();
+					history = history.Where(x => delDtList.IndexOf(x.Key) == -1).ToList();
+					for (var i = notifyIconMenuStrip.Items.Count - 3; i > -1; i--) {
+						var item = notifyIconMenuStrip.Items[i];
+						if (item.Tag == null) continue;
+						var ri = (RssItem)item.Tag;
+						if (delDtList.IndexOf(ri.pubDateDt) > -1)
+							notifyIconMenuStrip.Items.Remove(item);
+					}
+				}
+				
 				foreach (var item in history) {
 					try {
 						if (notifyIconMenuStrip.Items.IndexOf(item.Value) > -1) {
-							notifyIconMenuStrip.Items.Remove(item.Value);
+							//notifyIconMenuStrip.Items.Remove(item.Value);
 						}
 					} catch (Exception e) {
 						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
@@ -5925,10 +5969,12 @@ namespace namaichi
 				var addList = history.OrderByDescending(a => a.Key);
 				
 				foreach (var item in addList) {
-					notifyIconMenuStrip.Items.Insert(0, item.Value);
-					var rssItem = items.Find(a => a == item.Value.Tag);
-					if (rssItem != null) {
-						item.Value.Image = ThumbnailManager.getThumbnailRssUrl(rssItem.thumbnailUrl, false, true);
+					if (notifyIconMenuStrip.Items.IndexOf(item.Value) == -1) {
+						notifyIconMenuStrip.Items.Insert(0, item.Value);
+						var rssItem = items.Find(a => a == item.Value.Tag);
+						if (rssItem != null && item.Value.Image == null) {
+							item.Value.Image = ThumbnailManager.getThumbnailRssUrl(rssItem.thumbnailUrl, false, true);
+						}
 					}
 				}
 				notifyIconRecentSeparator.Visible = true;
@@ -6784,23 +6830,16 @@ namespace namaichi
 					"appliE","appliF","appliG",
 					"appliH","appliI","appliJ"};
 			var n = notifyOffList;
-			//alartList.EnableHeadersVisualStyles = true;
 			var columns = alartList.Columns;
-			//alartList.EnableHeadersVisualStyles = false;
 			for(var i = 2; i < notifyOffList.Length; i++) {
 				var isOff = notifyOffList[i];
 				foreach (DataGridViewColumn c in columns) {
 					util.debugWriteLine("column__ " + c.Name + " " + c.DataPropertyName);
-					//c.DefaultCellStyle.BackColor = Color.Yellow;
 					if (c.DataPropertyName.ToLower().IndexOf(notifyOffsPropName[i - 2]) > -1) {
-						//c.HeaderCell.Style.BackColor = isOff ? Color.FromArgb(240, 0, 0) : Color.White;
-						//c.DefaultCellStyle.ForeColor = Color.Green;
 						break;
 					}
 				}
 			}
-			//alartList.EnableHeadersVisualStyles = false;
-			//alartList.ColumnHeadersDefaultCellStyle.BackColor = Color.Red;
 			alartList.Refresh();
 		}
 		bool isNotifyOffColumn(int columnI) {
@@ -6835,6 +6874,69 @@ namespace namaichi
 				userSearchBtn.PerformClick();
 				e.SuppressKeyPress = true;
 			}
+		}
+		void LiveListFilterBtnClick(object sender, EventArgs e)
+		{
+			var filterList = new List<LiveListFilterInfo>();
+			if (liveListFilterBtn.Tag != null)
+				filterList = (List<LiveListFilterInfo>)liveListFilterBtn.Tag;
+			var f = new LiveListFilterForm(config, filterList);
+			if (f.ShowDialog() != DialogResult.OK) return;
+			
+			liveListFilterBtn.Tag = f.ret;
+			var j = JToken.FromObject(f.ret).ToString(Formatting.None);
+			config.set("liveListFilter", j);
+			liveListFilterBtn.Tag = f.ret;
+			resetLiveList();
+		}
+		bool isLiveFilterMatch(LiveInfo li) {
+			if (liveListFilterBtn.Tag == null) return true;
+			var filter = (List<LiveListFilterInfo>)liveListFilterBtn.Tag;
+			
+			foreach (var f in filter) {
+				//必ず含む いずれかを含む 含まない
+				//not
+				if (f.matchType == "含まない" && 
+				    	isLiveFilterMatchCore(li, f.infoType, f.str))
+					return false;
+				//and
+				if (f.matchType == "必ず含む" && 
+				    	!isLiveFilterMatchCore(li, f.infoType, f.str))
+					return false;
+				//or
+				if (f.matchType == "いずれかを含む" && 
+				    	isLiveFilterMatchCore(li, f.infoType, f.str))
+					return true;
+			}
+			return true;
+		}
+		bool isLiveFilterMatchCore(LiveInfo li, string infoType, string word) {
+			if (li.title == null) li.title = "";
+			if (li.comName == null) li.comName = "";
+			if (li.comId == null) li.comId = "";
+			if (li.hostName == null) li.hostName = "";
+			if (li.lvId == null) li.lvId = "";
+			
+			if (infoType == "タイトル")
+				return util.getRegGroup(li.title, "(" + word + ")") != null;
+			if (infoType == "チャンネル名")
+				return util.getRegGroup(li.comName, "(" + word + ")") != null;
+			if (infoType == "チャンネルID")
+				return util.getRegGroup(li.comId, "(" + word + ")") != null;
+			if (infoType == "放送者名")
+				return util.getRegGroup(li.hostName, "(" + word + ")") != null;
+			if (infoType == "放送者ID")
+				return util.getRegGroup(li.hostId, "(" + word + ")") != null;
+			if (infoType == "放送ID")
+				return util.getRegGroup(li.lvId, "(" + word + ")") != null;
+			if (infoType == "全て") {
+				return util.getRegGroup(li.title, "(" + word + ")") != null ||
+						util.getRegGroup(li.comName, "(" + word + ")") != null ||
+						util.getRegGroup(li.comId, "(" + word + ")") != null ||
+						util.getRegGroup(li.hostName, "(" + word + ")") != null ||
+						util.getRegGroup(li.lvId, "(" + word + ")") != null;
+			}
+			return true;
 		}
 	}
 }

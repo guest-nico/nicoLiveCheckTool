@@ -34,8 +34,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.8.7";
-	public static string versionDayStr = "2025/04/08";
+	public static string versionStr = "ver0.1.8.8";
+	public static string versionDayStr = "2025/04/19";
 	public static string osName = null;
 	public static string osType = null;
 	public static bool isWebRequestOk = false;
@@ -1161,6 +1161,7 @@ class util {
 	public static void appliProcess(string appliPath, string url, string args, RssItem ri, CookieContainer cc, config cfg, int appNum, MainForm form) {
 		if (appliPath == null || appliPath == "") return;
 		
+		string arg = "未設定";
 		try {
 			var us = "";
 			try {
@@ -1168,7 +1169,7 @@ class util {
 				us = c["user_session"] != null ? c["user_session"].Value : "";
 			} catch (Exception e) {util.debugWriteLine(e.Message + e.Source + e.StackTrace);}
 			
-			var arg = util.getDokujiSetteiArg(ri.hostName, ri.comName, ri.title, ri.lvId.Trim('e'), ri.comId, args, ri.pubDateDt, ri.userId, us);
+			arg = util.getDokujiSetteiArg(ri.hostName, ri.comName, ri.title, ri.lvId.Trim('e'), ri.comId, args, ri.pubDateDt, ri.userId, us);
 			var si = new ProcessStartInfo(appliPath, arg);
 			
 			var isMin = false;
@@ -1180,14 +1181,16 @@ class util {
 					isMin = true;
 				}
 			}
-			if (bool.Parse(cfg.get("IsAppliLog")))
-				form.addLogText(appliPath + "を起動しました 引数：" + arg);
 				
-			CreateProcess(appliPath, arg, isMin);
+			//var r = CreateProcess(appliPath, arg, isMin);
+			var r = ShellExecute(appliPath, arg, isMin);
 			//Process.Start(si);
 			//Process.Start(appliPath, url);
+			if (bool.Parse(cfg.get("IsAppliLog")))
+				form.addLogText(appliPath + (r ? "を起動しました" : "の起動に失敗しました") + " 引数：" + arg + " 最小化:" + isMin);
 		} catch (Exception e) {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			form.addLogText(appliPath + "の起動に失敗しました 引数：" + arg + " " + e.Message + e.Source + e.StackTrace);
 		}
 	}
     public static void appliProcessFromLvid(string appliPath, string lvid, string args, CookieContainer cc, config cfg, int appNum, MainForm form) {
@@ -1211,7 +1214,10 @@ class util {
 						isMin = true;
 					}
 				}
-				CreateProcess(appliPath, url + " " + args, isMin);
+				//var r = CreateProcess(appliPath, url + " " + args, isMin);
+				var r = ShellExecute(appliPath, url + args, isMin);
+				form.addLogText(appliPath + (r ? "を起動しました" : "の起動に失敗しました") + " 引数：" + args + " 最小化:" + isMin);
+				util.debugWriteLine(appliPath + (r ? "を起動しました" : "の起動に失敗しました") + " 引数：" + args + " 最小化:" + isMin);
 			}
 		} catch (Exception e) {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
@@ -1954,9 +1960,9 @@ class util {
         public uint dwProcessId;
         public uint dwThreadId;
     }
-	public static void CreateProcess(string f, string arg, bool isMin) {
+	public static bool CreateProcess(string f, string arg, bool isMin) {
 		//if (f == null || arg == null) return;
-		if (f == null) return;
+		if (f == null) return false;
 			
 		STARTUPINFO si = new STARTUPINFO();
 		PROCESS_INFORMATION pi = new PROCESS_INFORMATION();
@@ -1980,8 +1986,60 @@ class util {
 				out pi);
 		if (!r) {
 			Thread.Sleep(1000);
-			util.debugWriteLine("create false");
-			return;
 		}
+		util.debugWriteLine("create process " + r + " " + f + " " + arg + " ismin" + isMin);
+		return r;
+	}
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+    public struct SHELLEXECUTEINFO
+    {
+        public int cbSize;
+        public uint fMask;
+        public IntPtr hwnd;
+        [MarshalAs(UnmanagedType.LPTStr)]
+        public string lpVerb;
+        [MarshalAs(UnmanagedType.LPTStr)]
+        public string lpFile;
+        [MarshalAs(UnmanagedType.LPTStr)]
+        public string lpParameters;
+        [MarshalAs(UnmanagedType.LPTStr)]
+        public string lpDirectory;
+        public int nShow;
+        public IntPtr hInstApp;
+        public IntPtr lpIDList;
+        [MarshalAs(UnmanagedType.LPTStr)]
+        public string lpClass;
+        public IntPtr hkeyClass;
+        public uint dwHotKey;
+        public IntPtr hIconOrMonitor;
+        public IntPtr hProcess;
+    }
+    [DllImport("shell32.dll", CharSet = CharSet.Auto)]
+    static extern bool ShellExecuteEx(ref SHELLEXECUTEINFO lpExecInfo);
+    
+    public static bool ShellExecute(string f, string arg, bool isMin) {
+		if (f == null) return false;
+		
+		const int SW_SHOWNORMAL = 1;
+		//const int SW_SHOWMINIMIZED = 2;
+		//const int SW_SHOWNOACTIVATE = 4;
+		const int SW_SHOWMINNOACTIVE = 7;
+    	//const uint SEE_MASK_NOCLOSEPROCESS = 0x00000040;
+    	
+		SHELLEXECUTEINFO sei = new SHELLEXECUTEINFO();
+        sei.cbSize = Marshal.SizeOf(sei);
+        sei.lpVerb = "open";
+        sei.lpFile = f;
+        if (!string.IsNullOrEmpty(arg)) sei.lpParameters = arg;
+        sei.nShow = isMin ? SW_SHOWMINNOACTIVE : SW_SHOWNORMAL;
+        //sei.fMask = SEE_MASK_NOCLOSEPROCESS;
+
+        var r = ShellExecuteEx(ref sei);
+        
+		if (!r) {
+			Thread.Sleep(1000);
+		}
+		util.debugWriteLine("create process " + r + " " + f + " " + arg + " ismin" + isMin);
+		return r;
 	}
 }

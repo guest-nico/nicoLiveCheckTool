@@ -212,6 +212,10 @@
     <Compile Include="src\gui\fileNameOptionForm.Designer.cs">
       <DependentUpon>fileNameOptionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\gui\LiveListFilterForm.cs" />
+    <Compile Include="src\gui\LiveListFilterForm.Designer.cs">
+      <DependentUpon>LiveListFilterForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\gui\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -281,6 +285,7 @@
     <Compile Include="src\info\HistoryInfo.cs" />
     <Compile Include="src\info\CustomKeywordInfo.cs" />
     <Compile Include="src\info\LiveInfo.cs" />
+    <Compile Include="src\info\LiveListFilterInfo.cs" />
     <Compile Include="src\info\LogInfo.cs" />
     <Compile Include="src\info\TanzakuOnAir.cs" />
     <Compile Include="src\info\TaskInfo.cs" />
@@ -344,8 +349,14 @@
     <EmbeddedResource Include="src\gui\fileNameOptionForm.resx">
       <DependentUpon>fileNameOptionForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="src\gui\LiveListFilterForm.resx">
+      <DependentUpon>LiveListFilterForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\gui\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\gui\MfaInputForm.resx">
+      <DependentUpon>MfaInputForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\gui\NamarokuRecordCheckSettingForm.resx">
       <DependentUpon>NamarokuRecordCheckSettingForm.cs</DependentUpon>
@@ -398,7 +409,6 @@
     <None Include="src\gui\%28check.ico" />
     <None Include="src\gui\app.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="ProfilingSessions\Session20190401_054741.sdps" />
   </ItemGroup>

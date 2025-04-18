@@ -158,7 +158,7 @@ namespace namaichi.utility
 			string namarokuRecRead = null;
 			if (itemLineNum == 29) {
 				var f = new NamarokuRecordCheckSettingForm(int.Parse(form.config.get("fontSize")));
-				form.formAction(() => f.ShowDialog());
+				form.formAction(() => f.ShowDialog(), int.MaxValue);
 				if (f.recordCheck == null) return;
 				else namarokuRecRead = f.recordCheck;
 			}

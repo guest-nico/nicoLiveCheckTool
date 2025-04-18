@@ -210,6 +210,13 @@
       <Link>src\gui\fileNameOptionForm.Designer.cs</Link>
       <DependentUpon>fileNameOptionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\alart4.0\src\gui\LiveListFilterForm.cs">
+      <Link>src\gui\LiveListFilterForm.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\LiveListFilterForm.Designer.cs">
+      <Link>src\gui\LiveListFilterForm.Designer.cs</Link>
+      <DependentUpon>LiveListFilterForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\alart4.0\src\gui\MainForm.cs">
       <Link>src\gui\MainForm.cs</Link>
       <SubType>Form</SubType>
@@ -314,6 +321,9 @@
     </Compile>
     <Compile Include="..\alart4.0\src\info\LiveInfo.cs">
       <Link>src\info\LiveInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\info\LiveListFilterInfo.cs">
+      <Link>src\info\LiveListFilterInfo.cs</Link>
     </Compile>
     <Compile Include="..\alart4.0\src\info\LogInfo.cs">
       <Link>src\info\LogInfo.cs</Link>
@@ -436,7 +446,6 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="..\alart4.0\src\gui\addForm.resx">
       <Link>src\gui\addForm.resx</Link>
@@ -468,6 +477,10 @@
     <EmbeddedResource Include="..\alart4.0\src\gui\fileNameOptionForm.resx">
       <Link>src\gui\fileNameOptionForm.resx</Link>
       <DependentUpon>fileNameOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\LiveListFilterForm.resx">
+      <Link>src\gui\LiveListFilterForm.resx</Link>
+      <DependentUpon>LiveListFilterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\MainForm.resx">
       <Link>src\gui\MainForm.resx</Link>

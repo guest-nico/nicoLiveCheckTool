@@ -307,7 +307,7 @@ namespace namaichi.rec
 					try {
 						var f = new BulkAddFromFollowAccountForm(int.Parse(form.config.get("fontSize")), form.config);
 						Task.Factory.StartNew(() => {
-							form.formAction(() => f.ShowDialog(form));
+							form.formAction(() => f.ShowDialog(form), int.MaxValue);
 						}).Wait();
 						
 						if (f.DialogResult != DialogResult.OK) return;
@@ -543,7 +543,7 @@ namespace namaichi.rec
 					var ds = isAddToCom ? form.alartListDataSource : 
 							form.userAlartListDataSource;
 					ds.Add(ai);
-				});
+				}, int.MaxValue);
 				got++;
 				_lock.end = i;
 				setToolMenuStatusBar();

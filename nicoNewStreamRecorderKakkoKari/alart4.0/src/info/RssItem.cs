@@ -90,7 +90,7 @@ namespace namaichi.info
 					var isNot = k.StartsWith("-") || k.StartsWith("ー");
 					if (!isNot) continue;
 					var _k = k.Remove(0,1);
-					if (isNot && isMatchInfo(k)) return false;
+					if (isNot && isMatchInfo(k.Substring(1))) return false;
 					/*
 					if (isNot && (util.getRegGroup(lvId, "(" + _k + ")") != null ||
 							util.getRegGroup(hostName == null ? "" : hostName, "(" + _k + ")") != null ||

@@ -349,6 +349,7 @@ public class config
 	        {"liveListUpdateMinutes", "1"},
 	        {"liveListCacheIcon", "true"},
 	        {"liveListGetIcon", "true"},
+	        {"liveListFilter", ""},
 	        
 	        {"IsBulkAddAuto","false"},
 	        {"bulkAddAccountId",""},

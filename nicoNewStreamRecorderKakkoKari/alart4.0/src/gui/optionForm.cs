@@ -1069,10 +1069,6 @@ namespace namaichi
 			util.debugWriteLine(e.Index + " " + (e.NewValue == CheckState.Checked));
 			var selectI = isAppMinimizedCheckList.SelectedIndex;
 			if (selectI != e.Index) return;
-			
-			} catch (Exception ee) {
-				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);
-			}
 		}
 		private void setIsminimizedAppInit() {
 			var c = cfg.get("IsminimizedApp");

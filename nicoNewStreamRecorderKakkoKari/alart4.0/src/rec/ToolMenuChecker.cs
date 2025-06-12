@@ -323,7 +323,7 @@ namespace namaichi.rec
 								
 						var cc = getUserSession(f.mail, f.pass);
 						if (cc == null) {
-							form.addLogText("Cookieが取得できませんでした");
+							form.addLogText("参加ユーザー・チャンネルから一括登録中にCookieが取得できませんでした");
 							return;
 						}
 						
@@ -446,13 +446,15 @@ namespace namaichi.rec
 				
 				if (cc == null || 
 				    	cc.GetCookies(TargetUrl)["user_session"] == null) {
-					util.showModelessMessageBox("失敗：メールアドレスまたはパスワードが間違っているため、ログインできません", "", form);
+					//util.showModelessMessageBox("失敗：メールアドレスまたはパスワードが間違っているため、ログインできません", "", form);
+					form.addLogText("失敗：メールアドレスまたはパスワードが間違っているため、ログインできません。mail:" + mail + " pass:" + pass);
 					return null;
 				}
 				
 				return cc;
 			} catch (Exception e) {
-				util.showModelessMessageBox("失敗：メールアドレスまたはパスワードが間違っているため、ログインできません", "", form);
+				//util.showModelessMessageBox("失敗：メールアドレスまたはパスワードが間違っているため、ログインできません", "", form);
+				form.addLogText("失敗：メールアドレスまたはパスワードが間違っているため、ログインできません。mail:" + mail + " pass:" + pass + " " + e.Message + " " + e.Source + e.StackTrace);
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 				return null;
 			}

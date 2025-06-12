@@ -85,9 +85,10 @@ namespace namaichi.alart
 			util.debugWriteLine("app push getOkIdToken");
 			id = token = null;
 			
-			string _id, _token;
+			string _id, _token, fid, fiToken;
 			if (!checkin(out _id, out _token)) return false;
-			var pushToken = getToken(_id, _token);
+			getFi(out fid, out fiToken);
+			var pushToken = getToken(_id, _token, fid, fiToken);
 			if (pushToken == null) return false;
 			if (!sendTokenNico3(pushToken)) return false;
 			
@@ -207,7 +208,7 @@ namespace namaichi.alart
 				return false;
 			}
 		}
-		private string getToken(string androidId, string securityToken) {
+		private string getToken(string androidId, string securityToken, string fid, string fiToken) {
 			util.debugWriteLine("app push getToken " + androidId + " " + securityToken);
 			try {
 				var headers = new Dictionary<string, string>(){
@@ -227,12 +228,15 @@ namespace namaichi.alart
 					
 				}
 				param += "&device=" + androidId;
-				param += "&app_ver=107";
+				param += "&app_ver=177";
+				param += "&X-cliv=fcm-24.0.3";
 				param += "&gcm_ver=15090013";
 				//param += "&X-appid=$randomString";
 				param += "&X-scope=GCM";
 				param += "&X-app_ver_name=4.48.0";
 				//param += "&info=sxu5CRtfHmsco0hB01boBVwFAxLXkBY";
+				if (!string.IsNullOrEmpty(fiToken))
+					param += "&X-Goog-Firebase-Installations-Auth=" + fiToken;
 				
 				byte[] postDataBytes = Encoding.ASCII.GetBytes(param);
 				util.debugWriteLine(param);
@@ -924,6 +928,49 @@ namespace namaichi.alart
 		    sslStream.Write(x);
 		    sslStream.Flush();
 		}
+		bool getFi(out string fid, out string fiToken) {
+			fid = fiToken = null;
+			util.debugWriteLine("app push getFi");
+			try {
+				var headers = new Dictionary<string, string>(){
+					{"Content-Type", "application/json"},
+					{"Accept", "application/json"},
+					{"X-Android-Package", "jp.co.dwango.nicocas"},
+					{"x-firebase-client", "H4sIAAAAAAAAAKtWykhNLCpJSk0sKVayio7VUSpLLSrOzM9TslIyUqoFAFyivEQfAAAA"},
+					{"X-Android-Cert", "3C122F52D69D2D2DD8EB4F87BDAB57B8102F0E1E"},
+					{"x-goog-api-key", "AIzaSyDSQTOmErEmQa-E1i2p14MIM3xxxxxxxxx"},
+					{"User-Agent", "Dalvik/2.1.0 (Linux; U; Android 7.1.2; SM-G973N Build/PPR1.190810.011)"},
+				};
+				
+				fid = "";
+				var rand = new Random(util.getUnixTime());
+				for (var i = 0; i < 22; i++) fid += (char)(rand.Next(26) + (rand.NextDouble() > 0.5 ? 'a' : 'A'));
+				string param = "{\"fid\":\"" + fid + "\",\"appId\":\"1:13323994513:android:a2dae687d1e8df7f\",\"authVersion\":\"FIS_v2\",\"sdkVersion\":\"a:18.0.0\"}";
+				
+				byte[] postDataBytes = Encoding.ASCII.GetBytes(param);
+				util.debugWriteLine(param);
+				
+				var url = "https://firebaseinstallations.googleapis.com/v1/projects/nicocas-android/installations";
+				var r = util.postResStr(url, headers, postDataBytes);
+				util.debugWriteLine(r);
+				if (string.IsNullOrEmpty(r)) {
+					check.form.addLogText("スマホプッシュ通知の通知IDの取得に失敗しました");
+					return false;
+				}
+				fiToken = new Regex("\"token\":.*?\"(.+?)\"").Match(r).Groups[1].Value;
+				util.debugWriteLine(fiToken);
+				
+				if (fiToken == null) {
+					check.form.addLogText("スマホプッシュ通知の通知IDの取得に失敗しました");
+					return false;
+				}
+				return true;
+			} catch (Exception e) {
+				util.debugWriteLine("gettoken error " + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				check.form.addLogText("スマホプッシュ通知の通知IDの取得中にエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
+				return false;
+			}
+		}
 	}
 	class GetItemRetryApr {
 		private string lvid;
@@ -943,18 +990,3 @@ namespace namaichi.alart
 }
 //RECV DATA MESSAGE { "id": "6D44DD46", "from": "13323994513", "category": "jp.nicovideo.android", "appData": [ { "key": "nx", "value": "{\"type\":\"start_channel_publish\",\"relation\":\"follower\",\"channel_id\":\"ch2604516\",\"program_id\":\"lv322411981\",\"program_title\":\"⛔【限定】[ ASMR/耳舐め ] ハロウィン♡魔女ウィッチがご奉仕♡【実写カメラ】Ear  licking Video Stream\",\"channel_name\":\"all standard is ｃ☆。\",\"channel_icon\":\"https://secure-dcdn.cdn.nimg.jp/comch/channel-icon/128x128/ch2604516.jpg?1572956462\"}" }, { "key": "message", "value": "all standard is ｃ☆。が番組を開始しました" } ], "persistentId": "0:1573920045367966%75f5c14df9fd7ecd", "ttl": 86357, "sent": "1573920045351" }
 //RECV DATA MESSAGE { "id": "6D44DD3E", "from": "13323994513", "category": "jp.nicovideo.android", "appData": [ { "key": "nx", "value": "{\"type\":\"start_publish\",\"relation\":\"follower\",\"user_id\":\"14508141\",\"program_id\":\"lv322948514\",\"program_title\":\"真夜中の 【怪談 UMA 怪事件 超常現象 】 鑑賞会\",\"user_name\":\"ジャワ男\",\"user_icon\":\"https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/1450/14508141.jpg?1539494321\"}" }, { "key": "message", "value": "ジャワ男さんが番組を開始しました" } ], "persistentId": "0:1573914974863994%75f5c14df9fd7ecd", "ttl": 86400, "sent": "1573914974858" }
-
-/*
- * using (var ms = new MemoryStream())
-  {
-    Serializer.Serialize(ms, human);
-    byte[] bytes = ms.ToArray();
-    Console.WriteLine(BitConverter.ToString(bytes));
-
-    // デシリアライズ
-    // human = Serializer.Deserialize<Human>(ms);
-  }
-  
-  Task.Factory.StartNew() 
-  
- */

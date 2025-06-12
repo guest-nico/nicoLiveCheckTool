@@ -390,26 +390,22 @@ namespace namaichi.alart
 		}
 		private void appliProcess(string appliPath, string lvid, string args, RssItem ri, int appNum) {
 			if (appliPath == null || appliPath == "") return;
-			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
+			appliPath = appliPath.Trim();
 
+			Task.Factory.StartNew(() => 
+					appliProcessCore(appliPath, lvid, args, ri, appNum));
+		}
+		private void appliProcessCore(string appliPath, string lvid, string args, RssItem ri, int appNum) {
+			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
 			try {
-				appliPath = appliPath.Trim();
-				/*
-				string f, arg;
-				if (appliPath.StartsWith("\"")) {
-					f = util.getRegGroup(appliPath, "\"(.+?)\"");
-					arg = util.getRegGroup(appliPath, "\".+?\"(.*)");
-				} else {
-					f = util.getRegGroup(appliPath, "(.+?) ");
-					arg = util.getRegGroup(appliPath, ".+? (.*)");
-					if (f == null) {
-						f = appliPath;
-						arg = "";
-					}
+				var microSecondsDiff = ((TimeSpan)(ri.pubDateDt - DateTime.Now)).TotalMilliseconds;
+				if (microSecondsDiff > 0 && microSecondsDiff < 1000 * 60 * 10) {
+					Thread.Sleep((int)microSecondsDiff + 10000);
 				}
-				if (arg == null) arg = "";
-				arg += " " + url;
-				*/
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
+			}
+			try {
 				util.appliProcess(appliPath, url, args, ri, container, form.config, appNum, form);
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);

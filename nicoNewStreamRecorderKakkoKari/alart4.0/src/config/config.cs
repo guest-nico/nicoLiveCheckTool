@@ -164,6 +164,18 @@ public class config
 			{"appliHName",""},
 			{"appliIName",""},
 			{"appliJName",""},
+			
+			{"appliASetting", "{}"},
+			{"appliBSetting", "{}"},
+			{"appliCSetting", "{}"},
+			{"appliDSetting", "{}"},
+			{"appliESetting", "{}"},
+			{"appliFSetting", "{}"},
+			{"appliGSetting", "{}"},
+			{"appliHSetting", "{}"},
+			{"appliISetting", "{}"},
+			{"appliJSetting", "{}"},
+			
 			{"IsminimizedApp","false"},
 			{"IsAppliLog","false"},
 			{"log","false"},
@@ -331,7 +343,7 @@ public class config
 	        {"pushChId", ""},
 	        {"appPushId", ""},
 	        {"appPushToken", ""},
-	        {"nicoCasAppVer", "3.52.0"},
+	        {"nicoCasAppVer", "4.8.2"},
 	        {"niconicoAppVer", "6.14.1"},
 			
 	        {"thresholdpage", "10"},

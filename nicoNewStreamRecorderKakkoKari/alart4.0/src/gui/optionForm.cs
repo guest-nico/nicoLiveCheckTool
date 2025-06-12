@@ -20,6 +20,9 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using namaichi.config;
 using System.IO;
+using namaichi.gui;
+using namaichi.info;
+using Newtonsoft.Json;
 using SunokoLibrary.Application;
 using SunokoLibrary.Windows.ViewModels;
 
@@ -56,7 +59,6 @@ namespace namaichi
 			setForeColor(Color.FromArgb(int.Parse(cfg.get("alartForeColor"))));
 			
 			util.setFontSize(int.Parse(cfg.get("fontSize")), this, false);
-			setIsAppMinimizedListCloseEventHandler(this);
 		}
 		
 		void optionOk_Click(object sender, EventArgs e)
@@ -126,6 +128,17 @@ namespace namaichi
 				{"appliHName",nameHText.Text},
 				{"appliIName",nameIText.Text},
 				{"appliJName",nameJText.Text},
+				{"appliASetting",Newtonsoft.Json.JsonConvert.SerializeObject(appASettingBtn.Tag)},
+				{"appliBSetting",Newtonsoft.Json.JsonConvert.SerializeObject(appBSettingBtn.Tag)},
+				{"appliCSetting",Newtonsoft.Json.JsonConvert.SerializeObject(appCSettingBtn.Tag)},
+				{"appliDSetting",Newtonsoft.Json.JsonConvert.SerializeObject(appDSettingBtn.Tag)},
+				{"appliESetting",Newtonsoft.Json.JsonConvert.SerializeObject(appESettingBtn.Tag)},
+				{"appliFSetting",Newtonsoft.Json.JsonConvert.SerializeObject(appFSettingBtn.Tag)},
+				{"appliGSetting",Newtonsoft.Json.JsonConvert.SerializeObject(appGSettingBtn.Tag)},
+				{"appliHSetting",Newtonsoft.Json.JsonConvert.SerializeObject(appHSettingBtn.Tag)},
+				{"appliISetting",Newtonsoft.Json.JsonConvert.SerializeObject(appISettingBtn.Tag)},
+				{"appliJSetting",Newtonsoft.Json.JsonConvert.SerializeObject(appJSettingBtn.Tag)},
+				
 				{"IsminimizedApp",getIsminimizedApp()},
 				{"IsAppliLog",IsAppliLogChkBox.Checked.ToString()},
 				
@@ -327,6 +340,16 @@ namespace namaichi
 			nameHText.Text = cfg.get("appliHName");
 			nameIText.Text = cfg.get("appliIName");
 			nameJText.Text = cfg.get("appliJName");
+			appASettingBtn.Tag = JsonConvert.DeserializeObject<AppSettingInfo>(cfg.get("appliASetting"));
+			appBSettingBtn.Tag = JsonConvert.DeserializeObject<AppSettingInfo>(cfg.get("appliBSetting"));
+			appCSettingBtn.Tag = JsonConvert.DeserializeObject<AppSettingInfo>(cfg.get("appliCSetting"));
+			appDSettingBtn.Tag = JsonConvert.DeserializeObject<AppSettingInfo>(cfg.get("appliDSetting"));
+			appESettingBtn.Tag = JsonConvert.DeserializeObject<AppSettingInfo>(cfg.get("appliESetting"));
+			appFSettingBtn.Tag = JsonConvert.DeserializeObject<AppSettingInfo>(cfg.get("appliFSetting"));
+			appGSettingBtn.Tag = JsonConvert.DeserializeObject<AppSettingInfo>(cfg.get("appliGSetting"));
+			appHSettingBtn.Tag = JsonConvert.DeserializeObject<AppSettingInfo>(cfg.get("appliHSetting"));
+			appISettingBtn.Tag = JsonConvert.DeserializeObject<AppSettingInfo>(cfg.get("appliISetting"));
+			appJSettingBtn.Tag = JsonConvert.DeserializeObject<AppSettingInfo>(cfg.get("appliJSetting"));
 			
 			setIsminimizedAppInit();
 			IsAppliLogChkBox.Checked = bool.Parse(cfg.get("IsAppliLog"));
@@ -988,88 +1011,6 @@ namespace namaichi
 				f.ShowDialog();
 			}
 		}
-		private void setIsAppMinimizedListCloseEventHandler(Control parent) {
-			foreach (Control c in parent.Controls) {
-				if (c.Name != "isAppMinimizedList" &&
-				    (c.Name != "isAppMinimizedCheckList")) {
-				    c.Click += (o, e) => {
-				    	isAppMinimizedList.DroppedDown = false;
-				    	closeIsAppMinimizedList();
-					};
-					setIsAppMinimizedListCloseEventHandler(c);
-				}
-			}
-			parent.Click += (o, e) => {
-		    	isAppMinimizedList.DroppedDown = isAppMinimizedCheckList.Visible = false;
-			};
-		}
-		void closeIsAppMinimizedList() {
-			isAppMinimizedCheckList.Visible = false;
-			var t = "";
-			var indices = isAppMinimizedCheckList.CheckedIndices;
-			if (indices.Count == 0) t = "設定しない";
-			else {
-				foreach (int i in indices) {
-					if (t != "") t += ",";
-					t += ((string)isAppMinimizedCheckList.Items[i]).Substring(3, 1);
-				}
-				//t = t == "" ? "設定しない" : ("アプリ" + t);
-				t = "アプリ" + t;
-			}
-			
-			isAppMinimizedList.Items.Add(t);
-			isAppMinimizedList.SelectedIndex = -1;
-			isAppMinimizedList.SelectedItem = null;
-			
-			isAppMinimizedList.Text = t;
-		}
-		void IsAppMinimizedListDropDownClosed(object sender, EventArgs e)
-		{
-			util.debugWriteLine("close");
-			if (isAppMinimizedCheckList.Focused) {
-				//isAppMinimizedList.DroppedDown = true;
-			} else {
-				var l = isAppMinimizedCheckList.Location;
-				//var rec = RectangleToScreen(new Rectangle(l.X, l.Y, 0,0));
-				var lefttop = isAppMinimizedCheckList.PointToScreen(new Point(0,0));
-				var rightbottom = isAppMinimizedCheckList.PointToScreen(new Point(Width,Height));
-				
-				var x = MousePosition.X;
-				var y = MousePosition.Y;
-				if (x < lefttop.X || 
-					     y < lefttop.Y ||
-					     x > rightbottom.X || 
-					     y > rightbottom.Y) {
-					closeIsAppMinimizedList();
-				}
-				else isAppMinimizedList.DroppedDown = true;
-			}
-		}
-		void IsAppMinimizedListLeave(object sender, EventArgs e)
-		{
-			util.debugWriteLine("IsAppMinimizedListLeave " + isAppMinimizedCheckList.Focused);
-			if (!isAppMinimizedCheckList.Focused) {
-				closeIsAppMinimizedList();
-			}
-		}
-		void IsAppMinimizedListMouseDown(object sender, MouseEventArgs e)
-		{
-			util.debugWriteLine("IsAppMinimizedListMouseDown");
-			util.debugWriteLine("IsAppMinimizedListMouseDown " + " " + isAppMinimizedCheckList.Visible);
-			if (isAppMinimizedCheckList.Visible) {
-				closeIsAppMinimizedList();
-				isAppMinimizedList.DroppedDown = false;
-			} else {
-				isAppMinimizedCheckList.Visible = true;
-				isAppMinimizedCheckList.Focus();
-			}
-		}
-		void IsAppMinimizedCheckListItemCheck(object sender, ItemCheckEventArgs e)
-		{
-			util.debugWriteLine(e.Index + " " + (e.NewValue == CheckState.Checked));
-			var selectI = isAppMinimizedCheckList.SelectedIndex;
-			if (selectI != e.Index) return;
-		}
 		private void setIsminimizedAppInit() {
 			var c = cfg.get("IsminimizedApp");
 			if (string.IsNullOrEmpty(c)) return;
@@ -1077,15 +1018,22 @@ namespace namaichi
 			if (arr.Length != 10) return;
 			
 			for (var i = 0; i < 10; i++) {
-				isAppMinimizedCheckList.SetItemChecked(i, bool.Parse(arr[i]));
+				var appName = (char)('A' + i);
+				
+				var btn = this.Controls.Find("app" + appName + "SettingBtn", true);
+				var asi = (AppSettingInfo)btn[0].Tag;
+				asi.isMin = bool.Parse(arr[i]);
 			}
-			closeIsAppMinimizedList();
 		}
 		private string getIsminimizedApp() {
 			var ret = "";
-			for (var i = 0; i < isAppMinimizedCheckList.Items.Count; i++) {
+			for (var i = 0; i < 10; i++) {
 				if (i != 0) ret += ",";
-				ret += isAppMinimizedCheckList.CheckedIndices.IndexOf(i) > -1;
+				var appName = (char)('A' + i);
+				
+				var btn = this.Controls.Find("app" + appName + "SettingBtn", true);
+				var asi = (AppSettingInfo)btn[0].Tag;
+				ret += asi.isMin;
 			}
 			return ret;
 		}
@@ -1112,7 +1060,7 @@ namespace namaichi
 		void ArgTextLeave(object sender, EventArgs e)
 		{
 			var t = ((TextBox)sender);
-			t.Left = 291;
+			t.Left = 276;
 			t.Width = 60;
 			//291, 35  60,19
 			try {
@@ -1121,6 +1069,16 @@ namespace namaichi
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace);
 			}
+		}
+		void AppSettingBtnClick(object sender, EventArgs e)
+		{
+			var btn = (Button)sender;
+			var asi = (AppSettingInfo)btn.Tag;
+			
+			var f = new AppSettingForm(asi, cfg);
+			if (f.ShowDialog() != DialogResult.OK) return;
+			
+			btn.Tag = f.ret;
 		}
 	}
 }

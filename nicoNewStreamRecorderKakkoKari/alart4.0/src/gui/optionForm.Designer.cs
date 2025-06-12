@@ -39,10 +39,18 @@ namespace namaichi
 			this.button3 = new System.Windows.Forms.Button();
 			this.button4 = new System.Windows.Forms.Button();
 			this.appliTab = new System.Windows.Forms.TabPage();
-			this.isAppMinimizedCheckList = new System.Windows.Forms.CheckedListBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.appJSettingBtn = new System.Windows.Forms.Button();
+			this.appISettingBtn = new System.Windows.Forms.Button();
+			this.appESettingBtn = new System.Windows.Forms.Button();
+			this.appHSettingBtn = new System.Windows.Forms.Button();
+			this.appDSettingBtn = new System.Windows.Forms.Button();
+			this.appGSettingBtn = new System.Windows.Forms.Button();
+			this.appCSettingBtn = new System.Windows.Forms.Button();
+			this.appFSettingBtn = new System.Windows.Forms.Button();
+			this.appBSettingBtn = new System.Windows.Forms.Button();
+			this.appASettingBtn = new System.Windows.Forms.Button();
 			this.IsAppliLogChkBox = new System.Windows.Forms.CheckBox();
-			this.isAppMinimizedList = new System.Windows.Forms.ComboBox();
 			this.displayArgInfoLabel = new System.Windows.Forms.LinkLabel();
 			this.label26 = new System.Windows.Forms.Label();
 			this.argJText = new System.Windows.Forms.TextBox();
@@ -56,7 +64,6 @@ namespace namaichi
 			this.label29 = new System.Windows.Forms.Label();
 			this.argGText = new System.Windows.Forms.TextBox();
 			this.appliGPathSanshouBtn = new System.Windows.Forms.Button();
-			this.label30 = new System.Windows.Forms.Label();
 			this.label25 = new System.Windows.Forms.Label();
 			this.appliJPathText = new System.Windows.Forms.TextBox();
 			this.label16 = new System.Windows.Forms.Label();
@@ -115,11 +122,6 @@ namespace namaichi
 			this.label9 = new System.Windows.Forms.Label();
 			this.appliAPathSanshouBtn = new System.Windows.Forms.Button();
 			this.appliAPathText = new System.Windows.Forms.TextBox();
-			this.groupBox5 = new System.Windows.Forms.GroupBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.isDefaultBrowserPathChkBox = new System.Windows.Forms.CheckBox();
-			this.browserPathSanshouBtn = new System.Windows.Forms.Button();
-			this.browserPathText = new System.Windows.Forms.TextBox();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.commonTab = new System.Windows.Forms.TabPage();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -251,6 +253,11 @@ namespace namaichi
 			this.IsfixpopupChkBox = new System.Windows.Forms.CheckBox();
 			this.IsclosepopupChkBox = new System.Windows.Forms.CheckBox();
 			this.notify2Tab = new System.Windows.Forms.TabPage();
+			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.isDefaultBrowserPathChkBox = new System.Windows.Forms.CheckBox();
+			this.browserPathSanshouBtn = new System.Windows.Forms.Button();
+			this.browserPathText = new System.Windows.Forms.TextBox();
 			this.groupBox10 = new System.Windows.Forms.GroupBox();
 			this.sendTestMailBtn = new System.Windows.Forms.Button();
 			this.isMailSslChkBox = new System.Windows.Forms.CheckBox();
@@ -303,7 +310,6 @@ namespace namaichi
 			this.useSecondLoginChkBox = new System.Windows.Forms.CheckBox();
 			this.appliTab.SuspendLayout();
 			this.groupBox6.SuspendLayout();
-			this.groupBox5.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.commonTab.SuspendLayout();
 			this.groupBox1.SuspendLayout();
@@ -331,6 +337,7 @@ namespace namaichi
 			((System.ComponentModel.ISupportInitialize)(this.popupOpacityList)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.poptimeList)).BeginInit();
 			this.notify2Tab.SuspendLayout();
+			this.groupBox5.SuspendLayout();
 			this.groupBox10.SuspendLayout();
 			this.alartTab.SuspendLayout();
 			this.groupBox13.SuspendLayout();
@@ -364,9 +371,7 @@ namespace namaichi
 			// 
 			// appliTab
 			// 
-			this.appliTab.Controls.Add(this.isAppMinimizedCheckList);
 			this.appliTab.Controls.Add(this.groupBox6);
-			this.appliTab.Controls.Add(this.groupBox5);
 			this.appliTab.Location = new System.Drawing.Point(4, 22);
 			this.appliTab.Margin = new System.Windows.Forms.Padding(2);
 			this.appliTab.Name = "appliTab";
@@ -376,32 +381,19 @@ namespace namaichi
 			this.appliTab.Text = "アプリ設定";
 			this.appliTab.UseVisualStyleBackColor = true;
 			// 
-			// isAppMinimizedCheckList
-			// 
-			this.isAppMinimizedCheckList.CheckOnClick = true;
-			this.isAppMinimizedCheckList.FormattingEnabled = true;
-			this.isAppMinimizedCheckList.Items.AddRange(new object[] {
-									"アプリA",
-									"アプリB",
-									"アプリC",
-									"アプリD",
-									"アプリE",
-									"アプリF",
-									"アプリG",
-									"アプリH",
-									"アプリI",
-									"アプリJ"});
-			this.isAppMinimizedCheckList.Location = new System.Drawing.Point(201, 532);
-			this.isAppMinimizedCheckList.Name = "isAppMinimizedCheckList";
-			this.isAppMinimizedCheckList.Size = new System.Drawing.Size(95, 32);
-			this.isAppMinimizedCheckList.TabIndex = 48;
-			this.isAppMinimizedCheckList.Visible = false;
-			this.isAppMinimizedCheckList.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.IsAppMinimizedCheckListItemCheck);
-			// 
 			// groupBox6
 			// 
+			this.groupBox6.Controls.Add(this.appJSettingBtn);
+			this.groupBox6.Controls.Add(this.appISettingBtn);
+			this.groupBox6.Controls.Add(this.appESettingBtn);
+			this.groupBox6.Controls.Add(this.appHSettingBtn);
+			this.groupBox6.Controls.Add(this.appDSettingBtn);
+			this.groupBox6.Controls.Add(this.appGSettingBtn);
+			this.groupBox6.Controls.Add(this.appCSettingBtn);
+			this.groupBox6.Controls.Add(this.appFSettingBtn);
+			this.groupBox6.Controls.Add(this.appBSettingBtn);
+			this.groupBox6.Controls.Add(this.appASettingBtn);
 			this.groupBox6.Controls.Add(this.IsAppliLogChkBox);
-			this.groupBox6.Controls.Add(this.isAppMinimizedList);
 			this.groupBox6.Controls.Add(this.displayArgInfoLabel);
 			this.groupBox6.Controls.Add(this.label26);
 			this.groupBox6.Controls.Add(this.argJText);
@@ -415,7 +407,6 @@ namespace namaichi
 			this.groupBox6.Controls.Add(this.label29);
 			this.groupBox6.Controls.Add(this.argGText);
 			this.groupBox6.Controls.Add(this.appliGPathSanshouBtn);
-			this.groupBox6.Controls.Add(this.label30);
 			this.groupBox6.Controls.Add(this.label25);
 			this.groupBox6.Controls.Add(this.appliJPathText);
 			this.groupBox6.Controls.Add(this.label16);
@@ -474,12 +465,122 @@ namespace namaichi
 			this.groupBox6.Controls.Add(this.label9);
 			this.groupBox6.Controls.Add(this.appliAPathSanshouBtn);
 			this.groupBox6.Controls.Add(this.appliAPathText);
-			this.groupBox6.Location = new System.Drawing.Point(5, 103);
+			this.groupBox6.Location = new System.Drawing.Point(5, 5);
 			this.groupBox6.Name = "groupBox6";
 			this.groupBox6.Size = new System.Drawing.Size(423, 460);
 			this.groupBox6.TabIndex = 0;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "アプリケーション設定(Recorder登録)";
+			// 
+			// appJSettingBtn
+			// 
+			this.appJSettingBtn.Location = new System.Drawing.Point(383, 375);
+			this.appJSettingBtn.Margin = new System.Windows.Forms.Padding(2);
+			this.appJSettingBtn.Name = "appJSettingBtn";
+			this.appJSettingBtn.Size = new System.Drawing.Size(37, 23);
+			this.appJSettingBtn.TabIndex = 51;
+			this.appJSettingBtn.Text = "詳細";
+			this.appJSettingBtn.UseVisualStyleBackColor = true;
+			this.appJSettingBtn.Click += new System.EventHandler(this.AppSettingBtnClick);
+			// 
+			// appISettingBtn
+			// 
+			this.appISettingBtn.Location = new System.Drawing.Point(383, 337);
+			this.appISettingBtn.Margin = new System.Windows.Forms.Padding(2);
+			this.appISettingBtn.Name = "appISettingBtn";
+			this.appISettingBtn.Size = new System.Drawing.Size(37, 23);
+			this.appISettingBtn.TabIndex = 51;
+			this.appISettingBtn.Text = "詳細";
+			this.appISettingBtn.UseVisualStyleBackColor = true;
+			this.appISettingBtn.Click += new System.EventHandler(this.AppSettingBtnClick);
+			// 
+			// appESettingBtn
+			// 
+			this.appESettingBtn.Location = new System.Drawing.Point(383, 185);
+			this.appESettingBtn.Margin = new System.Windows.Forms.Padding(2);
+			this.appESettingBtn.Name = "appESettingBtn";
+			this.appESettingBtn.Size = new System.Drawing.Size(37, 23);
+			this.appESettingBtn.TabIndex = 51;
+			this.appESettingBtn.Text = "詳細";
+			this.appESettingBtn.UseVisualStyleBackColor = true;
+			this.appESettingBtn.Click += new System.EventHandler(this.AppSettingBtnClick);
+			// 
+			// appHSettingBtn
+			// 
+			this.appHSettingBtn.Location = new System.Drawing.Point(383, 299);
+			this.appHSettingBtn.Margin = new System.Windows.Forms.Padding(2);
+			this.appHSettingBtn.Name = "appHSettingBtn";
+			this.appHSettingBtn.Size = new System.Drawing.Size(37, 23);
+			this.appHSettingBtn.TabIndex = 51;
+			this.appHSettingBtn.Text = "詳細";
+			this.appHSettingBtn.UseVisualStyleBackColor = true;
+			this.appHSettingBtn.Click += new System.EventHandler(this.AppSettingBtnClick);
+			// 
+			// appDSettingBtn
+			// 
+			this.appDSettingBtn.Location = new System.Drawing.Point(383, 147);
+			this.appDSettingBtn.Margin = new System.Windows.Forms.Padding(2);
+			this.appDSettingBtn.Name = "appDSettingBtn";
+			this.appDSettingBtn.Size = new System.Drawing.Size(37, 23);
+			this.appDSettingBtn.TabIndex = 51;
+			this.appDSettingBtn.Text = "詳細";
+			this.appDSettingBtn.UseVisualStyleBackColor = true;
+			this.appDSettingBtn.Click += new System.EventHandler(this.AppSettingBtnClick);
+			// 
+			// appGSettingBtn
+			// 
+			this.appGSettingBtn.Location = new System.Drawing.Point(383, 261);
+			this.appGSettingBtn.Margin = new System.Windows.Forms.Padding(2);
+			this.appGSettingBtn.Name = "appGSettingBtn";
+			this.appGSettingBtn.Size = new System.Drawing.Size(37, 23);
+			this.appGSettingBtn.TabIndex = 51;
+			this.appGSettingBtn.Text = "詳細";
+			this.appGSettingBtn.UseVisualStyleBackColor = true;
+			this.appGSettingBtn.Click += new System.EventHandler(this.AppSettingBtnClick);
+			// 
+			// appCSettingBtn
+			// 
+			this.appCSettingBtn.Location = new System.Drawing.Point(383, 109);
+			this.appCSettingBtn.Margin = new System.Windows.Forms.Padding(2);
+			this.appCSettingBtn.Name = "appCSettingBtn";
+			this.appCSettingBtn.Size = new System.Drawing.Size(37, 23);
+			this.appCSettingBtn.TabIndex = 51;
+			this.appCSettingBtn.Text = "詳細";
+			this.appCSettingBtn.UseVisualStyleBackColor = true;
+			this.appCSettingBtn.Click += new System.EventHandler(this.AppSettingBtnClick);
+			// 
+			// appFSettingBtn
+			// 
+			this.appFSettingBtn.Location = new System.Drawing.Point(383, 223);
+			this.appFSettingBtn.Margin = new System.Windows.Forms.Padding(2);
+			this.appFSettingBtn.Name = "appFSettingBtn";
+			this.appFSettingBtn.Size = new System.Drawing.Size(37, 23);
+			this.appFSettingBtn.TabIndex = 50;
+			this.appFSettingBtn.Text = "詳細";
+			this.appFSettingBtn.UseVisualStyleBackColor = true;
+			this.appFSettingBtn.Click += new System.EventHandler(this.AppSettingBtnClick);
+			// 
+			// appBSettingBtn
+			// 
+			this.appBSettingBtn.Location = new System.Drawing.Point(383, 71);
+			this.appBSettingBtn.Margin = new System.Windows.Forms.Padding(2);
+			this.appBSettingBtn.Name = "appBSettingBtn";
+			this.appBSettingBtn.Size = new System.Drawing.Size(37, 23);
+			this.appBSettingBtn.TabIndex = 51;
+			this.appBSettingBtn.Text = "詳細";
+			this.appBSettingBtn.UseVisualStyleBackColor = true;
+			this.appBSettingBtn.Click += new System.EventHandler(this.AppSettingBtnClick);
+			// 
+			// appASettingBtn
+			// 
+			this.appASettingBtn.Location = new System.Drawing.Point(383, 33);
+			this.appASettingBtn.Margin = new System.Windows.Forms.Padding(2);
+			this.appASettingBtn.Name = "appASettingBtn";
+			this.appASettingBtn.Size = new System.Drawing.Size(37, 23);
+			this.appASettingBtn.TabIndex = 50;
+			this.appASettingBtn.Text = "詳細";
+			this.appASettingBtn.UseVisualStyleBackColor = true;
+			this.appASettingBtn.Click += new System.EventHandler(this.AppSettingBtnClick);
 			// 
 			// IsAppliLogChkBox
 			// 
@@ -489,24 +590,6 @@ namespace namaichi
 			this.IsAppliLogChkBox.TabIndex = 49;
 			this.IsAppliLogChkBox.Text = "アプリの起動時に引数のログを表示する";
 			this.IsAppliLogChkBox.UseVisualStyleBackColor = true;
-			// 
-			// isAppMinimizedList
-			// 
-			this.isAppMinimizedList.DropDownHeight = 1;
-			this.isAppMinimizedList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.isAppMinimizedList.DropDownWidth = 1;
-			this.isAppMinimizedList.FormattingEnabled = true;
-			this.isAppMinimizedList.IntegralHeight = false;
-			this.isAppMinimizedList.Items.AddRange(new object[] {
-									"条件を設定しない",
-									"aaa"});
-			this.isAppMinimizedList.Location = new System.Drawing.Point(196, 409);
-			this.isAppMinimizedList.Name = "isAppMinimizedList";
-			this.isAppMinimizedList.Size = new System.Drawing.Size(95, 20);
-			this.isAppMinimizedList.TabIndex = 48;
-			this.isAppMinimizedList.DropDownClosed += new System.EventHandler(this.IsAppMinimizedListDropDownClosed);
-			this.isAppMinimizedList.Leave += new System.EventHandler(this.IsAppMinimizedListLeave);
-			this.isAppMinimizedList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.IsAppMinimizedListMouseDown);
 			// 
 			// displayArgInfoLabel
 			// 
@@ -522,7 +605,7 @@ namespace namaichi
 			// 
 			// label26
 			// 
-			this.label26.Location = new System.Drawing.Point(291, 361);
+			this.label26.Location = new System.Drawing.Point(277, 361);
 			this.label26.Name = "label26";
 			this.label26.Size = new System.Drawing.Size(60, 15);
 			this.label26.TabIndex = 46;
@@ -530,7 +613,7 @@ namespace namaichi
 			// 
 			// argJText
 			// 
-			this.argJText.Location = new System.Drawing.Point(291, 377);
+			this.argJText.Location = new System.Drawing.Point(277, 377);
 			this.argJText.Name = "argJText";
 			this.argJText.Size = new System.Drawing.Size(60, 19);
 			this.argJText.TabIndex = 45;
@@ -539,7 +622,7 @@ namespace namaichi
 			// 
 			// label27
 			// 
-			this.label27.Location = new System.Drawing.Point(291, 323);
+			this.label27.Location = new System.Drawing.Point(277, 323);
 			this.label27.Name = "label27";
 			this.label27.Size = new System.Drawing.Size(60, 15);
 			this.label27.TabIndex = 44;
@@ -547,7 +630,7 @@ namespace namaichi
 			// 
 			// argIText
 			// 
-			this.argIText.Location = new System.Drawing.Point(291, 339);
+			this.argIText.Location = new System.Drawing.Point(277, 339);
 			this.argIText.Name = "argIText";
 			this.argIText.Size = new System.Drawing.Size(60, 19);
 			this.argIText.TabIndex = 43;
@@ -556,7 +639,7 @@ namespace namaichi
 			// 
 			// label28
 			// 
-			this.label28.Location = new System.Drawing.Point(291, 285);
+			this.label28.Location = new System.Drawing.Point(277, 285);
 			this.label28.Name = "label28";
 			this.label28.Size = new System.Drawing.Size(60, 15);
 			this.label28.TabIndex = 42;
@@ -564,7 +647,7 @@ namespace namaichi
 			// 
 			// argHText
 			// 
-			this.argHText.Location = new System.Drawing.Point(291, 301);
+			this.argHText.Location = new System.Drawing.Point(277, 301);
 			this.argHText.Name = "argHText";
 			this.argHText.Size = new System.Drawing.Size(60, 19);
 			this.argHText.TabIndex = 41;
@@ -573,7 +656,7 @@ namespace namaichi
 			// 
 			// appliJPathSanshouBtn
 			// 
-			this.appliJPathSanshouBtn.Location = new System.Drawing.Point(245, 375);
+			this.appliJPathSanshouBtn.Location = new System.Drawing.Point(231, 375);
 			this.appliJPathSanshouBtn.Name = "appliJPathSanshouBtn";
 			this.appliJPathSanshouBtn.Size = new System.Drawing.Size(40, 23);
 			this.appliJPathSanshouBtn.TabIndex = 40;
@@ -583,7 +666,7 @@ namespace namaichi
 			// 
 			// appliIPathSanshouBtn
 			// 
-			this.appliIPathSanshouBtn.Location = new System.Drawing.Point(245, 337);
+			this.appliIPathSanshouBtn.Location = new System.Drawing.Point(230, 337);
 			this.appliIPathSanshouBtn.Name = "appliIPathSanshouBtn";
 			this.appliIPathSanshouBtn.Size = new System.Drawing.Size(40, 23);
 			this.appliIPathSanshouBtn.TabIndex = 39;
@@ -593,7 +676,7 @@ namespace namaichi
 			// 
 			// appliHPathSanshouBtn
 			// 
-			this.appliHPathSanshouBtn.Location = new System.Drawing.Point(245, 299);
+			this.appliHPathSanshouBtn.Location = new System.Drawing.Point(230, 299);
 			this.appliHPathSanshouBtn.Name = "appliHPathSanshouBtn";
 			this.appliHPathSanshouBtn.Size = new System.Drawing.Size(40, 23);
 			this.appliHPathSanshouBtn.TabIndex = 38;
@@ -603,7 +686,7 @@ namespace namaichi
 			// 
 			// label29
 			// 
-			this.label29.Location = new System.Drawing.Point(291, 247);
+			this.label29.Location = new System.Drawing.Point(277, 247);
 			this.label29.Name = "label29";
 			this.label29.Size = new System.Drawing.Size(60, 15);
 			this.label29.TabIndex = 37;
@@ -611,7 +694,7 @@ namespace namaichi
 			// 
 			// argGText
 			// 
-			this.argGText.Location = new System.Drawing.Point(291, 263);
+			this.argGText.Location = new System.Drawing.Point(277, 263);
 			this.argGText.Name = "argGText";
 			this.argGText.Size = new System.Drawing.Size(60, 19);
 			this.argGText.TabIndex = 36;
@@ -620,21 +703,13 @@ namespace namaichi
 			// 
 			// appliGPathSanshouBtn
 			// 
-			this.appliGPathSanshouBtn.Location = new System.Drawing.Point(245, 261);
+			this.appliGPathSanshouBtn.Location = new System.Drawing.Point(230, 261);
 			this.appliGPathSanshouBtn.Name = "appliGPathSanshouBtn";
 			this.appliGPathSanshouBtn.Size = new System.Drawing.Size(40, 23);
 			this.appliGPathSanshouBtn.TabIndex = 35;
 			this.appliGPathSanshouBtn.Text = "参照";
 			this.appliGPathSanshouBtn.UseVisualStyleBackColor = true;
 			this.appliGPathSanshouBtn.Click += new System.EventHandler(this.appliPathSanshouBtn_Click);
-			// 
-			// label30
-			// 
-			this.label30.Location = new System.Drawing.Point(14, 412);
-			this.label30.Name = "label30";
-			this.label30.Size = new System.Drawing.Size(180, 15);
-			this.label30.TabIndex = 34;
-			this.label30.Text = "次のアプリを最小化状態で起動する";
 			// 
 			// label25
 			// 
@@ -648,12 +723,12 @@ namespace namaichi
 			// 
 			this.appliJPathText.Location = new System.Drawing.Point(14, 377);
 			this.appliJPathText.Name = "appliJPathText";
-			this.appliJPathText.Size = new System.Drawing.Size(225, 19);
+			this.appliJPathText.Size = new System.Drawing.Size(210, 19);
 			this.appliJPathText.TabIndex = 33;
 			// 
 			// label16
 			// 
-			this.label16.Location = new System.Drawing.Point(291, 209);
+			this.label16.Location = new System.Drawing.Point(277, 209);
 			this.label16.Name = "label16";
 			this.label16.Size = new System.Drawing.Size(60, 15);
 			this.label16.TabIndex = 32;
@@ -661,7 +736,7 @@ namespace namaichi
 			// 
 			// argFText
 			// 
-			this.argFText.Location = new System.Drawing.Point(291, 225);
+			this.argFText.Location = new System.Drawing.Point(277, 225);
 			this.argFText.Name = "argFText";
 			this.argFText.Size = new System.Drawing.Size(60, 19);
 			this.argFText.TabIndex = 31;
@@ -670,7 +745,7 @@ namespace namaichi
 			// 
 			// label17
 			// 
-			this.label17.Location = new System.Drawing.Point(291, 171);
+			this.label17.Location = new System.Drawing.Point(277, 171);
 			this.label17.Name = "label17";
 			this.label17.Size = new System.Drawing.Size(60, 15);
 			this.label17.TabIndex = 30;
@@ -678,7 +753,7 @@ namespace namaichi
 			// 
 			// argEText
 			// 
-			this.argEText.Location = new System.Drawing.Point(291, 187);
+			this.argEText.Location = new System.Drawing.Point(277, 187);
 			this.argEText.Name = "argEText";
 			this.argEText.Size = new System.Drawing.Size(60, 19);
 			this.argEText.TabIndex = 29;
@@ -687,7 +762,7 @@ namespace namaichi
 			// 
 			// label18
 			// 
-			this.label18.Location = new System.Drawing.Point(291, 133);
+			this.label18.Location = new System.Drawing.Point(276, 133);
 			this.label18.Name = "label18";
 			this.label18.Size = new System.Drawing.Size(60, 15);
 			this.label18.TabIndex = 28;
@@ -695,7 +770,7 @@ namespace namaichi
 			// 
 			// argDText
 			// 
-			this.argDText.Location = new System.Drawing.Point(291, 149);
+			this.argDText.Location = new System.Drawing.Point(277, 149);
 			this.argDText.Name = "argDText";
 			this.argDText.Size = new System.Drawing.Size(60, 19);
 			this.argDText.TabIndex = 27;
@@ -720,7 +795,7 @@ namespace namaichi
 			// 
 			// appliFPathSanshouBtn
 			// 
-			this.appliFPathSanshouBtn.Location = new System.Drawing.Point(245, 223);
+			this.appliFPathSanshouBtn.Location = new System.Drawing.Point(230, 223);
 			this.appliFPathSanshouBtn.Name = "appliFPathSanshouBtn";
 			this.appliFPathSanshouBtn.Size = new System.Drawing.Size(40, 23);
 			this.appliFPathSanshouBtn.TabIndex = 25;
@@ -732,14 +807,14 @@ namespace namaichi
 			// 
 			this.appliIPathText.Location = new System.Drawing.Point(14, 339);
 			this.appliIPathText.Name = "appliIPathText";
-			this.appliIPathText.Size = new System.Drawing.Size(225, 19);
+			this.appliIPathText.Size = new System.Drawing.Size(210, 19);
 			this.appliIPathText.TabIndex = 24;
 			// 
 			// appliFPathText
 			// 
 			this.appliFPathText.Location = new System.Drawing.Point(14, 225);
 			this.appliFPathText.Name = "appliFPathText";
-			this.appliFPathText.Size = new System.Drawing.Size(225, 19);
+			this.appliFPathText.Size = new System.Drawing.Size(210, 19);
 			this.appliFPathText.TabIndex = 24;
 			// 
 			// label23
@@ -760,7 +835,7 @@ namespace namaichi
 			// 
 			// appliEPathSanshouBtn
 			// 
-			this.appliEPathSanshouBtn.Location = new System.Drawing.Point(245, 185);
+			this.appliEPathSanshouBtn.Location = new System.Drawing.Point(230, 185);
 			this.appliEPathSanshouBtn.Name = "appliEPathSanshouBtn";
 			this.appliEPathSanshouBtn.Size = new System.Drawing.Size(40, 23);
 			this.appliEPathSanshouBtn.TabIndex = 22;
@@ -772,14 +847,14 @@ namespace namaichi
 			// 
 			this.appliHPathText.Location = new System.Drawing.Point(14, 301);
 			this.appliHPathText.Name = "appliHPathText";
-			this.appliHPathText.Size = new System.Drawing.Size(225, 19);
+			this.appliHPathText.Size = new System.Drawing.Size(210, 19);
 			this.appliHPathText.TabIndex = 21;
 			// 
 			// appliEPathText
 			// 
 			this.appliEPathText.Location = new System.Drawing.Point(14, 187);
 			this.appliEPathText.Name = "appliEPathText";
-			this.appliEPathText.Size = new System.Drawing.Size(225, 19);
+			this.appliEPathText.Size = new System.Drawing.Size(210, 19);
 			this.appliEPathText.TabIndex = 21;
 			// 
 			// label22
@@ -802,12 +877,12 @@ namespace namaichi
 			// 
 			this.appliGPathText.Location = new System.Drawing.Point(14, 263);
 			this.appliGPathText.Name = "appliGPathText";
-			this.appliGPathText.Size = new System.Drawing.Size(225, 19);
+			this.appliGPathText.Size = new System.Drawing.Size(210, 19);
 			this.appliGPathText.TabIndex = 18;
 			// 
 			// appliDPathSanshouBtn
 			// 
-			this.appliDPathSanshouBtn.Location = new System.Drawing.Point(245, 147);
+			this.appliDPathSanshouBtn.Location = new System.Drawing.Point(231, 147);
 			this.appliDPathSanshouBtn.Name = "appliDPathSanshouBtn";
 			this.appliDPathSanshouBtn.Size = new System.Drawing.Size(40, 23);
 			this.appliDPathSanshouBtn.TabIndex = 19;
@@ -819,12 +894,12 @@ namespace namaichi
 			// 
 			this.appliDPathText.Location = new System.Drawing.Point(14, 149);
 			this.appliDPathText.Name = "appliDPathText";
-			this.appliDPathText.Size = new System.Drawing.Size(225, 19);
+			this.appliDPathText.Size = new System.Drawing.Size(210, 19);
 			this.appliDPathText.TabIndex = 18;
 			// 
 			// label15
 			// 
-			this.label15.Location = new System.Drawing.Point(291, 95);
+			this.label15.Location = new System.Drawing.Point(276, 95);
 			this.label15.Name = "label15";
 			this.label15.Size = new System.Drawing.Size(60, 15);
 			this.label15.TabIndex = 17;
@@ -832,7 +907,7 @@ namespace namaichi
 			// 
 			// argCText
 			// 
-			this.argCText.Location = new System.Drawing.Point(291, 111);
+			this.argCText.Location = new System.Drawing.Point(276, 111);
 			this.argCText.Name = "argCText";
 			this.argCText.Size = new System.Drawing.Size(60, 19);
 			this.argCText.TabIndex = 16;
@@ -841,7 +916,7 @@ namespace namaichi
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(291, 57);
+			this.label14.Location = new System.Drawing.Point(276, 57);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(60, 15);
 			this.label14.TabIndex = 15;
@@ -849,7 +924,7 @@ namespace namaichi
 			// 
 			// argBText
 			// 
-			this.argBText.Location = new System.Drawing.Point(291, 73);
+			this.argBText.Location = new System.Drawing.Point(276, 73);
 			this.argBText.Name = "argBText";
 			this.argBText.Size = new System.Drawing.Size(60, 19);
 			this.argBText.TabIndex = 14;
@@ -858,7 +933,7 @@ namespace namaichi
 			// 
 			// label40
 			// 
-			this.label40.Location = new System.Drawing.Point(357, 361);
+			this.label40.Location = new System.Drawing.Point(343, 361);
 			this.label40.Name = "label40";
 			this.label40.Size = new System.Drawing.Size(42, 15);
 			this.label40.TabIndex = 13;
@@ -866,7 +941,7 @@ namespace namaichi
 			// 
 			// label39
 			// 
-			this.label39.Location = new System.Drawing.Point(357, 323);
+			this.label39.Location = new System.Drawing.Point(343, 323);
 			this.label39.Name = "label39";
 			this.label39.Size = new System.Drawing.Size(42, 15);
 			this.label39.TabIndex = 13;
@@ -874,7 +949,7 @@ namespace namaichi
 			// 
 			// label38
 			// 
-			this.label38.Location = new System.Drawing.Point(357, 285);
+			this.label38.Location = new System.Drawing.Point(343, 285);
 			this.label38.Name = "label38";
 			this.label38.Size = new System.Drawing.Size(42, 15);
 			this.label38.TabIndex = 13;
@@ -882,7 +957,7 @@ namespace namaichi
 			// 
 			// label37
 			// 
-			this.label37.Location = new System.Drawing.Point(357, 247);
+			this.label37.Location = new System.Drawing.Point(343, 247);
 			this.label37.Name = "label37";
 			this.label37.Size = new System.Drawing.Size(42, 15);
 			this.label37.TabIndex = 13;
@@ -890,7 +965,7 @@ namespace namaichi
 			// 
 			// label36
 			// 
-			this.label36.Location = new System.Drawing.Point(357, 209);
+			this.label36.Location = new System.Drawing.Point(343, 209);
 			this.label36.Name = "label36";
 			this.label36.Size = new System.Drawing.Size(42, 15);
 			this.label36.TabIndex = 13;
@@ -898,7 +973,7 @@ namespace namaichi
 			// 
 			// label35
 			// 
-			this.label35.Location = new System.Drawing.Point(357, 171);
+			this.label35.Location = new System.Drawing.Point(343, 171);
 			this.label35.Name = "label35";
 			this.label35.Size = new System.Drawing.Size(42, 15);
 			this.label35.TabIndex = 13;
@@ -906,7 +981,7 @@ namespace namaichi
 			// 
 			// label34
 			// 
-			this.label34.Location = new System.Drawing.Point(357, 133);
+			this.label34.Location = new System.Drawing.Point(343, 133);
 			this.label34.Name = "label34";
 			this.label34.Size = new System.Drawing.Size(42, 15);
 			this.label34.TabIndex = 13;
@@ -914,7 +989,7 @@ namespace namaichi
 			// 
 			// label33
 			// 
-			this.label33.Location = new System.Drawing.Point(357, 95);
+			this.label33.Location = new System.Drawing.Point(343, 95);
 			this.label33.Name = "label33";
 			this.label33.Size = new System.Drawing.Size(42, 15);
 			this.label33.TabIndex = 13;
@@ -922,7 +997,7 @@ namespace namaichi
 			// 
 			// label32
 			// 
-			this.label32.Location = new System.Drawing.Point(357, 57);
+			this.label32.Location = new System.Drawing.Point(343, 57);
 			this.label32.Name = "label32";
 			this.label32.Size = new System.Drawing.Size(42, 15);
 			this.label32.TabIndex = 13;
@@ -930,7 +1005,7 @@ namespace namaichi
 			// 
 			// label31
 			// 
-			this.label31.Location = new System.Drawing.Point(357, 19);
+			this.label31.Location = new System.Drawing.Point(343, 19);
 			this.label31.Name = "label31";
 			this.label31.Size = new System.Drawing.Size(42, 15);
 			this.label31.TabIndex = 13;
@@ -938,7 +1013,7 @@ namespace namaichi
 			// 
 			// argA
 			// 
-			this.argA.Location = new System.Drawing.Point(291, 19);
+			this.argA.Location = new System.Drawing.Point(276, 19);
 			this.argA.Name = "argA";
 			this.argA.Size = new System.Drawing.Size(60, 15);
 			this.argA.TabIndex = 13;
@@ -946,77 +1021,77 @@ namespace namaichi
 			// 
 			// nameJText
 			// 
-			this.nameJText.Location = new System.Drawing.Point(357, 377);
+			this.nameJText.Location = new System.Drawing.Point(343, 377);
 			this.nameJText.Name = "nameJText";
-			this.nameJText.Size = new System.Drawing.Size(60, 19);
+			this.nameJText.Size = new System.Drawing.Size(35, 19);
 			this.nameJText.TabIndex = 12;
 			// 
 			// nameIText
 			// 
-			this.nameIText.Location = new System.Drawing.Point(357, 339);
+			this.nameIText.Location = new System.Drawing.Point(343, 339);
 			this.nameIText.Name = "nameIText";
-			this.nameIText.Size = new System.Drawing.Size(60, 19);
+			this.nameIText.Size = new System.Drawing.Size(35, 19);
 			this.nameIText.TabIndex = 12;
 			// 
 			// nameHText
 			// 
-			this.nameHText.Location = new System.Drawing.Point(357, 301);
+			this.nameHText.Location = new System.Drawing.Point(343, 301);
 			this.nameHText.Name = "nameHText";
-			this.nameHText.Size = new System.Drawing.Size(60, 19);
+			this.nameHText.Size = new System.Drawing.Size(35, 19);
 			this.nameHText.TabIndex = 12;
 			// 
 			// nameGText
 			// 
-			this.nameGText.Location = new System.Drawing.Point(357, 263);
+			this.nameGText.Location = new System.Drawing.Point(343, 263);
 			this.nameGText.Name = "nameGText";
-			this.nameGText.Size = new System.Drawing.Size(60, 19);
+			this.nameGText.Size = new System.Drawing.Size(35, 19);
 			this.nameGText.TabIndex = 12;
 			// 
 			// nameFText
 			// 
-			this.nameFText.Location = new System.Drawing.Point(357, 225);
+			this.nameFText.Location = new System.Drawing.Point(343, 225);
 			this.nameFText.Name = "nameFText";
-			this.nameFText.Size = new System.Drawing.Size(60, 19);
+			this.nameFText.Size = new System.Drawing.Size(35, 19);
 			this.nameFText.TabIndex = 12;
 			// 
 			// nameEText
 			// 
-			this.nameEText.Location = new System.Drawing.Point(357, 187);
+			this.nameEText.Location = new System.Drawing.Point(343, 187);
 			this.nameEText.Name = "nameEText";
-			this.nameEText.Size = new System.Drawing.Size(60, 19);
+			this.nameEText.Size = new System.Drawing.Size(35, 19);
 			this.nameEText.TabIndex = 12;
 			// 
 			// nameDText
 			// 
-			this.nameDText.Location = new System.Drawing.Point(357, 149);
+			this.nameDText.Location = new System.Drawing.Point(343, 149);
 			this.nameDText.Name = "nameDText";
-			this.nameDText.Size = new System.Drawing.Size(60, 19);
+			this.nameDText.Size = new System.Drawing.Size(35, 19);
 			this.nameDText.TabIndex = 12;
 			// 
 			// nameCText
 			// 
-			this.nameCText.Location = new System.Drawing.Point(357, 111);
+			this.nameCText.Location = new System.Drawing.Point(343, 111);
 			this.nameCText.Name = "nameCText";
-			this.nameCText.Size = new System.Drawing.Size(60, 19);
+			this.nameCText.Size = new System.Drawing.Size(35, 19);
 			this.nameCText.TabIndex = 12;
 			// 
 			// nameBText
 			// 
-			this.nameBText.Location = new System.Drawing.Point(357, 73);
+			this.nameBText.Location = new System.Drawing.Point(343, 73);
 			this.nameBText.Name = "nameBText";
-			this.nameBText.Size = new System.Drawing.Size(60, 19);
+			this.nameBText.Size = new System.Drawing.Size(35, 19);
 			this.nameBText.TabIndex = 12;
 			// 
 			// nameAText
 			// 
-			this.nameAText.Location = new System.Drawing.Point(357, 35);
+			this.nameAText.Location = new System.Drawing.Point(343, 35);
 			this.nameAText.Name = "nameAText";
-			this.nameAText.Size = new System.Drawing.Size(60, 19);
+			this.nameAText.Size = new System.Drawing.Size(35, 19);
 			this.nameAText.TabIndex = 12;
 			// 
 			// argAText
 			// 
-			this.argAText.Location = new System.Drawing.Point(291, 35);
+			this.argAText.Location = new System.Drawing.Point(276, 35);
 			this.argAText.Name = "argAText";
 			this.argAText.Size = new System.Drawing.Size(60, 19);
 			this.argAText.TabIndex = 12;
@@ -1033,7 +1108,7 @@ namespace namaichi
 			// 
 			// appliCPathSanshouBtn
 			// 
-			this.appliCPathSanshouBtn.Location = new System.Drawing.Point(245, 109);
+			this.appliCPathSanshouBtn.Location = new System.Drawing.Point(230, 109);
 			this.appliCPathSanshouBtn.Name = "appliCPathSanshouBtn";
 			this.appliCPathSanshouBtn.Size = new System.Drawing.Size(40, 23);
 			this.appliCPathSanshouBtn.TabIndex = 9;
@@ -1045,7 +1120,7 @@ namespace namaichi
 			// 
 			this.appliCPathText.Location = new System.Drawing.Point(14, 111);
 			this.appliCPathText.Name = "appliCPathText";
-			this.appliCPathText.Size = new System.Drawing.Size(225, 19);
+			this.appliCPathText.Size = new System.Drawing.Size(210, 19);
 			this.appliCPathText.TabIndex = 8;
 			// 
 			// label10
@@ -1058,7 +1133,7 @@ namespace namaichi
 			// 
 			// appliBPathSanshouBtn
 			// 
-			this.appliBPathSanshouBtn.Location = new System.Drawing.Point(245, 71);
+			this.appliBPathSanshouBtn.Location = new System.Drawing.Point(230, 71);
 			this.appliBPathSanshouBtn.Name = "appliBPathSanshouBtn";
 			this.appliBPathSanshouBtn.Size = new System.Drawing.Size(40, 23);
 			this.appliBPathSanshouBtn.TabIndex = 5;
@@ -1070,7 +1145,7 @@ namespace namaichi
 			// 
 			this.appliBPathText.Location = new System.Drawing.Point(14, 73);
 			this.appliBPathText.Name = "appliBPathText";
-			this.appliBPathText.Size = new System.Drawing.Size(225, 19);
+			this.appliBPathText.Size = new System.Drawing.Size(210, 19);
 			this.appliBPathText.TabIndex = 4;
 			// 
 			// label9
@@ -1083,7 +1158,7 @@ namespace namaichi
 			// 
 			// appliAPathSanshouBtn
 			// 
-			this.appliAPathSanshouBtn.Location = new System.Drawing.Point(245, 33);
+			this.appliAPathSanshouBtn.Location = new System.Drawing.Point(230, 33);
 			this.appliAPathSanshouBtn.Name = "appliAPathSanshouBtn";
 			this.appliAPathSanshouBtn.Size = new System.Drawing.Size(40, 23);
 			this.appliAPathSanshouBtn.TabIndex = 1;
@@ -1095,56 +1170,8 @@ namespace namaichi
 			// 
 			this.appliAPathText.Location = new System.Drawing.Point(14, 35);
 			this.appliAPathText.Name = "appliAPathText";
-			this.appliAPathText.Size = new System.Drawing.Size(225, 19);
+			this.appliAPathText.Size = new System.Drawing.Size(210, 19);
 			this.appliAPathText.TabIndex = 0;
-			// 
-			// groupBox5
-			// 
-			this.groupBox5.Controls.Add(this.label3);
-			this.groupBox5.Controls.Add(this.isDefaultBrowserPathChkBox);
-			this.groupBox5.Controls.Add(this.browserPathSanshouBtn);
-			this.groupBox5.Controls.Add(this.browserPathText);
-			this.groupBox5.Location = new System.Drawing.Point(5, 10);
-			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(423, 87);
-			this.groupBox5.TabIndex = 0;
-			this.groupBox5.TabStop = false;
-			this.groupBox5.Text = "Webブラウザ設定";
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(14, 19);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(75, 15);
-			this.label3.TabIndex = 3;
-			this.label3.Text = "Webブラウザ";
-			// 
-			// isDefaultBrowserPathChkBox
-			// 
-			this.isDefaultBrowserPathChkBox.Location = new System.Drawing.Point(14, 60);
-			this.isDefaultBrowserPathChkBox.Name = "isDefaultBrowserPathChkBox";
-			this.isDefaultBrowserPathChkBox.Size = new System.Drawing.Size(170, 19);
-			this.isDefaultBrowserPathChkBox.TabIndex = 2;
-			this.isDefaultBrowserPathChkBox.Text = "既定のアプリケーションを使う";
-			this.isDefaultBrowserPathChkBox.UseVisualStyleBackColor = true;
-			this.isDefaultBrowserPathChkBox.CheckedChanged += new System.EventHandler(this.isDefaultBrowserPathChkBox_CheckedChanged);
-			// 
-			// browserPathSanshouBtn
-			// 
-			this.browserPathSanshouBtn.Location = new System.Drawing.Point(311, 33);
-			this.browserPathSanshouBtn.Name = "browserPathSanshouBtn";
-			this.browserPathSanshouBtn.Size = new System.Drawing.Size(40, 23);
-			this.browserPathSanshouBtn.TabIndex = 1;
-			this.browserPathSanshouBtn.Text = "参照";
-			this.browserPathSanshouBtn.UseVisualStyleBackColor = true;
-			this.browserPathSanshouBtn.Click += new System.EventHandler(this.browserPathSanshouBtn_Click);
-			// 
-			// browserPathText
-			// 
-			this.browserPathText.Location = new System.Drawing.Point(14, 35);
-			this.browserPathText.Name = "browserPathText";
-			this.browserPathText.Size = new System.Drawing.Size(291, 19);
-			this.browserPathText.TabIndex = 0;
 			// 
 			// tabControl1
 			// 
@@ -2626,6 +2653,7 @@ namespace namaichi
 			// 
 			// notify2Tab
 			// 
+			this.notify2Tab.Controls.Add(this.groupBox5);
 			this.notify2Tab.Controls.Add(this.groupBox10);
 			this.notify2Tab.Location = new System.Drawing.Point(4, 22);
 			this.notify2Tab.Name = "notify2Tab";
@@ -2633,6 +2661,52 @@ namespace namaichi
 			this.notify2Tab.TabIndex = 5;
 			this.notify2Tab.Text = "通知2";
 			this.notify2Tab.UseVisualStyleBackColor = true;
+			// 
+			// groupBox5
+			// 
+			this.groupBox5.Controls.Add(this.label3);
+			this.groupBox5.Controls.Add(this.isDefaultBrowserPathChkBox);
+			this.groupBox5.Controls.Add(this.browserPathSanshouBtn);
+			this.groupBox5.Controls.Add(this.browserPathText);
+			this.groupBox5.Location = new System.Drawing.Point(5, 211);
+			this.groupBox5.Name = "groupBox5";
+			this.groupBox5.Size = new System.Drawing.Size(423, 87);
+			this.groupBox5.TabIndex = 6;
+			this.groupBox5.TabStop = false;
+			this.groupBox5.Text = "Webブラウザ設定";
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(14, 19);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(75, 15);
+			this.label3.TabIndex = 3;
+			this.label3.Text = "Webブラウザ";
+			// 
+			// isDefaultBrowserPathChkBox
+			// 
+			this.isDefaultBrowserPathChkBox.Location = new System.Drawing.Point(14, 60);
+			this.isDefaultBrowserPathChkBox.Name = "isDefaultBrowserPathChkBox";
+			this.isDefaultBrowserPathChkBox.Size = new System.Drawing.Size(170, 19);
+			this.isDefaultBrowserPathChkBox.TabIndex = 2;
+			this.isDefaultBrowserPathChkBox.Text = "既定のアプリケーションを使う";
+			this.isDefaultBrowserPathChkBox.UseVisualStyleBackColor = true;
+			// 
+			// browserPathSanshouBtn
+			// 
+			this.browserPathSanshouBtn.Location = new System.Drawing.Point(311, 33);
+			this.browserPathSanshouBtn.Name = "browserPathSanshouBtn";
+			this.browserPathSanshouBtn.Size = new System.Drawing.Size(40, 23);
+			this.browserPathSanshouBtn.TabIndex = 1;
+			this.browserPathSanshouBtn.Text = "参照";
+			this.browserPathSanshouBtn.UseVisualStyleBackColor = true;
+			// 
+			// browserPathText
+			// 
+			this.browserPathText.Location = new System.Drawing.Point(14, 35);
+			this.browserPathText.Name = "browserPathText";
+			this.browserPathText.Size = new System.Drawing.Size(291, 19);
+			this.browserPathText.TabIndex = 0;
 			// 
 			// groupBox10
 			// 
@@ -3181,8 +3255,6 @@ namespace namaichi
 			this.appliTab.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
 			this.groupBox6.PerformLayout();
-			this.groupBox5.ResumeLayout(false);
-			this.groupBox5.PerformLayout();
 			this.tabControl1.ResumeLayout(false);
 			this.commonTab.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
@@ -3213,6 +3285,8 @@ namespace namaichi
 			((System.ComponentModel.ISupportInitialize)(this.popupOpacityList)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.poptimeList)).EndInit();
 			this.notify2Tab.ResumeLayout(false);
+			this.groupBox5.ResumeLayout(false);
+			this.groupBox5.PerformLayout();
 			this.groupBox10.ResumeLayout(false);
 			this.groupBox10.PerformLayout();
 			this.alartTab.ResumeLayout(false);
@@ -3226,10 +3300,17 @@ namespace namaichi
 			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.Button appASettingBtn;
+		private System.Windows.Forms.Button appBSettingBtn;
+		private System.Windows.Forms.Button appFSettingBtn;
+		private System.Windows.Forms.Button appCSettingBtn;
+		private System.Windows.Forms.Button appGSettingBtn;
+		private System.Windows.Forms.Button appDSettingBtn;
+		private System.Windows.Forms.Button appHSettingBtn;
+		private System.Windows.Forms.Button appESettingBtn;
+		private System.Windows.Forms.Button appISettingBtn;
+		private System.Windows.Forms.Button appJSettingBtn;
 		private System.Windows.Forms.CheckBox IsAppliLogChkBox;
-		private System.Windows.Forms.ComboBox isAppMinimizedList;
-		private System.Windows.Forms.CheckedListBox isAppMinimizedCheckList;
-		private System.Windows.Forms.Label label30;
 		private System.Windows.Forms.LinkLabel displayArgInfoLabel;
 		private System.Windows.Forms.Button userSessionTestBtn;
 		private System.Windows.Forms.RadioButton useUserSessionRadioBtn;

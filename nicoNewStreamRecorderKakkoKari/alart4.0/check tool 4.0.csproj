@@ -188,6 +188,10 @@
     <Compile Include="src\gui\AddTwitterForm.Designer.cs">
       <DependentUpon>AddTwitterForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\gui\AppSettingForm.cs" />
+    <Compile Include="src\gui\AppSettingForm.Designer.cs">
+      <DependentUpon>AppSettingForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\gui\BulkAddFromFollowAccountForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -206,9 +210,13 @@
     <Compile Include="src\gui\DotNetMessageBox.Designer.cs">
       <DependentUpon>DotNetMessageBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\gui\fileNameOptionForm.cs">
+    <Compile Include="src\gui\ArgOptionForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="src\gui\ArgOptionForm.Designer.cs">
+      <DependentUpon>ArgOptionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\gui\fileNameOptionForm.cs" />
     <Compile Include="src\gui\fileNameOptionForm.Designer.cs">
       <DependentUpon>fileNameOptionForm.cs</DependentUpon>
     </Compile>
@@ -281,6 +289,7 @@
       <DependentUpon>WriteThumbnailMemoForm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\info\ActivityTimeline.cs" />
+    <Compile Include="src\info\AppSettingInfo.cs" />
     <Compile Include="src\info\CategoryRecent.cs" />
     <Compile Include="src\info\HistoryInfo.cs" />
     <Compile Include="src\info\CustomKeywordInfo.cs" />
@@ -337,6 +346,9 @@
       <DependentUpon>AddTwitterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\gui\app.resx" />
+    <EmbeddedResource Include="src\gui\AppSettingForm.resx">
+      <DependentUpon>AppSettingForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\gui\BulkAddFromFollowAccountForm.resx">
       <DependentUpon>BulkAddFromFollowAccountForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -345,6 +357,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="src\gui\DotNetMessageBox.resx">
       <DependentUpon>DotNetMessageBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\gui\ArgOptionForm.resx">
+      <DependentUpon>ArgOptionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\gui\fileNameOptionForm.resx">
       <DependentUpon>fileNameOptionForm.cs</DependentUpon>

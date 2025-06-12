@@ -178,6 +178,20 @@
     <Compile Include="..\alart4.0\src\gui\AddTwitterForm.Designer.cs">
       <Link>src\gui\AddTwitterForm.Designer.cs</Link>
     </Compile>
+    <Compile Include="..\alart4.0\src\gui\AppSettingForm.cs">
+      <Link>src\gui\AppSettingForm.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\AppSettingForm.Designer.cs">
+      <Link>src\gui\AppSettingForm.Designer.cs</Link>
+      <DependentUpon>AppSettingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\ArgOptionForm.cs">
+      <Link>src\gui\ArgOptionForm.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\gui\ArgOptionForm.Designer.cs">
+      <Link>src\gui\ArgOptionForm.Designer.cs</Link>
+      <DependentUpon>ArgOptionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\alart4.0\src\gui\BulkAddFromFollowAccountForm.cs">
       <Link>src\gui\BulkAddFromFollowAccountForm.cs</Link>
       <SubType>Form</SubType>
@@ -309,6 +323,9 @@
     </Compile>
     <Compile Include="..\alart4.0\src\info\AlartInfo.cs">
       <Link>src\info\AlartInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\alart4.0\src\info\AppSettingInfo.cs">
+      <Link>src\info\AppSettingInfo.cs</Link>
     </Compile>
     <Compile Include="..\alart4.0\src\info\CategoryRecent.cs">
       <Link>src\info\CategoryRecent.cs</Link>
@@ -461,6 +478,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\app.resx">
       <Link>src\gui\app.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\AppSettingForm.resx">
+      <Link>src\gui\AppSettingForm.resx</Link>
+      <DependentUpon>AppSettingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\alart4.0\src\gui\ArgOptionForm.resx">
+      <Link>src\gui\ArgOptionForm.resx</Link>
+      <DependentUpon>ArgOptionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\alart4.0\src\gui\BulkAddFromFollowAccountForm.resx">
       <Link>src\gui\BulkAddFromFollowAccountForm.resx</Link>

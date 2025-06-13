@@ -36,8 +36,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.8.9";
-	public static string versionDayStr = "2025/06/13";
+	public static string versionStr = "ver0.1.8.10";
+	public static string versionDayStr = "2025/06/14";
 	public static string osName = null;
 	public static string osType = null;
 	public static bool isWebRequestOk = false;
@@ -387,7 +387,8 @@ class util {
 			type = type.Replace("{url}", "https://live.nicovideo.jp/watch/" + lvId);
 			type = type.Replace("{us}", us);
 			type = type.Replace("{noarg}", " ");
-			type = type.Replace("{file}", "\"" + getRecFolderFilePath(getOkArg(host), getOkArg(group), getOkArg(title), lvId, communityNum, hostId, false, util.getUnixTime(_openTime), asi)[1] + (asi.ext != "" ? ("." + asi.ext) : "") + "\"");
+			if (type.IndexOf("{file}") > -1) 
+				type = type.Replace("{file}", "\"" + getRecFolderFilePath(getOkArg(host), getOkArg(group), getOkArg(title), lvId, communityNum, hostId, false, util.getUnixTime(_openTime), asi)[1] + (asi.ext != "" ? ("." + asi.ext) : "") + "\"");
 			return type;
 		} catch (Exception e) {
 			util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);

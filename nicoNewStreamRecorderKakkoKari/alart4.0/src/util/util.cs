@@ -36,8 +36,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.8.10";
-	public static string versionDayStr = "2025/06/14";
+	public static string versionStr = "ver0.1.8.11";
+	public static string versionDayStr = "2025/07/10";
 	public static string osName = null;
 	public static string osType = null;
 	public static bool isWebRequestOk = false;
@@ -989,13 +989,12 @@ class util {
 	public static string CheckOSName()
         {
             string result = "";
-
-            System.Management.ManagementClass mc =
-                new System.Management.ManagementClass("Win32_OperatingSystem");
-            System.Management.ManagementObjectCollection moc = mc.GetInstances();
-
             try
             {
+            	System.Management.ManagementClass mc =
+            		    new System.Management.ManagementClass("Win32_OperatingSystem");
+            	System.Management.ManagementObjectCollection moc = mc.GetInstances();
+            
                 foreach (System.Management.ManagementObject mo in moc)
                 {
                     result = mo["Caption"].ToString();
@@ -1008,21 +1007,29 @@ class util {
             catch (Exception e)
             {
                 util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-                return result;
+                try {
+                	var ver = Environment.OSVersion.Version;
+					var osVer = "";
+					if (ver.Major > 6 || (ver.Major >= 6 && ver.Minor >= 2))
+						osVer = "Windows 10";
+					util.debugWriteLine("Environment " + osVer);
+					return osVer;
+                } catch (Exception ee) {
+                	util.debugWriteLine(ee.Message + e.Source + e.StackTrace + ee.TargetSite);
+                }
+                return result + " unknownOsName";
             }
-
             return result;
         }
         public static string CheckOSType()
         {
             string result = "";
-
-            System.Management.ManagementClass mc =
-                new System.Management.ManagementClass("Win32_OperatingSystem");
-            System.Management.ManagementObjectCollection moc = mc.GetInstances();
-
             try
             {
+            	System.Management.ManagementClass mc =
+	                new System.Management.ManagementClass("Win32_OperatingSystem");
+	            System.Management.ManagementObjectCollection moc = mc.GetInstances();
+            
                 foreach (System.Management.ManagementObject mo in moc)
                 {
                     if (mo["Version"].ToString().StartsWith("5.1"))
@@ -1232,10 +1239,7 @@ class util {
 				asi = new AppSettingInfo();
 			}
 			var userId = string.IsNullOrEmpty(ri.userId) ? (string.IsNullOrEmpty(ri.comId) ? "_" : ri.comId) : ri.userId;
-			form.addLogText("a " + userId);
 			arg = util.getDokujiSetteiArg(ri.hostName, ri.comName, ri.title, ri.lvId.Trim('e'), ri.comId, args, ri.pubDateDt, userId, us, asi, form);
-			form.addLogText("arg " + arg);
-						
 			var isMin = false;
 			var minimizedC = cfg.get("IsminimizedApp");
 			if (!string.IsNullOrEmpty(minimizedC)) {

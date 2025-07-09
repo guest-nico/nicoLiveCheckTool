@@ -3026,9 +3026,17 @@ namespace namaichi
 				util.debugWriteLine("is not started " + lvid);
 			//var _ret = _res.IndexOf("status-onair\">") > -1 ||
 			//			_res.IndexOf("status-comingsoon\">") > -1;
-			var _ret = _res.IndexOf("data-status=\"onair\"") > -1 ||
+			var _ret = false;
+			if (_res.IndexOf("data-status=") > -1) {
+			    _ret = _res.IndexOf("data-status=\"onair\"") > -1 ||
 					_res.IndexOf("data-status=\"comingsoon\"") > -1 ||
 					(startTStr != null && DateTime.Parse(startTStr) > DateTime.Now - TimeSpan.FromMinutes(2));
+			} else if (_res.IndexOf("status&quot") > -1) {
+				_ret = _res.IndexOf("status&quot;:&quot;onair") > -1 ||
+						_res.IndexOf("status&quot;:&quot;comingsoon") > -1;
+			}
+						
+							
 			if (!_ret) {
 				util.debugWriteLine("終了判定 embed " + lvid + " " + _res);
 				util.debugWriteLine("isOnAirLvid !_ret deleteNotifyIconRecentItem " + lvid);
@@ -6260,10 +6268,11 @@ namespace namaichi
 		void OpenReadmeMenuClick(object sender, EventArgs e)
 		{
 			string[] jarpath = util.getJarPath();
-			string path = jarpath[0] + "/readme.html.url";
+			string path = jarpath[0] + "/readme.url";
+			if (!File.Exists(path)) path = jarpath[0] + "/readme.html.url"; 
 			try {
 				if (!File.Exists(path)) {
-					MessageBox.Show("readme.htmlが見つかりませんでした");
+					MessageBox.Show("readmeが見つかりませんでした " + path);
 					return;
 				}
 				util.openUrlBrowser(path, config);

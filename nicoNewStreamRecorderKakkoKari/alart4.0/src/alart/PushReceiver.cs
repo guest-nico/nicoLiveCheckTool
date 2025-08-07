@@ -424,7 +424,6 @@ namespace namaichi.alart
 			var ret = new List<RssItem>();
 			try {
 				//var isCom = dec.IndexOf("\"content_type\":\"live.user.program.onairs\"") > -1;
-				var isCom = dec.IndexOf("\"content_type\":\"live.user") > -1;
 				var isJikken = dec.IndexOf("\"content_type\":\"live.user.program.cas.onairs\"") > -1;
 				string lvid, thumbnail, dt;//title, comName, hostName;//
 				//hostName = null;
@@ -437,40 +436,45 @@ namespace namaichi.alart
 				dt = util.getRegGroup(dec, "\"created_at\":\"(.+?)\"");
 				if (dt != null && DateTime.Parse(dt) < startTime && !bool.Parse(config.get("IsStartTimeAllCheck")))
 					return new List<RssItem>();
-				if (isCom || isJikken) {
-					//title = util.getRegGroup(dec, "\"body\":\".+? で、*「(.+?)」を放送\"");
-					//comName = util.getRegGroup(dec, "\"body\":\"(.+?) で、*「");
-					//hostName = util.getRegGroup(dec, "\"title\":\"(.+?)さんが生放送(\\(実験放送\\))*を開始\"");
-					
-				} else {
-					//title = util.getRegGroup(dec, "\"body\":\"(.+?)\",\"icon\"");
-					//comName = util.getRegGroup(dec, "\"title\":\"(.+?)が生放送を開始\"");
-				}
+				var title = util.getRegGroup(dec, "body\":\"「(.+?)」を放送\"");
+				var isUser = thumbnail.IndexOf("user") > -1;
+				var name = util.getRegGroup(dec, "title\":\"(.+?)(さん)*が生放送を");
+				var userName = isUser ? name : "";
+				var comName = !isUser ? name : "";
+				var userId = isUser ? util.getRegGroup(thumbnail, "/(\\d+)\\.jpg") : "";
+				var comId = !isUser ? util.getRegGroup(thumbnail, "/(ch\\d+)\\.jpg") : "";
 				
 				var hg = new namaichi.rec.HosoInfoGetter();
-				var r = hg.get(lvid, check.container);
+				//var r = hg.get(lvid, check.container);
+				var r = false;
 				//description = hg.description;
 				
-				if (!r) {
+				if (!r || true) {
+					
+					/*
 					hg.description = hg.userId = hg.communityId = "";
 					hg.tags = new string[]{};
 					check.form.addLogText("プッシュ通知から取得した放送のページが取得できませんでした " + lvid);
 					util.debugWriteLine("push page error !r " + lvid);
 					return null;
+					*/
+				} else {
+					if (hg.isClosed) 
+						return new List<RssItem>();
 				}
-				if (hg.isClosed) 
-					return new List<RssItem>();
 				
-				util.debugWriteLine("description " + hg.description);
-				util.debugWriteLine("userId " + hg.userId);
-				util.debugWriteLine("userName " + hg.userName);
+				//util.debugWriteLine("description " + hg.description);
+				util.debugWriteLine("userId " + userId);
+				util.debugWriteLine("userName " + userName + " comName " + comName);
 				
-				if (hg.title == null || lvid == null || thumbnail == null ||
-				    	dt == null || hg.group == null || hg.communityId == null ||
-				    	hg.tags == null || hg.description == null ||
-				    	(isCom && (hg.userName == null || hg.userId == null))) {
+				//if (hg.title == null || lvid == null || thumbnail == null ||
+				//    	dt == null || hg.group == null || hg.communityId == null ||
+				//    	hg.tags == null || hg.description == null ||
+				//    	(isCom && (hg.userName == null || hg.userId == null))) {
+				if (lvid == null || (userId == null && comId == null)) { 
 					check.form.addLogText("push error " + dec);
-					util.debugWriteLine("push error null " + dec + " t " + hg.title + " lvid " + lvid + " thumb " + thumbnail + " dt " + dt + " comN " + hg.group + " comi " + hg.communityId + " tag " + hg.tags + " desc " + hg.description + " isc " + isCom + " un " + hg.userName + " ui " + hg.userId);
+					//util.debugWriteLine("push error null " + dec + " t " + hg.title + " lvid " + lvid + " thumb " + thumbnail + " dt " + dt + " comN " + hg.group + " comi " + hg.communityId + " tag " + hg.tags + " desc " + hg.description + " isc " + isCom + " un " + hg.userName + " ui " + hg.userId);
+					util.debugWriteLine("push error null " + dec + " t " + title + " lvid " + lvid + " thumb " + thumbnail + " dt " + dt + " comN " + comName + " comi " + comId + " un " + userName + " ui " + userId);
 					return null;
 				}
 				if (dec.IndexOf("video_live.onairs") > -1) {
@@ -484,11 +488,21 @@ namespace namaichi.alart
 //				util.debugWriteLine("userid " + hg.userId);
 //				util.debugWriteLine("description " + hg.description);
 				
-				var i = new RssItem(hg.title, lvid, dt, hg.description, hg.group, hg.communityId, hg.userName, hg.thumbnail, hg.isMemberOnly.ToString(), "", hg.isPayment);
-				i.setUserId(hg.userId);
-				i.setTag(hg.tags);
-				i.category = hg.category;
-				i.type = hg.type;
+				RssItem i = null;
+				var isNew = true;
+				if (isNew) {
+					i = new RssItem(title, lvid, dt, "", comName, comId, userName, thumbnail, "", "", false);
+					i.setUserId(userId);
+					i.type = string.IsNullOrEmpty(userId) ? "channel" : "user";
+					
+				} else {
+					i = new RssItem(hg.title, lvid, dt, hg.description, hg.group, hg.communityId, hg.userName, hg.thumbnail, hg.isMemberOnly.ToString(), "", hg.isPayment);
+					i.setUserId(hg.userId);
+					i.setTag(hg.tags);
+					i.category = hg.category;
+					i.type = hg.type;
+				}
+				
 				i.pubDateDt = DateTime.Parse(dt);
 				ret.Add(i);
 				check.checkedLvIdList.Add(i);

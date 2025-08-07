@@ -331,7 +331,6 @@ namespace namaichi
 			this.alartListFollowUserMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.alartListUnFollowComMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.alartListUnFollowUserMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.alartUserListFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator41 = new System.Windows.Forms.ToolStripSeparator();
 			this.openAppliAMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliBMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -343,6 +342,7 @@ namespace namaichi
 			this.openAppliHMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliIMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.openAppliJMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.alartUserListFollowMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.notifyIconMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.notifyIconRecentSeparator = new System.Windows.Forms.ToolStripSeparator();
@@ -412,6 +412,7 @@ namespace namaichi
 			this.tryCategoryBtn = new System.Windows.Forms.RadioButton();
 			this.liveCategoryBtn = new System.Windows.Forms.RadioButton();
 			this.reqCategoryBtn = new System.Windows.Forms.RadioButton();
+			this.liveListFilterBtn = new System.Windows.Forms.Button();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.favoriteCommunityPanel = new System.Windows.Forms.Panel();
 			this.upButton = new System.Windows.Forms.Button();
@@ -659,7 +660,6 @@ namespace namaichi
 			this.toolStripMenuItem44 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator39 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem45 = new System.Windows.Forms.ToolStripMenuItem();
-			this.liveListFilterBtn = new System.Windows.Forms.Button();
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.alartList)).BeginInit();
@@ -2486,21 +2486,21 @@ namespace namaichi
 			// openReadmeMenu
 			// 
 			this.openReadmeMenu.Name = "openReadmeMenu";
-			this.openReadmeMenu.Size = new System.Drawing.Size(183, 22);
-			this.openReadmeMenu.Text = "readme.htmlを開く(&V)";
+			this.openReadmeMenu.Size = new System.Drawing.Size(158, 22);
+			this.openReadmeMenu.Text = "readmeを開く(&V)";
 			this.openReadmeMenu.Click += new System.EventHandler(this.OpenReadmeMenuClick);
 			// 
 			// updateMenu
 			// 
 			this.updateMenu.Name = "updateMenu";
-			this.updateMenu.Size = new System.Drawing.Size(183, 22);
+			this.updateMenu.Size = new System.Drawing.Size(158, 22);
 			this.updateMenu.Text = "更新方法(&U)";
 			this.updateMenu.Click += new System.EventHandler(this.UpdateMenuClick);
 			// 
 			// バージョン情報VToolStripMenuItem
 			// 
 			this.バージョン情報VToolStripMenuItem.Name = "バージョン情報VToolStripMenuItem";
-			this.バージョン情報VToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+			this.バージョン情報VToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
 			this.バージョン情報VToolStripMenuItem.Text = "バージョン情報(&A)";
 			this.バージョン情報VToolStripMenuItem.Click += new System.EventHandler(this.versionMenu_Click);
 			// 
@@ -2974,7 +2974,7 @@ namespace namaichi
 									this.alartListUnFollowComMenu,
 									this.alartListUnFollowUserMenu});
 			this.alartListFollowMenu.Name = "contextMenuStrip6";
-			this.alartListFollowMenu.OwnerItem = this.alartComListFollowMenu;
+			this.alartListFollowMenu.OwnerItem = this.alartUserListFollowMenu;
 			this.alartListFollowMenu.Size = new System.Drawing.Size(246, 92);
 			this.alartListFollowMenu.Opening += new System.ComponentModel.CancelEventHandler(this.AlartListFollowMenuOpening);
 			// 
@@ -3005,13 +3005,6 @@ namespace namaichi
 			this.alartListUnFollowUserMenu.Size = new System.Drawing.Size(245, 22);
 			this.alartListUnFollowUserMenu.Text = "この行のユーザーをフォロー解除する";
 			this.alartListUnFollowUserMenu.Click += new System.EventHandler(this.AlartListUnFollowUserMenuClick);
-			// 
-			// alartUserListFollowMenu
-			// 
-			this.alartUserListFollowMenu.DropDown = this.alartListFollowMenu;
-			this.alartUserListFollowMenu.Name = "alartUserListFollowMenu";
-			this.alartUserListFollowMenu.Size = new System.Drawing.Size(268, 22);
-			this.alartUserListFollowMenu.Text = "フォロー";
 			// 
 			// toolStripSeparator41
 			// 
@@ -3087,6 +3080,13 @@ namespace namaichi
 			this.openAppliJMenu.Size = new System.Drawing.Size(268, 22);
 			this.openAppliJMenu.Text = "最近行われた放送のURLをアプリJで開く";
 			this.openAppliJMenu.Click += new System.EventHandler(this.recentLiveAppliOpenMenu_Click);
+			// 
+			// alartUserListFollowMenu
+			// 
+			this.alartUserListFollowMenu.DropDown = this.alartListFollowMenu;
+			this.alartUserListFollowMenu.Name = "alartUserListFollowMenu";
+			this.alartUserListFollowMenu.Size = new System.Drawing.Size(268, 22);
+			this.alartUserListFollowMenu.Text = "フォロー";
 			// 
 			// notifyIcon
 			// 
@@ -3757,6 +3757,18 @@ namespace namaichi
 			this.reqCategoryBtn.UseCompatibleTextRendering = true;
 			this.reqCategoryBtn.UseMnemonic = false;
 			this.reqCategoryBtn.UseVisualStyleBackColor = true;
+			// 
+			// liveListFilterBtn
+			// 
+			this.liveListFilterBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.liveListFilterBtn.Location = new System.Drawing.Point(403, 0);
+			this.liveListFilterBtn.Margin = new System.Windows.Forms.Padding(0);
+			this.liveListFilterBtn.Name = "liveListFilterBtn";
+			this.liveListFilterBtn.Size = new System.Drawing.Size(73, 23);
+			this.liveListFilterBtn.TabIndex = 13;
+			this.liveListFilterBtn.Text = "フィルタ条件";
+			this.liveListFilterBtn.UseVisualStyleBackColor = true;
+			this.liveListFilterBtn.Click += new System.EventHandler(this.LiveListFilterBtnClick);
 			// 
 			// tabPage1
 			// 
@@ -6096,18 +6108,6 @@ namespace namaichi
 			this.toolStripMenuItem45.Size = new System.Drawing.Size(177, 22);
 			this.toolStripMenuItem45.Text = "この行を削除する";
 			this.toolStripMenuItem45.Click += new System.EventHandler(this.HistoryListDeleteRowMenuClick);
-			// 
-			// liveListFilterBtn
-			// 
-			this.liveListFilterBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.liveListFilterBtn.Location = new System.Drawing.Point(403, 0);
-			this.liveListFilterBtn.Margin = new System.Windows.Forms.Padding(0);
-			this.liveListFilterBtn.Name = "liveListFilterBtn";
-			this.liveListFilterBtn.Size = new System.Drawing.Size(73, 23);
-			this.liveListFilterBtn.TabIndex = 13;
-			this.liveListFilterBtn.Text = "フィルタ条件";
-			this.liveListFilterBtn.UseVisualStyleBackColor = true;
-			this.liveListFilterBtn.Click += new System.EventHandler(this.LiveListFilterBtnClick);
 			// 
 			// MainForm
 			// 

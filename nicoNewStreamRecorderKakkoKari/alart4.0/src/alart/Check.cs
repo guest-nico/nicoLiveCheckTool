@@ -72,13 +72,16 @@ namespace namaichi.alart
 			
 			//Task.Factory.StartNew(() => reserveStreamCheck());
 			if (bool.Parse(form.config.get("IsRss"))) {
+				form.addLogText("サーバーの負荷軽減のため、カテゴリページから取得する機能は停止しております。");
+				/*
 				Task.Factory.StartNew(() => {
 				    rc = new CategoryCheck(this, form.config);
 				    rc.start();
 		         	
 		        });
+		        */
 			} else if (bool.Parse(form.config.get("IsStartTimeAllCheck"))) {
-				new CategoryCheck(this, form.config).start(true);
+				//new CategoryCheck(this, form.config).start(true);
 			}
 			if (bool.Parse(form.config.get("IsPush"))) {
 				Task.Factory.StartNew(() => {
@@ -793,10 +796,13 @@ namespace namaichi.alart
 			
 			if (bool.Parse(form.config.get("IsRss"))) {
 				if (rc == null) {
+					form.addLogText("サーバーの負荷軽減のため、カテゴリページから取得する機能は停止しております。");
+					/*
 					Task.Factory.StartNew(() => {
 						rc = new CategoryCheck(this, form.config);
 						rc.start();
 					});
+					*/
 				}
 			} else {
 				if (rc != null) {
@@ -857,6 +863,7 @@ namespace namaichi.alart
 					
 				}
 				*/
+				/*
 				var intervalSec = bool.Parse(form.config.get("IscheckOnAir")) ? 180 : 180;
 				if (DateTime.Now - lastCheckLastRecentLiveTime > TimeSpan.FromSeconds(intervalSec)) {
 					Task.Factory.StartNew(() => {
@@ -865,6 +872,7 @@ namespace namaichi.alart
 			         	lastCheckLastRecentLiveTime = DateTime.Now;
 					});
 				}
+				*/
 				
 				if (DateTime.Now - form.lastChangeListDt > TimeSpan.FromMinutes(5)) {
 					form.lastChangeListDt = DateTime.MaxValue;
@@ -879,6 +887,7 @@ namespace namaichi.alart
 					});
 				}
 				
+				/*
 				if (DateTime.Now - lastCheckHistoryLiveTime > TimeSpan.FromMinutes(5)) {
 					lastCheckHistoryLiveTime = DateTime.MaxValue;
 					Task.Factory.StartNew(() => {
@@ -886,6 +895,7 @@ namespace namaichi.alart
 						lastCheckHistoryLiveTime = DateTime.Now;
 					});
 				}
+				*/
 				
 				if (DateTime.Now - lastGetCookieTime> TimeSpan.FromHours(1)) {
 					lastGetCookieTime= DateTime.MaxValue;
@@ -897,6 +907,7 @@ namespace namaichi.alart
 					}
 				}
 				
+				/*
 				if (DateTime.Now - lastCheckNotifyHistoryTime > TimeSpan.FromMinutes(5)) {
 					lastCheckNotifyHistoryTime = DateTime.MaxValue;
 					Task.Factory.StartNew(() => {
@@ -904,10 +915,11 @@ namespace namaichi.alart
 						lastCheckNotifyHistoryTime = DateTime.Now;
 					});
 				}
+				*/
 				if (bool.Parse(form.config.get("IsNotSleep")))
 					util.setThreadExecutionState();
 				
-				if (DateTime.Now - lastBulkAddTime > TimeSpan.FromHours(1) &&
+				if (DateTime.Now - lastBulkAddTime > TimeSpan.FromHours(12) &&
 				    	bool.Parse(form.config.get("IsBulkAddAuto"))) {
 					new ToolMenuProcess(form).bulkAdd();
 					lastBulkAddTime = DateTime.Now;

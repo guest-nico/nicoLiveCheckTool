@@ -128,6 +128,7 @@ namespace namaichi
 			InitializeComponent();
 			Text = "放送チェックツール（仮 " + util.versionStr;
 			
+			tabControl1.TabPages.Remove(tabPage3);
 			this.args = args;
 			
 			//saveControlLayout();
@@ -602,13 +603,13 @@ namespace namaichi
 			Task.Factory.StartNew(() => {
 				new ReserveHistoryListFileManager().load(this);
 			});
+			/*
 			Task.Factory.StartNew(() => {
 			    liveCheck = new LiveCheck(this);
 			    if (bool.Parse(config.get("AutoStart")))
 			    	formAction(() => updateAutoUpdateStartMenu.PerformClick());
-			    
 			});
-			
+			*/
 			//.net
 			util.debugWriteLine(".net version check");
 			var ver = util.Get45PlusFromRegistry();  
@@ -2891,7 +2892,8 @@ namespace namaichi
 		public int recentLiveCheckCore(bool isUserMode) {
 			//var isCheck30min = bool.Parse(config.get("Ischeck30min"));
 			//-1-no check 0-onair 1-30min
-			var checkMode = bool.Parse(config.get("IscheckOnAir")) ? 0 : 1;
+			//var checkMode = bool.Parse(config.get("IscheckOnAir")) ? 0 : 1;
+			var checkMode = 1;
 			if (!bool.Parse(config.get("IscheckRecent"))) checkMode = -1;
 			
 			var dataSource = isUserMode ? userAlartListDataSource : alartListDataSource;

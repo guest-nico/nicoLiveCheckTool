@@ -40,7 +40,7 @@ namespace namaichi.alart
 				try {
 					util.debugWriteLine("auto reserve check ");
 					
-					if (DateTime.Now - lastGetTime > TimeSpan.FromMinutes(10)) {
+					if (DateTime.Now - lastGetTime > TimeSpan.FromHours(12)) {
 						checkTimeline();
 						lastGetTime = DateTime.Now;
 					}

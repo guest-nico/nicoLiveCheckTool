@@ -142,23 +142,17 @@ namespace namaichi
 			this.isAddAlartedUserToUserListChkBox = new System.Windows.Forms.CheckBox();
 			this.IsAddAlartedComUserChkBox = new System.Windows.Forms.CheckBox();
 			this.alartCacheIconChkBox = new System.Windows.Forms.CheckBox();
-			this.followerOnlySampleColorText = new System.Windows.Forms.TextBox();
-			this.followerOnlyColorBtn = new System.Windows.Forms.Button();
-			this.defaultFollowerOnlyColorBtn = new System.Windows.Forms.Button();
-			this.isFollowerOnlyOtherColor = new System.Windows.Forms.CheckBox();
 			this.isAlartListColorRecent = new System.Windows.Forms.CheckBox();
 			this.recentSampleColorText = new System.Windows.Forms.TextBox();
 			this.recentColorBtn = new System.Windows.Forms.Button();
 			this.defaultRecentColorBtn = new System.Windows.Forms.Button();
 			this.isNotAllMatchNotifyNoRecentChkBox = new System.Windows.Forms.CheckBox();
-			this.isCheckOnAirRadioBtn = new System.Windows.Forms.RadioButton();
 			this.isCheck30minRadioBtn = new System.Windows.Forms.RadioButton();
 			this.doublecmodeList = new System.Windows.Forms.ComboBox();
 			this.label41 = new System.Windows.Forms.Label();
 			this.isdragComChkBox = new System.Windows.Forms.CheckBox();
 			this.isChangeIconChkBox = new System.Windows.Forms.CheckBox();
 			this.isRecentCheckRadioBtn = new System.Windows.Forms.CheckBox();
-			this.isStartTimeAllCheckChkBox = new System.Windows.Forms.CheckBox();
 			this.common2Tab = new System.Windows.Forms.TabPage();
 			this.groupBox12 = new System.Windows.Forms.GroupBox();
 			this.IsNotSleepChkBox = new System.Windows.Forms.CheckBox();
@@ -281,7 +275,6 @@ namespace namaichi
 			this.isTimeTableChkBox = new System.Windows.Forms.CheckBox();
 			this.isAppPushChkBox = new System.Windows.Forms.CheckBox();
 			this.isPushChkBox = new System.Windows.Forms.CheckBox();
-			this.isRssChkBox = new System.Windows.Forms.CheckBox();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
 			this.label12 = new System.Windows.Forms.Label();
 			this.label13 = new System.Windows.Forms.Label();
@@ -289,6 +282,7 @@ namespace namaichi
 			this.label7 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.rssUpdateIntervalList = new System.Windows.Forms.NumericUpDown();
+			this.isRssChkBox = new System.Windows.Forms.CheckBox();
 			this.accountTab = new System.Windows.Forms.TabPage();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.userSessionText = new System.Windows.Forms.TextBox();
@@ -308,6 +302,12 @@ namespace namaichi
 			this.cookieFileSanshouBtn = new System.Windows.Forms.Button();
 			this.btnReload = new System.Windows.Forms.Button();
 			this.useSecondLoginChkBox = new System.Windows.Forms.CheckBox();
+			this.followerOnlyColorBtn = new System.Windows.Forms.Button();
+			this.isFollowerOnlyOtherColor = new System.Windows.Forms.CheckBox();
+			this.isCheckOnAirRadioBtn = new System.Windows.Forms.RadioButton();
+			this.isStartTimeAllCheckChkBox = new System.Windows.Forms.CheckBox();
+			this.followerOnlySampleColorText = new System.Windows.Forms.TextBox();
+			this.defaultFollowerOnlyColorBtn = new System.Windows.Forms.Button();
 			this.appliTab.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.tabControl1.SuspendLayout();
@@ -1212,9 +1212,9 @@ namespace namaichi
 			this.groupBox1.Controls.Add(this.label60);
 			this.groupBox1.Controls.Add(this.isBroadLogChkBox);
 			this.groupBox1.Controls.Add(this.isLogChkBtn);
-			this.groupBox1.Location = new System.Drawing.Point(5, 430);
+			this.groupBox1.Location = new System.Drawing.Point(5, 359);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(420, 139);
+			this.groupBox1.Size = new System.Drawing.Size(420, 122);
 			this.groupBox1.TabIndex = 13;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "ログ・履歴";
@@ -1350,33 +1350,27 @@ namespace namaichi
 			this.groupBox2.Controls.Add(this.isAddAlartedUserToUserListChkBox);
 			this.groupBox2.Controls.Add(this.IsAddAlartedComUserChkBox);
 			this.groupBox2.Controls.Add(this.alartCacheIconChkBox);
-			this.groupBox2.Controls.Add(this.followerOnlySampleColorText);
-			this.groupBox2.Controls.Add(this.followerOnlyColorBtn);
-			this.groupBox2.Controls.Add(this.defaultFollowerOnlyColorBtn);
-			this.groupBox2.Controls.Add(this.isFollowerOnlyOtherColor);
 			this.groupBox2.Controls.Add(this.isAlartListColorRecent);
 			this.groupBox2.Controls.Add(this.recentSampleColorText);
 			this.groupBox2.Controls.Add(this.recentColorBtn);
 			this.groupBox2.Controls.Add(this.defaultRecentColorBtn);
 			this.groupBox2.Controls.Add(this.isNotAllMatchNotifyNoRecentChkBox);
-			this.groupBox2.Controls.Add(this.isCheckOnAirRadioBtn);
 			this.groupBox2.Controls.Add(this.isCheck30minRadioBtn);
 			this.groupBox2.Controls.Add(this.doublecmodeList);
 			this.groupBox2.Controls.Add(this.label41);
 			this.groupBox2.Controls.Add(this.isdragComChkBox);
 			this.groupBox2.Controls.Add(this.isChangeIconChkBox);
 			this.groupBox2.Controls.Add(this.isRecentCheckRadioBtn);
-			this.groupBox2.Controls.Add(this.isStartTimeAllCheckChkBox);
 			this.groupBox2.Location = new System.Drawing.Point(5, 10);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(420, 418);
+			this.groupBox2.Size = new System.Drawing.Size(420, 345);
 			this.groupBox2.TabIndex = 1;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "お気に入りの設定";
 			// 
 			// IsConfirmFollowChkBox
 			// 
-			this.IsConfirmFollowChkBox.Location = new System.Drawing.Point(19, 290);
+			this.IsConfirmFollowChkBox.Location = new System.Drawing.Point(19, 277);
 			this.IsConfirmFollowChkBox.Name = "IsConfirmFollowChkBox";
 			this.IsConfirmFollowChkBox.Size = new System.Drawing.Size(405, 19);
 			this.IsConfirmFollowChkBox.TabIndex = 49;
@@ -1385,7 +1379,7 @@ namespace namaichi
 			// 
 			// delThumbChkBox
 			// 
-			this.delThumbChkBox.Location = new System.Drawing.Point(19, 268);
+			this.delThumbChkBox.Location = new System.Drawing.Point(19, 189);
 			this.delThumbChkBox.Name = "delThumbChkBox";
 			this.delThumbChkBox.Size = new System.Drawing.Size(405, 19);
 			this.delThumbChkBox.TabIndex = 48;
@@ -1394,16 +1388,16 @@ namespace namaichi
 			// 
 			// IsUpdateComUserNameChkBox
 			// 
-			this.IsUpdateComUserNameChkBox.Location = new System.Drawing.Point(19, 399);
+			this.IsUpdateComUserNameChkBox.Location = new System.Drawing.Point(19, 324);
 			this.IsUpdateComUserNameChkBox.Name = "IsUpdateComUserNameChkBox";
-			this.IsUpdateComUserNameChkBox.Size = new System.Drawing.Size(350, 19);
+			this.IsUpdateComUserNameChkBox.Size = new System.Drawing.Size(241, 19);
 			this.IsUpdateComUserNameChkBox.TabIndex = 11;
 			this.IsUpdateComUserNameChkBox.Text = "ユーザー名とチャンネル名を定期的に更新する";
 			this.IsUpdateComUserNameChkBox.UseVisualStyleBackColor = true;
 			// 
 			// IsExistInHistoryListNotAlartChkBox
 			// 
-			this.IsExistInHistoryListNotAlartChkBox.Location = new System.Drawing.Point(19, 377);
+			this.IsExistInHistoryListNotAlartChkBox.Location = new System.Drawing.Point(19, 302);
 			this.IsExistInHistoryListNotAlartChkBox.Name = "IsExistInHistoryListNotAlartChkBox";
 			this.IsExistInHistoryListNotAlartChkBox.Size = new System.Drawing.Size(350, 19);
 			this.IsExistInHistoryListNotAlartChkBox.TabIndex = 11;
@@ -1413,7 +1407,7 @@ namespace namaichi
 			// isAddAlartedUserToUserListChkBox
 			// 
 			this.isAddAlartedUserToUserListChkBox.Enabled = false;
-			this.isAddAlartedUserToUserListChkBox.Location = new System.Drawing.Point(35, 356);
+			this.isAddAlartedUserToUserListChkBox.Location = new System.Drawing.Point(35, 258);
 			this.isAddAlartedUserToUserListChkBox.Name = "isAddAlartedUserToUserListChkBox";
 			this.isAddAlartedUserToUserListChkBox.Size = new System.Drawing.Size(350, 19);
 			this.isAddAlartedUserToUserListChkBox.TabIndex = 11;
@@ -1422,7 +1416,7 @@ namespace namaichi
 			// 
 			// IsAddAlartedComUserChkBox
 			// 
-			this.IsAddAlartedComUserChkBox.Location = new System.Drawing.Point(19, 334);
+			this.IsAddAlartedComUserChkBox.Location = new System.Drawing.Point(19, 236);
 			this.IsAddAlartedComUserChkBox.Name = "IsAddAlartedComUserChkBox";
 			this.IsAddAlartedComUserChkBox.Size = new System.Drawing.Size(350, 19);
 			this.IsAddAlartedComUserChkBox.TabIndex = 11;
@@ -1432,56 +1426,16 @@ namespace namaichi
 			// 
 			// alartCacheIconChkBox
 			// 
-			this.alartCacheIconChkBox.Location = new System.Drawing.Point(19, 312);
+			this.alartCacheIconChkBox.Location = new System.Drawing.Point(19, 214);
 			this.alartCacheIconChkBox.Name = "alartCacheIconChkBox";
 			this.alartCacheIconChkBox.Size = new System.Drawing.Size(350, 19);
 			this.alartCacheIconChkBox.TabIndex = 11;
 			this.alartCacheIconChkBox.Text = "登録時や通知時に取得したサムネイル画像をキャッシュする";
 			this.alartCacheIconChkBox.UseVisualStyleBackColor = true;
 			// 
-			// followerOnlySampleColorText
-			// 
-			this.followerOnlySampleColorText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
-			this.followerOnlySampleColorText.Location = new System.Drawing.Point(115, 103);
-			this.followerOnlySampleColorText.Name = "followerOnlySampleColorText";
-			this.followerOnlySampleColorText.Size = new System.Drawing.Size(95, 19);
-			this.followerOnlySampleColorText.TabIndex = 46;
-			this.followerOnlySampleColorText.Text = "例";
-			this.followerOnlySampleColorText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			// 
-			// followerOnlyColorBtn
-			// 
-			this.followerOnlyColorBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
-			this.followerOnlyColorBtn.Location = new System.Drawing.Point(49, 102);
-			this.followerOnlyColorBtn.Name = "followerOnlyColorBtn";
-			this.followerOnlyColorBtn.Size = new System.Drawing.Size(60, 23);
-			this.followerOnlyColorBtn.TabIndex = 45;
-			this.followerOnlyColorBtn.UseVisualStyleBackColor = false;
-			this.followerOnlyColorBtn.Click += new System.EventHandler(this.FollowerOnlyColorBtnClick);
-			// 
-			// defaultFollowerOnlyColorBtn
-			// 
-			this.defaultFollowerOnlyColorBtn.Location = new System.Drawing.Point(216, 102);
-			this.defaultFollowerOnlyColorBtn.Name = "defaultFollowerOnlyColorBtn";
-			this.defaultFollowerOnlyColorBtn.Size = new System.Drawing.Size(35, 23);
-			this.defaultFollowerOnlyColorBtn.TabIndex = 47;
-			this.defaultFollowerOnlyColorBtn.Text = "戻す";
-			this.defaultFollowerOnlyColorBtn.UseVisualStyleBackColor = true;
-			this.defaultFollowerOnlyColorBtn.Click += new System.EventHandler(this.DefaultFollowerOnlyColorBtnClick);
-			// 
-			// isFollowerOnlyOtherColor
-			// 
-			this.isFollowerOnlyOtherColor.Location = new System.Drawing.Point(49, 85);
-			this.isFollowerOnlyOtherColor.Name = "isFollowerOnlyOtherColor";
-			this.isFollowerOnlyOtherColor.Size = new System.Drawing.Size(350, 19);
-			this.isFollowerOnlyOtherColor.TabIndex = 44;
-			this.isFollowerOnlyOtherColor.Text = "フォロワー限定放送は色を変える";
-			this.isFollowerOnlyOtherColor.UseVisualStyleBackColor = true;
-			this.isFollowerOnlyOtherColor.CheckedChanged += new System.EventHandler(this.IsFollowerOnlyOtherColorCheckedChanged);
-			// 
 			// isAlartListColorRecent
 			// 
-			this.isAlartListColorRecent.Location = new System.Drawing.Point(252, 155);
+			this.isAlartListColorRecent.Location = new System.Drawing.Point(252, 73);
 			this.isAlartListColorRecent.Name = "isAlartListColorRecent";
 			this.isAlartListColorRecent.Size = new System.Drawing.Size(165, 19);
 			this.isAlartListColorRecent.TabIndex = 39;
@@ -1492,7 +1446,7 @@ namespace namaichi
 			// recentSampleColorText
 			// 
 			this.recentSampleColorText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
-			this.recentSampleColorText.Location = new System.Drawing.Point(101, 151);
+			this.recentSampleColorText.Location = new System.Drawing.Point(101, 69);
 			this.recentSampleColorText.Name = "recentSampleColorText";
 			this.recentSampleColorText.Size = new System.Drawing.Size(95, 19);
 			this.recentSampleColorText.TabIndex = 37;
@@ -1502,7 +1456,7 @@ namespace namaichi
 			// recentColorBtn
 			// 
 			this.recentColorBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
-			this.recentColorBtn.Location = new System.Drawing.Point(35, 150);
+			this.recentColorBtn.Location = new System.Drawing.Point(35, 65);
 			this.recentColorBtn.Name = "recentColorBtn";
 			this.recentColorBtn.Size = new System.Drawing.Size(60, 23);
 			this.recentColorBtn.TabIndex = 36;
@@ -1511,7 +1465,7 @@ namespace namaichi
 			// 
 			// defaultRecentColorBtn
 			// 
-			this.defaultRecentColorBtn.Location = new System.Drawing.Point(202, 150);
+			this.defaultRecentColorBtn.Location = new System.Drawing.Point(202, 68);
 			this.defaultRecentColorBtn.Name = "defaultRecentColorBtn";
 			this.defaultRecentColorBtn.Size = new System.Drawing.Size(35, 23);
 			this.defaultRecentColorBtn.TabIndex = 38;
@@ -1521,31 +1475,21 @@ namespace namaichi
 			// 
 			// isNotAllMatchNotifyNoRecentChkBox
 			// 
-			this.isNotAllMatchNotifyNoRecentChkBox.Location = new System.Drawing.Point(19, 246);
+			this.isNotAllMatchNotifyNoRecentChkBox.Location = new System.Drawing.Point(19, 167);
 			this.isNotAllMatchNotifyNoRecentChkBox.Name = "isNotAllMatchNotifyNoRecentChkBox";
 			this.isNotAllMatchNotifyNoRecentChkBox.Size = new System.Drawing.Size(405, 19);
 			this.isNotAllMatchNotifyNoRecentChkBox.TabIndex = 10;
 			this.isNotAllMatchNotifyNoRecentChkBox.Text = "登録した設定の一部に該当して通知された場合、最近の放送日時に反映しない";
 			this.isNotAllMatchNotifyNoRecentChkBox.UseVisualStyleBackColor = true;
 			// 
-			// isCheckOnAirRadioBtn
-			// 
-			this.isCheckOnAirRadioBtn.Checked = true;
-			this.isCheckOnAirRadioBtn.Location = new System.Drawing.Point(35, 62);
-			this.isCheckOnAirRadioBtn.Name = "isCheckOnAirRadioBtn";
-			this.isCheckOnAirRadioBtn.Size = new System.Drawing.Size(200, 17);
-			this.isCheckOnAirRadioBtn.TabIndex = 9;
-			this.isCheckOnAirRadioBtn.TabStop = true;
-			this.isCheckOnAirRadioBtn.Text = "放送中の番組に色をつける";
-			this.isCheckOnAirRadioBtn.UseVisualStyleBackColor = true;
-			this.isCheckOnAirRadioBtn.CheckedChanged += new System.EventHandler(this.IsCheckOnAirRadioBtnCheckedChanged);
-			// 
 			// isCheck30minRadioBtn
 			// 
-			this.isCheck30minRadioBtn.Location = new System.Drawing.Point(35, 128);
+			this.isCheck30minRadioBtn.Checked = true;
+			this.isCheck30minRadioBtn.Location = new System.Drawing.Point(35, 43);
 			this.isCheck30minRadioBtn.Name = "isCheck30minRadioBtn";
 			this.isCheck30minRadioBtn.Size = new System.Drawing.Size(200, 17);
 			this.isCheck30minRadioBtn.TabIndex = 9;
+			this.isCheck30minRadioBtn.TabStop = true;
 			this.isCheck30minRadioBtn.Text = "30分以内の番組に色をつける";
 			this.isCheck30minRadioBtn.UseVisualStyleBackColor = true;
 			// 
@@ -1571,14 +1515,14 @@ namespace namaichi
 									"最近行われた放送のURLをアプリHで開く",
 									"最近行われた放送のURLをアプリIで開く",
 									"最近行われた放送のURLをアプリJで開く"});
-			this.doublecmodeList.Location = new System.Drawing.Point(146, 221);
+			this.doublecmodeList.Location = new System.Drawing.Point(146, 142);
 			this.doublecmodeList.Name = "doublecmodeList";
 			this.doublecmodeList.Size = new System.Drawing.Size(241, 20);
 			this.doublecmodeList.TabIndex = 8;
 			// 
 			// label41
 			// 
-			this.label41.Location = new System.Drawing.Point(19, 224);
+			this.label41.Location = new System.Drawing.Point(19, 145);
 			this.label41.Name = "label41";
 			this.label41.Size = new System.Drawing.Size(121, 18);
 			this.label41.TabIndex = 7;
@@ -1586,7 +1530,7 @@ namespace namaichi
 			// 
 			// isdragComChkBox
 			// 
-			this.isdragComChkBox.Location = new System.Drawing.Point(19, 198);
+			this.isdragComChkBox.Location = new System.Drawing.Point(19, 119);
 			this.isdragComChkBox.Name = "isdragComChkBox";
 			this.isdragComChkBox.Size = new System.Drawing.Size(390, 19);
 			this.isdragComChkBox.TabIndex = 6;
@@ -1595,7 +1539,7 @@ namespace namaichi
 			// 
 			// isChangeIconChkBox
 			// 
-			this.isChangeIconChkBox.Location = new System.Drawing.Point(35, 176);
+			this.isChangeIconChkBox.Location = new System.Drawing.Point(35, 94);
 			this.isChangeIconChkBox.Name = "isChangeIconChkBox";
 			this.isChangeIconChkBox.Size = new System.Drawing.Size(350, 19);
 			this.isChangeIconChkBox.TabIndex = 4;
@@ -1604,22 +1548,13 @@ namespace namaichi
 			// 
 			// isRecentCheckRadioBtn
 			// 
-			this.isRecentCheckRadioBtn.Location = new System.Drawing.Point(19, 40);
+			this.isRecentCheckRadioBtn.Location = new System.Drawing.Point(19, 18);
 			this.isRecentCheckRadioBtn.Name = "isRecentCheckRadioBtn";
 			this.isRecentCheckRadioBtn.Size = new System.Drawing.Size(350, 19);
 			this.isRecentCheckRadioBtn.TabIndex = 3;
 			this.isRecentCheckRadioBtn.Text = "最近の番組に色をつける";
 			this.isRecentCheckRadioBtn.UseVisualStyleBackColor = true;
 			this.isRecentCheckRadioBtn.CheckedChanged += new System.EventHandler(this.IsRecentChkBoxCheckedChanged);
-			// 
-			// isStartTimeAllCheckChkBox
-			// 
-			this.isStartTimeAllCheckChkBox.Location = new System.Drawing.Point(19, 18);
-			this.isStartTimeAllCheckChkBox.Name = "isStartTimeAllCheckChkBox";
-			this.isStartTimeAllCheckChkBox.Size = new System.Drawing.Size(395, 19);
-			this.isStartTimeAllCheckChkBox.TabIndex = 2;
-			this.isStartTimeAllCheckChkBox.Text = "起動時に既に開始してる放送をチェックする";
-			this.isStartTimeAllCheckChkBox.UseVisualStyleBackColor = true;
 			// 
 			// common2Tab
 			// 
@@ -1642,7 +1577,7 @@ namespace namaichi
 			this.groupBox12.Controls.Add(this.isAllowMultiProcessChkBox);
 			this.groupBox12.Controls.Add(this.isTasktrayStartChkBox);
 			this.groupBox12.Controls.Add(this.isStartUpChkBox);
-			this.groupBox12.Location = new System.Drawing.Point(5, 176);
+			this.groupBox12.Location = new System.Drawing.Point(10, 10);
 			this.groupBox12.Name = "groupBox12";
 			this.groupBox12.Size = new System.Drawing.Size(420, 113);
 			this.groupBox12.TabIndex = 51;
@@ -1717,7 +1652,7 @@ namespace namaichi
 			this.displayGroup.Controls.Add(this.label66);
 			this.displayGroup.Controls.Add(this.label64);
 			this.displayGroup.Controls.Add(this.applyBtn);
-			this.displayGroup.Location = new System.Drawing.Point(5, 464);
+			this.displayGroup.Location = new System.Drawing.Point(10, 298);
 			this.displayGroup.Name = "displayGroup";
 			this.displayGroup.Size = new System.Drawing.Size(420, 65);
 			this.displayGroup.TabIndex = 11;
@@ -1796,12 +1731,13 @@ namespace namaichi
 			this.groupBox11.Controls.Add(this.thresholdpageList);
 			this.groupBox11.Controls.Add(this.label49);
 			this.groupBox11.Controls.Add(this.label48);
-			this.groupBox11.Location = new System.Drawing.Point(5, 10);
+			this.groupBox11.Location = new System.Drawing.Point(10, 391);
 			this.groupBox11.Name = "groupBox11";
 			this.groupBox11.Size = new System.Drawing.Size(420, 160);
 			this.groupBox11.TabIndex = 9;
 			this.groupBox11.TabStop = false;
 			this.groupBox11.Text = "放送中タブの設定";
+			this.groupBox11.Visible = false;
 			// 
 			// liveListGetIconChkBox
 			// 
@@ -1977,7 +1913,7 @@ namespace namaichi
 			this.defaultBehaviorGroupBox.Controls.Add(this.isDefaultSoundIdChkBox);
 			this.defaultBehaviorGroupBox.Controls.Add(this.defaultSoundList);
 			this.defaultBehaviorGroupBox.Controls.Add(this.label57);
-			this.defaultBehaviorGroupBox.Location = new System.Drawing.Point(5, 295);
+			this.defaultBehaviorGroupBox.Location = new System.Drawing.Point(10, 129);
 			this.defaultBehaviorGroupBox.Name = "defaultBehaviorGroupBox";
 			this.defaultBehaviorGroupBox.Size = new System.Drawing.Size(420, 161);
 			this.defaultBehaviorGroupBox.TabIndex = 3;
@@ -2653,6 +2589,12 @@ namespace namaichi
 			// 
 			// notify2Tab
 			// 
+			this.notify2Tab.Controls.Add(this.followerOnlySampleColorText);
+			this.notify2Tab.Controls.Add(this.defaultFollowerOnlyColorBtn);
+			this.notify2Tab.Controls.Add(this.isStartTimeAllCheckChkBox);
+			this.notify2Tab.Controls.Add(this.followerOnlyColorBtn);
+			this.notify2Tab.Controls.Add(this.isFollowerOnlyOtherColor);
+			this.notify2Tab.Controls.Add(this.isCheckOnAirRadioBtn);
 			this.notify2Tab.Controls.Add(this.groupBox5);
 			this.notify2Tab.Controls.Add(this.groupBox10);
 			this.notify2Tab.Location = new System.Drawing.Point(4, 22);
@@ -2850,6 +2792,7 @@ namespace namaichi
 			this.alartTab.Controls.Add(this.groupBox13);
 			this.alartTab.Controls.Add(this.groupBox8);
 			this.alartTab.Controls.Add(this.groupBox7);
+			this.alartTab.Controls.Add(this.isRssChkBox);
 			this.alartTab.Location = new System.Drawing.Point(4, 22);
 			this.alartTab.Name = "alartTab";
 			this.alartTab.Padding = new System.Windows.Forms.Padding(3);
@@ -2862,7 +2805,7 @@ namespace namaichi
 			// 
 			this.groupBox13.Controls.Add(this.isOverwriteOldReserveChkBox);
 			this.groupBox13.Controls.Add(this.isAutoReserveChkBox);
-			this.groupBox13.Location = new System.Drawing.Point(5, 269);
+			this.groupBox13.Location = new System.Drawing.Point(5, 152);
 			this.groupBox13.Name = "groupBox13";
 			this.groupBox13.Size = new System.Drawing.Size(420, 77);
 			this.groupBox13.TabIndex = 7;
@@ -2892,17 +2835,16 @@ namespace namaichi
 			this.groupBox8.Controls.Add(this.isTimeTableChkBox);
 			this.groupBox8.Controls.Add(this.isAppPushChkBox);
 			this.groupBox8.Controls.Add(this.isPushChkBox);
-			this.groupBox8.Controls.Add(this.isRssChkBox);
 			this.groupBox8.Location = new System.Drawing.Point(5, 10);
 			this.groupBox8.Name = "groupBox8";
-			this.groupBox8.Size = new System.Drawing.Size(420, 194);
+			this.groupBox8.Size = new System.Drawing.Size(420, 136);
 			this.groupBox8.TabIndex = 6;
 			this.groupBox8.TabStop = false;
 			this.groupBox8.Text = "取得元";
 			// 
 			// isTimeTableChkBox
 			// 
-			this.isTimeTableChkBox.Location = new System.Drawing.Point(19, 147);
+			this.isTimeTableChkBox.Location = new System.Drawing.Point(19, 98);
 			this.isTimeTableChkBox.Name = "isTimeTableChkBox";
 			this.isTimeTableChkBox.Size = new System.Drawing.Size(400, 33);
 			this.isTimeTableChkBox.TabIndex = 8;
@@ -2911,7 +2853,7 @@ namespace namaichi
 			// 
 			// isAppPushChkBox
 			// 
-			this.isAppPushChkBox.Location = new System.Drawing.Point(19, 98);
+			this.isAppPushChkBox.Location = new System.Drawing.Point(19, 57);
 			this.isAppPushChkBox.Name = "isAppPushChkBox";
 			this.isAppPushChkBox.Size = new System.Drawing.Size(400, 53);
 			this.isAppPushChkBox.TabIndex = 7;
@@ -2921,21 +2863,12 @@ namespace namaichi
 			// 
 			// isPushChkBox
 			// 
-			this.isPushChkBox.Location = new System.Drawing.Point(19, 57);
+			this.isPushChkBox.Location = new System.Drawing.Point(19, 18);
 			this.isPushChkBox.Name = "isPushChkBox";
 			this.isPushChkBox.Size = new System.Drawing.Size(400, 43);
 			this.isPushChkBox.TabIndex = 3;
 			this.isPushChkBox.Text = "ブラウザプッシュ通知から取得する\r\n（フォローしているコミュニティ、チャンネル、ユーザーの放送のみ取得できますが比較的早く届きます）";
 			this.isPushChkBox.UseVisualStyleBackColor = true;
-			// 
-			// isRssChkBox
-			// 
-			this.isRssChkBox.Location = new System.Drawing.Point(19, 18);
-			this.isRssChkBox.Name = "isRssChkBox";
-			this.isRssChkBox.Size = new System.Drawing.Size(400, 43);
-			this.isRssChkBox.TabIndex = 2;
-			this.isRssChkBox.Text = "カテゴリページから取得する\r\n（公式放送を除いてフォローしていない放送も取得できますが開始から1分程遅れます。番組説明文の情報から通知を行うことはできません。）";
-			this.isRssChkBox.UseVisualStyleBackColor = true;
 			// 
 			// groupBox7
 			// 
@@ -2945,12 +2878,13 @@ namespace namaichi
 			this.groupBox7.Controls.Add(this.label7);
 			this.groupBox7.Controls.Add(this.label8);
 			this.groupBox7.Controls.Add(this.rssUpdateIntervalList);
-			this.groupBox7.Location = new System.Drawing.Point(5, 210);
+			this.groupBox7.Location = new System.Drawing.Point(5, 470);
 			this.groupBox7.Name = "groupBox7";
 			this.groupBox7.Size = new System.Drawing.Size(420, 53);
 			this.groupBox7.TabIndex = 5;
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "更新頻度";
+			this.groupBox7.Visible = false;
 			// 
 			// label12
 			// 
@@ -3032,6 +2966,16 @@ namespace namaichi
 									0,
 									0,
 									0});
+			// 
+			// isRssChkBox
+			// 
+			this.isRssChkBox.Location = new System.Drawing.Point(5, 421);
+			this.isRssChkBox.Name = "isRssChkBox";
+			this.isRssChkBox.Size = new System.Drawing.Size(400, 43);
+			this.isRssChkBox.TabIndex = 2;
+			this.isRssChkBox.Text = "カテゴリページから取得する\r\n（公式放送を除いてフォローしていない放送も取得できますが開始から1分程遅れます。番組説明文の情報から通知を行うことはできません。）";
+			this.isRssChkBox.UseVisualStyleBackColor = true;
+			this.isRssChkBox.Visible = false;
 			// 
 			// accountTab
 			// 
@@ -3238,6 +3182,70 @@ namespace namaichi
 			this.useSecondLoginChkBox.Text = "ブラウザからクッキーが取得できなかった場合、次のアカウントでログインする";
 			this.useSecondLoginChkBox.UseVisualStyleBackColor = true;
 			// 
+			// followerOnlyColorBtn
+			// 
+			this.followerOnlyColorBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+			this.followerOnlyColorBtn.Enabled = false;
+			this.followerOnlyColorBtn.Location = new System.Drawing.Point(19, 359);
+			this.followerOnlyColorBtn.Name = "followerOnlyColorBtn";
+			this.followerOnlyColorBtn.Size = new System.Drawing.Size(60, 23);
+			this.followerOnlyColorBtn.TabIndex = 48;
+			this.followerOnlyColorBtn.UseVisualStyleBackColor = false;
+			this.followerOnlyColorBtn.Visible = false;
+			// 
+			// isFollowerOnlyOtherColor
+			// 
+			this.isFollowerOnlyOtherColor.Enabled = false;
+			this.isFollowerOnlyOtherColor.Location = new System.Drawing.Point(19, 342);
+			this.isFollowerOnlyOtherColor.Name = "isFollowerOnlyOtherColor";
+			this.isFollowerOnlyOtherColor.Size = new System.Drawing.Size(350, 19);
+			this.isFollowerOnlyOtherColor.TabIndex = 47;
+			this.isFollowerOnlyOtherColor.Text = "フォロワー限定放送は色を変える";
+			this.isFollowerOnlyOtherColor.UseVisualStyleBackColor = true;
+			this.isFollowerOnlyOtherColor.Visible = false;
+			// 
+			// isCheckOnAirRadioBtn
+			// 
+			this.isCheckOnAirRadioBtn.Enabled = false;
+			this.isCheckOnAirRadioBtn.Location = new System.Drawing.Point(5, 319);
+			this.isCheckOnAirRadioBtn.Name = "isCheckOnAirRadioBtn";
+			this.isCheckOnAirRadioBtn.Size = new System.Drawing.Size(200, 17);
+			this.isCheckOnAirRadioBtn.TabIndex = 46;
+			this.isCheckOnAirRadioBtn.Text = "放送中の番組に色をつける";
+			this.isCheckOnAirRadioBtn.UseVisualStyleBackColor = true;
+			this.isCheckOnAirRadioBtn.Visible = false;
+			// 
+			// isStartTimeAllCheckChkBox
+			// 
+			this.isStartTimeAllCheckChkBox.Location = new System.Drawing.Point(351, 265);
+			this.isStartTimeAllCheckChkBox.Name = "isStartTimeAllCheckChkBox";
+			this.isStartTimeAllCheckChkBox.Size = new System.Drawing.Size(395, 19);
+			this.isStartTimeAllCheckChkBox.TabIndex = 49;
+			this.isStartTimeAllCheckChkBox.Text = "起動時に既に開始してる放送をチェックする";
+			this.isStartTimeAllCheckChkBox.UseVisualStyleBackColor = true;
+			this.isStartTimeAllCheckChkBox.Visible = false;
+			// 
+			// followerOnlySampleColorText
+			// 
+			this.followerOnlySampleColorText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+			this.followerOnlySampleColorText.Enabled = false;
+			this.followerOnlySampleColorText.Location = new System.Drawing.Point(173, 317);
+			this.followerOnlySampleColorText.Name = "followerOnlySampleColorText";
+			this.followerOnlySampleColorText.Size = new System.Drawing.Size(95, 19);
+			this.followerOnlySampleColorText.TabIndex = 50;
+			this.followerOnlySampleColorText.Text = "例";
+			this.followerOnlySampleColorText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			// 
+			// defaultFollowerOnlyColorBtn
+			// 
+			this.defaultFollowerOnlyColorBtn.Enabled = false;
+			this.defaultFollowerOnlyColorBtn.Location = new System.Drawing.Point(274, 313);
+			this.defaultFollowerOnlyColorBtn.Name = "defaultFollowerOnlyColorBtn";
+			this.defaultFollowerOnlyColorBtn.Size = new System.Drawing.Size(35, 23);
+			this.defaultFollowerOnlyColorBtn.TabIndex = 51;
+			this.defaultFollowerOnlyColorBtn.Text = "戻す";
+			this.defaultFollowerOnlyColorBtn.UseVisualStyleBackColor = true;
+			// 
 			// optionForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -3285,6 +3293,7 @@ namespace namaichi
 			((System.ComponentModel.ISupportInitialize)(this.popupOpacityList)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.poptimeList)).EndInit();
 			this.notify2Tab.ResumeLayout(false);
+			this.notify2Tab.PerformLayout();
 			this.groupBox5.ResumeLayout(false);
 			this.groupBox5.PerformLayout();
 			this.groupBox10.ResumeLayout(false);
@@ -3300,6 +3309,10 @@ namespace namaichi
 			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.CheckBox isStartTimeAllCheckChkBox;
+		private System.Windows.Forms.RadioButton isCheckOnAirRadioBtn;
+		private System.Windows.Forms.CheckBox isFollowerOnlyOtherColor;
+		private System.Windows.Forms.Button followerOnlyColorBtn;
 		private System.Windows.Forms.Button appASettingBtn;
 		private System.Windows.Forms.Button appBSettingBtn;
 		private System.Windows.Forms.Button appFSettingBtn;
@@ -3345,9 +3358,7 @@ namespace namaichi
 		private System.Windows.Forms.CheckBox isLogFileChkBox;
 		private System.Windows.Forms.CheckBox delThumbChkBox;
 		private System.Windows.Forms.CheckBox liveListCacheIconChkBox;
-		private System.Windows.Forms.CheckBox isFollowerOnlyOtherColor;
 		private System.Windows.Forms.Button defaultFollowerOnlyColorBtn;
-		private System.Windows.Forms.Button followerOnlyColorBtn;
 		private System.Windows.Forms.TextBox followerOnlySampleColorText;
 		private System.Windows.Forms.CheckBox isStartUpChkBox;
 		private System.Windows.Forms.GroupBox groupBox12;
@@ -3427,7 +3438,6 @@ namespace namaichi
 		private System.Windows.Forms.CheckBox isMailChkBox;
 		private System.Windows.Forms.GroupBox defaultBehaviorGroupBox;
 		private System.Windows.Forms.RadioButton isCheck30minRadioBtn;
-		private System.Windows.Forms.RadioButton isCheckOnAirRadioBtn;
 		private System.Windows.Forms.Label label51;
 		private System.Windows.Forms.Label label50;
 		private System.Windows.Forms.NumericUpDown liveListUpdateMinutesList;
@@ -3531,7 +3541,6 @@ namespace namaichi
 		private System.Windows.Forms.ComboBox poplocList;
 		private System.Windows.Forms.GroupBox groupBox4;
 		private System.Windows.Forms.TabPage notifyTab;
-		private System.Windows.Forms.CheckBox isStartTimeAllCheckChkBox;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.CheckBox isBroadLogChkBox;
 		private System.Windows.Forms.CheckBox isLogChkBtn;

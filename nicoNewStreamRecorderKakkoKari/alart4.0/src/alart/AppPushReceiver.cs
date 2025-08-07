@@ -525,11 +525,18 @@ namespace namaichi.alart
 				util.debugWriteLine("RECV DATA MESSAGE " + proto);//lresp.Id + " time " + lresp.ServerTimestamp + " streamid " + lresp.StreamId + " ");
 				//var lvid = util.getRegGroup(lresp.AppData.ToString(), "\"lvid\"[\\s\\S]+(lv\\d+)");
 				//var lvid = util.getRegGroup(lresp.AppData.ToString(), "\"program_id\":\"(lv\\d+)");
-				var d = "";
-				foreach (var a in proto.AppDatas) d += a.Value;
-				//var lvid = util.getRegGroup(d, "program_id\\\\\":\\\\\"(lv\\d+)"); google protobuf
-				//var lvid = util.getRegGroup(d, "program_id\":\"(lv\\d+)"); //google protobuf
-				var lvid = util.getRegGroup(d, "(live_onair|video_live)-(lv\\d+)", 2);
+				
+				string lvid = "";
+				string d = "";
+				foreach (var a in proto.AppDatas) {
+					if (a.Key == "content_id" || a.Key == "content_url") {
+						var _lv = util.getRegGroup(a.Value, "(lv\\d+)");
+						if (_lv != null) lvid = _lv;
+					}
+					d += a.Value;
+				}
+				
+				//var lvid = util.getRegGroup(d, "(live_onair|video_live)-(lv\\d+)", 2);
 				if (lvid != null) {
 					if (check.checkedLvIdList.Find(x => x.lvId == lvid) != null) 
 						return;
@@ -656,24 +663,58 @@ namespace namaichi.alart
 			//ニコニコ生放送アプリ用
 			try {
 				util.debugWriteLine("getNicoCasItem appPush " + msg.ToString() + " " + lvid);
-				string title, comName, hostName;//, thumbnail, description;
+				string title = null, comName = null, hostName = null;//, thumbnail, description;
 				DateTime dt = util.getUnixToDatetime(msg.Sent / 1000);
 				if (dt < startTime - TimeSpan.FromMinutes(10) && !bool.Parse(config.get("IsStartTimeAllCheck")))
 					return new List<RssItem>();
+				
 				hostName = "";
 				
 				var hg = new namaichi.rec.HosoInfoGetter();
-				var r = hg.get(lvid, check.container);
+				//var r = hg.get(lvid, check.container);
+				var r = false;
 				
 				var d = "";
 				foreach (var a in msg.AppDatas) d += a.Value;
 				var appData = d;
 				util.debugWriteLine("app push receive " + d);
-				bool isCom;
-				if (!r) {
+				bool isCom = false;
+				string thumb = "";
+				string userId = "", comId = "";
+				string name = null;
+				if (!r || true) {
+					foreach (var a in msg.AppDatas) {
+						if (a.Key == "content_id" || a.Key == "content_url") {
+							var _lv = util.getRegGroup(a.Value, "(lv\\d+)");
+							if (_lv != null) lvid = _lv;
+						}
+						if (a.Key == "body") {
+							title = a.Value;
+						}
+						if (a.Key == "actor_icon")
+							thumb = a.Value;
+						if (a.Key == "group_id") {
+							var _groupid = util.getRegGroup(a.Value, "id_(.+)");
+							if (_groupid == null) continue;
+							
+							if (_groupid.StartsWith("c")) {
+								comId = a.Value;
+								isCom = _groupid.StartsWith("c");
+							}
+							else userId = _groupid;
+						}
+						if (a.Key == "title") {
+							name = util.getRegGroup(a.Value, "(.+?)(さん)*が番組を");
+						}
+						if (a.Key.IndexOf("icon") > -1) //"actor_icon")
+							thumb = a.Value;
+					}
+				
+					/*
 					check.form.addLogText("スマホプッシュ通知から取得した放送のページが取得できませんでした " + lvid);
 					util.debugWriteLine("app push page error !r " + lvid);
 					return null;
+					*/
 					/*
 					hg.description = hg.userId = hg.communityId = hg.thumbnail = "";
 					hg.tags = new String[]{};
@@ -717,31 +758,48 @@ namespace namaichi.alart
 					//title = util.getRegGroup(appData, "program_title\":\"(.+?)\"");
 					title = hg.title;
 				}
+				if (name != null) {
+					if (string.IsNullOrEmpty(userId)) comName = name;
+					else hostName = name;
+				}
 				
-				util.debugWriteLine("description " + hg.description);
-				util.debugWriteLine("userId " + hg.userId);
+				//util.debugWriteLine("description " + hg.description);
+				util.debugWriteLine("groupId " + comId + " userId " + userId);
 				util.debugWriteLine("userName " + hostName);
 				util.debugWriteLine("comName " + comName);
+				util.debugWriteLine("thumb " + thumb);
 				//thumbnail = "";
 				
-				if (title == null || lvid == null || hg.thumbnail == null ||
-				    	dt == DateTime.MinValue || comName == null || hg.communityId == null ||
-				    	hg.tags == null || hg.description == null ||
-				    	(isCom && (hostName == null || hg.userId == null))) {
+				
+				//if (title == null || lvid == null || hg.thumbnail == null ||
+				//    	dt == DateTime.MinValue || comName == null || hg.communityId == null ||
+				//    	hg.tags == null || hg.description == null ||
+				//    	(isCom && (hostName == null || hg.userId == null))) {
+				if (lvid == null || (userId == null && comId == null)) {
 					#if DEBUG
 						//check.form.addLogText("app push error " + msg + " lv " + lvid);
-						check.form.addLogText("app push error title " + title + " lvid " + lvid + " thumb " + hg.thumbnail + " dt " + dt + " comN " + comName + " comi " + hg.communityId + " tag " + hg.tags + " desc " + hg.description + " isc " + isCom + " un " + hostName + " ui " + hg.userId);
+						//check.form.addLogText("app push error title " + title + " lvid " + lvid + " thumb " + hg.thumbnail + " dt " + dt + " comN " + comName + " comi " + hg.communityId + " tag " + hg.tags + " desc " + hg.description + " isc " + isCom + " un " + hostName + " ui " + hg.userId);
+						check.form.addLogText("app push error title " + title + " lvid " + lvid + " thumb " + thumb + " dt " + dt + " comN " + comName + " comi " + comId + " isc " + isCom + " un " + hostName + " ui " + userId);
 					#endif
 					util.debugWriteLine("app push error nullinfo " + msg);
 					return null;
 					
 				}
 				
-				var i = new RssItem(title, lvid, dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"), hg.description, comName, hg.communityId, hostName, hg.thumbnail, hg.isMemberOnly.ToString(), "", hg.isPayment);
-				i.setUserId(hg.userId);
-				i.setTag(hg.tags);
-				i.category = hg.category;
-				i.type = hg.type;
+				RssItem i = null; 
+				var isNew = true;
+				if (isNew) {
+					i = new RssItem(title, lvid, dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"), "", comName, comId, hostName, thumb, "", "", false);
+					i.setUserId(userId);
+					i.type = string.IsNullOrEmpty(userId) ? "channel" : "user";
+				} else {
+					i = new RssItem(title, lvid, dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"), hg.description, comName, hg.communityId, hostName, hg.thumbnail, hg.isMemberOnly.ToString(), "", hg.isPayment);
+					i.setUserId(hg.userId);
+					i.setTag(hg.tags);
+					i.category = hg.category;
+					i.type = hg.type;
+				}
+				
 				i.pubDateDt = dt;
 				var ret = new List<RssItem>();
 				ret.Add(i);

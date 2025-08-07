@@ -47,7 +47,7 @@ namespace namaichi.alart
 				try {
 					util.debugWriteLine("timeline check liveList count " + timeTableList.Count);
 					
-					if (DateTime.Now - lastGetTime > TimeSpan.FromHours(3)) {
+					if (DateTime.Now - lastGetTime > TimeSpan.FromHours(12)) {
 						setLiveList();
 						lastGetTime = DateTime.Now;
 					}

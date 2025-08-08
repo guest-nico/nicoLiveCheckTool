@@ -437,6 +437,7 @@ namespace namaichi.alart
 				if (dt != null && DateTime.Parse(dt) < startTime && !bool.Parse(config.get("IsStartTimeAllCheck")))
 					return new List<RssItem>();
 				var title = util.getRegGroup(dec, "body\":\"「(.+?)」を放送\"");
+				if (string.IsNullOrEmpty(title)) title = util.getRegGroup(dec, "body\":\"(.+?)\"");
 				var isUser = thumbnail.IndexOf("user") > -1;
 				var name = util.getRegGroup(dec, "title\":\"(.+?)(さん)*が生放送を");
 				var userName = isUser ? name : "";

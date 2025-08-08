@@ -59,8 +59,9 @@ namespace namaichi.alart
 						if (DateTime.Now.AddSeconds(10) > l.pubDateDt) {
 							util.debugWriteLine("timeline alart " + l.lvId + " " + l.title);
 							if (check.checkedLvIdList.Find(x => x.lvId == l.lvId) == null) {
-								if (string.IsNullOrEmpty(l.description) ||
-								   	string.IsNullOrEmpty(l.hostName)) {
+								if (string.IsNullOrEmpty(l.description)
+								   	// || string.IsNullOrEmpty(l.hostName)
+								   ) {
 									var __l = setHosoInfo(l);
 									if (__l != null) l = __l;
 								}
@@ -289,15 +290,16 @@ namespace namaichi.alart
 					continue;
 				}
 				
-				var _isFollow = false;
+				//var _isFollow = false;
 				var lvid = item.lvId.StartsWith("lv") ? item.lvId : ("lv" + item.lvId);
 				var ri = new RssItem(hig.title, lvid, hig.dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"),
 						hig.description, 
-						util.getCommunityName(hig.communityId, out _isFollow, null), 
-						hig.communityId,
+						//util.getCommunityName(hig.communityId, out _isFollow, null),
+						item.comName,
+						item.comId,
 						"", 
 						hig.thumbnail, "false", "", hig.isPayment);
-				ri.type = hig.type;
+				ri.type = item.type;
 				ri.tags = hig.tags;
 				ri.pubDateDt = hig.openDt;
 				if (!string.IsNullOrEmpty(hig.userName)) ri.hostName = hig.userName;

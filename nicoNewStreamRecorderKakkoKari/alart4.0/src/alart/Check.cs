@@ -1125,7 +1125,8 @@ namespace namaichi.alart
 				var userFollow = (userName == null || container == null) ? "" : (isUserFollow ? "フォロー解除する" : "フォローする");
 				if (!isContainCom) {
 					var isFollow = false;
-					var comName = util.getCommunityName(ri.comId, out isFollow, container);
+					//var comName = util.getCommunityName(ri.comId, out isFollow, container);
+					var comName = ri.comName;
 					var comFollow = (comName == null || container == null) ? "" : (isFollow ? "フォロー解除する" : "フォローする");
 					
 					var ai = new AlartInfo(ri.comId, ri.userId, 

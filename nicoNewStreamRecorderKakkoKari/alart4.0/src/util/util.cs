@@ -36,8 +36,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.9.0";
-	public static string versionDayStr = "2025/08/08";
+	public static string versionStr = "ver0.1.9.1";
+	public static string versionDayStr = "2025/08/09";
 	public static string osName = null;
 	public static string osType = null;
 	public static bool isWebRequestOk = false;
@@ -455,7 +455,7 @@ class util {
 		}
 		return null;
 	}
-	public static string userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36";
+	public static string userAgent = "NicoLiveCheckTool/0.1.9.1";
 	public static string getPageSource(string _url, CookieContainer container = null, string referer = null, bool isFirstLog = true, int timeoutMs = 5000) {
 	
 		util.debugWriteLine("access__ getpage Source 1" + _url);

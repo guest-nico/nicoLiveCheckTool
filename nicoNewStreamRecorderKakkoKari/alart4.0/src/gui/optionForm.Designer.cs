@@ -247,6 +247,12 @@ namespace namaichi
 			this.IsfixpopupChkBox = new System.Windows.Forms.CheckBox();
 			this.IsclosepopupChkBox = new System.Windows.Forms.CheckBox();
 			this.notify2Tab = new System.Windows.Forms.TabPage();
+			this.followerOnlySampleColorText = new System.Windows.Forms.TextBox();
+			this.defaultFollowerOnlyColorBtn = new System.Windows.Forms.Button();
+			this.isStartTimeAllCheckChkBox = new System.Windows.Forms.CheckBox();
+			this.followerOnlyColorBtn = new System.Windows.Forms.Button();
+			this.isFollowerOnlyOtherColor = new System.Windows.Forms.CheckBox();
+			this.isCheckOnAirRadioBtn = new System.Windows.Forms.RadioButton();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.isDefaultBrowserPathChkBox = new System.Windows.Forms.CheckBox();
@@ -302,12 +308,6 @@ namespace namaichi
 			this.cookieFileSanshouBtn = new System.Windows.Forms.Button();
 			this.btnReload = new System.Windows.Forms.Button();
 			this.useSecondLoginChkBox = new System.Windows.Forms.CheckBox();
-			this.followerOnlyColorBtn = new System.Windows.Forms.Button();
-			this.isFollowerOnlyOtherColor = new System.Windows.Forms.CheckBox();
-			this.isCheckOnAirRadioBtn = new System.Windows.Forms.RadioButton();
-			this.isStartTimeAllCheckChkBox = new System.Windows.Forms.CheckBox();
-			this.followerOnlySampleColorText = new System.Windows.Forms.TextBox();
-			this.defaultFollowerOnlyColorBtn = new System.Windows.Forms.Button();
 			this.appliTab.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.tabControl1.SuspendLayout();
@@ -1214,7 +1214,7 @@ namespace namaichi
 			this.groupBox1.Controls.Add(this.isLogChkBtn);
 			this.groupBox1.Location = new System.Drawing.Point(5, 359);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(420, 122);
+			this.groupBox1.Size = new System.Drawing.Size(420, 142);
 			this.groupBox1.TabIndex = 13;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "ログ・履歴";
@@ -2604,6 +2604,70 @@ namespace namaichi
 			this.notify2Tab.Text = "通知2";
 			this.notify2Tab.UseVisualStyleBackColor = true;
 			// 
+			// followerOnlySampleColorText
+			// 
+			this.followerOnlySampleColorText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+			this.followerOnlySampleColorText.Enabled = false;
+			this.followerOnlySampleColorText.Location = new System.Drawing.Point(173, 317);
+			this.followerOnlySampleColorText.Name = "followerOnlySampleColorText";
+			this.followerOnlySampleColorText.Size = new System.Drawing.Size(95, 19);
+			this.followerOnlySampleColorText.TabIndex = 50;
+			this.followerOnlySampleColorText.Text = "例";
+			this.followerOnlySampleColorText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			// 
+			// defaultFollowerOnlyColorBtn
+			// 
+			this.defaultFollowerOnlyColorBtn.Enabled = false;
+			this.defaultFollowerOnlyColorBtn.Location = new System.Drawing.Point(274, 313);
+			this.defaultFollowerOnlyColorBtn.Name = "defaultFollowerOnlyColorBtn";
+			this.defaultFollowerOnlyColorBtn.Size = new System.Drawing.Size(35, 23);
+			this.defaultFollowerOnlyColorBtn.TabIndex = 51;
+			this.defaultFollowerOnlyColorBtn.Text = "戻す";
+			this.defaultFollowerOnlyColorBtn.UseVisualStyleBackColor = true;
+			// 
+			// isStartTimeAllCheckChkBox
+			// 
+			this.isStartTimeAllCheckChkBox.Location = new System.Drawing.Point(351, 265);
+			this.isStartTimeAllCheckChkBox.Name = "isStartTimeAllCheckChkBox";
+			this.isStartTimeAllCheckChkBox.Size = new System.Drawing.Size(395, 19);
+			this.isStartTimeAllCheckChkBox.TabIndex = 49;
+			this.isStartTimeAllCheckChkBox.Text = "起動時に既に開始してる放送をチェックする";
+			this.isStartTimeAllCheckChkBox.UseVisualStyleBackColor = true;
+			this.isStartTimeAllCheckChkBox.Visible = false;
+			// 
+			// followerOnlyColorBtn
+			// 
+			this.followerOnlyColorBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+			this.followerOnlyColorBtn.Enabled = false;
+			this.followerOnlyColorBtn.Location = new System.Drawing.Point(19, 359);
+			this.followerOnlyColorBtn.Name = "followerOnlyColorBtn";
+			this.followerOnlyColorBtn.Size = new System.Drawing.Size(60, 23);
+			this.followerOnlyColorBtn.TabIndex = 48;
+			this.followerOnlyColorBtn.UseVisualStyleBackColor = false;
+			this.followerOnlyColorBtn.Visible = false;
+			// 
+			// isFollowerOnlyOtherColor
+			// 
+			this.isFollowerOnlyOtherColor.Enabled = false;
+			this.isFollowerOnlyOtherColor.Location = new System.Drawing.Point(19, 342);
+			this.isFollowerOnlyOtherColor.Name = "isFollowerOnlyOtherColor";
+			this.isFollowerOnlyOtherColor.Size = new System.Drawing.Size(350, 19);
+			this.isFollowerOnlyOtherColor.TabIndex = 47;
+			this.isFollowerOnlyOtherColor.Text = "フォロワー限定放送は色を変える";
+			this.isFollowerOnlyOtherColor.UseVisualStyleBackColor = true;
+			this.isFollowerOnlyOtherColor.Visible = false;
+			// 
+			// isCheckOnAirRadioBtn
+			// 
+			this.isCheckOnAirRadioBtn.Enabled = false;
+			this.isCheckOnAirRadioBtn.Location = new System.Drawing.Point(5, 319);
+			this.isCheckOnAirRadioBtn.Name = "isCheckOnAirRadioBtn";
+			this.isCheckOnAirRadioBtn.Size = new System.Drawing.Size(200, 17);
+			this.isCheckOnAirRadioBtn.TabIndex = 46;
+			this.isCheckOnAirRadioBtn.Text = "放送中の番組に色をつける";
+			this.isCheckOnAirRadioBtn.UseVisualStyleBackColor = true;
+			this.isCheckOnAirRadioBtn.Visible = false;
+			// 
 			// groupBox5
 			// 
 			this.groupBox5.Controls.Add(this.label3);
@@ -3181,70 +3245,6 @@ namespace namaichi
 			this.useSecondLoginChkBox.TabIndex = 20;
 			this.useSecondLoginChkBox.Text = "ブラウザからクッキーが取得できなかった場合、次のアカウントでログインする";
 			this.useSecondLoginChkBox.UseVisualStyleBackColor = true;
-			// 
-			// followerOnlyColorBtn
-			// 
-			this.followerOnlyColorBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
-			this.followerOnlyColorBtn.Enabled = false;
-			this.followerOnlyColorBtn.Location = new System.Drawing.Point(19, 359);
-			this.followerOnlyColorBtn.Name = "followerOnlyColorBtn";
-			this.followerOnlyColorBtn.Size = new System.Drawing.Size(60, 23);
-			this.followerOnlyColorBtn.TabIndex = 48;
-			this.followerOnlyColorBtn.UseVisualStyleBackColor = false;
-			this.followerOnlyColorBtn.Visible = false;
-			// 
-			// isFollowerOnlyOtherColor
-			// 
-			this.isFollowerOnlyOtherColor.Enabled = false;
-			this.isFollowerOnlyOtherColor.Location = new System.Drawing.Point(19, 342);
-			this.isFollowerOnlyOtherColor.Name = "isFollowerOnlyOtherColor";
-			this.isFollowerOnlyOtherColor.Size = new System.Drawing.Size(350, 19);
-			this.isFollowerOnlyOtherColor.TabIndex = 47;
-			this.isFollowerOnlyOtherColor.Text = "フォロワー限定放送は色を変える";
-			this.isFollowerOnlyOtherColor.UseVisualStyleBackColor = true;
-			this.isFollowerOnlyOtherColor.Visible = false;
-			// 
-			// isCheckOnAirRadioBtn
-			// 
-			this.isCheckOnAirRadioBtn.Enabled = false;
-			this.isCheckOnAirRadioBtn.Location = new System.Drawing.Point(5, 319);
-			this.isCheckOnAirRadioBtn.Name = "isCheckOnAirRadioBtn";
-			this.isCheckOnAirRadioBtn.Size = new System.Drawing.Size(200, 17);
-			this.isCheckOnAirRadioBtn.TabIndex = 46;
-			this.isCheckOnAirRadioBtn.Text = "放送中の番組に色をつける";
-			this.isCheckOnAirRadioBtn.UseVisualStyleBackColor = true;
-			this.isCheckOnAirRadioBtn.Visible = false;
-			// 
-			// isStartTimeAllCheckChkBox
-			// 
-			this.isStartTimeAllCheckChkBox.Location = new System.Drawing.Point(351, 265);
-			this.isStartTimeAllCheckChkBox.Name = "isStartTimeAllCheckChkBox";
-			this.isStartTimeAllCheckChkBox.Size = new System.Drawing.Size(395, 19);
-			this.isStartTimeAllCheckChkBox.TabIndex = 49;
-			this.isStartTimeAllCheckChkBox.Text = "起動時に既に開始してる放送をチェックする";
-			this.isStartTimeAllCheckChkBox.UseVisualStyleBackColor = true;
-			this.isStartTimeAllCheckChkBox.Visible = false;
-			// 
-			// followerOnlySampleColorText
-			// 
-			this.followerOnlySampleColorText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
-			this.followerOnlySampleColorText.Enabled = false;
-			this.followerOnlySampleColorText.Location = new System.Drawing.Point(173, 317);
-			this.followerOnlySampleColorText.Name = "followerOnlySampleColorText";
-			this.followerOnlySampleColorText.Size = new System.Drawing.Size(95, 19);
-			this.followerOnlySampleColorText.TabIndex = 50;
-			this.followerOnlySampleColorText.Text = "例";
-			this.followerOnlySampleColorText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			// 
-			// defaultFollowerOnlyColorBtn
-			// 
-			this.defaultFollowerOnlyColorBtn.Enabled = false;
-			this.defaultFollowerOnlyColorBtn.Location = new System.Drawing.Point(274, 313);
-			this.defaultFollowerOnlyColorBtn.Name = "defaultFollowerOnlyColorBtn";
-			this.defaultFollowerOnlyColorBtn.Size = new System.Drawing.Size(35, 23);
-			this.defaultFollowerOnlyColorBtn.TabIndex = 51;
-			this.defaultFollowerOnlyColorBtn.Text = "戻す";
-			this.defaultFollowerOnlyColorBtn.UseVisualStyleBackColor = true;
 			// 
 			// optionForm
 			// 

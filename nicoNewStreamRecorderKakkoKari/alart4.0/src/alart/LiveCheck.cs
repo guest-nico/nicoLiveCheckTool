@@ -269,7 +269,7 @@ namespace namaichi.alart
 						
 					} catch (Exception e) {
 						util.debugWriteLine("getliveitems xml " + e.Message + e.Source + e.StackTrace + e.TargetSite);
-						Thread.Sleep(180000);
+						Thread.Sleep(600000);
 						return buf;
 					}
 				}

@@ -121,14 +121,13 @@ namespace namaichi
 //				if (config.get("IsLogFile") == "true") 
 //					config.set("IsLogFile", "false");
 //			#endif
-					
+			
 			System.Diagnostics.Debug.Listeners.Clear();
 			System.Diagnostics.Debug.Listeners.Add(new Logger.TraceListener());
 		    
 			InitializeComponent();
 			Text = "放送チェックツール（仮 " + util.versionStr;
 			
-			tabControl1.TabPages.Remove(tabPage3);
 			this.args = args;
 			
 			//saveControlLayout();
@@ -603,13 +602,11 @@ namespace namaichi
 			Task.Factory.StartNew(() => {
 				new ReserveHistoryListFileManager().load(this);
 			});
-			/*
 			Task.Factory.StartNew(() => {
 			    liveCheck = new LiveCheck(this);
 			    if (bool.Parse(config.get("AutoStart")))
 			    	formAction(() => updateAutoUpdateStartMenu.PerformClick());
 			});
-			*/
 			//.net
 			util.debugWriteLine(".net version check");
 			var ver = util.Get45PlusFromRegistry();  
@@ -2892,8 +2889,7 @@ namespace namaichi
 		public int recentLiveCheckCore(bool isUserMode) {
 			//var isCheck30min = bool.Parse(config.get("Ischeck30min"));
 			//-1-no check 0-onair 1-30min
-			//var checkMode = bool.Parse(config.get("IscheckOnAir")) ? 0 : 1;
-			var checkMode = 1;
+			var checkMode = bool.Parse(config.get("IscheckOnAir")) ? 0 : 1;
 			if (!bool.Parse(config.get("IscheckRecent"))) checkMode = -1;
 			
 			var dataSource = isUserMode ? userAlartListDataSource : alartListDataSource;
@@ -2901,6 +2897,7 @@ namespace namaichi
 			var testDt = DateTime.Now;
 			while (true) {
 				try {
+					var checkCount = 0;
 					var recentNum = 0;
 					var c = getAlartListCount(isUserMode);
 					for (var i = c - 1; i > -1; i--) {
@@ -2913,6 +2910,7 @@ namespace namaichi
 						var isRecentProcess = false;
 						if (checkMode == 0) {
 							isRecentProcess = isOnAir(dataSource[i]);
+							checkCount++;
 						} else if (checkMode == 1) {
 							isRecentProcess = DateTime.Now - dataSource[i].lastHosoDt < TimeSpan.FromMinutes(30);
 						} else if (checkMode == -1) {
@@ -2938,6 +2936,7 @@ namespace namaichi
 						setNotifyIcon();
 					}
 					//var ii = notifyIcon.Icon == Icon;
+					if (checkCount != 0) Thread.Sleep(checkCount * 30000);
 					return recentNum;
 					
 					
@@ -5248,9 +5247,13 @@ namespace namaichi
 			//);
 		}
 		public void checkHistoryLive() {
+			var checkMode = bool.Parse(config.get("IscheckOnAir")) ? 0 : 1;
+			if (!bool.Parse(config.get("IscheckRecent"))) checkMode = -1;
+			
 			while (true) {
 				try {
 					//var recentNum = 0;
+					var checkCount = 0;
 					var c = historyListDataSource.Count;
 					for (var i = 0; i < c; i++) {
 						var hi = historyListDataSource[i];
@@ -5262,19 +5265,27 @@ namespace namaichi
 						
 						//util.debugWriteLine(i + " " + alartListDataSource[i].lastHosoDt + " " + alartList[7, i].Style.BackColor);
 						util.debugWriteLine("check history live onair " + hi.lvid + " " + hi.type);
-						var isOnAir = isOnAirLvid(hi.lvid, hi.type);
 						
-						if (!isOnAir) {
-							historyListDataSource[i].onAirMode = 0;
+						var isRecentProcess = false;
+						if (checkMode == 0) {
+							isRecentProcess = isOnAirLvid(hi.lvid, hi.type);
+							checkCount++;
+						} else if (checkMode == 1)
+							isRecentProcess = DateTime.Now - hi.dt < TimeSpan.FromMinutes(30);
+						else if (checkMode == -1)
+							isRecentProcess = false;	
+						
+						if (!isRecentProcess) {
+							hi.onAirMode = 0;
 							util.debugWriteLine("checkHistoryLIve !isOnAir deleteNotifyIconRecentItem " + historyListDataSource[i].lvid);
-							deleteNotifyIconRecentItem(historyListDataSource[i].lvid);
+							deleteNotifyIconRecentItem(hi.lvid);
 						}
 						//util.debugWriteLine("test recent live check i " + i);
 						for (var j = 0; j < historyList.Columns.Count; j++)
 							historyList.UpdateCellValue(j, i);
 					}
+					if (checkCount != 0) Thread.Sleep(checkCount * 30000);
 					break;
-					
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 					Thread.Sleep(1000);
@@ -6662,6 +6673,7 @@ namespace namaichi
 		public void checkNotifyLive() {
 			while (true) {
 				try {
+					var checkCount = 0;
 					var items = notifyIconMenuStrip.Items; 
 					for (var i = 0; i < items.Count - 4; i++) {
 						if (items[i].Tag == null) {
@@ -6677,11 +6689,13 @@ namespace namaichi
 						}
 						else {
 							isOnAir = isOnAirLvid(ri.lvId, ri.type);
+							checkCount++;
 						}
 						//util.debugWriteLine("checkNotifyLive check " + ri.lvId + " " + isOnAir);
 						if (!isOnAir)
 							formAction(() => items.Remove(items[i]));
 					}
+					if (checkCount != 0) Thread.Sleep(checkCount * 30000);
 					break;
 					
 				} catch (Exception e) {

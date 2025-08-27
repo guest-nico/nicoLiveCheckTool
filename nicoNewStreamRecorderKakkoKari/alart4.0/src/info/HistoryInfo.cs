@@ -85,8 +85,6 @@ namespace namaichi.info
 			if (targetAi != null)
 				setFavoriteFromAiList(targetAi, ri, this);
 			else favorite = "Twitter";
-			
-			
 		}
 		private static void setFavoriteFromAiList(List<AlartInfo> targetAi, RssItem ri, HistoryInfo hi) {
 			while (true) {

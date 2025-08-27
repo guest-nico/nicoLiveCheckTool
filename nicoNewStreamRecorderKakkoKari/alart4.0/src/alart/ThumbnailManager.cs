@@ -68,6 +68,7 @@ namespace namaichi.alart
 		*/
 		public static bool isExist(string id, out Image img, string dir = null) {
 			img = null;
+			if (string.IsNullOrEmpty(id)) return false;
 			var isUser = !id.StartsWith("c");
 			if (dir == null)
 				dir = util.getJarPath()[0] + "/" + (isUser ? "ImageUser" : "ImageCommunity");
@@ -83,7 +84,7 @@ namespace namaichi.alart
 			return isExists;
 		}
 		public static Image getImageId(string id, MainForm form = null) {
-			
+			if (string.IsNullOrEmpty(id)) return null;
 			
 			
 			string url = null;

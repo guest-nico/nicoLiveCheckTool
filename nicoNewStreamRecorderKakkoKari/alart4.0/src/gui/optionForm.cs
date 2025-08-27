@@ -437,7 +437,7 @@ namespace namaichi
 			brodoubleList.SelectedIndex = int.Parse(cfg.get("brodouble"));
 			alartAddLiveBox.SelectedIndex = int.Parse(cfg.get("alartAddLive"));
 			
-			liveListUpdateMinutesList.Value = decimal.Parse(cfg.get("liveListUpdateMinutes"));
+			liveListUpdateMinutesList.Value = Math.Max(decimal.Parse(cfg.get("liveListUpdateMinutes")), 10);
 			liveListCacheIconChkBox.Checked = bool.Parse(cfg.get("liveListCacheIcon"));
 			liveListGetIconChkBox.Checked = bool.Parse(cfg.get("liveListGetIcon"));
 			

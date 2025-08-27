@@ -663,7 +663,7 @@ namespace namaichi.alart
 			//ニコニコ生放送アプリ用
 			try {
 				util.debugWriteLine("getNicoCasItem appPush " + msg.ToString() + " " + lvid);
-				string title = null, comName = null, hostName = null;//, thumbnail, description;
+				string title = "", comName = "", hostName = "";//, thumbnail, description;
 				DateTime dt = util.getUnixToDatetime(msg.Sent / 1000);
 				if (dt < startTime - TimeSpan.FromMinutes(10) && !bool.Parse(config.get("IsStartTimeAllCheck")))
 					return new List<RssItem>();
@@ -671,8 +671,8 @@ namespace namaichi.alart
 				hostName = "";
 				
 				var hg = new namaichi.rec.HosoInfoGetter();
-				//var r = hg.get(lvid, check.container);
-				var r = false;
+				var r = hg.get(lvid, check.container);
+				//var r = false;
 				
 				var d = "";
 				foreach (var a in msg.AppDatas) d += a.Value;
@@ -681,8 +681,8 @@ namespace namaichi.alart
 				bool isCom = false;
 				string thumb = "";
 				string userId = "", comId = "";
-				string name = null;
-				if (!r || true) {
+				string name = "";
+				if (!r) {
 					foreach (var a in msg.AppDatas) {
 						if (a.Key == "content_id" || a.Key == "content_url") {
 							var _lv = util.getRegGroup(a.Value, "(lv\\d+)");
@@ -733,6 +733,8 @@ namespace namaichi.alart
 					}
 					title = util.getRegGroup(appData, "program_title\\\\\":\\\\\"(.+?)\\\\\"");
 					*/
+					
+					comName = hostName = name;
 				} else {
 					if (hg.isClosed) 
 						return new List<RssItem>();
@@ -757,10 +759,6 @@ namespace namaichi.alart
 					//title = util.getRegGroup(appData, "program_title\\\\\":\\\\\"(.+?)\\\\\"");
 					//title = util.getRegGroup(appData, "program_title\":\"(.+?)\"");
 					title = hg.title;
-				}
-				if (name != null) {
-					if (string.IsNullOrEmpty(userId)) comName = name;
-					else hostName = name;
 				}
 				
 				//util.debugWriteLine("description " + hg.description);
@@ -787,7 +785,7 @@ namespace namaichi.alart
 				}
 				
 				RssItem i = null; 
-				var isNew = true;
+				var isNew = false;
 				if (isNew) {
 					i = new RssItem(title, lvid, dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"), "", comName, comId, hostName, thumb, "", "", false);
 					i.setUserId(userId);

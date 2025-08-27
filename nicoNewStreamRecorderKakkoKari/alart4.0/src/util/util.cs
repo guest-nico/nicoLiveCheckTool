@@ -36,8 +36,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.9.1";
-	public static string versionDayStr = "2025/08/09";
+	public static string versionStr = "ver0.1.9.2";
+	public static string versionDayStr = "2025/08/28";
 	public static string osName = null;
 	public static string osType = null;
 	public static bool isWebRequestOk = false;
@@ -326,6 +326,12 @@ class util {
 			string format, DateTime _openTime, string hostId, 
 			string us, AppSettingInfo asi, MainForm form) {
 		try {
+			if (string.IsNullOrEmpty(title)) title = "_";
+			if (string.IsNullOrEmpty(host)) host = "_";
+			if (string.IsNullOrEmpty(group)) group = "_";
+			if (communityNum == null) communityNum = "";
+			if (hostId == null) hostId = "";
+			
 			var type = format;
 			if (string.IsNullOrEmpty(type)) type = "{url}";
 			if (type.IndexOf("{url}") == -1 && type.IndexOf("{nourl}") == -1)
@@ -421,6 +427,52 @@ class util {
 			return fName + "/" + name + kakutyousi;
 		}
 	}
+	/*
+	public static string getAdjustPathLen(string type) {
+		if (type.IndexOf("file:") == -1) return type;
+		
+		var b = "";
+		var m = new Regex(@"[^\s""]+|""([^""]*)""").Matches(type);
+		foreach (Match _m in m) {
+			if (b != "") b += " ";			
+			
+			
+			var oriS = _m.Groups[0].Value;
+			var isQuote = oriS.StartsWith("\"") && oriS.EndsWith("\"");
+			var s = oriS.Trim('"');
+			if (!s.StartsWith("file:")) {
+				b += oriS;
+				continue;
+			}
+			s = util.getRegGroup(s, "file:(.+)");
+			try { 
+				Path.GetFullPath(s);
+				b += oriS;
+				continue;
+			}
+			catch (Exception e) {
+				util.debugWriteLine("s " + s + " " + e.Message + e.Source + e.StackTrace);
+			}
+			
+			s = s.Replace("\\", "/");
+			var fName = s.IndexOf("/") > -1 ? s.Substring(s.LastIndexOf("/") + 1) : s;
+			var ext = fName.IndexOf(".") > -1 ? util.getRegGroup(s, ".+\\.(.*)") : fName;
+			
+			fName = 
+			if (s.StartsWith("\"")) {
+				
+				b += s;
+				continue;
+			}
+			if (s.IndexOf("{1}") > -1 ||
+			    	s.IndexOf("{2}") > -1 ||
+			    	s.IndexOf("{4}") > -1)
+				b += "\"" + s + "\"";
+			else b += s;
+		}
+		return b;
+	}
+	*/
 	private static bool isExistAllExt(string fName) {
 		var ext = new string[] {".ts", ".xml", ".flv", ".avi", ".mp4",
 				".mov", ".wmv", ".vob", ".mkv", ".mp3",
@@ -455,7 +507,7 @@ class util {
 		}
 		return null;
 	}
-	public static string userAgent = "NicoLiveCheckTool/0.1.9.1";
+	public static string userAgent = "NicoLiveCheckTool/0.1.9.1 debug";
 	public static string getPageSource(string _url, CookieContainer container = null, string referer = null, bool isFirstLog = true, int timeoutMs = 5000) {
 	
 		util.debugWriteLine("access__ getpage Source 1" + _url);

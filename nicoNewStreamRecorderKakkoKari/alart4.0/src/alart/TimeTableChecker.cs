@@ -203,9 +203,9 @@ namespace namaichi.alart
 								util.debugWriteLine("not found time and page");
 								ri = new RssItem(l.title, "lv" + l.id, l.startTime.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"),
 										l.description, 
-										"", 
-										"",
-										"", 
+										l.socialGroupName,
+										l.socialGroupId,
+										l.providerName, 
 										l.thumbnail_url, "false", "", l.isPayment);
 								ri.type = l.provider_type;
 								ri.tags = new string[]{""};
@@ -282,6 +282,7 @@ namespace namaichi.alart
 			
 		}
 		private RssItem setHosoInfo(RssItem item) {
+			if (!string.IsNullOrEmpty(item.hostName)) return item;
 			for (var i = 0; i < 10; i++) {
 				var hig = new HosoInfoGetter();
 				var r = hig.get("https://live.nicovideo.jp/watch/" + item.lvId, check.container);
@@ -314,8 +315,8 @@ namespace namaichi.alart
 			var ret = new List<TanzakuItem>();
 			var endTime = DateTime.Parse(DateTime.Now.AddDays(2).ToShortDateString());
 			try {
-				for (var i = 10; i < 200; i += 10) {
-					var url = "https://api.cas.nicovideo.jp/v2/tanzakus/topic/live/content-groups/reserved/items?cursor=" + i + "/cursorEnd/" + (i - 10) + "";
+				for (var i = 0; i < 200; i += 10) {
+					var url = "https://api.cas.nicovideo.jp/v2/tanzakus/topic/live/content-groups/reserved/items" + (i == 0 ? "" : ("?cursor=" + i + "/cursorEnd/" + (i - 10) + ""));
 					var res = util.getPageSource(url);
 					if (res == null) break;
 					
@@ -344,8 +345,8 @@ namespace namaichi.alart
 			}
 			util.debugWriteLine("getCasOpenTime onair " + ret.Count);
 			try {
-				for (var i = 10; i < 200; i += 10) {
-					var url = "https://api.cas.nicovideo.jp/v2/tanzakus/topic/live/content-groups/onair/items?cursor=" + i + "/cursorEnd/" + (i - 10) + "";
+				for (var i = 0; i < 200; i += 10) {
+					var url = "https://api.cas.nicovideo.jp/v2/tanzakus/topic/live/content-groups/onair/items" + (i == 0 ? "" : ("?cursor=" + i + "/cursorEnd/" + (i - 10) + ""));
 					var res = util.getPageSource(url);
 					if (res == null) break;
 					
@@ -357,10 +358,12 @@ namespace namaichi.alart
 						util.debugWriteLine("getCasOpentime " + o.showTime.beginAt);
 						if (isAll) ret.Add(o);
 						else {
-							if (!o.isChannelRelatedOfficial) {
-								isEnd = true;
-								break;
-							} else ret.Add(o);
+							//if (!o.isChannelRelatedOfficial) {
+							//if (o.providerType == "channel") {
+							//	isEnd = true;
+							//	break;
+							//} else ret.Add(o);
+							ret.Add(o);
 						}
 					}
 					if (tanzakuObj.data.cursor == null) break;
@@ -387,13 +390,16 @@ namespace namaichi.alart
 					dataprops = dataprops.Replace("&quot;", "\"");
 					var propsObj = Newtonsoft.Json.JsonConvert.DeserializeObject<TimeTablePageInfo>(dataprops);
 					foreach (var p in propsObj.timetable.programs) {
-						var id = p.id.StartsWith("lv") ? p.id.Substring(2) : p.id;
-						var startDt = util.getUnixToDatetime(p.beginAt / 1000);
-						var endDt = util.getUnixToDatetime(p.endAt / 1000);
-						var status = p.liveCycle == "ON_AIR" ? "onair" : "RELEASED";
+						if (p.status == "ENDED") continue;
+						
+						var id = p.nicoliveProgramId.StartsWith("lv") ? p.nicoliveProgramId.Substring(2) : p.nicoliveProgramId;
+						var startDt = util.getUnixToDatetime(p.beginTime / 1);
+						var endDt = util.getUnixToDatetime(p.endTime / 1);
+						var status = p.status == "ON_AIR" ? "onair" : "RELEASED";
+						var hostName = (p.programProvider == null) ? (p.providerType == "official" ? "株式会社ドワンゴ" : "") : p.programProvider.name;
 						var ti = new TimeLineInfo(id, p.title, 
 								p.description, p.providerType, 
-								p.thumbnailUrl, null, null, null, null, null, status, p.isPayProgram);
+								p.socialGroup.thumbnailUrl, null, null, null, null, null, status, p.payment, p.socialGroup.id, p.socialGroup.name, hostName);
 						ti.startTime = startDt;
 						ret.Add(ti);
 					}
@@ -450,7 +456,7 @@ namespace namaichi.alart
 							continue;
 						}
 						var isPayment = mValue.IndexOf("\"timetablePage-ProgramList_TitleIcon-pay\">") > -1;
-						ret.Add(new TimeLineInfo(lv, title, description, provider_type, thumbnail_url, start_date, end_date, start_time, end_time, total_time, status, isPayment));
+						ret.Add(new TimeLineInfo(lv, title, description, provider_type, thumbnail_url, start_date, end_date, start_time, end_time, total_time, status, isPayment, "", "", ""));
 					} catch (Exception e) {
 						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 						util.debugWriteLine(_m.Value);
@@ -481,7 +487,8 @@ namespace namaichi.alart
 		public TimeLineInfo(string id, string title, string description,
 				string provider_type, string thumbnail_url, string start_date,
 				string end_date, string start_time, string end_time,
-				string total_time, string status, bool isPayment) {
+				string total_time, string status, bool isPayment, 
+				string socialGroupId, string socialGroupName, string providerName) {
 			this.id = id;
 			this.title = title;
 			this.description = description; 
@@ -494,6 +501,9 @@ namespace namaichi.alart
 			this.total_time = total_time;
 			this.status = status;
 			this.isPayment = isPayment;
+			this.socialGroupId = socialGroupId;
+			this.socialGroupName = socialGroupName;
+			this.providerName = providerName;
 		}
 		public string id = null;
 		public string title = null;
@@ -507,6 +517,9 @@ namespace namaichi.alart
 		public string total_time = null;
 		public string status = null;
 		public bool isPayment = false;
+		public string socialGroupId = null;
+		public string socialGroupName = null;
+		public string providerName = null;
 		
 		public DateTime startTime = DateTime.MinValue;
 	}
@@ -516,16 +529,31 @@ namespace namaichi.alart
 			public List<ttpPrograms> programs = null;
 		}
 		public class ttpPrograms {
-			public string id = null;
+			//public string id = null;
+			public string nicoliveProgramId = null;
 			public string title = null;
 			public string description = null;
 			public string providerType = null;
-			public string thumbnailUrl = null;
-			public long beginAt = 0;
-			public long endAt = 0;
-			public string liveCycle = null;
+			//public string thumbnailUrl = null;
+			//public long beginAt = 0;
+			//public long endAt = 0;
+			public long beginTime = 0;
+			public long endTime = 0;
+			//public string liveCycle = null;
+			public string status = null;
 			public bool isFollowerOnly = false;
-			public bool isPayProgram = false;
+			//public bool isPayProgram = false;
+			public bool payment = false;
+			public SocialGroup socialGroup = null;
+			public ProgramProvider programProvider = null;
+		}
+		public class SocialGroup {
+			public string id = null;
+			public string name = null;
+			public string thumbnailUrl = null;
+		}
+		public class ProgramProvider {
+			public string name = null;
 		}
 	}
 	

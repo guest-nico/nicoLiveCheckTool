@@ -37,6 +37,7 @@ namespace namaichi.info
 		public bool isChannelRelatedOfficial;
 		public string socialGroupId;
 		public bool isPayProgram;
+		public string providerType = null;
 	}
 	public class TanzakuShowTime {
 		public DateTime beginAt;

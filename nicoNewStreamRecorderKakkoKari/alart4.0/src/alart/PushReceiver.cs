@@ -446,11 +446,11 @@ namespace namaichi.alart
 				var comId = !isUser ? util.getRegGroup(thumbnail, "/(ch\\d+)\\.jpg") : "";
 				
 				var hg = new namaichi.rec.HosoInfoGetter();
-				//var r = hg.get(lvid, check.container);
-				var r = false;
+				var r = hg.get(lvid, check.container);
+				//var r = false;
 				//description = hg.description;
 				
-				if (!r || true) {
+				if (!r || false) {
 					
 					/*
 					hg.description = hg.userId = hg.communityId = "";
@@ -490,7 +490,7 @@ namespace namaichi.alart
 //				util.debugWriteLine("description " + hg.description);
 				
 				RssItem i = null;
-				var isNew = true;
+				var isNew = false;
 				if (isNew) {
 					i = new RssItem(title, lvid, dt, "", comName, comId, userName, thumbnail, "", "", false);
 					i.setUserId(userId);

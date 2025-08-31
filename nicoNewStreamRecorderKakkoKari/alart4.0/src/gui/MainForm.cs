@@ -105,6 +105,7 @@ namespace namaichi
 		
 		public MainForm(string[] args)
 		{
+			util.userAgent = "NicoLiveCheckTool/" + util.getRegGroup(util.versionStr, "ver(.+)");
 			madeThread = Thread.CurrentThread;
 			toolMenuProcess = new ToolMenuProcess(this);
 			

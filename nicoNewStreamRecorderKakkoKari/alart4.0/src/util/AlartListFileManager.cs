@@ -11,6 +11,7 @@ using System.IO;
 using System.Net;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using System.Collections.Generic;
@@ -375,7 +376,7 @@ namespace namaichi.utility
 			if (form.check.container != null) 
 				new FollowChecker(form, form.check.container).check();
 				
-			form.recentLiveCheck();
+			Task.Factory.StartNew(() => form.recentLiveCheck());
 		}
 		private List<int> getDuplicateNum(List<AlartInfo> readAiList, MainForm form) {
 			

@@ -158,16 +158,17 @@ namespace namaichi.alart
 						RssItem ri = null;
 						var opentimeItem = openTimeList.Find(x => x.id == "lv" + l.id);
 						if (opentimeItem != null) {
-							
 							ri = new RssItem(l.title, "lv" + l.id, opentimeItem.showTime.beginAt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"),
 									opentimeItem.description, 
 									opentimeItem.contentOwner.name, 
 									opentimeItem.socialGroupId,
 									"", 
-									opentimeItem.thumbnailUrl, opentimeItem.isMemberOnly.ToString(), "", l.isPayment);
+									l.thumbnail_url, opentimeItem.isMemberOnly.ToString(), "", l.isPayment);
+							
 							ri.type = "official";
 							ri.tags = new string[]{""};
 							ri.pubDateDt = opentimeItem.onAirTime.beginAt;
+							if (!string.IsNullOrEmpty(l.providerName)) ri.hostName = l.providerName;
 							//if (!string.IsNullOrEmpty(hig.userName)) ri.hostName = hig.userName;
 							//if (hig.openDt != hig.dt) util.debugWriteLine("hig open start tigau " + hig.openDt + " " + hig.dt);
 							//else util.debugWriteLine("hig open start onaji " + hig.openDt + " " + hig.dt);

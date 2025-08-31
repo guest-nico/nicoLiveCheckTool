@@ -113,11 +113,20 @@ namespace namaichi
 				thumbnailPictureBox.Image = new Bitmap(Image.FromFile(ri.thumbnailUrl), thumbnailPictureBox.Size);
 					return;
 			}
-			var img = ThumbnailManager.getImageId(ri.comId);
-			var isSaveCache = bool.Parse(config.get("alartCacheIcon"));
-			if (img != null && isSaveCache) ThumbnailManager.saveImage(img, ri.comId);
-			if (img == null && !string.IsNullOrEmpty(url)) 
-				img = ThumbnailManager.getThumbnailRssUrl(url, isSaveCache, true);
+			Image img;
+			var dt0 = DateTime.Now;
+			var thumbId = string.IsNullOrEmpty(ri.comId) || ri.comId == "co0" ? ri.userId : ri.comId;
+			if (!ThumbnailManager.isExist(thumbId, out img)) {
+				util.debugWriteLine("is not exist thumbnail time " + (DateTime.Now - dt0) + " " + ri.comName);
+				
+				img = ThumbnailManager.getImageId(thumbId);
+				var isSaveCache = bool.Parse(config.get("alartCacheIcon"));
+				if (img != null && isSaveCache) ThumbnailManager.saveImage(img, thumbId .StartsWith("c") ? ri.comId : ri.userId);
+				if (img == null && !string.IsNullOrEmpty(url)) 
+					img = ThumbnailManager.getThumbnailRssUrl(url, isSaveCache, true);
+			} else {
+				util.debugWriteLine("is exist thumbnail time " + (DateTime.Now - dt0) + " " + ri.comName);
+			}
 			thumbnailPictureBox.Image = img;
 			/*
        		if (!util.isShowWindow) return;

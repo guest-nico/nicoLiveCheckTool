@@ -329,6 +329,11 @@ namespace namaichi.info
         		else this.soundType = 0;
         	}
         }
+        public bool AutoReserve
+        {
+            get { return isAutoReserve; }
+            set { this.isAutoReserve = value; }
+        }
         public string Memo
         {
             get { return memo; }

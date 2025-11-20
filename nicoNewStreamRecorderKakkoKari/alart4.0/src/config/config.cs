@@ -279,6 +279,7 @@ public class config
 			{"ShowAppI","false"},
 			{"ShowAppJ","false"},
 			{"ShowSoundType","false"},
+			{"ShowAutoReserve","false"},
 			{"ShowMemo","true"},
 				
 			{"ShowTaskStartDt","true"},
@@ -308,7 +309,7 @@ public class config
 			{"ShowHistoryColumns","11111110111"},
 			{"ShowNotAlartColumns","1111111111"},
 			{"ShowReserveHistoryColumns","11111110010"},
-			{"ColorAlartListColumns","000000000100000000000000000"},
+			{"ColorAlartListColumns","0000000001000000000000000000"},
 			{"ColorHistoryListRecentColumns","10000000000"},
 			{"ColorLiveListColumns","001000000000000000"},
 			

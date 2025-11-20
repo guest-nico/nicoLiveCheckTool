@@ -42,6 +42,7 @@ namespace namaichi.alart
 		private Regex categoryReg = new Regex("<category>(.*?)</category>");
 		private int userNameUpdateInterval;
 		//public SoundPlayer soundPlayer = null;
+		long serverTimeDiffMs = 0;
 		
 		public PopupDisplay popup = null;
 		private object foundLiveLock = new object();
@@ -68,6 +69,7 @@ namespace namaichi.alart
 		}
 		public void start() {
 			setCookie();
+			setServerTime();
 			form.followCheck();
 			
 			//Task.Factory.StartNew(() => reserveStreamCheck());
@@ -399,8 +401,10 @@ namespace namaichi.alart
 			var url = "https://live.nicovideo.jp/watch/lv" + util.getRegGroup(lvid, "(\\d+)");
 			try {
 				var microSecondsDiff = ((TimeSpan)(ri.pubDateDt - DateTime.Now)).TotalMilliseconds;
-				if (microSecondsDiff > 0 && microSecondsDiff < 1000 * 60 * 10) {
-					Thread.Sleep((int)microSecondsDiff + 10000);
+				if (serverTimeDiffMs != 0)
+					microSecondsDiff += serverTimeDiffMs;
+				if (microSecondsDiff > 0 && microSecondsDiff < 1000 * 60 * 10 && ri.type == "official") {
+					Thread.Sleep((int)microSecondsDiff + 7000);
 				}
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
@@ -861,8 +865,8 @@ namespace namaichi.alart
 				if (DateTime.Now - lastCheckLastRecentLiveTime > TimeSpan.FromSeconds(intervalSec)) {
 					Task.Factory.StartNew(() => {
 					    lastCheckLastRecentLiveTime = DateTime.MaxValue;
-					    form.recentLiveCheck();
-			         	lastCheckLastRecentLiveTime = DateTime.Now;
+					    var checkCount = form.recentLiveCheck();
+					    lastCheckLastRecentLiveTime = DateTime.Now + TimeSpan.FromSeconds(checkCount * 10);
 					});
 				}
 				
@@ -882,8 +886,8 @@ namespace namaichi.alart
 				if (DateTime.Now - lastCheckHistoryLiveTime > TimeSpan.FromMinutes(5)) {
 					lastCheckHistoryLiveTime = DateTime.MaxValue;
 					Task.Factory.StartNew(() => {
-					    form.checkHistoryLive();
-						lastCheckHistoryLiveTime = DateTime.Now;
+					    var checkCount = form.checkHistoryLive();
+					    lastCheckHistoryLiveTime = DateTime.Now + TimeSpan.FromSeconds(checkCount * 10);
 					});
 				}
 				
@@ -1146,6 +1150,25 @@ namespace namaichi.alart
 						form.formAction(() => form.userAlartListDataSource.Add(ai));
 					}
 				}
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+		}
+		void setServerTime() {
+			try {
+				var r = util.getPageSource("https://live.nicovideo.jp/");
+				if (r == null) {
+					util.debugWriteLine("setServerTime r null");
+					return;
+				}
+				var t = util.getRegGroup(r, "&quot;serverTime&quot;:(\\d+)");
+				if (t == null) {
+					util.debugWriteLine("setServerTime t null");
+					return;
+				}
+				var serverTime = util.getUnixToDatetime(long.Parse(t) / 1000);
+				serverTimeDiffMs = (long)((TimeSpan)(DateTime.Now - serverTime)).TotalMilliseconds - 1000;
+				util.debugWriteLine("servertime diff set " + serverTimeDiffMs);
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}

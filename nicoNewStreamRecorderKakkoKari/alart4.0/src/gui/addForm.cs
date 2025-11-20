@@ -203,10 +203,14 @@ namespace namaichi
 		void editOkBtnProcess() {
 			var comId = communityId.Text == "official" ? "official" : util.getRegGroup(communityId.Text, "((ch|co)*\\d+)");
 			var userId = util.getRegGroup(userIdText.Text, "(\\d+)");
-			communityNameText.Text = "";
-			userNameText.Text = "";
-			if (comId != null) GetCommunityInfoBtnClickProcess(true);
-			if (userId != null) GetUserInfoBtnClickProcess(true);
+			if (comId != null && (editAi.communityId != comId || string.IsNullOrEmpty(editAi.communityName))) {
+				communityNameText.Text = "";
+				GetCommunityInfoBtnClickProcess(true);
+			}
+			if (userId != null && (editAi.hostId != userId || string.IsNullOrEmpty(editAi.hostName))) {
+				userNameText.Text = "";
+				GetUserInfoBtnClickProcess(true);
+			}
 			var comFollow = string.IsNullOrEmpty(comId) || form.check.container == null ? "" :
 					(communityFollowChkBox.Checked) ? "フォロー解除する" : "フォローする";
 			if (communityNameText.Text == "" || comId == "official") comFollow = "";
@@ -316,7 +320,7 @@ namespace namaichi
 			var isFollow = false;
 			var comName = util.getCommunityName(num, out isFollow, form.check.container);
 			if (comName == null) {
-				comName = "取得できませんでした";
+				comName = "";
 				//return;
 			}
 			communityFollowChkBox.Checked = isFollow;
@@ -336,7 +340,7 @@ namespace namaichi
 			userIdText.Text = num;
 			var isFollow = false;
 			var userName = util.getUserName(num, out isFollow, form.check.container, true, form.config);
-			if (userName == null) return;
+			if (userName == null) userName = "";
 			userFollowChkBox.Checked = isFollow;
 			userNameText.Text = userName;
 			

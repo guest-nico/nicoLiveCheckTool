@@ -36,8 +36,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.9.3";
-	public static string versionDayStr = "2025/09/01";
+	public static string versionStr = "ver0.1.9.4";
+	public static string versionDayStr = "2025/11/21";
 	public static string osName = null;
 	public static string osType = null;
 	public static bool isWebRequestOk = false;
@@ -108,7 +108,6 @@ class util {
 		host = getOkArg(host);
 		group = getOkArg(group);
 		title = getOkArg(title);
-		
 		
 		//string[] jarpath = getJarPath();
 //		util.debugWriteLine(jarpath);
@@ -1150,7 +1149,7 @@ class util {
 			
 		if (_res != null) {
 			var name = util.getRegGroup(_res, "<nickname>(.+?)</nickname>");
-			if (name != null) return name;
+			if (name != null && name != "-") return name;
 		}
 		/*
 		var url = "http://ext.nicovideo.jp/thumb_user/" + userId;

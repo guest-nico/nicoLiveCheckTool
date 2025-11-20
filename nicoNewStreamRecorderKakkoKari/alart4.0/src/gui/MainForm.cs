@@ -2261,7 +2261,7 @@ namespace namaichi
 					"ShowBalloon","ShowWeb", "ShowMail", "ShowSound","ShowAppA",
 					"ShowAppB","ShowAppC","ShowAppD","ShowAppE",
 					"ShowAppF","ShowAppG","ShowAppH","ShowAppI",
-					"ShowAppJ","ShowSoundType","ShowMemo"};
+					"ShowAppJ","ShowSoundType","ShowAutoReserve","ShowMemo"};
 			for(var i = 0; i < columns.Length; i++) {
 				var isDisplay = bool.Parse(config.get(columns[i]));
 				if (i == 5) isDisplay = false;
@@ -2401,7 +2401,7 @@ namespace namaichi
 					"ShowBalloon","ShowWeb","ShowMail","ShowSound","ShowAppA",
 					"ShowAppB","ShowAppC","ShowAppD","ShowAppE",
 					"ShowAppF","ShowAppG","ShowAppH","ShowAppI",
-					"ShowAppJ","ShowSoundType","ShowMemo"};
+					"ShowAppJ","ShowSoundType","ShowAutoReserve","ShowMemo"};
 			for(var i = 0; i < columns.Length; i++) {
 				setting.Add(columns[i], alartList.Columns[i].Visible.ToString().ToLower());
 			}
@@ -2480,7 +2480,7 @@ namespace namaichi
 					"ShowBalloon","ShowWeb","ShowMail","ShowSound","ShowAppA",
 					"ShowAppB","ShowAppC","ShowAppD","ShowAppE",
 					"ShowAppF","ShowAppG","ShowAppH","ShowAppI",
-					"ShowAppJ","ShowSoundType","ShowMemo"};
+					"ShowAppJ","ShowSoundType","ShowAutoReserve","ShowMemo"};
 			config.set(columns[i], alartList.Columns[i].Visible.ToString().ToLower());
          	
 			for (var ii = 0; ii < alartList.Columns.Count; ii++)
@@ -2883,11 +2883,14 @@ namespace namaichi
 				notifyIcon.Icon = defaultNotifyIcon;
 			}
 		}
-		public void recentLiveCheck() {
-			var recentNum = recentLiveCheckCore(true);
-			recentNum += recentLiveCheckCore(false);
+		public int recentLiveCheck() {
+			var checkCount0 = 0;
+			var recentNum = recentLiveCheckCore(true, out checkCount0);
+			var checkCount1 = 0;
+			recentNum += recentLiveCheckCore(false, out checkCount1);
+			return checkCount0 + checkCount1;
 		}
-		public int recentLiveCheckCore(bool isUserMode) {
+		public int recentLiveCheckCore(bool isUserMode, out int checkCount) {
 			//var isCheck30min = bool.Parse(config.get("Ischeck30min"));
 			//-1-no check 0-onair 1-30min
 			var checkMode = bool.Parse(config.get("IscheckOnAir")) ? 0 : 1;
@@ -2898,7 +2901,7 @@ namespace namaichi
 			var testDt = DateTime.Now;
 			while (true) {
 				try {
-					var checkCount = 0;
+					checkCount = 0;
 					var recentNum = 0;
 					var c = getAlartListCount(isUserMode);
 					for (var i = c - 1; i > -1; i--) {
@@ -2937,7 +2940,7 @@ namespace namaichi
 						setNotifyIcon();
 					}
 					//var ii = notifyIcon.Icon == Icon;
-					if (checkCount != 0) Thread.Sleep(checkCount * 30000);
+					//if (checkCount != 0) Thread.Sleep(checkCount * 30000);
 					return recentNum;
 					
 					
@@ -4419,6 +4422,11 @@ namespace namaichi
 						DataGridViewColumn c  = alartList.Columns[i];
 						c.Width = int.Parse(w[i]);
 					}
+					//autoreserve
+					if (w.Length != alartList.Columns.Count) {
+						alartList.Columns["Column5"].Width = 45;
+						alartList.Columns["comment"].Width = int.Parse(w[w.Length - 1]);
+					}
 				}
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
@@ -4431,6 +4439,11 @@ namespace namaichi
 					for (var i = 0; i < w.Length; i++) {
 						DataGridViewColumn c  = userAlartList.Columns[i];
 						c.Width = int.Parse(w[i]);
+					}
+					//autoreserve
+					if (w.Length != userAlartList.Columns.Count) {
+						userAlartList.Columns["Column6"].Width = 45; //AutoReserve
+						userAlartList.Columns["dataGridViewTextBoxColumn32"].Width = int.Parse(w[w.Length - 1]); //memo
 					}
 				}
 			} catch (Exception e) {
@@ -4908,11 +4921,13 @@ namespace namaichi
 				try {
 			        var scrollIndex = historyList.FirstDisplayedScrollingRowIndex;
 				    
-			        if (historyListDataSource.Count >= historyListMax) {
-				        var min = historyListDataSource.OrderBy((a) => a.dt).First();
-				        historyListDataSource.Remove(min);
-				        util.debugWriteLine("addHistoryList list max deleteNotifyIconRecentItem " + min.lvid);
-				        //deleteNotifyIconRecentItem(min.lvid);
+			        for (var i = 0; i < historyListDataSource.Count; i++) {
+				        if (historyListDataSource.Count >= historyListMax) {
+					        var min = historyListDataSource.OrderBy((a) => a.dt).First();
+					        historyListDataSource.Remove(min);
+					        util.debugWriteLine("addHistoryList list max deleteNotifyIconRecentItem " + min.lvid);
+					        //deleteNotifyIconRecentItem(min.lvid);
+				        } else break;
 			        }
 			        
 	       	    	historyListDataSource.Insert(0, hi);
@@ -5247,8 +5262,9 @@ namespace namaichi
 				openAddForm(notAlartListDataSource[cur.RowIndex].lvid);
 			//);
 		}
-		public void checkHistoryLive() {
-			var checkMode = bool.Parse(config.get("IscheckOnAir")) ? 0 : 1;
+		public int checkHistoryLive() {
+			var checkMode = 0;
+			checkMode = bool.Parse(config.get("IscheckOnAir")) ? 0 : 1;
 			if (!bool.Parse(config.get("IscheckRecent"))) checkMode = -1;
 			
 			while (true) {
@@ -5257,39 +5273,44 @@ namespace namaichi
 					var checkCount = 0;
 					var c = historyListDataSource.Count;
 					for (var i = 0; i < c; i++) {
-						var hi = historyListDataSource[i];
-						if (hi.onAirMode == 0) {
-							deleteNotifyIconRecentItem(hi.lvid);
-							util.debugWriteLine("checkHistoryLIve onairmode 0  deleteNotifyIconRecentItem " + hi.lvid);
-							continue;
+						try {
+							var hi = historyListDataSource[i];
+							
+							if (hi.onAirMode == 0) {
+								deleteNotifyIconRecentItem(hi.lvid);
+								util.debugWriteLine("checkHistoryLIve onairmode 0  deleteNotifyIconRecentItem " + hi.lvid);
+								continue;
+							}
+							
+							//util.debugWriteLine(i + " " + alartListDataSource[i].lastHosoDt + " " + alartList[7, i].Style.BackColor);
+							util.debugWriteLine("check history live onair " + hi.lvid + " " + hi.type);
+							
+							var isRecentProcess = false;
+							if (checkMode == 0) {
+								isRecentProcess = isOnAirLvid(hi.lvid, hi.type);
+								checkCount++;
+							} else if (checkMode == 1)
+								isRecentProcess = DateTime.Now - hi.dt < TimeSpan.FromMinutes(30);
+							else if (checkMode == -1)
+								isRecentProcess = false;	
+							
+							if (!isRecentProcess) {
+								hi.onAirMode = 0;
+								util.debugWriteLine("checkHistoryLIve !isOnAir deleteNotifyIconRecentItem " + historyListDataSource[i].lvid);
+								deleteNotifyIconRecentItem(hi.lvid);
+							}
+							for (var j = 0; j < historyList.Columns.Count; j++)
+								historyList.UpdateCellValue(j, i);
+						} catch (Exception e) {
+							util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 						}
-						
-						//util.debugWriteLine(i + " " + alartListDataSource[i].lastHosoDt + " " + alartList[7, i].Style.BackColor);
-						util.debugWriteLine("check history live onair " + hi.lvid + " " + hi.type);
-						
-						var isRecentProcess = false;
-						if (checkMode == 0) {
-							isRecentProcess = isOnAirLvid(hi.lvid, hi.type);
-							checkCount++;
-						} else if (checkMode == 1)
-							isRecentProcess = DateTime.Now - hi.dt < TimeSpan.FromMinutes(30);
-						else if (checkMode == -1)
-							isRecentProcess = false;	
-						
-						if (!isRecentProcess) {
-							hi.onAirMode = 0;
-							util.debugWriteLine("checkHistoryLIve !isOnAir deleteNotifyIconRecentItem " + historyListDataSource[i].lvid);
-							deleteNotifyIconRecentItem(hi.lvid);
-						}
-						//util.debugWriteLine("test recent live check i " + i);
-						for (var j = 0; j < historyList.Columns.Count; j++)
-							historyList.UpdateCellValue(j, i);
 					}
-					if (checkCount != 0) Thread.Sleep(checkCount * 30000);
-					break;
+					//if (checkCount != 0) Thread.Sleep(checkCount * 30000);
+					return checkCount;
 				} catch (Exception e) {
 					util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 					Thread.Sleep(1000);
+					return 10;
 				}
 			}
 		}
@@ -6685,7 +6706,7 @@ namespace namaichi
 						
 						var isOnAir = false;
 						var hi = historyListDataSource.FirstOrDefault(_hi => _hi.lvid == ri.lvId);
-						if (hi != null) {
+						if (hi != null && false) {
 							isOnAir = hi.onAirMode != 0;
 						}
 						else {

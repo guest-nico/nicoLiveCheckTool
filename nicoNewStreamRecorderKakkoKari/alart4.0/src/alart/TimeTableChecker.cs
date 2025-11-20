@@ -148,6 +148,8 @@ namespace namaichi.alart
 				
 				foreach (var l in list) {
 					if (l.provider_type != "official") continue;
+					if (l.socialGroupId == "ch2525" && l.title == "ニコニコ実況") 
+						continue;
 					
 					if (l.startTime == DateTime.MinValue)
 						l.startTime = DateTime.Parse(l.start_date + " " + l.start_time);

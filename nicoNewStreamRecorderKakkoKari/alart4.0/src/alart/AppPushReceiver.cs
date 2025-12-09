@@ -671,8 +671,8 @@ namespace namaichi.alart
 				hostName = "";
 				
 				var hg = new namaichi.rec.HosoInfoGetter();
-				var r = hg.get(lvid, check.container);
-				//var r = false;
+				//var r = hg.get(lvid, check.container);
+				var r = false;
 				
 				var d = "";
 				foreach (var a in msg.AppDatas) d += a.Value;
@@ -735,6 +735,10 @@ namespace namaichi.alart
 					*/
 					
 					comName = hostName = name;
+					if (userId != "") {
+						comName = "削除されたコミュニティ";
+						comId = "co0";
+					}
 				} else {
 					if (hg.isClosed) 
 						return new List<RssItem>();
@@ -785,7 +789,7 @@ namespace namaichi.alart
 				}
 				
 				RssItem i = null; 
-				var isNew = false;
+				var isNew = true;
 				if (isNew) {
 					i = new RssItem(title, lvid, dt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"), "", comName, comId, hostName, thumb, "", "", false);
 					i.setUserId(userId);
@@ -994,7 +998,7 @@ namespace namaichi.alart
 					{"X-Android-Package", "jp.co.dwango.nicocas"},
 					{"x-firebase-client", "H4sIAAAAAAAAAKtWykhNLCpJSk0sKVayio7VUSpLLSrOzM9TslIyUqoFAFyivEQfAAAA"},
 					{"X-Android-Cert", "3C122F52D69D2D2DD8EB4F87BDAB57B8102F0E1E"},
-					{"x-goog-api-key", "AIzaSyDSQTOmErEmQa-E1i2p14MIM3xxxxxxxxx"},
+					{"x-goog-api-key", "AIzaSyDSQTOmErEmQa-E1i2p14MIM3AeJxCG8MM"},
 					{"User-Agent", "Dalvik/2.1.0 (Linux; U; Android 7.1.2; SM-G973N Build/PPR1.190810.011)"},
 				};
 				

@@ -118,10 +118,13 @@ namespace namaichi.alart
 			util.debugWriteLine("gotStreamProcess itemCount " + (items != null ? items.Count.ToString() : "null"));
 			var isChanged = false;
 			items.Reverse();
+			var readItem = new List<RssItem>();
 			while (true) {
 				try {
 					foreach (var _item in items) {
 						try {
+							if (readItem.IndexOf(_item) > -1) continue;
+							
 							var item = _item;
 							var dpi = new DoProcessInfo();
 							//bool isAppliA, isAppliB, isAppliC, isAppliD, isAppliE, isAppliF, isAppliG, isAppliH, isAppliI, isAppliJ, isPopup, isBaloon, isBrowser, isMail, isSound, isLog;
@@ -147,7 +150,7 @@ namespace namaichi.alart
 							        dpi, nearAlartAi);
 							} else {
 								Task.Factory.StartNew(() => {
-									for (var i = 0; i < 200; i++) {
+									for (var i = 0; i < 30; i++) {
 										isSuccessAccess = getAlartProcess(dpi, ref isChanged, 
 											ref targetAi, ref nearAlartAi, ref item,
 										alartListDataSource);
@@ -155,13 +158,13 @@ namespace namaichi.alart
 											ref targetAi, ref nearAlartAi, ref item,
 										form.userAlartListDataSource);
 										if (isSuccessAccess && isSuccessAccess2) break;
-										Thread.Sleep(3000);
+										Thread.Sleep(10000);
 									}
 								    doProcess(item, targetAi, 
 								        dpi, nearAlartAi);
 								});
 							}
-							
+							readItem.Add(_item);
 						} catch (Exception e) {
 							util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 						}
@@ -614,12 +617,14 @@ namespace namaichi.alart
 		}
 		private bool setUserId(RssItem rssItem) {
 			if (rssItem.userId != null) return true;
-			
-			//return isSuccess
+			if (rssItem.comId == null || !rssItem.comId.StartsWith("co")) {
+				rssItem.userId = "";
+				return true;
+			}
+			util.debugWriteLine("setUserId " + rssItem.lvId);
 			var isFailureAccess = false;
 			var uid = (rssItem.userId != null) ? rssItem.userId : getUserIdFromLvid(rssItem.lvId, out isFailureAccess, container);
 			if (isFailureAccess) return false;  
-			if (rssItem.comId == null || !rssItem.comId.StartsWith("co")) uid = "";
 			if (rssItem.userId == null && uid != null) rssItem.userId = uid;
 			return true;
 		}

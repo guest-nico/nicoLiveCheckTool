@@ -440,18 +440,17 @@ namespace namaichi.alart
 				if (string.IsNullOrEmpty(title)) title = util.getRegGroup(dec, "body\":\"(.+?)\"");
 				var isUser = thumbnail.IndexOf("user") > -1;
 				var name = util.getRegGroup(dec, "title\":\"(.+?)(さん)*が生放送を");
-				var userName = isUser ? name : "";
-				var comName = !isUser ? name : "";
+				var userName = isUser ? name : name;
+				var comName = !isUser ? name : "削除されたコミュニティ";
 				var userId = isUser ? util.getRegGroup(thumbnail, "/(\\d+)\\.jpg") : "";
-				var comId = !isUser ? util.getRegGroup(thumbnail, "/(ch\\d+)\\.jpg") : "";
+				var comId = !isUser ? util.getRegGroup(thumbnail, "/(ch\\d+)\\.jpg") : "co0";
 				
-				var hg = new namaichi.rec.HosoInfoGetter();
-				var r = hg.get(lvid, check.container);
+				
 				//var r = false;
 				//description = hg.description;
 				
-				if (!r || false) {
-					
+				//if (!r || false) {
+				if (false) {
 					/*
 					hg.description = hg.userId = hg.communityId = "";
 					hg.tags = new string[]{};
@@ -460,8 +459,8 @@ namespace namaichi.alart
 					return null;
 					*/
 				} else {
-					if (hg.isClosed) 
-						return new List<RssItem>();
+					//if (hg.isClosed) 
+					//	return new List<RssItem>();
 				}
 				
 				//util.debugWriteLine("description " + hg.description);
@@ -490,13 +489,16 @@ namespace namaichi.alart
 //				util.debugWriteLine("description " + hg.description);
 				
 				RssItem i = null;
-				var isNew = false;
+				var isNew = true;
 				if (isNew) {
 					i = new RssItem(title, lvid, dt, "", comName, comId, userName, thumbnail, "", "", false);
 					i.setUserId(userId);
 					i.type = string.IsNullOrEmpty(userId) ? "channel" : "user";
 					
 				} else {
+					var hg = new namaichi.rec.HosoInfoGetter();
+					var r = hg.get(lvid, check.container);
+					
 					i = new RssItem(hg.title, lvid, dt, hg.description, hg.group, hg.communityId, hg.userName, hg.thumbnail, hg.isMemberOnly.ToString(), "", hg.isPayment);
 					i.setUserId(hg.userId);
 					i.setTag(hg.tags);

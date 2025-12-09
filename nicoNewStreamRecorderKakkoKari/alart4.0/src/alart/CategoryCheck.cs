@@ -57,6 +57,8 @@ namespace namaichi.alart
 				try {
 					var items = new List<RssItem>();
 					items = getFoundLvList(isFirst, items, isStartTimeAllCheck);
+					setChDataToHistoryList(items);
+
 					if (isStartTimeAllCheck) {
 						Task.Factory.StartNew(() => {
 							Thread.Sleep(100000);
@@ -185,10 +187,23 @@ namespace namaichi.alart
 				return isContainAddedLv;
 			}
 		}
+		void setChDataToHistoryList(List<RssItem> l) {
+			try {
+				foreach (var ri in l) {
+					var _hi = check.form.historyListDataSource.FirstOrDefault(x => x.lvid == ri.lvId);
+					if (_hi != null && !string.IsNullOrEmpty(ri.hostName)) _hi.userName = ri.hostName;
+					_hi = check.form.notAlartListDataSource.FirstOrDefault(x => x.lvid == ri.lvId);
+					if (_hi != null && !string.IsNullOrEmpty(ri.hostName)) _hi.userName = ri.hostName;
+					var _li = check.form.liveListDataSource.FirstOrDefault(x => x.lvId == ri.lvId);
+					if (_li != null && !string.IsNullOrEmpty(ri.hostName)) _li.hostName = ri.hostName;
+				}
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+		}
 		public void stop() {
 			isRetry = false;
 		}
-		
 	}
 	
 }

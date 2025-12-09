@@ -46,12 +46,12 @@ namespace namaichi.info
 		public nicoad nicoad;
 		public bool isPayProgram;
 		public string getThumb() {
-			if (!string.IsNullOrEmpty(socialGroup.thumbnailUrl) &&
+			if (socialGroup != null && !string.IsNullOrEmpty(socialGroup.thumbnailUrl) &&
 					socialGroup.id != "co0")
 				return socialGroup.thumbnailUrl;
-			if (!string.IsNullOrEmpty(programProvider.icon))
+			if (programProvider != null && !string.IsNullOrEmpty(programProvider.icon))
 				return programProvider.icon;
-			if (!string.IsNullOrEmpty(screenshotThumbnail.liveScreenshotThumbnailUrl)) 
+			if (screenshotThumbnail != null && !string.IsNullOrEmpty(screenshotThumbnail.liveScreenshotThumbnailUrl)) 
 				return screenshotThumbnail.liveScreenshotThumbnailUrl;
 			return "";
 		}
@@ -59,8 +59,10 @@ namespace namaichi.info
 			try {
 				var thumb = getThumb();
 				var pubDt = util.getUnixToDatetime(beginAt / 1000);
+				var socialName = socialGroup != null ? socialGroup.name : "削除されたコミュニティ";
+				var socialId = socialGroup != null ? socialGroup.name : "co0";
 				var item = new RssItem(title, id,
-						pubDt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"), "", socialGroup.name, socialGroup.id,
+				                       pubDt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"), "", socialName, socialId,
 						programProvider.name, thumb, isFollowerOnly, "", isPayProgram
 						);
 				item.setUserId(programProvider.id);

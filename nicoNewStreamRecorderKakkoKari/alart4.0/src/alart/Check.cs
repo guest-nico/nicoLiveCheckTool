@@ -143,8 +143,6 @@ namespace namaichi.alart
 									ref targetAi, ref nearAlartAi, ref item,
 									form.userAlartListDataSource);
 							
-							//if (items[0].comName.IndexOf("ウェザー") > -1)
-							//	util.debugWriteLine("ch");
 							if (isSuccessAccess && isSuccessAccess2) {
 								doProcess(item, targetAi, 
 							        dpi, nearAlartAi);

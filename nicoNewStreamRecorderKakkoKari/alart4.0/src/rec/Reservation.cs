@@ -305,6 +305,8 @@ namespace namaichi.rec
 					return "放送が予約に対応していない等、何らかの理由により予約できませんでした";
 				if (res.IndexOf("\"errorCode\":\"DUPLICATED\"") > -1)
 					return "既に予約済みです。";
+				if (res.IndexOf("\"errorCode\":\"EXPIRED_GENERAL\"") > -1)
+					return "申込み期限切れです";
 				return null;
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace);

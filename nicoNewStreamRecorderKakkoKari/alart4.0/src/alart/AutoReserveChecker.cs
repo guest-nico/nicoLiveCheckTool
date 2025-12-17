@@ -200,8 +200,10 @@ namespace namaichi.alart
 		}
 		List<string> getAddUrlList3(ref DateTime recentUpdateDt) {
 			var addUrlBuf = new List<string>();
-			var url = "https://api.feed.nicovideo.jp/v1/activities/followings/live?context=my_timeline";
-			for (var i = 0; i < 1; i++) {
+			var baseUrl = "https://api.feed.nicovideo.jp/v1/activities/followings/live?";
+			var cursor = "";
+			for (var i = 0; i < 5; i++) {
+				var url = baseUrl + (i == 0 ? "" : ("cursor=" + cursor + "&")) + "context=my_timeline";
 				try {
 					util.debugWriteLine("autoreserve i " + i);
 					var h = util.getHeader(check.container, "https://www.nicovideo.jp/", url);
@@ -216,6 +218,7 @@ namespace namaichi.alart
 						var res = sr.ReadToEnd();
 						var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<activitiesC>(res);
 						if (obj.activities == null) break;
+						cursor = obj.nextCursor;
 						foreach (var d in obj.activities) {
 							if (d.kind.IndexOf("reserve") == -1) continue;
 							if (d.createdAt > recentUpdateDt) recentUpdateDt = d.createdAt;

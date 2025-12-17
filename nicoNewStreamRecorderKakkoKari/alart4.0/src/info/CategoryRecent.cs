@@ -60,7 +60,7 @@ namespace namaichi.info
 				var thumb = getThumb();
 				var pubDt = util.getUnixToDatetime(beginAt / 1000);
 				var socialName = socialGroup != null ? socialGroup.name : "削除されたコミュニティ";
-				var socialId = socialGroup != null ? socialGroup.name : "co0";
+				var socialId = socialGroup != null ? socialGroup.id : "co0";
 				var item = new RssItem(title, id,
 				                       pubDt.ToString("yyyy\"/\"MM\"/\"dd HH\":\"mm\":\"ss"), "", socialName, socialId,
 						programProvider.name, thumb, isFollowerOnly, "", isPayProgram

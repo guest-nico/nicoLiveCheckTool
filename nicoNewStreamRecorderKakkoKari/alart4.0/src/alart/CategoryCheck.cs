@@ -57,8 +57,6 @@ namespace namaichi.alart
 				try {
 					var items = new List<RssItem>();
 					items = getFoundLvList(isFirst, items, isStartTimeAllCheck);
-					setChDataToHistoryList(items);
-
 					if (isStartTimeAllCheck) {
 						Task.Factory.StartNew(() => {
 							Thread.Sleep(100000);
@@ -172,6 +170,7 @@ namespace namaichi.alart
 							check.checkedLvIdList.Add(item);
 						} else {
 							isContainAddedLv = true;
+							setChDataToHistoryList(item);
 							//util.debugWriteLine("tuika nasi " + item.lvId + " " + item.title + " " + item.comId);
 						}
 					} catch (Exception e) {
@@ -187,16 +186,16 @@ namespace namaichi.alart
 				return isContainAddedLv;
 			}
 		}
-		void setChDataToHistoryList(List<RssItem> l) {
+		void setChDataToHistoryList(RssItem ri) {
 			try {
-				foreach (var ri in l) {
-					var _hi = check.form.historyListDataSource.FirstOrDefault(x => x.lvid == ri.lvId);
-					if (_hi != null && !string.IsNullOrEmpty(ri.hostName)) _hi.userName = ri.hostName;
-					_hi = check.form.notAlartListDataSource.FirstOrDefault(x => x.lvid == ri.lvId);
-					if (_hi != null && !string.IsNullOrEmpty(ri.hostName)) _hi.userName = ri.hostName;
-					var _li = check.form.liveListDataSource.FirstOrDefault(x => x.lvId == ri.lvId);
-					if (_li != null && !string.IsNullOrEmpty(ri.hostName)) _li.hostName = ri.hostName;
-				}
+				if (ri.type == "community" || ri.type == "user") return;
+				
+				var _hi = check.form.historyListDataSource.FirstOrDefault(x => x.lvid == ri.lvId);
+				if (_hi != null && !string.IsNullOrEmpty(ri.hostName) && _hi.userName != ri.hostName) _hi.userName = ri.hostName;
+				_hi = check.form.notAlartListDataSource.FirstOrDefault(x => x.lvid == ri.lvId);
+				if (_hi != null && !string.IsNullOrEmpty(ri.hostName) && _hi.userName != ri.hostName) _hi.userName = ri.hostName;
+				var _li = check.form.liveListDataSource.FirstOrDefault(x => x.lvId == ri.lvId);
+				if (_li != null && !string.IsNullOrEmpty(ri.hostName) && _li.hostName != ri.hostName) _li.hostName = ri.hostName;
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 			}
@@ -205,5 +204,4 @@ namespace namaichi.alart
 			isRetry = false;
 		}
 	}
-	
 }

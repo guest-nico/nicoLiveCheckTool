@@ -592,10 +592,10 @@ namespace namaichi
 			// 
 			this.label9.Location = new System.Drawing.Point(110, 227);
 			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(256, 48);
+			this.label9.Size = new System.Drawing.Size(271, 48);
 			this.label9.TabIndex = 23;
 			this.label9.Text = "（放送者名、放送者ID、チャンネル名、チャンネルID、タイトル、説明、放送ID。スペース区切りでワードを複数指定可(OR条件)。語頭に「-」で「含まない」判定(N" +
-			"OT条件)）。";
+			"OT条件)）。正規表現。";
 			// 
 			// comThumbBox
 			// 

@@ -430,8 +430,6 @@ namespace namaichi.alart
 				
 				//lvid = util.getRegGroup(dec, "\"content_ids\":\"(lv\\d+)\"");
 				lvid = util.getRegGroup(dec, "watch/(lv\\d+)");
-				if (check.checkedLvIdList.Find(x => x.lvId == lvid) != null)
-					return ret;
 				thumbnail = util.getRegGroup(dec, "\"icon\":\"(.+?)\"");
 				dt = util.getRegGroup(dec, "\"created_at\":\"(.+?)\"");
 				if (dt != null && DateTime.Parse(dt) < startTime && !bool.Parse(config.get("IsStartTimeAllCheck")))
@@ -508,7 +506,6 @@ namespace namaichi.alart
 				
 				i.pubDateDt = DateTime.Parse(dt);
 				ret.Add(i);
-				check.checkedLvIdList.Add(i);
 				return ret;
 			} catch (Exception ee) {
 				util.debugWriteLine(ee.Message + ee.Source + ee.StackTrace + ee.TargetSite);

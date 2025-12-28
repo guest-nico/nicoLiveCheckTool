@@ -37,6 +37,10 @@ namespace namaichi
 		private void InitializeComponent()
 		{
 			this.customList = new System.Windows.Forms.DataGridView();
+			this.条件 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.音設定 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.キーワード = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.カスタム = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.nameLabel = new System.Windows.Forms.Label();
 			this.nameText = new System.Windows.Forms.TextBox();
 			this.cancelBtn = new System.Windows.Forms.Button();
@@ -45,10 +49,7 @@ namespace namaichi
 			this.deleteBtn = new System.Windows.Forms.Button();
 			this.clearBtn = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
-			this.条件 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-			this.音設定 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-			this.キーワード = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.カスタム = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.label2 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.customList)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -78,6 +79,44 @@ namespace namaichi
 			this.customList.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.CustomListCellParsing);
 			this.customList.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.CustomListCellValueChanged);
 			this.customList.CurrentCellDirtyStateChanged += new System.EventHandler(this.CustomListCurrentCellDirtyStateChanged);
+			// 
+			// 条件
+			// 
+			this.条件.DataPropertyName = "matchType";
+			this.条件.HeaderText = "条件";
+			this.条件.Items.AddRange(new object[] {
+									"必ず含む",
+									"いずれかを含む",
+									"含まない"});
+			this.条件.Name = "条件";
+			// 
+			// 音設定
+			// 
+			this.音設定.DataPropertyName = "type";
+			this.音設定.HeaderText = "タイプ";
+			this.音設定.Items.AddRange(new object[] {
+									"ワード",
+									"条件の入れ子"});
+			this.音設定.Name = "音設定";
+			this.音設定.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.音設定.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.音設定.Width = 96;
+			// 
+			// キーワード
+			// 
+			this.キーワード.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.キーワード.DataPropertyName = "str";
+			this.キーワード.HeaderText = "ワード";
+			this.キーワード.Name = "キーワード";
+			// 
+			// カスタム
+			// 
+			this.カスタム.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+			this.カスタム.DataPropertyName = "customBtn";
+			this.カスタム.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.カスタム.HeaderText = "入れ子設定";
+			this.カスタム.Name = "カスタム";
+			this.カスタム.Width = 70;
 			// 
 			// nameLabel
 			// 
@@ -154,43 +193,13 @@ namespace namaichi
 			this.label1.TabIndex = 25;
 			this.label1.Text = "(任意設定。お気に入りタブで使用する表示名)";
 			// 
-			// 条件
+			// label2
 			// 
-			this.条件.DataPropertyName = "matchType";
-			this.条件.HeaderText = "条件";
-			this.条件.Items.AddRange(new object[] {
-									"必ず含む",
-									"いずれかを含む",
-									"含まない"});
-			this.条件.Name = "条件";
-			// 
-			// 音設定
-			// 
-			this.音設定.DataPropertyName = "type";
-			this.音設定.HeaderText = "タイプ";
-			this.音設定.Items.AddRange(new object[] {
-									"ワード",
-									"条件の入れ子"});
-			this.音設定.Name = "音設定";
-			this.音設定.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			this.音設定.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.音設定.Width = 96;
-			// 
-			// キーワード
-			// 
-			this.キーワード.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.キーワード.DataPropertyName = "str";
-			this.キーワード.HeaderText = "ワード";
-			this.キーワード.Name = "キーワード";
-			// 
-			// カスタム
-			// 
-			this.カスタム.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-			this.カスタム.DataPropertyName = "customBtn";
-			this.カスタム.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.カスタム.HeaderText = "入れ子設定";
-			this.カスタム.Name = "カスタム";
-			this.カスタム.Width = 70;
+			this.label2.Location = new System.Drawing.Point(174, 225);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(249, 16);
+			this.label2.TabIndex = 25;
+			this.label2.Text = "ワードは正規表現で判定されます。";
 			// 
 			// CustomKeywordForm
 			// 
@@ -203,6 +212,7 @@ namespace namaichi
 			this.Controls.Add(this.cancelBtn);
 			this.Controls.Add(this.okBtn);
 			this.Controls.Add(this.nameText);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.nameLabel);
 			this.Controls.Add(this.customList);
@@ -213,6 +223,7 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Button clearBtn;
 		private System.Windows.Forms.Button deleteBtn;

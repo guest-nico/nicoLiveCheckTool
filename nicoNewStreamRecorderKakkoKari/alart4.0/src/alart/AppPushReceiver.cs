@@ -538,9 +538,6 @@ namespace namaichi.alart
 				
 				//var lvid = util.getRegGroup(d, "(live_onair|video_live)-(lv\\d+)", 2);
 				if (lvid != null) {
-					if (check.checkedLvIdList.Find(x => x.lvId == lvid) != null) 
-						return;
-					
 					util.debugWriteLine("app push appData lvid " + lvid);
 					var items = getNicoCasItem(lvid, proto);
 					if (items != null) {
@@ -683,33 +680,42 @@ namespace namaichi.alart
 				string userId = "", comId = "";
 				string name = "";
 				if (!r) {
+					string dataBody = null, dataTitle = null;
 					foreach (var a in msg.AppDatas) {
 						if (a.Key == "content_id" || a.Key == "content_url") {
 							var _lv = util.getRegGroup(a.Value, "(lv\\d+)");
 							if (_lv != null) lvid = _lv;
 						}
 						if (a.Key == "body") {
-							title = a.Value;
+							dataBody = a.Value;
 						}
 						if (a.Key == "actor_icon")
 							thumb = a.Value;
 						if (a.Key == "group_id") {
+							if (a.Value == "live_info") return null;
+							
 							var _groupid = util.getRegGroup(a.Value, "id_(.+)");
 							if (_groupid == null) continue;
 							
 							if (_groupid.StartsWith("c")) {
-								comId = a.Value;
-								isCom = _groupid.StartsWith("c");
+								comId = _groupid;
+								isCom = _groupid.StartsWith("co");
 							}
 							else userId = _groupid;
 						}
 						if (a.Key == "title") {
-							name = util.getRegGroup(a.Value, "(.+?)(さん)*が番組を");
+							dataTitle = a.Value;
 						}
 						if (a.Key.IndexOf("icon") > -1) //"actor_icon")
 							thumb = a.Value;
 					}
-				
+					if (!string.IsNullOrEmpty(userId)) {
+						title = dataBody;
+						name = util.getRegGroup(dataTitle, "(.+?)(さん)*が番組を");
+					} else {
+						title = util.getRegGroup(dataTitle, "(.+?)が開始しました");
+						name = dataBody;
+					}
 					/*
 					check.form.addLogText("スマホプッシュ通知から取得した放送のページが取得できませんでした " + lvid);
 					util.debugWriteLine("app push page error !r " + lvid);
@@ -772,12 +778,11 @@ namespace namaichi.alart
 				util.debugWriteLine("thumb " + thumb);
 				//thumbnail = "";
 				
-				
 				//if (title == null || lvid == null || hg.thumbnail == null ||
 				//    	dt == DateTime.MinValue || comName == null || hg.communityId == null ||
 				//    	hg.tags == null || hg.description == null ||
 				//    	(isCom && (hostName == null || hg.userId == null))) {
-				if (lvid == null || (userId == null && comId == null)) {
+				if (lvid == null || (string.IsNullOrEmpty(userId) && string.IsNullOrEmpty(comId))) {
 					#if DEBUG
 						//check.form.addLogText("app push error " + msg + " lv " + lvid);
 						//check.form.addLogText("app push error title " + title + " lvid " + lvid + " thumb " + hg.thumbnail + " dt " + dt + " comN " + comName + " comi " + hg.communityId + " tag " + hg.tags + " desc " + hg.description + " isc " + isCom + " un " + hostName + " ui " + hg.userId);
@@ -805,7 +810,6 @@ namespace namaichi.alart
 				i.pubDateDt = dt;
 				var ret = new List<RssItem>();
 				ret.Add(i);
-				check.checkedLvIdList.Add(i);
 				#if DEBUG
 					//check.form.addLogText("app push found lvid " + lvid + " title " + title + " " + comName);
 				#endif

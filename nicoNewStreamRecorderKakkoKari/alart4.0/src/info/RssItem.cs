@@ -164,14 +164,24 @@ namespace namaichi.info
 				return title != null && 
 					title.IndexOf(word.Substring(word.IndexOf("=") + 1)) > -1;
 			}
-			
-			return util.getRegGroup(lvId, "(" + word + ")") != null || 
-					util.getRegGroup(hostName == null ? "" : hostName, "(" + word + ")") != null ||
-					util.getRegGroup(comId == null ? "" : comId, "(" + word + ")") != null ||
-					util.getRegGroup(comName == null ? "" : comName, "(" + word + ")") != null ||
-					util.getRegGroup(userId == null ? "" : userId, "(" + word + ")") != null ||
-					util.getRegGroup(description == null ? "" : description, "(" + word + ")") != null ||
-					util.getRegGroup(title == null ? "" : title, "(" + word + ")") != null;
+			try {
+				return util.getRegGroup(lvId, "(" + word + ")") != null || 
+						util.getRegGroup(hostName == null ? "" : hostName, "(" + word + ")") != null ||
+						util.getRegGroup(comId == null ? "" : comId, "(" + word + ")") != null ||
+						util.getRegGroup(comName == null ? "" : comName, "(" + word + ")") != null ||
+						util.getRegGroup(userId == null ? "" : userId, "(" + word + ")") != null ||
+						util.getRegGroup(description == null ? "" : description, "(" + word + ")") != null ||
+						util.getRegGroup(title == null ? "" : title, "(" + word + ")") != null;
+			} catch (Exception) {
+				util.debugWriteLine("invalid regex? " + word);
+				return (lvId != null && lvId.IndexOf(word) > -1) ||
+						(hostName != null && hostName.IndexOf(word) > -1) ||
+						(comId != null && comId.IndexOf(word) > -1) ||
+						(comName != null && comName.IndexOf(word) > -1) ||
+						(userId != null && userId.IndexOf(word) > -1) ||
+						(description != null && description.IndexOf(word) > -1) ||
+						(title != null && title.IndexOf(word) > -1);
+			}
 		}
 		private List<string> getStringToWordsList(string s) {
 			var quot = new List<string>();

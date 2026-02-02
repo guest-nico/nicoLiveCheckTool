@@ -72,7 +72,7 @@ namespace namaichi.alart
 					RssItem ri = null; 
 					if (!isReserveAiLive(lvid, higGetOk ? hig : null, aiList, out ri)) continue;
 					
-					var r = new Reservation(check.container, lvid, config);
+					var r = new Reservation(check.container, lvid, ri.pubDateDt, config);
 					var ret = r.live2Reserve(bool.Parse(config.get("IsOverwriteOldReserve")));
 					if (r.delLog != null) check.form.addLogText(r.delLog + "のタイムシフト予約を削除しました");
 					

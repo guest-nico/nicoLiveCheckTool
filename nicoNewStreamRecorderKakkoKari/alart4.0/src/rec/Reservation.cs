@@ -26,15 +26,17 @@ namespace namaichi.rec
 		CookieContainer cc;
 		string lv;
 		config.config cfg;
+		DateTime dt;
 		
 		string useUrl = "https://live.nicovideo.jp/api/timeshift.ticket.use";
 		//string reservationsUrl = "https://live.nicovideo.jp/api/timeshift.reservations";
 		public string delLog = null;
 		
-		public Reservation(CookieContainer cc, string lv, config.config cfg)
+		public Reservation(CookieContainer cc, string lv, DateTime dt, config.config cfg)
 		{
 			this.cc = cc;
 			this.lv = lv;
+			this.dt = dt;
 			this.cfg = cfg;
 		}
 		/*
@@ -252,17 +254,21 @@ namespace namaichi.rec
 				var oldTitle = "";
 				var timeList = new List<DateTime>();
 				var lvList = new List<DateTime>();
-				var timeM = new Regex("\"openTime\":\"(.+?)\"").Matches(props);
-				var lvM = new Regex("programId\":\"(lv\\d+)").Matches(props);
+				var timeM = new Regex("\"openTime\":(.+?)").Matches(props);
+				var lvM = new Regex("nicoliveProgramId\":\"(lv\\d+)").Matches(props);
 				var titleM = new Regex("title\":\"(.+?)\"").Matches(props);
 				
-				if (timeM.Count != lvM.Count || timeM.Count != lvM.Count)
-					oldId = util.getRegGroup(res, "programId&quot;:&quot;(lv\\d+)");
-				else {
+				if (timeM.Count == 0 || lvM.Count == 0)
+					return "予約リストをの上書き中、予約リストから放送情報の取得に失敗しました";
+				if (timeM.Count != lvM.Count || timeM.Count != lvM.Count) {
+					oldId = util.getRegGroup(res, "nicoliveProgramId&quot;:&quot;(lv\\d+)");
+					//return "予約の上書き中、予約リストの読み取りに失敗しました";
+				} else {
 					var minI = 0;
 					var minT = DateTime.MaxValue;
 					for (var i = 0; i < lvM.Count; i++) {
-						var t = DateTime.Parse(timeM[i].Groups[1].Value);
+						//var t = DateTime.Parse(timeM[i].Groups[1].Value);
+						var t = util.getUnixToDatetime(long.Parse(timeM[i].Groups[1].Value));
 						if (t < minT) {
 							minI = i;
 							minT = t; 
@@ -288,7 +294,7 @@ namespace namaichi.rec
 				return getLive2ReserveRes2();
 			} catch (Exception e) {
 				util.debugWriteLine(e.Message + e.Source + e.StackTrace);
-				return "予約の上書き中、何らかの問題が発生しました。";
+				return "予約の上書き中、何らかの問題が発生しました。 " + e.Message + e.Source + e.StackTrace;
 			}
 		}
 		

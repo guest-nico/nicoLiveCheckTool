@@ -135,6 +135,10 @@ namespace namaichi.alart
 						return;
 					}
 					list = getNewTimeLineList(res);
+					if (list == null) {
+						check.form.addLogText(url + " " + (res.Length < 300 ? res : res.Substring(0, 300)));
+						return;
+					}
 				} else {
 					res = util.getPageSource(url);
 					if (res == null) {
@@ -253,7 +257,7 @@ namespace namaichi.alart
 									var isSuccessAccess = true;
 									var isAlart = check.isAlartItem(ri, ai, out isSuccessAccess);
 									if (isAlart || !isSuccessAccess) {
-										var ret = new Reservation(check.container, ri.lvId, config).live2Reserve(bool.Parse(config.get("IsOverwriteOldReserve")));
+										var ret = new Reservation(check.container, ri.lvId, ri.pubDateDt, config).live2Reserve(bool.Parse(config.get("IsOverwriteOldReserve")));
 										if (ret == "ok") {
 											check.form.addLogText(ri.lvId + " " + ri.comName + (string.IsNullOrEmpty(ri.comName) ? (ri.title) : (ri.comName + "(" + ri.title + ")")) + "のタイムシフトを予約しました");
 											var hi = new HistoryInfo(ri, check.form);
@@ -392,8 +396,12 @@ namespace namaichi.alart
 					}
 					dataprops = dataprops.Replace("&quot;", "\"");
 					var propsObj = Newtonsoft.Json.JsonConvert.DeserializeObject<TimeTablePageInfo>(dataprops);
+					if (propsObj == null || propsObj.timetable == null) {
+						check.form.addLogText("番組表から正しく情報を取得できませんでした " + res.Length + " " + (res.Length < 300 ? res : res.Substring(0, 300)));
+					}
 					foreach (var p in propsObj.timetable.programs) {
 						if (p.status == "ENDED") continue;
+						if (p.socialGroup == null) continue;
 						
 						var id = p.nicoliveProgramId.StartsWith("lv") ? p.nicoliveProgramId.Substring(2) : p.nicoliveProgramId;
 						var startDt = util.getUnixToDatetime(p.beginTime / 1);
@@ -407,8 +415,8 @@ namespace namaichi.alart
 						ret.Add(ti);
 					}
 				} catch (Exception e) {
-					util.debugWriteLine(e.Message + e.Source + e.StackTrace);
-					check.form.addLogText("番組表からの取得中に何らかの問題が発生しました。 " + e.Message + e.Source + e.StackTrace);
+					util.debugWriteLine(e.Message + e.Source + e.TargetSite + e.StackTrace);
+					check.form.addLogText("番組表からの取得中に何らかの問題が発生しました。 " + e.Message + e.Source + e.TargetSite + e.StackTrace);
 				}
 				return ret.ToArray();
 			} else {

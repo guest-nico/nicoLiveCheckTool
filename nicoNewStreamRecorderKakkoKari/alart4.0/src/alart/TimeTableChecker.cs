@@ -396,10 +396,10 @@ namespace namaichi.alart
 					}
 					dataprops = dataprops.Replace("&quot;", "\"");
 					var propsObj = Newtonsoft.Json.JsonConvert.DeserializeObject<TimeTablePageInfo>(dataprops);
-					if (propsObj == null || propsObj.timetable == null) {
+					if (propsObj == null || propsObj.view == null) {
 						check.form.addLogText("番組表から正しく情報を取得できませんでした " + res.Length + " " + (res.Length < 300 ? res : res.Substring(0, 300)));
 					}
-					foreach (var p in propsObj.timetable.programs) {
+					foreach (var p in propsObj.view.programs) {
 						if (p.status == "ENDED") continue;
 						if (p.socialGroup == null) continue;
 						
@@ -408,6 +408,7 @@ namespace namaichi.alart
 						var endDt = util.getUnixToDatetime(p.endTime / 1);
 						var status = p.status == "ON_AIR" ? "onair" : "RELEASED";
 						var hostName = (p.programProvider == null) ? (p.providerType == "official" ? "株式会社ドワンゴ" : "") : p.programProvider.name;
+
 						var ti = new TimeLineInfo(id, p.title, 
 								p.description, p.providerType, 
 								p.socialGroup.thumbnailUrl, null, null, null, null, null, status, p.payment, p.socialGroup.id, p.socialGroup.name, hostName);
@@ -535,7 +536,9 @@ namespace namaichi.alart
 		public DateTime startTime = DateTime.MinValue;
 	}
 	class TimeTablePageInfo {
-		public ttpTimeTable timetable = null;
+		//public ttpTimeTable timetable = null;
+		public ttpTimeTable view = null; //new
+		
 		public class ttpTimeTable {
 			public List<ttpPrograms> programs = null;
 		}

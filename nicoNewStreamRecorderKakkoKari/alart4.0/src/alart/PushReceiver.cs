@@ -43,6 +43,7 @@ namespace namaichi.alart
 		protected bool isFirst = true;
 		
 		protected DateTime startTime = DateTime.Now;
+		int connectingErrorCount = 0;
 		
 		public PushReceiver(Check check, config.config config) {
 			this.check = check;
@@ -133,11 +134,15 @@ namespace namaichi.alart
 				Thread.Sleep(5000);
 				if (_ws != null && _ws.State == WebSocketState.Connecting) {
 					util.debugWriteLine("ws connect 5 seconds close");
+					connectingErrorCount++;
+					if (connectingErrorCount > 10 && isRetry) {
+						isRetry = false;
+						check.form.addLogText("ブラウザプッシュサーバーへの接続に失敗しました");
+					}
 					try {
 						_ws.Close();
 					} catch (Exception e) {
 						util.debugWriteLine("connect timeout ws exception " + e.Message + e.Source + e.StackTrace + e.TargetSite);
-						
 					}
 					//check.form.addLogText("ブラウザプッシュ通知の再接続に失敗しました");
 					//isFirst = true;
@@ -249,6 +254,12 @@ namespace namaichi.alart
 				var isChannnelIdNull = channelId == null;
 				util.debugWriteLine("channnel id  " + channelId + " uaid " + uaid);
 				if (channelId == null) {
+					if (check.container == null) {
+						check.form.addLogText("Cookieが見つからなかったためブラウザプッシュ通知の設定ができませんでした");
+						isRetry = false;
+						return;
+					}
+					
 					//var _chid2 = System.Guid.NewGuid().ToString();
 					var _chid = util.getTimeGuid();
 					var pubBase64 = Convert.ToBase64String(publicKey);

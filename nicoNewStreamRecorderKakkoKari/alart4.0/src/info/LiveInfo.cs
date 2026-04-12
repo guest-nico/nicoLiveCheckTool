@@ -155,8 +155,9 @@ namespace namaichi.info
 			//return ThumbnailManager.getThumbnailRssUrl(url, isSaveCache);
 			var img = ThumbnailManager.getThumbnailRssUrl(url, isSaveCache, isGetIcon);
 			if (img == null) return null;
-			return new Bitmap(img, 50, 50);
-			//return null;
+			var ret = new Bitmap(img, 50, 50);
+			img.Dispose();
+			return ret;
 		}
 
 		private string getFavorite(AlartInfo[] aiList, RssItem ri, string _favorite) {
@@ -405,5 +406,8 @@ namespace namaichi.info
             get { return memo;}
             set { this.memo = value; }
         }
+		public void dispose() {
+			if (thumbnail != null) thumbnail.Dispose();
+		}
 	}
 }

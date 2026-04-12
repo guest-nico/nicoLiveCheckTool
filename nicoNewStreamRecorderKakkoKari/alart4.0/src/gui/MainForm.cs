@@ -3443,6 +3443,9 @@ namespace namaichi
 			}
 			//formAction(() => {
 				try {
+					var rmList = new List<LiveInfo>();
+					var updateIndList = new List<int>();
+					
 					for (var i = _liveListDataSource.Count() - 1; i > -1; i--) {
 				        var li = _liveListDataSource[i];
 				        if (li == null) continue;
@@ -3453,14 +3456,16 @@ namespace namaichi
 				    	if (isDelete) {
 				           	 var th = li.thumbnail;
 				           	 if (th == null) continue;
-				           	 formAction(() => {
-							 	liveListDataSource.Remove(li);
-							 });
+							 rmList.Add(li);
 							 if (th != null) th.Dispose();
 						}
-				        else formAction(() => liveList.UpdateCellValue(8, i));
-						
+				        //else formAction(() => liveList.UpdateCellValue(8, i));
+				        else updateIndList.Add(i);
 					}
+					formAction(() => {
+						foreach (var i in updateIndList) liveList.UpdateCellValue(8, i);
+						foreach (var li in rmList) liveListDataSource.Remove(li);
+					});
 	           	} catch (Exception e) {
 	           		util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 	           	}
@@ -3643,8 +3648,10 @@ namespace namaichi
 			
 			var id = string.IsNullOrEmpty(idsStr) ? "こ" : (idsStr);
 			if (System.Windows.Forms.MessageBox.Show(id + "の行を削除していいですか？", "確認", MessageBoxButtons.OKCancel) == DialogResult.Cancel) return;
-			foreach (var li in selectedLIList)
+			foreach (var li in selectedLIList) {
 				liveListDataSource.Remove(li);
+				li.dispose();
+			}
 			changedListContent();
 				
 				
@@ -5987,8 +5994,10 @@ namespace namaichi
 						var item = notifyIconMenuStrip.Items[i];
 						if (item.Tag == null) continue;
 						var ri = (RssItem)item.Tag;
-						if (delDtList.IndexOf(ri.pubDateDt) > -1)
+						if (delDtList.IndexOf(ri.pubDateDt) > -1) {
 							notifyIconMenuStrip.Items.Remove(item);
+							if (item.Image != null) item.Image.Dispose();
+						}
 					}
 				}
 				

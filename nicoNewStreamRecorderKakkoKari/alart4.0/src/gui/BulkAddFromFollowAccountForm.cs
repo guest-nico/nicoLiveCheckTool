@@ -8,6 +8,7 @@
  */
 using System;
 using System.Drawing;
+using System.Net;
 using System.Windows.Forms;
 
 namespace namaichi
@@ -24,7 +25,9 @@ namespace namaichi
 		public bool isBulkAddAuto {get; set;}
 		public string bulkTypes = null;
 		config.config cfg = null;
-		public BulkAddFromFollowAccountForm(int fontSize, config.config cfg)
+		MainForm form = null;
+		public CookieContainer cc = null;
+		public BulkAddFromFollowAccountForm(int fontSize, config.config cfg, MainForm form)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
@@ -35,6 +38,7 @@ namespace namaichi
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
 			this.cfg = cfg;
+			this.form = form;
 			util.setFontSize(fontSize, this, false);
 		}
 		
@@ -44,8 +48,8 @@ namespace namaichi
 		}
 		void OkBtnClick(object sender, EventArgs e)
 		{
-			mail = mailText.Text;
-			pass = passText.Text;
+			//mail = mailText.Text;
+			//pass = passText.Text;
 			isAddToCom = comRadioBtn.Checked;
 			follow[0] = userChkBox.Checked;
 			follow[2] = comChkBox.Checked && isAddToCom;
@@ -62,6 +66,34 @@ namespace namaichi
 		void ReleaseBtnClick(object sender, EventArgs e)
 		{
 			cfg.set("IsBulkAddAuto", "false");
+		}
+		
+		void LoginBtnClick(object sender, EventArgs e)
+		{
+			#if NET40
+				MessageBox.Show("現在、こちらの機能は.NET Framework 4.5版でのみ動作が可能となっております。申し訳ありません。");
+				return;
+			#endif
+			if (!util.isWebView2Installed()) {
+				MessageBox.Show("現在のところ、こちらのログイン方法ではWebView2 Runtimeが必要です。\nhttps://developer.microsoft.com/ja-jp/microsoft-edge/webview2?form=MA13LH&cs=2463970835#download");
+				util.openUrlBrowser("https://developer.microsoft.com/ja-jp/microsoft-edge/webview2?form=MA13LH&cs=2463970835#download", cfg);
+				return;
+			}
+			var cg = new rec.CookieGetter(cfg, form);
+			//var cc = await cg.getAccountCookie(mailText.Text, passText.Text);
+			var cc = cg.getAccountCookie(mailText.Text, passText.Text);
+			if (cc == null) {
+				MessageBox.Show("login error", "", MessageBoxButtons.OK);
+				return;
+			}
+			var TargetUrl = new Uri("https://live.nicovideo.jp/");
+			if (cc.GetCookies(TargetUrl)["user_session"] == null &&
+				                   cc.GetCookies(TargetUrl)["user_session_secure"] == null)
+				MessageBox.Show("no login", "", MessageBoxButtons.OK);
+			else {
+				MessageBox.Show("login ok", "", MessageBoxButtons.OK);
+				this.cc = cc;
+			}
 		}
 	}
 }

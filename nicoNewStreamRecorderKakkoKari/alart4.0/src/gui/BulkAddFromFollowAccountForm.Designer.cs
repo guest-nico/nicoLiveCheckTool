@@ -50,6 +50,7 @@ namespace namaichi
 			this.label3 = new System.Windows.Forms.Label();
 			this.IsBuldAddAutoChkBox = new System.Windows.Forms.CheckBox();
 			this.releaseBtn = new System.Windows.Forms.Button();
+			this.loginBtn = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -60,6 +61,7 @@ namespace namaichi
 			this.label1.TabIndex = 0;
 			this.label1.Text = "メールアドレス：";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label1.Visible = false;
 			// 
 			// label2
 			// 
@@ -69,6 +71,7 @@ namespace namaichi
 			this.label2.TabIndex = 0;
 			this.label2.Text = "パスワード：";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label2.Visible = false;
 			// 
 			// mailText
 			// 
@@ -76,6 +79,7 @@ namespace namaichi
 			this.mailText.Name = "mailText";
 			this.mailText.Size = new System.Drawing.Size(317, 19);
 			this.mailText.TabIndex = 0;
+			this.mailText.Visible = false;
 			// 
 			// passText
 			// 
@@ -83,6 +87,7 @@ namespace namaichi
 			this.passText.Name = "passText";
 			this.passText.Size = new System.Drawing.Size(317, 19);
 			this.passText.TabIndex = 1;
+			this.passText.Visible = false;
 			// 
 			// cancelBtn
 			// 
@@ -173,6 +178,7 @@ namespace namaichi
 			this.IsBuldAddAutoChkBox.TabIndex = 2;
 			this.IsBuldAddAutoChkBox.Text = "定期的にこのアカウントのフォローから追加する";
 			this.IsBuldAddAutoChkBox.UseVisualStyleBackColor = true;
+			this.IsBuldAddAutoChkBox.Visible = false;
 			// 
 			// releaseBtn
 			// 
@@ -182,13 +188,26 @@ namespace namaichi
 			this.releaseBtn.TabIndex = 9;
 			this.releaseBtn.Text = "解除";
 			this.releaseBtn.UseVisualStyleBackColor = true;
+			this.releaseBtn.Visible = false;
 			this.releaseBtn.Click += new System.EventHandler(this.ReleaseBtnClick);
+			// 
+			// loginBtn
+			// 
+			this.loginBtn.Location = new System.Drawing.Point(25, 19);
+			this.loginBtn.Margin = new System.Windows.Forms.Padding(2);
+			this.loginBtn.Name = "loginBtn";
+			this.loginBtn.Size = new System.Drawing.Size(69, 23);
+			this.loginBtn.TabIndex = 18;
+			this.loginBtn.Text = "ログインする";
+			this.loginBtn.UseVisualStyleBackColor = true;
+			this.loginBtn.Click += new System.EventHandler(this.LoginBtnClick);
 			// 
 			// BulkAddFromFollowAccountForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(440, 139);
+			this.Controls.Add(this.loginBtn);
 			this.Controls.Add(this.releaseBtn);
 			this.Controls.Add(this.okBtn);
 			this.Controls.Add(this.IsBuldAddAutoChkBox);
@@ -212,6 +231,7 @@ namespace namaichi
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.Button loginBtn;
 		private System.Windows.Forms.Button releaseBtn;
 		private System.Windows.Forms.CheckBox IsBuldAddAutoChkBox;
 		private System.Windows.Forms.Label label3;

@@ -36,8 +36,8 @@ class app {
 	}
 }
 class util {
-	public static string versionStr = "ver0.1.9.10";
-	public static string versionDayStr = "2026/04/12";
+	public static string versionStr = "ver0.1.9.11";
+	public static string versionDayStr = "2026/08/17";
 	public static string osName = null;
 	public static string osType = null;
 	public static bool isWebRequestOk = false;
@@ -1038,78 +1038,99 @@ class util {
     return -1;
    }
 	public static string CheckOSName()
+    {
+        string result = "";
+        try
         {
-            string result = "";
-            try
+        	System.Management.ManagementClass mc =
+        		    new System.Management.ManagementClass("Win32_OperatingSystem");
+        	System.Management.ManagementObjectCollection moc = mc.GetInstances();
+        
+            foreach (System.Management.ManagementObject mo in moc)
             {
-            	System.Management.ManagementClass mc =
-            		    new System.Management.ManagementClass("Win32_OperatingSystem");
-            	System.Management.ManagementObjectCollection moc = mc.GetInstances();
-            
-                foreach (System.Management.ManagementObject mo in moc)
-                {
-                    result = mo["Caption"].ToString();
-                    if (mo["CSDVersion"] != null)
-                        result += " " + mo["CSDVersion"].ToString();
-                    result += " (" + mo["Version"].ToString() + ")";
-                }
-                osName = result;
+                result = mo["Caption"].ToString();
+                if (mo["CSDVersion"] != null)
+                    result += " " + mo["CSDVersion"].ToString();
+                result += " (" + mo["Version"].ToString() + ")";
             }
-            catch (Exception e)
+            osName = result;
+        }
+        catch (Exception e)
+        {
+            util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+            try {
+            	var ver = Environment.OSVersion.Version;
+				var osVer = "";
+				if (ver.Major > 6 || (ver.Major >= 6 && ver.Minor >= 2))
+					osVer = "Windows 10";
+				util.debugWriteLine("Environment " + osVer);
+				return osVer;
+            } catch (Exception ee) {
+            	util.debugWriteLine(ee.Message + e.Source + e.StackTrace + ee.TargetSite);
+            }
+            return result + " unknownOsName";
+        }
+        return result;
+    }
+    public static string CheckOSType()
+    {
+        string result = "";
+        try
+        {
+        	System.Management.ManagementClass mc =
+                new System.Management.ManagementClass("Win32_OperatingSystem");
+            System.Management.ManagementObjectCollection moc = mc.GetInstances();
+        
+            foreach (System.Management.ManagementObject mo in moc)
             {
-                util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-                try {
-                	var ver = Environment.OSVersion.Version;
-					var osVer = "";
-					if (ver.Major > 6 || (ver.Major >= 6 && ver.Minor >= 2))
-						osVer = "Windows 10";
-					util.debugWriteLine("Environment " + osVer);
-					return osVer;
-                } catch (Exception ee) {
-                	util.debugWriteLine(ee.Message + e.Source + e.StackTrace + ee.TargetSite);
-                }
-                return result + " unknownOsName";
+                if (mo["Version"].ToString().StartsWith("5.1"))
+                    result = "XP";
+                else if (mo["Version"].ToString().StartsWith("6.0"))
+                    result = "Vista";
+                else if (mo["Version"].ToString().StartsWith("6.1"))
+                    result = "7";
+                else if (mo["Version"].ToString().StartsWith("6.2"))
+                    result = "8";
+                else if (mo["Version"].ToString().StartsWith("6.3"))
+                    result = "8.1";
+                else if (mo["Version"].ToString().StartsWith("10.0"))
+                    result = "10";
+                else if (mo["Version"].ToString().StartsWith("11.0"))
+                    result = "11";
+                else
+                    result = "other";
             }
+            osType = result;
+        }
+        catch (Exception e)
+        {
+            util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
             return result;
         }
-        public static string CheckOSType()
-        {
-            string result = "";
-            try
-            {
-            	System.Management.ManagementClass mc =
-	                new System.Management.ManagementClass("Win32_OperatingSystem");
-	            System.Management.ManagementObjectCollection moc = mc.GetInstances();
-            
-                foreach (System.Management.ManagementObject mo in moc)
-                {
-                    if (mo["Version"].ToString().StartsWith("5.1"))
-                        result = "XP";
-                    else if (mo["Version"].ToString().StartsWith("6.0"))
-                        result = "Vista";
-                    else if (mo["Version"].ToString().StartsWith("6.1"))
-                        result = "7";
-                    else if (mo["Version"].ToString().StartsWith("6.2"))
-                        result = "8";
-                    else if (mo["Version"].ToString().StartsWith("6.3"))
-                        result = "8.1";
-                    else if (mo["Version"].ToString().StartsWith("10.0"))
-                        result = "10";
-                    else if (mo["Version"].ToString().StartsWith("11.0"))
-                        result = "11";
-                    else
-                        result = "other";
-                }
-                osType = result;
-            }
-            catch (Exception e)
-            {
-                util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
-                return result;
-            }
-            return result;
-        }
-
+        return result;
+    }
+	public static bool isWebView2Installed() {
+    	
+    	var subkeys = new List<string>() {
+			@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}",
+			@"HKEY_CURRENT_USER\Software\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}",
+			@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}",
+			@"HKEY_CURRENT_USER\Software\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}"
+    	};
+    	foreach (var subkey in subkeys) {
+    		var hive = subkey.StartsWith("HKEY_LOCAL_MACHINE") ? RegistryHive.LocalMachine : RegistryHive.CurrentUser;
+    		var _subkey = subkey.Substring(subkey.IndexOf("\\") + 1);
+			using (RegistryKey ndpKey = RegistryKey.OpenBaseKey(hive, RegistryView.Registry32).OpenSubKey(_subkey))
+			{
+				if (ndpKey == null) continue;
+				var v = ndpKey.GetValue("pv");
+				if (v != null && v.ToString() != "" && v.ToString() != "0.0.0.0") {
+					return true;
+				}
+			}
+    	}
+		return false;
+	}
 	public static string getMainSubStr(bool isSub, bool isKakko = false) {
 		var ret = (isSub) ? "サブ" : "メイン";
 		if (isKakko) ret = "(" + ret + ")";

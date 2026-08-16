@@ -303,17 +303,19 @@ namespace namaichi.rec
 				bulkAddFromFollowComLock = null;
 				setToolMenuStatusBar();
 			} else {
-				Task.Factory.StartNew(() => {
+				//Task.Factory.StartNew(() => {
 					try {
-						var f = new BulkAddFromFollowAccountForm(int.Parse(form.config.get("fontSize")), form.config);
+						var f = new BulkAddFromFollowAccountForm(int.Parse(form.config.get("fontSize")), form.config, form);
+						/*
 						Task.Factory.StartNew(() => {
 							form.formAction(() => f.ShowDialog(form), int.MaxValue);
 						}).Wait();
-						
+						*/
+						f.ShowDialog();
 						if (f.DialogResult != DialogResult.OK) return;
 						if (!f.isBulkAddAuto)
 							form.config.set("IsBulkAddAuto", "false");
-							
+						/*
 						if (f.mail == null) return;
 						
 						if (f.mail == "" || f.pass == "") {
@@ -322,6 +324,8 @@ namespace namaichi.rec
 						}
 								
 						var cc = getUserSession(f.mail, f.pass);
+						*/
+						var cc = f.cc;
 						if (cc == null) {
 							form.addLogText("参加ユーザー・チャンネルから一括登録中にCookieが取得できませんでした");
 							return;
@@ -390,7 +394,7 @@ namespace namaichi.rec
 						util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
 						form.addLogText("一括登録中に未知のエラーが発生しました" + e.Message + e.Source + e.StackTrace + e.TargetSite);
 					}
-				});
+				//});
 				
 			}
 		}
@@ -404,7 +408,7 @@ namespace namaichi.rec
 				else {
 					cc = getUserSession(form.config.get("bulkAddAccountId"), form.config.get("bulkAddAccountPass"));
 					if (cc == null) {
-						form.addLogText("参加中のユーザー・チャンネルから一括登録する際に前回のメールアドレスとパスワードからCookieが取得できませんでした");
+						form.addLogText("参加中のユーザー・チャンネルから自動で一括登録する際に前回のメールアドレスとパスワードからCookieが取得できませんでした");
 						return;
 					}
 				}

@@ -59,6 +59,9 @@ namespace namaichi
 			setForeColor(Color.FromArgb(int.Parse(cfg.get("alartForeColor"))));
 			
 			util.setFontSize(int.Parse(cfg.get("fontSize")), this, false);
+			
+			if (util.Get45PlusFromRegistry() < 4.5)
+				loginBtn.Enabled = false;
 		}
 		
 		void optionOk_Click(object sender, EventArgs e)
@@ -88,7 +91,7 @@ namespace namaichi
 //			var browserName = (selectedImporter != null) ? selectedImporter.SourceInfo.BrowserName : "";
 			var browserNum = (useCookieRadioBtn.Checked) ? "2" : (useAccountLoginRadioBtn.Checked ? "1" : "3");
 //			var browserNum2 = (useCookieRadioBtn2.Checked) ? "2" : "1";
-			return new Dictionary<string, string>(){
+			var ret = new Dictionary<string, string>(){
 				{"accountId",mailText.Text},
 				{"accountPass",passText.Text},
 				{"user_session_setting",userSessionText.Text},
@@ -229,9 +232,10 @@ namespace namaichi
 				{"IsBrowserShowAll",checkBoxShowAll.Checked.ToString().ToLower()},
 				{"user_session",""},
 				{"user_session_secure",""},
-				
 			};
-			
+			if (browserNum == "1" && loginBtn.Tag != null)
+				ret["user_session"] = loginBtn.Tag.ToString();
+			return ret;
 		}
 		
 		async void Selector_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -481,7 +485,16 @@ namespace namaichi
 		
 		void loginBtn_Click(object sender, EventArgs e)
 		{
+			#if NET40
+				MessageBox.Show("現在、こちらの機能は.NET Framework 4.5版でのみ動作が可能となっております。");
+				return;
+			#endif
 			
+			if (!util.isWebView2Installed()) {
+				MessageBox.Show("現在のところ、こちらのログイン方法ではWebView2 Runtimeが必要です。\nhttps://developer.microsoft.com/ja-jp/microsoft-edge/webview2?form=MA13LH&cs=2463970835#download");
+				util.openUrlBrowser("https://developer.microsoft.com/ja-jp/microsoft-edge/webview2?form=MA13LH&cs=2463970835#download", form.config);
+				return;
+			}
 			var cg = new rec.CookieGetter(cfg, form);
 			//var cc = await cg.getAccountCookie(mailText.Text, passText.Text);
 			var cc = cg.getAccountCookie(mailText.Text, passText.Text);
@@ -492,7 +505,10 @@ namespace namaichi
 			if (cc.GetCookies(TargetUrl)["user_session"] == null &&
 				                   cc.GetCookies(TargetUrl)["user_session_secure"] == null)
 				MessageBox.Show("no login", "", MessageBoxButtons.OK);
-			else MessageBox.Show("login ok", "", MessageBoxButtons.OK);
+			else {
+				MessageBox.Show("login ok", "", MessageBoxButtons.OK);
+				loginBtn.Tag = cc.GetCookies(TargetUrl)["user_session"].Value;
+			}
 			
 			//MessageBox.Show("aa");
 		}

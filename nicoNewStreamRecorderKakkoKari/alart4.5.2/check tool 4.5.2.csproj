@@ -59,6 +59,12 @@
     <Reference Include="Interop.IWshRuntimeLibrary">
       <HintPath>..\alart4.0\bin\Debug\Interop.IWshRuntimeLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Core">
+      <HintPath>..\packages\microsoft.web.webview2.1.0.2478.35\lib\net45\Microsoft.Web.WebView2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.WinForms">
+      <HintPath>..\packages\microsoft.web.webview2.1.0.2478.35\lib\net45\Microsoft.Web.WebView2.WinForms.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\newtonsoft.json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -445,6 +451,10 @@
       <Link>src\util\varint.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\gui\WebViewLoginForm.cs" />
+    <Compile Include="src\gui\WebViewLoginForm.Designer.cs">
+      <DependentUpon>WebViewLoginForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\alart4.0\src\gui\%28check.ico">
@@ -462,6 +472,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="WebView2Loader.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\alart4.0\src\gui\addForm.resx">
@@ -538,6 +551,9 @@
     <EmbeddedResource Include="..\alart4.0\src\gui\WriteThumbnailMemoForm.resx">
       <Link>src\gui\WriteThumbnailMemoForm.resx</Link>
       <DependentUpon>WriteThumbnailMemoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\gui\WebViewLoginForm.resx">
+      <DependentUpon>WebViewLoginForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

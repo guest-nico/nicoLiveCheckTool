@@ -3149,6 +3149,7 @@ namespace namaichi
 			// 
 			// passText
 			// 
+			this.passText.Enabled = false;
 			this.passText.Location = new System.Drawing.Point(95, 232);
 			this.passText.Margin = new System.Windows.Forms.Padding(2);
 			this.passText.Name = "passText";
@@ -3157,6 +3158,7 @@ namespace namaichi
 			// 
 			// mailText
 			// 
+			this.mailText.Enabled = false;
 			this.mailText.Location = new System.Drawing.Point(95, 203);
 			this.mailText.Margin = new System.Windows.Forms.Padding(2);
 			this.mailText.Name = "mailText";

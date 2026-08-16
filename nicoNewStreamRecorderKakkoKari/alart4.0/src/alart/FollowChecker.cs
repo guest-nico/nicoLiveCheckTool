@@ -130,7 +130,7 @@ namespace namaichi.alart
 					if (coList != null) {
 						ret.AddRange(coList);
 						result[2] = true;
-					} else form.addLogText("コミュニティフォローの取得に失敗しました");
+					}// else form.addLogText("コミュニティフォローの取得に失敗しました");
 				}
 				
 				return ret;

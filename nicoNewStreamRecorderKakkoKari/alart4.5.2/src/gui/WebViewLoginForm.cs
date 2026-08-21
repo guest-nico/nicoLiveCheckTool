@@ -62,5 +62,25 @@ namespace namaichi.gui
 				}
 			}
 		}
+		public void close() {
+			stop();
+			try {
+				Close();
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+		}
+		
+		void WebViewLoginFormFormClosed(object sender, FormClosedEventArgs e)
+		{
+			stop();
+		}
+		void stop() {
+			try {
+				webView21.CoreWebView2.Stop();
+			} catch (Exception e) {
+				util.debugWriteLine(e.Message + e.Source + e.StackTrace + e.TargetSite);
+			}
+		}
 	}
 }

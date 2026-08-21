@@ -294,13 +294,9 @@ namespace namaichi
 			this.userSessionText = new System.Windows.Forms.TextBox();
 			this.useUserSessionRadioBtn = new System.Windows.Forms.RadioButton();
 			this.userSessionTestBtn = new System.Windows.Forms.Button();
-			this.label2 = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
 			this.cookieFileText = new System.Windows.Forms.TextBox();
 			this.useAccountLoginRadioBtn = new System.Windows.Forms.RadioButton();
 			this.useCookieRadioBtn = new System.Windows.Forms.RadioButton();
-			this.passText = new System.Windows.Forms.TextBox();
-			this.mailText = new System.Windows.Forms.TextBox();
 			this.nicoSessionComboBox1 = new namaichi.NicoSessionComboBox2();
 			this.isCookieFileSiteiChkBox = new System.Windows.Forms.CheckBox();
 			this.checkBoxShowAll = new System.Windows.Forms.CheckBox();
@@ -308,6 +304,10 @@ namespace namaichi
 			this.cookieFileSanshouBtn = new System.Windows.Forms.Button();
 			this.btnReload = new System.Windows.Forms.Button();
 			this.useSecondLoginChkBox = new System.Windows.Forms.CheckBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.mailText = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.passText = new System.Windows.Forms.TextBox();
 			this.appliTab.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.tabControl1.SuspendLayout();
@@ -3037,6 +3037,10 @@ namespace namaichi
 			// accountTab
 			// 
 			this.accountTab.Controls.Add(this.groupBox3);
+			this.accountTab.Controls.Add(this.label1);
+			this.accountTab.Controls.Add(this.mailText);
+			this.accountTab.Controls.Add(this.label2);
+			this.accountTab.Controls.Add(this.passText);
 			this.accountTab.Location = new System.Drawing.Point(4, 22);
 			this.accountTab.Name = "accountTab";
 			this.accountTab.Padding = new System.Windows.Forms.Padding(3);
@@ -3050,13 +3054,9 @@ namespace namaichi
 			this.groupBox3.Controls.Add(this.userSessionText);
 			this.groupBox3.Controls.Add(this.useUserSessionRadioBtn);
 			this.groupBox3.Controls.Add(this.userSessionTestBtn);
-			this.groupBox3.Controls.Add(this.label2);
-			this.groupBox3.Controls.Add(this.label1);
 			this.groupBox3.Controls.Add(this.cookieFileText);
 			this.groupBox3.Controls.Add(this.useAccountLoginRadioBtn);
 			this.groupBox3.Controls.Add(this.useCookieRadioBtn);
-			this.groupBox3.Controls.Add(this.passText);
-			this.groupBox3.Controls.Add(this.mailText);
 			this.groupBox3.Controls.Add(this.nicoSessionComboBox1);
 			this.groupBox3.Controls.Add(this.isCookieFileSiteiChkBox);
 			this.groupBox3.Controls.Add(this.checkBoxShowAll);
@@ -3066,14 +3066,14 @@ namespace namaichi
 			this.groupBox3.Controls.Add(this.useSecondLoginChkBox);
 			this.groupBox3.Location = new System.Drawing.Point(5, 10);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(385, 338);
+			this.groupBox3.Size = new System.Drawing.Size(385, 310);
 			this.groupBox3.TabIndex = 19;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "ニコニコ動画アカウントの共有　(普段ニコニコ生放送を見ているブラウザ)";
 			// 
 			// userSessionText
 			// 
-			this.userSessionText.Location = new System.Drawing.Point(20, 295);
+			this.userSessionText.Location = new System.Drawing.Point(20, 267);
 			this.userSessionText.Name = "userSessionText";
 			this.userSessionText.Size = new System.Drawing.Size(277, 19);
 			this.userSessionText.TabIndex = 23;
@@ -3081,7 +3081,7 @@ namespace namaichi
 			// useUserSessionRadioBtn
 			// 
 			this.useUserSessionRadioBtn.Checked = true;
-			this.useUserSessionRadioBtn.Location = new System.Drawing.Point(6, 271);
+			this.useUserSessionRadioBtn.Location = new System.Drawing.Point(6, 243);
 			this.useUserSessionRadioBtn.Name = "useUserSessionRadioBtn";
 			this.useUserSessionRadioBtn.Size = new System.Drawing.Size(311, 18);
 			this.useUserSessionRadioBtn.TabIndex = 22;
@@ -3091,7 +3091,7 @@ namespace namaichi
 			// 
 			// userSessionTestBtn
 			// 
-			this.userSessionTestBtn.Location = new System.Drawing.Point(302, 293);
+			this.userSessionTestBtn.Location = new System.Drawing.Point(302, 265);
 			this.userSessionTestBtn.Margin = new System.Windows.Forms.Padding(2);
 			this.userSessionTestBtn.Name = "userSessionTestBtn";
 			this.userSessionTestBtn.Size = new System.Drawing.Size(69, 23);
@@ -3099,24 +3099,6 @@ namespace namaichi
 			this.userSessionTestBtn.Text = "テスト";
 			this.userSessionTestBtn.UseVisualStyleBackColor = true;
 			this.userSessionTestBtn.Click += new System.EventHandler(this.UserSessionTestBtnClick);
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(6, 232);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(80, 19);
-			this.label2.TabIndex = 20;
-			this.label2.Text = "パスワード：";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(6, 204);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(80, 19);
-			this.label1.TabIndex = 20;
-			this.label1.Text = "メールアドレス：";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// cookieFileText
 			// 
@@ -3146,24 +3128,6 @@ namespace namaichi
 			this.useCookieRadioBtn.TabStop = true;
 			this.useCookieRadioBtn.Text = "次のブラウザとクッキーを共有する";
 			this.useCookieRadioBtn.UseVisualStyleBackColor = true;
-			// 
-			// passText
-			// 
-			this.passText.Enabled = false;
-			this.passText.Location = new System.Drawing.Point(95, 232);
-			this.passText.Margin = new System.Windows.Forms.Padding(2);
-			this.passText.Name = "passText";
-			this.passText.Size = new System.Drawing.Size(193, 19);
-			this.passText.TabIndex = 13;
-			// 
-			// mailText
-			// 
-			this.mailText.Enabled = false;
-			this.mailText.Location = new System.Drawing.Point(95, 203);
-			this.mailText.Margin = new System.Windows.Forms.Padding(2);
-			this.mailText.Name = "mailText";
-			this.mailText.Size = new System.Drawing.Size(193, 19);
-			this.mailText.TabIndex = 12;
 			// 
 			// nicoSessionComboBox1
 			// 
@@ -3200,7 +3164,7 @@ namespace namaichi
 			// 
 			// loginBtn
 			// 
-			this.loginBtn.Location = new System.Drawing.Point(302, 230);
+			this.loginBtn.Location = new System.Drawing.Point(302, 201);
 			this.loginBtn.Margin = new System.Windows.Forms.Padding(2);
 			this.loginBtn.Name = "loginBtn";
 			this.loginBtn.Size = new System.Drawing.Size(69, 23);
@@ -3240,6 +3204,46 @@ namespace namaichi
 			this.useSecondLoginChkBox.TabIndex = 20;
 			this.useSecondLoginChkBox.Text = "ブラウザからクッキーが取得できなかった場合、次のアカウントでログインする";
 			this.useSecondLoginChkBox.UseVisualStyleBackColor = true;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(11, 374);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(80, 19);
+			this.label1.TabIndex = 20;
+			this.label1.Text = "メールアドレス：";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label1.Visible = false;
+			// 
+			// mailText
+			// 
+			this.mailText.Enabled = false;
+			this.mailText.Location = new System.Drawing.Point(100, 373);
+			this.mailText.Margin = new System.Windows.Forms.Padding(2);
+			this.mailText.Name = "mailText";
+			this.mailText.Size = new System.Drawing.Size(193, 19);
+			this.mailText.TabIndex = 12;
+			this.mailText.Visible = false;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(11, 402);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(80, 19);
+			this.label2.TabIndex = 20;
+			this.label2.Text = "パスワード：";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label2.Visible = false;
+			// 
+			// passText
+			// 
+			this.passText.Enabled = false;
+			this.passText.Location = new System.Drawing.Point(100, 402);
+			this.passText.Margin = new System.Windows.Forms.Padding(2);
+			this.passText.Name = "passText";
+			this.passText.Size = new System.Drawing.Size(193, 19);
+			this.passText.TabIndex = 13;
+			this.passText.Visible = false;
 			// 
 			// optionForm
 			// 
@@ -3299,6 +3303,7 @@ namespace namaichi
 			((System.ComponentModel.ISupportInitialize)(this.userNameUpdateIntervalList)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.rssUpdateIntervalList)).EndInit();
 			this.accountTab.ResumeLayout(false);
+			this.accountTab.PerformLayout();
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);

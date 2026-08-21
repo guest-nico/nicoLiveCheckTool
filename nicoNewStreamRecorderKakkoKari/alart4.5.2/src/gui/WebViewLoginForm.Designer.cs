@@ -65,6 +65,7 @@ namespace namaichi.gui
 			this.Name = "WebViewLoginForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "ログイン";
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.WebViewLoginFormFormClosed);
 			((System.ComponentModel.ISupportInitialize)(this.webView21)).EndInit();
 			this.ResumeLayout(false);
 		}

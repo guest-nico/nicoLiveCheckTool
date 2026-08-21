@@ -356,11 +356,13 @@ namespace namaichi.rec
 				#if NET40
 					return null;
 				#else
+					if (Thread.CurrentThread != form.madeThread) return null;
 					WebViewLoginForm f = null;
 					form.formAction(() => {
 					                	f = new WebViewLoginForm();
 					                	f.ShowDialog();
 					                }, 120000);
+					form.formAction(() => f.close());
 					if (f == null) {
 						util.debugWriteLine("WebViewLoginForm null");
 						return null;

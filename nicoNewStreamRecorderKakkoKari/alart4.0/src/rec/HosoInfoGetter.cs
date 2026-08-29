@@ -48,7 +48,7 @@ namespace namaichi.rec
 			
 			title = util.getRegGroup(res, "&quot;title&quot;:&quot;(.+?)&quot;");
 			if (title == null) title = util.getRegGroup(res, "<meta property=\"og:title\" content=\"(.*?)\"");
-			type = util.getRegGroup(res, "\"content_type\":\"(.+?)\"");
+			//type = util.getRegGroup(res.Replace("&quot;", "\""), "\"content_type\":\"(.+?)\"");
 			thumbnail = getThumbnail(res);
 			var _dt = util.getRegGroup(res, "(\\d{4}/\\d{1,2}/\\d{1,2}.{0,10}\\d{1,2}:\\d{1,2}(:\\d{1,2})*)");
 			if (_dt != null) {
@@ -118,7 +118,7 @@ namespace namaichi.rec
 			data = (isRtmpOnlyPage) ? System.Web.HttpUtility.UrlDecode(res) :
 						System.Web.HttpUtility.HtmlDecode(data);
 			if (data == null) data = System.Web.HttpUtility.HtmlDecode(res);
-			type = util.getRegGroup(res, "\"content_type\":\"(.+?)\"");
+			type = util.getRegGroup(res.Replace("&quot;", "\""), "\"content_type\":\"(.+?)\"");
 			if (type == null) type = util.getRegGroup(res, "content_type = '(.+?)'");
 			group = util.getRegGroup(data, "\"socialGroup\".+?\"name\".\"(.+?)\"");
 			if (group == null) group = util.getRegGroup(res, "COMMUNITY INFO[\\s\\S]+target=\"_blank\"><span itemprop=\"name\">(.+?)</span>");

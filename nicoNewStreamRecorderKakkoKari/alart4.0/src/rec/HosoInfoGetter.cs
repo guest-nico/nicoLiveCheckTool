@@ -50,10 +50,11 @@ namespace namaichi.rec
 			if (title == null) title = util.getRegGroup(res, "<meta property=\"og:title\" content=\"(.*?)\"");
 			//type = util.getRegGroup(res.Replace("&quot;", "\""), "\"content_type\":\"(.+?)\"");
 			thumbnail = getThumbnail(res);
-			var _dt = util.getRegGroup(res, "(\\d{4}/\\d{1,2}/\\d{1,2}.{0,10}\\d{1,2}:\\d{1,2}(:\\d{1,2})*)");
+			var _dt = util.getRegGroup(res, "(\\d{4}[/-]\\d{1,2}[/-]\\d{1,2}.{0,10}\\d{1,2}:\\d{1,2}:\\d{1,2})");
+			if (_dt == null) _dt = util.getRegGroup(res, "(\\d{4}/\\d{1,2}/\\d{1,2}.{0,10}\\d{1,2}:\\d{1,2}(:\\d{1,2})*)");
 			if (_dt != null) {
 				util.debugWriteLine("dt0 " + _dt);
-				_dt = util.getRegGroup(_dt, "(\\d{4}/\\d{1,2}/\\d{1,2})") + " " + util.getRegGroup(_dt, "(\\d{1,2}:\\d{1,2}(:\\d{1,2})*)");
+				_dt = util.getRegGroup(_dt, "(\\d{4}[/-]\\d{1,2}[/-]\\d{1,2})") + " " + util.getRegGroup(_dt, "(\\d{1,2}:\\d{1,2}(:\\d{1,2})*)");
 				util.debugWriteLine("dt1 " + _dt);
 				dt = DateTime.Parse(_dt);
 			} else {
